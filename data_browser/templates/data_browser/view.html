@@ -1,0 +1,161 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" class="html"><head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <title>View</title>
+    <style>
+        table {
+        }
+        table, th, td {
+           border: 1px solid black;
+        }
+        th, td {
+           padding: 5px;
+        }
+        td {
+            text-align: right;
+        }
+        th {
+            text-align: center;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 0;
+        }
+        p {
+            margin: 5px auto;
+        }
+        select {
+            display: inline;
+            width: auto;
+        }
+        .main_space {
+            margin: auto;
+            display: flex;
+            flex-flow: row;
+            margin-bottom: 30px;
+        }
+        .filters {
+            margin: auto;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .filters p {
+            margin: 5px;
+        }
+        .filters .error * {
+            background-color: red;
+        }
+        .filters .error {
+            background-color: red;
+        }
+    </style>
+</head><body>
+
+    <h1>{{ query.model }}</h1>
+    <p><a href="{{ query.csv_link }}">Download as CSV</a></p>
+    <p><a href="{{ query.save_link }}">Save View</a></p>
+
+    <form class="filters" method="get" action="{{ query.base_url }}">
+        {% for filter in query.filters %}
+            <p {% if not filter.is_valid %}class="error"{% endif %}>
+                <a href="{{ filter.remove_link }}">✘</a>
+                {{ filter.name }}
+
+                <script>
+                    function lookup_change_{{ forloop.counter }}(selectObject){
+                        var value = selectObject.value;
+                        {% for lookup in filter.lookups %}
+                            if(value=="{{ lookup.name }}")document.location.href="{{ lookup.link }}";
+                        {% endfor %}
+                    }
+                </script>
+                <select onchange="lookup_change_{{ forloop.counter }}(this);">
+                    {% for lookup in filter.lookups %}
+                        <option value="{{ lookup.name }}" {% if lookup.name == filter.lookup %}selected{% endif %}>{{ lookup.name }}</option>
+                    {% endfor %}
+                </select>
+                = <input type="text" name="{{ filter.url_name }}" value="{{ filter.value }}">
+            </p>
+        {% endfor %}
+        <p><input type="submit"></p>
+        <p>Showing {{ data|length }} results</p>
+    </form>
+
+    <div class="main_space">
+        <div>
+            {% include 'data_browser/fields_snippet.html' with group=query.all_fields_nested %}
+        </div>
+        <table>
+            <tr>
+                {% if query.sort_fields %}
+                    {% for field, sort_direction, sort_icon in query.sort_fields %}
+                        <th>
+                            <a href="{{ field.remove_link }}">✘</a>
+                            {% if field.concrete %}
+                                <a href="{{ field.add_filter_link }}">Y</a>
+                                <a href="{{ field.toggle_sort_link }}">
+                                    {{ field.name }} {{ sort_icon }}
+                                </a>
+                            {% else %}
+                                {{ field.name }}
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                {% else %}
+                    <th>No fields selected</th>
+                {% endif %}
+            </tr>
+            {% for row in data %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        {% block script_global %}{% endblock %}
+        jQuery( document ).ready( function( $ ) {
+            var storage = window.sessionStorage;
+            document.querySelectorAll('.toggle_link').forEach(function(elem){
+                elem.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var div = elem.nextElementSibling;
+                    if (div.style.display === "none") {
+                        div.style.display = "block";
+                    } else {
+                        div.style.display = "none";
+                    }
+
+                    var menu_state = JSON.parse(storage.getItem("menu_state"));
+                    menu_state[div.id] = div.style.display;
+                    storage.setItem("menu_state", JSON.stringify(menu_state));
+                });
+            });
+
+            var menu_state = storage.getItem("menu_state");
+            if (menu_state == null) {
+                menu_state = {};
+                storage.setItem("menu_state", JSON.stringify(menu_state));
+            } else {
+                menu_state = JSON.parse(menu_state);
+            }
+            for (var prop in menu_state){
+                if (menu_state.hasOwnProperty(prop)) {
+                    var div = document.querySelector("#" + prop);
+                    if (div != null) document.querySelector("#" + prop).style.display = menu_state[prop];
+                }
+            }
+        });
+    </script>
+</body></html>
