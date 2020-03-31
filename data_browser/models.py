@@ -2,10 +2,15 @@ import json
 
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
+from django.utils import crypto, timezone
+
+
+def get_id():
+    return crypto.get_random_string(length=12)
 
 
 class View(models.Model):
+    id = models.CharField(primary_key=True, max_length=12, default=get_id)
     created_time = models.DateTimeField(default=timezone.now)
 
     name = models.CharField(max_length=64, blank=False)
