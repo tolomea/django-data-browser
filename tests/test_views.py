@@ -1,13 +1,18 @@
+import csv
+
+import data_browser.models
 import pytest
 from data_browser import views
 from data_browser.query import BoundQuery, Query
+from django.contrib.auth.models import User
 
 from . import models
 
 
 @pytest.fixture
 def products(db):
-    producer = models.Producer.objects.create(name="bob")
+    address = models.Address.objects.create(city="london")
+    producer = models.Producer.objects.create(name="bob", address=address)
     models.Product.objects.create(name="a", size=1, size_unit="g", producer=producer)
     models.Product.objects.create(name="b", size=1, size_unit="g", producer=producer)
     models.Product.objects.create(name="c", size=2, size_unit="g", producer=producer)
@@ -105,18 +110,85 @@ def test_get_fields(fields):
     assert "id" not in fields
     assert "pk" in fields
 
-    # recurse
+    # follow fk
     assert "producer" not in fields
     assert "producer" in groups
     assert "name" in groups["producer"][0]
 
+    # follow multiple fk's
+    assert "city" in groups["producer"][1]["address"][0]
 
-# no loops
-# assert "product" not in groups["default_sku"][1]
+    # no loops
+    assert "product" not in groups["default_sku"][1]
 
-# multi recursion
-# assert "name" in groups["producer"][1]["shipping_address"][0]
+    # no many to many fields
+    assert "tags" not in fields
 
-# fk - field in admin model not, model in admin field not
-# fields not in admin
-# calculated field, on admin, on model, both, on model with arg
+    # check in and out of admin
+    assert "not_in_admin" not in fields
+    assert "fk_not_in_admin" not in groups
+    assert "model_not_in_admin" in groups
+    assert groups["model_not_in_admin"] == ({}, {})
+
+
+@pytest.mark.usefixtures("products")
+def test_query_html(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests/Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+    assert res.context["data"] == [[1, "a", "g"], [1, "b", "g"]]
+
+
+@pytest.mark.usefixtures("products")
+def test_query_html_bad_fields(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
+    )
+    assert res.status_code == 200
+    assert res.context["data"] == [[1, "a", "g"], [1, "b", "g"]]
+
+
+@pytest.mark.usefixtures("products")
+def test_query_html_bad_model(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests/Bob/-size,+name,size_unit.html?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+    assert res.content == b"App 'tests' doesn't have a 'Bob' model."
+
+
+@pytest.mark.usefixtures("products")
+def test_query_csv(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests/Product/-size,+name,size_unit.csv?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+    rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
+    assert rows == [["size", "name", "size_unit"], ["1", "a", "g"], ["1", "b", "g"]]
+
+
+@pytest.mark.usefixtures("products")
+def test_view_html(admin_client):
+    view = data_browser.models.View.objects.create(
+        app="tests",
+        model="Product",
+        fields="-size,+name,size_unit",
+        query='{"size__lt": ["2"], "id__gt": ["0"]}',
+        owner=User.objects.get(),
+    )
+
+    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    assert res.status_code == 404
+
+    view.public = True
+    view.save()
+    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    assert res.status_code == 200
+    rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
+    assert rows == [["size", "name", "size_unit"], ["1", "a", "g"], ["1", "b", "g"]]
+
+
+# calculated field, on admin, on model, both
+# missing permissions
+# view owner missing permissions

@@ -1,9 +1,12 @@
-from django.conf import settings
+import threading
+
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
 from . import models
+
+globals = threading.local()
 
 
 @admin.register(models.View)
@@ -29,27 +32,29 @@ class ViewAdmin(admin.ModelAdmin):
     readonly_fields = ["open_view", "public_link", "google_sheets_formula", "id"]
     list_display = ["__str__", "owner", "public"]
 
-    def get_readonly_fields(self, request, obj=None):
-        res = list(super().get_readonly_fields(request, obj))
-        if obj:
-            res.extend(["app", "model", "fields", "query"])
-        return res
+    def change_view(self, request, *args, **kwargs):
+        globals.request = request
+        return super().change_view(request, *args, **kwargs)
 
-    def open_view(self, obj):
+    @staticmethod
+    def open_view(obj):
         url = obj.get_query("html").url
         return format_html(f'<a href="{url}">view</a>')
 
-    def public_link(self, obj):
+    @staticmethod
+    def public_link(obj):
         if obj.public:
             url = reverse("data_browser:view", kwargs={"pk": obj.pk, "media": "csv"})
-            return f"{settings.WEBSITE_BASE}{url}"
+            return globals.request.build_absolute_uri(url)
         else:
             return "N/A"
 
-    def google_sheets_formula(self, obj):
+    @staticmethod
+    def google_sheets_formula(obj):
         if obj.public:
             url = reverse("data_browser:view", kwargs={"pk": obj.pk, "media": "csv"})
-            return f'=importdata("{settings.WEBSITE_BASE}{url}")'
+            url = globals.request.build_absolute_uri(url)
+            return f'=importdata("{url}")'
         else:
             return "N/A"
 

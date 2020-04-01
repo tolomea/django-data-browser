@@ -14,6 +14,15 @@ def query():
     )
 
 
-def test_round_trip_save(query):
-    obj = View(**query.save_params)
-    assert obj.get_query("html") == query
+@pytest.fixture
+def view(query):
+    return View(**query.save_params)
+
+
+def test_round_trip_save(query, view):
+    assert view.get_query("html") == query
+
+
+def test_str(view):
+    view.name = "bob"
+    assert str(view) == "model view: bob"

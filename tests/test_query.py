@@ -1,5 +1,17 @@
 import pytest
-from data_browser.query import ASC, DSC, BoundQuery, Field, Filter, Query
+from data_browser.query import (
+    ASC,
+    DSC,
+    BooleanField,
+    BoundQuery,
+    CalculatedField,
+    Field,
+    Filter,
+    NumberField,
+    Query,
+    StringField,
+    TimeField,
+)
 
 
 @pytest.fixture
@@ -176,3 +188,42 @@ class TestField:
             Field("fn", query).toggle_sort_link
             == "/data_browser/query/app/model/+fa,-fd,+fn.html?bob__equals=fred"
         )
+
+    def test_repr(self, query):
+        assert repr(Field("fa", query)) == f"Field('fa', {query})"
+
+
+class TestStringField:
+    def test_is_valid(self):
+        assert StringField(None, None).is_valid("contains", "hello")
+        assert not StringField(None, None).is_valid("pontains", "hello")
+
+
+class TestNumberField:
+    def test_is_valid(self):
+        assert NumberField(None, None).is_valid("gt", "6.1")
+        assert not NumberField(None, None).is_valid("pontains", "6.1")
+        assert not NumberField(None, None).is_valid("gt", "hello")
+        assert NumberField(None, None).is_valid("is_null", "True")
+        assert not NumberField(None, None).is_valid("is_null", "hello")
+
+
+class TestTimeField:
+    def test_is_valid(self):
+        assert TimeField(None, None).is_valid("gt", "2018-03-20T22:31:23")
+        assert not TimeField(None, None).is_valid("gt", "hello")
+        assert not TimeField(None, None).is_valid("pontains", "2018-03-20T22:31:23")
+        assert TimeField(None, None).is_valid("is_null", "True")
+        assert not TimeField(None, None).is_valid("is_null", "hello")
+
+
+class TestBooleanField:
+    def test_is_valid(self):
+        assert BooleanField(None, None).is_valid("is_null", "True")
+        assert not BooleanField(None, None).is_valid("is_null", "hello")
+        assert not BooleanField(None, None).is_valid("pontains", "True")
+
+
+class TestCalculatedField:
+    def test_is_valid(self):
+        assert not CalculatedField(None, None).is_valid("gt", "1")
