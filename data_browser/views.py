@@ -103,7 +103,7 @@ LOOKUP_MAP = {
     "contains": "icontains",
     "starts_with": "istartswith",
     "ends_with": "iendswith",
-    "is_null": "is_null",
+    "is_null": "isnull",
     "gt": "gt",
     "gte": "gte",
     "lt": "lt",
