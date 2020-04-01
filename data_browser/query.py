@@ -125,9 +125,6 @@ class Field:
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.name}', {self.query})"
 
-    def is_valid(self, lookup, value):
-        return True
-
     @property
     def add_link(self):
         fields = dict(self.query.fields)

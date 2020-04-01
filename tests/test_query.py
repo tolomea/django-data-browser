@@ -5,7 +5,6 @@ from data_browser.query import (
     BooleanField,
     BoundQuery,
     CalculatedField,
-    Field,
     Filter,
     NumberField,
     Query,
@@ -28,15 +27,15 @@ def query():
 @pytest.fixture
 def bound_query(query):
     group = (
-        {"fa": Field, "fd": Field, "fn": Field, "bob": Field},
-        {"tom": ({"jones": Field}, {"michael": ({"bolton": Field}, {})})},
+        {"fa": StringField, "fd": StringField, "fn": StringField, "bob": StringField},
+        {"tom": ({"jones": StringField}, {"michael": ({"bolton": StringField}, {})})},
     )
     return BoundQuery(query, group)
 
 
 @pytest.fixture
 def filter(query):
-    return Filter(0, Field("bob", query), "equals", "fred")
+    return Filter(0, StringField("bob", query), "equals", "fred")
 
 
 class TestQuery:
@@ -89,9 +88,9 @@ class TestBoundQuery:
 
     def test_sort_fields(self, query, bound_query):
         assert list(bound_query.sort_fields) == [
-            (Field("fa", query), ASC, "↓"),
-            (Field("fd", query), DSC, "↑"),
-            (Field("fn", query), None, ""),
+            (StringField("fa", query), ASC, "↓"),
+            (StringField("fd", query), DSC, "↑"),
+            (StringField("fn", query), None, ""),
         ]
 
     def test_filters(self, bound_query, filter):
@@ -99,31 +98,38 @@ class TestBoundQuery:
 
     def test_all_fields(self, query, bound_query):
         assert bound_query.all_fields == {
-            "fa": Field("fa", query),
-            "fd": Field("fd", query),
-            "fn": Field("fn", query),
-            "bob": Field("bob", query),
-            "tom__jones": Field("tom__jones", query),
-            "tom__michael__bolton": Field("tom__michael__bolton", query),
+            "fa": StringField("fa", query),
+            "fd": StringField("fd", query),
+            "fn": StringField("fn", query),
+            "bob": StringField("bob", query),
+            "tom__jones": StringField("tom__jones", query),
+            "tom__michael__bolton": StringField("tom__michael__bolton", query),
         }
 
     def test_all_nested(self, query, bound_query):
         assert bound_query.all_fields_nested == (
             {
-                "fa": Field("fa", query),
-                "fd": Field("fd", query),
-                "fn": Field("fn", query),
-                "bob": Field("bob", query),
+                "fa": StringField("fa", query),
+                "fd": StringField("fd", query),
+                "fn": StringField("fn", query),
+                "bob": StringField("bob", query),
             },
             {
                 "tom": (
                     "tom",
                     (
-                        {"jones": Field("tom__jones", query)},
+                        {"jones": StringField("tom__jones", query)},
                         {
                             "michael": (
                                 "tom__michael",
-                                ({"bolton": Field("tom__michael__bolton", query)}, {}),
+                                (
+                                    {
+                                        "bolton": StringField(
+                                            "tom__michael__bolton", query
+                                        )
+                                    },
+                                    {},
+                                ),
                             )
                         },
                     ),
@@ -140,57 +146,48 @@ class TestFilter:
         assert filter.remove_link == "/data_browser/query/app/model/+fa,-fd,fn.html"
 
     def test_lookups(self, filter):
-        assert list(filter.lookups) == [
-            (
-                "equals",
-                "/data_browser/query/app/model/+fa,-fd,fn.html?bob__equals=fred",
-            ),
-            (
-                "not_equals",
-                "/data_browser/query/app/model/+fa,-fd,fn.html?bob__not_equals=fred",
-            ),
-            (
-                "is_null",
-                "/data_browser/query/app/model/+fa,-fd,fn.html?bob__is_null=fred",
-            ),
+        expected = [
+            (f, f"/data_browser/query/app/model/+fa,-fd,fn.html?bob__{f}=fred")
+            for f in StringField.lookups
         ]
+        assert list(filter.lookups) == expected
 
 
 class TestField:
     def test_add_link(self, query):
         assert (
-            Field("bob", query).add_link
+            StringField("bob", query).add_link
             == "/data_browser/query/app/model/+fa,-fd,fn,bob.html?bob__equals=fred"
         )
 
     def test_remove_link(self, query):
         assert (
-            Field("fd", query).remove_link
+            StringField("fd", query).remove_link
             == "/data_browser/query/app/model/+fa,fn.html?bob__equals=fred"
         )
 
     def test_add_filter_link(self, query):
         assert (
-            Field("fd", query).add_filter_link
+            StringField("fd", query).add_filter_link
             == "/data_browser/query/app/model/+fa,-fd,fn.html?bob__equals=fred&fd__equals="
         )
 
     def test_toggle_sort_link(self, query):
         assert (
-            Field("fa", query).toggle_sort_link
+            StringField("fa", query).toggle_sort_link
             == "/data_browser/query/app/model/-fa,-fd,fn.html?bob__equals=fred"
         )
         assert (
-            Field("fd", query).toggle_sort_link
+            StringField("fd", query).toggle_sort_link
             == "/data_browser/query/app/model/+fa,fd,fn.html?bob__equals=fred"
         )
         assert (
-            Field("fn", query).toggle_sort_link
+            StringField("fn", query).toggle_sort_link
             == "/data_browser/query/app/model/+fa,-fd,+fn.html?bob__equals=fred"
         )
 
     def test_repr(self, query):
-        assert repr(Field("fa", query)) == f"Field('fa', {query})"
+        assert repr(StringField("fa", query)) == f"StringField('fa', {query})"
 
 
 class TestStringField:
