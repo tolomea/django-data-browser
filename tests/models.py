@@ -29,6 +29,7 @@ class Product(models.Model):
     size_unit = models.TextField()
     default_sku = models.ForeignKey("SKU", null=True, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag)
+    onsale = models.BooleanField(null=True)
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)

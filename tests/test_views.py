@@ -97,6 +97,31 @@ def test_get_data_collapsed(get_product_data):
     assert data == [[2, "g"], [1, "g"]]
 
 
+@pytest.mark.usefixtures("products")
+def test_get_data_null_filter(get_product_data):
+    data = get_product_data("pk", "html", {"onsale__is_null": ["True"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_data("pk", "html", {"onsale__is_null": ["true"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_data("pk", "html", {"onsale__is_null": ["False"]})
+    assert data == []
+    data = get_product_data("pk", "html", {"onsale__is_null": ["false"]})
+    assert data == []
+
+
+@pytest.mark.usefixtures("products")
+def test_get_data_boolean_filter(get_product_data):
+    models.Product.objects.update(onsale=True)
+    data = get_product_data("pk", "html", {"onsale__equal": ["True"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_data("pk", "html", {"onsale__equal": ["true"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_data("pk", "html", {"onsale__equal": ["False"]})
+    assert data == []
+    data = get_product_data("pk", "html", {"onsale__equal": ["false"]})
+    assert data == []
+
+
 def test_get_fields(fields):
     fields, groups = fields
 

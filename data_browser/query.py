@@ -1,8 +1,8 @@
 import json
+import urllib
 from collections import defaultdict, namedtuple
-from urllib import parse
 
-from dateutil import parser
+import dateutil.parser
 from django.urls import reverse
 from django.utils import safestring
 
@@ -87,8 +87,8 @@ class Query:
     def url(self):
         url = self.base_url
         if self.filters:
-            params = parse.urlencode(
-                self.filter_fields, quote_via=parse.quote_plus, doseq=True
+            params = urllib.parse.urlencode(
+                self.filter_fields, quote_via=urllib.parse.quote_plus, doseq=True
             )
             url = f"{url}?{params}"
         return url
@@ -107,8 +107,11 @@ class Query:
         }
 
 
+def parse_boolean(val):
+    return {"true": True, "false": False}[val.lower()]
+
+
 class Field:
-    lookups = ["equals", "not_equals", "is_null"]
     concrete = True
 
     def __init__(self, name, query):
@@ -124,6 +127,25 @@ class Field:
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.name}', {self.query})"
+
+    def parse(self, lookup, value):
+        if lookup == "is_null":
+            return parse_boolean(value)
+        else:
+            return self._parse(value)
+
+    def _parse(self, value):
+        return value
+
+    def is_valid(self, lookup, value):
+        if lookup not in self.lookups:
+            return False
+        try:
+            self.parse(lookup, value)
+        except Exception:
+            return False
+        else:
+            return True
 
     @property
     def add_link(self):
@@ -163,59 +185,34 @@ class StringField(Field):
         "not_starts_with",
         "not_ends_with",
         "not_regex",
+        "is_null",
     ]
-
-    def is_valid(self, lookup, value):
-        return lookup in self.lookups
 
 
 class NumberField(Field):
-    lookups = ["equals", "not_equals", "gt", "gte", "lt", "lte", "is_null"]
+    lookups = ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"]
 
-    def is_valid(self, lookup, value):
-        if lookup not in self.lookups:
-            return False
-        if lookup == "is_null":
-            return value in ["True", "False"]
-        try:
-            float(value)
-        except Exception:
-            return False
-        else:
-            return True
+    def _parse(self, s):
+        return float(s)
 
 
 class TimeField(Field):
-    lookups = ["equals", "not_equals", "gt", "gte", "lt", "lte", "is_null"]
+    lookups = ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"]
 
-    def is_valid(self, lookup, value):
-        if lookup not in self.lookups:
-            return False
-        if lookup == "is_null":
-            return value in ["True", "False"]
-        try:
-            parser.parse(value)
-        except Exception:
-            return False
-        else:
-            return True
+    def _parse(self, s):
+        return dateutil.parser.parse(s)
 
 
 class BooleanField(Field):
-    lookups = ["equals", "not_equals", "is_null"]
+    lookups = ["equal", "not_equal", "is_null"]
 
-    def is_valid(self, lookup, value):
-        if lookup not in self.lookups:
-            return False
-        return value in ["True", "False"]
+    def _parse(self, s):
+        return parse_boolean(s)
 
 
 class CalculatedField(Field):
     lookups = []
     concrete = False
-
-    def is_valid(self, lookup, value):
-        return False
 
 
 LookupOption = namedtuple("LookupOption", "name link")
@@ -226,10 +223,10 @@ class Filter:
         self.index = index
         self.field = field
         self.lookup = lookup
-        self.value = value
         self.query = field.query
-        self.is_valid = field.is_valid(lookup, value)
         self.name = field.name
+        self.is_valid = field.is_valid(lookup, value)
+        self.value = field.parse(lookup, value) if self.is_valid else None
 
     def __eq__(self, other):
         return (
@@ -300,8 +297,8 @@ class BoundQuery:
     def save_link(self):
         view_name = f"admin:{View._meta.db_table}_add"
         url = reverse(view_name)
-        params = parse.urlencode(
-            self._query.save_params, quote_via=parse.quote_plus, doseq=True
+        params = urllib.parse.urlencode(
+            self._query.save_params, quote_via=urllib.parse.quote_plus, doseq=True
         )
 
         return f"{url}?{params}"

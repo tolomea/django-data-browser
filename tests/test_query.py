@@ -216,8 +216,8 @@ class TestTimeField:
 
 class TestBooleanField:
     def test_is_valid(self):
-        assert BooleanField(None, None).is_valid("is_null", "True")
-        assert not BooleanField(None, None).is_valid("is_null", "hello")
+        assert BooleanField(None, None).is_valid("equal", "True")
+        assert not BooleanField(None, None).is_valid("equal", "hello")
         assert not BooleanField(None, None).is_valid("pontains", "True")
 
 

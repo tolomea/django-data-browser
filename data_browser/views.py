@@ -98,16 +98,17 @@ def get_nested_fields_for_model(model, admin_fields, seen=()):
 
 
 LOOKUP_MAP = {
-    "equals": "iexact",
-    "regex": "iregex",
-    "contains": "icontains",
-    "starts_with": "istartswith",
-    "ends_with": "iendswith",
-    "is_null": "isnull",
-    "gt": "gt",
-    "gte": "gte",
-    "lt": "lt",
-    "lte": "lte",
+    "equals": "__iexact",
+    "equal": "",
+    "regex": "__iregex",
+    "contains": "__icontains",
+    "starts_with": "__istartswith",
+    "ends_with": "__iendswith",
+    "is_null": "__isnull",
+    "gt": "__gt",
+    "gte": "__gte",
+    "lt": "__lt",
+    "lte": "__lte",
 }
 
 
@@ -139,10 +140,8 @@ def get_data(bound_query):
             if lookup.startswith("not_"):
                 negation = True
                 lookup = lookup[4:]
-            lookup = LOOKUP_MAP[lookup]
 
-            filter_str = f"{filter_.name}__{lookup}"
-
+            filter_str = f"{filter_.name}{LOOKUP_MAP[lookup]}"
             if negation:
                 qs = qs.exclude(**{filter_str: filter_.value})
             else:

@@ -30,6 +30,7 @@ class ProductMixin:
         "default_sku",
         "tags",
         "model_not_in_admin",
+        "onsale",
     ]
     readonly_fields = ["is_onsale"]
 
