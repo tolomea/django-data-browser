@@ -12,6 +12,7 @@ from django.forms.models import _get_foreign_key
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
+from django.views.generic import TemplateView
 
 from .models import View
 from .query import (
@@ -213,3 +214,6 @@ def view(request, pk, media):
     assert media == "csv"
     query = view.get_query(media)
     return csv_response(request, query)
+
+
+catchall = TemplateView.as_view(template_name="data_browser/index.html")

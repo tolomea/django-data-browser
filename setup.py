@@ -1,7 +1,17 @@
+import os
+
 import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+
+
+data_files = []
+for directory in "data_browser/static", "data_browser/templates":
+    for (path, _, filenames) in os.walk(directory):
+        for filename in filenames:
+            data_files.append(os.path.join("..", path, filename))
+
 
 setuptools.setup(
     name="django-data-browser",
@@ -19,4 +29,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.5",
+    package_data={"": data_files},
 )
