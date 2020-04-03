@@ -211,6 +211,6 @@ def test_view_html(admin_client):
     assert rows == [["size", "name", "size_unit"], ["1", "a", "g"], ["1", "b", "g"]]
 
 
-# calculated field, on admin, on model, both
-# missing permissions
-# view owner missing permissions
+# TODO calculated field, on admin, on model, both
+# TODO missing permissions
+# TODO view owner missing permissions
