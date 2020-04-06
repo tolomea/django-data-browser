@@ -24,4 +24,4 @@ repos:
     hooks:
     -   id: flake8
 exclude:
-    data_browser/static
+    data_browser/fe_build/|data_browser/templates/data_browser/index.html

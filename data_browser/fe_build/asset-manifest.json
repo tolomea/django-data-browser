@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/choo-choo-shoe/static/css/main.5f361e03.chunk.css",
+    "main.js": "/choo-choo-shoe/static/js/main.fede024b.chunk.js",
+    "main.js.map": "/choo-choo-shoe/static/js/main.fede024b.chunk.js.map",
+    "runtime-main.js": "/choo-choo-shoe/static/js/runtime-main.86706ea7.js",
+    "runtime-main.js.map": "/choo-choo-shoe/static/js/runtime-main.86706ea7.js.map",
+    "static/js/2.6da04d33.chunk.js": "/choo-choo-shoe/static/js/2.6da04d33.chunk.js",
+    "static/js/2.6da04d33.chunk.js.map": "/choo-choo-shoe/static/js/2.6da04d33.chunk.js.map",
+    "index.html": "/choo-choo-shoe/index.html",
+    "precache-manifest.484b583657f150c3eff71bed2d05f0ff.js": "/choo-choo-shoe/precache-manifest.484b583657f150c3eff71bed2d05f0ff.js",
+    "service-worker.js": "/choo-choo-shoe/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/choo-choo-shoe/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.6da04d33.chunk.js.LICENSE.txt": "/choo-choo-shoe/static/js/2.6da04d33.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/choo-choo-shoe/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.86706ea7.js",
+    "static/js/2.6da04d33.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.fede024b.chunk.js"
+  ]
+}

@@ -3,6 +3,8 @@ import io
 from collections import defaultdict
 
 import django.contrib.admin.views.decorators as admin_decorators
+import requests
+from django import http
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
@@ -11,8 +13,9 @@ from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.template import engines
 from django.utils import timezone
-from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import View
 from .query import (
@@ -216,4 +219,37 @@ def view(request, pk, media):
     return csv_response(request, query)
 
 
-catchall = TemplateView.as_view(template_name="data_browser/index.html")
+@csrf_exempt
+def catchall(request, path, upstream="http://localhost:3000"):
+    """
+    Proxy HTTP requests to the frontend dev server in development.
+
+    The implementation is very basic e.g. it doesn't handle HTTP headers.
+
+    """
+    upstream_url = upstream + request.path
+    method = request.META["REQUEST_METHOD"].lower()
+    response = getattr(requests, method)(upstream_url, stream=True)
+    content_type = response.headers.get("Content-Type")
+
+    if request.META.get("HTTP_UPGRADE", "").lower() == "websocket":
+        return http.HttpResponse(
+            content="WebSocket connections aren't supported",
+            status=501,
+            reason="Not Implemented",
+        )
+
+    elif content_type == "text/html; charset=UTF-8":
+        return http.HttpResponse(
+            content=engines["django"].from_string(response.text).render(),
+            status=response.status_code,
+            reason=response.reason,
+        )
+
+    else:
+        return http.StreamingHttpResponse(
+            streaming_content=response.iter_content(2 ** 12),
+            content_type=content_type,
+            status=response.status_code,
+            reason=response.reason,
+        )

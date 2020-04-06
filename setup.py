@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 
 data_files = []
-for directory in "data_browser/static", "data_browser/templates":
+for directory in "data_browser/fe_build", "data_browser/templates":
     for (path, _, filenames) in os.walk(directory):
         for filename in filenames:
             data_files.append(os.path.join("..", path, filename))
