@@ -169,6 +169,24 @@ def get_data(bound_query):
     return data
 
 
+class QueryHTML(TemplateView):
+    template_name = "data_browser/index.html"
+
+    def get_context_data(self, **kwargs):
+        return _context()
+
+
+@admin_decorators.staff_member_required
+def query_html_proxy(request, *, app, model, fields="", media="html"):
+    response = _get_proxy(request)
+
+    return http.HttpResponse(
+        content=engines["django"].from_string(response.text).render(context=_context()),
+        status=response.status_code,
+        reason=response.reason,
+    )
+
+
 @admin_decorators.staff_member_required
 def query(request, *, app, model, fields="", media):
     query = Query.from_request(app, model, fields, media, request.GET)
@@ -228,17 +246,21 @@ def _context():
     return {"data": data}
 
 
+def _get_proxy(request, upstream="http://localhost:3000"):
+    upstream_url = upstream + request.path
+    method = request.META["REQUEST_METHOD"].lower()
+    return getattr(requests, method)(upstream_url, stream=True)
+
+
 @csrf_exempt
-def catchall(request, path, upstream="http://localhost:3000"):
+def catchall_proxy(request, path=""):
     """
     Proxy HTTP requests to the frontend dev server in development.
 
     The implementation is very basic e.g. it doesn't handle HTTP headers.
 
     """
-    upstream_url = upstream + request.path
-    method = request.META["REQUEST_METHOD"].lower()
-    response = getattr(requests, method)(upstream_url, stream=True)
+    response = _get_proxy(request)
     content_type = response.headers.get("Content-Type")
 
     if request.META.get("HTTP_UPGRADE", "").lower() == "websocket":
@@ -248,16 +270,6 @@ def catchall(request, path, upstream="http://localhost:3000"):
             reason="Not Implemented",
         )
 
-    elif content_type == "text/html; charset=UTF-8":
-
-        return http.HttpResponse(
-            content=engines["django"]
-            .from_string(response.text)
-            .render(context=_context()),
-            status=response.status_code,
-            reason=response.reason,
-        )
-
     else:
         return http.StreamingHttpResponse(
             streaming_content=response.iter_content(2 ** 12),
@@ -265,10 +277,3 @@ def catchall(request, path, upstream="http://localhost:3000"):
             status=response.status_code,
             reason=response.reason,
         )
-
-
-class Index(TemplateView):
-    template_name = "data_browser/index.html"
-
-    def get_context_data(self, **kwargs):
-        return _context()
