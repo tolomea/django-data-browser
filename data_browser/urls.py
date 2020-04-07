@@ -7,7 +7,6 @@ from django.views.static import serve
 from .views import QueryHTML, catchall_proxy, query, query_html_proxy, view
 
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
-assert os.stat(FE_BUILD_DIR)
 
 
 class Optional:

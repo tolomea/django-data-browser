@@ -1,38 +1,91 @@
-.App {
-  text-align: center;
+*, *:after, *:before {
+    box-sizing: border-box;
+    font-weight: normal;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html.html{
+    overflow-y: scroll;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#body {
+    flex: 1;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #333e48;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#body a {
+  text-decoration: none;
 }
 
-.App-link {
-  color: #61dafb;
+#body a:hover {
+  text-decoration: underline;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+table, th, td {
+   border: 1px solid black;
+}
+th, td {
+   padding: 5px;
+}
+td {
+    text-align: right;
+}
+th {
+    text-align: center;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 0;
+}
+p {
+    margin: 5px auto;
+}
+select {
+    display: inline;
+    width: auto;
+}
+.main_space {
+    margin: auto;
+    display: flex;
+    flex-flow: row;
+    margin-bottom: 30px;
+}
+.filters {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.filters p {
+    margin: 5px;
+}
+.filters .error * {
+    background-color: red;
+}
+.filters .error {
+    background-color: red;
+}
+.toggle_link {
+    display: block;
+}
+.toggle_div {
+    display: block;
+    padding-left: 15px;
+}
+
+
+button.link {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  cursor: pointer;
+  color: #069;
+}
+button.link:hover {
+  text-decoration: underline;
 }

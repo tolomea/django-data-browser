@@ -169,6 +169,78 @@ def get_data(bound_query):
     return data
 
 
+def _context(request, app, model, fields):
+    query = Query.from_request(app, model, fields, "bob", request.GET)
+
+    try:
+        model = get_model(query)
+    except LookupError as e:
+        return HttpResponse(e)
+
+    admin_fields = get_all_admin_fields(request)
+    fields = get_nested_fields_for_model(model, admin_fields)
+    bound_query = BoundQuery(query, fields)
+    data = get_data(bound_query)
+
+    def fmt_fields(fields, fks):
+        return {
+            "fields": [
+                {
+                    "name": name,
+                    "concrete": field.concrete,
+                    "add_filter_link": field.add_filter_link,
+                    "add_link": field.add_link,
+                }
+                for name, field in sorted(fields.items())
+            ],
+            "fks": [
+                {"name": name, "path": path, **fmt_fields(*child)}
+                for name, (path, child) in sorted(fks.items())
+            ],
+        }
+
+    # {"query": bound_query, "data": data}
+    data = {
+        "query": {
+            "model": bound_query.model,
+            "base_url": bound_query.base_url,
+            "csv_link": bound_query.csv_link,
+            "save_link": bound_query.save_link,
+            "filters": [
+                {
+                    "is_valid": filter_.is_valid,
+                    "remove_link": filter_.remove_link,
+                    "name": filter_.name,
+                    "lookup": filter_.lookup,
+                    "url_name": filter_.url_name,
+                    "value": filter_.value,
+                    "lookups": [{"name": lookup.name} for lookup in filter_.lookups],
+                }
+                for filter_ in bound_query.filters
+            ],
+            "sort_fields": [
+                {
+                    "field": {
+                        "remove_link": field.remove_link,
+                        "concrete": field.concrete,
+                        "add_filter_link": field.add_filter_link,
+                        "toggle_sort_link": field.toggle_sort_link,
+                        "name": field.name,
+                    },
+                    "sort_icon": sort_icon,
+                }
+                for (field, sort_direction, sort_icon) in bound_query.sort_fields
+            ],
+            "all_fields_nested": fmt_fields(*bound_query.all_fields_nested),
+        },
+        "data": data,
+    }
+
+    data = json.dumps(data)
+    data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
+    return {"data": data}
+
+
 class QueryHTML(TemplateView):
     template_name = "data_browser/index.html"
 
@@ -177,11 +249,13 @@ class QueryHTML(TemplateView):
 
 
 @admin_decorators.staff_member_required
-def query_html_proxy(request, *, app, model, fields="", media="html"):
+def query_html_proxy(request, *, app, model, fields=""):
+    context = _context(request, app, model, fields)
+
     response = _get_proxy(request)
 
     return http.HttpResponse(
-        content=engines["django"].from_string(response.text).render(context=_context()),
+        content=engines["django"].from_string(response.text).render(context=context),
         status=response.status_code,
         reason=response.reason,
     )
@@ -237,13 +311,6 @@ def view(request, pk, media):
     assert media == "csv"
     query = view.get_query(media)
     return csv_response(request, query)
-
-
-def _context():
-    data = {"bob": "hello world3", "fred": "blah", "hack": "</script>"}
-    data = json.dumps(data)
-    data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
-    return {"data": data}
 
 
 def _get_proxy(request, upstream="http://localhost:3000"):
