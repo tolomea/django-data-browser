@@ -2,10 +2,9 @@ import os
 
 from django.conf import settings
 from django.urls import path, re_path, register_converter
-from django.views.generic import TemplateView
 from django.views.static import serve
 
-from .views import catchall, query, view
+from .views import Index, catchall, query, view
 
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
 assert os.stat(FE_BUILD_DIR)
@@ -34,10 +33,6 @@ if getattr(settings, "DATA_BROWSER_DEV", False):
     urlpatterns += [re_path(r"^(?P<path>.*)$", catchall)]
 else:
     urlpatterns += [
-        path(
-            "",
-            TemplateView.as_view(template_name="data_browser/index.html"),
-            name="index",
-        ),
+        path("", Index.as_view(), name="index"),
         path("<path:path>", serve, {"document_root": FE_BUILD_DIR}),
     ]

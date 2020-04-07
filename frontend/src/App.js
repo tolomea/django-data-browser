@@ -3,12 +3,16 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  var django_data = JSON.parse(document.getElementById('django-data').textContent);
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <p>
+          {JSON.stringify(django_data)}
         </p>
         <a
           className="App-link"

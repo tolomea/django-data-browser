@@ -1,5 +1,6 @@
 import csv
 import io
+import json
 from collections import defaultdict
 
 import django.contrib.admin.views.decorators as admin_decorators
@@ -16,6 +17,7 @@ from django.shortcuts import get_object_or_404, render
 from django.template import engines
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 
 from .models import View
 from .query import (
@@ -219,6 +221,13 @@ def view(request, pk, media):
     return csv_response(request, query)
 
 
+def _context():
+    data = {"bob": "hello world3", "fred": "blah", "hack": "</script>"}
+    data = json.dumps(data)
+    data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
+    return {"data": data}
+
+
 @csrf_exempt
 def catchall(request, path, upstream="http://localhost:3000"):
     """
@@ -240,8 +249,11 @@ def catchall(request, path, upstream="http://localhost:3000"):
         )
 
     elif content_type == "text/html; charset=UTF-8":
+
         return http.HttpResponse(
-            content=engines["django"].from_string(response.text).render(),
+            content=engines["django"]
+            .from_string(response.text)
+            .render(context=_context()),
             status=response.status_code,
             reason=response.reason,
         )
@@ -253,3 +265,10 @@ def catchall(request, path, upstream="http://localhost:3000"):
             status=response.status_code,
             reason=response.reason,
         )
+
+
+class Index(TemplateView):
+    template_name = "data_browser/index.html"
+
+    def get_context_data(self, **kwargs):
+        return _context()
