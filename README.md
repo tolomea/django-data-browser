@@ -14,5 +14,7 @@ If you want to modify the Javascript then you also need to
 
 2: Enable proxying to the JS dev server by adding `DATA_BROWSER_DEV = True` to your settings
 3: Fix up paths on the JS side by changing `homepage` in package.json to the correct path e.g. `/data_browser/`
+4: Run the dev server with `WDS_SOCKET_PORT=3000 npm start`
+This all assumes the dev server is running on the default `localhost:3000`
 
-To build the JS and move the files around appropriately and recreate the wheels run `build.sh`
+To build the JS, move the files around appropriately and recreate the wheels run `build.sh`
