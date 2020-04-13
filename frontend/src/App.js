@@ -9,23 +9,50 @@ function AddFilterLink(props) {
   }
 }
 
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isToggleOn: false };
+  }
+
+  handleClick() {
+    this.setState((state) => ({
+      isToggleOn: !state.isToggleOn,
+    }));
+  }
+
+  render() {
+    return (
+      <>
+        <button className="link toggle_link" onClick={this.handleClick.bind(this)}>
+          + {this.props.title}
+        </button>
+        <div
+          className="toggle_div"
+          style={{ display: this.state.isToggleOn ? "block" : "none" }}
+        >
+          {this.props.children}
+        </div>
+      </>
+    );
+  }
+}
+
 function Fields(props) {
   return (
     <>
       {props.fields.map((field) => (
         <>
-          <AddFilterLink field={field} />{" "}
-          <a href={field.add_link}>{field.name}</a>
+          <AddFilterLink field={field} /> <a href={field.add_link}>{field.name}</a>
           <br />
         </>
       ))}
 
       {props.fks.map((fk) => (
         <>
-          <button className="link toggle_link">+ {fk.name}</button>
-          <div className="toggle_div">
+          <Toggle title={fk.name}>
             <Fields {...fk} />
-          </div>
+          </Toggle>
         </>
       ))}
     </>
@@ -75,8 +102,7 @@ function Page(props) {
                   {field.concrete ? (
                     <>
                       <a href={field.add_filter_link}>Y</a>{" "}
-                      <a href={field.toggle_sort_link}>{field.name}</a>{" "}
-                      {sort_icon}
+                      <a href={field.toggle_sort_link}>{field.name}</a> {sort_icon}
                     </>
                   ) : (
                     field.name
@@ -100,9 +126,7 @@ function Page(props) {
 }
 
 function App() {
-  var django_data = JSON.parse(
-    document.getElementById("django-data").textContent
-  );
+  var django_data = JSON.parse(document.getElementById("django-data").textContent);
   return <Page {...django_data} />;
 }
 
