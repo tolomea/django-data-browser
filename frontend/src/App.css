@@ -1,21 +1,23 @@
-*, *:after, *:before {
-    box-sizing: border-box;
-    font-weight: normal;
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  font-weight: normal;
 }
 
-html.html{
-    overflow-y: scroll;
+html.html {
+  overflow-y: scroll;
 }
 
 #body {
-    flex: 1;
-    padding: 0;
-    margin: 0;
-    font-size: 14px;
-    color: #333e48;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  flex: 1;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  color: #333e48;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 #body a {
@@ -26,65 +28,74 @@ html.html{
   text-decoration: underline;
 }
 
-table, th, td {
-   border: 1px solid black;
+table,
+th,
+td {
+  border: 1px solid black;
 }
-th, td {
-   padding: 5px;
+th,
+td {
+  padding: 5px;
 }
 td {
-    text-align: right;
+  text-align: right;
 }
 th {
-    text-align: center;
+  text-align: center;
 }
 h1 {
-    text-align: center;
-    margin-bottom: 0;
+  text-align: center;
+  margin-bottom: 0;
 }
 p {
-    margin: 5px auto;
+  margin: 5px auto;
 }
 select {
-    display: inline;
-    width: auto;
+  display: inline;
+  width: auto;
 }
 .main_space {
-    margin: auto;
-    display: flex;
-    flex-flow: row;
-    margin-bottom: 30px;
+  margin: auto;
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 30px;
 }
 .filters {
-    margin: auto;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 .filters p {
-    margin: 5px;
+  margin: 5px;
 }
 .filters .error * {
-    background-color: red;
+  background-color: red;
 }
 .filters .error {
-    background-color: red;
+  background-color: red;
 }
 .toggle_link {
-    display: block;
+  display: block;
 }
 .toggle_div {
-    display: block;
-    padding-left: 15px;
+  display: block;
+  padding-left: 15px;
+}
+.fields_list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-
 button.link {
-  background: none!important;
+  background: none !important;
   border: none;
-  padding: 0!important;
+  padding: 0 !important;
   cursor: pointer;
   color: #069;
+  font-size: inherit;
+  font: inherit;
 }
 button.link:hover {
   text-decoration: underline;

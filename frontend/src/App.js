@@ -40,22 +40,21 @@ class Toggle extends React.Component {
 
 function Fields(props) {
   return (
-    <>
+    <ul className="fields_list">
       {props.fields.map((field) => (
-        <>
+        <li key={field.name}>
           <AddFilterLink field={field} /> <a href={field.add_link}>{field.name}</a>
-          <br />
-        </>
+        </li>
       ))}
 
       {props.fks.map((fk) => (
-        <>
+        <li key={fk.name}>
           <Toggle title={fk.name}>
             <Fields {...fk} />
           </Toggle>
-        </>
+        </li>
       ))}
-    </>
+    </ul>
   );
 }
 
@@ -71,15 +70,17 @@ function Page(props) {
       </p>
 
       <form className="filters" method="get" action={props.query.base_url}>
-        {props.query.filters.map((filter) => (
-          <p className={!filter.is_valid && "error"}>
+        {props.query.filters.map((filter, index) => (
+          <p className={!filter.is_valid ? "error" : undefined} key={index}>
             <a href={filter.remove_link}>✘</a> {filter.name}{" "}
             <select defaultValue={filter.lookup}>
               {filter.lookups.map((lookup) => (
-                <option value={lookup.name}>{lookup.name}</option>
+                <option key={lookup.name} value={lookup.name}>
+                  {lookup.name}
+                </option>
               ))}
             </select>{" "}
-            = <input type="text" name={filter.url_name} value={filter.value} />
+            = <input type="text" name={filter.url_name} defaultValue={filter.value} />
           </p>
         ))}
         <p>
@@ -93,32 +94,36 @@ function Page(props) {
           <Fields {...props.query.all_fields_nested} />
         </div>
         <table>
-          <tr>
-            {props.query.sort_fields.map((sort_field) => {
-              const { field, sort_icon } = sort_field;
-              return (
-                <th>
-                  <a href={field.remove_link}>✘</a>{" "}
-                  {field.concrete ? (
-                    <>
-                      <a href={field.add_filter_link}>Y</a>{" "}
-                      <a href={field.toggle_sort_link}>{field.name}</a> {sort_icon}
-                    </>
-                  ) : (
-                    field.name
-                  )}
-                </th>
-              );
-            })}
-            {!props.query.sort_fields.length && <th>No fields selected</th>}
-          </tr>
-          {props.data.map((row) => (
+          <thead>
             <tr>
-              {row.map((cell) => (
-                <td>{cell}</td>
-              ))}
+              {props.query.sort_fields.map((sort_field) => {
+                const { field, sort_icon } = sort_field;
+                return (
+                  <th key={field.name}>
+                    <a href={field.remove_link}>✘</a>{" "}
+                    {field.concrete ? (
+                      <>
+                        <a href={field.add_filter_link}>Y</a>{" "}
+                        <a href={field.toggle_sort_link}>{field.name}</a> {sort_icon}
+                      </>
+                    ) : (
+                      field.name
+                    )}
+                  </th>
+                );
+              })}
+              {!props.query.sort_fields.length && <th>No fields selected</th>}
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {props.data.map((row, index) => (
+              <tr key={index}>
+                {row.map((cell, index) => (
+                  <td key={props.query.sort_fields[index].field.name}>{cell}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
