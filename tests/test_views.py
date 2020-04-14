@@ -1,4 +1,5 @@
 import csv
+import json
 
 import data_browser.models
 import pytest
@@ -159,7 +160,7 @@ def test_query_html(admin_client):
         "/data_browser/query/tests/Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
-    assert res.context["data"] == [[1, "a", "g"], [1, "b", "g"]]
+    assert json.loads(res.context["data"])["data"] == [[1, "a", "g"], [1, "b", "g"]]
 
 
 @pytest.mark.usefixtures("products")
@@ -168,7 +169,7 @@ def test_query_html_bad_fields(admin_client):
         "/data_browser/query/tests/Product/-size,+name,size_unit,-bob.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
-    assert res.context["data"] == [[1, "a", "g"], [1, "b", "g"]]
+    assert json.loads(res.context["data"])["data"] == [[1, "a", "g"], [1, "b", "g"]]
 
 
 @pytest.mark.usefixtures("products")

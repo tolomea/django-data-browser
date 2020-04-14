@@ -7,17 +7,18 @@ import django.contrib.admin.views.decorators as admin_decorators
 import requests
 from django import http
 from django.apps import apps
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from django.template import engines
+from django.shortcuts import get_object_or_404
+from django.template import engines, loader
+from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
 
 from .models import View
 from .query import (
@@ -169,8 +170,9 @@ def get_data(bound_query):
     return data
 
 
-def _context(request, app, model, fields):
-    query = Query.from_request(app, model, fields, "bob", request.GET)
+@admin_decorators.staff_member_required
+def query_html(request, *, app, model, fields=""):
+    query = Query.from_request(app, model, fields, "html", request.GET)
 
     try:
         model = get_model(query)
@@ -199,7 +201,6 @@ def _context(request, app, model, fields):
             ],
         }
 
-    # {"query": bound_query, "data": data}
     data = {
         "query": {
             "model": bound_query.model,
@@ -242,37 +243,21 @@ def _context(request, app, model, fields):
 
     data = json.dumps(data)
     data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
-    return {"data": data}
 
+    if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
+        response = _get_from_js_dev_server(request)
+        template = engines["django"].from_string(response.text)
+    else:
+        template = loader.get_template("data_browser/index.html")
 
-class QueryHTML(TemplateView):
-    template_name = "data_browser/index.html"
-
-    def get_context_data(self, **kwargs):
-        return _context()
-
-
-@admin_decorators.staff_member_required
-def query_html_proxy(request, *, app, model, fields=""):
-    context = _context(request, app, model, fields)
-
-    response = _get_proxy(request)
-
-    return http.HttpResponse(
-        content=engines["django"].from_string(response.text).render(context=context),
-        status=response.status_code,
-        reason=response.reason,
-    )
+    return TemplateResponse(request, template, {"data": data})
 
 
 @admin_decorators.staff_member_required
 def query(request, *, app, model, fields="", media):
     query = Query.from_request(app, model, fields, media, request.GET)
-
-    if media == "csv":
-        return csv_response(request, query)
-    else:
-        return html_response(request, query)
+    assert media == "csv"
+    return csv_response(request, query)
 
 
 def csv_response(request, query):
@@ -293,22 +278,6 @@ def csv_response(request, query):
     return response
 
 
-def html_response(request, query):
-    try:
-        model = get_model(query)
-    except LookupError as e:
-        return HttpResponse(e)
-
-    admin_fields = get_all_admin_fields(request)
-    fields = get_nested_fields_for_model(model, admin_fields)
-    bound_query = BoundQuery(query, fields)
-    data = get_data(bound_query)
-
-    return render(
-        request, "data_browser/view.html", {"query": bound_query, "data": data}
-    )
-
-
 def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), pk=pk)
     request.user = view.owner  # public views are run as the person who created them
@@ -317,21 +286,21 @@ def view(request, pk, media):
     return csv_response(request, query)
 
 
-def _get_proxy(request, upstream="http://localhost:3000"):
-    upstream_url = upstream + request.path
+def _get_from_js_dev_server(request):  # pragma: no cover
+    upstream_url = f"http://localhost:3000{request.path}"
     method = request.META["REQUEST_METHOD"].lower()
     return getattr(requests, method)(upstream_url, stream=True)
 
 
 @csrf_exempt
-def catchall_proxy(request, path=""):
+def proxy_js_dev_server(request, path):  # pragma: no cover
     """
     Proxy HTTP requests to the frontend dev server in development.
 
     The implementation is very basic e.g. it doesn't handle HTTP headers.
 
     """
-    response = _get_proxy(request)
+    response = _get_from_js_dev_server(request)
     content_type = response.headers.get("Content-Type")
 
     if request.META.get("HTTP_UPGRADE", "").lower() == "websocket":
