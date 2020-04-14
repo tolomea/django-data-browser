@@ -123,22 +123,19 @@ def get_data(bound_query):
     if not bound_query.fields:
         return []
 
-    model = get_model(bound_query)
+    qs = get_model(bound_query).objects.all()
 
-    calculated_fields = bound_query.calculated_fields
-
+    # sort
     sort_fields = []
     for field, sort_direction, sort_symbol in bound_query.sort_fields:
-        if field.name not in calculated_fields:
+        if field.name not in bound_query.calculated_fields:
             if sort_direction is ASC:
                 sort_fields.append(field.name)
             if sort_direction is DSC:
                 sort_fields.append(f"-{field.name}")
-    qs = model.objects.order_by(*sort_fields)
+    qs = qs.order_by(*sort_fields)
 
-    if not calculated_fields:
-        qs = qs.values(*bound_query.fields)
-
+    # filter
     for filter_ in bound_query.filters:
         if filter_.is_valid:
             negation = False
@@ -154,19 +151,50 @@ def get_data(bound_query):
             else:
                 qs = qs.filter(**{filter_str: filter_.value})
 
-    data = []
-
-    for row in qs.distinct():
-        if calculated_fields:
-
-            def lookup(obj, name):
-                value = getattr(row, name, None)
-                return value() if callable(value) else value
-
-            data.append([lookup(row, f) for f in bound_query.fields])
-        else:
+    # no calculated fields early out using qs.values
+    if not bound_query.calculated_fields:
+        data = []
+        for row in qs.values(*bound_query.fields).distinct():
             data.append([row[f] for f in bound_query.fields])
+        return data
 
+    # preloading
+    select_related = set()
+
+    def add_select_relateds(name):
+        while "__" in name:
+            name = name.rsplit("__", 1)[0]
+            select_related.add(name)
+
+    for field, sort_direction, _ in bound_query.sort_fields:
+        if sort_direction is not None:
+            add_select_relateds(field.name)
+
+    for filter_ in bound_query.filters:
+        if filter_.is_valid:
+            add_select_relateds(filter_.name)
+
+    prefetch_related = set()
+    for field in bound_query.fields:
+        if "__" in field:
+            prefetch_related.add(field.rsplit("__", 1)[0])
+    prefetch_related -= select_related
+
+    if select_related:
+        qs = qs.select_related(*select_related)
+    if prefetch_related:
+        qs = qs.prefetch_related(*prefetch_related)
+
+    # get data
+    def lookup(obj, name):
+        value = obj
+        for part in name.split("__"):
+            value = getattr(value, part, None)
+        return value() if callable(value) else value
+
+    data = []
+    for row in qs.distinct():
+        data.append([lookup(row, f) for f in bound_query.fields])
     return data
 
 
