@@ -160,7 +160,181 @@ def test_query_html(admin_client):
         "/data_browser/query/tests/Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
-    assert json.loads(res.context["data"])["data"] == [[1, "a", "g"], [1, "b", "g"]]
+    context = json.loads(res.context["data"])
+    assert context.keys() == {"query", "data"}
+    assert context["data"] == [[1, "a", "g"], [1, "b", "g"]]
+    assert context["query"].keys() == {
+        "model",
+        "base_url",
+        "csv_link",
+        "save_link",
+        "filters",
+        "sort_fields",
+        "all_fields_nested",
+    }
+    assert context["query"]["filters"] == [
+        {
+            "err_message": None,
+            "is_valid": True,
+            "lookup": "lt",
+            "lookups": [
+                {
+                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__equal=2",
+                    "name": "equal",
+                },
+                {
+                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__not_equal=2",
+                    "name": "not_equal",
+                },
+                {
+                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__gt=2",
+                    "name": "gt",
+                },
+                {
+                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__gte=2",
+                    "name": "gte",
+                },
+                {
+                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2",
+                    "name": "lt",
+                },
+                {
+                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lte=2",
+                    "name": "lte",
+                },
+                {
+                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__is_null=2",
+                    "name": "is_null",
+                },
+            ],
+            "name": "size",
+            "remove_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0",
+            "url_name": "size__lt",
+            "value": 2.0,
+        }
+    ]
+
+    assert context["query"]["sort_fields"] == [
+        {
+            "field": {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size__equal=",
+                "concrete": True,
+                "name": "size",
+                "remove_link": "/data_browser/query/tests/Product/+name,size_unit.html?id__gt=0&size__lt=2",
+                "toggle_sort_link": "/data_browser/query/tests/Product/size,+name,size_unit.html?id__gt=0&size__lt=2",
+            },
+            "sort_icon": "\u2191",
+        },
+        {
+            "field": {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&name__equals=",
+                "concrete": True,
+                "name": "name",
+                "remove_link": "/data_browser/query/tests/Product/-size,size_unit.html?id__gt=0&size__lt=2",
+                "toggle_sort_link": "/data_browser/query/tests/Product/-size,-name,size_unit.html?id__gt=0&size__lt=2",
+            },
+            "sort_icon": "\u2193",
+        },
+        {
+            "field": {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size_unit__equals=",
+                "concrete": True,
+                "name": "size_unit",
+                "remove_link": "/data_browser/query/tests/Product/-size,+name.html?id__gt=0&size__lt=2",
+                "toggle_sort_link": "/data_browser/query/tests/Product/-size,+name,+size_unit.html?id__gt=0&size__lt=2",
+            },
+            "sort_icon": "",
+        },
+    ]
+
+    assert context["query"]["all_fields_nested"] == {
+        "fields": [
+            {
+                "add_filter_link": "",
+                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,is_onsale.html?id__gt=0&size__lt=2",
+                "concrete": False,
+                "name": "is_onsale",
+            },
+            {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&name__equals=",
+                "add_link": "/data_browser/query/tests/Product/-size,name,size_unit.html?id__gt=0&size__lt=2",
+                "concrete": True,
+                "name": "name",
+            },
+            {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&onsale__equal=",
+                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,onsale.html?id__gt=0&size__lt=2",
+                "concrete": True,
+                "name": "onsale",
+            },
+            {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&pk__equal=",
+                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,pk.html?id__gt=0&size__lt=2",
+                "concrete": True,
+                "name": "pk",
+            },
+            {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size__equal=",
+                "add_link": "/data_browser/query/tests/Product/size,+name,size_unit.html?id__gt=0&size__lt=2",
+                "concrete": True,
+                "name": "size",
+            },
+            {
+                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size_unit__equals=",
+                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2",
+                "concrete": True,
+                "name": "size_unit",
+            },
+        ],
+        "fks": [
+            {
+                "fields": [
+                    {
+                        "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&default_sku__name__equals=",
+                        "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,default_sku__name.html?id__gt=0&size__lt=2",
+                        "concrete": True,
+                        "name": "name",
+                    }
+                ],
+                "fks": [],
+                "name": "default_sku",
+                "path": "default_sku",
+            },
+            {
+                "fields": [],
+                "fks": [],
+                "name": "model_not_in_admin",
+                "path": "model_not_in_admin",
+            },
+            {
+                "fields": [
+                    {
+                        "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&producer__name__equals=",
+                        "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,producer__name.html?id__gt=0&size__lt=2",
+                        "concrete": True,
+                        "name": "name",
+                    }
+                ],
+                "fks": [
+                    {
+                        "fields": [
+                            {
+                                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&producer__address__city__equals=",
+                                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,producer__address__city.html?id__gt=0&size__lt=2",
+                                "concrete": True,
+                                "name": "city",
+                            }
+                        ],
+                        "fks": [],
+                        "name": "address",
+                        "path": "producer__address",
+                    }
+                ],
+                "name": "producer",
+                "path": "producer",
+            },
+        ],
+    }
 
 
 @pytest.mark.usefixtures("products")
@@ -192,7 +366,7 @@ def test_query_csv(admin_client):
 
 
 @pytest.mark.usefixtures("products")
-def test_view_html(admin_client):
+def test_view(admin_client):
     view = data_browser.models.View.objects.create(
         app="tests",
         model="Product",

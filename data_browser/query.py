@@ -4,7 +4,6 @@ from collections import defaultdict, namedtuple
 
 import dateutil.parser
 from django.urls import reverse
-from django.utils import safestring
 
 from .models import View
 
@@ -258,8 +257,7 @@ class Filter:
             name, _, value = filters[self.index]
             filters[self.index] = (name, lookup, value)
             link = self.query.copy(filters=filters).url
-            # TODO safestring is used here to make django template stuff happy
-            yield LookupOption(lookup, safestring.mark_safe(link))
+            yield LookupOption(lookup, link)
 
     @property
     def url_name(self):
