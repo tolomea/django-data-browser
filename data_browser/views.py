@@ -215,7 +215,10 @@ def _context(request, app, model, fields):
                     "lookup": filter_.lookup,
                     "url_name": filter_.url_name,
                     "value": filter_.value,
-                    "lookups": [{"name": lookup.name} for lookup in filter_.lookups],
+                    "lookups": [
+                        {"name": lookup.name, "link": lookup.link}
+                        for lookup in filter_.lookups
+                    ],
                 }
                 for filter_ in bound_query.filters
             ],

@@ -1,26 +1,37 @@
 import React from "react";
 import "./App.css";
 
-function Filter(props) {
-  return (
-    <p className={!props.filter.is_valid ? "error" : undefined}>
-      <a href={props.filter.remove_link}>✘</a> {props.filter.name}{" "}
-      <select defaultValue={props.filter.lookup}>
-        {props.filter.lookups.map((lookup) => (
-          <option key={lookup.name} value={lookup.name}>
-            {lookup.name}
-          </option>
-        ))}
-      </select>{" "}
-      ={" "}
-      <input
-        type="text"
-        name={props.filter.url_name}
-        defaultValue={props.filter.value}
-      />
-      {!props.filter.is_valid && props.filter.err_message}
-    </p>
-  );
+class Filter extends React.Component {
+  handleLookupChange(event) {
+    this.props.filter.lookups.forEach((lookup) => {
+      if (lookup.name === event.target.value) document.location.href = lookup.link;
+    });
+  }
+
+  render() {
+    return (
+      <p className={!this.props.filter.is_valid ? "error" : undefined}>
+        <a href={this.props.filter.remove_link}>✘</a> {this.props.filter.name}{" "}
+        <select
+          defaultValue={this.props.filter.lookup}
+          onChange={this.handleLookupChange.bind(this)}
+        >
+          {this.props.filter.lookups.map((lookup) => (
+            <option key={lookup.name} value={lookup.name}>
+              {lookup.name}
+            </option>
+          ))}
+        </select>{" "}
+        ={" "}
+        <input
+          type="text"
+          name={this.props.filter.url_name}
+          defaultValue={this.props.filter.value}
+        />
+        {!this.props.filter.is_valid && this.props.filter.err_message}
+      </p>
+    );
+  }
 }
 
 function AddFilter(props) {
