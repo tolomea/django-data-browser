@@ -191,36 +191,36 @@ class TestField:
 
 
 class TestStringField:
-    def test_is_valid(self):
-        assert StringField(None, None).is_valid("contains", "hello")
-        assert not StringField(None, None).is_valid("pontains", "hello")
+    def test_validate(self):
+        assert not StringField(None, None).validate("contains", "hello")
+        assert StringField(None, None).validate("pontains", "hello")
 
 
 class TestNumberField:
-    def test_is_valid(self):
-        assert NumberField(None, None).is_valid("gt", "6.1")
-        assert not NumberField(None, None).is_valid("pontains", "6.1")
-        assert not NumberField(None, None).is_valid("gt", "hello")
-        assert NumberField(None, None).is_valid("is_null", "True")
-        assert not NumberField(None, None).is_valid("is_null", "hello")
+    def test_validate(self):
+        assert not NumberField(None, None).validate("gt", "6.1")
+        assert NumberField(None, None).validate("pontains", "6.1")
+        assert NumberField(None, None).validate("gt", "hello")
+        assert not NumberField(None, None).validate("is_null", "True")
+        assert NumberField(None, None).validate("is_null", "hello")
 
 
 class TestTimeField:
-    def test_is_valid(self):
-        assert TimeField(None, None).is_valid("gt", "2018-03-20T22:31:23")
-        assert not TimeField(None, None).is_valid("gt", "hello")
-        assert not TimeField(None, None).is_valid("pontains", "2018-03-20T22:31:23")
-        assert TimeField(None, None).is_valid("is_null", "True")
-        assert not TimeField(None, None).is_valid("is_null", "hello")
+    def test_validate(self):
+        assert not TimeField(None, None).validate("gt", "2018-03-20T22:31:23")
+        assert TimeField(None, None).validate("gt", "hello")
+        assert TimeField(None, None).validate("pontains", "2018-03-20T22:31:23")
+        assert not TimeField(None, None).validate("is_null", "True")
+        assert TimeField(None, None).validate("is_null", "hello")
 
 
 class TestBooleanField:
-    def test_is_valid(self):
-        assert BooleanField(None, None).is_valid("equal", "True")
-        assert not BooleanField(None, None).is_valid("equal", "hello")
-        assert not BooleanField(None, None).is_valid("pontains", "True")
+    def test_validate(self):
+        assert not BooleanField(None, None).validate("equal", "True")
+        assert BooleanField(None, None).validate("equal", "hello")
+        assert BooleanField(None, None).validate("pontains", "True")
 
 
 class TestCalculatedField:
-    def test_is_valid(self):
-        assert not CalculatedField(None, None).is_valid("gt", "1")
+    def test_validate(self):
+        assert CalculatedField(None, None).validate("gt", "1")

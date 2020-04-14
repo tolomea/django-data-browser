@@ -108,7 +108,13 @@ class Query:
 
 
 def parse_boolean(val):
-    return {"true": True, "false": False}[val.lower()]
+    val = val.lower()
+    if val == "true":
+        return True
+    elif val == "false":
+        return False
+    else:
+        raise ValueError("Expected 'true' or 'false'")
 
 
 class Field:
@@ -137,15 +143,15 @@ class Field:
     def _parse(self, value):
         return value
 
-    def is_valid(self, lookup, value):
+    def validate(self, lookup, value):
         if lookup not in self.lookups:
-            return False
+            return f"Bad lookup '{lookup}' expected {self.lookups}"
         try:
             self.parse(lookup, value)
-        except Exception:
-            return False
+        except Exception as e:
+            return str(e) if str(e) else repr(e)
         else:
-            return True
+            return None
 
     @property
     def add_link(self):
@@ -161,8 +167,11 @@ class Field:
 
     @property
     def add_filter_link(self):
+        if not self.lookups:
+            return ""
+
         filters = list(self.query.filters)
-        filters.append((self.name, "equals", ""))
+        filters.append((self.name, self.lookups[0], ""))
         return self.query.copy(filters=filters).url
 
     @property
@@ -225,7 +234,8 @@ class Filter:
         self.lookup = lookup
         self.query = field.query
         self.name = field.name
-        self.is_valid = field.is_valid(lookup, value)
+        self.err_message = field.validate(lookup, value)
+        self.is_valid = not self.err_message
         self.value = field.parse(lookup, value) if self.is_valid else None
 
     def __eq__(self, other):

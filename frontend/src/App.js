@@ -1,7 +1,29 @@
 import React from "react";
 import "./App.css";
 
-function AddFilterLink(props) {
+function Filter(props) {
+  return (
+    <p className={!props.filter.is_valid ? "error" : undefined}>
+      <a href={props.filter.remove_link}>✘</a> {props.filter.name}{" "}
+      <select defaultValue={props.filter.lookup}>
+        {props.filter.lookups.map((lookup) => (
+          <option key={lookup.name} value={lookup.name}>
+            {lookup.name}
+          </option>
+        ))}
+      </select>{" "}
+      ={" "}
+      <input
+        type="text"
+        name={props.filter.url_name}
+        defaultValue={props.filter.value}
+      />
+      {!props.filter.is_valid && props.filter.err_message}
+    </p>
+  );
+}
+
+function AddFilter(props) {
   if (props.field.concrete) {
     return <a href={props.field.add_filter_link}>Y</a>;
   } else {
@@ -43,7 +65,7 @@ function Fields(props) {
     <ul className="fields_list">
       {props.fields.map((field) => (
         <li key={field.name}>
-          <AddFilterLink field={field} /> <a href={field.add_link}>{field.name}</a>
+          <AddFilter field={field} /> <a href={field.add_link}>{field.name}</a>
         </li>
       ))}
 
@@ -71,17 +93,7 @@ function Page(props) {
 
       <form className="filters" method="get" action={props.query.base_url}>
         {props.query.filters.map((filter, index) => (
-          <p className={!filter.is_valid ? "error" : undefined} key={index}>
-            <a href={filter.remove_link}>✘</a> {filter.name}{" "}
-            <select defaultValue={filter.lookup}>
-              {filter.lookups.map((lookup) => (
-                <option key={lookup.name} value={lookup.name}>
-                  {lookup.name}
-                </option>
-              ))}
-            </select>{" "}
-            = <input type="text" name={filter.url_name} defaultValue={filter.value} />
-          </p>
+          <Filter filter={filter} key={index} />
         ))}
         <p>
           <input type="submit" />

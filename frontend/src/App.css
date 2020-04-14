@@ -55,13 +55,13 @@ select {
   width: auto;
 }
 .main_space {
-  margin: auto;
+  margin: 0 auto;
   display: flex;
   flex-flow: row;
   margin-bottom: 30px;
 }
 .filters {
-  margin: auto;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -70,10 +70,10 @@ select {
   margin: 5px;
 }
 .filters .error * {
-  background-color: red;
+  background-color: #ff4040;
 }
 .filters .error {
-  background-color: red;
+  background-color: #ff4040;
 }
 .toggle_link {
   display: block;
