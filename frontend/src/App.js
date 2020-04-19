@@ -26,6 +26,17 @@ function getURLforQuery(query, media) {
   return `${getBaseURL()}/${fieldStr}.${media}?${filterStr}`;
 }
 
+function Link(props) {
+  return (
+    <button
+      type="button"
+      className={"link " + (props.className || "")}
+      onClick={props.onClick}
+    >
+      {props.children}
+    </button>
+  );
+}
 class Filter extends React.Component {
   handleLookupChange(event) {
     this.props.lookups.forEach((lookup) => {
@@ -36,10 +47,7 @@ class Filter extends React.Component {
   render() {
     return (
       <p className={this.props.filter.err_message ? "error" : undefined}>
-        <button type="button" className="link" onClick={this.props.handleRemove}>
-          ✘
-        </button>{" "}
-        {this.props.filter.name}{" "}
+        <Link onClick={this.props.handleRemove}>✘</Link> {this.props.filter.name}{" "}
         <select
           defaultValue={this.props.filter.lookup}
           onChange={this.handleLookupChange.bind(this)}
@@ -110,25 +118,17 @@ class Toggle extends React.Component {
     if (this.state.isToggleOn) {
       return (
         <>
-          <button
-            type="button"
-            className="link toggle_link"
-            onClick={this.handleClick.bind(this)}
-          >
+          <Link className="toggle_link" onClick={this.handleClick.bind(this)}>
             > {this.props.title}
-          </button>
+          </Link>
           <div className="toggle_div">{this.props.children}</div>
         </>
       );
     } else {
       return (
-        <button
-          type="button"
-          className="link toggle_link"
-          onClick={this.handleClick.bind(this)}
-        >
+        <Link className="toggle_link" onClick={this.handleClick.bind(this)}>
           + {this.props.title}
-        </button>
+        </Link>
       );
     }
   }
