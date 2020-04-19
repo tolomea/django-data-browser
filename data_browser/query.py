@@ -159,15 +159,6 @@ class Field:
         return self.query.copy(fields=fields).url
 
     @property
-    def add_filter_link(self):
-        if not self.lookups:
-            return ""
-
-        filters = list(self.query.filters)
-        filters.append((self.name, self.default_lookup, ""))
-        return self.query.copy(filters=filters).url
-
-    @property
     def default_lookup(self):
         return self.lookups[0]
 

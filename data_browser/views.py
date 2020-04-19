@@ -214,12 +214,7 @@ def query_html(request, *, app, model, fields=""):
     def fmt_fields(fields, fks):
         return {
             "fields": [
-                {
-                    "name": name,
-                    "concrete": field.concrete,
-                    "add_filter_link": field.add_filter_link,
-                    "add_link": field.add_link,
-                }
+                {"name": name, "concrete": field.concrete, "add_link": field.add_link}
                 for name, field in sorted(fields.items())
             ],
             "fks": [

@@ -95,14 +95,6 @@ function Filters(props) {
   );
 }
 
-function AddFilter(props) {
-  if (props.field.concrete) {
-    return <a href={props.field.add_filter_link}>Y</a>;
-  } else {
-    return <>&nbsp;&nbsp;</>;
-  }
-}
-
 class Toggle extends React.Component {
   constructor(props) {
     super(props);
@@ -138,11 +130,31 @@ class Toggle extends React.Component {
 function Fields(props) {
   return (
     <ul className="fields_list">
-      {props.fields.map((field) => (
-        <li key={field.name}>
-          <AddFilter field={field} /> <a href={field.add_link}>{field.name}</a>
-        </li>
-      ))}
+      {props.fields.map((field) => {
+        function handleAddFilter() {
+          var newFilters = props.query.filters.slice();
+          newFilters.push({
+            err_message: null,
+            name: field.name,
+            lookup: "",
+            value: "",
+          });
+          props.handleQueryChange({
+            filters: newFilters,
+          });
+        }
+
+        return (
+          <li key={field.name}>
+            {field.concrete ? (
+              <Link onClick={handleAddFilter}>Y</Link>
+            ) : (
+              <>&nbsp;&nbsp;</>
+            )}{" "}
+            <a href={field.add_link}>{field.name}</a>
+          </li>
+        );
+      })}
 
       {props.fks.map((fk) => (
         <li key={fk.name}>
@@ -256,7 +268,11 @@ function Page(props) {
       <p>Showing {props.data.length} results</p>
       <div className="main_space">
         <div>
-          <Fields {...props.all_fields} />
+          <Fields
+            query={props.lightQuery}
+            handleQueryChange={props.handleQueryChange}
+            {...props.all_fields}
+          />
         </div>
         <Results
           query={props.lightQuery}
