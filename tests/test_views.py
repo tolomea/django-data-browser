@@ -493,7 +493,17 @@ def test_query_json(admin_client):
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
-    assert data == {"data": [[1, "a", "g"], [1, "b", "g"]]}
+    assert data == {
+        "data": [[1, "a", "g"], [1, "b", "g"]],
+        "filters": [
+            {"err_message": None, "name": "size", "lookup": "lt", "value": 2.0}
+        ],
+        "fields": [
+            {"name": "size", "sort": "dsc"},
+            {"name": "name", "sort": "asc"},
+            {"name": "size_unit", "sort": None},
+        ],
+    }
 
 
 @pytest.mark.usefixtures("products")
@@ -535,7 +545,17 @@ def test_view_json(admin_client):
     res = admin_client.get(f"/data_browser/view/{view.pk}.json")
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
-    assert data == {"data": [[1, "a", "g"], [1, "b", "g"]]}
+    assert data == {
+        "data": [[1, "a", "g"], [1, "b", "g"]],
+        "filters": [
+            {"err_message": None, "name": "size", "lookup": "lt", "value": 2.0}
+        ],
+        "fields": [
+            {"name": "size", "sort": "dsc"},
+            {"name": "name", "sort": "asc"},
+            {"name": "size_unit", "sort": None},
+        ],
+    }
 
 
 # TODO calculated field, on admin, on model, both

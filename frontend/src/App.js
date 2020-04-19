@@ -196,6 +196,7 @@ class App extends React.Component {
     // TODO all_fileds should really be a prop and this djangoData thing should be over in index.js
     this.state = {
       data: [],
+      light_query: {},
       query: djangoData.query,
       all_fields: djangoData.all_fields,
     };
@@ -203,12 +204,12 @@ class App extends React.Component {
 
   componentDidMount() {
     fetch(getAPIforWindow())
-
       .then((res) => res.json())
       .then(
         (result) => {
           this.setState({
             data: result.data,
+            light_query: { fields: result.fields, filters: result.filters },
           });
         },
         (error) => {
@@ -223,6 +224,7 @@ class App extends React.Component {
     return (
       <Page
         data={this.state.data}
+        light_query={this.state.light_query}
         query={this.state.query}
         all_fields={this.state.all_fields} // TODO this should be a prop
       />

@@ -310,7 +310,24 @@ def json_response(request, query):
     bound_query = BoundQuery(query, fields)
     data = get_data(bound_query)
 
-    return JsonResponse({"data": data})
+    return JsonResponse(
+        {
+            "data": data,
+            "filters": [
+                {
+                    "err_message": filter_.err_message,
+                    "name": filter_.name,
+                    "lookup": filter_.lookup,
+                    "value": filter_.value,
+                }
+                for filter_ in bound_query.filters
+            ],
+            "fields": [
+                {"name": field.name, "sort": sort_direction}
+                for (field, sort_direction) in bound_query.sort_fields
+            ],
+        }
+    )
 
 
 def view(request, pk, media):
