@@ -28,7 +28,7 @@ function getURLforQuery(query, media) {
 
 class Filter extends React.Component {
   handleLookupChange(event) {
-    this.props.filter.lookups.forEach((lookup) => {
+    this.props.lookups.forEach((lookup) => {
       if (lookup.name === event.target.value) document.location.href = lookup.link;
     });
   }
@@ -44,7 +44,7 @@ class Filter extends React.Component {
           defaultValue={this.props.filter.lookup}
           onChange={this.handleLookupChange.bind(this)}
         >
-          {this.props.filter.lookups.map((lookup) => (
+          {this.props.lookups.map((lookup) => (
             <option key={lookup.name} value={lookup.name}>
               {lookup.name}
             </option>
@@ -60,6 +60,30 @@ class Filter extends React.Component {
       </p>
     );
   }
+}
+
+function Filters(props) {
+  return (
+    <form className="filters" method="get">
+      {props.light_query.filters.map((filter, index) => (
+        <Filter
+          filter={filter}
+          lookups={props.query.filters[index].lookups}
+          key={index}
+          handleRemove={() => {
+            var newFilters = props.light_query.filters.slice();
+            newFilters.splice(index, 1);
+            props.handleQueryChange({
+              filters: newFilters,
+            });
+          }}
+        />
+      ))}
+      <p>
+        <input type="submit" />
+      </p>
+    </form>
+  );
 }
 
 function AddFilter(props) {
@@ -179,29 +203,6 @@ function Results(props) {
   );
 }
 
-function Filters(props) {
-  return (
-    <form className="filters" method="get" action={props.query.base_url}>
-      {props.query.filters.map((filter, index) => (
-        <Filter
-          filter={filter}
-          key={index}
-          handleRemove={() => {
-            var newFilters = props.light_query.filters.slice();
-            newFilters.splice(index, 1);
-            props.handleQueryChange({
-              filters: newFilters,
-            });
-          }}
-        />
-      ))}
-      <p>
-        <input type="submit" />
-      </p>
-    </form>
-  );
-}
-
 function Page(props) {
   return (
     <div id="body">
@@ -237,7 +238,7 @@ class App extends React.Component {
     // TODO all_fileds should really be a prop and this djangoData thing should be over in index.js
     this.state = {
       data: [],
-      light_query: {},
+      light_query: { filters: [], fields: [] },
       query: djangoData.query,
       all_fields: djangoData.all_fields,
     };
