@@ -246,25 +246,12 @@ def test_query_html(admin_client):
     ]
 
     assert context["query"]["fields"] == [
-        {
-            "add_filter_link": ANY(str),
-            "concrete": True,
-            "name": "size",
-            "toggle_sort_link": ANY(str),
-            "sort": "dsc",
-        },
-        {
-            "add_filter_link": ANY(str),
-            "concrete": True,
-            "name": "name",
-            "toggle_sort_link": ANY(str),
-            "sort": "asc",
-        },
+        {"add_filter_link": ANY(str), "concrete": True, "name": "size", "sort": "dsc"},
+        {"add_filter_link": ANY(str), "concrete": True, "name": "name", "sort": "asc"},
         {
             "add_filter_link": ANY(str),
             "concrete": True,
             "name": "size_unit",
-            "toggle_sort_link": ANY(str),
             "sort": None,
         },
     ]
@@ -366,34 +353,15 @@ def test_query_html_bad_fields(admin_client):
     )
     assert res.status_code == 200
     assert json.loads(res.context["data"])["query"]["fields"] == [
+        {"concrete": True, "add_filter_link": ANY(str), "name": "size", "sort": "dsc"},
+        {"concrete": True, "add_filter_link": ANY(str), "name": "name", "sort": "asc"},
         {
             "concrete": True,
             "add_filter_link": ANY(str),
-            "toggle_sort_link": ANY(str),
-            "name": "size",
-            "sort": "dsc",
-        },
-        {
-            "concrete": True,
-            "add_filter_link": ANY(str),
-            "toggle_sort_link": ANY(str),
-            "name": "name",
-            "sort": "asc",
-        },
-        {
-            "concrete": True,
-            "add_filter_link": ANY(str),
-            "toggle_sort_link": ANY(str),
             "name": "size_unit",
             "sort": None,
         },
-        {
-            "concrete": False,
-            "add_filter_link": "",
-            "toggle_sort_link": ANY(str),
-            "name": "is_onsale",
-            "sort": None,
-        },
+        {"concrete": False, "add_filter_link": "", "name": "is_onsale", "sort": None},
     ]
     assert json.loads(res.context["data"])["query"]["filters"] == [
         {

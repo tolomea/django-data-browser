@@ -177,7 +177,20 @@ function ResultsHead(props) {
               {field.concrete ? (
                 <>
                   <a href={oldField.add_filter_link}>Y</a>{" "}
-                  <a href={oldField.toggle_sort_link}>{field.name}</a>{" "}
+                  <Link
+                    onClick={() => {
+                      var newFields = props.lightQuery.fields.slice();
+                      newFields[index] = {
+                        ...field,
+                        sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
+                      };
+                      props.handleQueryChange({
+                        fields: newFields,
+                      });
+                    }}
+                  >
+                    {field.name}
+                  </Link>{" "}
                   {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
                 </>
               ) : (

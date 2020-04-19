@@ -160,20 +160,6 @@ class TestField:
             == "/data_browser/query/app/model/+fa,-fd,fn.html?bob__equals=fred&fd__equals="
         )
 
-    def test_toggle_sort_link(self, query):
-        assert (
-            StringField("fa", query).toggle_sort_link
-            == "/data_browser/query/app/model/-fa,-fd,fn.html?bob__equals=fred"
-        )
-        assert (
-            StringField("fd", query).toggle_sort_link
-            == "/data_browser/query/app/model/+fa,fd,fn.html?bob__equals=fred"
-        )
-        assert (
-            StringField("fn", query).toggle_sort_link
-            == "/data_browser/query/app/model/+fa,-fd,+fn.html?bob__equals=fred"
-        )
-
     def test_repr(self, query):
         assert repr(StringField("fa", query)) == f"StringField('fa', {query})"
 

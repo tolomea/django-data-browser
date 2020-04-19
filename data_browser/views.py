@@ -251,7 +251,6 @@ def query_html(request, *, app, model, fields=""):
                 {
                     "concrete": field.concrete,
                     "add_filter_link": field.add_filter_link,
-                    "toggle_sort_link": field.toggle_sort_link,
                     "name": field.name,
                     "sort": sort_direction,
                 }

@@ -167,13 +167,6 @@ class Field:
         filters.append((self.name, self.lookups[0], ""))
         return self.query.copy(filters=filters).url
 
-    @property
-    def toggle_sort_link(self):
-        next_state = {ASC: DSC, DSC: None, None: ASC}
-        fields = dict(self.query.fields)
-        fields[self.name] = next_state[fields[self.name]]
-        return self.query.copy(fields=fields).url
-
 
 class StringField(Field):
     lookups = [
