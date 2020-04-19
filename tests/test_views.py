@@ -231,7 +231,6 @@ def test_query_html(admin_client):
     assert context["query"]["filters"] == [
         {
             "err_message": None,
-            "is_valid": True,
             "lookup": "lt",
             "lookups": [
                 {"link": ANY(str), "name": "equal"},
@@ -421,7 +420,6 @@ def test_query_html_bad_fields(admin_client):
     ]
     assert json.loads(res.context["data"])["query"]["filters"] == [
         {
-            "is_valid": True,
             "err_message": None,
             "remove_link": ANY(str),
             "name": "size",
@@ -438,7 +436,6 @@ def test_query_html_bad_fields(admin_client):
             ],
         },
         {
-            "is_valid": False,
             "err_message": "could not convert string to float: 'xx'",
             "remove_link": ANY(str),
             "name": "size",
@@ -455,7 +452,6 @@ def test_query_html_bad_fields(admin_client):
             ],
         },
         {
-            "is_valid": False,
             "err_message": "Bad lookup 'xx' expected ['equal', 'not_equal', 'gt', 'gte', 'lt', 'lte', 'is_null']",
             "remove_link": ANY(str),
             "name": "size",

@@ -11,7 +11,7 @@ class Filter extends React.Component {
 
   render() {
     return (
-      <p className={!this.props.filter.is_valid ? "error" : undefined}>
+      <p className={this.props.filter.err_message ? "error" : undefined}>
         <a href={this.props.filter.remove_link}>✘</a> {this.props.filter.name}{" "}
         <select
           defaultValue={this.props.filter.lookup}
@@ -29,7 +29,7 @@ class Filter extends React.Component {
           name={`${this.props.filter.name}__${this.props.filter.lookup}`}
           defaultValue={this.props.filter.value}
         />
-        {!this.props.filter.is_valid && this.props.filter.err_message}
+        {this.props.filter.err_message}
       </p>
     );
   }

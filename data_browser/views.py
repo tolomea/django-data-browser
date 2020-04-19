@@ -236,7 +236,6 @@ def query_html(request, *, app, model, fields=""):
             "save_link": bound_query.save_link,
             "filters": [
                 {
-                    "is_valid": filter_.is_valid,
                     "err_message": filter_.err_message,
                     "remove_link": filter_.remove_link,
                     "name": filter_.name,
