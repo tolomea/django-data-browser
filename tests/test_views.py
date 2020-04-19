@@ -244,7 +244,6 @@ def test_query_html(admin_client):
             ],
             "name": "size",
             "remove_link": ANY(str),
-            "url_name": "size__lt",
             "value": 2.0,
         }
     ]
@@ -427,7 +426,6 @@ def test_query_html_bad_fields(admin_client):
             "remove_link": ANY(str),
             "name": "size",
             "lookup": "lt",
-            "url_name": "size__lt",
             "value": 2.0,
             "lookups": [
                 {"name": "equal", "link": ANY(str)},
@@ -445,7 +443,6 @@ def test_query_html_bad_fields(admin_client):
             "remove_link": ANY(str),
             "name": "size",
             "lookup": "lt",
-            "url_name": "size__lt",
             "value": None,
             "lookups": [
                 {"name": "equal", "link": ANY(str)},
@@ -463,7 +460,6 @@ def test_query_html_bad_fields(admin_client):
             "remove_link": ANY(str),
             "name": "size",
             "lookup": "xx",
-            "url_name": "size__xx",
             "value": None,
             "lookups": [
                 {"name": "equal", "link": ANY(str)},

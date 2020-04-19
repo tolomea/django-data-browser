@@ -259,10 +259,6 @@ class Filter:
             link = self.query.copy(filters=filters).url
             yield LookupOption(lookup, link)
 
-    @property
-    def url_name(self):
-        return f"{self.field.name}__{self.lookup}"
-
 
 class BoundQuery:
     def __init__(self, query, group):

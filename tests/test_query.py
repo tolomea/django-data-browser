@@ -139,9 +139,6 @@ class TestBoundQuery:
 
 
 class TestFilter:
-    def test_url_name(self, filter):
-        assert filter.url_name == "bob__equals"
-
     def test_remove_link(self, filter):
         assert filter.remove_link == "/data_browser/query/app/model/+fa,-fd,fn.html"
 

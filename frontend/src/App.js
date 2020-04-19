@@ -26,7 +26,7 @@ class Filter extends React.Component {
         ={" "}
         <input
           type="text"
-          name={this.props.filter.url_name}
+          name={`${this.props.filter.name}__${this.props.filter.lookup}`}
           defaultValue={this.props.filter.value}
         />
         {!this.props.filter.is_valid && this.props.filter.err_message}

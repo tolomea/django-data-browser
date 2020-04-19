@@ -241,7 +241,6 @@ def query_html(request, *, app, model, fields=""):
                     "remove_link": filter_.remove_link,
                     "name": filter_.name,
                     "lookup": filter_.lookup,
-                    "url_name": filter_.url_name,
                     "value": filter_.value,
                     "lookups": [
                         {"name": lookup.name, "link": lookup.link}
