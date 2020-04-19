@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from .models import View
 
-ASC, DSC = range(2)
+ASC, DSC = "asc", "dsc"
 
 
 class Query:
@@ -309,11 +309,10 @@ class BoundQuery:
 
     @property
     def sort_fields(self):
-        sort_symbol = {ASC: "↓", DSC: "↑", None: ""}
         res = []
         for name, direction in self._query.fields.items():
             if name in self.all_fields:
-                res.append((self.all_fields[name], direction, sort_symbol[direction]))
+                res.append((self.all_fields[name], direction))
         return res
 
     @property

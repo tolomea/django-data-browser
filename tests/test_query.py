@@ -88,9 +88,9 @@ class TestBoundQuery:
 
     def test_sort_fields(self, query, bound_query):
         assert list(bound_query.sort_fields) == [
-            (StringField("fa", query), ASC, "↓"),
-            (StringField("fd", query), DSC, "↑"),
-            (StringField("fn", query), None, ""),
+            (StringField("fa", query), ASC),
+            (StringField("fd", query), DSC),
+            (StringField("fn", query), None),
         ]
 
     def test_filters(self, bound_query, filter):

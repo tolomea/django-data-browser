@@ -127,7 +127,7 @@ def get_data(bound_query):
 
     # sort
     sort_fields = []
-    for field, sort_direction, sort_symbol in bound_query.sort_fields:
+    for field, sort_direction in bound_query.sort_fields:
         if field.name not in bound_query.calculated_fields:
             if sort_direction is ASC:
                 sort_fields.append(field.name)
@@ -166,7 +166,7 @@ def get_data(bound_query):
             name = name.rsplit("__", 1)[0]
             select_related.add(name)
 
-    for field, sort_direction, _ in bound_query.sort_fields:
+    for field, sort_direction in bound_query.sort_fields:
         if sort_direction is not None:
             add_select_relateds(field.name)
 
@@ -250,16 +250,14 @@ def query_html(request, *, app, model, fields=""):
             ],
             "sort_fields": [
                 {
-                    "field": {
-                        "remove_link": field.remove_link,
-                        "concrete": field.concrete,
-                        "add_filter_link": field.add_filter_link,
-                        "toggle_sort_link": field.toggle_sort_link,
-                        "name": field.name,
-                    },
-                    "sort_icon": sort_icon,
+                    "remove_link": field.remove_link,
+                    "concrete": field.concrete,
+                    "add_filter_link": field.add_filter_link,
+                    "toggle_sort_link": field.toggle_sort_link,
+                    "name": field.name,
+                    "sort": sort_direction,
                 }
-                for (field, sort_direction, sort_icon) in bound_query.sort_fields
+                for (field, sort_direction) in bound_query.sort_fields
             ],
             "all_fields_nested": fmt_fields(*bound_query.all_fields_nested),
         }

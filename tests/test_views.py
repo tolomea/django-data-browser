@@ -249,34 +249,28 @@ def test_query_html(admin_client):
 
     assert context["query"]["sort_fields"] == [
         {
-            "field": {
-                "add_filter_link": ANY(str),
-                "concrete": True,
-                "name": "size",
-                "remove_link": ANY(str),
-                "toggle_sort_link": ANY(str),
-            },
-            "sort_icon": "\u2191",
+            "add_filter_link": ANY(str),
+            "concrete": True,
+            "name": "size",
+            "remove_link": ANY(str),
+            "toggle_sort_link": ANY(str),
+            "sort": "dsc",
         },
         {
-            "field": {
-                "add_filter_link": ANY(str),
-                "concrete": True,
-                "name": "name",
-                "remove_link": ANY(str),
-                "toggle_sort_link": ANY(str),
-            },
-            "sort_icon": "\u2193",
+            "add_filter_link": ANY(str),
+            "concrete": True,
+            "name": "name",
+            "remove_link": ANY(str),
+            "toggle_sort_link": ANY(str),
+            "sort": "asc",
         },
         {
-            "field": {
-                "add_filter_link": ANY(str),
-                "concrete": True,
-                "name": "size_unit",
-                "remove_link": ANY(str),
-                "toggle_sort_link": ANY(str),
-            },
-            "sort_icon": "",
+            "add_filter_link": ANY(str),
+            "concrete": True,
+            "name": "size_unit",
+            "remove_link": ANY(str),
+            "toggle_sort_link": ANY(str),
+            "sort": None,
         },
     ]
 
@@ -378,44 +372,36 @@ def test_query_html_bad_fields(admin_client):
     assert res.status_code == 200
     assert json.loads(res.context["data"])["query"]["sort_fields"] == [
         {
-            "field": {
-                "remove_link": ANY(str),
-                "concrete": True,
-                "add_filter_link": ANY(str),
-                "toggle_sort_link": ANY(str),
-                "name": "size",
-            },
-            "sort_icon": "↑",
+            "remove_link": ANY(str),
+            "concrete": True,
+            "add_filter_link": ANY(str),
+            "toggle_sort_link": ANY(str),
+            "name": "size",
+            "sort": "dsc",
         },
         {
-            "field": {
-                "remove_link": ANY(str),
-                "concrete": True,
-                "add_filter_link": ANY(str),
-                "toggle_sort_link": ANY(str),
-                "name": "name",
-            },
-            "sort_icon": "↓",
+            "remove_link": ANY(str),
+            "concrete": True,
+            "add_filter_link": ANY(str),
+            "toggle_sort_link": ANY(str),
+            "name": "name",
+            "sort": "asc",
         },
         {
-            "field": {
-                "remove_link": ANY(str),
-                "concrete": True,
-                "add_filter_link": ANY(str),
-                "toggle_sort_link": ANY(str),
-                "name": "size_unit",
-            },
-            "sort_icon": "",
+            "remove_link": ANY(str),
+            "concrete": True,
+            "add_filter_link": ANY(str),
+            "toggle_sort_link": ANY(str),
+            "name": "size_unit",
+            "sort": None,
         },
         {
-            "field": {
-                "remove_link": ANY(str),
-                "concrete": False,
-                "add_filter_link": "",
-                "toggle_sort_link": ANY(str),
-                "name": "is_onsale",
-            },
-            "sort_icon": "",
+            "remove_link": ANY(str),
+            "concrete": False,
+            "add_filter_link": "",
+            "toggle_sort_link": ANY(str),
+            "name": "is_onsale",
+            "sort": None,
         },
     ]
     assert json.loads(res.context["data"])["query"]["filters"] == [

@@ -120,15 +120,15 @@ function Page(props) {
         <table>
           <thead>
             <tr>
-              {props.query.sort_fields.map((sort_field) => {
-                const { field, sort_icon } = sort_field;
+              {props.query.sort_fields.map((field) => {
                 return (
                   <th key={field.name}>
                     <a href={field.remove_link}>✘</a>{" "}
                     {field.concrete ? (
                       <>
                         <a href={field.add_filter_link}>Y</a>{" "}
-                        <a href={field.toggle_sort_link}>{field.name}</a> {sort_icon}
+                        <a href={field.toggle_sort_link}>{field.name}</a>{" "}
+                        {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
                       </>
                     ) : (
                       field.name
@@ -143,7 +143,7 @@ function Page(props) {
             {props.data.map((row, index) => (
               <tr key={index}>
                 {row.map((cell, index) => (
-                  <td key={props.query.sort_fields[index].field.name}>{cell}</td>
+                  <td key={props.query.sort_fields[index].name}>{cell}</td>
                 ))}
               </tr>
             ))}
