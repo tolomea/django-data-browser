@@ -148,12 +148,6 @@ class TestFilter:
 
 
 class TestField:
-    def test_add_link(self, query):
-        assert (
-            StringField("bob", query).add_link
-            == "/data_browser/query/app/model/+fa,-fd,fn,bob.html?bob__equals=fred"
-        )
-
     def test_repr(self, query):
         assert repr(StringField("fa", query)) == f"StringField('fa', {query})"
 

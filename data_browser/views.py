@@ -214,7 +214,7 @@ def query_html(request, *, app, model, fields=""):
     def fmt_fields(fields, fks):
         return {
             "fields": [
-                {"name": name, "concrete": field.concrete, "add_link": field.add_link}
+                {"name": name, "concrete": field.concrete}
                 for name, field in sorted(fields.items())
             ],
             "fks": [
@@ -310,7 +310,11 @@ def json_response(request, query):
                 for filter_ in bound_query.filters
             ],
             "fields": [
-                {"name": field.name, "sort": sort_direction, "concrete": field.concrete}
+                {
+                    "name": field.name,
+                    "sort": sort_direction,
+                    "concrete": field.concrete,  # TODO concrete shouldn't be here
+                }
                 for (field, sort_direction) in bound_query.sort_fields
             ],
         }

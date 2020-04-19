@@ -139,9 +139,17 @@ function Fields(props) {
             lookup: "",
             value: "",
           });
-          props.handleQueryChange({
-            filters: newFilters,
+          props.handleQueryChange({ filters: newFilters });
+        }
+
+        function handleAddField() {
+          var newFields = props.query.fields.slice();
+          newFields.push({
+            name: field.name,
+            sort: null,
+            concrete: false,
           });
+          props.handleQueryChange({ fields: newFields });
         }
 
         return (
@@ -151,7 +159,7 @@ function Fields(props) {
             ) : (
               <>&nbsp;&nbsp;</>
             )}{" "}
-            <a href={field.add_link}>{field.name}</a>
+            <Link onClick={handleAddField}>{field.name}</Link>
           </li>
         );
       })}

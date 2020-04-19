@@ -153,12 +153,6 @@ class Field:
             return None
 
     @property
-    def add_link(self):
-        fields = dict(self.query.fields)
-        fields[self.name] = None
-        return self.query.copy(fields=fields).url
-
-    @property
     def default_lookup(self):
         return self.lookups[0]
 

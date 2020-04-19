@@ -253,16 +253,16 @@ def test_query_html(admin_client):
 
     assert context["all_fields"] == {
         "fields": [
-            {"add_link": ANY(str), "concrete": False, "name": "is_onsale"},
-            {"add_link": ANY(str), "concrete": True, "name": "name"},
-            {"add_link": ANY(str), "concrete": True, "name": "onsale"},
-            {"add_link": ANY(str), "concrete": True, "name": "pk"},
-            {"add_link": ANY(str), "concrete": True, "name": "size"},
-            {"add_link": ANY(str), "concrete": True, "name": "size_unit"},
+            {"concrete": False, "name": "is_onsale"},
+            {"concrete": True, "name": "name"},
+            {"concrete": True, "name": "onsale"},
+            {"concrete": True, "name": "pk"},
+            {"concrete": True, "name": "size"},
+            {"concrete": True, "name": "size_unit"},
         ],
         "fks": [
             {
-                "fields": [{"add_link": ANY(str), "concrete": True, "name": "name"}],
+                "fields": [{"concrete": True, "name": "name"}],
                 "fks": [],
                 "name": "default_sku",
                 "path": "default_sku",
@@ -274,12 +274,10 @@ def test_query_html(admin_client):
                 "path": "model_not_in_admin",
             },
             {
-                "fields": [{"add_link": ANY(str), "concrete": True, "name": "name"}],
+                "fields": [{"concrete": True, "name": "name"}],
                 "fks": [
                     {
-                        "fields": [
-                            {"add_link": ANY(str), "concrete": True, "name": "city"}
-                        ],
+                        "fields": [{"concrete": True, "name": "city"}],
                         "fks": [],
                         "name": "address",
                         "path": "producer__address",
