@@ -64,19 +64,22 @@ class Toggle extends React.Component {
   }
 
   render() {
-    return (
-      <>
+    if (this.state.isToggleOn) {
+      return (
+        <>
+          <button className="link toggle_link" onClick={this.handleClick.bind(this)}>
+            > {this.props.title}
+          </button>
+          <div className="toggle_div">{this.props.children}</div>
+        </>
+      );
+    } else {
+      return (
         <button className="link toggle_link" onClick={this.handleClick.bind(this)}>
           + {this.props.title}
         </button>
-        <div
-          className="toggle_div"
-          style={{ display: this.state.isToggleOn ? "block" : "none" }}
-        >
-          {this.props.children}
-        </div>
-      </>
-    );
+      );
+    }
   }
 }
 
