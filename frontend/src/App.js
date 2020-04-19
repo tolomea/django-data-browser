@@ -160,51 +160,45 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.query.fields.map((field, index) => {
+          function handleRemove() {
+            var newFields = props.query.fields.slice();
+            newFields.splice(index, 1);
+            props.handleQueryChange({
+              fields: newFields,
+            });
+          }
+
+          function handleAddFilter() {
+            var newFilters = props.query.filters.slice();
+            newFilters.push({
+              err_message: null,
+              name: field.name,
+              lookup: "",
+              value: "",
+            });
+            props.handleQueryChange({
+              filters: newFilters,
+            });
+          }
+
+          function handleToggleSort() {
+            var newFields = props.query.fields.slice();
+            newFields[index] = {
+              ...field,
+              sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
+            };
+            props.handleQueryChange({
+              fields: newFields,
+            });
+          }
+
           return (
             <th key={field.name}>
-              <Link
-                onClick={() => {
-                  var newFields = props.query.fields.slice();
-                  newFields.splice(index, 1);
-                  props.handleQueryChange({
-                    fields: newFields,
-                  });
-                }}
-              >
-                ✘
-              </Link>{" "}
+              <Link onClick={handleRemove}>✘</Link>{" "}
               {field.concrete ? (
                 <>
-                  <Link
-                    onClick={() => {
-                      var newFilters = props.query.filters.slice();
-                      newFilters.push({
-                        err_message: null,
-                        name: field.name,
-                        lookup: "",
-                        value: "",
-                      });
-                      props.handleQueryChange({
-                        filters: newFilters,
-                      });
-                    }}
-                  >
-                    Y
-                  </Link>{" "}
-                  <Link
-                    onClick={() => {
-                      var newFields = props.query.fields.slice();
-                      newFields[index] = {
-                        ...field,
-                        sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
-                      };
-                      props.handleQueryChange({
-                        fields: newFields,
-                      });
-                    }}
-                  >
-                    {field.name}
-                  </Link>{" "}
+                  <Link onClick={handleAddFilter}>Y</Link>{" "}
+                  <Link onClick={handleToggleSort}>{field.name}</Link>{" "}
                   {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
                 </>
               ) : (
@@ -236,10 +230,7 @@ function ResultsBody(props) {
 function Results(props) {
   return (
     <table>
-      <ResultsHead
-        query={props.lightQuery}
-        handleQueryChange={props.handleQueryChange}
-      />
+      <ResultsHead query={props.query} handleQueryChange={props.handleQueryChange} />
       <ResultsBody data={props.data} />
     </table>
   );
@@ -268,8 +259,7 @@ function Page(props) {
           <Fields {...props.all_fields} />
         </div>
         <Results
-          query={props.query}
-          lightQuery={props.lightQuery}
+          query={props.lightQuery}
           handleQueryChange={props.handleQueryChange}
           data={props.data}
         />
