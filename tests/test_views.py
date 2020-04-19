@@ -241,7 +241,6 @@ def test_query_html(admin_client):
                 {"link": ANY(str), "name": "is_null"},
             ],
             "name": "size",
-            "remove_link": ANY(str),
             "value": 2.0,
         }
     ]
@@ -406,7 +405,6 @@ def test_query_html_bad_fields(admin_client):
     assert json.loads(res.context["data"])["query"]["filters"] == [
         {
             "err_message": None,
-            "remove_link": ANY(str),
             "name": "size",
             "lookup": "lt",
             "value": 2.0,
@@ -422,7 +420,6 @@ def test_query_html_bad_fields(admin_client):
         },
         {
             "err_message": "could not convert string to float: 'xx'",
-            "remove_link": ANY(str),
             "name": "size",
             "lookup": "lt",
             "value": None,
@@ -438,7 +435,6 @@ def test_query_html_bad_fields(admin_client):
         },
         {
             "err_message": "Bad lookup 'xx' expected ['equal', 'not_equal', 'gt', 'gte', 'lt', 'lte', 'is_null']",
-            "remove_link": ANY(str),
             "name": "size",
             "lookup": "xx",
             "value": None,

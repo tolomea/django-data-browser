@@ -237,7 +237,6 @@ def query_html(request, *, app, model, fields=""):
             "filters": [
                 {
                     "err_message": filter_.err_message,
-                    "remove_link": filter_.remove_link,
                     "name": filter_.name,
                     "lookup": filter_.lookup,
                     "value": filter_.value,

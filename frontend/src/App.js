@@ -10,6 +10,22 @@ function getAPIforWindow() {
   return json_url + location.search;
 }
 
+function getBaseURL() {
+  const location = window.location;
+  const parts = location.pathname.split("/");
+  return location.origin + parts.slice(0, -1).join("/");
+}
+
+function getURLforQuery(query, media) {
+  const fieldStr = query.fields
+    .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
+    .join(",");
+  const filterStr = query.filters
+    .map((filter) => `${filter.name}__${filter.lookup}=${filter.value}`)
+    .join("&");
+  return `${getBaseURL()}/${fieldStr}.${media}?${filterStr}`;
+}
+
 class Filter extends React.Component {
   handleLookupChange(event) {
     this.props.filter.lookups.forEach((lookup) => {
@@ -20,7 +36,10 @@ class Filter extends React.Component {
   render() {
     return (
       <p className={this.props.filter.err_message ? "error" : undefined}>
-        <a href={this.props.filter.remove_link}>✘</a> {this.props.filter.name}{" "}
+        <button type="button" className="link" onClick={this.props.handleRemove}>
+          ✘
+        </button>{" "}
+        {this.props.filter.name}{" "}
         <select
           defaultValue={this.props.filter.lookup}
           onChange={this.handleLookupChange.bind(this)}
@@ -67,7 +86,11 @@ class Toggle extends React.Component {
     if (this.state.isToggleOn) {
       return (
         <>
-          <button className="link toggle_link" onClick={this.handleClick.bind(this)}>
+          <button
+            type="button"
+            className="link toggle_link"
+            onClick={this.handleClick.bind(this)}
+          >
             > {this.props.title}
           </button>
           <div className="toggle_div">{this.props.children}</div>
@@ -75,7 +98,11 @@ class Toggle extends React.Component {
       );
     } else {
       return (
-        <button className="link toggle_link" onClick={this.handleClick.bind(this)}>
+        <button
+          type="button"
+          className="link toggle_link"
+          onClick={this.handleClick.bind(this)}
+        >
           + {this.props.title}
         </button>
       );
@@ -156,7 +183,17 @@ function Filters(props) {
   return (
     <form className="filters" method="get" action={props.query.base_url}>
       {props.query.filters.map((filter, index) => (
-        <Filter filter={filter} key={index} />
+        <Filter
+          filter={filter}
+          key={index}
+          handleRemove={() => {
+            var newFilters = props.light_query.filters.slice();
+            newFilters.splice(index, 1);
+            props.handleQueryChange({
+              filters: newFilters,
+            });
+          }}
+        />
       ))}
       <p>
         <input type="submit" />
@@ -176,7 +213,11 @@ function Page(props) {
         <a href={props.query.save_link}>Save View</a>
       </p>
 
-      <Filters query={props.query} />
+      <Filters
+        query={props.query}
+        light_query={props.light_query}
+        handleQueryChange={props.handleQueryChange}
+      />
 
       <p>Showing {props.data.length} results</p>
       <div className="main_space">
@@ -220,6 +261,12 @@ class App extends React.Component {
       );
   }
 
+  handleQueryChange(queryChange) {
+    // TODO this should be an inplace update
+    const newQuery = { ...this.state.light_query, ...queryChange };
+    window.location.href = getURLforQuery(newQuery, "html");
+  }
+
   render() {
     return (
       <Page
@@ -227,6 +274,7 @@ class App extends React.Component {
         light_query={this.state.light_query}
         query={this.state.query}
         all_fields={this.state.all_fields} // TODO this should be a prop
+        handleQueryChange={this.handleQueryChange.bind(this)}
       />
     );
   }

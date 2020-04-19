@@ -245,12 +245,6 @@ class Filter:
         )
 
     @property
-    def remove_link(self):
-        filters = list(self.query.filters)
-        del filters[self.index]
-        return self.query.copy(filters=filters).url
-
-    @property
     def lookups(self):
         for lookup in self.field.lookups:
             filters = list(self.query.filters)
