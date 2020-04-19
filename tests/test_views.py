@@ -495,9 +495,9 @@ def test_query_json(admin_client):
             {"err_message": None, "name": "size", "lookup": "lt", "value": 2.0}
         ],
         "fields": [
-            {"name": "size", "sort": "dsc"},
-            {"name": "name", "sort": "asc"},
-            {"name": "size_unit", "sort": None},
+            {"name": "size", "sort": "dsc", "concrete": True},
+            {"name": "name", "sort": "asc", "concrete": True},
+            {"name": "size_unit", "sort": None, "concrete": True},
         ],
     }
 
@@ -547,9 +547,9 @@ def test_view_json(admin_client):
             {"err_message": None, "name": "size", "lookup": "lt", "value": 2.0}
         ],
         "fields": [
-            {"name": "size", "sort": "dsc"},
-            {"name": "name", "sort": "asc"},
-            {"name": "size_unit", "sort": None},
+            {"name": "size", "sort": "dsc", "concrete": True},
+            {"name": "name", "sort": "asc", "concrete": True},
+            {"name": "size_unit", "sort": None, "concrete": True},
         ],
     }
 
