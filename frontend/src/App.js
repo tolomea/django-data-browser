@@ -2,6 +2,14 @@ import React from "react";
 import "./App.css";
 var assert = require("assert");
 
+function getAPIforWindow() {
+  const location = window.location;
+  const html_url = location.origin + location.pathname;
+  assert(html_url.slice(-4) === "html");
+  const json_url = html_url.slice(0, -4) + "json";
+  return json_url + location.search;
+}
+
 class Filter extends React.Component {
   handleLookupChange(event) {
     this.props.filter.lookups.forEach((lookup) => {
@@ -92,6 +100,68 @@ function Fields(props) {
   );
 }
 
+function ResultsHead(props) {
+  return (
+    <thead>
+      <tr>
+        {props.query.fields.map((field) => {
+          return (
+            <th key={field.name}>
+              <a href={field.remove_link}>✘</a>{" "}
+              {field.concrete ? (
+                <>
+                  <a href={field.add_filter_link}>Y</a>{" "}
+                  <a href={field.toggle_sort_link}>{field.name}</a>{" "}
+                  {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
+                </>
+              ) : (
+                field.name
+              )}
+            </th>
+          );
+        })}
+        {!props.query.fields.length && <th>No fields selected</th>}
+      </tr>
+    </thead>
+  );
+}
+
+function ResultsBody(props) {
+  return (
+    <tbody>
+      {props.data.map((row, index) => (
+        <tr key={index}>
+          {row.map((cell, index) => (
+            <td key={index}>{cell}</td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  );
+}
+
+function Results(props) {
+  return (
+    <table>
+      <ResultsHead query={props.query} />
+      <ResultsBody data={props.data} />
+    </table>
+  );
+}
+
+function Filters(props) {
+  return (
+    <form className="filters" method="get" action={props.query.base_url}>
+      {props.query.filters.map((filter, index) => (
+        <Filter filter={filter} key={index} />
+      ))}
+      <p>
+        <input type="submit" />
+      </p>
+    </form>
+  );
+}
+
 function Page(props) {
   return (
     <div id="body">
@@ -103,52 +173,14 @@ function Page(props) {
         <a href={props.query.save_link}>Save View</a>
       </p>
 
-      <form className="filters" method="get" action={props.query.base_url}>
-        {props.query.filters.map((filter, index) => (
-          <Filter filter={filter} key={index} />
-        ))}
-        <p>
-          <input type="submit" />
-        </p>
-        <p>Showing {props.data.length} results</p>
-      </form>
+      <Filters query={props.query} />
 
+      <p>Showing {props.data.length} results</p>
       <div className="main_space">
         <div>
           <Fields {...props.query.all_fields_nested} />
         </div>
-        <table>
-          <thead>
-            <tr>
-              {props.query.fields.map((field) => {
-                return (
-                  <th key={field.name}>
-                    <a href={field.remove_link}>✘</a>{" "}
-                    {field.concrete ? (
-                      <>
-                        <a href={field.add_filter_link}>Y</a>{" "}
-                        <a href={field.toggle_sort_link}>{field.name}</a>{" "}
-                        {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
-                      </>
-                    ) : (
-                      field.name
-                    )}
-                  </th>
-                );
-              })}
-              {!props.query.fields.length && <th>No fields selected</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {props.data.map((row, index) => (
-              <tr key={index}>
-                {row.map((cell, index) => (
-                  <td key={props.query.fields[index].name}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Results query={props.query} data={props.data} />
       </div>
     </div>
   );
@@ -161,12 +193,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const location = window.location;
-    const html_url = location.origin + location.pathname;
-    assert(html_url.slice(-4) === "html");
-    const json_url = html_url.slice(0, -4) + "json";
+    fetch(getAPIforWindow())
 
-    fetch(json_url + location.search)
       .then((res) => res.json())
       .then(
         (result) => {
