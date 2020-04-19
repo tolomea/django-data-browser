@@ -218,7 +218,7 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"query"}
+    assert context.keys() == {"query", "all_fields"}
     assert context["query"].keys() == {
         "model",
         "base_url",
@@ -226,7 +226,6 @@ def test_query_html(admin_client):
         "save_link",
         "filters",
         "fields",
-        "all_fields_nested",
     }
     assert context["query"]["filters"] == [
         {
@@ -274,7 +273,7 @@ def test_query_html(admin_client):
         },
     ]
 
-    assert context["query"]["all_fields_nested"] == {
+    assert context["all_fields"] == {
         "fields": [
             {
                 "add_filter_link": "",

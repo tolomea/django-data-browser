@@ -259,8 +259,8 @@ def query_html(request, *, app, model, fields=""):
                 }
                 for (field, sort_direction) in bound_query.sort_fields
             ],
-            "all_fields_nested": fmt_fields(*bound_query.all_fields_nested),
-        }
+        },
+        "all_fields": fmt_fields(*bound_query.all_fields_nested),
     }
 
     data = json.dumps(data)

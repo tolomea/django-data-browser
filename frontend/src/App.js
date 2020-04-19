@@ -181,7 +181,7 @@ function Page(props) {
       <p>Showing {props.data.length} results</p>
       <div className="main_space">
         <div>
-          <Fields {...props.query.all_fields_nested} />
+          <Fields {...props.all_fields} />
         </div>
         <Results query={props.query} data={props.data} />
       </div>
@@ -192,7 +192,13 @@ function Page(props) {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    const djangoData = JSON.parse(document.getElementById("django-data").textContent);
+    // TODO all_fileds should really be a prop and this djangoData thing should be over in index.js
+    this.state = {
+      data: [],
+      query: djangoData.query,
+      all_fields: djangoData.all_fields,
+    };
   }
 
   componentDidMount() {
@@ -214,8 +220,13 @@ class App extends React.Component {
   }
 
   render() {
-    const django_data = JSON.parse(document.getElementById("django-data").textContent);
-    return <Page data={this.state.data} {...django_data} />;
+    return (
+      <Page
+        data={this.state.data}
+        query={this.state.query}
+        all_fields={this.state.all_fields} // TODO this should be a prop
+      />
+    );
   }
 }
 
