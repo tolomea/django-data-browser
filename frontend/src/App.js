@@ -244,8 +244,8 @@ class App extends React.Component {
     };
   }
 
-  componentDidMount() {
-    fetch(getAPIforWindow())
+  fetchData(url) {
+    fetch(url)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -262,10 +262,17 @@ class App extends React.Component {
       );
   }
 
+  componentDidMount() {
+    this.fetchData(getAPIforWindow());
+    window.onpopstate = (e) => {
+      this.fetchData(getAPIforWindow());
+    };
+  }
+
   handleQueryChange(queryChange) {
-    // TODO this should be an inplace update
     const newQuery = { ...this.state.light_query, ...queryChange };
-    window.location.href = getURLforQuery(newQuery, "html");
+    window.history.pushState(null, null, getURLforQuery(newQuery, "html"));
+    this.fetchData(getURLforQuery(newQuery, "json"));
   }
 
   render() {
