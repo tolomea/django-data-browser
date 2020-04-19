@@ -226,25 +226,15 @@ def query_html(request, *, app, model, fields=""):
     data = {
         "query": {
             "model": bound_query.model,
-            "base_url": bound_query.base_url,
-            "csv_link": bound_query.csv_link,
             "save_link": bound_query.save_link,
             "filters": [
                 {
-                    "err_message": filter_.err_message,
-                    "name": filter_.name,
-                    "lookup": filter_.lookup,
-                    "value": filter_.value,
                     "lookups": [
                         {"name": lookup.name, "link": lookup.link}
                         for lookup in filter_.lookups
-                    ],
+                    ]
                 }
                 for filter_ in bound_query.filters
-            ],
-            "fields": [
-                {"concrete": field.concrete, "name": field.name, "sort": sort_direction}
-                for (field, sort_direction) in bound_query.sort_fields
             ],
         },
         "all_fields": fmt_fields(*bound_query.all_fields_nested),

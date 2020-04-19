@@ -261,7 +261,7 @@ function Page(props) {
     <div id="body">
       <h1>{props.query.model}</h1>
       <p>
-        <a href={props.query.csv_link}>Download as CSV</a>
+        <a href={getURLforQuery(props.lightQuery, "csv")}>Download as CSV</a>
       </p>
       <p>
         <a href={props.query.save_link}>Save View</a>

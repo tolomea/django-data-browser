@@ -267,10 +267,6 @@ class BoundQuery:
         self.all_fields = flatten_fields(self.all_fields_nested)
 
     @property
-    def csv_link(self):
-        return self._query.copy(media="csv").url
-
-    @property
     def save_link(self):
         view_name = f"admin:{View._meta.db_table}_add"
         url = reverse(view_name)

@@ -219,18 +219,9 @@ def test_query_html(admin_client):
     assert res.status_code == 200
     context = json.loads(res.context["data"])
     assert context.keys() == {"query", "all_fields"}
-    assert context["query"].keys() == {
-        "model",
-        "base_url",
-        "csv_link",
-        "save_link",
-        "filters",
-        "fields",
-    }
+    assert context["query"].keys() == {"model", "save_link", "filters"}
     assert context["query"]["filters"] == [
         {
-            "err_message": None,
-            "lookup": "lt",
             "lookups": [
                 {"link": ANY(str), "name": "equal"},
                 {"link": ANY(str), "name": "not_equal"},
@@ -239,16 +230,8 @@ def test_query_html(admin_client):
                 {"link": ANY(str), "name": "lt"},
                 {"link": ANY(str), "name": "lte"},
                 {"link": ANY(str), "name": "is_null"},
-            ],
-            "name": "size",
-            "value": 2.0,
+            ]
         }
-    ]
-
-    assert context["query"]["fields"] == [
-        {"concrete": True, "name": "size", "sort": "dsc"},
-        {"concrete": True, "name": "name", "sort": "asc"},
-        {"concrete": True, "name": "size_unit", "sort": None},
     ]
 
     assert context["all_fields"] == {
@@ -296,18 +279,8 @@ def test_query_html_bad_fields(admin_client):
         "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
-    assert json.loads(res.context["data"])["query"]["fields"] == [
-        {"concrete": True, "name": "size", "sort": "dsc"},
-        {"concrete": True, "name": "name", "sort": "asc"},
-        {"concrete": True, "name": "size_unit", "sort": None},
-        {"concrete": False, "name": "is_onsale", "sort": None},
-    ]
     assert json.loads(res.context["data"])["query"]["filters"] == [
         {
-            "err_message": None,
-            "name": "size",
-            "lookup": "lt",
-            "value": 2.0,
             "lookups": [
                 {"name": "equal", "link": ANY(str)},
                 {"name": "not_equal", "link": ANY(str)},
@@ -316,13 +289,9 @@ def test_query_html_bad_fields(admin_client):
                 {"name": "lt", "link": ANY(str)},
                 {"name": "lte", "link": ANY(str)},
                 {"name": "is_null", "link": ANY(str)},
-            ],
+            ]
         },
         {
-            "err_message": "could not convert string to float: 'xx'",
-            "name": "size",
-            "lookup": "lt",
-            "value": None,
             "lookups": [
                 {"name": "equal", "link": ANY(str)},
                 {"name": "not_equal", "link": ANY(str)},
@@ -331,13 +300,9 @@ def test_query_html_bad_fields(admin_client):
                 {"name": "lt", "link": ANY(str)},
                 {"name": "lte", "link": ANY(str)},
                 {"name": "is_null", "link": ANY(str)},
-            ],
+            ]
         },
         {
-            "err_message": "Bad lookup 'xx' expected ['equal', 'not_equal', 'gt', 'gte', 'lt', 'lte', 'is_null']",
-            "name": "size",
-            "lookup": "xx",
-            "value": None,
             "lookups": [
                 {"name": "equal", "link": ANY(str)},
                 {"name": "not_equal", "link": ANY(str)},
@@ -346,7 +311,7 @@ def test_query_html_bad_fields(admin_client):
                 {"name": "lt", "link": ANY(str)},
                 {"name": "lte", "link": ANY(str)},
                 {"name": "is_null", "link": ANY(str)},
-            ],
+            ]
         },
     ]
 

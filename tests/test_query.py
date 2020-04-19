@@ -66,12 +66,6 @@ class TestQuery:
 
 
 class TestBoundQuery:
-    def test_csv_link(self, bound_query):
-        assert (
-            bound_query.csv_link
-            == "/data_browser/query/app/model/+fa,-fd,fn.csv?bob__equals=fred"
-        )
-
     def test_save_link(self, bound_query):
         assert (
             bound_query.save_link
