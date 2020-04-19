@@ -10,6 +10,14 @@ from django.contrib.auth.models import User
 from . import models
 
 
+class ANY:
+    def __init__(self, type):
+        self.type = type
+
+    def __eq__(self, other):
+        return isinstance(other, self.type)
+
+
 @pytest.fixture
 def products(db):
     address = models.Address.objects.create(city="london")
@@ -210,8 +218,7 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"query", "data"}
-    assert context["data"] == [[1, "a", "g"], [1, "b", "g"]]
+    assert context.keys() == {"query"}
     assert context["query"].keys() == {
         "model",
         "base_url",
@@ -227,37 +234,16 @@ def test_query_html(admin_client):
             "is_valid": True,
             "lookup": "lt",
             "lookups": [
-                {
-                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__equal=2",
-                    "name": "equal",
-                },
-                {
-                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__not_equal=2",
-                    "name": "not_equal",
-                },
-                {
-                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__gt=2",
-                    "name": "gt",
-                },
-                {
-                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__gte=2",
-                    "name": "gte",
-                },
-                {
-                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2",
-                    "name": "lt",
-                },
-                {
-                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lte=2",
-                    "name": "lte",
-                },
-                {
-                    "link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__is_null=2",
-                    "name": "is_null",
-                },
+                {"link": ANY(str), "name": "equal"},
+                {"link": ANY(str), "name": "not_equal"},
+                {"link": ANY(str), "name": "gt"},
+                {"link": ANY(str), "name": "gte"},
+                {"link": ANY(str), "name": "lt"},
+                {"link": ANY(str), "name": "lte"},
+                {"link": ANY(str), "name": "is_null"},
             ],
             "name": "size",
-            "remove_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0",
+            "remove_link": ANY(str),
             "url_name": "size__lt",
             "value": 2.0,
         }
@@ -266,31 +252,31 @@ def test_query_html(admin_client):
     assert context["query"]["sort_fields"] == [
         {
             "field": {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size__equal=",
+                "add_filter_link": ANY(str),
                 "concrete": True,
                 "name": "size",
-                "remove_link": "/data_browser/query/tests/Product/+name,size_unit.html?id__gt=0&size__lt=2",
-                "toggle_sort_link": "/data_browser/query/tests/Product/size,+name,size_unit.html?id__gt=0&size__lt=2",
+                "remove_link": ANY(str),
+                "toggle_sort_link": ANY(str),
             },
             "sort_icon": "\u2191",
         },
         {
             "field": {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&name__equals=",
+                "add_filter_link": ANY(str),
                 "concrete": True,
                 "name": "name",
-                "remove_link": "/data_browser/query/tests/Product/-size,size_unit.html?id__gt=0&size__lt=2",
-                "toggle_sort_link": "/data_browser/query/tests/Product/-size,-name,size_unit.html?id__gt=0&size__lt=2",
+                "remove_link": ANY(str),
+                "toggle_sort_link": ANY(str),
             },
             "sort_icon": "\u2193",
         },
         {
             "field": {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size_unit__equals=",
+                "add_filter_link": ANY(str),
                 "concrete": True,
                 "name": "size_unit",
-                "remove_link": "/data_browser/query/tests/Product/-size,+name.html?id__gt=0&size__lt=2",
-                "toggle_sort_link": "/data_browser/query/tests/Product/-size,+name,+size_unit.html?id__gt=0&size__lt=2",
+                "remove_link": ANY(str),
+                "toggle_sort_link": ANY(str),
             },
             "sort_icon": "",
         },
@@ -300,37 +286,37 @@ def test_query_html(admin_client):
         "fields": [
             {
                 "add_filter_link": "",
-                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,is_onsale.html?id__gt=0&size__lt=2",
+                "add_link": ANY(str),
                 "concrete": False,
                 "name": "is_onsale",
             },
             {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&name__equals=",
-                "add_link": "/data_browser/query/tests/Product/-size,name,size_unit.html?id__gt=0&size__lt=2",
+                "add_filter_link": ANY(str),
+                "add_link": ANY(str),
                 "concrete": True,
                 "name": "name",
             },
             {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&onsale__equal=",
-                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,onsale.html?id__gt=0&size__lt=2",
+                "add_filter_link": ANY(str),
+                "add_link": ANY(str),
                 "concrete": True,
                 "name": "onsale",
             },
             {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&pk__equal=",
-                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,pk.html?id__gt=0&size__lt=2",
+                "add_filter_link": ANY(str),
+                "add_link": ANY(str),
                 "concrete": True,
                 "name": "pk",
             },
             {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size__equal=",
-                "add_link": "/data_browser/query/tests/Product/size,+name,size_unit.html?id__gt=0&size__lt=2",
+                "add_filter_link": ANY(str),
+                "add_link": ANY(str),
                 "concrete": True,
                 "name": "size",
             },
             {
-                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&size_unit__equals=",
-                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2",
+                "add_filter_link": ANY(str),
+                "add_link": ANY(str),
                 "concrete": True,
                 "name": "size_unit",
             },
@@ -339,8 +325,8 @@ def test_query_html(admin_client):
             {
                 "fields": [
                     {
-                        "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&default_sku__name__equals=",
-                        "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,default_sku__name.html?id__gt=0&size__lt=2",
+                        "add_filter_link": ANY(str),
+                        "add_link": ANY(str),
                         "concrete": True,
                         "name": "name",
                     }
@@ -358,8 +344,8 @@ def test_query_html(admin_client):
             {
                 "fields": [
                     {
-                        "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&producer__name__equals=",
-                        "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,producer__name.html?id__gt=0&size__lt=2",
+                        "add_filter_link": ANY(str),
+                        "add_link": ANY(str),
                         "concrete": True,
                         "name": "name",
                     }
@@ -368,8 +354,8 @@ def test_query_html(admin_client):
                     {
                         "fields": [
                             {
-                                "add_filter_link": "/data_browser/query/tests/Product/-size,+name,size_unit.html?id__gt=0&size__lt=2&producer__address__city__equals=",
-                                "add_link": "/data_browser/query/tests/Product/-size,+name,size_unit,producer__address__city.html?id__gt=0&size__lt=2",
+                                "add_filter_link": ANY(str),
+                                "add_link": ANY(str),
                                 "concrete": True,
                                 "name": "city",
                             }
@@ -392,7 +378,113 @@ def test_query_html_bad_fields(admin_client):
         "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
-    assert json.loads(res.context["data"])["data"] == [
+    assert json.loads(res.context["data"])["query"]["sort_fields"] == [
+        {
+            "field": {
+                "remove_link": ANY(str),
+                "concrete": True,
+                "add_filter_link": ANY(str),
+                "toggle_sort_link": ANY(str),
+                "name": "size",
+            },
+            "sort_icon": "↑",
+        },
+        {
+            "field": {
+                "remove_link": ANY(str),
+                "concrete": True,
+                "add_filter_link": ANY(str),
+                "toggle_sort_link": ANY(str),
+                "name": "name",
+            },
+            "sort_icon": "↓",
+        },
+        {
+            "field": {
+                "remove_link": ANY(str),
+                "concrete": True,
+                "add_filter_link": ANY(str),
+                "toggle_sort_link": ANY(str),
+                "name": "size_unit",
+            },
+            "sort_icon": "",
+        },
+        {
+            "field": {
+                "remove_link": ANY(str),
+                "concrete": False,
+                "add_filter_link": "",
+                "toggle_sort_link": ANY(str),
+                "name": "is_onsale",
+            },
+            "sort_icon": "",
+        },
+    ]
+    assert json.loads(res.context["data"])["query"]["filters"] == [
+        {
+            "is_valid": True,
+            "err_message": None,
+            "remove_link": ANY(str),
+            "name": "size",
+            "lookup": "lt",
+            "url_name": "size__lt",
+            "value": 2.0,
+            "lookups": [
+                {"name": "equal", "link": ANY(str)},
+                {"name": "not_equal", "link": ANY(str)},
+                {"name": "gt", "link": ANY(str)},
+                {"name": "gte", "link": ANY(str)},
+                {"name": "lt", "link": ANY(str)},
+                {"name": "lte", "link": ANY(str)},
+                {"name": "is_null", "link": ANY(str)},
+            ],
+        },
+        {
+            "is_valid": False,
+            "err_message": "could not convert string to float: 'xx'",
+            "remove_link": ANY(str),
+            "name": "size",
+            "lookup": "lt",
+            "url_name": "size__lt",
+            "value": None,
+            "lookups": [
+                {"name": "equal", "link": ANY(str)},
+                {"name": "not_equal", "link": ANY(str)},
+                {"name": "gt", "link": ANY(str)},
+                {"name": "gte", "link": ANY(str)},
+                {"name": "lt", "link": ANY(str)},
+                {"name": "lte", "link": ANY(str)},
+                {"name": "is_null", "link": ANY(str)},
+            ],
+        },
+        {
+            "is_valid": False,
+            "err_message": "Bad lookup 'xx' expected ['equal', 'not_equal', 'gt', 'gte', 'lt', 'lte', 'is_null']",
+            "remove_link": ANY(str),
+            "name": "size",
+            "lookup": "xx",
+            "url_name": "size__xx",
+            "value": None,
+            "lookups": [
+                {"name": "equal", "link": ANY(str)},
+                {"name": "not_equal", "link": ANY(str)},
+                {"name": "gt", "link": ANY(str)},
+                {"name": "gte", "link": ANY(str)},
+                {"name": "lt", "link": ANY(str)},
+                {"name": "lte", "link": ANY(str)},
+                {"name": "is_null", "link": ANY(str)},
+            ],
+        },
+    ]
+
+
+@pytest.mark.usefixtures("products")
+def test_query_json_bad_fields(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
+    )
+    assert res.status_code == 200
+    assert json.loads(res.content.decode("utf-8"))["data"] == [
         [1, "a", "g", False],
         [1, "b", "g", False],
     ]

@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+var assert = require("assert");
 
 class Filter extends React.Component {
   handleLookupChange(event) {
@@ -153,9 +154,38 @@ function Page(props) {
   );
 }
 
-function App() {
-  var django_data = JSON.parse(document.getElementById("django-data").textContent);
-  return <Page {...django_data} />;
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [] };
+  }
+
+  componentDidMount() {
+    const location = window.location;
+    const html_url = location.origin + location.pathname;
+    assert(html_url.slice(-4) === "html");
+    const json_url = html_url.slice(0, -4) + "json";
+
+    fetch(json_url + location.search)
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            data: result.data,
+          });
+        },
+        (error) => {
+          this.setState({
+            error,
+          });
+        }
+      );
+  }
+
+  render() {
+    const django_data = JSON.parse(document.getElementById("django-data").textContent);
+    return <Page data={this.state.data} {...django_data} />;
+  }
 }
 
 export default App;

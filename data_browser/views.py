@@ -210,7 +210,6 @@ def query_html(request, *, app, model, fields=""):
     admin_fields = get_all_admin_fields(request)
     fields = get_nested_fields_for_model(model, admin_fields)
     bound_query = BoundQuery(query, fields)
-    data = get_data(bound_query)
 
     def fmt_fields(fields, fks):
         return {
@@ -265,8 +264,7 @@ def query_html(request, *, app, model, fields=""):
                 for (field, sort_direction, sort_icon) in bound_query.sort_fields
             ],
             "all_fields_nested": fmt_fields(*bound_query.all_fields_nested),
-        },
-        "data": data,
+        }
     }
 
     data = json.dumps(data)
