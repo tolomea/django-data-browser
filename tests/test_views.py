@@ -418,7 +418,17 @@ def test_query_csv(admin_client):
 
 
 @pytest.mark.usefixtures("products")
-def test_view(admin_client):
+def test_query_json(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests/Product/-size,+name,size_unit.json?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+    data = json.loads(res.content.decode("utf-8"))
+    assert data == {"data": [[1, "a", "g"], [1, "b", "g"]]}
+
+
+@pytest.mark.usefixtures("products")
+def test_view_csv(admin_client):
     view = data_browser.models.View.objects.create(
         app="tests",
         model="Product",
@@ -436,6 +446,27 @@ def test_view(admin_client):
     assert res.status_code == 200
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
     assert rows == [["size", "name", "size_unit"], ["1", "a", "g"], ["1", "b", "g"]]
+
+
+@pytest.mark.usefixtures("products")
+def test_view_json(admin_client):
+    view = data_browser.models.View.objects.create(
+        app="tests",
+        model="Product",
+        fields="-size,+name,size_unit",
+        query='{"size__lt": ["2"], "id__gt": ["0"]}',
+        owner=User.objects.get(),
+    )
+
+    res = admin_client.get(f"/data_browser/view/{view.pk}.json")
+    assert res.status_code == 404
+
+    view.public = True
+    view.save()
+    res = admin_client.get(f"/data_browser/view/{view.pk}.json")
+    assert res.status_code == 200
+    data = json.loads(res.content.decode("utf-8"))
+    assert data == {"data": [[1, "a", "g"], [1, "b", "g"]]}
 
 
 # TODO calculated field, on admin, on model, both

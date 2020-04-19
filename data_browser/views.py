@@ -13,7 +13,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template import engines, loader
 from django.template.response import TemplateResponse
@@ -284,8 +284,12 @@ def query_html(request, *, app, model, fields=""):
 @admin_decorators.staff_member_required
 def query(request, *, app, model, fields="", media):
     query = Query.from_request(app, model, fields, media, request.GET)
-    assert media == "csv"
-    return csv_response(request, query)
+    if media == "csv":
+        return csv_response(request, query)
+    elif media == "json":
+        return json_response(request, query)
+    else:
+        assert False
 
 
 def csv_response(request, query):
@@ -306,12 +310,26 @@ def csv_response(request, query):
     return response
 
 
+def json_response(request, query):
+    admin_fields = get_all_admin_fields(request)
+    fields = get_nested_fields_for_model(get_model(query), admin_fields)
+    bound_query = BoundQuery(query, fields)
+    data = get_data(bound_query)
+
+    return JsonResponse({"data": data})
+
+
 def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), pk=pk)
     request.user = view.owner  # public views are run as the person who created them
-    assert media == "csv"
     query = view.get_query(media)
-    return csv_response(request, query)
+
+    if media == "csv":
+        return csv_response(request, query)
+    elif media == "json":
+        return json_response(request, query)
+    else:
+        assert False
 
 
 def _get_from_js_dev_server(request):  # pragma: no cover
