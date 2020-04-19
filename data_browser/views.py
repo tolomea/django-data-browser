@@ -249,7 +249,6 @@ def query_html(request, *, app, model, fields=""):
             ],
             "fields": [
                 {
-                    "remove_link": field.remove_link,
                     "concrete": field.concrete,
                     "add_filter_link": field.add_filter_link,
                     "toggle_sort_link": field.toggle_sort_link,

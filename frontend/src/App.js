@@ -37,6 +37,7 @@ function Link(props) {
     </button>
   );
 }
+
 class Filter extends React.Component {
   handleLookupChange(event) {
     this.props.lookups.forEach((lookup) => {
@@ -73,13 +74,13 @@ class Filter extends React.Component {
 function Filters(props) {
   return (
     <form className="filters" method="get">
-      {props.light_query.filters.map((filter, index) => (
+      {props.lightQuery.filters.map((filter, index) => (
         <Filter
           filter={filter}
           lookups={props.query.filters[index].lookups}
           key={index}
           handleRemove={() => {
-            var newFilters = props.light_query.filters.slice();
+            var newFilters = props.lightQuery.filters.slice();
             newFilters.splice(index, 1);
             props.handleQueryChange({
               filters: newFilters,
@@ -158,14 +159,25 @@ function ResultsHead(props) {
   return (
     <thead>
       <tr>
-        {props.query.fields.map((field) => {
+        {props.lightQuery.fields.map((field, index) => {
+          const oldField = props.query.fields[index];
           return (
             <th key={field.name}>
-              <a href={field.remove_link}>✘</a>{" "}
+              <Link
+                onClick={() => {
+                  var newFields = props.lightQuery.fields.slice();
+                  newFields.splice(index, 1);
+                  props.handleQueryChange({
+                    fields: newFields,
+                  });
+                }}
+              >
+                ✘
+              </Link>{" "}
               {field.concrete ? (
                 <>
-                  <a href={field.add_filter_link}>Y</a>{" "}
-                  <a href={field.toggle_sort_link}>{field.name}</a>{" "}
+                  <a href={oldField.add_filter_link}>Y</a>{" "}
+                  <a href={oldField.toggle_sort_link}>{field.name}</a>{" "}
                   {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
                 </>
               ) : (
@@ -197,7 +209,11 @@ function ResultsBody(props) {
 function Results(props) {
   return (
     <table>
-      <ResultsHead query={props.query} />
+      <ResultsHead
+        query={props.query}
+        lightQuery={props.lightQuery}
+        handleQueryChange={props.handleQueryChange}
+      />
       <ResultsBody data={props.data} />
     </table>
   );
@@ -216,7 +232,7 @@ function Page(props) {
 
       <Filters
         query={props.query}
-        light_query={props.light_query}
+        lightQuery={props.lightQuery}
         handleQueryChange={props.handleQueryChange}
       />
 
@@ -225,7 +241,12 @@ function Page(props) {
         <div>
           <Fields {...props.all_fields} />
         </div>
-        <Results query={props.query} data={props.data} />
+        <Results
+          query={props.query}
+          lightQuery={props.lightQuery}
+          handleQueryChange={props.handleQueryChange}
+          data={props.data}
+        />
       </div>
     </div>
   );
@@ -238,7 +259,7 @@ class App extends React.Component {
     // TODO all_fileds should really be a prop and this djangoData thing should be over in index.js
     this.state = {
       data: [],
-      light_query: { filters: [], fields: [] },
+      lightQuery: { filters: [], fields: [] },
       query: djangoData.query,
       all_fields: djangoData.all_fields,
     };
@@ -251,7 +272,7 @@ class App extends React.Component {
         (result) => {
           this.setState({
             data: result.data,
-            light_query: { fields: result.fields, filters: result.filters },
+            lightQuery: { fields: result.fields, filters: result.filters },
           });
         },
         (error) => {
@@ -270,7 +291,7 @@ class App extends React.Component {
   }
 
   handleQueryChange(queryChange) {
-    const newQuery = { ...this.state.light_query, ...queryChange };
+    const newQuery = { ...this.state.lightQuery, ...queryChange };
     window.history.pushState(null, null, getURLforQuery(newQuery, "html"));
     this.fetchData(getURLforQuery(newQuery, "json"));
   }
@@ -279,7 +300,7 @@ class App extends React.Component {
     return (
       <Page
         data={this.state.data}
-        light_query={this.state.light_query}
+        lightQuery={this.state.lightQuery}
         query={this.state.query}
         all_fields={this.state.all_fields} // TODO this should be a prop
         handleQueryChange={this.handleQueryChange.bind(this)}

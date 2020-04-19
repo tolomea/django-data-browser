@@ -250,7 +250,6 @@ def test_query_html(admin_client):
             "add_filter_link": ANY(str),
             "concrete": True,
             "name": "size",
-            "remove_link": ANY(str),
             "toggle_sort_link": ANY(str),
             "sort": "dsc",
         },
@@ -258,7 +257,6 @@ def test_query_html(admin_client):
             "add_filter_link": ANY(str),
             "concrete": True,
             "name": "name",
-            "remove_link": ANY(str),
             "toggle_sort_link": ANY(str),
             "sort": "asc",
         },
@@ -266,7 +264,6 @@ def test_query_html(admin_client):
             "add_filter_link": ANY(str),
             "concrete": True,
             "name": "size_unit",
-            "remove_link": ANY(str),
             "toggle_sort_link": ANY(str),
             "sort": None,
         },
@@ -370,7 +367,6 @@ def test_query_html_bad_fields(admin_client):
     assert res.status_code == 200
     assert json.loads(res.context["data"])["query"]["fields"] == [
         {
-            "remove_link": ANY(str),
             "concrete": True,
             "add_filter_link": ANY(str),
             "toggle_sort_link": ANY(str),
@@ -378,7 +374,6 @@ def test_query_html_bad_fields(admin_client):
             "sort": "dsc",
         },
         {
-            "remove_link": ANY(str),
             "concrete": True,
             "add_filter_link": ANY(str),
             "toggle_sort_link": ANY(str),
@@ -386,7 +381,6 @@ def test_query_html_bad_fields(admin_client):
             "sort": "asc",
         },
         {
-            "remove_link": ANY(str),
             "concrete": True,
             "add_filter_link": ANY(str),
             "toggle_sort_link": ANY(str),
@@ -394,7 +388,6 @@ def test_query_html_bad_fields(admin_client):
             "sort": None,
         },
         {
-            "remove_link": ANY(str),
             "concrete": False,
             "add_filter_link": "",
             "toggle_sort_link": ANY(str),

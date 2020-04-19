@@ -159,12 +159,6 @@ class Field:
         return self.query.copy(fields=fields).url
 
     @property
-    def remove_link(self):
-        fields = dict(self.query.fields)
-        del fields[self.name]
-        return self.query.copy(fields=fields).url
-
-    @property
     def add_filter_link(self):
         if not self.lookups:
             return ""

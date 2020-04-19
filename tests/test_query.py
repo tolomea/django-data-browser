@@ -154,12 +154,6 @@ class TestField:
             == "/data_browser/query/app/model/+fa,-fd,fn,bob.html?bob__equals=fred"
         )
 
-    def test_remove_link(self, query):
-        assert (
-            StringField("fd", query).remove_link
-            == "/data_browser/query/app/model/+fa,fn.html?bob__equals=fred"
-        )
-
     def test_add_filter_link(self, query):
         assert (
             StringField("fd", query).add_filter_link
