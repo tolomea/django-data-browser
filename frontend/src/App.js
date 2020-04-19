@@ -120,7 +120,7 @@ function Page(props) {
         <table>
           <thead>
             <tr>
-              {props.query.sort_fields.map((field) => {
+              {props.query.fields.map((field) => {
                 return (
                   <th key={field.name}>
                     <a href={field.remove_link}>✘</a>{" "}
@@ -136,14 +136,14 @@ function Page(props) {
                   </th>
                 );
               })}
-              {!props.query.sort_fields.length && <th>No fields selected</th>}
+              {!props.query.fields.length && <th>No fields selected</th>}
             </tr>
           </thead>
           <tbody>
             {props.data.map((row, index) => (
               <tr key={index}>
                 {row.map((cell, index) => (
-                  <td key={props.query.sort_fields[index].name}>{cell}</td>
+                  <td key={props.query.fields[index].name}>{cell}</td>
                 ))}
               </tr>
             ))}

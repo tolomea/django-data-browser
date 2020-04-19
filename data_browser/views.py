@@ -248,7 +248,7 @@ def query_html(request, *, app, model, fields=""):
                 }
                 for filter_ in bound_query.filters
             ],
-            "sort_fields": [
+            "fields": [
                 {
                     "remove_link": field.remove_link,
                     "concrete": field.concrete,

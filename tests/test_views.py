@@ -225,7 +225,7 @@ def test_query_html(admin_client):
         "csv_link",
         "save_link",
         "filters",
-        "sort_fields",
+        "fields",
         "all_fields_nested",
     }
     assert context["query"]["filters"] == [
@@ -247,7 +247,7 @@ def test_query_html(admin_client):
         }
     ]
 
-    assert context["query"]["sort_fields"] == [
+    assert context["query"]["fields"] == [
         {
             "add_filter_link": ANY(str),
             "concrete": True,
@@ -370,7 +370,7 @@ def test_query_html_bad_fields(admin_client):
         "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
-    assert json.loads(res.context["data"])["query"]["sort_fields"] == [
+    assert json.loads(res.context["data"])["query"]["fields"] == [
         {
             "remove_link": ANY(str),
             "concrete": True,
