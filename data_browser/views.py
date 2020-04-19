@@ -248,12 +248,7 @@ def query_html(request, *, app, model, fields=""):
                 for filter_ in bound_query.filters
             ],
             "fields": [
-                {
-                    "concrete": field.concrete,
-                    "add_filter_link": field.add_filter_link,
-                    "name": field.name,
-                    "sort": sort_direction,
-                }
+                {"concrete": field.concrete, "name": field.name, "sort": sort_direction}
                 for (field, sort_direction) in bound_query.sort_fields
             ],
         },

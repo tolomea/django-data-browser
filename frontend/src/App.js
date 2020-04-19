@@ -50,7 +50,7 @@ class Filter extends React.Component {
       <p className={this.props.filter.err_message ? "error" : undefined}>
         <Link onClick={this.props.handleRemove}>✘</Link> {this.props.filter.name}{" "}
         <select
-          defaultValue={this.props.filter.lookup}
+          value={this.props.filter.lookup}
           onChange={this.handleLookupChange.bind(this)}
         >
           {this.props.lookups.map((lookup) => (
@@ -63,7 +63,7 @@ class Filter extends React.Component {
         <input
           type="text"
           name={`${this.props.filter.name}__${this.props.filter.lookup}`}
-          defaultValue={this.props.filter.value}
+          value={this.props.filter.value}
         />
         {this.props.filter.err_message}
       </p>
@@ -77,7 +77,7 @@ function Filters(props) {
       {props.lightQuery.filters.map((filter, index) => (
         <Filter
           filter={filter}
-          lookups={props.query.filters[index].lookups}
+          lookups={props.query.filters[index] ? props.query.filters[index].lookups : []} // TODO cleanup after all_fields is flattened
           key={index}
           handleRemove={() => {
             var newFilters = props.lightQuery.filters.slice();
@@ -159,13 +159,12 @@ function ResultsHead(props) {
   return (
     <thead>
       <tr>
-        {props.lightQuery.fields.map((field, index) => {
-          const oldField = props.query.fields[index];
+        {props.query.fields.map((field, index) => {
           return (
             <th key={field.name}>
               <Link
                 onClick={() => {
-                  var newFields = props.lightQuery.fields.slice();
+                  var newFields = props.query.fields.slice();
                   newFields.splice(index, 1);
                   props.handleQueryChange({
                     fields: newFields,
@@ -176,10 +175,25 @@ function ResultsHead(props) {
               </Link>{" "}
               {field.concrete ? (
                 <>
-                  <a href={oldField.add_filter_link}>Y</a>{" "}
                   <Link
                     onClick={() => {
-                      var newFields = props.lightQuery.fields.slice();
+                      var newFilters = props.query.filters.slice();
+                      newFilters.push({
+                        err_message: null,
+                        name: field.name,
+                        lookup: "",
+                        value: "",
+                      });
+                      props.handleQueryChange({
+                        filters: newFilters,
+                      });
+                    }}
+                  >
+                    Y
+                  </Link>{" "}
+                  <Link
+                    onClick={() => {
+                      var newFields = props.query.fields.slice();
                       newFields[index] = {
                         ...field,
                         sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
@@ -223,8 +237,7 @@ function Results(props) {
   return (
     <table>
       <ResultsHead
-        query={props.query}
-        lightQuery={props.lightQuery}
+        query={props.lightQuery}
         handleQueryChange={props.handleQueryChange}
       />
       <ResultsBody data={props.data} />

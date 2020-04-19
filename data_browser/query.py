@@ -164,8 +164,12 @@ class Field:
             return ""
 
         filters = list(self.query.filters)
-        filters.append((self.name, self.lookups[0], ""))
+        filters.append((self.name, self.default_lookup, ""))
         return self.query.copy(filters=filters).url
+
+    @property
+    def default_lookup(self):
+        return self.lookups[0]
 
 
 class StringField(Field):
@@ -215,6 +219,9 @@ LookupOption = namedtuple("LookupOption", "name link")
 
 class Filter:
     def __init__(self, index, field, lookup, value):
+        if not lookup:
+            lookup = field.default_lookup
+
         self.index = index
         self.field = field
         self.lookup = lookup
