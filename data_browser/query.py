@@ -1,6 +1,6 @@
 import json
 import urllib
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 
 import dateutil.parser
 from django.urls import reverse
@@ -39,11 +39,6 @@ class Query:
         self.fields = fields  # {name: None/ASC/DSC}
         self.media = media
         self.filters = filters  # [(name, lookup, value)]
-
-    def copy(self, **kwargs):
-        values = self._data
-        values.update(kwargs)
-        return Query(**values)
 
     @property
     def _data(self):
@@ -199,9 +194,6 @@ class CalculatedField(Field):
     concrete = False
 
 
-LookupOption = namedtuple("LookupOption", "name link")
-
-
 class Filter:
     def __init__(self, index, field, lookup, value):
         if not lookup:
@@ -222,15 +214,6 @@ class Filter:
             and self.lookup == other.lookup
             and self.value == other.value
         )
-
-    @property
-    def lookups(self):
-        for lookup in self.field.lookups:
-            filters = list(self.query.filters)
-            name, _, value = filters[self.index]
-            filters[self.index] = (name, lookup, value)
-            link = self.query.copy(filters=filters).url
-            yield LookupOption(lookup, link)
 
 
 class BoundQuery:

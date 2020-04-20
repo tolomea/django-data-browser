@@ -214,7 +214,7 @@ def query_html(request, *, app, model, fields=""):
     def fmt_fields(fields, fks):
         return {
             "fields": [
-                {"name": name, "concrete": field.concrete}
+                {"name": name, "concrete": field.concrete, "lookups": field.lookups}
                 for name, field in sorted(fields.items())
             ],
             "fks": [
@@ -224,19 +224,8 @@ def query_html(request, *, app, model, fields=""):
         }
 
     data = {
-        "query": {
-            "model": bound_query.model,
-            "save_link": bound_query.save_link,
-            "filters": [
-                {
-                    "lookups": [
-                        {"name": lookup.name, "link": lookup.link}
-                        for lookup in filter_.lookups
-                    ]
-                }
-                for filter_ in bound_query.filters
-            ],
-        },
+        "model": bound_query.model,
+        "save_link": bound_query.save_link,
         "all_fields": fmt_fields(*bound_query.all_fields_nested),
     }
 

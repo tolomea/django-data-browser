@@ -40,9 +40,27 @@ function Link(props) {
 
 class Filter extends React.Component {
   handleLookupChange(event) {
-    this.props.lookups.forEach((lookup) => {
-      if (lookup.name === event.target.value) document.location.href = lookup.link;
-    });
+    var newFilters = this.props.query.filters.slice();
+    newFilters[this.props.index] = {
+      ...newFilters[this.props.index],
+      lookup: event.target.value,
+    };
+    this.props.handleQueryChange({ filters: newFilters });
+  }
+
+  getLookups() {
+    const parts = this.props.filter.name.split("__");
+    function follow(path, fields) {
+      if (path.length > 1) {
+        return follow(
+          path.slice(1),
+          fields.fks.find((fk) => fk.name === path[0])
+        );
+      } else {
+        return fields.fields.find((f) => f.name === path[0]);
+      }
+    }
+    return follow(parts, this.props.all_fields).lookups;
   }
 
   render() {
@@ -53,9 +71,9 @@ class Filter extends React.Component {
           value={this.props.filter.lookup}
           onChange={this.handleLookupChange.bind(this)}
         >
-          {this.props.lookups.map((lookup) => (
-            <option key={lookup.name} value={lookup.name}>
-              {lookup.name}
+          {this.getLookups().map((lookup) => (
+            <option key={lookup} value={lookup}>
+              {lookup}
             </option>
           ))}
         </select>{" "}
@@ -63,7 +81,7 @@ class Filter extends React.Component {
         <input
           type="text"
           name={`${this.props.filter.name}__${this.props.filter.lookup}`}
-          value={this.props.filter.value}
+          defaultValue={this.props.filter.value}
         />
         {this.props.filter.err_message}
       </p>
@@ -74,13 +92,16 @@ class Filter extends React.Component {
 function Filters(props) {
   return (
     <form className="filters" method="get">
-      {props.lightQuery.filters.map((filter, index) => (
+      {props.query.filters.map((filter, index) => (
         <Filter
           filter={filter}
-          lookups={props.query.filters[index] ? props.query.filters[index].lookups : []} // TODO cleanup after all_fields is flattened
+          all_fields={props.all_fields} // TODO cleanup after all_fields is flattened
           key={index}
+          index={index}
+          query={props.query}
+          handleQueryChange={props.handleQueryChange}
           handleRemove={() => {
-            var newFilters = props.lightQuery.filters.slice();
+            var newFilters = props.query.filters.slice();
             newFilters.splice(index, 1);
             props.handleQueryChange({
               filters: newFilters,
@@ -259,31 +280,31 @@ function Results(props) {
 function Page(props) {
   return (
     <div id="body">
-      <h1>{props.query.model}</h1>
+      <h1>{props.model}</h1>
       <p>
-        <a href={getURLforQuery(props.lightQuery, "csv")}>Download as CSV</a>
+        <a href={getURLforQuery(props.query, "csv")}>Download as CSV</a>
       </p>
       <p>
-        <a href={props.query.save_link}>Save View</a>
+        <a href={props.saveLink}>Save View</a>
       </p>
 
       <Filters
         query={props.query}
-        lightQuery={props.lightQuery}
         handleQueryChange={props.handleQueryChange}
+        all_fields={props.all_fields}
       />
 
       <p>Showing {props.data.length} results</p>
       <div className="main_space">
         <div>
           <Fields
-            query={props.lightQuery}
+            query={props.query}
             handleQueryChange={props.handleQueryChange}
             {...props.all_fields}
           />
         </div>
         <Results
-          query={props.lightQuery}
+          query={props.query}
           handleQueryChange={props.handleQueryChange}
           data={props.data}
         />
@@ -296,11 +317,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const djangoData = JSON.parse(document.getElementById("django-data").textContent);
-    // TODO all_fileds should really be a prop and this djangoData thing should be over in index.js
+    // TODO all_fileds and model should really be props and this djangoData thing should be over in index.js
     this.state = {
       data: [],
-      lightQuery: { filters: [], fields: [] },
-      query: djangoData.query,
+      query: { filters: [], fields: [] },
+      model: djangoData.model,
+      saveLink: djangoData.save_link,
       all_fields: djangoData.all_fields,
     };
   }
@@ -312,7 +334,7 @@ class App extends React.Component {
         (result) => {
           this.setState({
             data: result.data,
-            lightQuery: { fields: result.fields, filters: result.filters },
+            query: { fields: result.fields, filters: result.filters },
           });
         },
         (error) => {
@@ -331,7 +353,7 @@ class App extends React.Component {
   }
 
   handleQueryChange(queryChange) {
-    const newQuery = { ...this.state.lightQuery, ...queryChange };
+    const newQuery = { ...this.state.query, ...queryChange };
     window.history.pushState(null, null, getURLforQuery(newQuery, "html"));
     this.fetchData(getURLforQuery(newQuery, "json"));
   }
@@ -340,10 +362,11 @@ class App extends React.Component {
     return (
       <Page
         data={this.state.data}
-        lightQuery={this.state.lightQuery}
         query={this.state.query}
         all_fields={this.state.all_fields} // TODO this should be a prop
         handleQueryChange={this.handleQueryChange.bind(this)}
+        model={this.state.model} // TODO this should be a prop if we need it at all
+        saveLink={this.state.saveLink} // TODO this should be calculated
       />
     );
   }

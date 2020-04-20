@@ -132,15 +132,6 @@ class TestBoundQuery:
         )
 
 
-class TestFilter:
-    def test_lookups(self, filter):
-        expected = [
-            (f, f"/data_browser/query/app/model/+fa,-fd,fn.html?bob__{f}=fred")
-            for f in StringField.lookups
-        ]
-        assert list(filter.lookups) == expected
-
-
 class TestField:
     def test_repr(self, query):
         assert repr(StringField("fa", query)) == f"StringField('fa', {query})"

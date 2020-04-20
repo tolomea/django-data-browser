@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from . import models
 
 
-class ANY:
+class ANY:  # pragma: no cover
     def __init__(self, type):
         self.type = type
 
@@ -218,56 +218,141 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"query", "all_fields"}
-    assert context["query"].keys() == {"model", "save_link", "filters"}
-    assert context["query"]["filters"] == [
-        {
-            "lookups": [
-                {"link": ANY(str), "name": "equal"},
-                {"link": ANY(str), "name": "not_equal"},
-                {"link": ANY(str), "name": "gt"},
-                {"link": ANY(str), "name": "gte"},
-                {"link": ANY(str), "name": "lt"},
-                {"link": ANY(str), "name": "lte"},
-                {"link": ANY(str), "name": "is_null"},
-            ]
-        }
-    ]
+    assert context.keys() == {"model", "save_link", "all_fields"}
 
+    print(json.dumps(context["all_fields"], indent=4))
     assert context["all_fields"] == {
         "fields": [
-            {"concrete": False, "name": "is_onsale"},
-            {"concrete": True, "name": "name"},
-            {"concrete": True, "name": "onsale"},
-            {"concrete": True, "name": "pk"},
-            {"concrete": True, "name": "size"},
-            {"concrete": True, "name": "size_unit"},
+            {"name": "is_onsale", "concrete": False, "lookups": []},
+            {
+                "name": "name",
+                "concrete": True,
+                "lookups": [
+                    "equals",
+                    "contains",
+                    "starts_with",
+                    "ends_with",
+                    "regex",
+                    "not_equals",
+                    "not_contains",
+                    "not_starts_with",
+                    "not_ends_with",
+                    "not_regex",
+                    "is_null",
+                ],
+            },
+            {
+                "name": "onsale",
+                "concrete": True,
+                "lookups": ["equal", "not_equal", "is_null"],
+            },
+            {
+                "name": "pk",
+                "concrete": True,
+                "lookups": ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"],
+            },
+            {
+                "name": "size",
+                "concrete": True,
+                "lookups": ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"],
+            },
+            {
+                "name": "size_unit",
+                "concrete": True,
+                "lookups": [
+                    "equals",
+                    "contains",
+                    "starts_with",
+                    "ends_with",
+                    "regex",
+                    "not_equals",
+                    "not_contains",
+                    "not_starts_with",
+                    "not_ends_with",
+                    "not_regex",
+                    "is_null",
+                ],
+            },
         ],
         "fks": [
             {
-                "fields": [{"concrete": True, "name": "name"}],
-                "fks": [],
                 "name": "default_sku",
                 "path": "default_sku",
-            },
-            {
-                "fields": [],
-                "fks": [],
-                "name": "model_not_in_admin",
-                "path": "model_not_in_admin",
-            },
-            {
-                "fields": [{"concrete": True, "name": "name"}],
-                "fks": [
+                "fields": [
                     {
-                        "fields": [{"concrete": True, "name": "city"}],
-                        "fks": [],
-                        "name": "address",
-                        "path": "producer__address",
+                        "name": "name",
+                        "concrete": True,
+                        "lookups": [
+                            "equals",
+                            "contains",
+                            "starts_with",
+                            "ends_with",
+                            "regex",
+                            "not_equals",
+                            "not_contains",
+                            "not_starts_with",
+                            "not_ends_with",
+                            "not_regex",
+                            "is_null",
+                        ],
                     }
                 ],
+                "fks": [],
+            },
+            {
+                "name": "model_not_in_admin",
+                "path": "model_not_in_admin",
+                "fields": [],
+                "fks": [],
+            },
+            {
                 "name": "producer",
                 "path": "producer",
+                "fields": [
+                    {
+                        "name": "name",
+                        "concrete": True,
+                        "lookups": [
+                            "equals",
+                            "contains",
+                            "starts_with",
+                            "ends_with",
+                            "regex",
+                            "not_equals",
+                            "not_contains",
+                            "not_starts_with",
+                            "not_ends_with",
+                            "not_regex",
+                            "is_null",
+                        ],
+                    }
+                ],
+                "fks": [
+                    {
+                        "name": "address",
+                        "path": "producer__address",
+                        "fields": [
+                            {
+                                "name": "city",
+                                "concrete": True,
+                                "lookups": [
+                                    "equals",
+                                    "contains",
+                                    "starts_with",
+                                    "ends_with",
+                                    "regex",
+                                    "not_equals",
+                                    "not_contains",
+                                    "not_starts_with",
+                                    "not_ends_with",
+                                    "not_regex",
+                                    "is_null",
+                                ],
+                            }
+                        ],
+                        "fks": [],
+                    }
+                ],
             },
         ],
     }
@@ -279,41 +364,6 @@ def test_query_html_bad_fields(admin_client):
         "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
-    assert json.loads(res.context["data"])["query"]["filters"] == [
-        {
-            "lookups": [
-                {"name": "equal", "link": ANY(str)},
-                {"name": "not_equal", "link": ANY(str)},
-                {"name": "gt", "link": ANY(str)},
-                {"name": "gte", "link": ANY(str)},
-                {"name": "lt", "link": ANY(str)},
-                {"name": "lte", "link": ANY(str)},
-                {"name": "is_null", "link": ANY(str)},
-            ]
-        },
-        {
-            "lookups": [
-                {"name": "equal", "link": ANY(str)},
-                {"name": "not_equal", "link": ANY(str)},
-                {"name": "gt", "link": ANY(str)},
-                {"name": "gte", "link": ANY(str)},
-                {"name": "lt", "link": ANY(str)},
-                {"name": "lte", "link": ANY(str)},
-                {"name": "is_null", "link": ANY(str)},
-            ]
-        },
-        {
-            "lookups": [
-                {"name": "equal", "link": ANY(str)},
-                {"name": "not_equal", "link": ANY(str)},
-                {"name": "gt", "link": ANY(str)},
-                {"name": "gte", "link": ANY(str)},
-                {"name": "lt", "link": ANY(str)},
-                {"name": "lte", "link": ANY(str)},
-                {"name": "is_null", "link": ANY(str)},
-            ]
-        },
-    ]
 
 
 @pytest.mark.usefixtures("products")
