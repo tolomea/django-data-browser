@@ -300,11 +300,9 @@ function Page(props) {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const djangoData = JSON.parse(document.getElementById("django-data").textContent);
     this.state = {
       data: [],
       query: { filters: [], fields: [] },
-      ...djangoData, // this should be props and this djangoData thing should be over in index.js
     };
   }
 
@@ -341,8 +339,8 @@ class App extends React.Component {
 
   getPartsForQuery(query) {
     return {
-      app: this.state.app,
-      model: this.state.model,
+      app: this.props.app,
+      model: this.props.model,
       fields: query.fields
         .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
         .join(","),
@@ -355,12 +353,12 @@ class App extends React.Component {
   getSaveUrl(query) {
     const parts = this.getPartsForQuery(this.state.query);
     const queryString = new URLSearchParams(parts).toString();
-    return `${window.location.origin}${this.state.adminUrl}?${queryString}`;
+    return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
   }
 
   getUrlForQuery(query, media) {
     const parts = this.getPartsForQuery(query);
-    const basePath = `${this.state.baseUrl}query/${parts.app}/${parts.model}`;
+    const basePath = `${this.props.baseUrl}query/${parts.app}/${parts.model}`;
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
@@ -369,9 +367,9 @@ class App extends React.Component {
       <Page
         data={this.state.data}
         query={this.state.query}
-        allFields={this.state.allFields} // TODO this should be a prop
+        allFields={this.props.allFields}
         handleQueryChange={this.handleQueryChange.bind(this)}
-        model={this.state.model} // TODO this should be a prop if we need it at all
+        model={this.props.model}
         saveLink={this.getSaveUrl()}
         csvLink={this.getUrlForQuery(this.state.query, "csv")}
       />
