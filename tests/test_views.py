@@ -218,9 +218,19 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"model", "save_link", "all_fields"}
+    assert context.keys() == {
+        "model",
+        "save_link",
+        "all_fields",
+        "baseURL",
+        "adminURL",
+        "app",
+    }
+    assert context["model"] == "Product"
+    assert context["app"] == "tests"
+    assert context["baseURL"] == "/data_browser/"
+    assert context["adminURL"] == "/admin/data_browser/view/add/"
 
-    print(json.dumps(context["all_fields"], indent=4))
     assert context["all_fields"] == {
         "fields": [
             {"name": "is_onsale", "concrete": False, "lookups": []},

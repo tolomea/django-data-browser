@@ -27,6 +27,7 @@ urlpatterns = [
     path("query/<app>/<model>/<optional:fields>.html", query_html, name="query_html"),
     path("query/<app>/<model>/<optional:fields>.<media>", query, name="query"),
     path("view/<pk>.<media>", view, name="view"),
+    path("", lambda: None, name="root"),
 ]
 if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
     urlpatterns.append(path("<path:path>", proxy_js_dev_server))

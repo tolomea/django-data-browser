@@ -10,22 +10,6 @@ function getAPIforWindow() {
   return json_url + location.search;
 }
 
-function getBaseURL() {
-  const location = window.location;
-  const parts = location.pathname.split("/");
-  return location.origin + parts.slice(0, -1).join("/");
-}
-
-function getURLforQuery(query, media) {
-  const fieldStr = query.fields
-    .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
-    .join(",");
-  const filterStr = query.filters
-    .map((filter) => `${filter.name}__${filter.lookup}=${filter.value}`)
-    .join("&");
-  return `${getBaseURL()}/${fieldStr}.${media}?${filterStr}`;
-}
-
 function Link(props) {
   return (
     <button
@@ -282,7 +266,7 @@ function Page(props) {
     <div id="body">
       <h1>{props.model}</h1>
       <p>
-        <a href={getURLforQuery(props.query, "csv")}>Download as CSV</a>
+        <a href={props.getURLforQuery(props.query, "csv")}>Download as CSV</a>
       </p>
       <p>
         <a href={props.saveLink}>Save View</a>
@@ -317,13 +301,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const djangoData = JSON.parse(document.getElementById("django-data").textContent);
-    // TODO all_fileds and model should really be props and this djangoData thing should be over in index.js
     this.state = {
       data: [],
       query: { filters: [], fields: [] },
-      model: djangoData.model,
-      saveLink: djangoData.save_link,
-      all_fields: djangoData.all_fields,
+      ...djangoData, // this should be props and this djangoData thing should be over in index.js
     };
   }
 
@@ -354,8 +335,19 @@ class App extends React.Component {
 
   handleQueryChange(queryChange) {
     const newQuery = { ...this.state.query, ...queryChange };
-    window.history.pushState(null, null, getURLforQuery(newQuery, "html"));
-    this.fetchData(getURLforQuery(newQuery, "json"));
+    window.history.pushState(null, null, this.getURLforQuery(newQuery, "html"));
+    this.fetchData(this.getURLforQuery(newQuery, "json"));
+  }
+
+  getURLforQuery(query, media) {
+    const basePath = `${this.state.baseURL}query/${this.state.app}/${this.state.model}`;
+    const fieldStr = query.fields
+      .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
+      .join(",");
+    const filterStr = query.filters
+      .map((filter) => `${filter.name}__${filter.lookup}=${filter.value}`)
+      .join("&");
+    return `${window.location.origin}${basePath}/${fieldStr}.${media}?${filterStr}`;
   }
 
   render() {
@@ -367,6 +359,7 @@ class App extends React.Component {
         handleQueryChange={this.handleQueryChange.bind(this)}
         model={this.state.model} // TODO this should be a prop if we need it at all
         saveLink={this.state.saveLink} // TODO this should be calculated
+        getURLforQuery={this.getURLforQuery.bind(this)}
       />
     );
   }

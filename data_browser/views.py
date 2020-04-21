@@ -17,6 +17,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template import engines, loader
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
@@ -224,9 +225,12 @@ def query_html(request, *, app, model, fields=""):
         }
 
     data = {
+        "app": bound_query.app,
         "model": bound_query.model,
         "save_link": bound_query.save_link,
         "all_fields": fmt_fields(*bound_query.all_fields_nested),
+        "baseURL": reverse("data_browser:root"),
+        "adminURL": reverse(f"admin:{View._meta.db_table}_add"),
     }
 
     data = json.dumps(data)
