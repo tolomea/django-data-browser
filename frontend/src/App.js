@@ -2,6 +2,8 @@ import React from "react";
 import "./App.css";
 var assert = require("assert");
 
+let controller;
+
 function getAPIforWindow() {
   const location = window.location;
   const htmlUrl = location.origin + location.pathname;
@@ -307,7 +309,10 @@ class App extends React.Component {
   }
 
   fetchData(url) {
-    fetch(url)
+    if (controller) controller.abort();
+    controller = new AbortController();
+
+    fetch(url, { signal: controller.signal })
       .then((res) => res.json())
       .then(
         (result) => {
@@ -333,6 +338,7 @@ class App extends React.Component {
 
   handleQueryChange(queryChange) {
     const newQuery = { ...this.state.query, ...queryChange };
+    this.setState({ query: newQuery });
     window.history.pushState(null, null, this.getUrlForQuery(newQuery, "html"));
     this.fetchData(this.getUrlForQuery(newQuery, "json"));
   }
