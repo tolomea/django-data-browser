@@ -227,9 +227,9 @@ def query_html(request, *, app, model, fields=""):
     data = {
         "app": bound_query.app,
         "model": bound_query.model,
-        "baseURL": reverse("data_browser:root"),
-        "adminURL": reverse(f"admin:{View._meta.db_table}_add"),
-        "all_fields": fmt_fields(*bound_query.all_fields_nested),
+        "baseUrl": reverse("data_browser:root"),
+        "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
+        "allFields": fmt_fields(*bound_query.all_fields_nested),
     }
 
     data = json.dumps(data)
@@ -284,7 +284,7 @@ def json_response(request, query):
             "data": data,
             "filters": [
                 {
-                    "err_message": filter_.err_message,
+                    "errorMessage": filter_.err_message,
                     "name": filter_.name,
                     "lookup": filter_.lookup,
                     "value": filter_.value,

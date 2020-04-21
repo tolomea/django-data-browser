@@ -4,17 +4,17 @@ var assert = require("assert");
 
 function getAPIforWindow() {
   const location = window.location;
-  const html_url = location.origin + location.pathname;
-  assert(html_url.slice(-4) === "html");
-  const json_url = html_url.slice(0, -4) + "json";
-  return json_url + location.search;
+  const htmlUrl = location.origin + location.pathname;
+  assert(htmlUrl.slice(-4) === "html");
+  const jsonUrl = htmlUrl.slice(0, -4) + "json";
+  return jsonUrl + location.search;
 }
 
 function Link(props) {
   return (
     <button
       type="button"
-      className={"link " + (props.className || "")}
+      className={"Link " + (props.className || "")}
       onClick={props.onClick}
     >
       {props.children}
@@ -44,12 +44,12 @@ class Filter extends React.Component {
         return fields.fields.find((f) => f.name === path[0]);
       }
     }
-    return follow(parts, this.props.all_fields).lookups;
+    return follow(parts, this.props.allFields).lookups;
   }
 
   render() {
     return (
-      <p className={this.props.filter.err_message ? "error" : undefined}>
+      <p className={this.props.filter.errorMessage ? "Error" : undefined}>
         <Link onClick={this.props.handleRemove}>✘</Link> {this.props.filter.name}{" "}
         <select
           value={this.props.filter.lookup}
@@ -67,7 +67,7 @@ class Filter extends React.Component {
           name={`${this.props.filter.name}__${this.props.filter.lookup}`}
           defaultValue={this.props.filter.value}
         />
-        {this.props.filter.err_message}
+        {this.props.filter.errorMessage}
       </p>
     );
   }
@@ -75,11 +75,11 @@ class Filter extends React.Component {
 
 function Filters(props) {
   return (
-    <form className="filters" method="get">
+    <form className="Filters" method="get">
       {props.query.filters.map((filter, index) => (
         <Filter
           filter={filter}
-          all_fields={props.all_fields} // TODO cleanup after all_fields is flattened
+          allFields={props.allFields} // TODO cleanup after allFields is flattened
           key={index}
           index={index}
           query={props.query}
@@ -116,15 +116,15 @@ class Toggle extends React.Component {
     if (this.state.isToggleOn) {
       return (
         <>
-          <Link className="toggle_link" onClick={this.handleClick.bind(this)}>
+          <Link className="ToggleLink" onClick={this.handleClick.bind(this)}>
             > {this.props.title}
           </Link>
-          <div className="toggle_div">{this.props.children}</div>
+          <div className="ToggleDiv">{this.props.children}</div>
         </>
       );
     } else {
       return (
-        <Link className="toggle_link" onClick={this.handleClick.bind(this)}>
+        <Link className="ToggleLink" onClick={this.handleClick.bind(this)}>
           + {this.props.title}
         </Link>
       );
@@ -134,12 +134,12 @@ class Toggle extends React.Component {
 
 function Fields(props) {
   return (
-    <ul className="fields_list">
+    <ul className="FieldsList">
       {props.fields.map((field) => {
         function handleAddFilter() {
           var newFilters = props.query.filters.slice();
           newFilters.push({
-            err_message: null,
+            errorMessage: null,
             name: field.name,
             lookup: "",
             value: "",
@@ -196,7 +196,7 @@ function ResultsHead(props) {
           function handleAddFilter() {
             var newFilters = props.query.filters.slice();
             newFilters.push({
-              err_message: null,
+              errorMessage: null,
               name: field.name,
               lookup: "",
               value: "",
@@ -275,16 +275,16 @@ function Page(props) {
       <Filters
         query={props.query}
         handleQueryChange={props.handleQueryChange}
-        all_fields={props.all_fields}
+        allFields={props.allFields}
       />
 
       <p>Showing {props.data.length} results</p>
-      <div className="main_space">
+      <div className="MainSpace">
         <div>
           <Fields
             query={props.query}
             handleQueryChange={props.handleQueryChange}
-            {...props.all_fields}
+            {...props.allFields}
           />
         </div>
         <Results
@@ -335,8 +335,8 @@ class App extends React.Component {
 
   handleQueryChange(queryChange) {
     const newQuery = { ...this.state.query, ...queryChange };
-    window.history.pushState(null, null, this.getURLforQuery(newQuery, "html"));
-    this.fetchData(this.getURLforQuery(newQuery, "json"));
+    window.history.pushState(null, null, this.getUrlForQuery(newQuery, "html"));
+    this.fetchData(this.getUrlForQuery(newQuery, "json"));
   }
 
   getPartsForQuery(query) {
@@ -352,15 +352,15 @@ class App extends React.Component {
     };
   }
 
-  getSaveURL(query) {
+  getSaveUrl(query) {
     const parts = this.getPartsForQuery(this.state.query);
     const queryString = new URLSearchParams(parts).toString();
-    return `${window.location.origin}${this.state.adminURL}?${queryString}`;
+    return `${window.location.origin}${this.state.adminUrl}?${queryString}`;
   }
 
-  getURLforQuery(query, media) {
+  getUrlForQuery(query, media) {
     const parts = this.getPartsForQuery(query);
-    const basePath = `${this.state.baseURL}query/${parts.app}/${parts.model}`;
+    const basePath = `${this.state.baseUrl}query/${parts.app}/${parts.model}`;
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
@@ -369,11 +369,11 @@ class App extends React.Component {
       <Page
         data={this.state.data}
         query={this.state.query}
-        all_fields={this.state.all_fields} // TODO this should be a prop
+        allFields={this.state.allFields} // TODO this should be a prop
         handleQueryChange={this.handleQueryChange.bind(this)}
         model={this.state.model} // TODO this should be a prop if we need it at all
-        saveLink={this.getSaveURL()}
-        csvLink={this.getURLforQuery(this.state.query, "csv")}
+        saveLink={this.getSaveUrl()}
+        csvLink={this.getUrlForQuery(this.state.query, "csv")}
       />
     );
   }

@@ -54,41 +54,41 @@ select {
   display: inline;
   width: auto;
 }
-.main_space {
+.MainSpace {
   margin: 0 auto;
   display: flex;
   flex-flow: row;
   margin-bottom: 30px;
 }
-.filters {
+.Filters {
   margin: 0 auto;
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-.filters p {
+.Filters p {
   margin: 5px;
 }
-.filters .error * {
+.Filters .error * {
   background-color: #ff4040;
 }
-.filters .error {
+.Filters .error {
   background-color: #ff4040;
 }
-.toggle_link {
+.ToggleLink {
   display: block;
 }
-.toggle_div {
+.ToggleDiv {
   display: block;
   padding-left: 15px;
 }
-.fields_list {
+.FieldsList {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-button.link {
+button.Link {
   background: none !important;
   border: none;
   padding: 0 !important;
@@ -97,6 +97,6 @@ button.link {
   font-size: inherit;
   font: inherit;
 }
-button.link:hover {
+button.Link:hover {
   text-decoration: underline;
 }
