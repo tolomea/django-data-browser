@@ -66,12 +66,6 @@ class TestQuery:
 
 
 class TestBoundQuery:
-    def test_save_link(self, bound_query):
-        assert (
-            bound_query.save_link
-            == "/admin/data_browser/view/add/?app=app&model=model&fields=%2Bfa%2C-fd%2Cfn&query=%7B%22bob__equals%22%3A+%5B%22fred%22%5D%7D"
-        )
-
     def test_fields(self, query, bound_query):
         assert list(bound_query.fields) == ["fa", "fd", "fn"]
 

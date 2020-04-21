@@ -227,10 +227,9 @@ def query_html(request, *, app, model, fields=""):
     data = {
         "app": bound_query.app,
         "model": bound_query.model,
-        "save_link": bound_query.save_link,
-        "all_fields": fmt_fields(*bound_query.all_fields_nested),
         "baseURL": reverse("data_browser:root"),
         "adminURL": reverse(f"admin:{View._meta.db_table}_add"),
+        "all_fields": fmt_fields(*bound_query.all_fields_nested),
     }
 
     data = json.dumps(data)

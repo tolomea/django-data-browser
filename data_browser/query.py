@@ -5,8 +5,6 @@ from collections import defaultdict
 import dateutil.parser
 from django.urls import reverse
 
-from .models import View
-
 ASC, DSC = "asc", "dsc"
 
 
@@ -248,16 +246,6 @@ class BoundQuery:
             return res
 
         self.all_fields = flatten_fields(self.all_fields_nested)
-
-    @property
-    def save_link(self):
-        view_name = f"admin:{View._meta.db_table}_add"
-        url = reverse(view_name)
-        params = urllib.parse.urlencode(
-            self._query.save_params, quote_via=urllib.parse.quote_plus, doseq=True
-        )
-
-        return f"{url}?{params}"
 
     @property
     def sort_fields(self):

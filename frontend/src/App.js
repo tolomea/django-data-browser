@@ -266,7 +266,7 @@ function Page(props) {
     <div id="body">
       <h1>{props.model}</h1>
       <p>
-        <a href={props.getURLforQuery(props.query, "csv")}>Download as CSV</a>
+        <a href={props.csvLink}>Download as CSV</a>
       </p>
       <p>
         <a href={props.saveLink}>Save View</a>
@@ -339,15 +339,29 @@ class App extends React.Component {
     this.fetchData(this.getURLforQuery(newQuery, "json"));
   }
 
+  getPartsForQuery(query) {
+    return {
+      app: this.state.app,
+      model: this.state.model,
+      fields: query.fields
+        .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
+        .join(","),
+      query: query.filters
+        .map((filter) => `${filter.name}__${filter.lookup}=${filter.value}`)
+        .join("&"),
+    };
+  }
+
+  getSaveURL(query) {
+    const parts = this.getPartsForQuery(this.state.query);
+    const queryString = new URLSearchParams(parts).toString();
+    return `${window.location.origin}${this.state.adminURL}?${queryString}`;
+  }
+
   getURLforQuery(query, media) {
-    const basePath = `${this.state.baseURL}query/${this.state.app}/${this.state.model}`;
-    const fieldStr = query.fields
-      .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
-      .join(",");
-    const filterStr = query.filters
-      .map((filter) => `${filter.name}__${filter.lookup}=${filter.value}`)
-      .join("&");
-    return `${window.location.origin}${basePath}/${fieldStr}.${media}?${filterStr}`;
+    const parts = this.getPartsForQuery(query);
+    const basePath = `${this.state.baseURL}query/${parts.app}/${parts.model}`;
+    return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
   render() {
@@ -358,8 +372,8 @@ class App extends React.Component {
         all_fields={this.state.all_fields} // TODO this should be a prop
         handleQueryChange={this.handleQueryChange.bind(this)}
         model={this.state.model} // TODO this should be a prop if we need it at all
-        saveLink={this.state.saveLink} // TODO this should be calculated
-        getURLforQuery={this.getURLforQuery.bind(this)}
+        saveLink={this.getSaveURL()}
+        csvLink={this.getURLforQuery(this.state.query, "csv")}
       />
     );
   }
