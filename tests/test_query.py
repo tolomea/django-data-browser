@@ -45,8 +45,7 @@ class TestQuery:
         )
         assert q == query
 
-    def test_from_request_with_related_filter(self, query):
-
+    def test_from_request_with_related_filter(self):
         q = Query.from_request(
             "app", "model", "+fa,-fd,fn", "html", {"bob__jones__equals": ["fred"]}
         )
@@ -136,6 +135,9 @@ class TestStringField:
         assert not StringField(None, None).validate("contains", "hello")
         assert StringField(None, None).validate("pontains", "hello")
 
+    def test_default_lookup(self):
+        assert StringField(None, None).default_lookup == "equals"
+
 
 class TestNumberField:
     def test_validate(self):
@@ -144,6 +146,9 @@ class TestNumberField:
         assert NumberField(None, None).validate("gt", "hello")
         assert not NumberField(None, None).validate("is_null", "True")
         assert NumberField(None, None).validate("is_null", "hello")
+
+    def test_default_lookup(self):
+        assert NumberField(None, None).default_lookup == "equal"
 
 
 class TestTimeField:
@@ -154,12 +159,18 @@ class TestTimeField:
         assert not TimeField(None, None).validate("is_null", "True")
         assert TimeField(None, None).validate("is_null", "hello")
 
+    def test_default_lookup(self):
+        assert TimeField(None, None).default_lookup == "equal"
+
 
 class TestBooleanField:
     def test_validate(self):
         assert not BooleanField(None, None).validate("equal", "True")
         assert BooleanField(None, None).validate("equal", "hello")
         assert BooleanField(None, None).validate("pontains", "True")
+
+    def test_default_lookup(self):
+        assert BooleanField(None, None).default_lookup == "equal"
 
 
 class TestCalculatedField:

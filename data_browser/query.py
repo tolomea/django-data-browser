@@ -109,6 +109,14 @@ def parse_boolean(val):
         raise ValueError("Expected 'true' or 'false'")
 
 
+PARSERS = {
+    "string": lambda x: x,
+    "number": float,
+    "time": dateutil.parser.parse,
+    "boolean": parse_boolean,
+}
+
+
 class Field:
     concrete = True
 
@@ -127,13 +135,7 @@ class Field:
         return f"{self.__class__.__name__}('{self.name}', {self.query})"
 
     def parse(self, lookup, value):
-        if lookup == "is_null":
-            return parse_boolean(value)
-        else:
-            return self._parse(value)
-
-    def _parse(self, value):
-        return value
+        return PARSERS[self.lookups[lookup]](value)
 
     def validate(self, lookup, value):
         if lookup not in self.lookups:
@@ -147,48 +149,55 @@ class Field:
 
     @property
     def default_lookup(self):
-        return self.lookups[0]
+        return list(self.lookups)[0]
 
 
 class StringField(Field):
-    lookups = [
-        "equals",
-        "contains",
-        "starts_with",
-        "ends_with",
-        "regex",
-        "not_equals",
-        "not_contains",
-        "not_starts_with",
-        "not_ends_with",
-        "not_regex",
-        "is_null",
-    ]
+    lookups = {
+        "equals": "string",
+        "contains": "string",
+        "starts_with": "string",
+        "ends_with": "string",
+        "regex": "string",
+        "not_equals": "string",
+        "not_contains": "string",
+        "not_starts_with": "string",
+        "not_ends_with": "string",
+        "not_regex": "string",
+        "is_null": "boolean",
+    }
 
 
 class NumberField(Field):
-    lookups = ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"]
-
-    def _parse(self, s):
-        return float(s)
+    lookups = {
+        "equal": "number",
+        "not_equal": "number",
+        "gt": "number",
+        "gte": "number",
+        "lt": "number",
+        "lte": "number",
+        "is_null": "boolean",
+    }
 
 
 class TimeField(Field):
-    lookups = ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"]
-
-    def _parse(self, s):
-        return dateutil.parser.parse(s)
+    lookups = {
+        "equal": "time",
+        "not_equal": "time",
+        "gt": "time",
+        "gte": "time",
+        "lt": "time",
+        "lte": "time",
+        "is_null": "boolean",
+    }
 
 
 class BooleanField(Field):
-    lookups = ["equal", "not_equal", "is_null"]
-
-    def _parse(self, s):
-        return parse_boolean(s)
+    lookups = {"equal": "boolean", "not_equal": "boolean", "is_null": "boolean"}
 
 
 class CalculatedField(Field):
-    lookups = []
+    lookups = {}
     concrete = False
 
 
