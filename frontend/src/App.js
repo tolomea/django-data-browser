@@ -25,11 +25,26 @@ function Link(props) {
 }
 
 class Filter extends React.Component {
+  handleRemove(event) {
+    var newFilters = this.props.query.filters.slice();
+    newFilters.splice(this.props.index, 1);
+    this.props.handleQueryChange({ filters: newFilters });
+  }
+
   handleLookupChange(event) {
     var newFilters = this.props.query.filters.slice();
     newFilters[this.props.index] = {
       ...newFilters[this.props.index],
       lookup: event.target.value,
+    };
+    this.props.handleQueryChange({ filters: newFilters });
+  }
+
+  handleValueChange(event) {
+    var newFilters = this.props.query.filters.slice();
+    newFilters[this.props.index] = {
+      ...newFilters[this.props.index],
+      value: event.target.value,
     };
     this.props.handleQueryChange({ filters: newFilters });
   }
@@ -52,7 +67,7 @@ class Filter extends React.Component {
   render() {
     return (
       <p className={this.props.filter.errorMessage ? "Error" : undefined}>
-        <Link onClick={this.props.handleRemove}>✘</Link> {this.props.filter.name}{" "}
+        <Link onClick={this.handleRemove.bind(this)}>✘</Link> {this.props.filter.name}{" "}
         <select
           value={this.props.filter.lookup}
           onChange={this.handleLookupChange.bind(this)}
@@ -68,6 +83,7 @@ class Filter extends React.Component {
           type="text"
           name={`${this.props.filter.name}__${this.props.filter.lookup}`}
           defaultValue={this.props.filter.value}
+          onChange={this.handleValueChange.bind(this)}
         />
         {this.props.filter.errorMessage}
       </p>
@@ -86,18 +102,8 @@ function Filters(props) {
           index={index}
           query={props.query}
           handleQueryChange={props.handleQueryChange}
-          handleRemove={() => {
-            var newFilters = props.query.filters.slice();
-            newFilters.splice(index, 1);
-            props.handleQueryChange({
-              filters: newFilters,
-            });
-          }}
         />
       ))}
-      <p>
-        <input type="submit" />
-      </p>
     </form>
   );
 }
