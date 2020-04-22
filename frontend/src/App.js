@@ -82,7 +82,7 @@ class Filter extends React.Component {
         <input
           type="text"
           name={`${this.props.filter.name}__${this.props.filter.lookup}`}
-          defaultValue={this.props.filter.value}
+          value={this.props.filter.value}
           onChange={this.handleValueChange.bind(this)}
         />
         {this.props.filter.errorMessage}
@@ -93,7 +93,7 @@ class Filter extends React.Component {
 
 function Filters(props) {
   return (
-    <form className="Filters" method="get">
+    <form className="Filters">
       {props.query.filters.map((filter, index) => (
         <Filter
           filter={filter}
