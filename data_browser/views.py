@@ -25,6 +25,7 @@ from .models import View
 from .query import (
     ASC,
     DSC,
+    FIELD_TYPES,
     BooleanField,
     BoundQuery,
     CalculatedField,
@@ -35,13 +36,13 @@ from .query import (
 )
 
 
-def get_model(query):
-    return apps.get_model(app_label=query.app, model_name=query.model)
+def get_model(app, model):
+    return apps.get_model(app_label=app, model_name=model)
 
 
 FIELD_MAP = [
     ((models.BooleanField, models.NullBooleanField), BooleanField),
-    ((models.CharField, models.TextField), StringField),
+    ((models.CharField, models.TextField, models.GenericIPAddressField), StringField),
     ((models.DateTimeField, models.DateField), TimeField),
     (
         (models.DecimalField, models.FloatField, models.IntegerField, models.AutoField),
@@ -124,7 +125,7 @@ def get_data(bound_query):
     if not bound_query.fields:
         return []
 
-    qs = get_model(bound_query).objects.all()
+    qs = get_model(bound_query.app, bound_query.model).objects.all()
 
     # sort
     sort_fields = []
@@ -200,12 +201,7 @@ def get_data(bound_query):
 
 
 def get_context(request, app, model, fields):  # should really only need app and model
-    query = Query.from_request(app, model, fields, "html", request.GET)
-
-    try:
-        model = get_model(query)
-    except LookupError as e:
-        return HttpResponse(e)
+    query = Query.from_request(app, model.__name__, fields, "html", request.GET)
 
     admin_fields = get_all_admin_fields(request)
     fields = get_nested_fields_for_model(model, admin_fields)
@@ -227,24 +223,66 @@ def get_context(request, app, model, fields):  # should really only need app and
             ],
         }
 
+    types = {
+        type_.get_type(): {
+            "lookups": [{"name": n, "type": t} for n, t in type_.lookups.items()],
+            "concrete": type_.concrete,
+        }
+        for type_ in FIELD_TYPES
+    }
+
+    def model_name(model):
+        return f"{model._meta.app_label}__{model.__name__}"
+
+    all_model_fields = {
+        model: get_fields_for_model(model, admin_fields) for model in admin_fields
+    }
+
+    all_model_fields = {
+        model_name(model): {
+            "fields": {
+                name: {"type": type_.get_type()}
+                for name, type_ in sorted(model_fields["fields"].items())
+            },
+            "fks": {
+                name: {"model": model_name(rel_model)}
+                for name, rel_model in sorted(model_fields["fks"].items())
+            },
+            "sorted_fields": sorted(model_fields["fields"]),
+            "sorted_fks": sorted(model_fields["fks"]),
+        }
+        for model, model_fields in all_model_fields.items()
+    }
+
     return {
         "app": bound_query.app,
         "model": bound_query.model,
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "allFields": fmt_fields(*bound_query.all_fields_nested),
+        "types": types,
+        "fields": all_model_fields,
     }
 
 
 @admin_decorators.staff_member_required
-def query_ctx(request, *, app, model, fields=""):
+def query_ctx(request, *, app, model, fields=""):  # pragma: no cover
+    try:
+        model = get_model(app, model)
+    except LookupError as e:
+        return HttpResponse(e)
     return JsonResponse(get_context(request, app, model, fields))
 
 
 @admin_decorators.staff_member_required
 def query_html(request, *, app, model, fields=""):
-    data = get_context(request, app, model, fields)
 
+    try:
+        model = get_model(app, model)
+    except LookupError as e:
+        return HttpResponse(e)
+
+    data = get_context(request, app, model, fields)
     data = json.dumps(data)
     data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
 
@@ -270,7 +308,9 @@ def query(request, *, app, model, fields="", media):
 
 def csv_response(request, query):
     admin_fields = get_all_admin_fields(request)
-    fields = get_nested_fields_for_model(get_model(query), admin_fields)
+    fields = get_nested_fields_for_model(
+        get_model(query.app, query.model), admin_fields
+    )
     bound_query = BoundQuery(query, fields)
     data = get_data(bound_query)
 
@@ -288,7 +328,9 @@ def csv_response(request, query):
 
 def json_response(request, query):
     admin_fields = get_all_admin_fields(request)
-    fields = get_nested_fields_for_model(get_model(query), admin_fields)
+    fields = get_nested_fields_for_model(
+        get_model(query.app, query.model), admin_fields
+    )
     bound_query = BoundQuery(query, fields)
     data = get_data(bound_query)
 

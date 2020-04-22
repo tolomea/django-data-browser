@@ -218,12 +218,19 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"model", "allFields", "baseUrl", "adminUrl", "app"}
+    assert context.keys() == {
+        "model",
+        "allFields",
+        "baseUrl",
+        "adminUrl",
+        "app",
+        "types",
+        "fields",
+    }
     assert context["model"] == "Product"
     assert context["app"] == "tests"
     assert context["baseUrl"] == "/data_browser/"
     assert context["adminUrl"] == "/admin/data_browser/view/add/"
-
     assert context["allFields"] == {
         "fields": [
             {"name": "is_onsale", "concrete": False, "lookups": []},
@@ -358,6 +365,152 @@ def test_query_html(admin_client):
                 ],
             },
         ],
+    }
+
+    assert context["types"] == {
+        "string": {
+            "lookups": [
+                {"name": "equals", "type": "string"},
+                {"name": "contains", "type": "string"},
+                {"name": "starts_with", "type": "string"},
+                {"name": "ends_with", "type": "string"},
+                {"name": "regex", "type": "string"},
+                {"name": "not_equals", "type": "string"},
+                {"name": "not_contains", "type": "string"},
+                {"name": "not_starts_with", "type": "string"},
+                {"name": "not_ends_with", "type": "string"},
+                {"name": "not_regex", "type": "string"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "number": {
+            "lookups": [
+                {"name": "equal", "type": "number"},
+                {"name": "not_equal", "type": "number"},
+                {"name": "gt", "type": "number"},
+                {"name": "gte", "type": "number"},
+                {"name": "lt", "type": "number"},
+                {"name": "lte", "type": "number"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "time": {
+            "lookups": [
+                {"name": "equal", "type": "time"},
+                {"name": "not_equal", "type": "time"},
+                {"name": "gt", "type": "time"},
+                {"name": "gte", "type": "time"},
+                {"name": "lt", "type": "time"},
+                {"name": "lte", "type": "time"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "boolean": {
+            "lookups": [
+                {"name": "equal", "type": "boolean"},
+                {"name": "not_equal", "type": "boolean"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "calculated": {"lookups": [], "concrete": False},
+    }
+
+    assert context["fields"] == {
+        "auth__Group": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["name"],
+            "sorted_fks": [],
+        },
+        "auth__User": {
+            "fields": {"username": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["username"],
+            "sorted_fks": [],
+        },
+        "tests__InAdmin": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["name"],
+            "sorted_fks": [],
+        },
+        "tests__Tag": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["name"],
+            "sorted_fks": [],
+        },
+        "tests__Address": {
+            "fields": {"city": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["city"],
+            "sorted_fks": [],
+        },
+        "tests__Producer": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {"address": {"model": "tests__Address"}},
+            "sorted_fields": ["name"],
+            "sorted_fks": ["address"],
+        },
+        "tests__Product": {
+            "fields": {
+                "is_onsale": {"type": "calculated"},
+                "name": {"type": "string"},
+                "onsale": {"type": "boolean"},
+                "pk": {"type": "number"},
+                "size": {"type": "number"},
+                "size_unit": {"type": "string"},
+            },
+            "fks": {
+                "default_sku": {"model": "tests__SKU"},
+                "model_not_in_admin": {"model": "tests__NotInAdmin"},
+                "producer": {"model": "tests__Producer"},
+            },
+            "sorted_fields": ["is_onsale", "name", "onsale", "pk", "size", "size_unit"],
+            "sorted_fks": ["default_sku", "model_not_in_admin", "producer"],
+        },
+        "tests__SKU": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {"product": {"model": "tests__Product"}},
+            "sorted_fields": ["name"],
+            "sorted_fks": ["product"],
+        },
+        "data_browser__View": {
+            "fields": {
+                "app": {"type": "string"},
+                "created_time": {"type": "time"},
+                "description": {"type": "string"},
+                "fields": {"type": "string"},
+                "id": {"type": "string"},
+                "model": {"type": "string"},
+                "name": {"type": "string"},
+                "public": {"type": "boolean"},
+                "query": {"type": "string"},
+            },
+            "fks": {"owner": {"model": "auth__User"}},
+            "sorted_fields": [
+                "app",
+                "created_time",
+                "description",
+                "fields",
+                "id",
+                "model",
+                "name",
+                "public",
+                "query",
+            ],
+            "sorted_fks": ["owner"],
+        },
+        "tests__NotInAdmin": {
+            "fields": {},
+            "fks": {},
+            "sorted_fields": [],
+            "sorted_fks": [],
+        },
     }
 
 

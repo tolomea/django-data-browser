@@ -151,6 +151,12 @@ class Field:
     def default_lookup(self):
         return list(self.lookups)[0]
 
+    @classmethod
+    def get_type(cls):
+        name = cls.__name__.lower()
+        assert name.endswith("field")
+        return name[: -len("field")]
+
 
 class StringField(Field):
     lookups = {
@@ -199,6 +205,9 @@ class BooleanField(Field):
 class CalculatedField(Field):
     lookups = {}
     concrete = False
+
+
+FIELD_TYPES = [StringField, NumberField, TimeField, BooleanField, CalculatedField]
 
 
 class Filter:
