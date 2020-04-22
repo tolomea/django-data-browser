@@ -204,7 +204,8 @@ class Filter:
         self.name = field.name
         self.err_message = field.validate(lookup, value)
         self.is_valid = not self.err_message
-        self.value = field.parse(lookup, value) if self.is_valid else None
+        self.value = value
+        self.parsed = field.parse(lookup, value) if self.is_valid else None
 
     def __eq__(self, other):
         return (

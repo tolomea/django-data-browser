@@ -69,10 +69,10 @@ select {
 .Filters p {
   margin: 5px;
 }
-.Filters .error * {
+.Filters .Error * {
   background-color: #ff4040;
 }
-.Filters .error {
+.Filters .Error {
   background-color: #ff4040;
 }
 .ToggleLink {

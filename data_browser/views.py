@@ -148,9 +148,9 @@ def get_data(bound_query):
 
             filter_str = f"{filter_.name}{LOOKUP_MAP[lookup]}"
             if negation:
-                qs = qs.exclude(**{filter_str: filter_.value})
+                qs = qs.exclude(**{filter_str: filter_.parsed})
             else:
-                qs = qs.filter(**{filter_str: filter_.value})
+                qs = qs.filter(**{filter_str: filter_.parsed})
 
     # no calculated fields early out using qs.values
     if not bound_query.calculated_fields:

@@ -218,13 +218,13 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"model", "all_fields", "baseURL", "adminURL", "app"}
+    assert context.keys() == {"model", "allFields", "baseUrl", "adminUrl", "app"}
     assert context["model"] == "Product"
     assert context["app"] == "tests"
-    assert context["baseURL"] == "/data_browser/"
-    assert context["adminURL"] == "/admin/data_browser/view/add/"
+    assert context["baseUrl"] == "/data_browser/"
+    assert context["adminUrl"] == "/admin/data_browser/view/add/"
 
-    assert context["all_fields"] == {
+    assert context["allFields"] == {
         "fields": [
             {"name": "is_onsale", "concrete": False, "lookups": []},
             {
@@ -410,7 +410,7 @@ def test_query_json(admin_client):
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
         "filters": [
-            {"err_message": None, "name": "size", "lookup": "lt", "value": 2.0}
+            {"errorMessage": None, "name": "size", "lookup": "lt", "value": "2"}
         ],
         "fields": [
             {"name": "size", "sort": "dsc", "concrete": True},
@@ -462,7 +462,7 @@ def test_view_json(admin_client):
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
         "filters": [
-            {"err_message": None, "name": "size", "lookup": "lt", "value": 2.0}
+            {"errorMessage": None, "name": "size", "lookup": "lt", "value": "2"}
         ],
         "fields": [
             {"name": "size", "sort": "dsc", "concrete": True},
