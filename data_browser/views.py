@@ -199,8 +199,7 @@ def get_data(bound_query):
     return data
 
 
-@admin_decorators.staff_member_required
-def query_html(request, *, app, model, fields=""):
+def get_context(request, app, model, fields):  # should really only need app and model
     query = Query.from_request(app, model, fields, "html", request.GET)
 
     try:
@@ -228,13 +227,23 @@ def query_html(request, *, app, model, fields=""):
             ],
         }
 
-    data = {
+    return {
         "app": bound_query.app,
         "model": bound_query.model,
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "allFields": fmt_fields(*bound_query.all_fields_nested),
     }
+
+
+@admin_decorators.staff_member_required
+def query_ctx(request, *, app, model, fields=""):
+    return JsonResponse(get_context(request, app, model, fields))
+
+
+@admin_decorators.staff_member_required
+def query_html(request, *, app, model, fields=""):
+    data = get_context(request, app, model, fields)
 
     data = json.dumps(data)
     data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
