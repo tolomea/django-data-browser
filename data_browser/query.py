@@ -237,11 +237,14 @@ class BoundQuery:
     def __init__(self, query, group, root, all_model_fields):
         # group = fields, groups
         # groups = [name, group]
-
+        # all_model_fields = {model: {"fields": {field_name, Field}, "fks": {field_name: model}}}
         self._query = query
         self.app = query.app
         self.model = query.model
         self.base_url = query.base_url
+
+        self.all_model_fields = all_model_fields
+        self.root = root
 
         def bind_fields(group, prefix=""):
             fields, groups = group
@@ -266,6 +269,15 @@ class BoundQuery:
 
         self.all_fields = flatten_fields(self.all_fields_nested)
 
+    def _get_field_type(self, path):
+        parts = path.split("__")
+        model = self.root
+        for part in parts[:-1]:
+            model = self.all_model_fields[model]["fks"].get(part)
+            if model is None:
+                return None
+        return self.all_model_fields[model]["fields"].get(parts[-1])
+
     @property
     def sort_fields(self):
         res = []
@@ -278,7 +290,8 @@ class BoundQuery:
     def calculated_fields(self):
         res = set()
         for name in self._query.fields:
-            if name in self.all_fields and not self.all_fields[name].concrete:
+            field_type = self._get_field_type(name)
+            if field_type and not field_type.concrete:
                 res.add(name)
         return res
 
