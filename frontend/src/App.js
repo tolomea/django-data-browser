@@ -267,7 +267,10 @@ function Page(props) {
     <div id="body">
       <h1>{props.model}</h1>
       <p>
-        <a href={props.csvLink}>Download as CSV</a>
+        <a href={props.getUrlForQuery(props.query, "csv")}>Download as CSV</a>
+      </p>
+      <p>
+        <a href={props.getUrlForQuery(props.query, "json")}>View as JSON</a>
       </p>
       <p>
         <a href={props.saveLink}>Save View</a>
@@ -396,7 +399,7 @@ class App extends React.Component {
         handleQueryChange={this.handleQueryChange.bind(this)}
         model={this.props.model}
         saveLink={this.getSaveUrl()}
-        csvLink={this.getUrlForQuery(this.state.query, "csv")}
+        getUrlForQuery={this.getUrlForQuery.bind(this)}
         getFkModel={this.getFkModel.bind(this)}
         getFieldType={this.getFieldType.bind(this)}
         fields={this.props.fields}
