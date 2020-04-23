@@ -35,17 +35,17 @@ def admin_fields(rf, admin_user):
 
 
 @pytest.fixture
-def fields(admin_fields):
-    return views.get_nested_fields_for_model(models.Product, admin_fields)
+def all_model_fields(admin_fields):
+    return views.get_all_model_fields(admin_fields)
 
 
 @pytest.fixture
-def get_query_data(fields, admin_fields, django_assert_num_queries):
+def get_query_data(all_model_fields, django_assert_num_queries):
     def helper(queries, *args):
         query = Query.from_request(*args)
-        all_model_fields = views.get_all_model_fields(admin_fields)
+
         bound_query = BoundQuery(
-            query, fields, views.get_model(query.app, query.model), all_model_fields
+            query, views.get_model(query.app, query.model), all_model_fields
         )
         with django_assert_num_queries(queries):
             return views.get_data(bound_query)
@@ -187,35 +187,30 @@ def test_get_data_filter_causes_select(get_product_data):
     ]
 
 
-def test_get_fields(fields):
-    fields, groups = fields
-
+def test_get_fields(all_model_fields):
     # basic
-    assert "name" in fields
+    assert "name" in all_model_fields[models.Product]["fields"]
 
     # remap id to pk
-    assert "id" not in fields
-    assert "pk" in fields
+    assert "id" not in all_model_fields[models.Product]["fields"]
+    assert "pk" in all_model_fields[models.Product]["fields"]
 
     # follow fk
-    assert "producer" not in fields
-    assert "producer" in groups
-    assert "name" in groups["producer"][0]
+    assert "producer" not in all_model_fields[models.Product]["fields"]
+    assert "producer" in all_model_fields[models.Product]["fks"]
+    assert "name" in all_model_fields[models.Producer]["fields"]
 
     # follow multiple fk's
-    assert "city" in groups["producer"][1]["address"][0]
-
-    # no loops
-    assert "product" not in groups["default_sku"][1]
+    assert "city" in all_model_fields[models.Address]["fields"]
 
     # no many to many fields
-    assert "tags" not in fields
+    assert "tags" not in all_model_fields[models.Product]["fields"]
 
     # check in and out of admin
-    assert "not_in_admin" not in fields
-    assert "fk_not_in_admin" not in groups
-    assert "model_not_in_admin" in groups
-    assert groups["model_not_in_admin"] == ({}, {})
+    assert "not_in_admin" not in all_model_fields[models.Product]["fields"]
+    assert "fk_not_in_admin" not in all_model_fields[models.Product]["fks"]
+    assert "model_not_in_admin" in all_model_fields[models.Product]["fks"]
+    assert models.NotInAdmin not in all_model_fields
 
 
 @pytest.mark.usefixtures("products")

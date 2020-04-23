@@ -234,9 +234,7 @@ class Filter:
 
 
 class BoundQuery:
-    def __init__(self, query, group, root, all_model_fields):
-        # group = fields, groups
-        # groups = [name, group]
+    def __init__(self, query, root, all_model_fields):
         # all_model_fields = {model: {"fields": {field_name, Field}, "fks": {field_name: model}}}
         self._query = query
         self.app = query.app
@@ -245,6 +243,19 @@ class BoundQuery:
 
         self.all_model_fields = all_model_fields
         self.root = root
+
+        def get_nested_fields_for_model(model, all_model_fields, seen=()):
+            # res = {field_name: Field}, {field_name: res}
+            data = all_model_fields.get(model, {"fields": {}, "fks": {}})
+
+            groups = {}
+            for field_name, related_model in data["fks"].items():
+                if related_model not in seen:
+                    group_fileds = get_nested_fields_for_model(
+                        related_model, all_model_fields, seen + (model,)
+                    )
+                    groups[field_name] = group_fileds
+            return data["fields"], groups
 
         def bind_fields(group, prefix=""):
             fields, groups = group
@@ -259,7 +270,7 @@ class BoundQuery:
 
             return res
 
-        # self.all_fields = flatten_fields(bind_fields(group))
+        group = get_nested_fields_for_model(root, all_model_fields)
         self.all_fields = bind_fields(group)
 
     def _get_field_type(self, path):
