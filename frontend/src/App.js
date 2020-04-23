@@ -351,8 +351,8 @@ class App extends React.Component {
 
   getPartsForQuery(query) {
     return {
-      app: this.props.app,
-      model: this.props.model,
+      app: this.props.model.split(".")[0],
+      model: this.props.model.split(".")[1],
       fields: query.fields
         .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
         .join(","),

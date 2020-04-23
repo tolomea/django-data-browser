@@ -232,7 +232,7 @@ def get_context(request, app, model, fields):  # should really only need app and
     }
 
     def model_name(model):
-        return f"{model._meta.app_label}__{model.__name__}"
+        return f"{model._meta.app_label}.{model.__name__}"
 
     all_model_fields = {
         model: get_fields_for_model(model, admin_fields) for model in admin_fields
@@ -255,8 +255,7 @@ def get_context(request, app, model, fields):  # should really only need app and
     }
 
     return {
-        "app": bound_query.app,
-        "model": bound_query.model,
+        "model": f"{bound_query.app}.{bound_query.model}",
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "allFields": fmt_fields(*bound_query.all_fields_nested),

@@ -223,12 +223,10 @@ def test_query_html(admin_client):
         "allFields",
         "baseUrl",
         "adminUrl",
-        "app",
         "types",
         "fields",
     }
-    assert context["model"] == "Product"
-    assert context["app"] == "tests"
+    assert context["model"] == "tests.Product"
     assert context["baseUrl"] == "/data_browser/"
     assert context["adminUrl"] == "/admin/data_browser/view/add/"
     assert context["allFields"] == {
@@ -420,43 +418,43 @@ def test_query_html(admin_client):
     }
 
     assert context["fields"] == {
-        "auth__Group": {
+        "auth.Group": {
             "fields": {"name": {"type": "string"}},
             "fks": {},
             "sorted_fields": ["name"],
             "sorted_fks": [],
         },
-        "auth__User": {
+        "auth.User": {
             "fields": {"username": {"type": "string"}},
             "fks": {},
             "sorted_fields": ["username"],
             "sorted_fks": [],
         },
-        "tests__InAdmin": {
+        "tests.InAdmin": {
             "fields": {"name": {"type": "string"}},
             "fks": {},
             "sorted_fields": ["name"],
             "sorted_fks": [],
         },
-        "tests__Tag": {
+        "tests.Tag": {
             "fields": {"name": {"type": "string"}},
             "fks": {},
             "sorted_fields": ["name"],
             "sorted_fks": [],
         },
-        "tests__Address": {
+        "tests.Address": {
             "fields": {"city": {"type": "string"}},
             "fks": {},
             "sorted_fields": ["city"],
             "sorted_fks": [],
         },
-        "tests__Producer": {
+        "tests.Producer": {
             "fields": {"name": {"type": "string"}},
-            "fks": {"address": {"model": "tests__Address"}},
+            "fks": {"address": {"model": "tests.Address"}},
             "sorted_fields": ["name"],
             "sorted_fks": ["address"],
         },
-        "tests__Product": {
+        "tests.Product": {
             "fields": {
                 "is_onsale": {"type": "calculated"},
                 "name": {"type": "string"},
@@ -466,20 +464,20 @@ def test_query_html(admin_client):
                 "size_unit": {"type": "string"},
             },
             "fks": {
-                "default_sku": {"model": "tests__SKU"},
-                "model_not_in_admin": {"model": "tests__NotInAdmin"},
-                "producer": {"model": "tests__Producer"},
+                "default_sku": {"model": "tests.SKU"},
+                "model_not_in_admin": {"model": "tests.NotInAdmin"},
+                "producer": {"model": "tests.Producer"},
             },
             "sorted_fields": ["is_onsale", "name", "onsale", "pk", "size", "size_unit"],
             "sorted_fks": ["default_sku", "model_not_in_admin", "producer"],
         },
-        "tests__SKU": {
+        "tests.SKU": {
             "fields": {"name": {"type": "string"}},
-            "fks": {"product": {"model": "tests__Product"}},
+            "fks": {"product": {"model": "tests.Product"}},
             "sorted_fields": ["name"],
             "sorted_fks": ["product"],
         },
-        "data_browser__View": {
+        "data_browser.View": {
             "fields": {
                 "app": {"type": "string"},
                 "created_time": {"type": "time"},
@@ -491,7 +489,7 @@ def test_query_html(admin_client):
                 "public": {"type": "boolean"},
                 "query": {"type": "string"},
             },
-            "fks": {"owner": {"model": "auth__User"}},
+            "fks": {"owner": {"model": "auth.User"}},
             "sorted_fields": [
                 "app",
                 "created_time",
@@ -505,7 +503,7 @@ def test_query_html(admin_client):
             ],
             "sorted_fks": ["owner"],
         },
-        "tests__NotInAdmin": {
+        "tests.NotInAdmin": {
             "fields": {},
             "fks": {},
             "sorted_fields": [],
