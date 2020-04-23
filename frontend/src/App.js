@@ -51,13 +51,10 @@ class Filter extends React.Component {
 
   render() {
     return (
-      <p className={this.props.filter.errorMessage ? "Error" : undefined}>
-        <Link onClick={this.handleRemove.bind(this)}>✘</Link> {this.props.filter.name}{" "}
-        <select
-          value={this.props.filter.lookup}
-          onChange={this.handleLookupChange.bind(this)}
-        >
-          {this.props.getFieldType(this.props.filter.name).lookups.map((lookup) => (
+      <p className={this.props.errorMessage ? "Error" : undefined}>
+        <Link onClick={this.handleRemove.bind(this)}>✘</Link> {this.props.name}{" "}
+        <select value={this.props.lookup} onChange={this.handleLookupChange.bind(this)}>
+          {this.props.getFieldType(this.props.name).lookups.map((lookup) => (
             <option key={lookup.name} value={lookup.name}>
               {lookup.name}
             </option>
@@ -66,11 +63,11 @@ class Filter extends React.Component {
         ={" "}
         <input
           type="text"
-          name={`${this.props.filter.name}__${this.props.filter.lookup}`}
-          value={this.props.filter.value}
+          name={`${this.props.name}__${this.props.lookup}`}
+          value={this.props.value}
           onChange={this.handleValueChange.bind(this)}
         />
-        {this.props.filter.errorMessage}
+        {this.props.errorMessage}
       </p>
     );
   }
@@ -81,7 +78,7 @@ function Filters(props) {
     <form className="Filters">
       {props.query.filters.map((filter, index) => (
         <Filter
-          filter={filter}
+          {...filter}
           key={index}
           index={index}
           query={props.query}
