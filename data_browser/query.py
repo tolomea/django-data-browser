@@ -248,26 +248,19 @@ class BoundQuery:
 
         def bind_fields(group, prefix=""):
             fields, groups = group
-            fields = {
-                name: field_type(f"{prefix}{name}", query)
+
+            res = {
+                f"{prefix}{name}": field_type(f"{prefix}{name}", query)
                 for name, field_type in fields.items()
             }
-            groups = {
-                name: (f"{prefix}{name}", bind_fields(group, f"{prefix}{name}__"))
-                for name, group in groups.items()
-            }
-            return fields, groups
 
-        self.all_fields_nested = bind_fields(group)
+            for name, group in groups.items():
+                res.update(bind_fields(group, f"{prefix}{name}__"))
 
-        def flatten_fields(group):
-            fields, groups = group
-            res = {field.name: field for field in fields.values()}
-            for name, (path, group) in groups.items():
-                res.update(flatten_fields(group))
             return res
 
-        self.all_fields = flatten_fields(self.all_fields_nested)
+        # self.all_fields = flatten_fields(bind_fields(group))
+        self.all_fields = bind_fields(group)
 
     def _get_field_type(self, path):
         parts = path.split("__")

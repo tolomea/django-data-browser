@@ -109,37 +109,6 @@ class TestBoundQuery:
             "tom__michael__bolton": StringField("tom__michael__bolton", query),
         }
 
-    def test_all_nested(self, query, bound_query):
-        assert bound_query.all_fields_nested == (
-            {
-                "fa": StringField("fa", query),
-                "fd": StringField("fd", query),
-                "fn": StringField("fn", query),
-                "bob": StringField("bob", query),
-            },
-            {
-                "tom": (
-                    "tom",
-                    (
-                        {"jones": StringField("tom__jones", query)},
-                        {
-                            "michael": (
-                                "tom__michael",
-                                (
-                                    {
-                                        "bolton": StringField(
-                                            "tom__michael__bolton", query
-                                        )
-                                    },
-                                    {},
-                                ),
-                            )
-                        },
-                    ),
-                )
-            },
-        )
-
 
 class TestField:
     def test_repr(self, query):
