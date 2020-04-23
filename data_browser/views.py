@@ -207,22 +207,6 @@ def get_context(request, app, model, fields):  # should really only need app and
     fields = get_nested_fields_for_model(model, admin_fields)
     bound_query = BoundQuery(query, fields)
 
-    def fmt_fields(fields, fks):
-        return {
-            "fields": [
-                {
-                    "name": name,
-                    "concrete": field.concrete,
-                    "lookups": list(field.lookups),
-                }
-                for name, field in sorted(fields.items())
-            ],
-            "fks": [
-                {"name": name, "path": path, **fmt_fields(*child)}
-                for name, (path, child) in sorted(fks.items())
-            ],
-        }
-
     types = {
         type_.get_type(): {
             "lookups": [{"name": n, "type": t} for n, t in type_.lookups.items()],
@@ -258,7 +242,6 @@ def get_context(request, app, model, fields):  # should really only need app and
         "model": f"{bound_query.app}.{bound_query.model}",
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
-        "allFields": fmt_fields(*bound_query.all_fields_nested),
         "types": types,
         "fields": all_model_fields,
     }
