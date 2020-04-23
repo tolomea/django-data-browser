@@ -49,21 +49,6 @@ class Filter extends React.Component {
     this.props.handleQueryChange({ filters: newFilters });
   }
 
-  getLookups() {
-    const parts = this.props.filter.name.split("__");
-    function follow(path, fields) {
-      if (path.length > 1) {
-        return follow(
-          path.slice(1),
-          fields.fks.find((fk) => fk.name === path[0])
-        );
-      } else {
-        return fields.fields.find((f) => f.name === path[0]);
-      }
-    }
-    return follow(parts, this.props.allFields).lookups;
-  }
-
   render() {
     return (
       <p className={this.props.filter.errorMessage ? "Error" : undefined}>
@@ -72,9 +57,9 @@ class Filter extends React.Component {
           value={this.props.filter.lookup}
           onChange={this.handleLookupChange.bind(this)}
         >
-          {this.getLookups().map((lookup) => (
-            <option key={lookup} value={lookup}>
-              {lookup}
+          {this.props.getFieldType(this.props.filter.name).lookups.map((lookup) => (
+            <option key={lookup.name} value={lookup.name}>
+              {lookup.name}
             </option>
           ))}
         </select>{" "}
@@ -97,11 +82,11 @@ function Filters(props) {
       {props.query.filters.map((filter, index) => (
         <Filter
           filter={filter}
-          allFields={props.allFields} // TODO cleanup after allFields is flattened
           key={index}
           index={index}
           query={props.query}
           handleQueryChange={props.handleQueryChange}
+          getFieldType={props.getFieldType}
         />
       ))}
     </form>
@@ -283,7 +268,7 @@ function Page(props) {
       <Filters
         query={props.query}
         handleQueryChange={props.handleQueryChange}
-        allFields={props.allFields}
+        getFieldType={props.getFieldType}
       />
 
       <p>Showing {props.data.length} results</p>
@@ -374,6 +359,24 @@ class App extends React.Component {
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
+  getFieldType(path) {
+    const parts = path.split("__");
+    const field = parts.slice(-1);
+    const model = this.getFkModel(parts.slice(0, -1).join("__"));
+    const type = this.props.fields[model].fields[field]["type"];
+    return this.props.types[type];
+  }
+
+  getFkModel(path) {
+    var model = this.props.model;
+    if (path) {
+      for (const field of path.split("__")) {
+        model = this.props.fields[model].fks[field]["model"];
+      }
+    }
+    return model;
+  }
+
   render() {
     return (
       <Page
@@ -384,6 +387,8 @@ class App extends React.Component {
         model={this.props.model}
         saveLink={this.getSaveUrl()}
         csvLink={this.getUrlForQuery(this.state.query, "csv")}
+        getFkModel={this.getFkModel.bind(this)}
+        getFieldType={this.getFieldType.bind(this)}
       />
     );
   }
