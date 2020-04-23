@@ -123,14 +123,16 @@ class Toggle extends React.Component {
 }
 
 function Fields(props) {
+  const model_fields = props.fields[props.model];
   return (
     <ul className="FieldsList">
-      {props.fields.map((field) => {
+      {model_fields.sorted_fields.map((field_name) => {
+        const field = model_fields.fields[field_name];
         function handleAddFilter() {
           var newFilters = props.query.filters.slice();
           newFilters.push({
             errorMessage: null,
-            name: field.name,
+            name: `${props.path}${field_name}`,
             lookup: "",
             value: "",
           });
@@ -140,7 +142,7 @@ function Fields(props) {
         function handleAddField() {
           var newFields = props.query.fields.slice();
           newFields.push({
-            name: field.name,
+            name: `${props.path}${field_name}`,
             sort: null,
             concrete: false,
           });
@@ -148,24 +150,33 @@ function Fields(props) {
         }
 
         return (
-          <li key={field.name}>
-            {field.concrete ? (
+          <li key={field_name}>
+            {props.types[field.type].concrete ? (
               <Link onClick={handleAddFilter}>Y</Link>
             ) : (
               <>&nbsp;&nbsp;</>
             )}{" "}
-            <Link onClick={handleAddField}>{field.name}</Link>
+            <Link onClick={handleAddField}>{field_name}</Link>
           </li>
         );
       })}
-
-      {props.fks.map((fk) => (
-        <li key={fk.name}>
-          <Toggle title={fk.name}>
-            <Fields {...fk} />
-          </Toggle>
-        </li>
-      ))}
+      {model_fields.sorted_fks.map((fk_name) => {
+        const fk = model_fields.fks[fk_name];
+        return (
+          <li key={fk_name}>
+            <Toggle title={fk_name}>
+              <Fields
+                query={props.query}
+                handleQueryChange={props.handleQueryChange}
+                fields={props.fields}
+                model={fk.model}
+                path={`${props.path}${fk_name}__`}
+                types={props.types}
+              />
+            </Toggle>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -274,7 +285,10 @@ function Page(props) {
           <Fields
             query={props.query}
             handleQueryChange={props.handleQueryChange}
-            {...props.allFields}
+            fields={props.fields}
+            model={props.model}
+            path=""
+            types={props.types}
           />
         </div>
         <Results
@@ -379,13 +393,14 @@ class App extends React.Component {
       <Page
         data={this.state.data}
         query={this.state.query}
-        allFields={this.props.allFields}
         handleQueryChange={this.handleQueryChange.bind(this)}
         model={this.props.model}
         saveLink={this.getSaveUrl()}
         csvLink={this.getUrlForQuery(this.state.query, "csv")}
         getFkModel={this.getFkModel.bind(this)}
         getFieldType={this.getFieldType.bind(this)}
+        fields={this.props.fields}
+        types={this.props.types}
       />
     );
   }
