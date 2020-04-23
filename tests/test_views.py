@@ -28,18 +28,25 @@ def products(db):
 
 
 @pytest.fixture
-def fields(rf, admin_user):
+def admin_fields(rf, admin_user):
     request = rf.get("/")
     request.user = admin_user
-    admin_fields = views.get_all_admin_fields(request)
+    return views.get_all_admin_fields(request)
+
+
+@pytest.fixture
+def fields(admin_fields):
     return views.get_nested_fields_for_model(models.Product, admin_fields)
 
 
 @pytest.fixture
-def get_query_data(fields, django_assert_num_queries):
+def get_query_data(fields, admin_fields, django_assert_num_queries):
     def helper(queries, *args):
         query = Query.from_request(*args)
-        bound_query = BoundQuery(query, fields)
+        all_model_fields = views.get_all_model_fields(admin_fields)
+        bound_query = BoundQuery(
+            query, fields, views.get_model(query.app, query.model), all_model_fields
+        )
         with django_assert_num_queries(queries):
             return views.get_data(bound_query)
 
@@ -359,12 +366,6 @@ def test_query_html(admin_client):
                 "query",
             ],
             "sorted_fks": ["owner"],
-        },
-        "tests.NotInAdmin": {
-            "fields": {},
-            "fks": {},
-            "sorted_fields": [],
-            "sorted_fks": [],
         },
     }
 

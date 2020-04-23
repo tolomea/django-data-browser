@@ -234,7 +234,7 @@ class Filter:
 
 
 class BoundQuery:
-    def __init__(self, query, group):
+    def __init__(self, query, group, root, all_model_fields):
         # group = fields, groups
         # groups = [name, group]
 

@@ -30,7 +30,23 @@ def bound_query(query):
         {"fa": StringField, "fd": StringField, "fn": StringField, "bob": StringField},
         {"tom": ({"jones": StringField}, {"michael": ({"bolton": StringField}, {})})},
     )
-    return BoundQuery(query, group)
+    all_model_fields = {
+        "app.model": {
+            "fields": {
+                "fa": StringField,
+                "fd": StringField,
+                "fn": StringField,
+                "bob": StringField,
+            },
+            "fks": {"tom": "app.Tom"},
+        },
+        "app.Tom": {
+            "fields": {"jones": StringField},
+            "fks": {"michael": "app.Michael"},
+        },
+        "app.Michael": {"fields": {"bolton": StringField}, "fks": {}},
+    }
+    return BoundQuery(query, group, "app.model", all_model_fields)
 
 
 @pytest.fixture

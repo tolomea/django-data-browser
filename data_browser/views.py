@@ -200,12 +200,20 @@ def get_data(bound_query):
     return data
 
 
+def get_all_model_fields(admin_fields):
+    # {model: {"fields": {field_name, Field}, "fks": {field_name: model}}}
+    return {model: get_fields_for_model(model, admin_fields) for model in admin_fields}
+
+
 def get_context(request, app, model, fields):  # should really only need app and model
     query = Query.from_request(app, model.__name__, fields, "html", request.GET)
 
     admin_fields = get_all_admin_fields(request)
+    all_model_fields = get_all_model_fields(admin_fields)
     fields = get_nested_fields_for_model(model, admin_fields)
-    bound_query = BoundQuery(query, fields)
+    bound_query = BoundQuery(
+        query, fields, get_model(query.app, query.model), all_model_fields
+    )
 
     types = {
         type_.get_type(): {
@@ -217,10 +225,6 @@ def get_context(request, app, model, fields):  # should really only need app and
 
     def model_name(model):
         return f"{model._meta.app_label}.{model.__name__}"
-
-    all_model_fields = {
-        model: get_fields_for_model(model, admin_fields) for model in admin_fields
-    }
 
     all_model_fields = {
         model_name(model): {
@@ -293,7 +297,10 @@ def csv_response(request, query):
     fields = get_nested_fields_for_model(
         get_model(query.app, query.model), admin_fields
     )
-    bound_query = BoundQuery(query, fields)
+    all_model_fields = get_all_model_fields(admin_fields)
+    bound_query = BoundQuery(
+        query, fields, get_model(query.app, query.model), all_model_fields
+    )
     data = get_data(bound_query)
 
     buffer = io.StringIO()
@@ -313,7 +320,10 @@ def json_response(request, query):
     fields = get_nested_fields_for_model(
         get_model(query.app, query.model), admin_fields
     )
-    bound_query = BoundQuery(query, fields)
+    all_model_fields = get_all_model_fields(admin_fields)
+    bound_query = BoundQuery(
+        query, fields, get_model(query.app, query.model), all_model_fields
+    )
     data = get_data(bound_query)
 
     return JsonResponse(
