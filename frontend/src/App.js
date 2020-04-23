@@ -245,7 +245,7 @@ function ResultsBody(props) {
       {props.data.map((row, index) => (
         <tr key={index}>
           {row.map((cell, index) => (
-            <td key={index}>{cell}</td>
+            <td key={index}>{String(cell)}</td>
           ))}
         </tr>
       ))}
