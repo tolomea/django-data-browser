@@ -120,19 +120,11 @@ PARSERS = {
 class Field:
     concrete = True
 
-    def __init__(self, name, query):
-        self.name = name
-        self.query = query
-
     def __eq__(self, other):
-        return (
-            self.__class__ == other.__class__
-            and self.name == other.name
-            and self.query == other.query
-        )
+        return self.__class__ == other.__class__
 
     def __repr__(self):
-        return f"{self.__class__.__name__}('{self.name}', {self.query})"
+        return f"{self.__class__.__name__}()"
 
     def parse(self, lookup, value):
         return PARSERS[self.lookups[lookup]](value)
@@ -211,15 +203,14 @@ FIELD_TYPES = [StringField, NumberField, TimeField, BooleanField, CalculatedFiel
 
 
 class Filter:
-    def __init__(self, index, field, lookup, value):
+    def __init__(self, name, index, field, lookup, value):
         if not lookup:
             lookup = field.default_lookup
 
+        self.name = name
         self.index = index
         self.field = field
         self.lookup = lookup
-        self.query = field.query
-        self.name = field.name
         self.err_message = field.validate(lookup, value)
         self.is_valid = not self.err_message
         self.value = value
@@ -244,6 +235,15 @@ class BoundQuery:
         self.all_model_fields = all_model_fields
         self.root = root
 
+        def _get_field_type(path):
+            parts = path.split("__")
+            model = root
+            for part in parts[:-1]:
+                model = all_model_fields[model]["fks"].get(part)
+                if model is None:
+                    return None
+            return all_model_fields[model]["fields"].get(parts[-1])
+
         def get_nested_fields_for_model(model, all_model_fields, seen=()):
             # res = {field_name: Field}, {field_name: res}
             data = all_model_fields.get(model, {"fields": {}, "fks": {}})
@@ -261,8 +261,7 @@ class BoundQuery:
             fields, groups = group
 
             res = {
-                f"{prefix}{name}": field_type(f"{prefix}{name}", query)
-                for name, field_type in fields.items()
+                f"{prefix}{name}": field_type() for name, field_type in fields.items()
             }
 
             for name, group in groups.items():
@@ -273,21 +272,12 @@ class BoundQuery:
         group = get_nested_fields_for_model(root, all_model_fields)
         self.all_fields = bind_fields(group)
 
-    def _get_field_type(self, path):
-        parts = path.split("__")
-        model = self.root
-        for part in parts[:-1]:
-            model = self.all_model_fields[model]["fks"].get(part)
-            if model is None:
-                return None
-        return self.all_model_fields[model]["fields"].get(parts[-1])
-
     @property
     def sort_fields(self):
         res = []
         for name, direction in self._query.fields.items():
             if name in self.all_fields:
-                res.append((self.all_fields[name], direction))
+                res.append((name, self.all_fields[name], direction))
         return res
 
     @property
@@ -303,7 +293,7 @@ class BoundQuery:
         for i, (name, lookup, value) in enumerate(self._query.filters):
             if name in self.all_fields:
                 field = self.all_fields[name]
-                yield Filter(i, field, lookup, value)
+                yield Filter(name, i, field, lookup, value)
 
     @property
     def fields(self):

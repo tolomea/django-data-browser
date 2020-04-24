@@ -120,12 +120,12 @@ def get_data(bound_query):
 
     # sort
     sort_fields = []
-    for field, sort_direction in bound_query.sort_fields:
-        if field.name not in bound_query.calculated_fields:
+    for name, field, sort_direction in bound_query.sort_fields:
+        if name not in bound_query.calculated_fields:
             if sort_direction is ASC:
-                sort_fields.append(field.name)
+                sort_fields.append(name)
             if sort_direction is DSC:
-                sort_fields.append(f"-{field.name}")
+                sort_fields.append(f"-{name}")
     qs = qs.order_by(*sort_fields)
 
     # filter
@@ -159,9 +159,9 @@ def get_data(bound_query):
             name = name.rsplit("__", 1)[0]
             select_related.add(name)
 
-    for field, sort_direction in bound_query.sort_fields:
+    for name, field, sort_direction in bound_query.sort_fields:
         if sort_direction is not None:
-            add_select_relateds(field.name)
+            add_select_relateds(name)
 
     for filter_ in bound_query.filters:
         if filter_.is_valid:
@@ -313,11 +313,11 @@ def json_response(request, query):
             ],
             "fields": [
                 {
-                    "name": field.name,
+                    "name": name,
                     "sort": sort_direction,
                     "concrete": field.concrete,  # TODO concrete shouldn't be here
                 }
-                for (field, sort_direction) in bound_query.sort_fields
+                for (name, field, sort_direction) in bound_query.sort_fields
             ],
         }
     )

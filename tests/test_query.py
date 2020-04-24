@@ -47,7 +47,7 @@ def bound_query(query):
 
 @pytest.fixture
 def filter(query):
-    return Filter(0, StringField("bob", query), "equals", "fred")
+    return Filter("bob", 0, StringField(), "equals", "fred")
 
 
 class TestQuery:
@@ -77,85 +77,85 @@ class TestQuery:
 
 
 class TestBoundQuery:
-    def test_fields(self, query, bound_query):
+    def test_fields(self, bound_query):
         assert list(bound_query.fields) == ["fa", "fd", "fn"]
 
-    def test_calculated_fields(self, query, bound_query):
+    def test_calculated_fields(self, bound_query):
         assert list(bound_query.calculated_fields) == []
         # TODO, only one of these
         bound_query.all_fields["fa"].concrete = False
         bound_query.all_model_fields["app.model"]["fields"]["fa"] = CalculatedField
         assert list(bound_query.calculated_fields) == ["fa"]
 
-    def test_sort_fields(self, query, bound_query):
+    def test_sort_fields(self, bound_query):
         assert list(bound_query.sort_fields) == [
-            (StringField("fa", query), ASC),
-            (StringField("fd", query), DSC),
-            (StringField("fn", query), None),
+            ("fa", StringField(), ASC),
+            ("fd", StringField(), DSC),
+            ("fn", StringField(), None),
         ]
 
     def test_filters(self, bound_query, filter):
         assert list(bound_query.filters) == [filter]
 
-    def test_all_fields(self, query, bound_query):
+    def test_all_fields(self, bound_query):
         assert bound_query.all_fields == {
-            "fa": StringField("fa", query),
-            "fd": StringField("fd", query),
-            "fn": StringField("fn", query),
-            "bob": StringField("bob", query),
-            "tom__jones": StringField("tom__jones", query),
-            "tom__michael__bolton": StringField("tom__michael__bolton", query),
+            "fa": StringField(),
+            "fd": StringField(),
+            "fn": StringField(),
+            "bob": StringField(),
+            "tom__jones": StringField(),
+            "tom__michael__bolton": StringField(),
         }
 
 
 class TestField:
-    def test_repr(self, query):
-        assert repr(StringField("fa", query)) == f"StringField('fa', {query})"
+    def test_repr(self):
+        assert repr(StringField()) == f"StringField()"
 
 
 class TestStringField:
     def test_validate(self):
-        assert not StringField(None, None).validate("contains", "hello")
-        assert StringField(None, None).validate("pontains", "hello")
+        assert not StringField().validate("contains", "hello")
+        assert StringField().validate("pontains", "hello")
 
     def test_default_lookup(self):
-        assert StringField(None, None).default_lookup == "equals"
+        assert StringField().default_lookup == "equals"
 
 
 class TestNumberField:
     def test_validate(self):
-        assert not NumberField(None, None).validate("gt", "6.1")
-        assert NumberField(None, None).validate("pontains", "6.1")
-        assert NumberField(None, None).validate("gt", "hello")
-        assert not NumberField(None, None).validate("is_null", "True")
-        assert NumberField(None, None).validate("is_null", "hello")
+        assert not NumberField().validate("gt", "6.1")
+        assert NumberField().validate("pontains", "6.1")
+        assert NumberField().validate("gt", "hello")
+        assert not NumberField().validate("is_null", "True")
+        assert NumberField().validate("is_null", "hello")
 
     def test_default_lookup(self):
-        assert NumberField(None, None).default_lookup == "equal"
+        assert NumberField().default_lookup == "equal"
 
 
 class TestTimeField:
     def test_validate(self):
-        assert not TimeField(None, None).validate("gt", "2018-03-20T22:31:23")
-        assert TimeField(None, None).validate("gt", "hello")
-        assert TimeField(None, None).validate("pontains", "2018-03-20T22:31:23")
-        assert not TimeField(None, None).validate("is_null", "True")
-        assert TimeField(None, None).validate("is_null", "hello")
+        assert not TimeField().validate("gt", "2018-03-20T22:31:23")
+        assert TimeField().validate("gt", "hello")
+        assert TimeField().validate("pontains", "2018-03-20T22:31:23")
+        assert not TimeField().validate("is_null", "True")
+        assert TimeField().validate("is_null", "hello")
 
     def test_default_lookup(self):
-        assert TimeField(None, None).default_lookup == "equal"
+        assert TimeField().default_lookup == "equal"
 
 
 class TestBooleanField:
     def test_validate(self):
-        assert not BooleanField(None, None).validate("equal", "True")
-        assert BooleanField(None, None).validate("equal", "hello")
-        assert BooleanField(None, None).validate("pontains", "True")
+        assert not BooleanField().validate("equal", "True")
+        assert BooleanField().validate("equal", "hello")
+        assert BooleanField().validate("pontains", "True")
 
     def test_default_lookup(self):
-        assert BooleanField(None, None).default_lookup == "equal"
+        assert BooleanField().default_lookup == "equal"
 
 
 class TestCalculatedField:
     def test_validate(self):
-        assert CalculatedField(None, None).validate("gt", "1")
+        assert CalculatedField().validate("gt", "1")
