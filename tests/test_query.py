@@ -82,6 +82,8 @@ class TestBoundQuery:
 
     def test_calculated_fields(self, query, bound_query):
         assert list(bound_query.calculated_fields) == []
+        # TODO, only one of these
+        bound_query.all_fields["fa"].concrete = False
         bound_query.all_model_fields["app.model"]["fields"]["fa"] = CalculatedField
         assert list(bound_query.calculated_fields) == ["fa"]
 

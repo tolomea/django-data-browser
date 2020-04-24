@@ -294,8 +294,7 @@ class BoundQuery:
     def calculated_fields(self):
         res = set()
         for name in self._query.fields:
-            field_type = self._get_field_type(name)
-            if field_type and not field_type.concrete:
+            if name in self.all_fields and not self.all_fields[name].concrete:
                 res.add(name)
         return res
 
