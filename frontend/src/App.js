@@ -49,10 +49,21 @@ class Filter extends React.Component {
     this.props.handleQueryChange({ filters: newFilters });
   }
 
+  handleAddField() {
+    var newFields = this.props.query.fields.slice();
+    newFields.push({
+      name: this.props.name,
+      sort: null,
+      concrete: false,
+    });
+    this.props.handleQueryChange({ fields: newFields });
+  }
+
   render() {
     return (
       <p className={this.props.errorMessage ? "Error" : undefined}>
-        <Link onClick={this.handleRemove.bind(this)}>✘</Link> {this.props.name}{" "}
+        <Link onClick={this.handleRemove.bind(this)}>✘</Link>{" "}
+        <Link onClick={this.handleAddField.bind(this)}>{this.props.name}</Link>{" "}
         <select value={this.props.lookup} onChange={this.handleLookupChange.bind(this)}>
           {this.props.getFieldType(this.props.name).lookups.map((lookup) => (
             <option key={lookup.name} value={lookup.name}>
