@@ -42,7 +42,15 @@ def get_model(app, model):
 
 FIELD_MAP = [
     ((models.BooleanField, models.NullBooleanField), BooleanField),
-    ((models.CharField, models.TextField, models.GenericIPAddressField), StringField),
+    (
+        (
+            models.CharField,
+            models.TextField,
+            models.GenericIPAddressField,
+            models.UUIDField,
+        ),
+        StringField,
+    ),
     ((models.DateTimeField, models.DateField), TimeField),
     (
         (models.DecimalField, models.FloatField, models.IntegerField, models.AutoField),
@@ -54,7 +62,8 @@ FIELD_MAP = [
 
 def get_all_admin_fields(request):
     def from_fieldsets(admin, model):
-        for f in flatten_fieldsets(admin.get_fieldsets(request)):
+        obj = model()  # we want the admin change field sets, not the add ones
+        for f in flatten_fieldsets(admin.get_fieldsets(request, obj)):
             if hasattr(model, f):
                 yield f
 
@@ -75,7 +84,8 @@ def get_fields_for_model(model, admin_fields):
     fks = {}
 
     model_fields = {f.name: f for f in model._meta.get_fields()}
-    model_fields["pk"] = model_fields["id"]
+    if "id" in model_fields:
+        model_fields["pk"] = model_fields["id"]
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
@@ -88,7 +98,10 @@ def get_fields_for_model(model, admin_fields):
                         fields[field_name] = field_type
                         break
                 else:
-                    assert isinstance(field, models.fields.files.FileField), type(field)
+                    if not isinstance(field, models.fields.files.FileField):
+                        print(
+                            f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
+                        )
     return {"fields": fields, "fks": fks}
 
 
