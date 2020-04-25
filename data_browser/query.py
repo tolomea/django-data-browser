@@ -117,31 +117,35 @@ PARSERS = {
 }
 
 
-class Field:
+class MetaField(type):
+    def __repr__(cls):
+        return cls.__name__
+
+    @property
+    def default_lookup(cls):
+        return list(cls.lookups)[0]
+
+
+class Field(metaclass=MetaField):
     concrete = True
 
-    def __eq__(self, other):
-        return self.__class__ == other.__class__
+    def __init__(self):
+        assert False
 
-    def __repr__(self):
-        return f"{self.__class__.__name__}()"
+    @classmethod
+    def parse(cls, lookup, value):
+        return PARSERS[cls.lookups[lookup]](value)
 
-    def parse(self, lookup, value):
-        return PARSERS[self.lookups[lookup]](value)
-
-    def validate(self, lookup, value):
-        if lookup not in self.lookups:
-            return f"Bad lookup '{lookup}' expected {self.lookups}"
+    @classmethod
+    def validate(cls, lookup, value):
+        if lookup not in cls.lookups:
+            return f"Bad lookup '{lookup}' expected {cls.lookups}"
         try:
-            self.parse(lookup, value)
+            cls.parse(lookup, value)
         except Exception as e:
             return str(e) if str(e) else repr(e)
         else:
             return None
-
-    @property
-    def default_lookup(self):
-        return list(self.lookups)[0]
 
     @classmethod
     def get_type(cls):
@@ -260,9 +264,7 @@ class BoundQuery:
         def bind_fields(group, prefix=""):
             fields, groups = group
 
-            res = {
-                f"{prefix}{name}": field_type() for name, field_type in fields.items()
-            }
+            res = {f"{prefix}{name}": field_type for name, field_type in fields.items()}
 
             for name, group in groups.items():
                 res.update(bind_fields(group, f"{prefix}{name}__"))

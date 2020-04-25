@@ -56,7 +56,8 @@ FIELD_MAP = [
         (models.DecimalField, models.FloatField, models.IntegerField, models.AutoField),
         NumberField,
     ),
-    ((type(None)), CalculatedField),
+    ((type(None),), CalculatedField),
+    ((models.FileField,), None),
 ]
 
 
@@ -95,13 +96,13 @@ def get_fields_for_model(model, admin_fields):
             else:
                 for django_types, field_type in FIELD_MAP:
                     if isinstance(field, django_types):
-                        fields[field_name] = field_type
+                        if field_type:
+                            fields[field_name] = field_type
                         break
-                else:
-                    if not isinstance(field, models.fields.files.FileField):
-                        print(
-                            f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
-                        )
+                else:  # pragma: no cover
+                    print(
+                        f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
+                    )
     return {"fields": fields, "fks": fks}
 
 
