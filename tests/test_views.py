@@ -398,12 +398,12 @@ def test_query_html_bad_fields(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_fields(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
+        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale,pooducer__name,producer__name.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
     assert json.loads(res.content.decode("utf-8"))["data"] == [
-        [1, "a", "g", False],
-        [1, "b", "g", False],
+        [1, "a", "g", False, "bob"],
+        [1, "b", "g", False, "bob"],
     ]
 
 

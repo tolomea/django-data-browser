@@ -82,9 +82,7 @@ class TestBoundQuery:
 
     def test_calculated_fields(self, bound_query):
         assert list(bound_query.calculated_fields) == []
-        # TODO, only one of these
         bound_query.all_model_fields["app.model"]["fields"]["fa"] = CalculatedField
-        bound_query.all_fields["fa"] = CalculatedField
         assert list(bound_query.calculated_fields) == ["fa"]
 
     def test_sort_fields(self, bound_query):
@@ -96,16 +94,6 @@ class TestBoundQuery:
 
     def test_filters(self, bound_query, filter):
         assert list(bound_query.filters) == [filter]
-
-    def test_all_fields(self, bound_query):
-        assert bound_query.all_fields == {
-            "fa": StringField,
-            "fd": StringField,
-            "fn": StringField,
-            "bob": StringField,
-            "tom__jones": StringField,
-            "tom__michael__bolton": StringField,
-        }
 
 
 class TestField:

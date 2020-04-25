@@ -235,68 +235,43 @@ class BoundQuery:
         self.app = query.app
         self.model = query.model
         self.base_url = query.base_url
-
         self.all_model_fields = all_model_fields
         self.root = root
 
-        def _get_field_type(path):
-            parts = path.split("__")
-            model = root
-            for part in parts[:-1]:
-                model = all_model_fields[model]["fks"].get(part)
-                if model is None:
-                    return None
-            return all_model_fields[model]["fields"].get(parts[-1])
-
-        def get_nested_fields_for_model(model, all_model_fields, seen=()):
-            # res = {field_name: Field}, {field_name: res}
-            data = all_model_fields.get(model, {"fields": {}, "fks": {}})
-
-            groups = {}
-            for field_name, related_model in data["fks"].items():
-                if related_model not in seen:
-                    group_fileds = get_nested_fields_for_model(
-                        related_model, all_model_fields, seen + (model,)
-                    )
-                    groups[field_name] = group_fileds
-            return data["fields"], groups
-
-        def bind_fields(group, prefix=""):
-            fields, groups = group
-
-            res = {f"{prefix}{name}": field_type for name, field_type in fields.items()}
-
-            for name, group in groups.items():
-                res.update(bind_fields(group, f"{prefix}{name}__"))
-
-            return res
-
-        group = get_nested_fields_for_model(root, all_model_fields)
-        self.all_fields = bind_fields(group)
+    def _get_field_type(self, path):
+        parts = path.split("__")
+        model = self.root
+        for part in parts[:-1]:
+            model = self.all_model_fields[model]["fks"].get(part)
+            if model is None:
+                return None
+        return self.all_model_fields[model]["fields"].get(parts[-1])
 
     @property
     def sort_fields(self):
         res = []
         for name, direction in self._query.fields.items():
-            if name in self.all_fields:
-                res.append((name, self.all_fields[name], direction))
+            type_ = self._get_field_type(name)
+            if type_:
+                res.append((name, type_, direction))
         return res
 
     @property
     def calculated_fields(self):
         res = set()
         for name in self._query.fields:
-            if name in self.all_fields and not self.all_fields[name].concrete:
+            type_ = self._get_field_type(name)
+            if type_ and not type_.concrete:
                 res.add(name)
         return res
 
     @property
     def filters(self):
         for i, (name, lookup, value) in enumerate(self._query.filters):
-            if name in self.all_fields:
-                field = self.all_fields[name]
-                yield Filter(name, i, field, lookup, value)
+            type_ = self._get_field_type(name)
+            if type_:
+                yield Filter(name, i, type_, lookup, value)
 
     @property
     def fields(self):
-        return [f for f in self._query.fields if f in self.all_fields]
+        return [f for f in self._query.fields if self._get_field_type(f)]
