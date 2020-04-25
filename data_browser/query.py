@@ -109,99 +109,112 @@ def parse_boolean(val):
         raise ValueError("Expected 'true' or 'false'")
 
 
-class Field:
+PARSERS = {
+    "string": lambda x: x,
+    "number": float,
+    "time": dateutil.parser.parse,
+    "boolean": parse_boolean,
+}
+
+
+class MetaField(type):
+    def __repr__(cls):
+        return cls.__name__
+
+    @property
+    def default_lookup(cls):
+        return list(cls.lookups)[0]
+
+
+class Field(metaclass=MetaField):
     concrete = True
 
-    def __init__(self, name, query):
-        self.name = name
-        self.query = query
+    def __init__(self):
+        assert False
 
-    def __eq__(self, other):
-        return (
-            self.__class__ == other.__class__
-            and self.name == other.name
-            and self.query == other.query
-        )
+    @classmethod
+    def parse(cls, lookup, value):
+        return PARSERS[cls.lookups[lookup]](value)
 
-    def __repr__(self):
-        return f"{self.__class__.__name__}('{self.name}', {self.query})"
-
-    def parse(self, lookup, value):
-        if lookup == "is_null":
-            return parse_boolean(value)
-        else:
-            return self._parse(value)
-
-    def _parse(self, value):
-        return value
-
-    def validate(self, lookup, value):
-        if lookup not in self.lookups:
-            return f"Bad lookup '{lookup}' expected {self.lookups}"
+    @classmethod
+    def validate(cls, lookup, value):
+        if lookup not in cls.lookups:
+            return f"Bad lookup '{lookup}' expected {cls.lookups}"
         try:
-            self.parse(lookup, value)
+            cls.parse(lookup, value)
         except Exception as e:
             return str(e) if str(e) else repr(e)
         else:
             return None
 
-    @property
-    def default_lookup(self):
-        return self.lookups[0]
+    @classmethod
+    def get_type(cls):
+        name = cls.__name__.lower()
+        assert name.endswith("field")
+        return name[: -len("field")]
 
 
 class StringField(Field):
-    lookups = [
-        "equals",
-        "contains",
-        "starts_with",
-        "ends_with",
-        "regex",
-        "not_equals",
-        "not_contains",
-        "not_starts_with",
-        "not_ends_with",
-        "not_regex",
-        "is_null",
-    ]
+    lookups = {
+        "equals": "string",
+        "contains": "string",
+        "starts_with": "string",
+        "ends_with": "string",
+        "regex": "string",
+        "not_equals": "string",
+        "not_contains": "string",
+        "not_starts_with": "string",
+        "not_ends_with": "string",
+        "not_regex": "string",
+        "is_null": "boolean",
+    }
 
 
 class NumberField(Field):
-    lookups = ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"]
-
-    def _parse(self, s):
-        return float(s)
+    lookups = {
+        "equal": "number",
+        "not_equal": "number",
+        "gt": "number",
+        "gte": "number",
+        "lt": "number",
+        "lte": "number",
+        "is_null": "boolean",
+    }
 
 
 class TimeField(Field):
-    lookups = ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"]
-
-    def _parse(self, s):
-        return dateutil.parser.parse(s)
+    lookups = {
+        "equal": "time",
+        "not_equal": "time",
+        "gt": "time",
+        "gte": "time",
+        "lt": "time",
+        "lte": "time",
+        "is_null": "boolean",
+    }
 
 
 class BooleanField(Field):
-    lookups = ["equal", "not_equal", "is_null"]
-
-    def _parse(self, s):
-        return parse_boolean(s)
+    lookups = {"equal": "boolean", "not_equal": "boolean", "is_null": "boolean"}
 
 
 class CalculatedField(Field):
-    lookups = []
+    lookups = {}
     concrete = False
 
 
+FIELD_TYPES = [StringField, NumberField, TimeField, BooleanField, CalculatedField]
+
+
 class Filter:
-    def __init__(self, index, field, lookup, value):
+    def __init__(self, name, index, field, lookup, value):
         if not lookup:
             lookup = field.default_lookup
 
+        self.name = name
         self.index = index
         self.field = field
         self.lookup = lookup
-        self.query = field.query
-        self.name = field.name
         self.err_message = field.validate(lookup, value)
         self.is_valid = not self.err_message
         self.value = value
@@ -216,61 +229,49 @@ class Filter:
 
 
 class BoundQuery:
-    def __init__(self, query, group):
-        # group = fields, groups
-        # groups = [name, group]
-
+    def __init__(self, query, root, all_model_fields):
+        # all_model_fields = {model: {"fields": {field_name, Field}, "fks": {field_name: model}}}
         self._query = query
         self.app = query.app
         self.model = query.model
         self.base_url = query.base_url
+        self.all_model_fields = all_model_fields
+        self.root = root
 
-        def bind_fields(group, prefix=""):
-            fields, groups = group
-            fields = {
-                name: field_type(f"{prefix}{name}", query)
-                for name, field_type in fields.items()
-            }
-            groups = {
-                name: (f"{prefix}{name}", bind_fields(group, f"{prefix}{name}__"))
-                for name, group in groups.items()
-            }
-            return fields, groups
-
-        self.all_fields_nested = bind_fields(group)
-
-        def flatten_fields(group):
-            fields, groups = group
-            res = {field.name: field for field in fields.values()}
-            for name, (path, group) in groups.items():
-                res.update(flatten_fields(group))
-            return res
-
-        self.all_fields = flatten_fields(self.all_fields_nested)
+    def _get_field_type(self, path):
+        parts = path.split("__")
+        model = self.root
+        for part in parts[:-1]:
+            model = self.all_model_fields[model]["fks"].get(part)
+            if model is None:
+                return None
+        return self.all_model_fields[model]["fields"].get(parts[-1])
 
     @property
     def sort_fields(self):
         res = []
         for name, direction in self._query.fields.items():
-            if name in self.all_fields:
-                res.append((self.all_fields[name], direction))
+            type_ = self._get_field_type(name)
+            if type_:
+                res.append((name, type_, direction))
         return res
 
     @property
     def calculated_fields(self):
         res = set()
         for name in self._query.fields:
-            if name in self.all_fields and not self.all_fields[name].concrete:
+            type_ = self._get_field_type(name)
+            if type_ and not type_.concrete:
                 res.add(name)
         return res
 
     @property
     def filters(self):
         for i, (name, lookup, value) in enumerate(self._query.filters):
-            if name in self.all_fields:
-                field = self.all_fields[name]
-                yield Filter(i, field, lookup, value)
+            type_ = self._get_field_type(name)
+            if type_:
+                yield Filter(name, i, type_, lookup, value)
 
     @property
     def fields(self):
-        return [f for f in self._query.fields if f in self.all_fields]
+        return [f for f in self._query.fields if self._get_field_type(f)]

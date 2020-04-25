@@ -28,18 +28,25 @@ def products(db):
 
 
 @pytest.fixture
-def fields(rf, admin_user):
+def admin_fields(rf, admin_user):
     request = rf.get("/")
     request.user = admin_user
-    admin_fields = views.get_all_admin_fields(request)
-    return views.get_nested_fields_for_model(models.Product, admin_fields)
+    return views.get_all_admin_fields(request)
 
 
 @pytest.fixture
-def get_query_data(fields, django_assert_num_queries):
+def all_model_fields(admin_fields):
+    return views.get_all_model_fields(admin_fields)
+
+
+@pytest.fixture
+def get_query_data(all_model_fields, django_assert_num_queries):
     def helper(queries, *args):
         query = Query.from_request(*args)
-        bound_query = BoundQuery(query, fields)
+
+        bound_query = BoundQuery(
+            query, views.get_model(query.app, query.model), all_model_fields
+        )
         with django_assert_num_queries(queries):
             return views.get_data(bound_query)
 
@@ -180,35 +187,30 @@ def test_get_data_filter_causes_select(get_product_data):
     ]
 
 
-def test_get_fields(fields):
-    fields, groups = fields
-
+def test_get_fields(all_model_fields):
     # basic
-    assert "name" in fields
+    assert "name" in all_model_fields[models.Product]["fields"]
 
     # remap id to pk
-    assert "id" not in fields
-    assert "pk" in fields
+    assert "id" not in all_model_fields[models.Product]["fields"]
+    assert "pk" in all_model_fields[models.Product]["fields"]
 
     # follow fk
-    assert "producer" not in fields
-    assert "producer" in groups
-    assert "name" in groups["producer"][0]
+    assert "producer" not in all_model_fields[models.Product]["fields"]
+    assert "producer" in all_model_fields[models.Product]["fks"]
+    assert "name" in all_model_fields[models.Producer]["fields"]
 
     # follow multiple fk's
-    assert "city" in groups["producer"][1]["address"][0]
-
-    # no loops
-    assert "product" not in groups["default_sku"][1]
+    assert "city" in all_model_fields[models.Address]["fields"]
 
     # no many to many fields
-    assert "tags" not in fields
+    assert "tags" not in all_model_fields[models.Product]["fields"]
 
     # check in and out of admin
-    assert "not_in_admin" not in fields
-    assert "fk_not_in_admin" not in groups
-    assert "model_not_in_admin" in groups
-    assert groups["model_not_in_admin"] == ({}, {})
+    assert "not_in_admin" not in all_model_fields[models.Product]["fields"]
+    assert "fk_not_in_admin" not in all_model_fields[models.Product]["fks"]
+    assert "model_not_in_admin" in all_model_fields[models.Product]["fks"]
+    assert models.NotInAdmin not in all_model_fields
 
 
 @pytest.mark.usefixtures("products")
@@ -218,146 +220,170 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"model", "allFields", "baseUrl", "adminUrl", "app"}
-    assert context["model"] == "Product"
-    assert context["app"] == "tests"
+    assert context.keys() == {"model", "baseUrl", "adminUrl", "types", "fields"}
+    assert context["model"] == "tests.Product"
     assert context["baseUrl"] == "/data_browser/"
     assert context["adminUrl"] == "/admin/data_browser/view/add/"
+    assert context["types"] == {
+        "string": {
+            "lookups": [
+                {"name": "equals", "type": "string"},
+                {"name": "contains", "type": "string"},
+                {"name": "starts_with", "type": "string"},
+                {"name": "ends_with", "type": "string"},
+                {"name": "regex", "type": "string"},
+                {"name": "not_equals", "type": "string"},
+                {"name": "not_contains", "type": "string"},
+                {"name": "not_starts_with", "type": "string"},
+                {"name": "not_ends_with", "type": "string"},
+                {"name": "not_regex", "type": "string"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "number": {
+            "lookups": [
+                {"name": "equal", "type": "number"},
+                {"name": "not_equal", "type": "number"},
+                {"name": "gt", "type": "number"},
+                {"name": "gte", "type": "number"},
+                {"name": "lt", "type": "number"},
+                {"name": "lte", "type": "number"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "time": {
+            "lookups": [
+                {"name": "equal", "type": "time"},
+                {"name": "not_equal", "type": "time"},
+                {"name": "gt", "type": "time"},
+                {"name": "gte", "type": "time"},
+                {"name": "lt", "type": "time"},
+                {"name": "lte", "type": "time"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "boolean": {
+            "lookups": [
+                {"name": "equal", "type": "boolean"},
+                {"name": "not_equal", "type": "boolean"},
+                {"name": "is_null", "type": "boolean"},
+            ],
+            "concrete": True,
+        },
+        "calculated": {"lookups": [], "concrete": False},
+    }
 
-    assert context["allFields"] == {
-        "fields": [
-            {"name": "is_onsale", "concrete": False, "lookups": []},
-            {
-                "name": "name",
-                "concrete": True,
-                "lookups": [
-                    "equals",
-                    "contains",
-                    "starts_with",
-                    "ends_with",
-                    "regex",
-                    "not_equals",
-                    "not_contains",
-                    "not_starts_with",
-                    "not_ends_with",
-                    "not_regex",
-                    "is_null",
-                ],
+    assert context["fields"] == {
+        "auth.Group": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["name"],
+            "sorted_fks": [],
+        },
+        "auth.User": {
+            "fields": {
+                "date_joined": {"type": "time"},
+                "email": {"type": "string"},
+                "first_name": {"type": "string"},
+                "is_active": {"type": "boolean"},
+                "is_staff": {"type": "boolean"},
+                "is_superuser": {"type": "boolean"},
+                "last_login": {"type": "time"},
+                "last_name": {"type": "string"},
+                "password": {"type": "string"},
+                "username": {"type": "string"},
             },
-            {
-                "name": "onsale",
-                "concrete": True,
-                "lookups": ["equal", "not_equal", "is_null"],
+            "fks": {},
+            "sorted_fields": [
+                "date_joined",
+                "email",
+                "first_name",
+                "is_active",
+                "is_staff",
+                "is_superuser",
+                "last_login",
+                "last_name",
+                "password",
+                "username",
+            ],
+            "sorted_fks": [],
+        },
+        "tests.InAdmin": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["name"],
+            "sorted_fks": [],
+        },
+        "tests.Tag": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["name"],
+            "sorted_fks": [],
+        },
+        "tests.Address": {
+            "fields": {"city": {"type": "string"}},
+            "fks": {},
+            "sorted_fields": ["city"],
+            "sorted_fks": [],
+        },
+        "tests.Producer": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {"address": {"model": "tests.Address"}},
+            "sorted_fields": ["name"],
+            "sorted_fks": ["address"],
+        },
+        "tests.Product": {
+            "fields": {
+                "is_onsale": {"type": "calculated"},
+                "name": {"type": "string"},
+                "onsale": {"type": "boolean"},
+                "pk": {"type": "number"},
+                "size": {"type": "number"},
+                "size_unit": {"type": "string"},
             },
-            {
-                "name": "pk",
-                "concrete": True,
-                "lookups": ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"],
+            "fks": {
+                "default_sku": {"model": "tests.SKU"},
+                "model_not_in_admin": {"model": "tests.NotInAdmin"},
+                "producer": {"model": "tests.Producer"},
             },
-            {
-                "name": "size",
-                "concrete": True,
-                "lookups": ["equal", "not_equal", "gt", "gte", "lt", "lte", "is_null"],
+            "sorted_fields": ["is_onsale", "name", "onsale", "pk", "size", "size_unit"],
+            "sorted_fks": ["default_sku", "model_not_in_admin", "producer"],
+        },
+        "tests.SKU": {
+            "fields": {"name": {"type": "string"}},
+            "fks": {"product": {"model": "tests.Product"}},
+            "sorted_fields": ["name"],
+            "sorted_fks": ["product"],
+        },
+        "data_browser.View": {
+            "fields": {
+                "app": {"type": "string"},
+                "created_time": {"type": "time"},
+                "description": {"type": "string"},
+                "fields": {"type": "string"},
+                "id": {"type": "string"},
+                "model": {"type": "string"},
+                "name": {"type": "string"},
+                "public": {"type": "boolean"},
+                "query": {"type": "string"},
             },
-            {
-                "name": "size_unit",
-                "concrete": True,
-                "lookups": [
-                    "equals",
-                    "contains",
-                    "starts_with",
-                    "ends_with",
-                    "regex",
-                    "not_equals",
-                    "not_contains",
-                    "not_starts_with",
-                    "not_ends_with",
-                    "not_regex",
-                    "is_null",
-                ],
-            },
-        ],
-        "fks": [
-            {
-                "name": "default_sku",
-                "path": "default_sku",
-                "fields": [
-                    {
-                        "name": "name",
-                        "concrete": True,
-                        "lookups": [
-                            "equals",
-                            "contains",
-                            "starts_with",
-                            "ends_with",
-                            "regex",
-                            "not_equals",
-                            "not_contains",
-                            "not_starts_with",
-                            "not_ends_with",
-                            "not_regex",
-                            "is_null",
-                        ],
-                    }
-                ],
-                "fks": [],
-            },
-            {
-                "name": "model_not_in_admin",
-                "path": "model_not_in_admin",
-                "fields": [],
-                "fks": [],
-            },
-            {
-                "name": "producer",
-                "path": "producer",
-                "fields": [
-                    {
-                        "name": "name",
-                        "concrete": True,
-                        "lookups": [
-                            "equals",
-                            "contains",
-                            "starts_with",
-                            "ends_with",
-                            "regex",
-                            "not_equals",
-                            "not_contains",
-                            "not_starts_with",
-                            "not_ends_with",
-                            "not_regex",
-                            "is_null",
-                        ],
-                    }
-                ],
-                "fks": [
-                    {
-                        "name": "address",
-                        "path": "producer__address",
-                        "fields": [
-                            {
-                                "name": "city",
-                                "concrete": True,
-                                "lookups": [
-                                    "equals",
-                                    "contains",
-                                    "starts_with",
-                                    "ends_with",
-                                    "regex",
-                                    "not_equals",
-                                    "not_contains",
-                                    "not_starts_with",
-                                    "not_ends_with",
-                                    "not_regex",
-                                    "is_null",
-                                ],
-                            }
-                        ],
-                        "fks": [],
-                    }
-                ],
-            },
-        ],
+            "fks": {"owner": {"model": "auth.User"}},
+            "sorted_fields": [
+                "app",
+                "created_time",
+                "description",
+                "fields",
+                "id",
+                "model",
+                "name",
+                "public",
+                "query",
+            ],
+            "sorted_fks": ["owner"],
+        },
     }
 
 
@@ -372,12 +398,12 @@ def test_query_html_bad_fields(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_fields(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
+        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale,pooducer__name,producer__name.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
     assert json.loads(res.content.decode("utf-8"))["data"] == [
-        [1, "a", "g", False],
-        [1, "b", "g", False],
+        [1, "a", "g", False, "bob"],
+        [1, "b", "g", False, "bob"],
     ]
 
 

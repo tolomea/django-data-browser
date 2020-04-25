@@ -25,6 +25,7 @@ from .models import View
 from .query import (
     ASC,
     DSC,
+    FIELD_TYPES,
     BooleanField,
     BoundQuery,
     CalculatedField,
@@ -35,25 +36,35 @@ from .query import (
 )
 
 
-def get_model(query):
-    return apps.get_model(app_label=query.app, model_name=query.model)
+def get_model(app, model):
+    return apps.get_model(app_label=app, model_name=model)
 
 
 FIELD_MAP = [
     ((models.BooleanField, models.NullBooleanField), BooleanField),
-    ((models.CharField, models.TextField), StringField),
+    (
+        (
+            models.CharField,
+            models.TextField,
+            models.GenericIPAddressField,
+            models.UUIDField,
+        ),
+        StringField,
+    ),
     ((models.DateTimeField, models.DateField), TimeField),
     (
         (models.DecimalField, models.FloatField, models.IntegerField, models.AutoField),
         NumberField,
     ),
-    ((type(None)), CalculatedField),
+    ((type(None),), CalculatedField),
+    ((models.FileField,), None),
 ]
 
 
 def get_all_admin_fields(request):
     def from_fieldsets(admin, model):
-        for f in flatten_fieldsets(admin.get_fieldsets(request)):
+        obj = model()  # we want the admin change field sets, not the add ones
+        for f in flatten_fieldsets(admin.get_fieldsets(request, obj)):
             if hasattr(model, f):
                 yield f
 
@@ -74,7 +85,8 @@ def get_fields_for_model(model, admin_fields):
     fks = {}
 
     model_fields = {f.name: f for f in model._meta.get_fields()}
-    model_fields["pk"] = model_fields["id"]
+    if "id" in model_fields:
+        model_fields["pk"] = model_fields["id"]
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
@@ -84,25 +96,19 @@ def get_fields_for_model(model, admin_fields):
             else:
                 for django_types, field_type in FIELD_MAP:
                     if isinstance(field, django_types):
-                        fields[field_name] = field_type
+                        if field_type:
+                            fields[field_name] = field_type
                         break
-                else:
-                    assert isinstance(field, models.fields.files.FileField), type(field)
+                else:  # pragma: no cover
+                    print(
+                        f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
+                    )
     return {"fields": fields, "fks": fks}
 
 
-def get_nested_fields_for_model(model, admin_fields, seen=()):
-    # res = {field_name: Field}, {field_name: res}
-    data = get_fields_for_model(model, admin_fields)
-
-    groups = {}
-    for field_name, related_model in data["fks"].items():
-        if related_model not in seen:
-            group_fileds = get_nested_fields_for_model(
-                related_model, admin_fields, seen + (model,)
-            )
-            groups[field_name] = group_fileds
-    return data["fields"], groups
+def get_all_model_fields(admin_fields):
+    # {model: {"fields": {field_name, Field}, "fks": {field_name: model}}}
+    return {model: get_fields_for_model(model, admin_fields) for model in admin_fields}
 
 
 LOOKUP_MAP = {
@@ -124,16 +130,16 @@ def get_data(bound_query):
     if not bound_query.fields:
         return []
 
-    qs = get_model(bound_query).objects.all()
+    qs = get_model(bound_query.app, bound_query.model).objects.all()
 
     # sort
     sort_fields = []
-    for field, sort_direction in bound_query.sort_fields:
-        if field.name not in bound_query.calculated_fields:
+    for name, field, sort_direction in bound_query.sort_fields:
+        if name not in bound_query.calculated_fields:
             if sort_direction is ASC:
-                sort_fields.append(field.name)
+                sort_fields.append(name)
             if sort_direction is DSC:
-                sort_fields.append(f"-{field.name}")
+                sort_fields.append(f"-{name}")
     qs = qs.order_by(*sort_fields)
 
     # filter
@@ -167,9 +173,9 @@ def get_data(bound_query):
             name = name.rsplit("__", 1)[0]
             select_related.add(name)
 
-    for field, sort_direction in bound_query.sort_fields:
+    for name, field, sort_direction in bound_query.sort_fields:
         if sort_direction is not None:
-            add_select_relateds(field.name)
+            add_select_relateds(name)
 
     for filter_ in bound_query.filters:
         if filter_.is_valid:
@@ -199,39 +205,67 @@ def get_data(bound_query):
     return data
 
 
+def get_context(request, app, model, fields):  # should really only need app and model
+    query = Query.from_request(app, model.__name__, fields, "html", request.GET)
+
+    admin_fields = get_all_admin_fields(request)
+    all_model_fields = get_all_model_fields(admin_fields)
+    bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
+
+    types = {
+        type_.get_type(): {
+            "lookups": [{"name": n, "type": t} for n, t in type_.lookups.items()],
+            "concrete": type_.concrete,
+        }
+        for type_ in FIELD_TYPES
+    }
+
+    def model_name(model):
+        return f"{model._meta.app_label}.{model.__name__}"
+
+    all_model_fields = {
+        model_name(model): {
+            "fields": {
+                name: {"type": type_.get_type()}
+                for name, type_ in sorted(model_fields["fields"].items())
+            },
+            "fks": {
+                name: {"model": model_name(rel_model)}
+                for name, rel_model in sorted(model_fields["fks"].items())
+            },
+            "sorted_fields": sorted(model_fields["fields"]),
+            "sorted_fks": sorted(model_fields["fks"]),
+        }
+        for model, model_fields in all_model_fields.items()
+    }
+
+    return {
+        "model": f"{bound_query.app}.{bound_query.model}",
+        "baseUrl": reverse("data_browser:root"),
+        "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
+        "types": types,
+        "fields": all_model_fields,
+    }
+
+
+@admin_decorators.staff_member_required
+def query_ctx(request, *, app, model, fields=""):  # pragma: no cover
+    try:
+        model = get_model(app, model)
+    except LookupError as e:
+        return HttpResponse(e)
+    return JsonResponse(get_context(request, app, model, fields))
+
+
 @admin_decorators.staff_member_required
 def query_html(request, *, app, model, fields=""):
-    query = Query.from_request(app, model, fields, "html", request.GET)
 
     try:
-        model = get_model(query)
+        model = get_model(app, model)
     except LookupError as e:
         return HttpResponse(e)
 
-    admin_fields = get_all_admin_fields(request)
-    fields = get_nested_fields_for_model(model, admin_fields)
-    bound_query = BoundQuery(query, fields)
-
-    def fmt_fields(fields, fks):
-        return {
-            "fields": [
-                {"name": name, "concrete": field.concrete, "lookups": field.lookups}
-                for name, field in sorted(fields.items())
-            ],
-            "fks": [
-                {"name": name, "path": path, **fmt_fields(*child)}
-                for name, (path, child) in sorted(fks.items())
-            ],
-        }
-
-    data = {
-        "app": bound_query.app,
-        "model": bound_query.model,
-        "baseUrl": reverse("data_browser:root"),
-        "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
-        "allFields": fmt_fields(*bound_query.all_fields_nested),
-    }
-
+    data = get_context(request, app, model, fields)
     data = json.dumps(data)
     data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
 
@@ -257,8 +291,8 @@ def query(request, *, app, model, fields="", media):
 
 def csv_response(request, query):
     admin_fields = get_all_admin_fields(request)
-    fields = get_nested_fields_for_model(get_model(query), admin_fields)
-    bound_query = BoundQuery(query, fields)
+    all_model_fields = get_all_model_fields(admin_fields)
+    bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
     data = get_data(bound_query)
 
     buffer = io.StringIO()
@@ -275,8 +309,8 @@ def csv_response(request, query):
 
 def json_response(request, query):
     admin_fields = get_all_admin_fields(request)
-    fields = get_nested_fields_for_model(get_model(query), admin_fields)
-    bound_query = BoundQuery(query, fields)
+    all_model_fields = get_all_model_fields(admin_fields)
+    bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
     data = get_data(bound_query)
 
     return JsonResponse(
@@ -293,11 +327,11 @@ def json_response(request, query):
             ],
             "fields": [
                 {
-                    "name": field.name,
+                    "name": name,
                     "sort": sort_direction,
                     "concrete": field.concrete,  # TODO concrete shouldn't be here
                 }
-                for (field, sort_direction) in bound_query.sort_fields
+                for (name, field, sort_direction) in bound_query.sort_fields
             ],
         }
     )

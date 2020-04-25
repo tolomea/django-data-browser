@@ -49,43 +49,36 @@ class Filter extends React.Component {
     this.props.handleQueryChange({ filters: newFilters });
   }
 
-  getLookups() {
-    const parts = this.props.filter.name.split("__");
-    function follow(path, fields) {
-      if (path.length > 1) {
-        return follow(
-          path.slice(1),
-          fields.fks.find((fk) => fk.name === path[0])
-        );
-      } else {
-        return fields.fields.find((f) => f.name === path[0]);
-      }
-    }
-    return follow(parts, this.props.allFields).lookups;
+  handleAddField() {
+    var newFields = this.props.query.fields.slice();
+    newFields.push({
+      name: this.props.name,
+      sort: null,
+      concrete: false,
+    });
+    this.props.handleQueryChange({ fields: newFields });
   }
 
   render() {
     return (
-      <p className={this.props.filter.errorMessage ? "Error" : undefined}>
-        <Link onClick={this.handleRemove.bind(this)}>✘</Link> {this.props.filter.name}{" "}
-        <select
-          value={this.props.filter.lookup}
-          onChange={this.handleLookupChange.bind(this)}
-        >
-          {this.getLookups().map((lookup) => (
-            <option key={lookup} value={lookup}>
-              {lookup}
+      <p className={this.props.errorMessage ? "Error" : undefined}>
+        <Link onClick={this.handleRemove.bind(this)}>✘</Link>{" "}
+        <Link onClick={this.handleAddField.bind(this)}>{this.props.name}</Link>{" "}
+        <select value={this.props.lookup} onChange={this.handleLookupChange.bind(this)}>
+          {this.props.getFieldType(this.props.name).lookups.map((lookup) => (
+            <option key={lookup.name} value={lookup.name}>
+              {lookup.name}
             </option>
           ))}
         </select>{" "}
         ={" "}
         <input
           type="text"
-          name={`${this.props.filter.name}__${this.props.filter.lookup}`}
-          value={this.props.filter.value}
+          name={`${this.props.name}__${this.props.lookup}`}
+          value={this.props.value}
           onChange={this.handleValueChange.bind(this)}
         />
-        {this.props.filter.errorMessage}
+        {this.props.errorMessage}
       </p>
     );
   }
@@ -96,12 +89,12 @@ function Filters(props) {
     <form className="Filters">
       {props.query.filters.map((filter, index) => (
         <Filter
-          filter={filter}
-          allFields={props.allFields} // TODO cleanup after allFields is flattened
+          {...filter}
           key={index}
           index={index}
           query={props.query}
           handleQueryChange={props.handleQueryChange}
+          getFieldType={props.getFieldType}
         />
       ))}
     </form>
@@ -141,14 +134,16 @@ class Toggle extends React.Component {
 }
 
 function Fields(props) {
+  const model_fields = props.fields[props.model];
   return (
     <ul className="FieldsList">
-      {props.fields.map((field) => {
+      {model_fields.sorted_fields.map((field_name) => {
+        const field = model_fields.fields[field_name];
         function handleAddFilter() {
           var newFilters = props.query.filters.slice();
           newFilters.push({
             errorMessage: null,
-            name: field.name,
+            name: `${props.path}${field_name}`,
             lookup: "",
             value: "",
           });
@@ -158,7 +153,7 @@ function Fields(props) {
         function handleAddField() {
           var newFields = props.query.fields.slice();
           newFields.push({
-            name: field.name,
+            name: `${props.path}${field_name}`,
             sort: null,
             concrete: false,
           });
@@ -166,24 +161,33 @@ function Fields(props) {
         }
 
         return (
-          <li key={field.name}>
-            {field.concrete ? (
+          <li key={field_name}>
+            {props.types[field.type].concrete ? (
               <Link onClick={handleAddFilter}>Y</Link>
             ) : (
               <>&nbsp;&nbsp;</>
             )}{" "}
-            <Link onClick={handleAddField}>{field.name}</Link>
+            <Link onClick={handleAddField}>{field_name}</Link>
           </li>
         );
       })}
-
-      {props.fks.map((fk) => (
-        <li key={fk.name}>
-          <Toggle title={fk.name}>
-            <Fields {...fk} />
-          </Toggle>
-        </li>
-      ))}
+      {model_fields.sorted_fks.map((fk_name) => {
+        const fk = model_fields.fks[fk_name];
+        return (
+          <li key={fk_name}>
+            <Toggle title={fk_name}>
+              <Fields
+                query={props.query}
+                handleQueryChange={props.handleQueryChange}
+                fields={props.fields}
+                model={fk.model}
+                path={`${props.path}${fk_name}__`}
+                types={props.types}
+              />
+            </Toggle>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -252,7 +256,7 @@ function ResultsBody(props) {
       {props.data.map((row, index) => (
         <tr key={index}>
           {row.map((cell, index) => (
-            <td key={index}>{cell}</td>
+            <td key={index}>{String(cell)}</td>
           ))}
         </tr>
       ))}
@@ -274,7 +278,10 @@ function Page(props) {
     <div id="body">
       <h1>{props.model}</h1>
       <p>
-        <a href={props.csvLink}>Download as CSV</a>
+        <a href={props.getUrlForQuery(props.query, "csv")}>Download as CSV</a>
+      </p>
+      <p>
+        <a href={props.getUrlForQuery(props.query, "json")}>View as JSON</a>
       </p>
       <p>
         <a href={props.saveLink}>Save View</a>
@@ -283,7 +290,7 @@ function Page(props) {
       <Filters
         query={props.query}
         handleQueryChange={props.handleQueryChange}
-        allFields={props.allFields}
+        getFieldType={props.getFieldType}
       />
 
       <p>Showing {props.data.length} results</p>
@@ -292,7 +299,10 @@ function Page(props) {
           <Fields
             query={props.query}
             handleQueryChange={props.handleQueryChange}
-            {...props.allFields}
+            fields={props.fields}
+            model={props.model}
+            path=""
+            types={props.types}
           />
         </div>
         <Results
@@ -351,8 +361,8 @@ class App extends React.Component {
 
   getPartsForQuery(query) {
     return {
-      app: this.props.app,
-      model: this.props.model,
+      app: this.props.model.split(".")[0],
+      model: this.props.model.split(".")[1],
       fields: query.fields
         .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
         .join(","),
@@ -374,16 +384,37 @@ class App extends React.Component {
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
+  getFieldType(path) {
+    const parts = path.split("__");
+    const field = parts.slice(-1);
+    const model = this.getFkModel(parts.slice(0, -1).join("__"));
+    const type = this.props.fields[model].fields[field]["type"];
+    return this.props.types[type];
+  }
+
+  getFkModel(path) {
+    var model = this.props.model;
+    if (path) {
+      for (const field of path.split("__")) {
+        model = this.props.fields[model].fks[field]["model"];
+      }
+    }
+    return model;
+  }
+
   render() {
     return (
       <Page
         data={this.state.data}
         query={this.state.query}
-        allFields={this.props.allFields}
         handleQueryChange={this.handleQueryChange.bind(this)}
         model={this.props.model}
         saveLink={this.getSaveUrl()}
-        csvLink={this.getUrlForQuery(this.state.query, "csv")}
+        getUrlForQuery={this.getUrlForQuery.bind(this)}
+        getFkModel={this.getFkModel.bind(this)}
+        getFieldType={this.getFieldType.bind(this)}
+        fields={this.props.fields}
+        types={this.props.types}
       />
     );
   }

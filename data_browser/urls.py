@@ -4,7 +4,7 @@ from django.conf import settings
 from django.urls import path, register_converter
 from django.views.static import serve
 
-from .views import proxy_js_dev_server, query, query_html, view
+from .views import proxy_js_dev_server, query, query_ctx, query_html, view
 
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
 
@@ -25,6 +25,7 @@ app_name = "data_browser"
 
 urlpatterns = [
     path("query/<app>/<model>/<optional:fields>.html", query_html, name="query_html"),
+    path("query/<app>/<model>/<optional:fields>.ctx", query_ctx, name="query_ctx"),
     path("query/<app>/<model>/<optional:fields>.<media>", query, name="query"),
     path("view/<pk>.<media>", view, name="view"),
     path("", lambda: None, name="root"),
