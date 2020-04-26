@@ -75,6 +75,10 @@ class TestQuery:
             == "/data_browser/query/app.model/+fa,-fd,fn.html?bob__equals=fred"
         )
 
+    def test_url_no_filters(self, query):
+        query.filters = []
+        assert query.url == "/data_browser/query/app.model/+fa,-fd,fn.html?"
+
 
 class TestBoundQuery:
     def test_fields(self, bound_query):

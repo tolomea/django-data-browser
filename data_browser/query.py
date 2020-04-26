@@ -60,8 +60,12 @@ class Query:
         return ",".join(field_strs)
 
     @property
-    def base_url(self):
-        return reverse(
+    def filter_fields(self):
+        return [(f"{n}__{l}", v) for (n, l, v) in self.filters]
+
+    @property
+    def url(self):
+        base_url = reverse(
             "data_browser:query",
             kwargs={
                 "app": self.app,
@@ -70,20 +74,10 @@ class Query:
                 "media": self.media,
             },
         )
-
-    @property
-    def filter_fields(self):
-        return [(f"{n}__{l}", v) for (n, l, v) in self.filters]
-
-    @property
-    def url(self):
-        url = self.base_url
-        if self.filters:
-            params = urllib.parse.urlencode(
-                self.filter_fields, quote_via=urllib.parse.quote_plus, doseq=True
-            )
-            url = f"{url}?{params}"
-        return url
+        params = urllib.parse.urlencode(
+            self.filter_fields, quote_via=urllib.parse.quote_plus, doseq=True
+        )
+        return f"{base_url}?{params}"
 
     @property
     def save_params(self):
@@ -203,9 +197,6 @@ TYPES = {
 
 class Filter:
     def __init__(self, name, index, field, lookup, value):
-        if not lookup:
-            lookup = field.default_lookup
-
         self.name = name
         self.index = index
         self.field = field
@@ -238,7 +229,6 @@ class BoundQuery:
         self._query = query
         self.app = query.app
         self.model = query.model
-        self.base_url = query.base_url
         self.all_model_fields = all_model_fields
         self.root = root
 
