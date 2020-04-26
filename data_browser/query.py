@@ -24,7 +24,7 @@ class Query:
                     fields[name] = None
 
         filters = []
-        for name__lookup, values in sorted(dict(get_args).items()):
+        for name__lookup, values in dict(get_args).items():
             for value in values:
                 name, lookup = name__lookup.rsplit("__", 1)
                 filters.append((name, lookup, value))

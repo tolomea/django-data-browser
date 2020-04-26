@@ -234,11 +234,11 @@ def get_context(request, app, model, fields):  # should really only need app and
         model_name(model): {
             "fields": {
                 name: {"type": type_.name}
-                for name, type_ in sorted(model_fields["fields"].items())
+                for name, type_ in model_fields["fields"].items()
             },
             "fks": {
                 name: {"model": model_name(rel_model)}
-                for name, rel_model in sorted(model_fields["fks"].items())
+                for name, rel_model in model_fields["fks"].items()
             },
             "sorted_fields": sorted(model_fields["fields"]),
             "sorted_fks": sorted(model_fields["fks"]),
