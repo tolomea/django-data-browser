@@ -60,6 +60,7 @@ class Filter extends React.Component {
   }
 
   render() {
+    const fieldType = this.props.getFieldType(this.props.name);
     return (
       <tr className={this.props.errorMessage ? "Error" : undefined}>
         <td>
@@ -72,9 +73,9 @@ class Filter extends React.Component {
             value={this.props.lookup}
             onChange={this.handleLookupChange.bind(this)}
           >
-            {this.props.getFieldType(this.props.name).lookups.map((lookup) => (
-              <option key={lookup.name} value={lookup.name}>
-                {lookup.name.replace("_", " ")}
+            {fieldType.sorted_lookups.map((lookupName) => (
+              <option key={lookupName} value={lookupName}>
+                {lookupName.replace("_", " ")}
               </option>
             ))}
           </select>

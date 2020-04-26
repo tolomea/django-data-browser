@@ -218,7 +218,8 @@ def get_context(request, app, model, fields):  # should really only need app and
 
     types = {
         type_.get_type(): {
-            "lookups": [{"name": n, "type": t} for n, t in type_.lookups.items()],
+            "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
+            "sorted_lookups": list(type_.lookups),
             "concrete": type_.concrete,
         }
         for type_ in FIELD_TYPES
