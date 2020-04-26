@@ -111,19 +111,23 @@ def get_all_model_fields(admin_fields):
     return {model: get_fields_for_model(model, admin_fields) for model in admin_fields}
 
 
-LOOKUP_MAP = {
-    "equals": "__iexact",
-    "equal": "",
-    "regex": "__iregex",
-    "contains": "__icontains",
-    "starts_with": "__istartswith",
-    "ends_with": "__iendswith",
-    "is_null": "__isnull",
-    "gt": "__gt",
-    "gte": "__gte",
-    "lt": "__lt",
-    "lte": "__lte",
-}
+def get_django_lookup(field_type, lookup):
+    if field_type == StringField and lookup == "equals":
+        return "iexact"
+    else:
+        lookup = {
+            "equals": "exact",
+            "regex": "iregex",
+            "contains": "icontains",
+            "starts_with": "istartswith",
+            "ends_with": "iendswith",
+            "is_null": "isnull",
+            "gt": "gt",
+            "gte": "gte",
+            "lt": "lt",
+            "lte": "lte",
+        }[lookup]
+        return lookup
 
 
 def get_data(bound_query):
@@ -152,7 +156,7 @@ def get_data(bound_query):
                 negation = True
                 lookup = lookup[4:]
 
-            filter_str = f"{filter_.name}{LOOKUP_MAP[lookup]}"
+            filter_str = f"{filter_.name}__{get_django_lookup(filter_.field, lookup)}"
             if negation:
                 qs = qs.exclude(**{filter_str: filter_.parsed})
             else:

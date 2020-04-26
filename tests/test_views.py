@@ -21,7 +21,7 @@ class ANY:  # pragma: no cover
 @pytest.fixture
 def products(db):
     address = models.Address.objects.create(city="london")
-    producer = models.Producer.objects.create(name="bob", address=address)
+    producer = models.Producer.objects.create(name="Bob", address=address)
     models.Product.objects.create(name="a", size=1, size_unit="g", producer=producer)
     models.Product.objects.create(name="b", size=1, size_unit="g", producer=producer)
     models.Product.objects.create(name="c", size=2, size_unit="g", producer=producer)
@@ -90,7 +90,7 @@ def test_get_data_pks(get_product_data):
 def test_get_data_calculated_field(get_product_data):
     # query + prefetch producer
     data = get_product_data(2, "+name,producer__name,is_onsale", "html", {})
-    assert data == [["a", "bob", False], ["b", "bob", False], ["c", "bob", False]]
+    assert data == [["a", "Bob", False], ["b", "Bob", False], ["c", "Bob", False]]
 
 
 @pytest.mark.usefixtures("products")
@@ -132,13 +132,23 @@ def test_get_data_null_filter(get_product_data):
 @pytest.mark.usefixtures("products")
 def test_get_data_boolean_filter(get_product_data):
     models.Product.objects.update(onsale=True)
-    data = get_product_data(1, "pk", "html", {"onsale__equal": ["True"]})
+    data = get_product_data(1, "pk", "html", {"onsale__equals": ["True"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", "html", {"onsale__equal": ["true"]})
+    data = get_product_data(1, "pk", "html", {"onsale__equals": ["true"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", "html", {"onsale__equal": ["False"]})
+    data = get_product_data(1, "pk", "html", {"onsale__equals": ["False"]})
     assert data == []
-    data = get_product_data(1, "pk", "html", {"onsale__equal": ["false"]})
+    data = get_product_data(1, "pk", "html", {"onsale__equals": ["false"]})
+    assert data == []
+
+
+@pytest.mark.usefixtures("products")
+def test_get_data_string_filter(get_product_data):
+    data = get_product_data(1, "pk", "html", {"producer__name__equals": ["Bob"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_data(1, "pk", "html", {"producer__name__equals": ["bob"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_data(1, "pk", "html", {"producer__name__equals": ["fred"]})
     assert data == []
 
 
@@ -243,8 +253,8 @@ def test_query_html(admin_client):
         },
         "number": {
             "lookups": [
-                {"name": "equal", "type": "number"},
-                {"name": "not_equal", "type": "number"},
+                {"name": "equals", "type": "number"},
+                {"name": "not_equals", "type": "number"},
                 {"name": "gt", "type": "number"},
                 {"name": "gte", "type": "number"},
                 {"name": "lt", "type": "number"},
@@ -255,8 +265,8 @@ def test_query_html(admin_client):
         },
         "time": {
             "lookups": [
-                {"name": "equal", "type": "time"},
-                {"name": "not_equal", "type": "time"},
+                {"name": "equals", "type": "time"},
+                {"name": "not_equals", "type": "time"},
                 {"name": "gt", "type": "time"},
                 {"name": "gte", "type": "time"},
                 {"name": "lt", "type": "time"},
@@ -267,8 +277,8 @@ def test_query_html(admin_client):
         },
         "boolean": {
             "lookups": [
-                {"name": "equal", "type": "boolean"},
-                {"name": "not_equal", "type": "boolean"},
+                {"name": "equals", "type": "boolean"},
+                {"name": "not_equals", "type": "boolean"},
                 {"name": "is_null", "type": "boolean"},
             ],
             "concrete": True,
@@ -402,8 +412,8 @@ def test_query_json_bad_fields(admin_client):
     )
     assert res.status_code == 200
     assert json.loads(res.content.decode("utf-8"))["data"] == [
-        [1, "a", "g", False, "bob"],
-        [1, "b", "g", False, "bob"],
+        [1, "a", "g", False, "Bob"],
+        [1, "b", "g", False, "Bob"],
     ]
 
 

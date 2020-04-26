@@ -119,7 +119,7 @@ class TestNumberField:
         assert NumberField.validate("is_null", "hello")
 
     def test_default_lookup(self):
-        assert NumberField.default_lookup == "equal"
+        assert NumberField.default_lookup == "equals"
 
 
 class TestTimeField:
@@ -131,17 +131,17 @@ class TestTimeField:
         assert TimeField.validate("is_null", "hello")
 
     def test_default_lookup(self):
-        assert TimeField.default_lookup == "equal"
+        assert TimeField.default_lookup == "equals"
 
 
 class TestBooleanField:
     def test_validate(self):
-        assert not BooleanField.validate("equal", "True")
-        assert BooleanField.validate("equal", "hello")
+        assert not BooleanField.validate("equals", "True")
+        assert BooleanField.validate("equals", "hello")
         assert BooleanField.validate("pontains", "True")
 
     def test_default_lookup(self):
-        assert BooleanField.default_lookup == "equal"
+        assert BooleanField.default_lookup == "equals"
 
 
 class TestCalculatedField:

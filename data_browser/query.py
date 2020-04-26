@@ -172,8 +172,8 @@ class StringField(Field):
 
 class NumberField(Field):
     lookups = {
-        "equal": "number",
-        "not_equal": "number",
+        "equals": "number",
+        "not_equals": "number",
         "gt": "number",
         "gte": "number",
         "lt": "number",
@@ -184,8 +184,8 @@ class NumberField(Field):
 
 class TimeField(Field):
     lookups = {
-        "equal": "time",
-        "not_equal": "time",
+        "equals": "time",
+        "not_equals": "time",
         "gt": "time",
         "gte": "time",
         "lt": "time",
@@ -195,7 +195,7 @@ class TimeField(Field):
 
 
 class BooleanField(Field):
-    lookups = {"equal": "boolean", "not_equal": "boolean", "is_null": "boolean"}
+    lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
 
 
 class CalculatedField(Field):
