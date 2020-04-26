@@ -234,6 +234,7 @@ def get_context(request, app, model, fields):  # should really only need app and
     def model_name(model):
         return f"{model._meta.app_label}.{model.__name__}"
 
+    front_fields = ["pk"]
     all_model_fields = {
         model_name(model): {
             "fields": {
@@ -244,7 +245,8 @@ def get_context(request, app, model, fields):  # should really only need app and
                 name: {"model": model_name(rel_model)}
                 for name, rel_model in model_fields["fks"].items()
             },
-            "sorted_fields": sorted(model_fields["fields"]),
+            "sorted_fields": front_fields
+            + sorted(f for f in model_fields["fields"] if f not in front_fields),
             "sorted_fks": sorted(model_fields["fks"]),
         }
         for model, model_fields in all_model_fields.items()

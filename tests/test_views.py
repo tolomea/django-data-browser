@@ -349,26 +349,28 @@ def test_query_html(admin_client):
 
     assert context["fields"] == {
         "auth.Group": {
-            "fields": {"name": {"type": "string"}},
+            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
             "fks": {},
-            "sorted_fields": ["name"],
+            "sorted_fields": ["pk", "name"],
             "sorted_fks": [],
         },
         "auth.User": {
             "fields": {
                 "date_joined": {"type": "time"},
-                "email": {"type": "string"},
-                "first_name": {"type": "string"},
-                "is_active": {"type": "boolean"},
-                "is_staff": {"type": "boolean"},
-                "is_superuser": {"type": "boolean"},
-                "last_login": {"type": "time"},
                 "last_name": {"type": "string"},
-                "password": {"type": "string"},
+                "last_login": {"type": "time"},
+                "pk": {"type": "number"},
+                "is_superuser": {"type": "boolean"},
+                "is_active": {"type": "boolean"},
                 "username": {"type": "string"},
+                "password": {"type": "string"},
+                "is_staff": {"type": "boolean"},
+                "first_name": {"type": "string"},
+                "email": {"type": "string"},
             },
             "fks": {},
             "sorted_fields": [
+                "pk",
                 "date_joined",
                 "email",
                 "first_name",
@@ -383,66 +385,68 @@ def test_query_html(admin_client):
             "sorted_fks": [],
         },
         "tests.InAdmin": {
-            "fields": {"name": {"type": "string"}},
+            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
             "fks": {},
-            "sorted_fields": ["name"],
+            "sorted_fields": ["pk", "name"],
             "sorted_fks": [],
         },
         "tests.Tag": {
-            "fields": {"name": {"type": "string"}},
+            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
             "fks": {},
-            "sorted_fields": ["name"],
+            "sorted_fields": ["pk", "name"],
             "sorted_fks": [],
         },
         "tests.Address": {
-            "fields": {"city": {"type": "string"}},
+            "fields": {"pk": {"type": "number"}, "city": {"type": "string"}},
             "fks": {},
-            "sorted_fields": ["city"],
+            "sorted_fields": ["pk", "city"],
             "sorted_fks": [],
         },
         "tests.Producer": {
-            "fields": {"name": {"type": "string"}},
+            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
             "fks": {"address": {"model": "tests.Address"}},
-            "sorted_fields": ["name"],
+            "sorted_fields": ["pk", "name"],
             "sorted_fks": ["address"],
         },
         "tests.Product": {
             "fields": {
                 "is_onsale": {"type": "calculated"},
                 "name": {"type": "string"},
-                "onsale": {"type": "boolean"},
                 "pk": {"type": "number"},
                 "size": {"type": "number"},
                 "size_unit": {"type": "string"},
+                "onsale": {"type": "boolean"},
             },
             "fks": {
-                "default_sku": {"model": "tests.SKU"},
-                "model_not_in_admin": {"model": "tests.NotInAdmin"},
                 "producer": {"model": "tests.Producer"},
+                "model_not_in_admin": {"model": "tests.NotInAdmin"},
+                "default_sku": {"model": "tests.SKU"},
             },
-            "sorted_fields": ["is_onsale", "name", "onsale", "pk", "size", "size_unit"],
+            "sorted_fields": ["pk", "is_onsale", "name", "onsale", "size", "size_unit"],
             "sorted_fks": ["default_sku", "model_not_in_admin", "producer"],
         },
         "tests.SKU": {
-            "fields": {"name": {"type": "string"}},
+            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
             "fks": {"product": {"model": "tests.Product"}},
-            "sorted_fields": ["name"],
+            "sorted_fields": ["pk", "name"],
             "sorted_fks": ["product"],
         },
         "data_browser.View": {
             "fields": {
-                "app": {"type": "string"},
                 "created_time": {"type": "time"},
+                "app": {"type": "string"},
+                "public": {"type": "boolean"},
+                "name": {"type": "string"},
+                "pk": {"type": "string"},
                 "description": {"type": "string"},
                 "fields": {"type": "string"},
-                "id": {"type": "string"},
                 "model": {"type": "string"},
-                "name": {"type": "string"},
-                "public": {"type": "boolean"},
                 "query": {"type": "string"},
+                "id": {"type": "string"},
             },
             "fks": {"owner": {"model": "auth.User"}},
             "sorted_fields": [
+                "pk",
                 "app",
                 "created_time",
                 "description",
@@ -456,13 +460,6 @@ def test_query_html(admin_client):
             "sorted_fks": ["owner"],
         },
     }
-
-
-def test_query_html_bad_fields(admin_client):
-    res = admin_client.get(
-        "/data_browser/query/tests.Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
-    )
-    assert res.status_code == 200
 
 
 @pytest.mark.usefixtures("products")
