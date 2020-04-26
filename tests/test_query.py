@@ -103,8 +103,8 @@ class TestField:
 
 class TestStringField:
     def test_validate(self):
-        assert not StringField.validate("contains", "hello")
-        assert StringField.validate("pontains", "hello")
+        assert Filter("bob", 0, StringField, "contains", "hello").is_valid
+        assert not Filter("bob", 0, StringField, "pontains", "hello").is_valid
 
     def test_default_lookup(self):
         assert StringField.default_lookup == "equals"
@@ -112,11 +112,11 @@ class TestStringField:
 
 class TestNumberField:
     def test_validate(self):
-        assert not NumberField.validate("gt", "6.1")
-        assert NumberField.validate("pontains", "6.1")
-        assert NumberField.validate("gt", "hello")
-        assert not NumberField.validate("is_null", "True")
-        assert NumberField.validate("is_null", "hello")
+        assert Filter("bob", 0, NumberField, "gt", "6.1").is_valid
+        assert not Filter("bob", 0, NumberField, "pontains", "6.1").is_valid
+        assert not Filter("bob", 0, NumberField, "gt", "hello").is_valid
+        assert Filter("bob", 0, NumberField, "is_null", "True").is_valid
+        assert not Filter("bob", 0, NumberField, "is_null", "hello").is_valid
 
     def test_default_lookup(self):
         assert NumberField.default_lookup == "equals"
@@ -124,11 +124,13 @@ class TestNumberField:
 
 class TestTimeField:
     def test_validate(self):
-        assert not TimeField.validate("gt", "2018-03-20T22:31:23")
-        assert TimeField.validate("gt", "hello")
-        assert TimeField.validate("pontains", "2018-03-20T22:31:23")
-        assert not TimeField.validate("is_null", "True")
-        assert TimeField.validate("is_null", "hello")
+        assert Filter("bob", 0, TimeField, "gt", "2018-03-20T22:31:23").is_valid
+        assert not Filter("bob", 0, TimeField, "gt", "hello").is_valid
+        assert not Filter(
+            "bob", 0, TimeField, "pontains", "2018-03-20T22:31:23"
+        ).is_valid
+        assert Filter("bob", 0, TimeField, "is_null", "True").is_valid
+        assert not Filter("bob", 0, TimeField, "is_null", "hello").is_valid
 
     def test_default_lookup(self):
         assert TimeField.default_lookup == "equals"
@@ -136,9 +138,9 @@ class TestTimeField:
 
 class TestBooleanField:
     def test_validate(self):
-        assert not BooleanField.validate("equals", "True")
-        assert BooleanField.validate("equals", "hello")
-        assert BooleanField.validate("pontains", "True")
+        assert Filter("bob", 0, BooleanField, "equals", "True").is_valid
+        assert not Filter("bob", 0, BooleanField, "equals", "hello").is_valid
+        assert not Filter("bob", 0, BooleanField, "pontains", "True").is_valid
 
     def test_default_lookup(self):
         assert BooleanField.default_lookup == "equals"
@@ -146,4 +148,4 @@ class TestBooleanField:
 
 class TestCalculatedField:
     def test_validate(self):
-        assert CalculatedField.validate("gt", "1")
+        assert not Filter("bob", 0, CalculatedField, "gt", "1").is_valid

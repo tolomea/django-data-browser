@@ -25,7 +25,7 @@ from .models import View
 from .query import (
     ASC,
     DSC,
-    FIELD_TYPES,
+    TYPES,
     BooleanField,
     BoundQuery,
     CalculatedField,
@@ -217,12 +217,12 @@ def get_context(request, app, model, fields):  # should really only need app and
     bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
 
     types = {
-        type_.get_type(): {
+        name: {
             "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
             "sorted_lookups": list(type_.lookups),
             "concrete": type_.concrete,
         }
-        for type_ in FIELD_TYPES
+        for name, type_ in TYPES.items()
     }
 
     def model_name(model):
@@ -231,7 +231,7 @@ def get_context(request, app, model, fields):  # should really only need app and
     all_model_fields = {
         model_name(model): {
             "fields": {
-                name: {"type": type_.get_type()}
+                name: {"type": type_.name}
                 for name, type_ in sorted(model_fields["fields"].items())
             },
             "fks": {

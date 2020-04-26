@@ -99,24 +99,6 @@ class Query:
         }
 
 
-def parse_boolean(val):
-    val = val.lower()
-    if val == "true":
-        return True
-    elif val == "false":
-        return False
-    else:
-        raise ValueError("Expected 'true' or 'false'")
-
-
-PARSERS = {
-    "string": lambda x: x,
-    "number": float,
-    "time": dateutil.parser.parse,
-    "boolean": parse_boolean,
-}
-
-
 class MetaField(type):
     def __repr__(cls):
         return cls.__name__
@@ -125,33 +107,18 @@ class MetaField(type):
     def default_lookup(cls):
         return list(cls.lookups)[0]
 
+    @property
+    def name(cls):
+        name = cls.__name__.lower()
+        assert name.endswith("field")
+        return name[: -len("field")]
+
 
 class Field(metaclass=MetaField):
     concrete = True
 
     def __init__(self):
         assert False
-
-    @classmethod
-    def parse(cls, lookup, value):
-        return PARSERS[cls.lookups[lookup]](value)
-
-    @classmethod
-    def validate(cls, lookup, value):
-        if lookup not in cls.lookups:
-            return f"Bad lookup '{lookup}' expected {cls.lookups}"
-        try:
-            cls.parse(lookup, value)
-        except Exception as e:
-            return str(e) if str(e) else repr(e)
-        else:
-            return None
-
-    @classmethod
-    def get_type(cls):
-        name = cls.__name__.lower()
-        assert name.endswith("field")
-        return name[: -len("field")]
 
 
 class StringField(Field):
@@ -169,6 +136,10 @@ class StringField(Field):
         "is_null": "boolean",
     }
 
+    @staticmethod
+    def parse(value):
+        return value
+
 
 class NumberField(Field):
     lookups = {
@@ -180,6 +151,10 @@ class NumberField(Field):
         "lte": "number",
         "is_null": "boolean",
     }
+
+    @staticmethod
+    def parse(value):
+        return float(value)
 
 
 class TimeField(Field):
@@ -193,9 +168,23 @@ class TimeField(Field):
         "is_null": "boolean",
     }
 
+    @staticmethod
+    def parse(value):
+        return dateutil.parser.parse(value)
+
 
 class BooleanField(Field):
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
+
+    @staticmethod
+    def parse(value):
+        value = value.lower()
+        if value == "true":
+            return True
+        elif value == "false":
+            return False
+        else:
+            raise ValueError("Expected 'true' or 'false'")
 
 
 class CalculatedField(Field):
@@ -203,7 +192,10 @@ class CalculatedField(Field):
     concrete = False
 
 
-FIELD_TYPES = [StringField, NumberField, TimeField, BooleanField, CalculatedField]
+TYPES = {
+    f.name: f
+    for f in [StringField, NumberField, TimeField, BooleanField, CalculatedField]
+}
 
 
 class Filter:
@@ -215,10 +207,19 @@ class Filter:
         self.index = index
         self.field = field
         self.lookup = lookup
-        self.err_message = field.validate(lookup, value)
-        self.is_valid = not self.err_message
         self.value = value
-        self.parsed = field.parse(lookup, value) if self.is_valid else None
+
+        self.parsed = None
+        self.err_message = None
+
+        if lookup not in field.lookups:
+            self.err_message = f"Bad lookup '{lookup}' expected {field.lookups}"
+        try:
+            self.parsed = TYPES[field.lookups[lookup]].parse(value)
+        except Exception as e:
+            self.err_message = str(e) if str(e) else repr(e)
+
+        self.is_valid = not self.err_message
 
     def __eq__(self, other):
         return (
