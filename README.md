@@ -1,6 +1,6 @@
 # django-data-browser
-Django app for user friendly querying of Django models
 
+Django app for user friendly querying of Django models
 
 ## Development
 
@@ -13,8 +13,8 @@ The compiled Javascript is checked into the repo, so if only want to mess with t
 If you want to modify the Javascript then you also need to
 
 2: Enable proxying to the JS dev server by adding `DATA_BROWSER_DEV = True` to your settings
-3: Fix up paths on the JS side by changing `homepage` in package.json to the correct path e.g. `/data_browser/`
-4: Run the dev server with `WDS_SOCKET_PORT=3000 npm start`
-This all assumes the dev server is running on the default `localhost:3000`
+3: Run the dev server with `WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start`
+The WDS_SOCKET_PORT is so the proxied JS can find the webpack dev server.
+The PUBLIC_URL tells the dev server what path to serve from and should be the same as the URL you have mounted the data-browser on in you urls.py file.
 
 To build the JS, move the files around appropriately and recreate the wheels run `build.sh`
