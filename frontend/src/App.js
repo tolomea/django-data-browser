@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-var assert = require("assert");
+const assert = require("assert");
 
 let controller;
 
@@ -37,13 +37,13 @@ function FilterValue(props) {
 
 class Filter extends React.Component {
   handleRemove(event) {
-    var newFilters = this.props.query.filters.slice();
+    const newFilters = this.props.query.filters.slice();
     newFilters.splice(this.props.index, 1);
     this.props.handleQueryChange({ filters: newFilters });
   }
 
   handleLookupChange(event) {
-    var newFilters = this.props.query.filters.slice();
+    const newFilters = this.props.query.filters.slice();
     newFilters[this.props.index] = {
       ...newFilters[this.props.index],
       lookup: event.target.value,
@@ -52,7 +52,7 @@ class Filter extends React.Component {
   }
 
   handleValueChange(event) {
-    var newFilters = this.props.query.filters.slice();
+    const newFilters = this.props.query.filters.slice();
     newFilters[this.props.index] = {
       ...newFilters[this.props.index],
       value: event.target.value,
@@ -61,7 +61,7 @@ class Filter extends React.Component {
   }
 
   handleAddField() {
-    var newFields = this.props.query.fields.slice();
+    const newFields = this.props.query.fields.slice();
     newFields.push({
       name: this.props.name,
       sort: null,
@@ -164,7 +164,7 @@ function Fields(props) {
       {model_fields.sorted_fields.map((field_name) => {
         const field = model_fields.fields[field_name];
         function handleAddFilter() {
-          var newFilters = props.query.filters.slice();
+          const newFilters = props.query.filters.slice();
           newFilters.push({
             errorMessage: null,
             name: `${props.path}${field_name}`,
@@ -175,7 +175,7 @@ function Fields(props) {
         }
 
         function handleAddField() {
-          var newFields = props.query.fields.slice();
+          const newFields = props.query.fields.slice();
           newFields.push({
             name: `${props.path}${field_name}`,
             sort: null,
@@ -222,7 +222,7 @@ function ResultsHead(props) {
       <tr>
         {props.query.fields.map((field, index) => {
           function handleRemove() {
-            var newFields = props.query.fields.slice();
+            const newFields = props.query.fields.slice();
             newFields.splice(index, 1);
             props.handleQueryChange({
               fields: newFields,
@@ -230,7 +230,7 @@ function ResultsHead(props) {
           }
 
           function handleAddFilter() {
-            var newFilters = props.query.filters.slice();
+            const newFilters = props.query.filters.slice();
             newFilters.push({
               errorMessage: null,
               name: field.name,
@@ -243,7 +243,7 @@ function ResultsHead(props) {
           }
 
           function handleToggleSort() {
-            var newFields = props.query.fields.slice();
+            const newFields = props.query.fields.slice();
             newFields[index] = {
               ...field,
               sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
@@ -416,7 +416,7 @@ class App extends React.Component {
   }
 
   getFkModel(path) {
-    var model = this.props.model;
+    let model = this.props.model;
     if (path) {
       for (const field of path.split("__")) {
         model = this.props.fields[model].fks[field]["model"];
