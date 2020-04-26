@@ -24,6 +24,17 @@ function Link(props) {
   );
 }
 
+function FilterValue(props) {
+  return (
+    <input
+      type="text"
+      name={props.name}
+      value={props.value}
+      onChange={props.onChange}
+    />
+  );
+}
+
 class Filter extends React.Component {
   handleRemove(event) {
     var newFilters = this.props.query.filters.slice();
@@ -82,11 +93,11 @@ class Filter extends React.Component {
         </td>
         <td>=</td>
         <td>
-          <input
-            type="text"
+          <FilterValue
             name={`${this.props.name}__${this.props.lookup}`}
             value={this.props.value}
             onChange={this.handleValueChange.bind(this)}
+            lookup={fieldType.lookups[this.props.lookup]}
           />
           {this.props.errorMessage}
         </td>
