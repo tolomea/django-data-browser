@@ -308,7 +308,7 @@ def test_query_html(admin_client):
                 "is_null",
             ],
             "defaultLookup": "equals",
-            "defaultValue": "",
+            "defaultValue": ANY(str),
             "concrete": True,
         },
         "boolean": {

@@ -25,14 +25,34 @@ function Link(props) {
 }
 
 function FilterValue(props) {
-  return (
-    <input
-      type="text"
-      name={props.name}
-      value={props.value}
-      onChange={props.onChange}
-    />
-  );
+  if (props.lookup.type === "boolean")
+    return (
+      <select className="FilterValue" onChange={props.onChange} value={props.value}>
+        <option value={true}>true</option>
+        <option value={false}>false</option>
+      </select>
+    );
+  else if (props.lookup.type === "number")
+    return (
+      <input
+        className="FilterValue"
+        type="number"
+        step="0"
+        name={props.name}
+        value={props.value}
+        onChange={props.onChange}
+      />
+    );
+  else
+    return (
+      <input
+        className="FilterValue"
+        type="text"
+        name={props.name}
+        value={props.value}
+        onChange={props.onChange}
+      />
+    );
 }
 
 class Filter extends React.Component {
@@ -73,7 +93,7 @@ class Filter extends React.Component {
   render() {
     const fieldType = this.props.getFieldType(this.props.name);
     return (
-      <tr className={this.props.errorMessage ? "Error" : undefined}>
+      <tr>
         <td>
           <Link onClick={this.handleRemove.bind(this)}>✘</Link>{" "}
           <Link onClick={this.handleAddField.bind(this)}>{this.props.name}</Link>{" "}
@@ -110,16 +130,18 @@ function Filters(props) {
   return (
     <form className="Filters">
       <table className="Flat">
-        {props.query.filters.map((filter, index) => (
-          <Filter
-            {...filter}
-            key={index}
-            index={index}
-            query={props.query}
-            handleQueryChange={props.handleQueryChange}
-            getFieldType={props.getFieldType}
-          />
-        ))}
+        <tbody>
+          {props.query.filters.map((filter, index) => (
+            <Filter
+              {...filter}
+              key={index}
+              index={index}
+              query={props.query}
+              handleQueryChange={props.handleQueryChange}
+              getFieldType={props.getFieldType}
+            />
+          ))}
+        </tbody>
       </table>
     </form>
   );

@@ -89,11 +89,9 @@ select {
 .Filters p {
   margin: 5px;
 }
-.Filters .Error * {
-  background-color: #ff4040;
-}
-.Filters .Error {
-  background-color: #ff4040;
+select.FilterValue,
+input.FilterValue {
+  width: 100%;
 }
 select.Lookup {
   width: 100%;

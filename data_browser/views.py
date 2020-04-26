@@ -166,7 +166,7 @@ def get_data(bound_query):
     if not bound_query.calculated_fields:
         data = []
         for row in qs.values(*bound_query.fields).distinct():
-            data.append([row[f] for f in bound_query.fields])
+            data.append([t.format(row[f]) for f, t in bound_query.fields.items()])
         return data
 
     # preloading
@@ -205,7 +205,7 @@ def get_data(bound_query):
 
     data = []
     for row in qs.distinct():
-        data.append([lookup(row, f) for f in bound_query.fields])
+        data.append([t.format(lookup(row, f)) for f, t in bound_query.fields.items()])
     return data
 
 

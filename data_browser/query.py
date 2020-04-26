@@ -4,6 +4,7 @@ from collections import defaultdict
 
 import dateutil.parser
 from django.urls import reverse
+from django.utils import timezone
 
 ASC, DSC = "asc", "dsc"
 
@@ -115,6 +116,14 @@ class Field(metaclass=MetaField):
     def __init__(self):
         assert False
 
+    @staticmethod
+    def format(value):
+        return value
+
+    @staticmethod
+    def parse(value):
+        return value
+
 
 class StringField(Field):
     lookups = {
@@ -130,10 +139,6 @@ class StringField(Field):
         "not_regex": "string",
         "is_null": "boolean",
     }
-
-    @staticmethod
-    def parse(value):
-        return value
 
 
 class NumberField(Field):
@@ -163,10 +168,15 @@ class TimeField(Field):
         "lte": "time",
         "is_null": "boolean",
     }
+    default_value = timezone.now().strftime("%Y-%m-%d %H:%M")
 
     @staticmethod
     def parse(value):
-        return dateutil.parser.parse(value)
+        return timezone.make_aware(dateutil.parser.parse(value))
+
+    @staticmethod
+    def format(value):
+        return timezone.make_naive(value)
 
 
 class BooleanField(Field):
@@ -268,4 +278,8 @@ class BoundQuery:
 
     @property
     def fields(self):
-        return [f for f in self._query.fields if self._get_field_type(f)]
+        return {
+            f: self._get_field_type(f)
+            for f in self._query.fields
+            if self._get_field_type(f)
+        }
