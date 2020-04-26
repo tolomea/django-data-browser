@@ -22,7 +22,7 @@ def view(query):
 
 
 def test_open_view(view, rf):
-    expected = '<a href="/data_browser/query/app/model/+fa,-fd,fn.html?bob__equals=fred">view</a>'
+    expected = '<a href="/data_browser/query/app.model/+fa,-fd,fn.html?bob__equals=fred">view</a>'
     assert ViewAdmin.open_view(view) == expected
 
 

@@ -72,7 +72,7 @@ class TestQuery:
     def test_url(self, query):
         assert (
             query.url
-            == "/data_browser/query/app/model/+fa,-fd,fn.html?bob__equals=fred"
+            == "/data_browser/query/app.model/+fa,-fd,fn.html?bob__equals=fred"
         )
 
 

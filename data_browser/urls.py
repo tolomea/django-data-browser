@@ -24,9 +24,9 @@ register_converter(Optional, "optional")
 app_name = "data_browser"
 
 urlpatterns = [
-    path("query/<app>/<model>/<optional:fields>.html", query_html, name="query_html"),
-    path("query/<app>/<model>/<optional:fields>.ctx", query_ctx, name="query_ctx"),
-    path("query/<app>/<model>/<optional:fields>.<media>", query, name="query"),
+    path("query/<app>.<model>/<optional:fields>.html", query_html, name="query_html"),
+    path("query/<app>.<model>/<optional:fields>.ctx", query_ctx, name="query_ctx"),
+    path("query/<app>.<model>/<optional:fields>.<media>", query, name="query"),
     path("view/<pk>.<media>", view, name="view"),
     path("", lambda: None, name="root"),
 ]

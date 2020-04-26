@@ -226,7 +226,7 @@ def test_get_fields(all_model_fields):
 @pytest.mark.usefixtures("products")
 def test_query_html(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
@@ -400,7 +400,7 @@ def test_query_html(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_html_bad_fields(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
+        "/data_browser/query/tests.Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
 
@@ -408,7 +408,7 @@ def test_query_html_bad_fields(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_fields(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Product/-size,+name,size_unit,-bob,is_onsale,pooducer__name,producer__name.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
+        "/data_browser/query/tests.Product/-size,+name,size_unit,-bob,is_onsale,pooducer__name,producer__name.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
     assert json.loads(res.content.decode("utf-8"))["data"] == [
@@ -420,7 +420,7 @@ def test_query_json_bad_fields(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_html_bad_model(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Bob/-size,+name,size_unit.html?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Bob/-size,+name,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     assert res.content == b"App 'tests' doesn't have a 'Bob' model."
@@ -429,7 +429,7 @@ def test_query_html_bad_model(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_csv(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Product/-size,+name,size_unit.csv?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Product/-size,+name,size_unit.csv?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
@@ -439,7 +439,7 @@ def test_query_csv(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_json(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests/Product/-size,+name,size_unit.json?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Product/-size,+name,size_unit.json?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))

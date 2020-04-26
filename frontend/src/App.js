@@ -361,8 +361,7 @@ class App extends React.Component {
 
   getPartsForQuery(query) {
     return {
-      app: this.props.model.split(".")[0],
-      model: this.props.model.split(".")[1],
+      model: this.props.model,
       fields: query.fields
         .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
         .join(","),
@@ -380,7 +379,7 @@ class App extends React.Component {
 
   getUrlForQuery(query, media) {
     const parts = this.getPartsForQuery(query);
-    const basePath = `${this.props.baseUrl}query/${parts.app}/${parts.model}`;
+    const basePath = `${this.props.baseUrl}query/${parts.model}`;
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
