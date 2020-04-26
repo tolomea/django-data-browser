@@ -61,25 +61,35 @@ class Filter extends React.Component {
 
   render() {
     return (
-      <p className={this.props.errorMessage ? "Error" : undefined}>
-        <Link onClick={this.handleRemove.bind(this)}>✘</Link>{" "}
-        <Link onClick={this.handleAddField.bind(this)}>{this.props.name}</Link>{" "}
-        <select value={this.props.lookup} onChange={this.handleLookupChange.bind(this)}>
-          {this.props.getFieldType(this.props.name).lookups.map((lookup) => (
-            <option key={lookup.name} value={lookup.name}>
-              {lookup.name}
-            </option>
-          ))}
-        </select>{" "}
-        ={" "}
-        <input
-          type="text"
-          name={`${this.props.name}__${this.props.lookup}`}
-          value={this.props.value}
-          onChange={this.handleValueChange.bind(this)}
-        />
-        {this.props.errorMessage}
-      </p>
+      <tr className={this.props.errorMessage ? "Error" : undefined}>
+        <td>
+          <Link onClick={this.handleRemove.bind(this)}>✘</Link>{" "}
+          <Link onClick={this.handleAddField.bind(this)}>{this.props.name}</Link>{" "}
+        </td>
+        <td>
+          <select
+            className="Lookup"
+            value={this.props.lookup}
+            onChange={this.handleLookupChange.bind(this)}
+          >
+            {this.props.getFieldType(this.props.name).lookups.map((lookup) => (
+              <option key={lookup.name} value={lookup.name}>
+                {lookup.name.replace("_", " ")}
+              </option>
+            ))}
+          </select>
+        </td>
+        <td>=</td>
+        <td>
+          <input
+            type="text"
+            name={`${this.props.name}__${this.props.lookup}`}
+            value={this.props.value}
+            onChange={this.handleValueChange.bind(this)}
+          />
+          {this.props.errorMessage}
+        </td>
+      </tr>
     );
   }
 }
@@ -87,16 +97,18 @@ class Filter extends React.Component {
 function Filters(props) {
   return (
     <form className="Filters">
-      {props.query.filters.map((filter, index) => (
-        <Filter
-          {...filter}
-          key={index}
-          index={index}
-          query={props.query}
-          handleQueryChange={props.handleQueryChange}
-          getFieldType={props.getFieldType}
-        />
-      ))}
+      <table className="Flat">
+        {props.query.filters.map((filter, index) => (
+          <Filter
+            {...filter}
+            key={index}
+            index={index}
+            query={props.query}
+            handleQueryChange={props.handleQueryChange}
+            getFieldType={props.getFieldType}
+          />
+        ))}
+      </table>
     </form>
   );
 }

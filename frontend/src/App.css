@@ -31,7 +31,8 @@ html.html {
 table,
 th,
 td {
-  border: 1px solid black;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
 th,
 td {
@@ -43,6 +44,14 @@ td {
 th {
   text-align: center;
 }
+
+table.Flat,
+table.Flat th,
+table.Flat td {
+  border: none;
+  padding: 3px 1px;
+}
+
 h1 {
   text-align: center;
   margin-bottom: 0;
@@ -50,10 +59,21 @@ h1 {
 p {
   margin: 5px auto;
 }
+
+select,
+input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+input {
+  padding: 3px 6px;
+}
 select {
   display: inline;
   width: auto;
+  padding: 2px;
 }
+
 .MainSpace {
   margin: 0 auto;
   display: flex;
@@ -75,6 +95,9 @@ select {
 .Filters .Error {
   background-color: #ff4040;
 }
+select.Lookup {
+  width: 100%;
+}
 .ToggleLink {
   display: block;
 }
@@ -85,7 +108,7 @@ select {
 .FieldsList {
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 10px;
 }
 
 button.Link {
