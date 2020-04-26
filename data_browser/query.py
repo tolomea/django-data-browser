@@ -105,7 +105,7 @@ class MetaField(type):
 
     @property
     def default_lookup(cls):
-        return list(cls.lookups)[0]
+        return list(cls.lookups)[0] if cls.lookups else None
 
     @property
     def name(cls):
@@ -116,6 +116,7 @@ class MetaField(type):
 
 class Field(metaclass=MetaField):
     concrete = True
+    default_value = ""
 
     def __init__(self):
         assert False
@@ -142,6 +143,7 @@ class StringField(Field):
 
 
 class NumberField(Field):
+    default_value = 0
     lookups = {
         "equals": "number",
         "not_equals": "number",
@@ -174,6 +176,7 @@ class TimeField(Field):
 
 
 class BooleanField(Field):
+    default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
 
     @staticmethod

@@ -67,13 +67,13 @@ def test_get_data_all(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_empty(get_product_data):
+def test_get_data_empty(get_product_data):
     data = get_product_data(0, "", "html", {})
     assert data == []
 
 
 @pytest.mark.usefixtures("products")
-def test_sort(get_product_data):
+def test_get_data_sort(get_product_data):
     data = get_product_data(1, "+size,-name,size_unit", "html", {})
     assert data == [[1, "b", "g"], [1, "a", "g"], [2, "c", "g"]]
 
@@ -223,7 +223,6 @@ def test_get_fields(all_model_fields):
     assert models.NotInAdmin not in all_model_fields
 
 
-@pytest.mark.usefixtures("products")
 def test_query_html(admin_client):
     res = admin_client.get(
         "/data_browser/query/tests.Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
@@ -262,6 +261,8 @@ def test_query_html(admin_client):
                 "not_regex",
                 "is_null",
             ],
+            "defaultLookup": "equals",
+            "defaultValue": "",
             "concrete": True,
         },
         "number": {
@@ -283,6 +284,8 @@ def test_query_html(admin_client):
                 "lte",
                 "is_null",
             ],
+            "defaultLookup": "equals",
+            "defaultValue": 0,
             "concrete": True,
         },
         "time": {
@@ -304,6 +307,8 @@ def test_query_html(admin_client):
                 "lte",
                 "is_null",
             ],
+            "defaultLookup": "equals",
+            "defaultValue": "",
             "concrete": True,
         },
         "boolean": {
@@ -313,9 +318,17 @@ def test_query_html(admin_client):
                 "is_null": {"type": "boolean"},
             },
             "sorted_lookups": ["equals", "not_equals", "is_null"],
+            "defaultLookup": "equals",
+            "defaultValue": True,
             "concrete": True,
         },
-        "calculated": {"lookups": {}, "sorted_lookups": [], "concrete": False},
+        "calculated": {
+            "lookups": {},
+            "sorted_lookups": [],
+            "defaultLookup": None,
+            "defaultValue": "",
+            "concrete": False,
+        },
     }
 
     assert context["fields"] == {
@@ -429,7 +442,6 @@ def test_query_html(admin_client):
     }
 
 
-@pytest.mark.usefixtures("products")
 def test_query_html_bad_fields(admin_client):
     res = admin_client.get(
         "/data_browser/query/tests.Product/-size,+name,size_unit,-bob,is_onsale.html?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
@@ -449,7 +461,6 @@ def test_query_json_bad_fields(admin_client):
     ]
 
 
-@pytest.mark.usefixtures("products")
 def test_query_html_bad_model(admin_client):
     res = admin_client.get(
         "/data_browser/query/tests.Bob/-size,+name,size_unit.html?size__lt=2&id__gt=0"
