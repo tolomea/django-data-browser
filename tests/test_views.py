@@ -164,6 +164,22 @@ def test_get_data_prefetch(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
+def test_get_data_prefetch_with_filter(get_product_data):
+    # query products, join to producer, producer__address
+    data = get_product_data(
+        1,
+        "+name,is_onsale,producer__address__city",
+        "html",
+        {"producer__address__city__not_equals": ["Invercargill"]},
+    )
+    assert data == [
+        ["a", False, "london"],
+        ["b", False, "london"],
+        ["c", False, "london"],
+    ]
+
+
+@pytest.mark.usefixtures("products")
 def test_get_data_no_calculated_so_flat(get_product_data):
     # query products, join the rest
     data = get_product_data(1, "+name,producer__address__city", "html", {})
