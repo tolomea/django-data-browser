@@ -158,18 +158,19 @@ class Toggle extends React.Component {
 }
 
 function Fields(props) {
-  const model_fields = props.fields[props.model];
+  const modelFields = props.fields[props.model];
   return (
     <ul className="FieldsList">
-      {model_fields.sorted_fields.map((field_name) => {
-        const field = model_fields.fields[field_name];
+      {modelFields.sorted_fields.map((field_name) => {
+        const fieldType = props.types[modelFields.fields[field_name].type];
         function handleAddFilter() {
           const newFilters = props.query.filters.slice();
           newFilters.push({
             errorMessage: null,
             name: `${props.path}${field_name}`,
-            lookup: "",
-            value: "",
+            lookup: fieldType.defaultLookup,
+            value:
+              props.types[fieldType.lookups[fieldType.defaultLookup].type].defaultValue,
           });
           props.handleQueryChange({ filters: newFilters });
         }
@@ -186,7 +187,7 @@ function Fields(props) {
 
         return (
           <li key={field_name}>
-            {props.types[field.type].concrete ? (
+            {fieldType.concrete ? (
               <Link onClick={handleAddFilter}>Y</Link>
             ) : (
               <>&nbsp;&nbsp;</>
@@ -195,8 +196,8 @@ function Fields(props) {
           </li>
         );
       })}
-      {model_fields.sorted_fks.map((fk_name) => {
-        const fk = model_fields.fks[fk_name];
+      {modelFields.sorted_fks.map((fk_name) => {
+        const fk = modelFields.fks[fk_name];
         return (
           <li key={fk_name}>
             <Toggle title={fk_name}>
@@ -221,6 +222,8 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.query.fields.map((field, index) => {
+          const fieldType = props.getFieldType(field.name);
+
           function handleRemove() {
             const newFields = props.query.fields.slice();
             newFields.splice(index, 1);
@@ -234,8 +237,10 @@ function ResultsHead(props) {
             newFilters.push({
               errorMessage: null,
               name: field.name,
-              lookup: "",
-              value: "",
+              lookup: fieldType.defaultLookup,
+              value:
+                props.types[fieldType.lookups[fieldType.defaultLookup].type]
+                  .defaultValue,
             });
             props.handleQueryChange({
               filters: newFilters,
@@ -291,7 +296,12 @@ function ResultsBody(props) {
 function Results(props) {
   return (
     <table>
-      <ResultsHead query={props.query} handleQueryChange={props.handleQueryChange} />
+      <ResultsHead
+        query={props.query}
+        handleQueryChange={props.handleQueryChange}
+        types={props.types}
+        getFieldType={props.getFieldType}
+      />
       <ResultsBody data={props.data} />
     </table>
   );
@@ -333,6 +343,8 @@ function Page(props) {
           query={props.query}
           handleQueryChange={props.handleQueryChange}
           data={props.data}
+          types={props.types}
+          getFieldType={props.getFieldType}
         />
       </div>
     </div>

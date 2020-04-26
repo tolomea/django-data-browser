@@ -108,7 +108,7 @@ select.Lookup {
 .FieldsList {
   list-style-type: none;
   padding: 0;
-  margin: 10px;
+  margin: 0px 10px;
 }
 
 button.Link {
