@@ -76,6 +76,10 @@ def get_all_admin_fields(request):
             all_admin_fields[inline.model].add(
                 _get_foreign_key(model, inline.model, inline.fk_name).name
             )
+    # we always have pk
+    for fields in all_admin_fields.values():
+        if fields:
+            fields.add("pk")
     return all_admin_fields
 
 
