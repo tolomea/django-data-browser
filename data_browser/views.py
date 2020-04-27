@@ -335,11 +335,7 @@ def json_response(request, query):
                 for filter_ in bound_query.filters
             ],
             "fields": [
-                {
-                    "name": name,
-                    "sort": sort_direction,
-                    "concrete": field.concrete,  # TODO concrete shouldn't be here
-                }
+                {"name": name, "sort": sort_direction}
                 for (name, field, sort_direction) in bound_query.sort_fields
             ],
         }

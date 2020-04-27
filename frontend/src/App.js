@@ -85,7 +85,6 @@ class Filter extends React.Component {
     newFields.push({
       name: this.props.name,
       sort: null,
-      concrete: false,
     });
     this.props.handleQueryChange({ fields: newFields });
   }
@@ -202,7 +201,6 @@ function Fields(props) {
           newFields.push({
             name: `${props.path}${field_name}`,
             sort: null,
-            concrete: false,
           });
           props.handleQueryChange({ fields: newFields });
         }
@@ -283,7 +281,7 @@ function ResultsHead(props) {
           return (
             <th key={field.name}>
               <Link onClick={handleRemove}>✘</Link>{" "}
-              {field.concrete ? (
+              {fieldType.concrete ? (
                 <>
                   <Link onClick={handleAddFilter}>Y</Link>{" "}
                   <Link onClick={handleToggleSort}>{field.name}</Link>{" "}
