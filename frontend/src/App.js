@@ -183,7 +183,8 @@ function Fields(props) {
   return (
     <ul className="FieldsList">
       {modelFields.sorted_fields.map((field_name) => {
-        const fieldType = props.types[modelFields.fields[field_name].type];
+        const modelField = modelFields.fields[field_name];
+        const fieldType = props.types[modelField.type];
         function handleAddFilter() {
           const newFilters = props.query.filters.slice();
           newFilters.push({
@@ -207,7 +208,7 @@ function Fields(props) {
 
         return (
           <li key={field_name}>
-            {fieldType.concrete ? (
+            {modelField.concrete ? (
               <Link onClick={handleAddFilter}>Y</Link>
             ) : (
               <>&nbsp;&nbsp;</>
@@ -242,7 +243,8 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.query.fields.map((field, index) => {
-          const fieldType = props.getFieldType(field.name);
+          const modelField = props.getModelField(field.name);
+          const fieldType = props.types[modelField.type];
 
           function handleRemove() {
             const newFields = props.query.fields.slice();
@@ -281,7 +283,7 @@ function ResultsHead(props) {
           return (
             <th key={field.name}>
               <Link onClick={handleRemove}>✘</Link>{" "}
-              {fieldType.concrete ? (
+              {modelField.concrete ? (
                 <>
                   <Link onClick={handleAddFilter}>Y</Link>{" "}
                   <Link onClick={handleToggleSort}>{field.name}</Link>{" "}
@@ -321,6 +323,7 @@ function Results(props) {
         handleQueryChange={props.handleQueryChange}
         types={props.types}
         getFieldType={props.getFieldType}
+        getModelField={props.getModelField}
       />
       <ResultsBody data={props.data} />
     </table>
@@ -361,6 +364,7 @@ function Page(props) {
           data={props.data}
           types={props.types}
           getFieldType={props.getFieldType}
+          getModelField={props.getModelField}
         />
       </div>
     </div>
@@ -435,11 +439,16 @@ class App extends React.Component {
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
-  getFieldType(path) {
+  getModelField(path) {
     const parts = path.split("__");
     const field = parts.slice(-1);
     const model = this.getFkModel(parts.slice(0, -1).join("__"));
-    const type = this.props.fields[model].fields[field]["type"];
+    return this.props.fields[model].fields[field];
+  }
+
+  getFieldType(path) {
+    const modelField = this.getModelField(path);
+    const type = modelField["type"];
     return this.props.types[type];
   }
 
@@ -466,6 +475,7 @@ class App extends React.Component {
         getFieldType={this.getFieldType.bind(this)}
         fields={this.props.fields}
         types={this.props.types}
+        getModelField={this.getModelField.bind(this)}
       />
     );
   }

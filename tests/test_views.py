@@ -279,7 +279,6 @@ def test_query_html(admin_client):
             ],
             "defaultLookup": "equals",
             "defaultValue": "",
-            "concrete": True,
         },
         "number": {
             "lookups": {
@@ -302,7 +301,6 @@ def test_query_html(admin_client):
             ],
             "defaultLookup": "equals",
             "defaultValue": 0,
-            "concrete": True,
         },
         "time": {
             "lookups": {
@@ -325,7 +323,6 @@ def test_query_html(admin_client):
             ],
             "defaultLookup": "equals",
             "defaultValue": ANY(str),
-            "concrete": True,
         },
         "boolean": {
             "lookups": {
@@ -336,37 +333,38 @@ def test_query_html(admin_client):
             "sorted_lookups": ["equals", "not_equals", "is_null"],
             "defaultLookup": "equals",
             "defaultValue": True,
-            "concrete": True,
         },
         "calculated": {
             "lookups": {},
             "sorted_lookups": [],
             "defaultLookup": None,
             "defaultValue": "",
-            "concrete": False,
         },
     }
 
     assert context["fields"] == {
         "auth.Group": {
-            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
+            "fields": {
+                "name": {"type": "string", "concrete": True},
+                "pk": {"type": "number", "concrete": True},
+            },
             "fks": {},
             "sorted_fields": ["pk", "name"],
             "sorted_fks": [],
         },
         "auth.User": {
             "fields": {
-                "date_joined": {"type": "time"},
-                "last_name": {"type": "string"},
-                "last_login": {"type": "time"},
-                "pk": {"type": "number"},
-                "is_superuser": {"type": "boolean"},
-                "is_active": {"type": "boolean"},
-                "username": {"type": "string"},
-                "password": {"type": "string"},
-                "is_staff": {"type": "boolean"},
-                "first_name": {"type": "string"},
-                "email": {"type": "string"},
+                "last_name": {"type": "string", "concrete": True},
+                "is_superuser": {"type": "boolean", "concrete": True},
+                "last_login": {"type": "time", "concrete": True},
+                "first_name": {"type": "string", "concrete": True},
+                "username": {"type": "string", "concrete": True},
+                "email": {"type": "string", "concrete": True},
+                "is_active": {"type": "boolean", "concrete": True},
+                "password": {"type": "string", "concrete": True},
+                "date_joined": {"type": "time", "concrete": True},
+                "is_staff": {"type": "boolean", "concrete": True},
+                "pk": {"type": "number", "concrete": True},
             },
             "fks": {},
             "sorted_fields": [
@@ -385,64 +383,79 @@ def test_query_html(admin_client):
             "sorted_fks": [],
         },
         "tests.InAdmin": {
-            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
+            "fields": {
+                "name": {"type": "string", "concrete": True},
+                "pk": {"type": "number", "concrete": True},
+            },
             "fks": {},
             "sorted_fields": ["pk", "name"],
             "sorted_fks": [],
         },
         "tests.Tag": {
-            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
+            "fields": {
+                "name": {"type": "string", "concrete": True},
+                "pk": {"type": "number", "concrete": True},
+            },
             "fks": {},
             "sorted_fields": ["pk", "name"],
             "sorted_fks": [],
         },
         "tests.Address": {
-            "fields": {"pk": {"type": "number"}, "city": {"type": "string"}},
+            "fields": {
+                "pk": {"type": "number", "concrete": True},
+                "city": {"type": "string", "concrete": True},
+            },
             "fks": {},
             "sorted_fields": ["pk", "city"],
             "sorted_fks": [],
         },
         "tests.Producer": {
-            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
+            "fields": {
+                "name": {"type": "string", "concrete": True},
+                "pk": {"type": "number", "concrete": True},
+            },
             "fks": {"address": {"model": "tests.Address"}},
             "sorted_fields": ["pk", "name"],
             "sorted_fks": ["address"],
         },
         "tests.Product": {
             "fields": {
-                "is_onsale": {"type": "calculated"},
-                "name": {"type": "string"},
-                "pk": {"type": "number"},
-                "size": {"type": "number"},
-                "size_unit": {"type": "string"},
-                "onsale": {"type": "boolean"},
+                "is_onsale": {"type": "calculated", "concrete": False},
+                "onsale": {"type": "boolean", "concrete": True},
+                "name": {"type": "string", "concrete": True},
+                "size_unit": {"type": "string", "concrete": True},
+                "pk": {"type": "number", "concrete": True},
+                "size": {"type": "number", "concrete": True},
             },
             "fks": {
+                "default_sku": {"model": "tests.SKU"},
                 "producer": {"model": "tests.Producer"},
                 "model_not_in_admin": {"model": "tests.NotInAdmin"},
-                "default_sku": {"model": "tests.SKU"},
             },
             "sorted_fields": ["pk", "is_onsale", "name", "onsale", "size", "size_unit"],
             "sorted_fks": ["default_sku", "model_not_in_admin", "producer"],
         },
         "tests.SKU": {
-            "fields": {"pk": {"type": "number"}, "name": {"type": "string"}},
+            "fields": {
+                "name": {"type": "string", "concrete": True},
+                "pk": {"type": "number", "concrete": True},
+            },
             "fks": {"product": {"model": "tests.Product"}},
             "sorted_fields": ["pk", "name"],
             "sorted_fks": ["product"],
         },
         "data_browser.View": {
             "fields": {
-                "created_time": {"type": "time"},
-                "app": {"type": "string"},
-                "public": {"type": "boolean"},
-                "name": {"type": "string"},
-                "pk": {"type": "string"},
-                "description": {"type": "string"},
-                "fields": {"type": "string"},
-                "model": {"type": "string"},
-                "query": {"type": "string"},
-                "id": {"type": "string"},
+                "model": {"type": "string", "concrete": True},
+                "fields": {"type": "string", "concrete": True},
+                "name": {"type": "string", "concrete": True},
+                "description": {"type": "string", "concrete": True},
+                "public": {"type": "boolean", "concrete": True},
+                "app": {"type": "string", "concrete": True},
+                "id": {"type": "string", "concrete": True},
+                "created_time": {"type": "time", "concrete": True},
+                "query": {"type": "string", "concrete": True},
+                "pk": {"type": "string", "concrete": True},
             },
             "fks": {"owner": {"model": "auth.User"}},
             "sorted_fields": [

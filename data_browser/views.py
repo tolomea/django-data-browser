@@ -223,7 +223,6 @@ def get_context(request, base_model):
             "sorted_lookups": list(type_.lookups),
             "defaultLookup": type_.default_lookup,
             "defaultValue": type_.default_value,
-            "concrete": type_.concrete,
         }
         for name, type_ in TYPES.items()
     }
@@ -235,7 +234,7 @@ def get_context(request, base_model):
     all_model_fields = {
         model_name(model): {
             "fields": {
-                name: {"type": type_.name}
+                name: {"type": type_.name, "concrete": type_.concrete}
                 for name, type_ in model_fields["fields"].items()
             },
             "fks": {
