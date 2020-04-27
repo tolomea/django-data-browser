@@ -2,14 +2,14 @@ import pytest
 from data_browser.query import (
     ASC,
     DSC,
-    BooleanField,
+    BooleanFieldType,
     BoundQuery,
-    CalculatedField,
+    CalculatedFieldType,
     Filter,
-    NumberField,
+    NumberFieldType,
     Query,
-    StringField,
-    TimeField,
+    StringFieldType,
+    TimeFieldType,
 )
 
 
@@ -29,25 +29,25 @@ def bound_query(query):
     all_model_fields = {
         "app.model": {
             "fields": {
-                "fa": StringField,
-                "fd": StringField,
-                "fn": StringField,
-                "bob": StringField,
+                "fa": StringFieldType,
+                "fd": StringFieldType,
+                "fn": StringFieldType,
+                "bob": StringFieldType,
             },
             "fks": {"tom": "app.Tom"},
         },
         "app.Tom": {
-            "fields": {"jones": StringField},
+            "fields": {"jones": StringFieldType},
             "fks": {"michael": "app.Michael"},
         },
-        "app.Michael": {"fields": {"bolton": StringField}, "fks": {}},
+        "app.Michael": {"fields": {"bolton": StringFieldType}, "fks": {}},
     }
     return BoundQuery(query, "app.model", all_model_fields)
 
 
 @pytest.fixture
 def filter(query):
-    return Filter("bob", 0, StringField, "equals", "fred")
+    return Filter("bob", 0, StringFieldType, "equals", "fred")
 
 
 class TestQuery:
@@ -86,70 +86,70 @@ class TestBoundQuery:
 
     def test_calculated_fields(self, bound_query):
         assert list(bound_query.calculated_fields) == []
-        bound_query.all_model_fields["app.model"]["fields"]["fa"] = CalculatedField
+        bound_query.all_model_fields["app.model"]["fields"]["fa"] = CalculatedFieldType
         assert list(bound_query.calculated_fields) == ["fa"]
 
     def test_sort_fields(self, bound_query):
         assert list(bound_query.sort_fields) == [
-            ("fa", StringField, ASC),
-            ("fd", StringField, DSC),
-            ("fn", StringField, None),
+            ("fa", StringFieldType, ASC),
+            ("fd", StringFieldType, DSC),
+            ("fn", StringFieldType, None),
         ]
 
     def test_filters(self, bound_query, filter):
         assert list(bound_query.filters) == [filter]
 
 
-class TestField:
+class TestFieldType:
     def test_repr(self):
-        assert repr(StringField) == f"StringField"
+        assert repr(StringFieldType) == f"StringFieldType"
 
 
-class TestStringField:
+class TestStringFieldType:
     def test_validate(self):
-        assert Filter("bob", 0, StringField, "contains", "hello").is_valid
-        assert not Filter("bob", 0, StringField, "pontains", "hello").is_valid
+        assert Filter("bob", 0, StringFieldType, "contains", "hello").is_valid
+        assert not Filter("bob", 0, StringFieldType, "pontains", "hello").is_valid
 
     def test_default_lookup(self):
-        assert StringField.default_lookup == "equals"
+        assert StringFieldType.default_lookup == "equals"
 
 
-class TestNumberField:
+class TestNumberFieldType:
     def test_validate(self):
-        assert Filter("bob", 0, NumberField, "gt", "6.1").is_valid
-        assert not Filter("bob", 0, NumberField, "pontains", "6.1").is_valid
-        assert not Filter("bob", 0, NumberField, "gt", "hello").is_valid
-        assert Filter("bob", 0, NumberField, "is_null", "True").is_valid
-        assert not Filter("bob", 0, NumberField, "is_null", "hello").is_valid
+        assert Filter("bob", 0, NumberFieldType, "gt", "6.1").is_valid
+        assert not Filter("bob", 0, NumberFieldType, "pontains", "6.1").is_valid
+        assert not Filter("bob", 0, NumberFieldType, "gt", "hello").is_valid
+        assert Filter("bob", 0, NumberFieldType, "is_null", "True").is_valid
+        assert not Filter("bob", 0, NumberFieldType, "is_null", "hello").is_valid
 
     def test_default_lookup(self):
-        assert NumberField.default_lookup == "equals"
+        assert NumberFieldType.default_lookup == "equals"
 
 
-class TestTimeField:
+class TestTimeFieldType:
     def test_validate(self):
-        assert Filter("bob", 0, TimeField, "gt", "2018-03-20T22:31:23").is_valid
-        assert not Filter("bob", 0, TimeField, "gt", "hello").is_valid
+        assert Filter("bob", 0, TimeFieldType, "gt", "2018-03-20T22:31:23").is_valid
+        assert not Filter("bob", 0, TimeFieldType, "gt", "hello").is_valid
         assert not Filter(
-            "bob", 0, TimeField, "pontains", "2018-03-20T22:31:23"
+            "bob", 0, TimeFieldType, "pontains", "2018-03-20T22:31:23"
         ).is_valid
-        assert Filter("bob", 0, TimeField, "is_null", "True").is_valid
-        assert not Filter("bob", 0, TimeField, "is_null", "hello").is_valid
+        assert Filter("bob", 0, TimeFieldType, "is_null", "True").is_valid
+        assert not Filter("bob", 0, TimeFieldType, "is_null", "hello").is_valid
 
     def test_default_lookup(self):
-        assert TimeField.default_lookup == "equals"
+        assert TimeFieldType.default_lookup == "equals"
 
 
-class TestBooleanField:
+class TestBooleanFieldType:
     def test_validate(self):
-        assert Filter("bob", 0, BooleanField, "equals", "True").is_valid
-        assert not Filter("bob", 0, BooleanField, "equals", "hello").is_valid
-        assert not Filter("bob", 0, BooleanField, "pontains", "True").is_valid
+        assert Filter("bob", 0, BooleanFieldType, "equals", "True").is_valid
+        assert not Filter("bob", 0, BooleanFieldType, "equals", "hello").is_valid
+        assert not Filter("bob", 0, BooleanFieldType, "pontains", "True").is_valid
 
     def test_default_lookup(self):
-        assert BooleanField.default_lookup == "equals"
+        assert BooleanFieldType.default_lookup == "equals"
 
 
-class TestCalculatedField:
+class TestCalculatedFieldType:
     def test_validate(self):
-        assert not Filter("bob", 0, CalculatedField, "gt", "1").is_valid
+        assert not Filter("bob", 0, CalculatedFieldType, "gt", "1").is_valid

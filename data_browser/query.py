@@ -94,7 +94,7 @@ class Query:
         }
 
 
-class MetaField(type):
+class MetaFieldType(type):
     def __repr__(cls):
         return cls.__name__
 
@@ -105,11 +105,11 @@ class MetaField(type):
     @property
     def name(cls):
         name = cls.__name__.lower()
-        assert name.endswith("field")
-        return name[: -len("field")]
+        assert name.endswith("fieldtype")
+        return name[: -len("fieldtype")]
 
 
-class Field(metaclass=MetaField):
+class FieldType(metaclass=MetaFieldType):
     concrete = True
     default_value = ""
 
@@ -125,7 +125,7 @@ class Field(metaclass=MetaField):
         return value
 
 
-class StringField(Field):
+class StringFieldType(FieldType):
     lookups = {
         "equals": "string",
         "contains": "string",
@@ -141,7 +141,7 @@ class StringField(Field):
     }
 
 
-class NumberField(Field):
+class NumberFieldType(FieldType):
     default_value = 0
     lookups = {
         "equals": "number",
@@ -158,7 +158,7 @@ class NumberField(Field):
         return float(value)
 
 
-class TimeField(Field):
+class TimeFieldType(FieldType):
     lookups = {
         "equals": "time",
         "not_equals": "time",
@@ -179,7 +179,7 @@ class TimeField(Field):
         return timezone.make_naive(value)
 
 
-class BooleanField(Field):
+class BooleanFieldType(FieldType):
     default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
 
@@ -194,14 +194,20 @@ class BooleanField(Field):
             raise ValueError("Expected 'true' or 'false'")
 
 
-class CalculatedField(Field):
+class CalculatedFieldType(FieldType):
     lookups = {}
     concrete = False
 
 
 TYPES = {
     f.name: f
-    for f in [StringField, NumberField, TimeField, BooleanField, CalculatedField]
+    for f in [
+        StringFieldType,
+        NumberFieldType,
+        TimeFieldType,
+        BooleanFieldType,
+        CalculatedFieldType,
+    ]
 }
 
 
@@ -235,7 +241,7 @@ class Filter:
 
 class BoundQuery:
     def __init__(self, query, root, all_model_fields):
-        # all_model_fields = {model: {"fields": {field_name, Field}, "fks": {field_name: model}}}
+        # all_model_fields = {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
         self._query = query
         self.app = query.app
         self.model = query.model

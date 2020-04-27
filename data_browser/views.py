@@ -26,13 +26,13 @@ from .query import (
     ASC,
     DSC,
     TYPES,
-    BooleanField,
+    BooleanFieldType,
     BoundQuery,
-    CalculatedField,
-    NumberField,
+    CalculatedFieldType,
+    NumberFieldType,
     Query,
-    StringField,
-    TimeField,
+    StringFieldType,
+    TimeFieldType,
 )
 
 
@@ -41,7 +41,7 @@ def get_model(app, model):
 
 
 FIELD_MAP = [
-    ((models.BooleanField, models.NullBooleanField), BooleanField),
+    ((models.BooleanField, models.NullBooleanField), BooleanFieldType),
     (
         (
             models.CharField,
@@ -49,14 +49,14 @@ FIELD_MAP = [
             models.GenericIPAddressField,
             models.UUIDField,
         ),
-        StringField,
+        StringFieldType,
     ),
-    ((models.DateTimeField, models.DateField), TimeField),
+    ((models.DateTimeField, models.DateField), TimeFieldType),
     (
         (models.DecimalField, models.FloatField, models.IntegerField, models.AutoField),
-        NumberField,
+        NumberFieldType,
     ),
-    ((type(None),), CalculatedField),
+    ((type(None),), CalculatedFieldType),
     ((models.FileField,), None),
 ]
 
@@ -84,7 +84,7 @@ def get_all_admin_fields(request):
 
 
 def get_fields_for_model(model, admin_fields):
-    # {"fields": {field_name, Field}, "fks": {field_name: model}}
+    # {"fields": {field_name, FieldType}, "fks": {field_name: model}}
     fields = {}
     fks = {}
 
@@ -111,12 +111,12 @@ def get_fields_for_model(model, admin_fields):
 
 
 def get_all_model_fields(admin_fields):
-    # {model: {"fields": {field_name, Field}, "fks": {field_name: model}}}
+    # {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
     return {model: get_fields_for_model(model, admin_fields) for model in admin_fields}
 
 
 def get_django_lookup(field_type, lookup):
-    if field_type == StringField and lookup == "equals":
+    if field_type == StringFieldType and lookup == "equals":
         return "iexact"
     else:
         lookup = {
