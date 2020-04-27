@@ -333,15 +333,6 @@ function Page(props) {
   return (
     <div id="body">
       <h1>{props.model}</h1>
-      <p>
-        <a href={props.getUrlForQuery(props.query, "csv")}>Download as CSV</a>
-      </p>
-      <p>
-        <a href={props.getUrlForQuery(props.query, "json")}>View as JSON</a>
-      </p>
-      <p>
-        <a href={props.saveLink}>Save View</a>
-      </p>
 
       <Filters
         query={props.query}
@@ -349,7 +340,12 @@ function Page(props) {
         getFieldType={props.getFieldType}
       />
 
-      <p>Showing {props.data.length} results</p>
+      <p>
+        Showing {props.data.length} results -{" "}
+        <a href={props.getUrlForQuery(props.query, "csv")}>Download as CSV</a> -{" "}
+        <a href={props.getUrlForQuery(props.query, "json")}>View as JSON</a> -{" "}
+        <a href={props.saveLink}>Save View</a>
+      </p>
       <div className="MainSpace">
         <div>
           <Fields
