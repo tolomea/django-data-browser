@@ -97,12 +97,12 @@ def get_fields_for_model(model, admin_fields):
             if isinstance(field, models.ForeignKey):
                 fks[field_name] = field.related_model
             elif isinstance(field, type(None)):
-                fields[field_name] = {"type": CalculatedFieldType}
+                fields[field_name] = {"type": CalculatedFieldType, "concrete": False}
             else:
                 for django_types, field_type in FIELD_MAP:
                     if isinstance(field, django_types):
                         if field_type:
-                            fields[field_name] = {"type": field_type}
+                            fields[field_name] = {"type": field_type, "concrete": True}
                         break
                 else:  # pragma: no cover
                     print(
@@ -235,7 +235,7 @@ def get_context(request, base_model):
     all_model_fields = {
         model_name(model): {
             "fields": {
-                name: {"type": field["type"].name, "concrete": field["type"].concrete}
+                name: {"type": field["type"].name, "concrete": field["concrete"]}
                 for name, field in model_fields["fields"].items()
             },
             "fks": {
