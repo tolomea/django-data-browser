@@ -4,7 +4,6 @@ from data_browser.query import (
     DSC,
     BooleanFieldType,
     BoundQuery,
-    CalculatedFieldType,
     Filter,
     NumberFieldType,
     Query,
@@ -29,18 +28,21 @@ def bound_query(query):
     all_model_fields = {
         "app.model": {
             "fields": {
-                "fa": {"type": StringFieldType},
-                "fd": {"type": StringFieldType},
-                "fn": {"type": StringFieldType},
-                "bob": {"type": StringFieldType},
+                "fa": {"type": StringFieldType, "concrete": True},
+                "fd": {"type": StringFieldType, "concrete": True},
+                "fn": {"type": StringFieldType, "concrete": True},
+                "bob": {"type": StringFieldType, "concrete": True},
             },
             "fks": {"tom": "app.Tom"},
         },
         "app.Tom": {
-            "fields": {"jones": {"type": StringFieldType}},
+            "fields": {"jones": {"type": StringFieldType, "concrete": True}},
             "fks": {"michael": "app.Michael"},
         },
-        "app.Michael": {"fields": {"bolton": {"type": StringFieldType}}, "fks": {}},
+        "app.Michael": {
+            "fields": {"bolton": {"type": StringFieldType, "concrete": True}},
+            "fks": {},
+        },
     }
     return BoundQuery(query, "app.model", all_model_fields)
 
@@ -87,7 +89,8 @@ class TestBoundQuery:
     def test_calculated_fields(self, bound_query):
         assert list(bound_query.calculated_fields) == []
         bound_query.all_model_fields["app.model"]["fields"]["fa"] = {
-            "type": CalculatedFieldType
+            "type": StringFieldType,
+            "concrete": False,
         }
         assert list(bound_query.calculated_fields) == ["fa"]
 
@@ -150,8 +153,3 @@ class TestBooleanFieldType:
 
     def test_default_lookup(self):
         assert BooleanFieldType.default_lookup == "equals"
-
-
-class TestCalculatedFieldType:
-    def test_validate(self):
-        assert not Filter("bob", 0, CalculatedFieldType, "gt", "1").is_valid

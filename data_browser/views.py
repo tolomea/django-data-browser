@@ -28,7 +28,6 @@ from .query import (
     TYPES,
     BooleanFieldType,
     BoundQuery,
-    CalculatedFieldType,
     NumberFieldType,
     Query,
     StringFieldType,
@@ -97,7 +96,7 @@ def get_fields_for_model(model, admin_fields):
             if isinstance(field, models.ForeignKey):
                 fks[field_name] = field.related_model
             elif isinstance(field, type(None)):
-                fields[field_name] = {"type": CalculatedFieldType, "concrete": False}
+                fields[field_name] = {"type": StringFieldType, "concrete": False}
             else:
                 for django_types, field_type in FIELD_MAP:
                     if isinstance(field, django_types):

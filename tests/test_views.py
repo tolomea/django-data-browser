@@ -334,12 +334,6 @@ def test_query_html(admin_client):
             "defaultLookup": "equals",
             "defaultValue": True,
         },
-        "calculated": {
-            "lookups": {},
-            "sorted_lookups": [],
-            "defaultLookup": None,
-            "defaultValue": "",
-        },
     }
 
     assert context["fields"] == {
@@ -420,7 +414,7 @@ def test_query_html(admin_client):
         },
         "tests.Product": {
             "fields": {
-                "is_onsale": {"type": "calculated", "concrete": False},
+                "is_onsale": {"type": "string", "concrete": False},
                 "onsale": {"type": "boolean", "concrete": True},
                 "name": {"type": "string", "concrete": True},
                 "size_unit": {"type": "string", "concrete": True},

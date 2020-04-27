@@ -110,7 +110,6 @@ class MetaFieldType(type):
 
 
 class FieldType(metaclass=MetaFieldType):
-    concrete = True
     default_value = ""
 
     def __init__(self):
@@ -194,20 +193,9 @@ class BooleanFieldType(FieldType):
             raise ValueError("Expected 'true' or 'false'")
 
 
-class CalculatedFieldType(FieldType):
-    lookups = {}
-    concrete = False
-
-
 TYPES = {
     f.name: f
-    for f in [
-        StringFieldType,
-        NumberFieldType,
-        TimeFieldType,
-        BooleanFieldType,
-        CalculatedFieldType,
-    ]
+    for f in [StringFieldType, NumberFieldType, TimeFieldType, BooleanFieldType]
 }
 
 
@@ -256,7 +244,6 @@ class BoundQuery:
             if model is None:
                 return None
         res = self.all_model_fields[model]["fields"].get(parts[-1])
-        print(type(res), res)
         return res
 
     @property
@@ -273,7 +260,7 @@ class BoundQuery:
         res = set()
         for name in self._query.fields:
             field = self._get_field(name)
-            if field and not field["type"].concrete:
+            if field and not field["concrete"]:
                 res.add(name)
         return res
 
