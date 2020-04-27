@@ -213,12 +213,9 @@ def get_data(bound_query):
     return data
 
 
-def get_context(request, app, model, fields):  # should really only need app and model
-    query = Query.from_request(app, model.__name__, fields, "html", request.GET)
-
+def get_context(request, base_model):
     admin_fields = get_all_admin_fields(request)
     all_model_fields = get_all_model_fields(admin_fields)
-    bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
 
     types = {
         name: {
@@ -253,7 +250,7 @@ def get_context(request, app, model, fields):  # should really only need app and
     }
 
     return {
-        "model": f"{bound_query.app}.{bound_query.model}",
+        "model": model_name(base_model),
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "types": types,
@@ -267,18 +264,17 @@ def query_ctx(request, *, app, model, fields=""):  # pragma: no cover
         model = get_model(app, model)
     except LookupError as e:
         return HttpResponse(e)
-    return JsonResponse(get_context(request, app, model, fields))
+    return JsonResponse(get_context(request, model))
 
 
 @admin_decorators.staff_member_required
 def query_html(request, *, app, model, fields=""):
-
     try:
         model = get_model(app, model)
     except LookupError as e:
         return HttpResponse(e)
 
-    data = get_context(request, app, model, fields)
+    data = get_context(request, model)
     data = json.dumps(data)
     data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
 
