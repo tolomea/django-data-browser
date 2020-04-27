@@ -56,7 +56,6 @@ FIELD_MAP = [
         (models.DecimalField, models.FloatField, models.IntegerField, models.AutoField),
         NumberFieldType,
     ),
-    ((type(None),), CalculatedFieldType),
     ((models.FileField,), None),
 ]
 
@@ -97,11 +96,13 @@ def get_fields_for_model(model, admin_fields):
         if not isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             if isinstance(field, models.ForeignKey):
                 fks[field_name] = field.related_model
+            elif isinstance(field, type(None)):
+                fields[field_name] = {"type": CalculatedFieldType}
             else:
                 for django_types, field_type in FIELD_MAP:
                     if isinstance(field, django_types):
                         if field_type:
-                            fields[field_name] = field_type
+                            fields[field_name] = {"type": field_type}
                         break
                 else:  # pragma: no cover
                     print(
@@ -234,8 +235,8 @@ def get_context(request, base_model):
     all_model_fields = {
         model_name(model): {
             "fields": {
-                name: {"type": type_.name, "concrete": type_.concrete}
-                for name, type_ in model_fields["fields"].items()
+                name: {"type": field["type"].name, "concrete": field["type"].concrete}
+                for name, field in model_fields["fields"].items()
             },
             "fks": {
                 name: {"model": model_name(rel_model)}

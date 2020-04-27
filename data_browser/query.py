@@ -248,44 +248,46 @@ class BoundQuery:
         self.all_model_fields = all_model_fields
         self.root = root
 
-    def _get_field_type(self, path):
+    def _get_field(self, path):
         parts = path.split("__")
         model = self.root
         for part in parts[:-1]:
             model = self.all_model_fields[model]["fks"].get(part)
             if model is None:
                 return None
-        return self.all_model_fields[model]["fields"].get(parts[-1])
+        res = self.all_model_fields[model]["fields"].get(parts[-1])
+        print(type(res), res)
+        return res
 
     @property
     def sort_fields(self):
         res = []
         for name, direction in self._query.fields.items():
-            type_ = self._get_field_type(name)
-            if type_:
-                res.append((name, type_, direction))
+            field = self._get_field(name)
+            if field:
+                res.append((name, field["type"], direction))
         return res
 
     @property
     def calculated_fields(self):
         res = set()
         for name in self._query.fields:
-            type_ = self._get_field_type(name)
-            if type_ and not type_.concrete:
+            field = self._get_field(name)
+            if field and not field["type"].concrete:
                 res.add(name)
         return res
 
     @property
     def filters(self):
         for i, (name, lookup, value) in enumerate(self._query.filters):
-            type_ = self._get_field_type(name)
-            if type_:
-                yield Filter(name, i, type_, lookup, value)
+            field = self._get_field(name)
+            if field:
+                yield Filter(name, i, field["type"], lookup, value)
 
     @property
     def fields(self):
         return {
-            f: self._get_field_type(f)
+            f: self._get_field(f)["type"]
             for f in self._query.fields
-            if self._get_field_type(f)
+            if self._get_field(f)
         }

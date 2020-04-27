@@ -29,18 +29,18 @@ def bound_query(query):
     all_model_fields = {
         "app.model": {
             "fields": {
-                "fa": StringFieldType,
-                "fd": StringFieldType,
-                "fn": StringFieldType,
-                "bob": StringFieldType,
+                "fa": {"type": StringFieldType},
+                "fd": {"type": StringFieldType},
+                "fn": {"type": StringFieldType},
+                "bob": {"type": StringFieldType},
             },
             "fks": {"tom": "app.Tom"},
         },
         "app.Tom": {
-            "fields": {"jones": StringFieldType},
+            "fields": {"jones": {"type": StringFieldType}},
             "fks": {"michael": "app.Michael"},
         },
-        "app.Michael": {"fields": {"bolton": StringFieldType}, "fks": {}},
+        "app.Michael": {"fields": {"bolton": {"type": StringFieldType}}, "fks": {}},
     }
     return BoundQuery(query, "app.model", all_model_fields)
 
@@ -86,7 +86,9 @@ class TestBoundQuery:
 
     def test_calculated_fields(self, bound_query):
         assert list(bound_query.calculated_fields) == []
-        bound_query.all_model_fields["app.model"]["fields"]["fa"] = CalculatedFieldType
+        bound_query.all_model_fields["app.model"]["fields"]["fa"] = {
+            "type": CalculatedFieldType
+        }
         assert list(bound_query.calculated_fields) == ["fa"]
 
     def test_sort_fields(self, bound_query):
