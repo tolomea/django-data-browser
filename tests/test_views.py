@@ -245,7 +245,7 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["data"])
-    assert context.keys() == {"model", "baseUrl", "adminUrl", "types", "fields"}
+    assert context.keys() == {"model", "baseUrl", "adminUrl", "types", "allModelFields"}
     assert context["model"] == "tests.Product"
     assert context["baseUrl"] == "/data_browser/"
     assert context["adminUrl"] == "/admin/data_browser/view/add/"
@@ -348,8 +348,8 @@ def test_query_html(admin_client):
         },
     }
 
-    print(json.dumps(context["fields"], indent=4))
-    assert context["fields"] == {
+    print(json.dumps(context["allModelFields"], indent=4))
+    assert context["allModelFields"] == {
         "auth.Group": {
             "fields": {
                 "admin": {"type": "html", "concrete": false},

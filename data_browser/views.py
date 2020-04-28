@@ -268,7 +268,7 @@ def get_context(request, base_model):
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "types": types,
-        "fields": all_model_fields,
+        "allModelFields": all_model_fields,
     }
 
 

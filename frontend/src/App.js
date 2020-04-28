@@ -112,7 +112,7 @@ function Filters(props) {
     <form className="Filters">
       <table className="Flat">
         <tbody>
-          {props.query.filters.map((filter, index) => (
+          {props.filters.map((filter, index) => (
             <Filter
               {...filter}
               key={index}
@@ -160,7 +160,7 @@ class Toggle extends React.Component {
 }
 
 function Fields(props) {
-  const modelFields = props.fields[props.model];
+  const modelFields = props.allModelFields[props.model];
   return (
     <ul className="FieldsList">
       {modelFields.sorted_fields.map((field_name) => {
@@ -209,7 +209,7 @@ function ResultsHead(props) {
   return (
     <thead>
       <tr>
-        {props.query.fields.map((field, index) => {
+        {props.fields.map((field, index) => {
           const modelField = props.getModelField(field.name);
 
           function handleRemove() {
@@ -239,7 +239,7 @@ function ResultsHead(props) {
             </th>
           );
         })}
-        {!props.query.fields.length && <th>No fields selected</th>}
+        {!props.fields.length && <th>No fields selected</th>}
       </tr>
     </thead>
   );
@@ -275,6 +275,7 @@ function Results(props) {
     <table>
       <ResultsHead
         query={props.query}
+        fields={props.fields}
         types={props.types}
         getFieldType={props.getFieldType}
         getModelField={props.getModelField}
@@ -282,7 +283,7 @@ function Results(props) {
       <ResultsBody
         data={props.data}
         getModelField={props.getModelField}
-        fields={props.query.fields}
+        fields={props.fields}
       />
     </table>
   );
@@ -293,26 +294,31 @@ function Page(props) {
     <div id="body">
       <h1>{props.model}</h1>
 
-      <Filters query={props.query} getFieldType={props.getFieldType} />
+      <Filters
+        query={props.query}
+        filters={props.filters}
+        getFieldType={props.getFieldType}
+      />
 
       <p>
         Showing {props.data.length} results -{" "}
-        <a href={props.getUrlForQuery(props.query, "csv")}>Download as CSV</a> -{" "}
-        <a href={props.getUrlForQuery(props.query, "json")}>View as JSON</a> -{" "}
+        <a href={props.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
+        <a href={props.getUrlForMedia("json")}>View as JSON</a> -{" "}
         <a href={props.saveLink}>Save View</a>
       </p>
       <div className="MainSpace">
         <div>
           <Fields
             query={props.query}
-            fields={props.fields}
+            allModelFields={props.allModelFields}
             model={props.model}
-            path=""
             types={props.types}
+            path=""
           />
         </div>
         <Results
           query={props.query}
+          fields={props.fields}
           data={props.data}
           types={props.types}
           getFieldType={props.getFieldType}
@@ -328,12 +334,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       data: [],
-      query: this.makeQuery([], []),
+      fields: [],
+      filters: [],
     };
   }
 
   addField(path) {
-    const newFields = this.state.query.fields.slice();
+    const newFields = this.state.fields.slice();
     newFields.push({
       name: path,
       sort: null,
@@ -342,7 +349,7 @@ class App extends React.Component {
   }
 
   removeField(index) {
-    const newFields = this.state.query.fields.slice();
+    const newFields = this.state.fields.slice();
     newFields.splice(index, 1);
     this.handleQueryChange({
       fields: newFields,
@@ -350,8 +357,8 @@ class App extends React.Component {
   }
 
   toggleSort(index) {
-    const field = this.state.query.fields[index];
-    const newFields = this.state.query.fields.slice();
+    const field = this.state.fields[index];
+    const newFields = this.state.fields.slice();
     newFields[index] = {
       ...field,
       sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
@@ -363,7 +370,7 @@ class App extends React.Component {
 
   addFilter(path) {
     const fieldType = this.getFieldType(path);
-    const newFilters = this.state.query.filters.slice();
+    const newFilters = this.state.filters.slice();
     newFilters.push({
       errorMessage: null,
       name: path,
@@ -375,13 +382,13 @@ class App extends React.Component {
   }
 
   removeFilter(index) {
-    const newFilters = this.state.query.filters.slice();
+    const newFilters = this.state.filters.slice();
     newFilters.splice(index, 1);
     this.handleQueryChange({ filters: newFilters });
   }
 
   setFilterValue(index, value) {
-    const newFilters = this.state.query.filters.slice();
+    const newFilters = this.state.filters.slice();
     newFilters[index] = {
       ...newFilters[index],
       value: value,
@@ -390,29 +397,12 @@ class App extends React.Component {
   }
 
   setFilterLookup(index, lookup) {
-    const newFilters = this.state.query.filters.slice();
+    const newFilters = this.state.filters.slice();
     newFilters[index] = {
       ...newFilters[index],
       lookup: lookup,
     };
     this.handleQueryChange({ filters: newFilters });
-  }
-
-  // lookup change
-  // filter value change
-
-  makeQuery(fields, filters) {
-    return {
-      fields: fields,
-      filters: filters,
-      addField: this.addField.bind(this),
-      removeField: this.removeField.bind(this),
-      toggleSort: this.toggleSort.bind(this),
-      addFilter: this.addFilter.bind(this),
-      removeFilter: this.removeFilter.bind(this),
-      setFilterValue: this.setFilterValue.bind(this),
-      setFilterLookup: this.setFilterLookup.bind(this),
-    };
   }
 
   fetchData(url) {
@@ -423,10 +413,7 @@ class App extends React.Component {
       .then((res) => res.json())
       .then(
         (result) => {
-          this.setState({
-            data: result.data,
-            query: this.makeQuery(result.fields, result.filters),
-          });
+          this.setState(result);
         },
         (error) => {
           this.setState({
@@ -444,41 +431,49 @@ class App extends React.Component {
   }
 
   handleQueryChange(queryChange) {
-    const newQuery = { ...this.state.query, ...queryChange };
-    this.setState({ query: this.makeQuery(newQuery.fields, newQuery.filters) });
-    window.history.pushState(null, null, this.getUrlForQuery(newQuery, "html"));
-    this.fetchData(this.getUrlForQuery(newQuery, "json"));
+    const newState = { ...this.state, ...queryChange };
+    this.setState(queryChange);
+    window.history.pushState(
+      null,
+      null,
+      this.getUrlForQuery(newState.fields, newState.filters, "html")
+    );
+    this.fetchData(this.getUrlForQuery(newState.fields, newState.filters, "json"));
   }
 
-  getPartsForQuery(query) {
+  getPartsForQuery(fields, filters) {
     return {
       model: this.props.model,
-      fields: query.fields
+      fields: fields
         .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
         .join(","),
-      query: query.filters
+      query: filters
         .map((filter) => `${filter.name}__${filter.lookup}=${filter.value}`)
         .join("&"),
     };
   }
 
-  getSaveUrl(query) {
-    const parts = this.getPartsForQuery(this.state.query);
+  getSaveUrl() {
+    const parts = this.getPartsForQuery(this.state.fields, this.state.filters);
     const queryString = new URLSearchParams(parts).toString();
     return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
   }
 
-  getUrlForQuery(query, media) {
-    const parts = this.getPartsForQuery(query);
+  getUrlForQuery(fields, filters, media) {
+    const parts = this.getPartsForQuery(fields, filters);
     const basePath = `${this.props.baseUrl}query/${parts.model}`;
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
+  }
+
+  getUrlForMedia(media) {
+    return this.getUrlForQuery(this.state.fields, this.state.filters, media);
   }
 
   getModelField(path) {
     const parts = path.split("__");
     const field = parts.slice(-1);
     const model = this.getFkModel(parts.slice(0, -1).join("__"));
-    return this.props.fields[model].fields[field];
+    return this.props.allModelFields[model].fields[field];
   }
 
   getFieldType(path) {
@@ -491,7 +486,7 @@ class App extends React.Component {
     let model = this.props.model;
     if (path) {
       for (const field of path.split("__")) {
-        model = this.props.fields[model].fks[field]["model"];
+        model = this.props.allModelFields[model].fks[field]["model"];
       }
     }
     return model;
@@ -500,17 +495,24 @@ class App extends React.Component {
   render() {
     return (
       <Page
-        data={this.state.data}
-        query={this.state.query}
-        handleQueryChange={this.handleQueryChange.bind(this)}
         model={this.props.model}
-        saveLink={this.getSaveUrl()}
-        getUrlForQuery={this.getUrlForQuery.bind(this)}
+        saveLink={this.getSaveUrl()} // todo move into query
+        getUrlForMedia={this.getUrlForMedia.bind(this)}
         getFkModel={this.getFkModel.bind(this)}
         getFieldType={this.getFieldType.bind(this)}
-        fields={this.props.fields}
+        allModelFields={this.props.allModelFields}
         types={this.props.types}
         getModelField={this.getModelField.bind(this)}
+        query={{
+          addField: this.addField.bind(this),
+          removeField: this.removeField.bind(this),
+          toggleSort: this.toggleSort.bind(this),
+          addFilter: this.addFilter.bind(this),
+          removeFilter: this.removeFilter.bind(this),
+          setFilterValue: this.setFilterValue.bind(this),
+          setFilterLookup: this.setFilterLookup.bind(this),
+        }}
+        {...this.state}
       />
     );
   }
