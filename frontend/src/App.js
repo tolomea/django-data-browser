@@ -56,36 +56,19 @@ function FilterValue(props) {
 
 class Filter extends React.Component {
   handleRemove(event) {
-    const newFilters = this.props.query.filters.slice();
-    newFilters.splice(this.props.index, 1);
-    this.props.handleQueryChange({ filters: newFilters });
+    this.props.query.removeFilter(this.props.index);
   }
 
   handleLookupChange(event) {
-    const newFilters = this.props.query.filters.slice();
-    newFilters[this.props.index] = {
-      ...newFilters[this.props.index],
-      lookup: event.target.value,
-    };
-    this.props.handleQueryChange({ filters: newFilters });
+    this.props.query.setFilterLookup(this.props.index, event.target.value);
   }
 
   handleValueChange(event) {
-    const newFilters = this.props.query.filters.slice();
-    newFilters[this.props.index] = {
-      ...newFilters[this.props.index],
-      value: event.target.value,
-    };
-    this.props.handleQueryChange({ filters: newFilters });
+    this.props.query.setFilterValue(this.props.index, event.target.value);
   }
 
   handleAddField() {
-    const newFields = this.props.query.fields.slice();
-    newFields.push({
-      name: this.props.name,
-      sort: null,
-    });
-    this.props.handleQueryChange({ fields: newFields });
+    this.props.query.addField(this.props.name);
   }
 
   render() {
@@ -135,7 +118,6 @@ function Filters(props) {
               key={index}
               index={index}
               query={props.query}
-              handleQueryChange={props.handleQueryChange}
               getFieldType={props.getFieldType}
             />
           ))}
@@ -183,26 +165,13 @@ function Fields(props) {
     <ul className="FieldsList">
       {modelFields.sorted_fields.map((field_name) => {
         const modelField = modelFields.fields[field_name];
-        const fieldType = props.types[modelField.type];
+
         function handleAddFilter() {
-          const newFilters = props.query.filters.slice();
-          newFilters.push({
-            errorMessage: null,
-            name: `${props.path}${field_name}`,
-            lookup: fieldType.defaultLookup,
-            value:
-              props.types[fieldType.lookups[fieldType.defaultLookup].type].defaultValue,
-          });
-          props.handleQueryChange({ filters: newFilters });
+          props.query.addFilter(`${props.path}${field_name}`);
         }
 
         function handleAddField() {
-          const newFields = props.query.fields.slice();
-          newFields.push({
-            name: `${props.path}${field_name}`,
-            sort: null,
-          });
-          props.handleQueryChange({ fields: newFields });
+          props.query.addField(`${props.path}${field_name}`);
         }
 
         return (
@@ -223,7 +192,6 @@ function Fields(props) {
             <Toggle title={fk_name}>
               <Fields
                 query={props.query}
-                handleQueryChange={props.handleQueryChange}
                 fields={props.fields}
                 model={fk.model}
                 path={`${props.path}${fk_name}__`}
@@ -243,40 +211,17 @@ function ResultsHead(props) {
       <tr>
         {props.query.fields.map((field, index) => {
           const modelField = props.getModelField(field.name);
-          const fieldType = props.types[modelField.type];
 
           function handleRemove() {
-            const newFields = props.query.fields.slice();
-            newFields.splice(index, 1);
-            props.handleQueryChange({
-              fields: newFields,
-            });
+            props.query.removeField(index);
           }
 
           function handleAddFilter() {
-            const newFilters = props.query.filters.slice();
-            newFilters.push({
-              errorMessage: null,
-              name: field.name,
-              lookup: fieldType.defaultLookup,
-              value:
-                props.types[fieldType.lookups[fieldType.defaultLookup].type]
-                  .defaultValue,
-            });
-            props.handleQueryChange({
-              filters: newFilters,
-            });
+            props.query.addFilter(field.name);
           }
 
           function handleToggleSort() {
-            const newFields = props.query.fields.slice();
-            newFields[index] = {
-              ...field,
-              sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
-            };
-            props.handleQueryChange({
-              fields: newFields,
-            });
+            props.query.toggleSort(index);
           }
 
           return (
@@ -330,7 +275,6 @@ function Results(props) {
     <table>
       <ResultsHead
         query={props.query}
-        handleQueryChange={props.handleQueryChange}
         types={props.types}
         getFieldType={props.getFieldType}
         getModelField={props.getModelField}
@@ -349,11 +293,7 @@ function Page(props) {
     <div id="body">
       <h1>{props.model}</h1>
 
-      <Filters
-        query={props.query}
-        handleQueryChange={props.handleQueryChange}
-        getFieldType={props.getFieldType}
-      />
+      <Filters query={props.query} getFieldType={props.getFieldType} />
 
       <p>
         Showing {props.data.length} results -{" "}
@@ -365,7 +305,6 @@ function Page(props) {
         <div>
           <Fields
             query={props.query}
-            handleQueryChange={props.handleQueryChange}
             fields={props.fields}
             model={props.model}
             path=""
@@ -374,7 +313,6 @@ function Page(props) {
         </div>
         <Results
           query={props.query}
-          handleQueryChange={props.handleQueryChange}
           data={props.data}
           types={props.types}
           getFieldType={props.getFieldType}
@@ -390,7 +328,90 @@ class App extends React.Component {
     super(props);
     this.state = {
       data: [],
-      query: { filters: [], fields: [] },
+      query: this.makeQuery([], []),
+    };
+  }
+
+  addField(path) {
+    const newFields = this.state.query.fields.slice();
+    newFields.push({
+      name: path,
+      sort: null,
+    });
+    this.handleQueryChange({ fields: newFields });
+  }
+
+  removeField(index) {
+    const newFields = this.state.query.fields.slice();
+    newFields.splice(index, 1);
+    this.handleQueryChange({
+      fields: newFields,
+    });
+  }
+
+  toggleSort(index) {
+    const field = this.state.query.fields[index];
+    const newFields = this.state.query.fields.slice();
+    newFields[index] = {
+      ...field,
+      sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
+    };
+    this.handleQueryChange({
+      fields: newFields,
+    });
+  }
+
+  addFilter(path) {
+    const fieldType = this.getFieldType(path);
+    const newFilters = this.state.query.filters.slice();
+    newFilters.push({
+      errorMessage: null,
+      name: path,
+      lookup: fieldType.defaultLookup,
+      value: this.props.types[fieldType.lookups[fieldType.defaultLookup].type]
+        .defaultValue,
+    });
+    this.handleQueryChange({ filters: newFilters });
+  }
+
+  removeFilter(index) {
+    const newFilters = this.state.query.filters.slice();
+    newFilters.splice(index, 1);
+    this.handleQueryChange({ filters: newFilters });
+  }
+
+  setFilterValue(index, value) {
+    const newFilters = this.state.query.filters.slice();
+    newFilters[index] = {
+      ...newFilters[index],
+      value: value,
+    };
+    this.handleQueryChange({ filters: newFilters });
+  }
+
+  setFilterLookup(index, lookup) {
+    const newFilters = this.state.query.filters.slice();
+    newFilters[index] = {
+      ...newFilters[index],
+      lookup: lookup,
+    };
+    this.handleQueryChange({ filters: newFilters });
+  }
+
+  // lookup change
+  // filter value change
+
+  makeQuery(fields, filters) {
+    return {
+      fields: fields,
+      filters: filters,
+      addField: this.addField.bind(this),
+      removeField: this.removeField.bind(this),
+      toggleSort: this.toggleSort.bind(this),
+      addFilter: this.addFilter.bind(this),
+      removeFilter: this.removeFilter.bind(this),
+      setFilterValue: this.setFilterValue.bind(this),
+      setFilterLookup: this.setFilterLookup.bind(this),
     };
   }
 
@@ -404,7 +425,7 @@ class App extends React.Component {
         (result) => {
           this.setState({
             data: result.data,
-            query: { fields: result.fields, filters: result.filters },
+            query: this.makeQuery(result.fields, result.filters),
           });
         },
         (error) => {
@@ -424,7 +445,7 @@ class App extends React.Component {
 
   handleQueryChange(queryChange) {
     const newQuery = { ...this.state.query, ...queryChange };
-    this.setState({ query: newQuery });
+    this.setState({ query: this.makeQuery(newQuery.fields, newQuery.filters) });
     window.history.pushState(null, null, this.getUrlForQuery(newQuery, "html"));
     this.fetchData(this.getUrlForQuery(newQuery, "json"));
   }
