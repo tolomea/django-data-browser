@@ -341,19 +341,20 @@ class App extends React.Component {
 
   addField(path) {
     const newFields = this.state.fields.slice();
-    newFields.push({
-      name: path,
-      sort: null,
-    });
-    this.handleQueryChange({ fields: newFields });
+    newFields.push({ name: path, sort: null });
+    const newData = this.state.data.map((row) => row.concat([""]));
+    this.handleQueryChange({ fields: newFields, data: newData });
   }
 
   removeField(index) {
     const newFields = this.state.fields.slice();
     newFields.splice(index, 1);
-    this.handleQueryChange({
-      fields: newFields,
-    });
+    const newData = this.state.data.map((row) =>
+      row.slice(0, index).concat(row.slice(index + 1))
+    );
+    console.log(this.state.data);
+    console.log(newData);
+    this.handleQueryChange({ fields: newFields, data: newData });
   }
 
   toggleSort(index) {
@@ -389,19 +390,13 @@ class App extends React.Component {
 
   setFilterValue(index, value) {
     const newFilters = this.state.filters.slice();
-    newFilters[index] = {
-      ...newFilters[index],
-      value: value,
-    };
+    newFilters[index] = { ...newFilters[index], value: value };
     this.handleQueryChange({ filters: newFilters });
   }
 
   setFilterLookup(index, lookup) {
     const newFilters = this.state.filters.slice();
-    newFilters[index] = {
-      ...newFilters[index],
-      lookup: lookup,
-    };
+    newFilters[index] = { ...newFilters[index], lookup: lookup };
     this.handleQueryChange({ filters: newFilters });
   }
 
