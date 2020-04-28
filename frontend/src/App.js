@@ -4,14 +4,6 @@ import Page from "./Components";
 const assert = require("assert");
 let controller;
 
-function getAPIforWindow() {
-  const location = window.location;
-  const htmlUrl = location.origin + location.pathname;
-  assert(htmlUrl.slice(-4) === "html");
-  const jsonUrl = htmlUrl.slice(0, -4) + "json";
-  return jsonUrl + location.search;
-}
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -102,9 +94,14 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchData(getAPIforWindow());
+    const location = window.location;
+    const htmlUrl = location.origin + location.pathname;
+    assert(htmlUrl.slice(-4) === "html");
+    const jsonUrl = htmlUrl.slice(0, -4) + "json" + location.search;
+
+    this.fetchData(jsonUrl);
     window.onpopstate = (e) => {
-      this.fetchData(getAPIforWindow());
+      this.fetchData(jsonUrl);
     };
   }
 
