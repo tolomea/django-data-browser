@@ -28,15 +28,22 @@ from .query import (
     TYPES,
     BooleanFieldType,
     BoundQuery,
+    HTMLFieldType,
     NumberFieldType,
     Query,
     StringFieldType,
     TimeFieldType,
 )
 
+OPEN_IN_ADMIN = "admin"
+
 
 def get_model(app, model):
     return apps.get_model(app_label=app, model_name=model)
+
+
+def model_name(model, sep="."):
+    return f"{model._meta.app_label}{sep}{model.__name__}"
 
 
 FIELD_MAP = [
@@ -83,7 +90,7 @@ def get_all_admin_fields(request):
 
 def get_fields_for_model(model, admin_fields):
     # {"fields": {field_name, FieldType}, "fks": {field_name: model}}
-    fields = {}
+    fields = {OPEN_IN_ADMIN: {"type": HTMLFieldType, "concrete": False}}
     fks = {}
 
     model_fields = {f.name: f for f in model._meta.get_fields()}
@@ -92,21 +99,23 @@ def get_fields_for_model(model, admin_fields):
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
-        if not isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
-            if isinstance(field, models.ForeignKey):
-                fks[field_name] = field.related_model
-            elif isinstance(field, type(None)):
-                fields[field_name] = {"type": StringFieldType, "concrete": False}
-            else:
-                for django_types, field_type in FIELD_MAP:
-                    if isinstance(field, django_types):
-                        if field_type:
-                            fields[field_name] = {"type": field_type, "concrete": True}
-                        break
-                else:  # pragma: no cover
-                    print(
-                        f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
-                    )
+        if isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
+            pass  # TODO 2many support
+        elif isinstance(field, models.ForeignKey):
+            fks[field_name] = field.related_model
+        elif isinstance(field, type(None)):
+            fields[field_name] = {"type": StringFieldType, "concrete": False}
+        else:
+            for django_types, field_type in FIELD_MAP:
+                if isinstance(field, django_types):
+                    if field_type:
+                        fields[field_name] = {"type": field_type, "concrete": True}
+                    break
+            else:  # pragma: no cover
+                print(
+                    f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
+                )
+
     return {"fields": fields, "fks": fks}
 
 
@@ -200,11 +209,20 @@ def get_data(bound_query):
     if prefetch_related:
         qs = qs.prefetch_related(*prefetch_related)
 
+    def get_admin_link(obj):
+        model = model_name(obj.__class__, "_")
+        url_name = f"admin:{model}_change".lower()
+        url = reverse(url_name, args=[obj.pk])
+        return f'<a href="{url}">{obj}</a>'
+
     # get data
     def lookup(obj, name):
         value = obj
         for part in name.split("__"):
-            value = getattr(value, part, None)
+            if part == OPEN_IN_ADMIN:
+                value = get_admin_link(value)
+            else:
+                value = getattr(value, part, None)
         return value() if callable(value) else value
 
     data = []
@@ -220,17 +238,14 @@ def get_context(request, base_model):
     types = {
         name: {
             "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
-            "sorted_lookups": list(type_.lookups),
+            "sortedLookups": list(type_.lookups),
             "defaultLookup": type_.default_lookup,
             "defaultValue": type_.default_value,
         }
         for name, type_ in TYPES.items()
     }
 
-    def model_name(model):
-        return f"{model._meta.app_label}.{model.__name__}"
-
-    front_fields = ["pk"]
+    front_fields = ["pk", "admin"]
     all_model_fields = {
         model_name(model): {
             "fields": {

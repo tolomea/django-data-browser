@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 const assert = require("assert");
-
 let controller;
 
 function getAPIforWindow() {
@@ -103,7 +102,7 @@ class Filter extends React.Component {
             value={this.props.lookup}
             onChange={this.handleLookupChange.bind(this)}
           >
-            {fieldType.sorted_lookups.map((lookupName) => (
+            {fieldType.sortedLookups.map((lookupName) => (
               <option key={lookupName} value={lookupName}>
                 {lookupName.replace("_", " ")}
               </option>
@@ -301,13 +300,24 @@ function ResultsHead(props) {
   );
 }
 
+function ResultsCell(props) {
+  if (props.modelField.type === "html") {
+    return <div dangerouslySetInnerHTML={{ __html: props.value }} />;
+  } else return String(props.value);
+}
+
 function ResultsBody(props) {
   return (
     <tbody>
-      {props.data.map((row, index) => (
-        <tr key={index}>
-          {row.map((cell, index) => (
-            <td key={index}>{String(cell)}</td>
+      {props.data.map((row, row_index) => (
+        <tr key={row_index}>
+          {row.map((cell, col_index) => (
+            <td key={col_index}>
+              <ResultsCell
+                value={cell}
+                modelField={props.getModelField(props.fields[col_index].name)}
+              />
+            </td>
           ))}
         </tr>
       ))}
@@ -325,7 +335,11 @@ function Results(props) {
         getFieldType={props.getFieldType}
         getModelField={props.getModelField}
       />
-      <ResultsBody data={props.data} />
+      <ResultsBody
+        data={props.data}
+        getModelField={props.getModelField}
+        fields={props.query.fields}
+      />
     </table>
   );
 }

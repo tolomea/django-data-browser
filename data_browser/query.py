@@ -178,6 +178,10 @@ class TimeFieldType(FieldType):
         return timezone.make_naive(value)
 
 
+class HTMLFieldType(FieldType):
+    lookups = {}
+
+
 class BooleanFieldType(FieldType):
     default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
@@ -195,7 +199,13 @@ class BooleanFieldType(FieldType):
 
 TYPES = {
     f.name: f
-    for f in [StringFieldType, NumberFieldType, TimeFieldType, BooleanFieldType]
+    for f in [
+        StringFieldType,
+        NumberFieldType,
+        TimeFieldType,
+        BooleanFieldType,
+        HTMLFieldType,
+    ]
 }
 
 
