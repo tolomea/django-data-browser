@@ -275,9 +275,9 @@ function Page(props) {
       <Filters config={props.config} query={props.query} filters={props.filters} />
       <p>
         Showing {props.data.length} results -{" "}
-        <a href={props.config.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
-        <a href={props.config.getUrlForMedia("json")}>View as JSON</a> -{" "}
-        <a href={props.config.saveLink}>Save View</a>
+        <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
+        <a href={props.query.getUrlForMedia("json")}>View as JSON</a> -{" "}
+        <a href={props.query.getUrlForSave()}>Save View</a>
       </p>
       <div className="MainSpace">
         <div>

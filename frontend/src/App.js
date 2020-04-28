@@ -128,7 +128,7 @@ class App extends React.Component {
     };
   }
 
-  getSaveUrl() {
+  getUrlForSave() {
     const parts = this.getPartsForQuery(this.state.fields, this.state.filters);
     const queryString = new URLSearchParams(parts).toString();
     return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
@@ -174,12 +174,10 @@ class App extends React.Component {
           model: this.props.model,
           types: this.props.types,
           allModelFields: this.props.allModelFields,
-          getUrlForMedia: this.getUrlForMedia.bind(this),
           getFkModel: this.getFkModel.bind(this),
           getFieldType: this.getFieldType.bind(this),
           getModelField: this.getModelField.bind(this),
         }}
-        saveLink={this.getSaveUrl()} // todo move into query
         query={{
           addField: this.addField.bind(this),
           removeField: this.removeField.bind(this),
@@ -188,6 +186,8 @@ class App extends React.Component {
           removeFilter: this.removeFilter.bind(this),
           setFilterValue: this.setFilterValue.bind(this),
           setFilterLookup: this.setFilterLookup.bind(this),
+          getUrlForMedia: this.getUrlForMedia.bind(this),
+          getUrlForSave: this.getUrlForSave.bind(this),
         }}
         {...this.state}
       />
