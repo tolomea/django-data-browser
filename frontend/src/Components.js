@@ -104,11 +104,11 @@ function Filters(props) {
         <tbody>
           {props.filters.map((filter, index) => (
             <Filter
-              {...filter}
-              key={index}
-              index={index}
               config={props.config}
               query={props.query}
+              key={index}
+              index={index}
+              {...filter}
             />
           ))}
         </tbody>
@@ -272,9 +272,7 @@ function Page(props) {
   return (
     <div id="body">
       <h1>{props.config.model}</h1>
-
       <Filters config={props.config} query={props.query} filters={props.filters} />
-
       <p>
         Showing {props.data.length} results -{" "}
         <a href={props.config.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
