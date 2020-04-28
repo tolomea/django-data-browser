@@ -62,7 +62,7 @@ class Filter extends React.Component {
   }
 
   render() {
-    const fieldType = this.props.getFieldType(this.props.name);
+    const fieldType = this.props.config.getFieldType(this.props.name);
     return (
       <tr>
         <td>
@@ -107,8 +107,8 @@ function Filters(props) {
               {...filter}
               key={index}
               index={index}
+              config={props.config}
               query={props.query}
-              getFieldType={props.getFieldType}
             />
           ))}
         </tbody>
@@ -150,7 +150,7 @@ class Toggle extends React.Component {
 }
 
 function Fields(props) {
-  const modelFields = props.allModelFields[props.model];
+  const modelFields = props.config.allModelFields[props.model];
   return (
     <ul className="FieldsList">
       {modelFields.sorted_fields.map((field_name) => {
@@ -181,11 +181,10 @@ function Fields(props) {
           <li key={fk_name}>
             <Toggle title={fk_name}>
               <Fields
+                config={props.config}
                 query={props.query}
-                fields={props.fields}
                 model={fk.model}
                 path={`${props.path}${fk_name}__`}
-                types={props.types}
               />
             </Toggle>
           </li>
@@ -200,7 +199,7 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.fields.map((field, index) => {
-          const modelField = props.getModelField(field.name);
+          const modelField = props.config.getModelField(field.name);
 
           function handleRemove() {
             props.query.removeField(index);
@@ -250,7 +249,7 @@ function ResultsBody(props) {
             <td key={col_index}>
               <ResultsCell
                 value={cell}
-                modelField={props.getModelField(props.fields[col_index].name)}
+                modelField={props.config.getModelField(props.fields[col_index].name)}
               />
             </td>
           ))}
@@ -263,18 +262,8 @@ function ResultsBody(props) {
 function Results(props) {
   return (
     <table>
-      <ResultsHead
-        query={props.query}
-        fields={props.fields}
-        types={props.types}
-        getFieldType={props.getFieldType}
-        getModelField={props.getModelField}
-      />
-      <ResultsBody
-        data={props.data}
-        getModelField={props.getModelField}
-        fields={props.fields}
-      />
+      <ResultsHead config={props.config} query={props.query} fields={props.fields} />
+      <ResultsBody config={props.config} data={props.data} fields={props.fields} />
     </table>
   );
 }
@@ -282,37 +271,30 @@ function Results(props) {
 function Page(props) {
   return (
     <div id="body">
-      <h1>{props.model}</h1>
+      <h1>{props.config.model}</h1>
 
-      <Filters
-        query={props.query}
-        filters={props.filters}
-        getFieldType={props.getFieldType}
-      />
+      <Filters config={props.config} query={props.query} filters={props.filters} />
 
       <p>
         Showing {props.data.length} results -{" "}
-        <a href={props.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
-        <a href={props.getUrlForMedia("json")}>View as JSON</a> -{" "}
-        <a href={props.saveLink}>Save View</a>
+        <a href={props.config.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
+        <a href={props.config.getUrlForMedia("json")}>View as JSON</a> -{" "}
+        <a href={props.config.saveLink}>Save View</a>
       </p>
       <div className="MainSpace">
         <div>
           <Fields
+            config={props.config}
             query={props.query}
-            allModelFields={props.allModelFields}
-            model={props.model}
-            types={props.types}
+            model={props.config.model}
             path=""
           />
         </div>
         <Results
+          config={props.config}
           query={props.query}
           fields={props.fields}
           data={props.data}
-          types={props.types}
-          getFieldType={props.getFieldType}
-          getModelField={props.getModelField}
         />
       </div>
     </div>

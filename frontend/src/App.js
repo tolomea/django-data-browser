@@ -173,14 +173,16 @@ class App extends React.Component {
   render() {
     return (
       <Page
-        model={this.props.model}
+        config={{
+          model: this.props.model,
+          types: this.props.types,
+          allModelFields: this.props.allModelFields,
+          getUrlForMedia: this.getUrlForMedia.bind(this),
+          getFkModel: this.getFkModel.bind(this),
+          getFieldType: this.getFieldType.bind(this),
+          getModelField: this.getModelField.bind(this),
+        }}
         saveLink={this.getSaveUrl()} // todo move into query
-        getUrlForMedia={this.getUrlForMedia.bind(this)}
-        getFkModel={this.getFkModel.bind(this)}
-        getFieldType={this.getFieldType.bind(this)}
-        allModelFields={this.props.allModelFields}
-        types={this.props.types}
-        getModelField={this.getModelField.bind(this)}
         query={{
           addField: this.addField.bind(this),
           removeField: this.removeField.bind(this),
