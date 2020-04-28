@@ -45,35 +45,23 @@ function FilterValue(props) {
 }
 
 class Filter extends React.Component {
-  handleRemove(event) {
-    this.props.query.removeFilter(this.props.index);
-  }
-
-  handleLookupChange(event) {
-    this.props.query.setFilterLookup(this.props.index, event.target.value);
-  }
-
-  handleValueChange(event) {
-    this.props.query.setFilterValue(this.props.index, event.target.value);
-  }
-
-  handleAddField() {
-    this.props.query.addField(this.props.name);
-  }
-
   render() {
-    const fieldType = this.props.config.getFieldType(this.props.name);
+    const name = this.props.name;
+    const index = this.props.index;
+    const lookup = this.props.lookup;
+    const query = this.props.query;
+    const fieldType = this.props.config.getFieldType(name);
     return (
       <tr>
         <td>
-          <Link onClick={this.handleRemove.bind(this)}>✘</Link>{" "}
-          <Link onClick={this.handleAddField.bind(this)}>{this.props.name}</Link>{" "}
+          <Link onClick={() => query.removeFilter(index)}>✘</Link>{" "}
+          <Link onClick={() => query.addField(name)}>{name}</Link>{" "}
         </td>
         <td>
           <select
             className="Lookup"
-            value={this.props.lookup}
-            onChange={this.handleLookupChange.bind(this)}
+            value={lookup}
+            onChange={(e) => query.setFilterLookup(index, e.target.value)}
           >
             {fieldType.sortedLookups.map((lookupName) => (
               <option key={lookupName} value={lookupName}>
@@ -85,10 +73,10 @@ class Filter extends React.Component {
         <td>=</td>
         <td>
           <FilterValue
-            name={`${this.props.name}__${this.props.lookup}`}
+            name={`${name}__${lookup}`}
             value={this.props.value}
-            onChange={this.handleValueChange.bind(this)}
-            lookup={fieldType.lookups[this.props.lookup]}
+            onChange={(e) => query.setFilterValue(index, e.target.value)}
+            lookup={fieldType.lookups[lookup]}
           />
           {this.props.errorMessage}
         </td>
@@ -130,7 +118,7 @@ class Toggle extends React.Component {
   }
 
   render() {
-    if (this.state.isToggleOn) {
+    if (this.state.isToggleOn)
       return (
         <>
           <Link className="ToggleLink" onClick={this.handleClick.bind(this)}>
@@ -139,13 +127,12 @@ class Toggle extends React.Component {
           <div className="ToggleDiv">{this.props.children}</div>
         </>
       );
-    } else {
+    else
       return (
         <Link className="ToggleLink" onClick={this.handleClick.bind(this)}>
           + {this.props.title}
         </Link>
       );
-    }
   }
 }
 
@@ -155,23 +142,18 @@ function Fields(props) {
     <ul className="FieldsList">
       {modelFields.sorted_fields.map((field_name) => {
         const modelField = modelFields.fields[field_name];
-
-        function handleAddFilter() {
-          props.query.addFilter(`${props.path}${field_name}`);
-        }
-
-        function handleAddField() {
-          props.query.addField(`${props.path}${field_name}`);
-        }
-
         return (
           <li key={field_name}>
             {modelField.concrete ? (
-              <Link onClick={handleAddFilter}>Y</Link>
+              <Link onClick={() => props.query.addFilter(`${props.path}${field_name}`)}>
+                Y
+              </Link>
             ) : (
               <>&nbsp;&nbsp;</>
             )}{" "}
-            <Link onClick={handleAddField}>{field_name}</Link>
+            <Link onClick={() => props.query.addField(`${props.path}${field_name}`)}>
+              {field_name}
+            </Link>
           </li>
         );
       })}
@@ -200,26 +182,15 @@ function ResultsHead(props) {
       <tr>
         {props.fields.map((field, index) => {
           const modelField = props.config.getModelField(field.name);
-
-          function handleRemove() {
-            props.query.removeField(index);
-          }
-
-          function handleAddFilter() {
-            props.query.addFilter(field.name);
-          }
-
-          function handleToggleSort() {
-            props.query.toggleSort(index);
-          }
-
           return (
             <th key={field.name}>
-              <Link onClick={handleRemove}>✘</Link>{" "}
+              <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
               {modelField.concrete ? (
                 <>
-                  <Link onClick={handleAddFilter}>Y</Link>{" "}
-                  <Link onClick={handleToggleSort}>{field.name}</Link>{" "}
+                  <Link onClick={() => props.query.addFilter(field.name)}>Y</Link>{" "}
+                  <Link onClick={() => props.query.toggleSort(index)}>
+                    {field.name}
+                  </Link>{" "}
                   {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
                 </>
               ) : (
@@ -235,9 +206,9 @@ function ResultsHead(props) {
 }
 
 function ResultsCell(props) {
-  if (props.modelField.type === "html") {
+  if (props.modelField.type === "html")
     return <div dangerouslySetInnerHTML={{ __html: props.value }} />;
-  } else return String(props.value);
+  else return String(props.value);
 }
 
 function ResultsBody(props) {
