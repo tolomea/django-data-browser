@@ -1,3 +1,6 @@
+import json
+from collections import defaultdict
+
 import pytest
 from data_browser.admin import ViewAdmin, globals
 from data_browser.models import View
@@ -8,17 +11,19 @@ from django.contrib.auth.models import User
 @pytest.fixture
 def query():
     return Query(
-        "app",
-        "model",
-        {"fa": ASC, "fd": DSC, "fn": None},
-        "html",
-        [("bob", "equals", "fred")],
+        "app.model", {"fa": ASC, "fd": DSC, "fn": None}, [("bob", "equals", "fred")]
     )
 
 
 @pytest.fixture
 def view(query):
-    return View(**query.save_params)
+    filters = defaultdict(list)
+    for k, v in query.filter_fields:
+        filters[k].append(v)
+
+    return View(
+        model=query.model_name, fields=query.field_str, query=json.dumps(filters)
+    )
 
 
 def test_open_view(view, rf):

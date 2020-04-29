@@ -15,11 +15,7 @@ from data_browser.query import (
 @pytest.fixture
 def query():
     return Query(
-        "app",
-        "model",
-        {"fa": ASC, "fd": DSC, "fn": None},
-        "html",
-        [("bob", "equals", "fred")],
+        "app.model", {"fa": ASC, "fd": DSC, "fn": None}, [("bob", "equals", "fred")]
     )
 
 
@@ -54,32 +50,28 @@ def filter(query):
 
 class TestQuery:
     def test_from_request(self, query):
-        q = Query.from_request(
-            "app", "model", "+fa,-fd,fn", "html", {"bob__equals": ["fred"]}
-        )
+        q = Query.from_request("app.model", "+fa,-fd,fn", {"bob__equals": ["fred"]})
         assert q == query
 
     def test_from_request_with_related_filter(self):
         q = Query.from_request(
-            "app", "model", "+fa,-fd,fn", "html", {"bob__jones__equals": ["fred"]}
+            "app.model", "+fa,-fd,fn", {"bob__jones__equals": ["fred"]}
         )
         assert q == Query(
-            "app",
-            "model",
+            "app.model",
             {"fa": ASC, "fd": DSC, "fn": None},
-            "html",
             [("bob__jones", "equals", "fred")],
         )
 
     def test_url(self, query):
         assert (
-            query.url
+            query.get_url("html")
             == "/data_browser/query/app.model/+fa,-fd,fn.html?bob__equals=fred"
         )
 
     def test_url_no_filters(self, query):
         query.filters = []
-        assert query.url == "/data_browser/query/app.model/+fa,-fd,fn.html?"
+        assert query.get_url("html") == "/data_browser/query/app.model/+fa,-fd,fn.html?"
 
 
 class TestBoundQuery:

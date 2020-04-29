@@ -1,6 +1,4 @@
-import json
 import urllib
-from collections import defaultdict
 
 import dateutil.parser
 from django.urls import reverse
@@ -63,24 +61,16 @@ class Query:
     def get_url(self, media):
         base_url = reverse(
             "data_browser:query",
-            kwargs={"model": self.model, "fields": self.field_str, "media": media},
+            kwargs={
+                "model_name": self.model_name,
+                "fields": self.field_str,
+                "media": media,
+            },
         )
         params = urllib.parse.urlencode(
             self.filter_fields, quote_via=urllib.parse.quote_plus, doseq=True
         )
         return f"{base_url}?{params}"
-
-    @property
-    def save_params(self):
-        filters = defaultdict(list)
-        for k, v in self.filter_fields:
-            filters[k].append(v)
-
-        return {
-            "model_name": self.model_name,
-            "fields": self.field_str,
-            "query": json.dumps(filters),
-        }
 
 
 class MetaFieldType(type):
