@@ -19,9 +19,26 @@ from .models import View
 from .query import TYPES, BoundQuery, Query
 
 
-def get_context(request, base_model):
-    all_model_fields = get_all_model_fields(request)
+def _get_query_data(bound_query):
+    return {
+        "filters": [
+            {
+                "errorMessage": filter_.err_message,
+                "name": filter_.name,
+                "lookup": filter_.lookup,
+                "value": filter_.value,
+            }
+            for filter_ in bound_query.filters
+        ],
+        "fields": [
+            {"name": name, "sort": sort_direction}
+            for (name, field, sort_direction) in bound_query.sort_fields
+        ],
+        "model": bound_query.model_name,
+    }
 
+
+def _get_config(all_model_fields):
     types = {
         name: {
             "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
@@ -58,29 +75,22 @@ def get_context(request, base_model):
     }
 
 
+def _get_context(request, model_name, fields):
+    query = Query.from_request(model_name, fields, request.GET)
+    all_model_fields = get_all_model_fields(request)
+    bound_query = BoundQuery(query, get_model(model_name), all_model_fields)
+    return {**_get_config(all_model_fields), **_get_query_data(bound_query)}
+
+
 @admin_decorators.staff_member_required
 def query_ctx(request, *, model_name, fields=""):  # pragma: no cover
-    try:
-        model = get_model(model_name)
-    except LookupError as e:
-        return HttpResponse(e)
-    return JsonResponse(get_context(request, model))
+    ctx = _get_context(request, model_name, fields)
+    return JsonResponse(ctx)
 
 
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name, fields=""):
-    query = Query.from_request(model_name, fields, request.GET)
-
-    try:
-        model = get_model(model_name)
-    except LookupError as e:
-        return HttpResponse(e)
-
-    ctx = get_context(request, model)
-
-    all_model_fields = get_all_model_fields(request)
-    bound_query = BoundQuery(query, model, all_model_fields)
-    ctx.update(get_query_data(bound_query))
+    ctx = _get_context(request, model_name, fields)
     ctx = json.dumps(ctx)
     ctx = ctx.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
 
@@ -96,68 +106,36 @@ def query_html(request, *, model_name, fields=""):
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
     query = Query.from_request(model_name, fields, request.GET)
-    if media == "csv":
-        return csv_response(request, query)
-    elif media == "json":
-        return json_response(request, query)
-    else:
-        assert False
-
-
-def csv_response(request, query):
-    all_model_fields = get_all_model_fields(request)
-    bound_query = BoundQuery(query, get_model(query.model_name), all_model_fields)
-    data = get_data(bound_query)
-
-    buffer = io.StringIO()
-    writer = csv.writer(buffer)
-    writer.writerow(bound_query.fields)
-    writer.writerows(data)
-    buffer.seek(0)
-    response = HttpResponse(buffer, content_type="text/csv")
-    response[
-        "Content-Disposition"
-    ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
-    return response
-
-
-def json_response(request, query):
-    all_model_fields = get_all_model_fields(request)
-    bound_query = BoundQuery(query, get_model(query.model_name), all_model_fields)
-    data = get_data(bound_query)
-    resp = get_query_data(bound_query)
-    resp["data"] = data
-    return JsonResponse(resp)
-
-
-def get_query_data(bound_query):
-    return {
-        "filters": [
-            {
-                "errorMessage": filter_.err_message,
-                "name": filter_.name,
-                "lookup": filter_.lookup,
-                "value": filter_.value,
-            }
-            for filter_ in bound_query.filters
-        ],
-        "fields": [
-            {"name": name, "sort": sort_direction}
-            for (name, field, sort_direction) in bound_query.sort_fields
-        ],
-        "model": bound_query.model_name,
-    }
+    return _data_response(request, query, media)
 
 
 def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), pk=pk)
-    request.user = view.owner  # public views are run as the person who created them
+    request.user = view.owner  # public views are run as the person who owns them
     query = view.get_query()
+    return _data_response(request, query, media)
+
+
+def _data_response(request, query, media):
+    all_model_fields = get_all_model_fields(request)
+    bound_query = BoundQuery(query, get_model(query.model_name), all_model_fields)
+    data = get_data(bound_query)
 
     if media == "csv":
-        return csv_response(request, query)
+        buffer = io.StringIO()
+        writer = csv.writer(buffer)
+        writer.writerow(bound_query.fields)
+        writer.writerows(data)
+        buffer.seek(0)
+        response = HttpResponse(buffer, content_type="text/csv")
+        response[
+            "Content-Disposition"
+        ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
+        return response
     elif media == "json":
-        return json_response(request, query)
+        resp = _get_query_data(bound_query)
+        resp["data"] = data
+        return JsonResponse(resp)
     else:
         assert False
 
