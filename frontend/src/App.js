@@ -135,8 +135,6 @@ class App extends React.Component {
       this.state.fields,
       this.state.filters
     );
-    parts.app = parts.model.split(".")[0];
-    parts.model = parts.model.split(".")[1];
     const queryString = new URLSearchParams(parts).toString();
     return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
   }

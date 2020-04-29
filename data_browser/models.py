@@ -1,7 +1,6 @@
-import json
-
 from django.conf import settings
 from django.db import models
+from django.http import QueryDict
 from django.utils import crypto, timezone
 
 
@@ -20,7 +19,6 @@ class View(models.Model):
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL
     )
 
-    app = models.CharField(max_length=16, blank=False)
     model = models.CharField(max_length=32, blank=False)
     fields = models.TextField(blank=True)
     query = models.TextField(blank=False)
@@ -28,9 +26,7 @@ class View(models.Model):
     def get_query(self, media):
         from .query import Query
 
-        return Query.from_request(
-            self.app, self.model, self.fields, media, json.loads(self.query)
-        )
+        return Query.from_request(self.model, self.fields, media, QueryDict(self.query))
 
     def __str__(self):
         return f"{self.model} view: {self.name}"

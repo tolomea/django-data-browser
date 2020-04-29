@@ -40,11 +40,12 @@ _FIELD_MAP = [
 ]
 
 
-def get_model(app, model):
+def get_model(model_name):
+    app, model = model_name.split(".")
     return apps.get_model(app_label=app, model_name=model)
 
 
-def model_name(model, sep="."):
+def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
 
 
@@ -130,7 +131,7 @@ def get_data(bound_query):
     if not bound_query.fields:
         return []
 
-    qs = get_model(bound_query.app, bound_query.model).objects.all()
+    qs = get_model(bound_query.model_name).objects.all()
 
     # sort
     sort_fields = []
@@ -193,8 +194,8 @@ def get_data(bound_query):
         qs = qs.prefetch_related(*prefetch_related)
 
     def get_admin_link(obj):
-        model = model_name(obj.__class__, "_")
-        url_name = f"admin:{model}_change".lower()
+        model_name = get_model_name(obj.__class__, "_")
+        url_name = f"admin:{model_name}_change".lower()
         url = reverse(url_name, args=[obj.pk])
         return f'<a href="{url}">{obj}</a>'
 

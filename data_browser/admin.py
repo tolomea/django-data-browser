@@ -26,7 +26,7 @@ class ViewAdmin(admin.ModelAdmin):
                 ]
             },
         ),
-        ("Query", {"fields": [("app", "model"), "fields", "query"]}),
+        ("Query", {"fields": ["model", "fields", "query"]}),
         ("Internal", {"fields": ["id", "created_time"]}),
     ]
     readonly_fields = ["open_view", "public_link", "google_sheets_formula", "id"]

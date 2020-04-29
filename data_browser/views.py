@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from .db import get_all_model_fields, get_data, get_model, model_name
+from .db import get_all_model_fields, get_data, get_model, get_model_name
 from .models import View
 from .query import TYPES, BoundQuery, Query
 
@@ -34,13 +34,13 @@ def get_context(request, base_model):
 
     front_fields = ["pk", "admin"]
     all_model_fields = {
-        model_name(model): {
+        get_model_name(model): {
             "fields": {
                 name: {"type": field["type"].name, "concrete": field["concrete"]}
                 for name, field in model_fields["fields"].items()
             },
             "fks": {
-                name: {"model": model_name(rel_model)}
+                name: {"model": get_model_name(rel_model)}
                 for name, rel_model in model_fields["fks"].items()
             },
             "sorted_fields": front_fields
@@ -59,20 +59,20 @@ def get_context(request, base_model):
 
 
 @admin_decorators.staff_member_required
-def query_ctx(request, *, app, model, fields=""):  # pragma: no cover
+def query_ctx(request, *, model_name, fields=""):  # pragma: no cover
     try:
-        model = get_model(app, model)
+        model = get_model(model_name)
     except LookupError as e:
         return HttpResponse(e)
     return JsonResponse(get_context(request, model))
 
 
 @admin_decorators.staff_member_required
-def query_html(request, *, app, model, fields=""):
-    query = Query.from_request(app, model, fields, "html", request.GET)
+def query_html(request, *, model_name, fields=""):
+    query = Query.from_request(model_name, fields, "html", request.GET)
 
     try:
-        model = get_model(app, model)
+        model = get_model(model_name)
     except LookupError as e:
         return HttpResponse(e)
 
@@ -94,8 +94,8 @@ def query_html(request, *, app, model, fields=""):
 
 
 @admin_decorators.staff_member_required
-def query(request, *, app, model, fields="", media):
-    query = Query.from_request(app, model, fields, media, request.GET)
+def query(request, *, model_name, fields="", media):
+    query = Query.from_request(model_name, fields, media, request.GET)
     if media == "csv":
         return csv_response(request, query)
     elif media == "json":
@@ -106,7 +106,7 @@ def query(request, *, app, model, fields="", media):
 
 def csv_response(request, query):
     all_model_fields = get_all_model_fields(request)
-    bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
+    bound_query = BoundQuery(query, get_model(query.model_name), all_model_fields)
     data = get_data(bound_query)
 
     buffer = io.StringIO()
@@ -117,13 +117,13 @@ def csv_response(request, query):
     response = HttpResponse(buffer, content_type="text/csv")
     response[
         "Content-Disposition"
-    ] = f"attachment; filename={query.model}-{timezone.now().isoformat()}.csv"
+    ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
     return response
 
 
 def json_response(request, query):
     all_model_fields = get_all_model_fields(request)
-    bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
+    bound_query = BoundQuery(query, get_model(query.model_name), all_model_fields)
     data = get_data(bound_query)
     resp = get_query_data(bound_query)
     resp["data"] = data
@@ -145,7 +145,7 @@ def get_query_data(bound_query):
             {"name": name, "sort": sort_direction}
             for (name, field, sort_direction) in bound_query.sort_fields
         ],
-        "model": f"{bound_query.app}.{bound_query.model}",
+        "model": bound_query.model_name,
     }
 
 

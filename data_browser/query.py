@@ -11,7 +11,7 @@ ASC, DSC = "asc", "dsc"
 
 class Query:
     @classmethod
-    def from_request(cls, app, model, field_str, media, get_args):
+    def from_request(cls, model_name, field_str, media, get_args):
         fields = {}
         for field in field_str.split(","):
             if field.strip():
@@ -29,12 +29,11 @@ class Query:
                 name, lookup = name__lookup.rsplit("__", 1)
                 filters.append((name, lookup, value))
 
-        res = cls(app, model, fields, media, filters)
+        res = cls(model_name, fields, media, filters)
         return res
 
-    def __init__(self, app, model, fields, media, filters):
-        self.app = app
-        self.model = model
+    def __init__(self, model_name, fields, media, filters):
+        self.model_name = model_name
         self.fields = fields  # {name: None/ASC/DSC}
         self.media = media
         self.filters = filters  # [(name, lookup, value)]
@@ -42,8 +41,7 @@ class Query:
     @property
     def _data(self):
         return {
-            "app": self.app,
-            "model": self.model,
+            "model_name": self.model_name,
             "fields": self.fields,
             "media": self.media,
             "filters": self.filters,
@@ -69,8 +67,7 @@ class Query:
         base_url = reverse(
             "data_browser:query",
             kwargs={
-                "app": self.app,
-                "model": self.model,
+                "model_name": self.model_name,
                 "fields": self.field_str,
                 "media": self.media,
             },
@@ -87,8 +84,7 @@ class Query:
             filters[k].append(v)
 
         return {
-            "app": self.app,
-            "model": self.model,
+            "model_name": self.model_name,
             "fields": self.field_str,
             "query": json.dumps(filters),
         }
@@ -241,8 +237,7 @@ class BoundQuery:
     def __init__(self, query, root, all_model_fields):
         # all_model_fields = {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
         self._query = query
-        self.app = query.app
-        self.model = query.model
+        self.model_name = query.model_name
         self.all_model_fields = all_model_fields
         self.root = root
 
