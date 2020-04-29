@@ -23,10 +23,10 @@ class View(models.Model):
     fields = models.TextField(blank=True)
     query = models.TextField(blank=False)
 
-    def get_query(self, media):
+    def get_query(self):
         from .query import Query
 
-        return Query.from_request(self.model, self.fields, media, QueryDict(self.query))
+        return Query.from_request(self.model, self.fields, QueryDict(self.query))
 
     def __str__(self):
         return f"{self.model} view: {self.name}"

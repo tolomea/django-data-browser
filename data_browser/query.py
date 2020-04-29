@@ -11,7 +11,7 @@ ASC, DSC = "asc", "dsc"
 
 class Query:
     @classmethod
-    def from_request(cls, model_name, field_str, media, get_args):
+    def from_request(cls, model_name, field_str, get_args):
         fields = {}
         for field in field_str.split(","):
             if field.strip():
@@ -29,13 +29,12 @@ class Query:
                 name, lookup = name__lookup.rsplit("__", 1)
                 filters.append((name, lookup, value))
 
-        res = cls(model_name, fields, media, filters)
+        res = cls(model_name, fields, filters)
         return res
 
-    def __init__(self, model_name, fields, media, filters):
+    def __init__(self, model_name, fields, filters):
         self.model_name = model_name
         self.fields = fields  # {name: None/ASC/DSC}
-        self.media = media
         self.filters = filters  # [(name, lookup, value)]
 
     @property
@@ -43,7 +42,6 @@ class Query:
         return {
             "model_name": self.model_name,
             "fields": self.fields,
-            "media": self.media,
             "filters": self.filters,
         }
 
@@ -62,15 +60,10 @@ class Query:
     def filter_fields(self):
         return [(f"{n}__{l}", v) for (n, l, v) in self.filters]
 
-    @property
-    def url(self):
+    def get_url(self, media):
         base_url = reverse(
             "data_browser:query",
-            kwargs={
-                "model_name": self.model_name,
-                "fields": self.field_str,
-                "media": self.media,
-            },
+            kwargs={"model": self.model, "fields": self.field_str, "media": media},
         )
         params = urllib.parse.urlencode(
             self.filter_fields, quote_via=urllib.parse.quote_plus, doseq=True

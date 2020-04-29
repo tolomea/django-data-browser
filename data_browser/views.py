@@ -69,7 +69,7 @@ def query_ctx(request, *, model_name, fields=""):  # pragma: no cover
 
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name, fields=""):
-    query = Query.from_request(model_name, fields, "html", request.GET)
+    query = Query.from_request(model_name, fields, request.GET)
 
     try:
         model = get_model(model_name)
@@ -95,7 +95,7 @@ def query_html(request, *, model_name, fields=""):
 
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
-    query = Query.from_request(model_name, fields, media, request.GET)
+    query = Query.from_request(model_name, fields, request.GET)
     if media == "csv":
         return csv_response(request, query)
     elif media == "json":
@@ -152,7 +152,7 @@ def get_query_data(bound_query):
 def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), pk=pk)
     request.user = view.owner  # public views are run as the person who created them
-    query = view.get_query(media)
+    query = view.get_query()
 
     if media == "csv":
         return csv_response(request, query)
