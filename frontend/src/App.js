@@ -9,8 +9,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       data: [],
-      fields: [],
-      filters: [],
+      fields: props.fields,
+      filters: props.filters,
+      model: props.model,
     };
   }
 
@@ -116,9 +117,9 @@ class App extends React.Component {
     this.fetchData(this.getUrlForQuery(newState.fields, newState.filters, "json"));
   }
 
-  getPartsForQuery(fields, filters) {
+  getPartsForQuery(model, fields, filters) {
     return {
-      model: this.props.model,
+      model: model,
       fields: fields
         .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
         .join(","),
@@ -129,13 +130,19 @@ class App extends React.Component {
   }
 
   getUrlForSave() {
-    const parts = this.getPartsForQuery(this.state.fields, this.state.filters);
+    const parts = this.getPartsForQuery(
+      this.state.model,
+      this.state.fields,
+      this.state.filters
+    );
+    parts.app = parts.model.split(".")[0];
+    parts.model = parts.model.split(".")[1];
     const queryString = new URLSearchParams(parts).toString();
     return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
   }
 
   getUrlForQuery(fields, filters, media) {
-    const parts = this.getPartsForQuery(fields, filters);
+    const parts = this.getPartsForQuery(this.state.model, fields, filters);
     const basePath = `${this.props.baseUrl}query/${parts.model}`;
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
@@ -158,7 +165,7 @@ class App extends React.Component {
   }
 
   getFkModel(path) {
-    let model = this.props.model;
+    let model = this.state.model;
     if (path) {
       for (const field of path.split("__")) {
         model = this.props.allModelFields[model].fks[field]["model"];
@@ -171,7 +178,6 @@ class App extends React.Component {
     return (
       <Page
         config={{
-          model: this.props.model,
           types: this.props.types,
           allModelFields: this.props.allModelFields,
           getFkModel: this.getFkModel.bind(this),

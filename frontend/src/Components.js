@@ -242,7 +242,7 @@ function Results(props) {
 function Page(props) {
   return (
     <div id="body">
-      <h1>{props.config.model}</h1>
+      <h1>{props.model}</h1>
       <Filters config={props.config} query={props.query} filters={props.filters} />
       <p>
         Showing {props.data.length} results -{" "}
@@ -255,7 +255,7 @@ function Page(props) {
           <Fields
             config={props.config}
             query={props.query}
-            model={props.config.model}
+            model={props.model}
             path=""
           />
         </div>

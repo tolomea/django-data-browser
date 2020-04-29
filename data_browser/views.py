@@ -264,7 +264,6 @@ def get_context(request, base_model):
     }
 
     return {
-        "model": model_name(base_model),
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "types": types,
@@ -283,12 +282,19 @@ def query_ctx(request, *, app, model, fields=""):  # pragma: no cover
 
 @admin_decorators.staff_member_required
 def query_html(request, *, app, model, fields=""):
+    query = Query.from_request(app, model, fields, "html", request.GET)
+
     try:
         model = get_model(app, model)
     except LookupError as e:
         return HttpResponse(e)
 
     ctx = get_context(request, model)
+
+    admin_fields = get_all_admin_fields(request)
+    all_model_fields = get_all_model_fields(admin_fields)
+    bound_query = BoundQuery(query, model, all_model_fields)
+    ctx.update(get_query_data(bound_query))
     ctx = json.dumps(ctx)
     ctx = ctx.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
 
@@ -335,25 +341,28 @@ def json_response(request, query):
     all_model_fields = get_all_model_fields(admin_fields)
     bound_query = BoundQuery(query, get_model(query.app, query.model), all_model_fields)
     data = get_data(bound_query)
+    resp = get_query_data(bound_query)
+    resp["data"] = data
+    return JsonResponse(resp)
 
-    return JsonResponse(
-        {
-            "data": data,
-            "filters": [
-                {
-                    "errorMessage": filter_.err_message,
-                    "name": filter_.name,
-                    "lookup": filter_.lookup,
-                    "value": filter_.value,
-                }
-                for filter_ in bound_query.filters
-            ],
-            "fields": [
-                {"name": name, "sort": sort_direction}
-                for (name, field, sort_direction) in bound_query.sort_fields
-            ],
-        }
-    )
+
+def get_query_data(bound_query):
+    return {
+        "filters": [
+            {
+                "errorMessage": filter_.err_message,
+                "name": filter_.name,
+                "lookup": filter_.lookup,
+                "value": filter_.value,
+            }
+            for filter_ in bound_query.filters
+        ],
+        "fields": [
+            {"name": name, "sort": sort_direction}
+            for (name, field, sort_direction) in bound_query.sort_fields
+        ],
+        "model": f"{bound_query.app}.{bound_query.model}",
+    }
 
 
 def view(request, pk, media):
