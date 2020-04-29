@@ -288,9 +288,9 @@ def query_html(request, *, app, model, fields=""):
     except LookupError as e:
         return HttpResponse(e)
 
-    data = get_context(request, model)
-    data = json.dumps(data)
-    data = data.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
+    ctx = get_context(request, model)
+    ctx = json.dumps(ctx)
+    ctx = ctx.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
 
     if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
         response = _get_from_js_dev_server(request)
@@ -298,7 +298,7 @@ def query_html(request, *, app, model, fields=""):
     else:
         template = loader.get_template("data_browser/index.html")
 
-    return TemplateResponse(request, template, {"data": data})
+    return TemplateResponse(request, template, {"ctx": ctx})
 
 
 @admin_decorators.staff_member_required
