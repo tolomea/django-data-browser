@@ -38,7 +38,7 @@ class ViewAdmin(admin.ModelAdmin):
 
     @staticmethod
     def open_view(obj):
-        if obj._state.adding:
+        if not obj.model:
             return "N/A"
         url = obj.get_query().get_url("html")
         return format_html(f'<a href="{url}">view</a>')
