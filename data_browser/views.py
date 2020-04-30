@@ -78,6 +78,8 @@ def _get_config(all_model_fields):
 def _get_context(request, model_name, fields):
     query = Query.from_request(model_name, fields, request.GET)
     all_model_fields = get_all_model_fields(request)
+    if query.model_name not in all_model_fields:
+        raise http.Http404(f"query.model_name does not exist")
     bound_query = BoundQuery(query, all_model_fields)
     return {**_get_config(all_model_fields), **_get_query_data(bound_query)}
 
@@ -118,6 +120,8 @@ def view(request, pk, media):
 
 def _data_response(request, query, media):
     all_model_fields = get_all_model_fields(request)
+    if query.model_name not in all_model_fields:
+        raise http.Http404(f"query.model_name does not exist")
     bound_query = BoundQuery(query, all_model_fields)
     data = get_data(bound_query)
 

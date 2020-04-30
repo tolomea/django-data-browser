@@ -206,28 +206,28 @@ def test_get_data_filter_causes_select(get_product_data):
 
 def test_get_fields(all_model_fields):
     # basic
-    assert "name" in all_model_fields[models.Product]["fields"]
+    assert "name" in all_model_fields["tests.Product"]["fields"]
 
     # remap id to pk
-    assert "id" not in all_model_fields[models.Product]["fields"]
-    assert "pk" in all_model_fields[models.Product]["fields"]
+    assert "id" not in all_model_fields["tests.Product"]["fields"]
+    assert "pk" in all_model_fields["tests.Product"]["fields"]
 
     # follow fk
-    assert "producer" not in all_model_fields[models.Product]["fields"]
-    assert "producer" in all_model_fields[models.Product]["fks"]
-    assert "name" in all_model_fields[models.Producer]["fields"]
+    assert "producer" not in all_model_fields["tests.Product"]["fields"]
+    assert "producer" in all_model_fields["tests.Product"]["fks"]
+    assert "name" in all_model_fields["tests.Producer"]["fields"]
 
     # follow multiple fk's
-    assert "city" in all_model_fields[models.Address]["fields"]
+    assert "city" in all_model_fields["tests.Address"]["fields"]
 
     # no many to many fields
-    assert "tags" not in all_model_fields[models.Product]["fields"]
+    assert "tags" not in all_model_fields["tests.Product"]["fields"]
 
     # check in and out of admin
-    assert "not_in_admin" not in all_model_fields[models.Product]["fields"]
-    assert "fk_not_in_admin" not in all_model_fields[models.Product]["fks"]
-    assert "model_not_in_admin" in all_model_fields[models.Product]["fks"]
-    assert models.NotInAdmin not in all_model_fields
+    assert "not_in_admin" not in all_model_fields["tests.Product"]["fields"]
+    assert "fk_not_in_admin" not in all_model_fields["tests.Product"]["fks"]
+    assert "model_not_in_admin" in all_model_fields["tests.Product"]["fks"]
+    assert "tests.NotInAdmin" not in all_model_fields
 
 
 def test_query_html(admin_client):
@@ -235,8 +235,16 @@ def test_query_html(admin_client):
         "/data_browser/query/tests.Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
-    context = json.loads(res.context["data"])
-    assert context.keys() == {"model", "baseUrl", "adminUrl", "types", "allModelFields"}
+    context = json.loads(res.context["ctx"])
+    assert context.keys() == {
+        "model",
+        "baseUrl",
+        "adminUrl",
+        "filters",
+        "fields",
+        "types",
+        "allModelFields",
+    }
     assert context["model"] == "tests.Product"
     assert context["baseUrl"] == "/data_browser/"
     assert context["adminUrl"] == "/admin/data_browser/view/add/"
@@ -244,6 +252,18 @@ def test_query_html(admin_client):
     true = True
     false = False
     null = None
+
+    print(json.dumps(context["filters"], indent=4))
+    assert context["filters"] == [
+        {"errorMessage": null, "name": "size", "lookup": "lt", "value": "2"}
+    ]
+
+    print(json.dumps(context["fields"], indent=4))
+    assert context["fields"] == [
+        {"name": "size", "sort": "dsc"},
+        {"name": "name", "sort": "asc"},
+        {"name": "size_unit", "sort": null},
+    ]
 
     print(json.dumps(context["types"], indent=4))
     assert context["types"] == {
@@ -493,7 +513,13 @@ def test_query_html(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_fields(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests.Product/-size,+name,size_unit,-bob,is_onsale,pooducer__name,producer__name.json?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
+        "".join(
+            [
+                "/data_browser/query/tests.Product/",
+                "-size,+name,size_unit,-bob,is_onsale,pooducer__name,producer__name.json",
+                "?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx",
+            ]
+        )
     )
     assert res.status_code == 200
     assert json.loads(res.content.decode("utf-8"))["data"] == [
@@ -506,8 +532,7 @@ def test_query_html_bad_model(admin_client):
     res = admin_client.get(
         "/data_browser/query/tests.Bob/-size,+name,size_unit.html?size__lt=2&id__gt=0"
     )
-    assert res.status_code == 200
-    assert res.content == b"App 'tests' doesn't have a 'Bob' model."
+    assert res.status_code == 404
 
 
 @pytest.mark.usefixtures("products")
@@ -527,6 +552,7 @@ def test_query_json(admin_client):
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
+
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
         "filters": [
@@ -537,6 +563,7 @@ def test_query_json(admin_client):
             {"name": "name", "sort": "asc"},
             {"name": "size_unit", "sort": None},
         ],
+        "model": "tests.Product",
     }
 
 
@@ -545,7 +572,7 @@ def test_view_csv(admin_client):
     view = data_browser.models.View.objects.create(
         model="tests.Product",
         fields="-size,+name,size_unit",
-        query='{"size__lt": ["2"], "id__gt": ["0"]}',
+        query="size__lt=2&id__gt=0",
         owner=User.objects.get(),
     )
 
@@ -565,7 +592,7 @@ def test_view_json(admin_client):
     view = data_browser.models.View.objects.create(
         model="tests.Product",
         fields="-size,+name,size_unit",
-        query='{"size__lt": ["2"], "id__gt": ["0"]}',
+        query="size__lt=2&id__gt=0",
         owner=User.objects.get(),
     )
 
@@ -587,6 +614,7 @@ def test_view_json(admin_client):
             {"name": "name", "sort": "asc"},
             {"name": "size_unit", "sort": None},
         ],
+        "model": "tests.Product",
     }
 
 

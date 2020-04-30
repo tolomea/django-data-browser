@@ -25,7 +25,7 @@ def view(query):
 
 
 def test_round_trip_save(query, view):
-    assert view.get_query("html") == query
+    assert view.get_query() == query
 
 
 def test_str(view):
