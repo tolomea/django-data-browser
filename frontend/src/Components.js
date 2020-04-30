@@ -242,7 +242,15 @@ function Results(props) {
 function Page(props) {
   return (
     <div id="body">
-      <h1>{props.model}</h1>
+      <select
+        className="modelSelector"
+        onChange={(e) => props.query.setModel(e.target.value)}
+        value={props.model}
+      >
+        {props.config.sortedModels.map((model) => (
+          <option>{model}</option>
+        ))}
+      </select>
       <Filters config={props.config} query={props.query} filters={props.filters} />
       <p>
         Showing {props.data.length} results -{" "}

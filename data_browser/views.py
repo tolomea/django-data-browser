@@ -72,6 +72,7 @@ def _get_config(all_model_fields):
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "types": types,
         "allModelFields": all_model_fields,
+        "sortedModels": sorted(all_model_fields),
     }
 
 

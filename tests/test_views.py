@@ -39,10 +39,22 @@ def test_query_html(admin_client):
         "fields",
         "types",
         "allModelFields",
+        "sortedModels",
     }
     assert context["model"] == "tests.Product"
     assert context["baseUrl"] == "/data_browser/"
     assert context["adminUrl"] == "/admin/data_browser/view/add/"
+    assert context["sortedModels"] == [
+        "auth.Group",
+        "auth.User",
+        "data_browser.View",
+        "tests.Address",
+        "tests.InAdmin",
+        "tests.Producer",
+        "tests.Product",
+        "tests.SKU",
+        "tests.Tag",
+    ]
 
     true = True
     false = False

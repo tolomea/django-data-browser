@@ -8,10 +8,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      model: props.model,
       fields: props.fields,
       filters: props.filters,
-      model: props.model,
+      data: [],
     };
   }
 
@@ -76,6 +76,15 @@ class App extends React.Component {
     this.handleQueryChange({ filters: newFilters });
   }
 
+  setModel(model) {
+    this.handleQueryChange({
+      model: model,
+      fields: [],
+      filters: [],
+      data: [],
+    });
+  }
+
   fetchData(url) {
     if (controller) controller.abort();
     controller = new AbortController();
@@ -112,9 +121,11 @@ class App extends React.Component {
     window.history.pushState(
       null,
       null,
-      this.getUrlForQuery(newState.fields, newState.filters, "html")
+      this.getUrlForQuery(newState.model, newState.fields, newState.filters, "html")
     );
-    this.fetchData(this.getUrlForQuery(newState.fields, newState.filters, "json"));
+    this.fetchData(
+      this.getUrlForQuery(newState.model, newState.fields, newState.filters, "json")
+    );
   }
 
   getPartsForQuery(model, fields, filters) {
@@ -139,14 +150,19 @@ class App extends React.Component {
     return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
   }
 
-  getUrlForQuery(fields, filters, media) {
-    const parts = this.getPartsForQuery(this.state.model, fields, filters);
+  getUrlForQuery(model, fields, filters, media) {
+    const parts = this.getPartsForQuery(model, fields, filters);
     const basePath = `${this.props.baseUrl}query/${parts.model}`;
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
   getUrlForMedia(media) {
-    return this.getUrlForQuery(this.state.fields, this.state.filters, media);
+    return this.getUrlForQuery(
+      this.state.model,
+      this.state.fields,
+      this.state.filters,
+      media
+    );
   }
 
   getModelField(path) {
@@ -178,6 +194,7 @@ class App extends React.Component {
         config={{
           types: this.props.types,
           allModelFields: this.props.allModelFields,
+          sortedModels: this.props.sortedModels,
           getFkModel: this.getFkModel.bind(this),
           getFieldType: this.getFieldType.bind(this),
           getModelField: this.getModelField.bind(this),
@@ -190,6 +207,7 @@ class App extends React.Component {
           removeFilter: this.removeFilter.bind(this),
           setFilterValue: this.setFilterValue.bind(this),
           setFilterLookup: this.setFilterLookup.bind(this),
+          setModel: this.setModel.bind(this),
           getUrlForMedia: this.getUrlForMedia.bind(this),
           getUrlForSave: this.getUrlForSave.bind(this),
         }}
