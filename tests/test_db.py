@@ -55,6 +55,16 @@ def test_get_data_all(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
+def test_get_admin_field(get_product_data):
+    data = get_product_data(1, "admin", {})
+    assert data == [
+        ['<a href="/admin/tests/product/1/change/">Product object (1)</a>'],
+        ['<a href="/admin/tests/product/2/change/">Product object (2)</a>'],
+        ['<a href="/admin/tests/product/3/change/">Product object (3)</a>'],
+    ]
+
+
+@pytest.mark.usefixtures("products")
 def test_get_data_empty(get_product_data):
     data = get_product_data(0, "", {})
     assert data == []
