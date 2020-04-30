@@ -39,9 +39,7 @@ def get_query_data(all_model_fields, django_assert_num_queries):
     def helper(queries, *args):
         query = Query.from_request(*args)
 
-        bound_query = BoundQuery(
-            query, db.get_model(query.model_name), all_model_fields
-        )
+        bound_query = BoundQuery(query, all_model_fields)
         with django_assert_num_queries(queries):
             return db.get_data(bound_query)
 
@@ -51,7 +49,7 @@ def get_query_data(all_model_fields, django_assert_num_queries):
 @pytest.fixture
 def get_product_data(get_query_data):
     return lambda queries, *args, **kwargs: get_query_data(
-        queries, "tests.product", *args, **kwargs
+        queries, "tests.Product", *args, **kwargs
     )
 
 

@@ -217,21 +217,20 @@ class Filter:
 
 
 class BoundQuery:
-    def __init__(self, query, root, all_model_fields):
-        # all_model_fields = {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
+    def __init__(self, query, all_model_fields):
+        # all_model_fields = {model_name: {"fields": {field_name, FieldType}, "fks": {field_name: model_name}}}
         self._query = query
         self.model_name = query.model_name
         self.all_model_fields = all_model_fields
-        self.root = root
 
     def _get_field(self, path):
         parts = path.split("__")
-        model = self.root
+        model_name = self.model_name
         for part in parts[:-1]:
-            model = self.all_model_fields[model]["fks"].get(part)
-            if model is None:
+            model_name = self.all_model_fields[model_name]["fks"].get(part)
+            if model_name is None:
                 return None
-        res = self.all_model_fields[model]["fields"].get(parts[-1])
+        res = self.all_model_fields[model_name]["fields"].get(parts[-1])
         return res
 
     @property

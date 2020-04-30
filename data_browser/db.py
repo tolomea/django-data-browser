@@ -85,7 +85,7 @@ def _get_fields_for_model(model, admin_fields):
         if isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
-            fks[field_name] = field.related_model
+            fks[field_name] = get_model_name(field.related_model)
         elif isinstance(field, type(None)):
             fields[field_name] = {"type": StringFieldType, "concrete": False}
         else:
@@ -105,7 +105,10 @@ def _get_fields_for_model(model, admin_fields):
 def get_all_model_fields(request):
     admin_fields = _get_all_admin_fields(request)
     # {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
-    return {model: _get_fields_for_model(model, admin_fields) for model in admin_fields}
+    return {
+        get_model_name(model): _get_fields_for_model(model, admin_fields)
+        for model in admin_fields
+    }
 
 
 def _get_django_lookup(field_type, lookup):

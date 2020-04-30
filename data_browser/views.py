@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from .db import get_all_model_fields, get_data, get_model, get_model_name
+from .db import get_all_model_fields, get_data
 from .models import View
 from .query import TYPES, BoundQuery, Query
 
@@ -51,20 +51,20 @@ def _get_config(all_model_fields):
 
     front_fields = ["pk", "admin"]
     all_model_fields = {
-        get_model_name(model): {
+        model_name: {
             "fields": {
                 name: {"type": field["type"].name, "concrete": field["concrete"]}
                 for name, field in model_fields["fields"].items()
             },
             "fks": {
-                name: {"model": get_model_name(rel_model)}
+                name: {"model": rel_model}
                 for name, rel_model in model_fields["fks"].items()
             },
             "sorted_fields": front_fields
             + sorted(f for f in model_fields["fields"] if f not in front_fields),
             "sorted_fks": sorted(model_fields["fks"]),
         }
-        for model, model_fields in all_model_fields.items()
+        for model_name, model_fields in all_model_fields.items()
     }
 
     return {
@@ -78,7 +78,7 @@ def _get_config(all_model_fields):
 def _get_context(request, model_name, fields):
     query = Query.from_request(model_name, fields, request.GET)
     all_model_fields = get_all_model_fields(request)
-    bound_query = BoundQuery(query, get_model(model_name), all_model_fields)
+    bound_query = BoundQuery(query, all_model_fields)
     return {**_get_config(all_model_fields), **_get_query_data(bound_query)}
 
 
@@ -118,7 +118,7 @@ def view(request, pk, media):
 
 def _data_response(request, query, media):
     all_model_fields = get_all_model_fields(request)
-    bound_query = BoundQuery(query, get_model(query.model_name), all_model_fields)
+    bound_query = BoundQuery(query, all_model_fields)
     data = get_data(bound_query)
 
     if media == "csv":

@@ -40,7 +40,7 @@ def bound_query(query):
             "fks": {},
         },
     }
-    return BoundQuery(query, "app.model", all_model_fields)
+    return BoundQuery(query, all_model_fields)
 
 
 @pytest.fixture
