@@ -13,27 +13,27 @@ class Query:
         fields = {}
         for field in field_str.split(","):
             if field.strip():
-                name = field.lstrip("+-")
+                path = field.lstrip("+-")
                 if field.startswith("+"):
-                    fields[name] = ASC
+                    fields[path] = ASC
                 elif field.startswith("-"):
-                    fields[name] = DSC
+                    fields[path] = DSC
                 else:
-                    fields[name] = None
+                    fields[path] = None
 
         filters = []
-        for name__lookup, values in dict(get_args).items():
+        for path__lookup, values in dict(get_args).items():
             for value in values:
-                name, lookup = name__lookup.rsplit("__", 1)
-                filters.append((name, lookup, value))
+                path, lookup = path__lookup.rsplit("__", 1)
+                filters.append((path, lookup, value))
 
         res = cls(model_name, fields, filters)
         return res
 
     def __init__(self, model_name, fields, filters):
         self.model_name = model_name
-        self.fields = fields  # {name: None/ASC/DSC}
-        self.filters = filters  # [(name, lookup, value)]
+        self.fields = fields  # {path: None/ASC/DSC}
+        self.filters = filters  # [(path, lookup, value)]
 
     @property
     def _data(self):
@@ -50,8 +50,8 @@ class Query:
     def field_str(self):
         prefix = {ASC: "+", DSC: "-", None: ""}
         field_strs = []
-        for name, order in self.fields.items():
-            field_strs.append(f"{prefix[order]}{name}")
+        for path, order in self.fields.items():
+            field_strs.append(f"{prefix[order]}{path}")
         return ",".join(field_strs)
 
     @property
@@ -177,8 +177,8 @@ class BooleanFieldType(FieldType):
 
 
 TYPES = {
-    f.name: f
-    for f in [
+    field_type.name: field_type
+    for field_type in [
         StringFieldType,
         NumberFieldType,
         TimeFieldType,
