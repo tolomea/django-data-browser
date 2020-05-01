@@ -24,14 +24,14 @@ def _get_query_data(bound_query):
         "filters": [
             {
                 "errorMessage": filter_.err_message,
-                "name": filter_.path,
+                "path": filter_.path,
                 "lookup": filter_.lookup,
                 "value": filter_.value,
             }
             for filter_ in bound_query.filters
         ],
         "fields": [
-            {"name": path, "sort": sort_direction}
+            {"path": path, "sort": sort_direction}
             for (path, field, sort_direction) in bound_query.sort_fields
         ],
         "model": bound_query.model_name,

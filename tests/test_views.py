@@ -62,14 +62,14 @@ def test_query_html(admin_client):
 
     print(json.dumps(context["filters"], indent=4))
     assert context["filters"] == [
-        {"errorMessage": null, "name": "size", "lookup": "lt", "value": "2"}
+        {"errorMessage": null, "path": "size", "lookup": "lt", "value": "2"}
     ]
 
     print(json.dumps(context["fields"], indent=4))
     assert context["fields"] == [
-        {"name": "size", "sort": "dsc"},
-        {"name": "name", "sort": "asc"},
-        {"name": "size_unit", "sort": null},
+        {"path": "size", "sort": "dsc"},
+        {"path": "name", "sort": "asc"},
+        {"path": "size_unit", "sort": null},
     ]
 
     print(json.dumps(context["types"], indent=4))
@@ -363,12 +363,12 @@ def test_query_json(admin_client):
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
         "filters": [
-            {"errorMessage": None, "name": "size", "lookup": "lt", "value": "2"}
+            {"errorMessage": None, "path": "size", "lookup": "lt", "value": "2"}
         ],
         "fields": [
-            {"name": "size", "sort": "dsc"},
-            {"name": "name", "sort": "asc"},
-            {"name": "size_unit", "sort": None},
+            {"path": "size", "sort": "dsc"},
+            {"path": "name", "sort": "asc"},
+            {"path": "size_unit", "sort": None},
         ],
         "model": "tests.Product",
     }
@@ -422,12 +422,12 @@ def test_view_json(admin_client):
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
         "filters": [
-            {"errorMessage": None, "name": "size", "lookup": "lt", "value": "2"}
+            {"errorMessage": None, "path": "size", "lookup": "lt", "value": "2"}
         ],
         "fields": [
-            {"name": "size", "sort": "dsc"},
-            {"name": "name", "sort": "asc"},
-            {"name": "size_unit", "sort": None},
+            {"path": "size", "sort": "dsc"},
+            {"path": "name", "sort": "asc"},
+            {"path": "size_unit", "sort": None},
         ],
         "model": "tests.Product",
     }
