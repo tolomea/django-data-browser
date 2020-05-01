@@ -138,12 +138,12 @@ def get_data(bound_query):
 
     # sort
     sort_fields = []
-    for name, field, sort_direction in bound_query.sort_fields:
-        if name not in bound_query.calculated_fields:
+    for path, field, sort_direction in bound_query.sort_fields:
+        if path not in bound_query.calculated_fields:
             if sort_direction is ASC:
-                sort_fields.append(name)
+                sort_fields.append(path)
             if sort_direction is DSC:
-                sort_fields.append(f"-{name}")
+                sort_fields.append(f"-{path}")
     qs = qs.order_by(*sort_fields)
 
     # filter
@@ -156,7 +156,7 @@ def get_data(bound_query):
                 negation = True
                 lookup = lookup[4:]
 
-            filter_str = f"{filter_.name}__{_get_django_lookup(filter_.field, lookup)}"
+            filter_str = f"{filter_.path}__{_get_django_lookup(filter_.field, lookup)}"
             if negation:
                 qs = qs.exclude(**{filter_str: filter_.parsed})
             else:
@@ -172,18 +172,18 @@ def get_data(bound_query):
     # preloading
     select_related = set()
 
-    def add_select_relateds(name):
-        while "__" in name:
-            name = name.rsplit("__", 1)[0]
-            select_related.add(name)
+    def add_select_relateds(path):
+        while "__" in path:
+            path = path.rsplit("__", 1)[0]
+            select_related.add(path)
 
-    for name, field, sort_direction in bound_query.sort_fields:
+    for path, field, sort_direction in bound_query.sort_fields:
         if sort_direction is not None:
-            add_select_relateds(name)
+            add_select_relateds(path)
 
     for filter_ in bound_query.filters:
         if filter_.is_valid:
-            add_select_relateds(filter_.name)
+            add_select_relateds(filter_.path)
 
     prefetch_related = set()
     for field in bound_query.fields:
@@ -203,9 +203,9 @@ def get_data(bound_query):
         return f'<a href="{url}">{obj}</a>'
 
     # get data
-    def lookup(obj, name):
+    def lookup(obj, path):
         value = obj
-        for part in name.split("__"):
+        for part in path.split("__"):
             if part == _OPEN_IN_ADMIN:
                 value = get_admin_link(value)
             else:

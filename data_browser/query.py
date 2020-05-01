@@ -189,8 +189,8 @@ TYPES = {
 
 
 class Filter:
-    def __init__(self, name, index, field, lookup, value):
-        self.name = name
+    def __init__(self, path, index, field, lookup, value):
+        self.path = path
         self.index = index
         self.field = field
         self.lookup = lookup
@@ -236,32 +236,32 @@ class BoundQuery:
     @property
     def sort_fields(self):
         res = []
-        for name, direction in self._query.fields.items():
-            field = self._get_field(name)
+        for path, direction in self._query.fields.items():
+            field = self._get_field(path)
             if field:
-                res.append((name, field["type"], direction))
+                res.append((path, field["type"], direction))
         return res
 
     @property
     def calculated_fields(self):
         res = set()
-        for name in self._query.fields:
-            field = self._get_field(name)
+        for path in self._query.fields:
+            field = self._get_field(path)
             if field and not field["concrete"]:
-                res.add(name)
+                res.add(path)
         return res
 
     @property
     def filters(self):
-        for i, (name, lookup, value) in enumerate(self._query.filters):
-            field = self._get_field(name)
+        for i, (path, lookup, value) in enumerate(self._query.filters):
+            field = self._get_field(path)
             if field:
-                yield Filter(name, i, field["type"], lookup, value)
+                yield Filter(path, i, field["type"], lookup, value)
 
     @property
     def fields(self):
         return {
-            f: self._get_field(f)["type"]
-            for f in self._query.fields
-            if self._get_field(f)
+            path: self._get_field(path)["type"]
+            for path in self._query.fields
+            if self._get_field(path)
         }
