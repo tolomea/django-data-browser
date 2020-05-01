@@ -27,7 +27,7 @@ function FilterValue(props) {
         className="FilterValue"
         type="number"
         step="0"
-        name={props.name}
+        name={props.path}
         value={props.value}
         onChange={props.onChange}
       />
@@ -37,7 +37,7 @@ function FilterValue(props) {
       <input
         className="FilterValue"
         type="text"
-        name={props.name}
+        name={props.path}
         value={props.value}
         onChange={props.onChange}
       />
@@ -46,16 +46,16 @@ function FilterValue(props) {
 
 class Filter extends React.Component {
   render() {
-    const name = this.props.name;
+    const path = this.props.path;
     const index = this.props.index;
     const lookup = this.props.lookup;
     const query = this.props.query;
-    const fieldType = this.props.config.getFieldType(name);
+    const fieldType = this.props.config.getFieldType(path);
     return (
       <tr>
         <td>
           <Link onClick={() => query.removeFilter(index)}>✘</Link>{" "}
-          <Link onClick={() => query.addField(name)}>{name}</Link>{" "}
+          <Link onClick={() => query.addField(path)}>{path}</Link>{" "}
         </td>
         <td>
           <select
@@ -73,7 +73,7 @@ class Filter extends React.Component {
         <td>=</td>
         <td>
           <FilterValue
-            name={`${name}__${lookup}`}
+            name={`${path}__${lookup}`}
             value={this.props.value}
             onChange={(e) => query.setFilterValue(index, e.target.value)}
             lookup={fieldType.lookups[lookup]}
@@ -181,20 +181,20 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.fields.map((field, index) => {
-          const modelField = props.config.getModelField(field.name);
+          const modelField = props.config.getModelField(field.path);
           return (
-            <th key={field.name}>
+            <th key={field.path}>
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
               {modelField.concrete ? (
                 <>
-                  <Link onClick={() => props.query.addFilter(field.name)}>Y</Link>{" "}
+                  <Link onClick={() => props.query.addFilter(field.path)}>Y</Link>{" "}
                   <Link onClick={() => props.query.toggleSort(index)}>
-                    {field.name}
+                    {field.path}
                   </Link>{" "}
                   {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
                 </>
               ) : (
-                field.name
+                field.path
               )}
             </th>
           );
@@ -220,7 +220,7 @@ function ResultsBody(props) {
             <td key={col_index}>
               <ResultsCell
                 value={cell}
-                modelField={props.config.getModelField(props.fields[col_index].name)}
+                modelField={props.config.getModelField(props.fields[col_index].path)}
               />
             </td>
           ))}

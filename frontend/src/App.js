@@ -17,7 +17,7 @@ class App extends React.Component {
 
   addField(path) {
     const newFields = this.state.fields.slice();
-    newFields.push({ name: path, sort: null });
+    newFields.push({ path: path, sort: null });
     const newData = this.state.data.map((row) => row.concat([""]));
     this.handleQueryChange({ fields: newFields, data: newData });
   }
@@ -50,7 +50,7 @@ class App extends React.Component {
     const newFilters = this.state.filters.slice();
     newFilters.push({
       errorMessage: null,
-      name: path,
+      path: path,
       lookup: fieldType.defaultLookup,
       value: this.props.types[fieldType.lookups[fieldType.defaultLookup].type]
         .defaultValue,
@@ -132,10 +132,10 @@ class App extends React.Component {
     return {
       model: model,
       fields: fields
-        .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.name))
+        .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.path))
         .join(","),
       query: filters
-        .map((filter) => `${filter.name}__${filter.lookup}=${filter.value}`)
+        .map((filter) => `${filter.path}__${filter.lookup}=${filter.value}`)
         .join("&"),
     };
   }
