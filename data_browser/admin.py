@@ -26,7 +26,7 @@ class ViewAdmin(admin.ModelAdmin):
                 ]
             },
         ),
-        ("Query", {"fields": ["model", "fields", "query"]}),
+        ("Query", {"fields": ["model_name", "fields", "query"]}),
         ("Internal", {"fields": ["id", "created_time"]}),
     ]
     readonly_fields = ["open_view", "public_link", "google_sheets_formula", "id"]
@@ -38,7 +38,7 @@ class ViewAdmin(admin.ModelAdmin):
 
     @staticmethod
     def open_view(obj):
-        if not obj.model:
+        if not obj.model_name:
             return "N/A"
         url = obj.get_query().get_url("html")
         return format_html(f'<a href="{url}">view</a>')

@@ -19,14 +19,14 @@ class View(models.Model):
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL
     )
 
-    model = models.CharField(max_length=32, blank=False)
+    model_name = models.CharField(max_length=32, blank=False)
     fields = models.TextField(blank=True)
     query = models.TextField(blank=False)
 
     def get_query(self):
         from .query import Query
 
-        return Query.from_request(self.model, self.fields, QueryDict(self.query))
+        return Query.from_request(self.model_name, self.fields, QueryDict(self.query))
 
     def __str__(self):
-        return f"{self.model} view: {self.name}"
+        return f"{self.model_name} view: {self.name}"

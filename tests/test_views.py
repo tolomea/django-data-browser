@@ -289,7 +289,7 @@ def test_query_html(admin_client):
         "data_browser.View": {
             "fields": {
                 "admin": {"type": "html", "concrete": false},
-                "model": {"type": "string", "concrete": true},
+                "model_name": {"type": "string", "concrete": true},
                 "query": {"type": "string", "concrete": true},
                 "id": {"type": "string", "concrete": true},
                 "pk": {"type": "string", "concrete": true},
@@ -307,7 +307,7 @@ def test_query_html(admin_client):
                 "description",
                 "fields",
                 "id",
-                "model",
+                "model_name",
                 "name",
                 "public",
                 "query",
@@ -385,7 +385,7 @@ def test_query_json_bad_model(admin_client):
 @pytest.mark.usefixtures("products")
 def test_view_csv(admin_client):
     view = data_browser.models.View.objects.create(
-        model="tests.Product",
+        model_name="tests.Product",
         fields="-size,+name,size_unit",
         query="size__lt=2&id__gt=0",
         owner=User.objects.get(),
@@ -405,7 +405,7 @@ def test_view_csv(admin_client):
 @pytest.mark.usefixtures("products")
 def test_view_json(admin_client):
     view = data_browser.models.View.objects.create(
-        model="tests.Product",
+        model_name="tests.Product",
         fields="-size,+name,size_unit",
         query="size__lt=2&id__gt=0",
         owner=User.objects.get(),
