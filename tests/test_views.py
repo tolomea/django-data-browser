@@ -32,18 +32,29 @@ def test_query_html(admin_client):
     assert res.status_code == 200
     context = json.loads(res.context["ctx"])
     assert context.keys() == {
-        "model",
         "baseUrl",
         "adminUrl",
+        "model",
         "filters",
         "fields",
+        "sortedModels",
         "types",
         "allModelFields",
-        "sortedModels",
     }
-    assert context["model"] == "tests.Product"
     assert context["baseUrl"] == "/data_browser/"
     assert context["adminUrl"] == "/admin/data_browser/view/add/"
+
+    assert context["model"] == "tests.Product"
+    assert context["filters"] == [
+        {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"}
+    ]
+
+    assert context["fields"] == [
+        {"path": "size", "sort": "dsc"},
+        {"path": "name", "sort": "asc"},
+        {"path": "size_unit", "sort": None},
+    ]
+
     assert context["sortedModels"] == [
         "auth.Group",
         "auth.User",
@@ -60,33 +71,61 @@ def test_query_html(admin_client):
     false = False
     null = None
 
-    print(json.dumps(context["filters"], indent=4))
-    assert context["filters"] == [
-        {"errorMessage": null, "path": "size", "lookup": "lt", "value": "2"}
-    ]
-
-    print(json.dumps(context["fields"], indent=4))
-    assert context["fields"] == [
-        {"path": "size", "sort": "dsc"},
-        {"path": "name", "sort": "asc"},
-        {"path": "size_unit", "sort": null},
-    ]
-
-    print(json.dumps(context["types"], indent=4))
+    print(json.dumps(context["types"], indent=4, sort_keys=True))
     assert context["types"] == {
-        "string": {
+        "boolean": {
+            "defaultLookup": "equals",
+            "defaultValue": true,
             "lookups": {
-                "equals": {"type": "string"},
-                "contains": {"type": "string"},
-                "starts_with": {"type": "string"},
-                "ends_with": {"type": "string"},
-                "regex": {"type": "string"},
-                "not_equals": {"type": "string"},
-                "not_contains": {"type": "string"},
-                "not_starts_with": {"type": "string"},
-                "not_ends_with": {"type": "string"},
-                "not_regex": {"type": "string"},
+                "equals": {"type": "boolean"},
                 "is_null": {"type": "boolean"},
+                "not_equals": {"type": "boolean"},
+            },
+            "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "html": {
+            "defaultLookup": null,
+            "defaultValue": "",
+            "lookups": {},
+            "sortedLookups": [],
+        },
+        "number": {
+            "defaultLookup": "equals",
+            "defaultValue": 0,
+            "lookups": {
+                "equals": {"type": "number"},
+                "gt": {"type": "number"},
+                "gte": {"type": "number"},
+                "is_null": {"type": "boolean"},
+                "lt": {"type": "number"},
+                "lte": {"type": "number"},
+                "not_equals": {"type": "number"},
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null",
+            ],
+        },
+        "string": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "contains": {"type": "string"},
+                "ends_with": {"type": "string"},
+                "equals": {"type": "string"},
+                "is_null": {"type": "boolean"},
+                "not_contains": {"type": "string"},
+                "not_ends_with": {"type": "string"},
+                "not_equals": {"type": "string"},
+                "not_regex": {"type": "string"},
+                "not_starts_with": {"type": "string"},
+                "regex": {"type": "string"},
+                "starts_with": {"type": "string"},
             },
             "sortedLookups": [
                 "equals",
@@ -101,40 +140,18 @@ def test_query_html(admin_client):
                 "not_regex",
                 "is_null",
             ],
-            "defaultLookup": "equals",
-            "defaultValue": "",
-        },
-        "number": {
-            "lookups": {
-                "equals": {"type": "number"},
-                "not_equals": {"type": "number"},
-                "gt": {"type": "number"},
-                "gte": {"type": "number"},
-                "lt": {"type": "number"},
-                "lte": {"type": "number"},
-                "is_null": {"type": "boolean"},
-            },
-            "sortedLookups": [
-                "equals",
-                "not_equals",
-                "gt",
-                "gte",
-                "lt",
-                "lte",
-                "is_null",
-            ],
-            "defaultLookup": "equals",
-            "defaultValue": 0,
         },
         "time": {
+            "defaultLookup": "equals",
+            "defaultValue": ANY(str),
             "lookups": {
                 "equals": {"type": "time"},
-                "not_equals": {"type": "time"},
                 "gt": {"type": "time"},
                 "gte": {"type": "time"},
+                "is_null": {"type": "boolean"},
                 "lt": {"type": "time"},
                 "lte": {"type": "time"},
-                "is_null": {"type": "boolean"},
+                "not_equals": {"type": "time"},
             },
             "sortedLookups": [
                 "equals",
@@ -145,34 +162,16 @@ def test_query_html(admin_client):
                 "lte",
                 "is_null",
             ],
-            "defaultLookup": "equals",
-            "defaultValue": ANY(str),
-        },
-        "boolean": {
-            "lookups": {
-                "equals": {"type": "boolean"},
-                "not_equals": {"type": "boolean"},
-                "is_null": {"type": "boolean"},
-            },
-            "sortedLookups": ["equals", "not_equals", "is_null"],
-            "defaultLookup": "equals",
-            "defaultValue": true,
-        },
-        "html": {
-            "lookups": {},
-            "sortedLookups": [],
-            "defaultLookup": null,
-            "defaultValue": "",
         },
     }
 
-    print(json.dumps(context["allModelFields"], indent=4))
+    print(json.dumps(context["allModelFields"], indent=4, sort_keys=True))
     assert context["allModelFields"] == {
         "auth.Group": {
             "fields": {
-                "admin": {"type": "html", "concrete": false},
-                "pk": {"type": "number", "concrete": true},
-                "name": {"type": "string", "concrete": true},
+                "admin": {"concrete": false, "type": "html"},
+                "name": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "number"},
             },
             "fks": {},
             "sorted_fields": ["pk", "admin", "name"],
@@ -180,18 +179,18 @@ def test_query_html(admin_client):
         },
         "auth.User": {
             "fields": {
-                "first_name": {"type": "string", "concrete": true},
-                "is_superuser": {"type": "boolean", "concrete": true},
-                "last_name": {"type": "string", "concrete": true},
-                "username": {"type": "string", "concrete": true},
-                "is_staff": {"type": "boolean", "concrete": true},
-                "date_joined": {"type": "time", "concrete": true},
-                "last_login": {"type": "time", "concrete": true},
-                "pk": {"type": "number", "concrete": true},
-                "password": {"type": "string", "concrete": true},
-                "is_active": {"type": "boolean", "concrete": true},
-                "admin": {"type": "html", "concrete": false},
-                "email": {"type": "string", "concrete": true},
+                "admin": {"concrete": false, "type": "html"},
+                "date_joined": {"concrete": true, "type": "time"},
+                "email": {"concrete": true, "type": "string"},
+                "first_name": {"concrete": true, "type": "string"},
+                "is_active": {"concrete": true, "type": "boolean"},
+                "is_staff": {"concrete": true, "type": "boolean"},
+                "is_superuser": {"concrete": true, "type": "boolean"},
+                "last_login": {"concrete": true, "type": "time"},
+                "last_name": {"concrete": true, "type": "string"},
+                "password": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "number"},
+                "username": {"concrete": true, "type": "string"},
             },
             "fks": {},
             "sorted_fields": [
@@ -210,92 +209,17 @@ def test_query_html(admin_client):
             ],
             "sorted_fks": [],
         },
-        "tests.InAdmin": {
-            "fields": {
-                "admin": {"type": "html", "concrete": false},
-                "pk": {"type": "number", "concrete": true},
-                "name": {"type": "string", "concrete": true},
-            },
-            "fks": {},
-            "sorted_fields": ["pk", "admin", "name"],
-            "sorted_fks": [],
-        },
-        "tests.Tag": {
-            "fields": {
-                "admin": {"type": "html", "concrete": false},
-                "pk": {"type": "number", "concrete": true},
-                "name": {"type": "string", "concrete": true},
-            },
-            "fks": {},
-            "sorted_fields": ["pk", "admin", "name"],
-            "sorted_fks": [],
-        },
-        "tests.Address": {
-            "fields": {
-                "city": {"type": "string", "concrete": true},
-                "pk": {"type": "number", "concrete": true},
-                "admin": {"type": "html", "concrete": false},
-            },
-            "fks": {},
-            "sorted_fields": ["pk", "admin", "city"],
-            "sorted_fks": [],
-        },
-        "tests.Producer": {
-            "fields": {
-                "admin": {"type": "html", "concrete": false},
-                "pk": {"type": "number", "concrete": true},
-                "name": {"type": "string", "concrete": true},
-            },
-            "fks": {"address": {"model": "tests.Address"}},
-            "sorted_fields": ["pk", "admin", "name"],
-            "sorted_fks": ["address"],
-        },
-        "tests.Product": {
-            "fields": {
-                "is_onsale": {"type": "string", "concrete": false},
-                "pk": {"type": "number", "concrete": true},
-                "onsale": {"type": "boolean", "concrete": true},
-                "size_unit": {"type": "string", "concrete": true},
-                "name": {"type": "string", "concrete": true},
-                "size": {"type": "number", "concrete": true},
-                "admin": {"type": "html", "concrete": false},
-            },
-            "fks": {
-                "producer": {"model": "tests.Producer"},
-                "default_sku": {"model": "tests.SKU"},
-            },
-            "sorted_fields": [
-                "pk",
-                "admin",
-                "is_onsale",
-                "name",
-                "onsale",
-                "size",
-                "size_unit",
-            ],
-            "sorted_fks": ["default_sku", "producer"],
-        },
-        "tests.SKU": {
-            "fields": {
-                "admin": {"type": "html", "concrete": false},
-                "pk": {"type": "number", "concrete": true},
-                "name": {"type": "string", "concrete": true},
-            },
-            "fks": {"product": {"model": "tests.Product"}},
-            "sorted_fields": ["pk", "admin", "name"],
-            "sorted_fks": ["product"],
-        },
         "data_browser.View": {
             "fields": {
-                "created_time": {"type": "time", "concrete": true},
-                "fields": {"type": "string", "concrete": true},
-                "public": {"type": "boolean", "concrete": true},
-                "query": {"type": "string", "concrete": true},
-                "description": {"type": "string", "concrete": true},
-                "model_name": {"type": "string", "concrete": true},
-                "pk": {"type": "string", "concrete": true},
-                "name": {"type": "string", "concrete": true},
-                "admin": {"type": "html", "concrete": false},
+                "admin": {"concrete": false, "type": "html"},
+                "created_time": {"concrete": true, "type": "time"},
+                "description": {"concrete": true, "type": "string"},
+                "fields": {"concrete": true, "type": "string"},
+                "model_name": {"concrete": true, "type": "string"},
+                "name": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "string"},
+                "public": {"concrete": true, "type": "boolean"},
+                "query": {"concrete": true, "type": "string"},
             },
             "fks": {"owner": {"model": "auth.User"}},
             "sorted_fields": [
@@ -310,6 +234,81 @@ def test_query_html(admin_client):
                 "query",
             ],
             "sorted_fks": ["owner"],
+        },
+        "tests.Address": {
+            "fields": {
+                "admin": {"concrete": false, "type": "html"},
+                "city": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "number"},
+            },
+            "fks": {},
+            "sorted_fields": ["pk", "admin", "city"],
+            "sorted_fks": [],
+        },
+        "tests.InAdmin": {
+            "fields": {
+                "admin": {"concrete": false, "type": "html"},
+                "name": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "number"},
+            },
+            "fks": {},
+            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fks": [],
+        },
+        "tests.Producer": {
+            "fields": {
+                "admin": {"concrete": false, "type": "html"},
+                "name": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "number"},
+            },
+            "fks": {"address": {"model": "tests.Address"}},
+            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fks": ["address"],
+        },
+        "tests.Product": {
+            "fields": {
+                "admin": {"concrete": false, "type": "html"},
+                "is_onsale": {"concrete": false, "type": "string"},
+                "name": {"concrete": true, "type": "string"},
+                "onsale": {"concrete": true, "type": "boolean"},
+                "pk": {"concrete": true, "type": "number"},
+                "size": {"concrete": true, "type": "number"},
+                "size_unit": {"concrete": true, "type": "string"},
+            },
+            "fks": {
+                "default_sku": {"model": "tests.SKU"},
+                "producer": {"model": "tests.Producer"},
+            },
+            "sorted_fields": [
+                "pk",
+                "admin",
+                "is_onsale",
+                "name",
+                "onsale",
+                "size",
+                "size_unit",
+            ],
+            "sorted_fks": ["default_sku", "producer"],
+        },
+        "tests.SKU": {
+            "fields": {
+                "admin": {"concrete": false, "type": "html"},
+                "name": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "number"},
+            },
+            "fks": {"product": {"model": "tests.Product"}},
+            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fks": ["product"],
+        },
+        "tests.Tag": {
+            "fields": {
+                "admin": {"concrete": false, "type": "html"},
+                "name": {"concrete": true, "type": "string"},
+                "pk": {"concrete": true, "type": "number"},
+            },
+            "fks": {},
+            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fks": [],
         },
     }
 
