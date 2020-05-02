@@ -56,24 +56,39 @@ def _get_all_admin_fields(request):
             if hasattr(model, f):
                 yield f
 
+    def visible(modeladmin, request):
+        if modeladmin.has_change_permission(request):
+            return True
+        if hasattr(modeladmin, "has_view_permission"):
+            return modeladmin.has_view_permission(request)
+        return False
+
     all_admin_fields = defaultdict(set)
     for model, modeladmin in admin.site._registry.items():
-        all_admin_fields[model].update(from_fieldsets(modeladmin, model))
-        for inline in modeladmin.get_inline_instances(request):
-            all_admin_fields[inline.model].update(from_fieldsets(inline, inline.model))
-            all_admin_fields[inline.model].add(
-                _get_foreign_key(model, inline.model, inline.fk_name).name
-            )
-    # we always have pk
+        if visible(modeladmin, request):
+            all_admin_fields[model].update(from_fieldsets(modeladmin, model))
+            all_admin_fields[model].add(_OPEN_IN_ADMIN)
+
+            # check the inlines, these are already filtered for access
+            for inline in modeladmin.get_inline_instances(request):
+                all_admin_fields[inline.model].update(
+                    from_fieldsets(inline, inline.model)
+                )
+                all_admin_fields[inline.model].add(
+                    _get_foreign_key(model, inline.model, inline.fk_name).name
+                )
+
+    # we always have pk and never id
     for fields in all_admin_fields.values():
-        if fields:
-            fields.add("pk")
+        fields.add("pk")
+        fields.discard("id")
+
     return all_admin_fields
 
 
 def _get_fields_for_model(model, admin_fields):
     # {"fields": {field_name, FieldType}, "fks": {field_name: model}}
-    fields = {_OPEN_IN_ADMIN: {"type": HTMLFieldType, "concrete": False}}
+    fields = {}
     fks = {}
 
     model_fields = {f.name: f for f in model._meta.get_fields()}
@@ -82,10 +97,13 @@ def _get_fields_for_model(model, admin_fields):
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
-        if isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
+        if field_name == _OPEN_IN_ADMIN:
+            fields[_OPEN_IN_ADMIN] = {"type": HTMLFieldType, "concrete": False}
+        elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
-            fks[field_name] = get_model_name(field.related_model)
+            if field.related_model in admin_fields:
+                fks[field_name] = get_model_name(field.related_model)
         elif isinstance(field, type(None)):
             fields[field_name] = {"type": StringFieldType, "concrete": False}
         else:

@@ -231,5 +231,5 @@ def test_get_fields(all_model_fields):
     # check in and out of admin
     assert "not_in_admin" not in all_model_fields["tests.Product"]["fields"]
     assert "fk_not_in_admin" not in all_model_fields["tests.Product"]["fks"]
-    assert "model_not_in_admin" in all_model_fields["tests.Product"]["fks"]
+    assert "model_not_in_admin" not in all_model_fields["tests.Product"]["fks"]
     assert "tests.NotInAdmin" not in all_model_fields
