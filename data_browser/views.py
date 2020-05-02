@@ -49,7 +49,13 @@ def _get_config(all_model_fields):
         for name, type_ in TYPES.items()
     }
 
-    front_fields = ["id", "admin"]
+    def sort_model_fields(fields):
+        sorted_fields = []
+        for f in ["id", "admin"] + sorted(fields):
+            if f not in sorted_fields and f in fields:
+                sorted_fields.append(f)
+        return sorted_fields
+
     all_model_fields = {
         model_name: {
             "fields": {
@@ -60,8 +66,7 @@ def _get_config(all_model_fields):
                 name: {"model": rel_model}
                 for name, rel_model in model_fields["fks"].items()
             },
-            "sorted_fields": front_fields
-            + sorted(f for f in model_fields["fields"] if f not in front_fields),
+            "sorted_fields": sort_model_fields(model_fields["fields"]),
             "sorted_fks": sorted(model_fields["fks"]),
         }
         for model_name, model_fields in all_model_fields.items()

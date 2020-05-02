@@ -227,6 +227,9 @@ def test_get_fields(all_model_fields):
     # no many to many fields
     assert "tags" not in all_model_fields["tests.Product"]["fields"]
 
+    # no admin on inlines
+    assert "admin" not in all_model_fields["tests.InlineAdmin"]["fields"]
+
 
 class TestPermissions:
     def get_fields_with_perms(self, rf, perms):

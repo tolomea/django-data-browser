@@ -264,7 +264,7 @@ def test_query_html(admin_client):
                 "name": {"concrete": true, "type": "string"},
             },
             "fks": {"in_admin": {"model": "tests.InAdmin"}},
-            "sorted_fields": ["id", "admin", "name"],
+            "sorted_fields": ["id", "name"],
             "sorted_fks": ["in_admin"],
         },
         "tests.Normal": {
