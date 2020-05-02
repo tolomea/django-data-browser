@@ -1,5 +1,7 @@
 from django.db import models
 
+# models for perm testing
+
 
 class InAdmin(models.Model):
     name = models.TextField()
@@ -7,6 +9,21 @@ class InAdmin(models.Model):
 
 class NotInAdmin(models.Model):
     name = models.TextField()
+
+
+class InlineAdmin(models.Model):
+    name = models.TextField()
+    in_admin = models.ForeignKey(InAdmin, on_delete=models.CASCADE)
+
+
+class Normal(models.Model):
+    name = models.TextField()
+    in_admin = models.ForeignKey(InAdmin, on_delete=models.CASCADE)
+    not_in_admin = models.ForeignKey(NotInAdmin, on_delete=models.CASCADE)
+    inline_admin = models.ForeignKey(InlineAdmin, on_delete=models.CASCADE)
+
+
+# general models
 
 
 class Tag(models.Model):

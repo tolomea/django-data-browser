@@ -2,10 +2,26 @@ from django.contrib import admin
 
 from . import models
 
+# admin for perm testing
+
+
+class InlineAdminInline(admin.TabularInline):
+    model = models.InlineAdmin
+    fields = ["name"]
+
 
 @admin.register(models.InAdmin)
 class InAdmin(admin.ModelAdmin):
     fields = ["name"]
+    inlines = [InlineAdminInline]
+
+
+@admin.register(models.Normal)
+class Normal(admin.ModelAdmin):
+    fields = ["name", "in_admin", "not_in_admin", "inline_admin"]
+
+
+# general admin
 
 
 @admin.register(models.Tag)

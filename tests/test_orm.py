@@ -1,6 +1,7 @@
 import pytest
 from data_browser import orm
 from data_browser.query import BoundQuery, Query
+from django.contrib.auth.models import Permission, User
 
 from . import models
 
@@ -11,6 +12,14 @@ class ANY:  # pragma: no cover
 
     def __eq__(self, other):
         return isinstance(other, self.type)
+
+
+class KEYS:  # pragma: no cover
+    def __init__(self, *keys):
+        self.keys = set(keys)
+
+    def __eq__(self, other):
+        return isinstance(other, dict) and other.keys() == self.keys
 
 
 @pytest.fixture
@@ -210,26 +219,79 @@ def test_get_data_filter_causes_select(get_product_data):
 
 
 def test_get_fields(all_model_fields):
-    # basic
-    assert "name" in all_model_fields["tests.Product"]["fields"]
 
     # remap pk to id
     assert "pk" not in all_model_fields["tests.Product"]["fields"]
     assert "id" in all_model_fields["tests.Product"]["fields"]
 
-    # follow fk
-    assert "producer" not in all_model_fields["tests.Product"]["fields"]
-    assert "producer" in all_model_fields["tests.Product"]["fks"]
-    assert "name" in all_model_fields["tests.Producer"]["fields"]
-
-    # follow multiple fk's
-    assert "city" in all_model_fields["tests.Address"]["fields"]
-
     # no many to many fields
     assert "tags" not in all_model_fields["tests.Product"]["fields"]
 
-    # check in and out of admin
-    assert "not_in_admin" not in all_model_fields["tests.Product"]["fields"]
-    assert "fk_not_in_admin" not in all_model_fields["tests.Product"]["fks"]
-    assert "model_not_in_admin" not in all_model_fields["tests.Product"]["fks"]
-    assert "tests.NotInAdmin" not in all_model_fields
+
+class TestPermissions:
+    def get_fields_with_perms(self, rf, perms):
+        user = User.objects.create()
+        for perm in perms:
+            user.user_permissions.add(Permission.objects.get(codename=f"change_{perm}"))
+
+        request = rf.get("/")
+        request.user = user
+        return orm.get_all_model_fields(request)
+
+    def test_all_perms(self, rf, admin_user):
+        all_model_fields = self.get_fields_with_perms(
+            rf, ["normal", "notinadmin", "inadmin", "inlineadmin"]
+        )
+
+        assert "tests.NotInAdmin" not in all_model_fields
+        assert all_model_fields["tests.InAdmin"] == {
+            "fields": KEYS("admin", "id", "name"),
+            "fks": {},
+        }
+        assert all_model_fields["tests.InlineAdmin"] == {
+            "fields": KEYS("id", "name"),
+            "fks": {"in_admin": "tests.InAdmin"},
+        }
+        assert all_model_fields["tests.Normal"] == {
+            "fields": KEYS("admin", "id", "name"),
+            "fks": {"in_admin": "tests.InAdmin", "inline_admin": "tests.InlineAdmin"},
+        }
+
+    @pytest.mark.django_db
+    def test_no_perms(self, rf):
+        all_model_fields = self.get_fields_with_perms(rf, ["normal"])
+
+        assert "tests.NotInAdmin" not in all_model_fields
+        assert "tests.InAdmin" not in all_model_fields
+        assert "tests.InlineAdmin" not in all_model_fields
+        assert all_model_fields["tests.Normal"] == {
+            "fields": KEYS("admin", "id", "name"),
+            "fks": {},
+        }
+
+    @pytest.mark.django_db
+    def test_inline_perms(self, rf):
+        all_model_fields = self.get_fields_with_perms(rf, ["normal", "inlineadmin"])
+
+        assert "tests.NotInAdmin" not in all_model_fields
+        assert "tests.InAdmin" not in all_model_fields
+        assert "tests.InlineAdmin" not in all_model_fields
+        assert all_model_fields["tests.Normal"] == {
+            "fields": KEYS("admin", "id", "name"),
+            "fks": {},
+        }
+
+    @pytest.mark.django_db
+    def test_admin_perms(self, rf):
+        all_model_fields = self.get_fields_with_perms(rf, ["normal", "inadmin"])
+
+        assert "tests.NotInAdmin" not in all_model_fields
+        assert all_model_fields["tests.InAdmin"] == {
+            "fields": KEYS("admin", "id", "name"),
+            "fks": {},
+        }
+        assert "tests.InlineAdmin" not in all_model_fields
+        assert all_model_fields["tests.Normal"] == {
+            "fields": KEYS("admin", "id", "name"),
+            "fks": {"in_admin": "tests.InAdmin"},
+        }

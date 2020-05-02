@@ -62,6 +62,8 @@ def test_query_html(admin_client):
         "data_browser.View",
         "tests.Address",
         "tests.InAdmin",
+        "tests.InlineAdmin",
+        "tests.Normal",
         "tests.Producer",
         "tests.Product",
         "tests.SKU",
@@ -171,8 +173,8 @@ def test_query_html(admin_client):
         "auth.Group": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
-                "name": {"concrete": true, "type": "string"},
                 "id": {"concrete": true, "type": "number"},
+                "name": {"concrete": true, "type": "string"},
             },
             "fks": {},
             "sorted_fields": ["id", "admin", "name"],
@@ -184,13 +186,13 @@ def test_query_html(admin_client):
                 "date_joined": {"concrete": true, "type": "time"},
                 "email": {"concrete": true, "type": "string"},
                 "first_name": {"concrete": true, "type": "string"},
+                "id": {"concrete": true, "type": "number"},
                 "is_active": {"concrete": true, "type": "boolean"},
                 "is_staff": {"concrete": true, "type": "boolean"},
                 "is_superuser": {"concrete": true, "type": "boolean"},
                 "last_login": {"concrete": true, "type": "time"},
                 "last_name": {"concrete": true, "type": "string"},
                 "password": {"concrete": true, "type": "string"},
-                "id": {"concrete": true, "type": "number"},
                 "username": {"concrete": true, "type": "string"},
             },
             "fks": {},
@@ -216,9 +218,9 @@ def test_query_html(admin_client):
                 "created_time": {"concrete": true, "type": "time"},
                 "description": {"concrete": true, "type": "string"},
                 "fields": {"concrete": true, "type": "string"},
+                "id": {"concrete": true, "type": "string"},
                 "model_name": {"concrete": true, "type": "string"},
                 "name": {"concrete": true, "type": "string"},
-                "id": {"concrete": true, "type": "string"},
                 "public": {"concrete": true, "type": "boolean"},
                 "query": {"concrete": true, "type": "string"},
             },
@@ -249,18 +251,40 @@ def test_query_html(admin_client):
         "tests.InAdmin": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
-                "name": {"concrete": true, "type": "string"},
                 "id": {"concrete": true, "type": "number"},
+                "name": {"concrete": true, "type": "string"},
             },
             "fks": {},
             "sorted_fields": ["id", "admin", "name"],
             "sorted_fks": [],
         },
+        "tests.InlineAdmin": {
+            "fields": {
+                "id": {"concrete": true, "type": "number"},
+                "name": {"concrete": true, "type": "string"},
+            },
+            "fks": {"in_admin": {"model": "tests.InAdmin"}},
+            "sorted_fields": ["id", "admin", "name"],
+            "sorted_fks": ["in_admin"],
+        },
+        "tests.Normal": {
+            "fields": {
+                "admin": {"concrete": false, "type": "html"},
+                "id": {"concrete": true, "type": "number"},
+                "name": {"concrete": true, "type": "string"},
+            },
+            "fks": {
+                "in_admin": {"model": "tests.InAdmin"},
+                "inline_admin": {"model": "tests.InlineAdmin"},
+            },
+            "sorted_fields": ["id", "admin", "name"],
+            "sorted_fks": ["in_admin", "inline_admin"],
+        },
         "tests.Producer": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
-                "name": {"concrete": true, "type": "string"},
                 "id": {"concrete": true, "type": "number"},
+                "name": {"concrete": true, "type": "string"},
             },
             "fks": {"address": {"model": "tests.Address"}},
             "sorted_fields": ["id", "admin", "name"],
@@ -269,10 +293,10 @@ def test_query_html(admin_client):
         "tests.Product": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
+                "id": {"concrete": true, "type": "number"},
                 "is_onsale": {"concrete": false, "type": "string"},
                 "name": {"concrete": true, "type": "string"},
                 "onsale": {"concrete": true, "type": "boolean"},
-                "id": {"concrete": true, "type": "number"},
                 "size": {"concrete": true, "type": "number"},
                 "size_unit": {"concrete": true, "type": "string"},
             },
@@ -294,8 +318,8 @@ def test_query_html(admin_client):
         "tests.SKU": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
-                "name": {"concrete": true, "type": "string"},
                 "id": {"concrete": true, "type": "number"},
+                "name": {"concrete": true, "type": "string"},
             },
             "fks": {"product": {"model": "tests.Product"}},
             "sorted_fields": ["id", "admin", "name"],
@@ -304,8 +328,8 @@ def test_query_html(admin_client):
         "tests.Tag": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
-                "name": {"concrete": true, "type": "string"},
                 "id": {"concrete": true, "type": "number"},
+                "name": {"concrete": true, "type": "string"},
             },
             "fks": {},
             "sorted_fields": ["id", "admin", "name"],
