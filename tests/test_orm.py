@@ -1,5 +1,5 @@
 import pytest
-from data_browser import db
+from data_browser import orm
 from data_browser.query import BoundQuery, Query
 
 from . import models
@@ -26,7 +26,7 @@ def products(db):
 def all_model_fields(rf, admin_user):
     request = rf.get("/")
     request.user = admin_user
-    return db.get_all_model_fields(request)
+    return orm.get_all_model_fields(request)
 
 
 @pytest.fixture
@@ -36,7 +36,7 @@ def get_query_data(all_model_fields, django_assert_num_queries):
 
         bound_query = BoundQuery(query, all_model_fields)
         with django_assert_num_queries(queries):
-            return db.get_data(bound_query)
+            return orm.get_data(bound_query)
 
     yield helper
 

@@ -14,8 +14,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from .db import get_all_model_fields, get_data
 from .models import View
+from .orm import get_all_model_fields, get_data
 from .query import TYPES, BoundQuery, Query
 
 
