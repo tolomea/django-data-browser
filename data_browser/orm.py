@@ -50,6 +50,8 @@ def get_model_name(model, sep="."):
 
 
 def _get_all_admin_fields(request):
+    request.data_browser = True
+
     def from_fieldsets(admin, model):
         obj = model()  # we want the admin change field sets, not the add ones
         for f in flatten_fieldsets(admin.get_fieldsets(request, obj)):
