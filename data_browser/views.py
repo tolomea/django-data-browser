@@ -49,7 +49,7 @@ def _get_config(all_model_fields):
         for name, type_ in TYPES.items()
     }
 
-    front_fields = ["pk", "admin"]
+    front_fields = ["id", "admin"]
     all_model_fields = {
         model_name: {
             "fields": {

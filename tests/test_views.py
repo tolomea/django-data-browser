@@ -46,7 +46,8 @@ def test_query_html(admin_client):
 
     assert context["model"] == "tests.Product"
     assert context["filters"] == [
-        {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"}
+        {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"},
+        {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
     ]
 
     assert context["fields"] == [
@@ -171,10 +172,10 @@ def test_query_html(admin_client):
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
                 "name": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
             },
             "fks": {},
-            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fields": ["id", "admin", "name"],
             "sorted_fks": [],
         },
         "auth.User": {
@@ -189,12 +190,12 @@ def test_query_html(admin_client):
                 "last_login": {"concrete": true, "type": "time"},
                 "last_name": {"concrete": true, "type": "string"},
                 "password": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
                 "username": {"concrete": true, "type": "string"},
             },
             "fks": {},
             "sorted_fields": [
-                "pk",
+                "id",
                 "admin",
                 "date_joined",
                 "email",
@@ -217,13 +218,13 @@ def test_query_html(admin_client):
                 "fields": {"concrete": true, "type": "string"},
                 "model_name": {"concrete": true, "type": "string"},
                 "name": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "string"},
+                "id": {"concrete": true, "type": "string"},
                 "public": {"concrete": true, "type": "boolean"},
                 "query": {"concrete": true, "type": "string"},
             },
             "fks": {"owner": {"model": "auth.User"}},
             "sorted_fields": [
-                "pk",
+                "id",
                 "admin",
                 "created_time",
                 "description",
@@ -239,30 +240,30 @@ def test_query_html(admin_client):
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
                 "city": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
             },
             "fks": {},
-            "sorted_fields": ["pk", "admin", "city"],
+            "sorted_fields": ["id", "admin", "city"],
             "sorted_fks": [],
         },
         "tests.InAdmin": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
                 "name": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
             },
             "fks": {},
-            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fields": ["id", "admin", "name"],
             "sorted_fks": [],
         },
         "tests.Producer": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
                 "name": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
             },
             "fks": {"address": {"model": "tests.Address"}},
-            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fields": ["id", "admin", "name"],
             "sorted_fks": ["address"],
         },
         "tests.Product": {
@@ -271,7 +272,7 @@ def test_query_html(admin_client):
                 "is_onsale": {"concrete": false, "type": "string"},
                 "name": {"concrete": true, "type": "string"},
                 "onsale": {"concrete": true, "type": "boolean"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
                 "size": {"concrete": true, "type": "number"},
                 "size_unit": {"concrete": true, "type": "string"},
             },
@@ -280,7 +281,7 @@ def test_query_html(admin_client):
                 "producer": {"model": "tests.Producer"},
             },
             "sorted_fields": [
-                "pk",
+                "id",
                 "admin",
                 "is_onsale",
                 "name",
@@ -294,20 +295,20 @@ def test_query_html(admin_client):
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
                 "name": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
             },
             "fks": {"product": {"model": "tests.Product"}},
-            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fields": ["id", "admin", "name"],
             "sorted_fks": ["product"],
         },
         "tests.Tag": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
                 "name": {"concrete": true, "type": "string"},
-                "pk": {"concrete": true, "type": "number"},
+                "id": {"concrete": true, "type": "number"},
             },
             "fks": {},
-            "sorted_fields": ["pk", "admin", "name"],
+            "sorted_fields": ["id", "admin", "name"],
             "sorted_fks": [],
         },
     }
@@ -359,7 +360,8 @@ def test_query_json(admin_client):
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
         "filters": [
-            {"errorMessage": None, "path": "size", "lookup": "lt", "value": "2"}
+            {"errorMessage": None, "path": "size", "lookup": "lt", "value": "2"},
+            {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
         ],
         "fields": [
             {"path": "size", "sort": "dsc"},
@@ -415,15 +417,17 @@ def test_view_json(admin_client):
     res = admin_client.get(f"/data_browser/view/{view.pk}.json")
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
+    print(json.dumps(data, indent=4, sort_keys=True))
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
-        "filters": [
-            {"errorMessage": None, "path": "size", "lookup": "lt", "value": "2"}
-        ],
         "fields": [
             {"path": "size", "sort": "dsc"},
             {"path": "name", "sort": "asc"},
             {"path": "size_unit", "sort": None},
+        ],
+        "filters": [
+            {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"},
+            {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
         ],
         "model": "tests.Product",
     }

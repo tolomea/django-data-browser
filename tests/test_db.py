@@ -78,9 +78,9 @@ def test_get_data_sort(get_product_data):
 
 @pytest.mark.usefixtures("products")
 def test_get_data_pks(get_product_data):
-    data = get_product_data(1, "pk", {})
+    data = get_product_data(1, "id", {})
     assert {d[0] for d in data} == set(
-        models.Product.objects.values_list("pk", flat=True)
+        models.Product.objects.values_list("id", flat=True)
     )
 
 
@@ -117,36 +117,36 @@ def test_get_data_collapsed(get_product_data):
 
 @pytest.mark.usefixtures("products")
 def test_get_data_null_filter(get_product_data):
-    data = get_product_data(1, "pk", {"onsale__is_null": ["True"]})
+    data = get_product_data(1, "id", {"onsale__is_null": ["True"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", {"onsale__is_null": ["true"]})
+    data = get_product_data(1, "id", {"onsale__is_null": ["true"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", {"onsale__is_null": ["False"]})
+    data = get_product_data(1, "id", {"onsale__is_null": ["False"]})
     assert data == []
-    data = get_product_data(1, "pk", {"onsale__is_null": ["false"]})
+    data = get_product_data(1, "id", {"onsale__is_null": ["false"]})
     assert data == []
 
 
 @pytest.mark.usefixtures("products")
 def test_get_data_boolean_filter(get_product_data):
     models.Product.objects.update(onsale=True)
-    data = get_product_data(1, "pk", {"onsale__equals": ["True"]})
+    data = get_product_data(1, "id", {"onsale__equals": ["True"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", {"onsale__equals": ["true"]})
+    data = get_product_data(1, "id", {"onsale__equals": ["true"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", {"onsale__equals": ["False"]})
+    data = get_product_data(1, "id", {"onsale__equals": ["False"]})
     assert data == []
-    data = get_product_data(1, "pk", {"onsale__equals": ["false"]})
+    data = get_product_data(1, "id", {"onsale__equals": ["false"]})
     assert data == []
 
 
 @pytest.mark.usefixtures("products")
 def test_get_data_string_filter(get_product_data):
-    data = get_product_data(1, "pk", {"producer__name__equals": ["Bob"]})
+    data = get_product_data(1, "id", {"producer__name__equals": ["Bob"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", {"producer__name__equals": ["bob"]})
+    data = get_product_data(1, "id", {"producer__name__equals": ["bob"]})
     assert data == [[1], [2], [3]]
-    data = get_product_data(1, "pk", {"producer__name__equals": ["fred"]})
+    data = get_product_data(1, "id", {"producer__name__equals": ["fred"]})
     assert data == []
 
 
@@ -213,9 +213,9 @@ def test_get_fields(all_model_fields):
     # basic
     assert "name" in all_model_fields["tests.Product"]["fields"]
 
-    # remap id to pk
-    assert "id" not in all_model_fields["tests.Product"]["fields"]
-    assert "pk" in all_model_fields["tests.Product"]["fields"]
+    # remap pk to id
+    assert "pk" not in all_model_fields["tests.Product"]["fields"]
+    assert "id" in all_model_fields["tests.Product"]["fields"]
 
     # follow fk
     assert "producer" not in all_model_fields["tests.Product"]["fields"]

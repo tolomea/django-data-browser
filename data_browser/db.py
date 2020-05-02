@@ -78,10 +78,10 @@ def _get_all_admin_fields(request):
                     _get_foreign_key(model, inline.model, inline.fk_name).name
                 )
 
-    # we always have pk and never id
+    # we always have id and never pk
     for fields in all_admin_fields.values():
-        fields.add("pk")
-        fields.discard("id")
+        fields.add("id")
+        fields.discard("pk")
 
     return all_admin_fields
 
@@ -92,8 +92,6 @@ def _get_fields_for_model(model, admin_fields):
     fks = {}
 
     model_fields = {f.name: f for f in model._meta.get_fields()}
-    if "id" in model_fields:
-        model_fields["pk"] = model_fields["id"]
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)

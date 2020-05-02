@@ -15,12 +15,12 @@ class Tag(admin.ModelAdmin):
 
 @admin.register(models.Address)
 class Address(admin.ModelAdmin):
-    fields = ["city"]
+    fields = ["pk", "city"]
 
 
 class ProductMixin:
     fields = [
-        "pk",
+        "id",
         "producer",
         "name",
         "size",
