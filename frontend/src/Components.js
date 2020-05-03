@@ -183,7 +183,7 @@ function ResultsHead(props) {
         {props.fields.map((field, index) => {
           const modelField = props.config.getModelField(field.path);
           return (
-            <th key={field.path}>
+            <th key={index}>
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
               {modelField.concrete ? (
                 <>
@@ -252,7 +252,7 @@ function Page(props) {
         value={props.model}
       >
         {props.config.sortedModels.map((model) => (
-          <option>{model}</option>
+          <option key={model}>{model}</option>
         ))}
       </select>
       <Filters config={props.config} query={props.query} filters={props.filters} />

@@ -35,11 +35,32 @@ class App extends React.Component {
 
   toggleSort(index) {
     const field = this.state.fields[index];
-    const newFields = this.state.fields.slice();
-    newFields[index] = {
-      ...field,
-      sort: { asc: "dsc", dsc: null, null: "asc" }[field.sort],
-    };
+    const newSort = { asc: "dsc", dsc: null, null: "asc" }[field.sort];
+    let newFields = this.state.fields.slice();
+
+    if (field.sort) {
+      // move any later sort fields forward
+      newFields = newFields.map((f) => ({
+        ...f,
+        priority:
+          f.priority != null && f.priority > field.priority
+            ? f.priority - 1
+            : f.priority,
+      }));
+    }
+
+    if (newSort) {
+      // move all other fiels back and insert the updated one
+      newFields = newFields.map((f) => ({
+        ...f,
+        priority: f.priority != null ? f.priority + 1 : f.priority,
+      }));
+      newFields[index] = { ...field, sort: newSort, priority: 0 };
+    } else {
+      // blank the sort on the updated field
+      newFields[index] = { ...field, sort: null, priority: null };
+    }
+
     this.handleQueryChange({
       fields: newFields,
     });
@@ -132,11 +153,12 @@ class App extends React.Component {
     return {
       model: model,
       fields: fields
-        .map((field) => field.path + { asc: "+0", dsc: "-0", null: "" }[field.sort])
+        .map(
+          (f) =>
+            f.path + { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
+        )
         .join(","),
-      query: filters
-        .map((filter) => `${filter.path}__${filter.lookup}=${filter.value}`)
-        .join("&"),
+      query: filters.map((f) => `${f.path}__${f.lookup}=${f.value}`).join("&"),
     };
   }
 
