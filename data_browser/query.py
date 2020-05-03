@@ -1,4 +1,6 @@
 import urllib
+from dataclasses import dataclass
+from typing import Optional
 
 import dateutil.parser
 from django.urls import reverse
@@ -7,19 +9,25 @@ from django.utils import timezone
 ASC, DSC = "asc", "dsc"
 
 
+@dataclass
+class QueryField:
+    path: str
+    direction: Optional[str]
+
+
 class Query:
     @classmethod
     def from_request(cls, model_name, field_str, get_args):
-        fields = {}
+        fields = []
         for field in field_str.split(","):
             if field.strip():
                 path = field.lstrip("+-")
                 if field.startswith("+"):
-                    fields[path] = ASC
+                    fields.append(QueryField(path, ASC))
                 elif field.startswith("-"):
-                    fields[path] = DSC
+                    fields.append(QueryField(path, DSC))
                 else:
-                    fields[path] = None
+                    fields.append(QueryField(path, None))
 
         filters = []
         for path__lookup, values in dict(get_args).items():
@@ -32,8 +40,8 @@ class Query:
 
     def __init__(self, model_name, fields, filters):
         self.model_name = model_name
-        self.fields = fields  # {path: None/ASC/DSC}
-        self.filters = filters  # [(path, lookup, value)]
+        self.fields = fields
+        self.filters = filters
 
     @property
     def _data(self):
@@ -50,8 +58,8 @@ class Query:
     def field_str(self):
         prefix = {ASC: "+", DSC: "-", None: ""}
         field_strs = []
-        for path, order in self.fields.items():
-            field_strs.append(f"{prefix[order]}{path}")
+        for field in self.fields:
+            field_strs.append(f"{prefix[field.direction]}{field.path}")
         return ",".join(field_strs)
 
     @property
@@ -218,11 +226,11 @@ class BoundFilter:
 
 
 class BoundField:
-    def __init__(self, path, orm_field, direction):
-        self.path = path
+    def __init__(self, query_field, orm_field):
+        self.path = query_field.path
         self.concrete = orm_field.concrete
         self.type_ = orm_field.type_
-        self.direction = direction if self.concrete else None
+        self.direction = query_field.direction if self.concrete else None
 
 
 class BoundQuery:
@@ -243,10 +251,10 @@ class BoundQuery:
         self.orm_models = orm_models
 
         self.fields = []
-        for path, direction in query.fields.items():
-            orm_field = get_orm_field(path)
+        for query_field in query.fields:
+            orm_field = get_orm_field(query_field.path)
             if orm_field:
-                self.fields.append(BoundField(path, orm_field, direction))
+                self.fields.append(BoundField(query_field, orm_field))
 
         self.filters = []
         for i, (path, lookup, value) in enumerate(query.filters):

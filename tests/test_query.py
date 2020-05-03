@@ -8,6 +8,7 @@ from data_browser.query import (
     BoundQuery,
     NumberFieldType,
     Query,
+    QueryField,
     StringFieldType,
     TimeFieldType,
 )
@@ -16,7 +17,9 @@ from data_browser.query import (
 @pytest.fixture
 def query():
     return Query(
-        "app.model", {"fa": ASC, "fd": DSC, "fn": None}, [("bob", "equals", "fred")]
+        "app.model",
+        [QueryField("fa", ASC), QueryField("fd", DSC), QueryField("fn", None)],
+        [("bob", "equals", "fred")],
     )
 
 
@@ -60,7 +63,7 @@ class TestQuery:
         )
         assert q == Query(
             "app.model",
-            {"fa": ASC, "fd": DSC, "fn": None},
+            [QueryField("fa", ASC), QueryField("fd", DSC), QueryField("fn", None)],
             [("bob__jones", "equals", "fred")],
         )
 
