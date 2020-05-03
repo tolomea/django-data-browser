@@ -191,7 +191,11 @@ function ResultsHead(props) {
                   <Link onClick={() => props.query.toggleSort(index)}>
                     {field.path}
                   </Link>{" "}
-                  {{ dsc: "↑", asc: "↓", null: "" }[field.sort]}
+                  {
+                    { dsc: `↑${field.priority}`, asc: `↓${field.priority}`, null: "" }[
+                      field.sort
+                    ]
+                  }
                 </>
               ) : (
                 field.path
