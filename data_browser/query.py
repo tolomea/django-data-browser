@@ -232,10 +232,10 @@ class BoundQuery:
             parts = path.split("__")
             model_name = query.model_name
             for part in parts[:-1]:
-                model_name = all_model_fields[model_name]["fks"].get(part)
+                model_name = all_model_fields[model_name].fks.get(part)
                 if model_name is None:
                     return None
-            res = all_model_fields[model_name]["fields"].get(parts[-1])
+            res = all_model_fields[model_name].fields.get(parts[-1])
             return res
 
         self.model_name = query.model_name

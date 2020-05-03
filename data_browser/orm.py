@@ -1,6 +1,8 @@
 from collections import defaultdict
+from dataclasses import dataclass
 
 from django.contrib import admin
+from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
@@ -41,6 +43,13 @@ _FIELD_MAP = [
 
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
+
+
+@dataclass
+class OrmModel:
+    fields: dict
+    fks: dict
+    admin: BaseModelAdmin = None
 
 
 def _get_all_admin_fields(request):
@@ -115,7 +124,7 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                     f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
                 )
 
-    return {"fields": fields, "fks": fks, "admin": model_admins[model]}
+    return OrmModel(fields=fields, fks=fks, admin=model_admins[model])
 
 
 def get_all_model_fields(request):
@@ -152,7 +161,7 @@ def get_data(request, bound_query):
     if not bound_query.fields:
         return []
 
-    admin = bound_query.all_model_fields[bound_query.model_name]["admin"]
+    admin = bound_query.all_model_fields[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
     # sort

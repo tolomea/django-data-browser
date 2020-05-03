@@ -227,14 +227,14 @@ def test_get_data_filter_causes_select(get_product_data):
 def test_get_fields(all_model_fields):
 
     # remap pk to id
-    assert "pk" not in all_model_fields["tests.Product"]["fields"]
-    assert "id" in all_model_fields["tests.Product"]["fields"]
+    assert "pk" not in all_model_fields["tests.Product"].fields
+    assert "id" in all_model_fields["tests.Product"].fields
 
     # no many to many fields
-    assert "tags" not in all_model_fields["tests.Product"]["fields"]
+    assert "tags" not in all_model_fields["tests.Product"].fields
 
     # no admin on inlines
-    assert "admin" not in all_model_fields["tests.InlineAdmin"]["fields"]
+    assert "admin" not in all_model_fields["tests.InlineAdmin"].fields
 
 
 class TestPermissions:
@@ -253,21 +253,19 @@ class TestPermissions:
         )
 
         assert "tests.NotInAdmin" not in all_model_fields
-        assert all_model_fields["tests.InAdmin"] == {
-            "fields": KEYS("admin", "id", "name"),
-            "fks": {},
-            "admin": ANY(BaseModelAdmin),
-        }
-        assert all_model_fields["tests.InlineAdmin"] == {
-            "fields": KEYS("id", "name"),
-            "fks": {"in_admin": "tests.InAdmin"},
-            "admin": ANY(BaseModelAdmin),
-        }
-        assert all_model_fields["tests.Normal"] == {
-            "fields": KEYS("admin", "id", "name"),
-            "fks": {"in_admin": "tests.InAdmin", "inline_admin": "tests.InlineAdmin"},
-            "admin": ANY(BaseModelAdmin),
-        }
+        assert all_model_fields["tests.InAdmin"] == orm.OrmModel(
+            fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
+        )
+        assert all_model_fields["tests.InlineAdmin"] == orm.OrmModel(
+            fields=KEYS("id", "name"),
+            fks={"in_admin": "tests.InAdmin"},
+            admin=ANY(BaseModelAdmin),
+        )
+        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+            fields=KEYS("admin", "id", "name"),
+            fks={"in_admin": "tests.InAdmin", "inline_admin": "tests.InlineAdmin"},
+            admin=ANY(BaseModelAdmin),
+        )
 
     @pytest.mark.django_db
     def test_no_perms(self, rf):
@@ -276,11 +274,9 @@ class TestPermissions:
         assert "tests.NotInAdmin" not in all_model_fields
         assert "tests.InAdmin" not in all_model_fields
         assert "tests.InlineAdmin" not in all_model_fields
-        assert all_model_fields["tests.Normal"] == {
-            "fields": KEYS("admin", "id", "name"),
-            "fks": {},
-            "admin": ANY(BaseModelAdmin),
-        }
+        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+            fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
+        )
 
     @pytest.mark.django_db
     def test_inline_perms(self, rf):
@@ -289,25 +285,21 @@ class TestPermissions:
         assert "tests.NotInAdmin" not in all_model_fields
         assert "tests.InAdmin" not in all_model_fields
         assert "tests.InlineAdmin" not in all_model_fields
-        assert all_model_fields["tests.Normal"] == {
-            "fields": KEYS("admin", "id", "name"),
-            "fks": {},
-            "admin": ANY(BaseModelAdmin),
-        }
+        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+            fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
+        )
 
     @pytest.mark.django_db
     def test_admin_perms(self, rf):
         all_model_fields = self.get_fields_with_perms(rf, ["normal", "inadmin"])
 
         assert "tests.NotInAdmin" not in all_model_fields
-        assert all_model_fields["tests.InAdmin"] == {
-            "fields": KEYS("admin", "id", "name"),
-            "fks": {},
-            "admin": ANY(BaseModelAdmin),
-        }
+        assert all_model_fields["tests.InAdmin"] == orm.OrmModel(
+            fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
+        )
         assert "tests.InlineAdmin" not in all_model_fields
-        assert all_model_fields["tests.Normal"] == {
-            "fields": KEYS("admin", "id", "name"),
-            "fks": {"in_admin": "tests.InAdmin"},
-            "admin": ANY(BaseModelAdmin),
-        }
+        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+            fields=KEYS("admin", "id", "name"),
+            fks={"in_admin": "tests.InAdmin"},
+            admin=ANY(BaseModelAdmin),
+        )

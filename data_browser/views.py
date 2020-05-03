@@ -59,14 +59,14 @@ def _get_config(all_model_fields):
         model_name: {
             "fields": {
                 name: {"type": field["type"].name, "concrete": field["concrete"]}
-                for name, field in model_fields["fields"].items()
+                for name, field in model_fields.fields.items()
             },
             "fks": {
                 name: {"model": rel_model}
-                for name, rel_model in model_fields["fks"].items()
+                for name, rel_model in model_fields.fks.items()
             },
-            "sorted_fields": sort_model_fields(model_fields["fields"]),
-            "sorted_fks": sorted(model_fields["fks"]),
+            "sorted_fields": sort_model_fields(model_fields.fields),
+            "sorted_fks": sorted(model_fields.fks),
         }
         for model_name, model_fields in all_model_fields.items()
     }

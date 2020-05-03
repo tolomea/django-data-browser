@@ -1,4 +1,5 @@
 import pytest
+from data_browser import orm
 from data_browser.query import (
     ASC,
     DSC,
@@ -22,23 +23,22 @@ def query():
 @pytest.fixture
 def bound_query(query):
     all_model_fields = {
-        "app.model": {
-            "fields": {
+        "app.model": orm.OrmModel(
+            fields={
                 "fa": {"type": StringFieldType, "concrete": True},
                 "fd": {"type": StringFieldType, "concrete": True},
                 "fn": {"type": StringFieldType, "concrete": False},
                 "bob": {"type": StringFieldType, "concrete": True},
             },
-            "fks": {"tom": "app.Tom"},
-        },
-        "app.Tom": {
-            "fields": {"jones": {"type": StringFieldType, "concrete": True}},
-            "fks": {"michael": "app.Michael"},
-        },
-        "app.Michael": {
-            "fields": {"bolton": {"type": StringFieldType, "concrete": True}},
-            "fks": {},
-        },
+            fks={"tom": "app.Tom"},
+        ),
+        "app.Tom": orm.OrmModel(
+            fields={"jones": {"type": StringFieldType, "concrete": True}},
+            fks={"michael": "app.Michael"},
+        ),
+        "app.Michael": orm.OrmModel(
+            fields={"bolton": {"type": StringFieldType, "concrete": True}}, fks={}
+        ),
     }
     return BoundQuery(query, all_model_fields)
 
