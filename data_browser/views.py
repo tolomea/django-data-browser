@@ -62,7 +62,8 @@ def _get_config(orm_models):
                 for name, orm_field in orm_model.fields.items()
             },
             "fks": {
-                name: {"model": rel_model} for name, rel_model in orm_model.fks.items()
+                name: {"model": fk_field.model_name}
+                for name, fk_field in orm_model.fks.items()
             },
             "sorted_fields": sort_model_fields(orm_model.fields),
             "sorted_fks": sorted(orm_model.fks),

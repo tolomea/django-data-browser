@@ -59,6 +59,11 @@ class OrmField:
     concrete: bool
 
 
+@dataclass
+class OrmFkField:
+    model_name: str
+
+
 def _get_all_admin_fields(request):
     request.data_browser = True
 
@@ -103,7 +108,6 @@ def _get_all_admin_fields(request):
 
 
 def _get_fields_for_model(model, model_admins, admin_fields):
-    # {"fields": {field_name, FieldType}, "fks": {field_name: model}}
     fields = {}
     fks = {}
 
@@ -117,7 +121,7 @@ def _get_fields_for_model(model, model_admins, admin_fields):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
             if field.related_model in admin_fields:
-                fks[field_name] = get_model_name(field.related_model)
+                fks[field_name] = OrmFkField(get_model_name(field.related_model))
         elif isinstance(field, type(None)):
             fields[field_name] = OrmField(type_=StringFieldType, concrete=False)
         else:

@@ -232,9 +232,10 @@ class BoundQuery:
             parts = path.split("__")
             model_name = query.model_name
             for part in parts[:-1]:
-                model_name = orm_models[model_name].fks.get(part)
-                if model_name is None:
+                fk_field = orm_models[model_name].fks.get(part)
+                if fk_field is None:
                     return None
+                model_name = fk_field.model_name
             res = orm_models[model_name].fields.get(parts[-1])
             return res
 
