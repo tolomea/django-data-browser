@@ -32,7 +32,7 @@ def _get_query_data(bound_query):
             for filter_ in bound_query.filters
         ],
         "fields": [
-            {"path": field.path, "sort": field.direction}
+            {"path": field.path, "sort": field.direction, "priority": field.priority}
             for field in bound_query.fields
         ],
         "model": bound_query.model_name,

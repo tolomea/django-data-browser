@@ -7,6 +7,10 @@ from django.contrib.auth.models import User
 
 from . import models
 
+true = True
+false = False
+null = None
+
 
 class ANY:  # pragma: no cover
     def __init__(self, type):
@@ -50,10 +54,11 @@ def test_query_html(admin_client):
         {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
     ]
 
+    print(json.dumps(context["fields"], indent=4, sort_keys=True))
     assert context["fields"] == [
-        {"path": "size", "sort": "dsc"},
-        {"path": "name", "sort": "asc"},
-        {"path": "size_unit", "sort": None},
+        {"path": "size", "priority": 0, "sort": "dsc"},
+        {"path": "name", "priority": 1, "sort": "asc"},
+        {"path": "size_unit", "priority": null, "sort": null},
     ]
 
     assert context["sortedModels"] == [
@@ -69,10 +74,6 @@ def test_query_html(admin_client):
         "tests.SKU",
         "tests.Tag",
     ]
-
-    true = True
-    false = False
-    null = None
 
     print(json.dumps(context["types"], indent=4, sort_keys=True))
     assert context["types"] == {
@@ -381,16 +382,17 @@ def test_query_json(admin_client):
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
 
+    print(json.dumps(data, indent=4, sort_keys=True))
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
-        "filters": [
-            {"errorMessage": None, "path": "size", "lookup": "lt", "value": "2"},
-            {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
-        ],
         "fields": [
-            {"path": "size", "sort": "dsc"},
-            {"path": "name", "sort": "asc"},
-            {"path": "size_unit", "sort": None},
+            {"path": "size", "priority": 0, "sort": "dsc"},
+            {"path": "name", "priority": 1, "sort": "asc"},
+            {"path": "size_unit", "priority": null, "sort": null},
+        ],
+        "filters": [
+            {"errorMessage": null, "lookup": "lt", "path": "size", "value": "2"},
+            {"errorMessage": null, "lookup": "gt", "path": "id", "value": "0"},
         ],
         "model": "tests.Product",
     }
@@ -445,13 +447,13 @@ def test_view_json(admin_client):
     assert data == {
         "data": [[1, "a", "g"], [1, "b", "g"]],
         "fields": [
-            {"path": "size", "sort": "dsc"},
-            {"path": "name", "sort": "asc"},
-            {"path": "size_unit", "sort": None},
+            {"path": "size", "priority": 0, "sort": "dsc"},
+            {"path": "name", "priority": 1, "sort": "asc"},
+            {"path": "size_unit", "priority": null, "sort": null},
         ],
         "filters": [
-            {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"},
-            {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
+            {"errorMessage": null, "lookup": "lt", "path": "size", "value": "2"},
+            {"errorMessage": null, "lookup": "gt", "path": "id", "value": "0"},
         ],
         "model": "tests.Product",
     }
