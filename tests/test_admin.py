@@ -6,11 +6,11 @@ from django.contrib.auth.models import User
 
 @pytest.fixture
 def view():
-    return View(model_name="app.model", fields="+fa,-fd,fn", query="bob__equals=fred")
+    return View(model_name="app.model", fields="fa+0,fd-1,fn", query="bob__equals=fred")
 
 
 def test_open_view(view, rf):
-    expected = '<a href="/data_browser/query/app.model/+fa,-fd,fn.html?bob__equals=fred">view</a>'
+    expected = '<a href="/data_browser/query/app.model/fa+0,fd-1,fn.html?bob__equals=fred">view</a>'
     assert ViewAdmin.open_view(view) == expected
 
 

@@ -27,7 +27,7 @@ def products(db):
 
 def test_query_html(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests.Product/-size,+name,size_unit.html?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Product/size-0,name+1,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     context = json.loads(res.context["ctx"])
@@ -344,7 +344,7 @@ def test_query_json_bad_fields(admin_client):
         "".join(
             [
                 "/data_browser/query/tests.Product/",
-                "-size,+name,size_unit,-bob,is_onsale,pooducer__name,producer__name.json",
+                "size-0,name+1,size_unit,bob-2,is_onsale,pooducer__name,producer__name.json",
                 "?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx",
             ]
         )
@@ -358,7 +358,7 @@ def test_query_json_bad_fields(admin_client):
 
 def test_query_html_bad_model(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests.Bob/-size,+name,size_unit.html?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Bob/size-0,name+1,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 404
 
@@ -366,7 +366,7 @@ def test_query_html_bad_model(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_csv(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests.Product/-size,+name,size_unit.csv?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Product/size-0,name+1,size_unit.csv?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
@@ -376,7 +376,7 @@ def test_query_csv(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_json(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests.Product/-size,+name,size_unit.json?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Product/size-0,name+1,size_unit.json?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
@@ -399,7 +399,7 @@ def test_query_json(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_model(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests.Bob/-size,+name,size_unit.json?size__lt=2&id__gt=0"
+        "/data_browser/query/tests.Bob/size-0,name+1,size_unit.json?size__lt=2&id__gt=0"
     )
     assert res.status_code == 404
 
@@ -408,7 +408,7 @@ def test_query_json_bad_model(admin_client):
 def test_view_csv(admin_client):
     view = data_browser.models.View.objects.create(
         model_name="tests.Product",
-        fields="-size,+name,size_unit",
+        fields="size-0,name+1,size_unit",
         query="size__lt=2&id__gt=0",
         owner=User.objects.get(),
     )
@@ -428,7 +428,7 @@ def test_view_csv(admin_client):
 def test_view_json(admin_client):
     view = data_browser.models.View.objects.create(
         model_name="tests.Product",
-        fields="-size,+name,size_unit",
+        fields="size-0,name+1,size_unit",
         query="size__lt=2&id__gt=0",
         owner=User.objects.get(),
     )

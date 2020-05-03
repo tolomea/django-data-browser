@@ -132,7 +132,7 @@ class App extends React.Component {
     return {
       model: model,
       fields: fields
-        .map((field) => ({ asc: "+", dsc: "-", null: "" }[field.sort] + field.path))
+        .map((field) => field.path + { asc: "+0", dsc: "-0", null: "" }[field.sort])
         .join(","),
       query: filters
         .map((filter) => `${filter.path}__${filter.lookup}=${filter.value}`)

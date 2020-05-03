@@ -12,7 +12,11 @@ ASC, DSC = "asc", "dsc"
 @dataclass
 class QueryField:
     path: str
-    direction: Optional[str]
+    direction: str = None
+    priority: int = None
+
+    def __post_init__(self):
+        assert (self.direction is None) == (self.priority is None)
 
 
 @dataclass
@@ -32,14 +36,16 @@ class Query:
     def from_request(cls, model_name, field_str, get_args):
         fields = []
         for field in field_str.split(","):
-            if field.strip():
-                path = field.lstrip("+-")
-                if field.startswith("+"):
-                    fields.append(QueryField(path, ASC))
-                elif field.startswith("-"):
-                    fields.append(QueryField(path, DSC))
+            field = field.strip()
+            if field:
+                if "+" in field:
+                    path, priority = field.split("+")
+                    fields.append(QueryField(path, ASC, int(priority)))
+                elif "-" in field:
+                    path, priority = field.split("-")
+                    fields.append(QueryField(path, DSC, int(priority)))
                 else:
-                    fields.append(QueryField(path, None))
+                    fields.append(QueryField(field, None, None))
 
         filters = []
         for path__lookup, values in dict(get_args).items():
@@ -52,10 +58,11 @@ class Query:
 
     @property
     def field_str(self):
-        prefix = {ASC: "+", DSC: "-", None: ""}
         field_strs = []
         for field in self.fields:
-            field_strs.append(f"{prefix[field.direction]}{field.path}")
+            direction = {ASC: "+", DSC: "-", None: ""}[field.direction]
+            priority = str(field.priority) if field.direction else ""
+            field_strs.append(f"{field.path}{direction}{priority}")
         return ",".join(field_strs)
 
     @property
@@ -227,13 +234,17 @@ class BoundFilter:
 class BoundField:
     path: str
     direction: Optional[str]
+    priority: Optional[int]
     concrete: bool
     type_: FieldType
 
     @classmethod
     def bind(cls, query_field, orm_field):
         direction = query_field.direction if orm_field.concrete else None
-        return cls(query_field.path, direction, orm_field.concrete, orm_field.type_)
+        priority = query_field.priority if orm_field.concrete else None
+        return cls(
+            query_field.path, direction, priority, orm_field.concrete, orm_field.type_
+        )
 
 
 class BoundQuery:
