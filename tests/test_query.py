@@ -22,7 +22,7 @@ def query():
 
 @pytest.fixture
 def bound_query(query):
-    all_model_fields = {
+    orm_models = {
         "app.model": orm.OrmModel(
             fields={
                 "fa": {"type": StringFieldType, "concrete": True},
@@ -40,7 +40,7 @@ def bound_query(query):
             fields={"bolton": {"type": StringFieldType, "concrete": True}}, fks={}
         ),
     }
-    return BoundQuery(query, all_model_fields)
+    return BoundQuery(query, orm_models)
 
 
 @pytest.fixture

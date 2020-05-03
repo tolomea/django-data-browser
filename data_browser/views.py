@@ -16,7 +16,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import View
-from .orm import _OPEN_IN_ADMIN, get_all_model_fields, get_data
+from .orm import _OPEN_IN_ADMIN, get_data, get_models
 from .query import TYPES, BoundQuery, Query
 
 
@@ -39,7 +39,7 @@ def _get_query_data(bound_query):
     }
 
 
-def _get_config(all_model_fields):
+def _get_config(orm_models):
     types = {
         name: {
             "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
@@ -55,38 +55,37 @@ def _get_config(all_model_fields):
         front = {"id": 1, _OPEN_IN_ADMIN: 2}
         return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
 
-    all_model_fields = {
+    orm_models = {
         model_name: {
             "fields": {
                 name: {"type": field["type"].name, "concrete": field["concrete"]}
-                for name, field in model_fields.fields.items()
+                for name, field in orm_model.fields.items()
             },
             "fks": {
-                name: {"model": rel_model}
-                for name, rel_model in model_fields.fks.items()
+                name: {"model": rel_model} for name, rel_model in orm_model.fks.items()
             },
-            "sorted_fields": sort_model_fields(model_fields.fields),
-            "sorted_fks": sorted(model_fields.fks),
+            "sorted_fields": sort_model_fields(orm_model.fields),
+            "sorted_fks": sorted(orm_model.fks),
         }
-        for model_name, model_fields in all_model_fields.items()
+        for model_name, orm_model in orm_models.items()
     }
 
     return {
         "baseUrl": reverse("data_browser:root"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "types": types,
-        "allModelFields": all_model_fields,
-        "sortedModels": sorted(all_model_fields),
+        "allModelFields": orm_models,
+        "sortedModels": sorted(orm_models),
     }
 
 
 def _get_context(request, model_name, fields):
     query = Query.from_request(model_name, fields, request.GET)
-    all_model_fields = get_all_model_fields(request)
-    if query.model_name not in all_model_fields:
+    orm_models = get_models(request)
+    if query.model_name not in orm_models:
         raise http.Http404(f"query.model_name does not exist")
-    bound_query = BoundQuery(query, all_model_fields)
-    return {**_get_config(all_model_fields), **_get_query_data(bound_query)}
+    bound_query = BoundQuery(query, orm_models)
+    return {**_get_config(orm_models), **_get_query_data(bound_query)}
 
 
 @admin_decorators.staff_member_required
@@ -124,10 +123,10 @@ def view(request, pk, media):
 
 
 def _data_response(request, query, media):
-    all_model_fields = get_all_model_fields(request)
-    if query.model_name not in all_model_fields:
+    orm_models = get_models(request)
+    if query.model_name not in orm_models:
         raise http.Http404(f"query.model_name does not exist")
-    bound_query = BoundQuery(query, all_model_fields)
+    bound_query = BoundQuery(query, orm_models)
     data = get_data(request, bound_query)
 
     if media == "csv":

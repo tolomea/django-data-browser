@@ -40,16 +40,16 @@ def req(rf, admin_user):
 
 
 @pytest.fixture
-def all_model_fields(req):
-    return orm.get_all_model_fields(req)
+def orm_models(req):
+    return orm.get_models(req)
 
 
 @pytest.fixture
-def get_query_data(req, all_model_fields, django_assert_num_queries):
+def get_query_data(req, orm_models, django_assert_num_queries):
     def helper(queries, *args):
         query = Query.from_request(*args)
 
-        bound_query = BoundQuery(query, all_model_fields)
+        bound_query = BoundQuery(query, orm_models)
         with django_assert_num_queries(queries):
             return orm.get_data(req, bound_query)
 
@@ -224,17 +224,17 @@ def test_get_data_filter_causes_select(get_product_data):
     ]
 
 
-def test_get_fields(all_model_fields):
+def test_get_fields(orm_models):
 
     # remap pk to id
-    assert "pk" not in all_model_fields["tests.Product"].fields
-    assert "id" in all_model_fields["tests.Product"].fields
+    assert "pk" not in orm_models["tests.Product"].fields
+    assert "id" in orm_models["tests.Product"].fields
 
     # no many to many fields
-    assert "tags" not in all_model_fields["tests.Product"].fields
+    assert "tags" not in orm_models["tests.Product"].fields
 
     # no admin on inlines
-    assert "admin" not in all_model_fields["tests.InlineAdmin"].fields
+    assert "admin" not in orm_models["tests.InlineAdmin"].fields
 
 
 class TestPermissions:
@@ -245,23 +245,23 @@ class TestPermissions:
 
         request = rf.get("/")
         request.user = user
-        return orm.get_all_model_fields(request)
+        return orm.get_models(request)
 
     def test_all_perms(self, rf, admin_user):
-        all_model_fields = self.get_fields_with_perms(
+        orm_models = self.get_fields_with_perms(
             rf, ["normal", "notinadmin", "inadmin", "inlineadmin"]
         )
 
-        assert "tests.NotInAdmin" not in all_model_fields
-        assert all_model_fields["tests.InAdmin"] == orm.OrmModel(
+        assert "tests.NotInAdmin" not in orm_models
+        assert orm_models["tests.InAdmin"] == orm.OrmModel(
             fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
         )
-        assert all_model_fields["tests.InlineAdmin"] == orm.OrmModel(
+        assert orm_models["tests.InlineAdmin"] == orm.OrmModel(
             fields=KEYS("id", "name"),
             fks={"in_admin": "tests.InAdmin"},
             admin=ANY(BaseModelAdmin),
         )
-        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+        assert orm_models["tests.Normal"] == orm.OrmModel(
             fields=KEYS("admin", "id", "name"),
             fks={"in_admin": "tests.InAdmin", "inline_admin": "tests.InlineAdmin"},
             admin=ANY(BaseModelAdmin),
@@ -269,36 +269,36 @@ class TestPermissions:
 
     @pytest.mark.django_db
     def test_no_perms(self, rf):
-        all_model_fields = self.get_fields_with_perms(rf, ["normal"])
+        orm_models = self.get_fields_with_perms(rf, ["normal"])
 
-        assert "tests.NotInAdmin" not in all_model_fields
-        assert "tests.InAdmin" not in all_model_fields
-        assert "tests.InlineAdmin" not in all_model_fields
-        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+        assert "tests.NotInAdmin" not in orm_models
+        assert "tests.InAdmin" not in orm_models
+        assert "tests.InlineAdmin" not in orm_models
+        assert orm_models["tests.Normal"] == orm.OrmModel(
             fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
         )
 
     @pytest.mark.django_db
     def test_inline_perms(self, rf):
-        all_model_fields = self.get_fields_with_perms(rf, ["normal", "inlineadmin"])
+        orm_models = self.get_fields_with_perms(rf, ["normal", "inlineadmin"])
 
-        assert "tests.NotInAdmin" not in all_model_fields
-        assert "tests.InAdmin" not in all_model_fields
-        assert "tests.InlineAdmin" not in all_model_fields
-        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+        assert "tests.NotInAdmin" not in orm_models
+        assert "tests.InAdmin" not in orm_models
+        assert "tests.InlineAdmin" not in orm_models
+        assert orm_models["tests.Normal"] == orm.OrmModel(
             fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
         )
 
     @pytest.mark.django_db
     def test_admin_perms(self, rf):
-        all_model_fields = self.get_fields_with_perms(rf, ["normal", "inadmin"])
+        orm_models = self.get_fields_with_perms(rf, ["normal", "inadmin"])
 
-        assert "tests.NotInAdmin" not in all_model_fields
-        assert all_model_fields["tests.InAdmin"] == orm.OrmModel(
+        assert "tests.NotInAdmin" not in orm_models
+        assert orm_models["tests.InAdmin"] == orm.OrmModel(
             fields=KEYS("admin", "id", "name"), fks={}, admin=ANY(BaseModelAdmin)
         )
-        assert "tests.InlineAdmin" not in all_model_fields
-        assert all_model_fields["tests.Normal"] == orm.OrmModel(
+        assert "tests.InlineAdmin" not in orm_models
+        assert orm_models["tests.Normal"] == orm.OrmModel(
             fields=KEYS("admin", "id", "name"),
             fks={"in_admin": "tests.InAdmin"},
             admin=ANY(BaseModelAdmin),

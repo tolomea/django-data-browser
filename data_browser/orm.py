@@ -127,7 +127,7 @@ def _get_fields_for_model(model, model_admins, admin_fields):
     return OrmModel(fields=fields, fks=fks, admin=model_admins[model])
 
 
-def get_all_model_fields(request):
+def get_models(request):
     model_admins, admin_fields = _get_all_admin_fields(request)
     # {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
     return {
@@ -161,7 +161,7 @@ def get_data(request, bound_query):
     if not bound_query.fields:
         return []
 
-    admin = bound_query.all_model_fields[bound_query.model_name].admin
+    admin = bound_query.orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
     # sort

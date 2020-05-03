@@ -226,20 +226,20 @@ class BoundField:
 
 
 class BoundQuery:
-    def __init__(self, query, all_model_fields):
-        # all_model_fields = {model_name: {"fields": {field_name, FieldType}, "fks": {field_name: model_name}}}
+    def __init__(self, query, orm_models):
+        # orm_models = {model_name: {"fields": {field_name, FieldType}, "fks": {field_name: model_name}}}
         def get_orm_field(path):
             parts = path.split("__")
             model_name = query.model_name
             for part in parts[:-1]:
-                model_name = all_model_fields[model_name].fks.get(part)
+                model_name = orm_models[model_name].fks.get(part)
                 if model_name is None:
                     return None
-            res = all_model_fields[model_name].fields.get(parts[-1])
+            res = orm_models[model_name].fields.get(parts[-1])
             return res
 
         self.model_name = query.model_name
-        self.all_model_fields = all_model_fields
+        self.orm_models = orm_models
 
         self.fields = []
         for path, direction in query.fields.items():
