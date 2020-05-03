@@ -32,8 +32,8 @@ def _get_query_data(bound_query):
             for filter_ in bound_query.filters
         ],
         "fields": [
-            {"path": path, "sort": sort_direction}
-            for path, sort_direction in bound_query.sort_fields
+            {"path": field.path, "sort": field.direction}
+            for field in bound_query.fields
         ],
         "model": bound_query.model_name,
     }
@@ -133,7 +133,7 @@ def _data_response(request, query, media):
     if media == "csv":
         buffer = io.StringIO()
         writer = csv.writer(buffer)
-        writer.writerow(bound_query.fields)
+        writer.writerow(f.path for f in bound_query.fields)
         writer.writerows(data)
         buffer.seek(0)
         response = HttpResponse(buffer, content_type="text/csv")

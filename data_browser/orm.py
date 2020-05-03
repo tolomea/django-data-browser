@@ -157,12 +157,11 @@ def get_data(request, bound_query):
 
     # sort
     sort_fields = []
-    for path, sort_direction in bound_query.sort_fields:
-        if path not in bound_query.calculated_fields:
-            if sort_direction is ASC:
-                sort_fields.append(path)
-            if sort_direction is DSC:
-                sort_fields.append(f"-{path}")
+    for field in bound_query.sort_fields:
+        if field.direction is ASC:
+            sort_fields.append(field.path)
+        if field.direction is DSC:
+            sort_fields.append(f"-{field.path}")
     qs = qs.order_by(*sort_fields)
 
     # filter
@@ -175,7 +174,7 @@ def get_data(request, bound_query):
                 negation = True
                 lookup = lookup[4:]
 
-            filter_str = f"{filter_.path}__{_get_django_lookup(filter_.field, lookup)}"
+            filter_str = f"{filter_.path}__{_get_django_lookup(filter_.type_, lookup)}"
             if negation:
                 qs = qs.exclude(**{filter_str: filter_.parsed})
             else:
@@ -184,8 +183,10 @@ def get_data(request, bound_query):
     # no calculated fields early out using qs.values
     if not bound_query.calculated_fields:
         data = []
-        for row in qs.values(*bound_query.fields).distinct():
-            data.append([t.format(row[f]) for f, t in bound_query.fields.items()])
+        for row in qs.values(*[f.path for f in bound_query.fields]).distinct():
+            data.append(
+                [field.type_.format(row[field.path]) for field in bound_query.fields]
+            )
         return data
 
     # preloading
@@ -196,9 +197,8 @@ def get_data(request, bound_query):
             path = path.rsplit("__", 1)[0]
             select_related.add(path)
 
-    for path, sort_direction in bound_query.sort_fields:
-        if sort_direction is not None:
-            add_select_relateds(path)
+    for field in bound_query.sort_fields:
+        add_select_relateds(field.path)
 
     for filter_ in bound_query.filters:
         if filter_.is_valid:
@@ -206,8 +206,8 @@ def get_data(request, bound_query):
 
     prefetch_related = set()
     for field in bound_query.fields:
-        if "__" in field:
-            prefetch_related.add(field.rsplit("__", 1)[0])
+        if "__" in field.path:
+            prefetch_related.add(field.path.rsplit("__", 1)[0])
     prefetch_related -= select_related
 
     if select_related:
@@ -233,5 +233,10 @@ def get_data(request, bound_query):
 
     data = []
     for row in qs.distinct():
-        data.append([t.format(lookup(row, f)) for f, t in bound_query.fields.items()])
+        data.append(
+            [
+                field.type_.format(lookup(row, field.path))
+                for field in bound_query.fields
+            ]
+        )
     return data

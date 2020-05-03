@@ -188,79 +188,77 @@ TYPES = {
 }
 
 
-class Filter:
-    def __init__(self, path, index, field, lookup, value):
+class BoundFilter:
+    def __init__(self, path, index, type_, lookup, value):
         self.path = path
         self.index = index
-        self.field = field
+        self.type_ = type_
         self.lookup = lookup
         self.value = value
 
         self.parsed = None
         self.err_message = None
 
-        if lookup not in field.lookups:
-            self.err_message = f"Bad lookup '{lookup}' expected {field.lookups}"
-        try:
-            self.parsed = TYPES[field.lookups[lookup]].parse(value)
-        except Exception as e:
-            self.err_message = str(e) if str(e) else repr(e)
+        if lookup not in type_.lookups:
+            self.err_message = f"Bad lookup '{lookup}' expected {type_.lookups}"
+        else:
+            try:
+                self.parsed = TYPES[type_.lookups[lookup]].parse(value)
+            except Exception as e:
+                self.err_message = str(e) if str(e) else repr(e)
 
         self.is_valid = not self.err_message
 
     def __eq__(self, other):
         return (
-            self.field == other.field
+            self.type_ == other.type_
             and self.lookup == other.lookup
             and self.value == other.value
         )
 
 
+class BoundField:
+    def __init__(self, path, orm_field, direction):
+        self.path = path
+        self.concrete = orm_field["concrete"]
+        self.type_ = orm_field["type"]
+        self.direction = direction if self.concrete else None
+
+
 class BoundQuery:
     def __init__(self, query, all_model_fields):
         # all_model_fields = {model_name: {"fields": {field_name, FieldType}, "fks": {field_name: model_name}}}
-        self._query = query
+        def get_orm_field(path):
+            parts = path.split("__")
+            model_name = query.model_name
+            for part in parts[:-1]:
+                model_name = all_model_fields[model_name]["fks"].get(part)
+                if model_name is None:
+                    return None
+            res = all_model_fields[model_name]["fields"].get(parts[-1])
+            return res
+
         self.model_name = query.model_name
         self.all_model_fields = all_model_fields
 
-    def _get_field(self, path):
-        parts = path.split("__")
-        model_name = self.model_name
-        for part in parts[:-1]:
-            model_name = self.all_model_fields[model_name]["fks"].get(part)
-            if model_name is None:
-                return None
-        res = self.all_model_fields[model_name]["fields"].get(parts[-1])
-        return res
+        self.fields = []
+        for path, direction in query.fields.items():
+            orm_field = get_orm_field(path)
+            if orm_field:
+                self.fields.append(BoundField(path, orm_field, direction))
+
+        self.filters = []
+        for i, (path, lookup, value) in enumerate(query.filters):
+            orm_field = get_orm_field(path)
+            if orm_field:
+                self.filters.append(
+                    BoundFilter(path, i, orm_field["type"], lookup, value)
+                )
 
     @property
     def sort_fields(self):
-        res = []
-        for path, direction in self._query.fields.items():
-            if self._get_field(path):
-                res.append((path, direction))
-        return res
+        return [f for f in self.fields if f.direction]
 
     @property
     def calculated_fields(self):
-        res = set()
-        for path in self._query.fields:
-            field = self._get_field(path)
-            if field and not field["concrete"]:
-                res.add(path)
-        return res
-
-    @property
-    def filters(self):
-        for i, (path, lookup, value) in enumerate(self._query.filters):
-            field = self._get_field(path)
-            if field:
-                yield Filter(path, i, field["type"], lookup, value)
-
-    @property
-    def fields(self):
-        return {
-            path: self._get_field(path)["type"]
-            for path in self._query.fields
-            if self._get_field(path)
-        }
+        return {f.path for f in self.fields if not f.concrete}
