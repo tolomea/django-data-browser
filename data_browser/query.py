@@ -1,6 +1,6 @@
 import urllib
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Sequence
 
 import dateutil.parser
 from django.urls import reverse
@@ -15,7 +15,19 @@ class QueryField:
     direction: Optional[str]
 
 
+@dataclass
+class QueryFilter:
+    path: str
+    lookup: str
+    value: str
+
+
+@dataclass
 class Query:
+    model_name: str
+    fields: Sequence[QueryField]
+    filters: Sequence[QueryFilter]
+
     @classmethod
     def from_request(cls, model_name, field_str, get_args):
         fields = []
@@ -33,26 +45,10 @@ class Query:
         for path__lookup, values in dict(get_args).items():
             for value in values:
                 path, lookup = path__lookup.rsplit("__", 1)
-                filters.append((path, lookup, value))
+                filters.append(QueryFilter(path, lookup, value))
 
         res = cls(model_name, fields, filters)
         return res
-
-    def __init__(self, model_name, fields, filters):
-        self.model_name = model_name
-        self.fields = fields
-        self.filters = filters
-
-    @property
-    def _data(self):
-        return {
-            "model_name": self.model_name,
-            "fields": self.fields,
-            "filters": self.filters,
-        }
-
-    def __eq__(self, other):
-        return self._data == other._data
 
     @property
     def field_str(self):
@@ -64,7 +60,9 @@ class Query:
 
     @property
     def filter_fields(self):
-        return [(f"{n}__{l}", v) for (n, l, v) in self.filters]
+        return [
+            (f"{filter.path}__{filter.lookup}", filter.value) for filter in self.filters
+        ]
 
     def get_url(self, media):
         base_url = reverse(
@@ -196,41 +194,46 @@ TYPES = {
 }
 
 
+@dataclass
 class BoundFilter:
-    def __init__(self, path, index, type_, lookup, value):
-        self.path = path
-        self.index = index
-        self.type_ = type_
-        self.lookup = lookup
-        self.value = value
+    path: str
+    lookup: str
+    value: str
+    type_: FieldType
 
+    @classmethod
+    def bind(cls, query_filter, orm_field):
+        return cls(
+            query_filter.path, query_filter.lookup, query_filter.value, orm_field.type_
+        )
+
+    def __post_init__(self):
         self.parsed = None
         self.err_message = None
 
-        if lookup not in type_.lookups:
-            self.err_message = f"Bad lookup '{lookup}' expected {type_.lookups}"
+        lookups = self.type_.lookups
+        if self.lookup not in lookups:
+            self.err_message = f"Bad lookup '{self.lookup}' expected {lookups}"
         else:
             try:
-                self.parsed = TYPES[type_.lookups[lookup]].parse(value)
+                self.parsed = TYPES[lookups[self.lookup]].parse(self.value)
             except Exception as e:
                 self.err_message = str(e) if str(e) else repr(e)
 
         self.is_valid = not self.err_message
 
-    def __eq__(self, other):
-        return (
-            self.type_ == other.type_
-            and self.lookup == other.lookup
-            and self.value == other.value
-        )
 
-
+@dataclass
 class BoundField:
-    def __init__(self, query_field, orm_field):
-        self.path = query_field.path
-        self.concrete = orm_field.concrete
-        self.type_ = orm_field.type_
-        self.direction = query_field.direction if self.concrete else None
+    path: str
+    direction: Optional[str]
+    concrete: bool
+    type_: FieldType
+
+    @classmethod
+    def bind(cls, query_field, orm_field):
+        direction = query_field.direction if orm_field.concrete else None
+        return cls(query_field.path, direction, orm_field.concrete, orm_field.type_)
 
 
 class BoundQuery:
@@ -254,15 +257,13 @@ class BoundQuery:
         for query_field in query.fields:
             orm_field = get_orm_field(query_field.path)
             if orm_field:
-                self.fields.append(BoundField(query_field, orm_field))
+                self.fields.append(BoundField.bind(query_field, orm_field))
 
         self.filters = []
-        for i, (path, lookup, value) in enumerate(query.filters):
-            orm_field = get_orm_field(path)
+        for query_filter in query.filters:
+            orm_field = get_orm_field(query_filter.path)
             if orm_field:
-                self.filters.append(
-                    BoundFilter(path, i, orm_field.type_, lookup, value)
-                )
+                self.filters.append(BoundFilter.bind(query_filter, orm_field))
 
     @property
     def sort_fields(self):
