@@ -278,7 +278,7 @@ class BoundQuery:
 
     @property
     def sort_fields(self):
-        return [f for f in self.fields if f.direction]
+        return sorted((f for f in self.fields if f.direction), key=lambda f: f.priority)
 
     @property
     def calculated_fields(self):
