@@ -220,8 +220,8 @@ class BoundFilter:
 class BoundField:
     def __init__(self, path, orm_field, direction):
         self.path = path
-        self.concrete = orm_field["concrete"]
-        self.type_ = orm_field["type"]
+        self.concrete = orm_field.concrete
+        self.type_ = orm_field.type_
         self.direction = direction if self.concrete else None
 
 
@@ -252,7 +252,7 @@ class BoundQuery:
             orm_field = get_orm_field(path)
             if orm_field:
                 self.filters.append(
-                    BoundFilter(path, i, orm_field["type"], lookup, value)
+                    BoundFilter(path, i, orm_field.type_, lookup, value)
                 )
 
     @property

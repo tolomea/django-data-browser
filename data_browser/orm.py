@@ -13,6 +13,7 @@ from .query import (
     ASC,
     DSC,
     BooleanFieldType,
+    FieldType,
     HTMLFieldType,
     NumberFieldType,
     StringFieldType,
@@ -50,6 +51,12 @@ class OrmModel:
     fields: dict
     fks: dict
     admin: BaseModelAdmin = None
+
+
+@dataclass
+class OrmField:
+    type_: FieldType
+    concrete: bool
 
 
 def _get_all_admin_fields(request):
@@ -105,19 +112,19 @@ def _get_fields_for_model(model, model_admins, admin_fields):
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
         if field_name == _OPEN_IN_ADMIN:
-            fields[_OPEN_IN_ADMIN] = {"type": HTMLFieldType, "concrete": False}
+            fields[_OPEN_IN_ADMIN] = OrmField(type_=HTMLFieldType, concrete=False)
         elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
             if field.related_model in admin_fields:
                 fks[field_name] = get_model_name(field.related_model)
         elif isinstance(field, type(None)):
-            fields[field_name] = {"type": StringFieldType, "concrete": False}
+            fields[field_name] = OrmField(type_=StringFieldType, concrete=False)
         else:
             for django_types, field_type in _FIELD_MAP:
                 if isinstance(field, django_types):
                     if field_type:
-                        fields[field_name] = {"type": field_type, "concrete": True}
+                        fields[field_name] = OrmField(type_=field_type, concrete=True)
                     break
             else:  # pragma: no cover
                 print(

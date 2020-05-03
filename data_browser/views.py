@@ -58,8 +58,8 @@ def _get_config(orm_models):
     orm_models = {
         model_name: {
             "fields": {
-                name: {"type": field["type"].name, "concrete": field["concrete"]}
-                for name, field in orm_model.fields.items()
+                name: {"type": orm_field.type_.name, "concrete": orm_field.concrete}
+                for name, orm_field in orm_model.fields.items()
             },
             "fks": {
                 name: {"model": rel_model} for name, rel_model in orm_model.fks.items()

@@ -174,7 +174,7 @@ class App extends React.Component {
 
   getFieldType(path) {
     const modelField = this.getModelField(path);
-    const type = modelField["type"];
+    const type = modelField.type;
     return this.props.types[type];
   }
 
@@ -182,7 +182,7 @@ class App extends React.Component {
     let model = this.state.model;
     if (path) {
       for (const field of path.split("__")) {
-        model = this.props.allModelFields[model].fks[field]["model"];
+        model = this.props.allModelFields[model].fks[field].model;
       }
     }
     return model;

@@ -25,19 +25,20 @@ def bound_query(query):
     orm_models = {
         "app.model": orm.OrmModel(
             fields={
-                "fa": {"type": StringFieldType, "concrete": True},
-                "fd": {"type": StringFieldType, "concrete": True},
-                "fn": {"type": StringFieldType, "concrete": False},
-                "bob": {"type": StringFieldType, "concrete": True},
+                "fa": orm.OrmField(type_=StringFieldType, concrete=True),
+                "fd": orm.OrmField(type_=StringFieldType, concrete=True),
+                "fn": orm.OrmField(type_=StringFieldType, concrete=False),
+                "bob": orm.OrmField(type_=StringFieldType, concrete=True),
             },
             fks={"tom": "app.Tom"},
         ),
         "app.Tom": orm.OrmModel(
-            fields={"jones": {"type": StringFieldType, "concrete": True}},
+            fields={"jones": orm.OrmField(type_=StringFieldType, concrete=True)},
             fks={"michael": "app.Michael"},
         ),
         "app.Michael": orm.OrmModel(
-            fields={"bolton": {"type": StringFieldType, "concrete": True}}, fks={}
+            fields={"bolton": orm.OrmField(type_=StringFieldType, concrete=True)},
+            fks={},
         ),
     }
     return BoundQuery(query, orm_models)
