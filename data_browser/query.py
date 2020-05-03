@@ -237,9 +237,8 @@ class BoundQuery:
     def sort_fields(self):
         res = []
         for path, direction in self._query.fields.items():
-            field = self._get_field(path)
-            if field:
-                res.append((path, field["type"], direction))
+            if self._get_field(path):
+                res.append((path, direction))
         return res
 
     @property

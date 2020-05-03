@@ -33,7 +33,7 @@ def _get_query_data(bound_query):
         ],
         "fields": [
             {"path": path, "sort": sort_direction}
-            for (path, field, sort_direction) in bound_query.sort_fields
+            for path, sort_direction in bound_query.sort_fields
         ],
         "model": bound_query.model_name,
     }

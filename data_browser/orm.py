@@ -157,7 +157,7 @@ def get_data(request, bound_query):
 
     # sort
     sort_fields = []
-    for path, field, sort_direction in bound_query.sort_fields:
+    for path, sort_direction in bound_query.sort_fields:
         if path not in bound_query.calculated_fields:
             if sort_direction is ASC:
                 sort_fields.append(path)
@@ -196,7 +196,7 @@ def get_data(request, bound_query):
             path = path.rsplit("__", 1)[0]
             select_related.add(path)
 
-    for path, field, sort_direction in bound_query.sort_fields:
+    for path, sort_direction in bound_query.sort_fields:
         if sort_direction is not None:
             add_select_relateds(path)
 

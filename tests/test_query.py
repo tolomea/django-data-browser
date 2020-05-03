@@ -87,11 +87,7 @@ class TestBoundQuery:
         assert list(bound_query.calculated_fields) == ["fa"]
 
     def test_sort_fields(self, bound_query):
-        assert list(bound_query.sort_fields) == [
-            ("fa", StringFieldType, ASC),
-            ("fd", StringFieldType, DSC),
-            ("fn", StringFieldType, None),
-        ]
+        assert list(bound_query.sort_fields) == [("fa", ASC), ("fd", DSC), ("fn", None)]
 
     def test_filters(self, bound_query, filter):
         assert list(bound_query.filters) == [filter]
