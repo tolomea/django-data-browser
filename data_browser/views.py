@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+import sys
 
 import django.contrib.admin.views.decorators as admin_decorators
 import requests
@@ -15,7 +16,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import View
-from .orm import get_all_model_fields, get_data
+from .orm import _OPEN_IN_ADMIN, get_all_model_fields, get_data
 from .query import TYPES, BoundQuery, Query
 
 
@@ -50,11 +51,9 @@ def _get_config(all_model_fields):
     }
 
     def sort_model_fields(fields):
-        sorted_fields = []
-        for f in ["id", "admin"] + sorted(fields):
-            if f not in sorted_fields and f in fields:
-                sorted_fields.append(f)
-        return sorted_fields
+        fields = sorted(fields)
+        front = {"id": 1, _OPEN_IN_ADMIN: 2}
+        return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
 
     all_model_fields = {
         model_name: {
@@ -129,7 +128,7 @@ def _data_response(request, query, media):
     if query.model_name not in all_model_fields:
         raise http.Http404(f"query.model_name does not exist")
     bound_query = BoundQuery(query, all_model_fields)
-    data = get_data(bound_query)
+    data = get_data(request, bound_query)
 
     if media == "csv":
         buffer = io.StringIO()

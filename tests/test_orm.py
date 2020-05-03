@@ -1,6 +1,7 @@
 import pytest
 from data_browser import orm
 from data_browser.query import BoundQuery, Query
+from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 
 from . import models
@@ -32,20 +33,25 @@ def products(db):
 
 
 @pytest.fixture
-def all_model_fields(rf, admin_user):
-    request = rf.get("/")
-    request.user = admin_user
-    return orm.get_all_model_fields(request)
+def req(rf, admin_user):
+    req = rf.get("/")
+    req.user = admin_user
+    return req
 
 
 @pytest.fixture
-def get_query_data(all_model_fields, django_assert_num_queries):
+def all_model_fields(req):
+    return orm.get_all_model_fields(req)
+
+
+@pytest.fixture
+def get_query_data(req, all_model_fields, django_assert_num_queries):
     def helper(queries, *args):
         query = Query.from_request(*args)
 
         bound_query = BoundQuery(query, all_model_fields)
         with django_assert_num_queries(queries):
-            return orm.get_data(bound_query)
+            return orm.get_data(req, bound_query)
 
     yield helper
 
@@ -250,14 +256,17 @@ class TestPermissions:
         assert all_model_fields["tests.InAdmin"] == {
             "fields": KEYS("admin", "id", "name"),
             "fks": {},
+            "admin": ANY(BaseModelAdmin),
         }
         assert all_model_fields["tests.InlineAdmin"] == {
             "fields": KEYS("id", "name"),
             "fks": {"in_admin": "tests.InAdmin"},
+            "admin": ANY(BaseModelAdmin),
         }
         assert all_model_fields["tests.Normal"] == {
             "fields": KEYS("admin", "id", "name"),
             "fks": {"in_admin": "tests.InAdmin", "inline_admin": "tests.InlineAdmin"},
+            "admin": ANY(BaseModelAdmin),
         }
 
     @pytest.mark.django_db
@@ -270,6 +279,7 @@ class TestPermissions:
         assert all_model_fields["tests.Normal"] == {
             "fields": KEYS("admin", "id", "name"),
             "fks": {},
+            "admin": ANY(BaseModelAdmin),
         }
 
     @pytest.mark.django_db
@@ -282,6 +292,7 @@ class TestPermissions:
         assert all_model_fields["tests.Normal"] == {
             "fields": KEYS("admin", "id", "name"),
             "fks": {},
+            "admin": ANY(BaseModelAdmin),
         }
 
     @pytest.mark.django_db
@@ -292,9 +303,11 @@ class TestPermissions:
         assert all_model_fields["tests.InAdmin"] == {
             "fields": KEYS("admin", "id", "name"),
             "fks": {},
+            "admin": ANY(BaseModelAdmin),
         }
         assert "tests.InlineAdmin" not in all_model_fields
         assert all_model_fields["tests.Normal"] == {
             "fields": KEYS("admin", "id", "name"),
             "fks": {"in_admin": "tests.InAdmin"},
+            "admin": ANY(BaseModelAdmin),
         }

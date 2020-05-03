@@ -1,6 +1,5 @@
 from collections import defaultdict
 
-from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.db import models
@@ -40,11 +39,6 @@ _FIELD_MAP = [
 ]
 
 
-def get_model(model_name):
-    app, model = model_name.split(".")
-    return apps.get_model(app_label=app, model_name=model)
-
-
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
 
@@ -66,13 +60,17 @@ def _get_all_admin_fields(request):
         return False
 
     all_admin_fields = defaultdict(set)
+    model_admins = {}
     for model, modeladmin in admin.site._registry.items():
+        model_admins[model] = modeladmin
         if visible(modeladmin, request):
             all_admin_fields[model].update(from_fieldsets(modeladmin, model))
             all_admin_fields[model].add(_OPEN_IN_ADMIN)
 
             # check the inlines, these are already filtered for access
             for inline in modeladmin.get_inline_instances(request):
+                if inline.model not in model_admins:  # pragma: no cover
+                    model_admins[inline.model] = inline
                 all_admin_fields[inline.model].update(
                     from_fieldsets(inline, inline.model)
                 )
@@ -85,10 +83,10 @@ def _get_all_admin_fields(request):
         fields.add("id")
         fields.discard("pk")
 
-    return all_admin_fields
+    return model_admins, all_admin_fields
 
 
-def _get_fields_for_model(model, admin_fields):
+def _get_fields_for_model(model, model_admins, admin_fields):
     # {"fields": {field_name, FieldType}, "fks": {field_name: model}}
     fields = {}
     fks = {}
@@ -117,14 +115,14 @@ def _get_fields_for_model(model, admin_fields):
                     f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
                 )
 
-    return {"fields": fields, "fks": fks}
+    return {"fields": fields, "fks": fks, "admin": model_admins[model]}
 
 
 def get_all_model_fields(request):
-    admin_fields = _get_all_admin_fields(request)
+    model_admins, admin_fields = _get_all_admin_fields(request)
     # {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
     return {
-        get_model_name(model): _get_fields_for_model(model, admin_fields)
+        get_model_name(model): _get_fields_for_model(model, model_admins, admin_fields)
         for model in admin_fields
     }
 
@@ -148,11 +146,14 @@ def _get_django_lookup(field_type, lookup):
         return lookup
 
 
-def get_data(bound_query):
+def get_data(request, bound_query):
+    request.data_browser = True
+
     if not bound_query.fields:
         return []
 
-    qs = get_model(bound_query.model_name).objects.all()
+    admin = bound_query.all_model_fields[bound_query.model_name]["admin"]
+    qs = admin.get_queryset(request)
 
     # sort
     sort_fields = []
