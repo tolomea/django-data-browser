@@ -106,7 +106,9 @@ class App extends React.Component {
     });
   }
 
-  fetchData(url) {
+  fetchData(state) {
+    const url = this.getUrlForState(state, "json");
+
     if (controller) controller.abort();
     controller = new AbortController();
 
@@ -125,66 +127,62 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const location = window.location;
-    const htmlUrl = location.origin + location.pathname;
-    assert(htmlUrl.slice(-4) === "html");
-    const jsonUrl = htmlUrl.slice(0, -4) + "json" + location.search;
-
-    this.fetchData(jsonUrl);
+    const reqState = {
+      model: this.state.model,
+      fields: this.state.fields,
+      filters: this.state.filters,
+    };
+    window.history.replaceState(
+      reqState,
+      null,
+      this.getUrlForState(this.state, "html")
+    );
+    this.fetchData(this.state);
     window.onpopstate = (e) => {
-      this.fetchData(jsonUrl);
+      console.log("popstate", e.state);
+      this.fetchData(e.state);
     };
   }
 
   handleQueryChange(queryChange) {
     const newState = { ...this.state, ...queryChange };
     this.setState(queryChange);
-    window.history.pushState(
-      null,
-      null,
-      this.getUrlForQuery(newState.model, newState.fields, newState.filters, "html")
-    );
-    this.fetchData(
-      this.getUrlForQuery(newState.model, newState.fields, newState.filters, "json")
-    );
+    const reqState = {
+      model: newState.model,
+      fields: newState.fields,
+      filters: newState.filters,
+    };
+    window.history.pushState(reqState, null, this.getUrlForState(newState, "html"));
+    this.fetchData(newState);
   }
 
-  getPartsForQuery(model, fields, filters) {
+  getPartsForQuery(state) {
     return {
-      model: model,
-      fields: fields
+      model: state.model,
+      fields: state.fields
         .map(
           (f) =>
             f.path + { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
         )
         .join(","),
-      query: filters.map((f) => `${f.path}__${f.lookup}=${f.value}`).join("&"),
+      query: state.filters.map((f) => `${f.path}__${f.lookup}=${f.value}`).join("&"),
     };
   }
 
   getUrlForSave() {
-    const parts = this.getPartsForQuery(
-      this.state.model,
-      this.state.fields,
-      this.state.filters
-    );
+    const parts = this.getPartsForQuery(this.state);
     const queryString = new URLSearchParams(parts).toString();
     return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
   }
 
-  getUrlForQuery(model, fields, filters, media) {
-    const parts = this.getPartsForQuery(model, fields, filters);
+  getUrlForState(state, media) {
+    const parts = this.getPartsForQuery(state);
     const basePath = `${this.props.baseUrl}query/${parts.model}`;
     return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
   }
 
   getUrlForMedia(media) {
-    return this.getUrlForQuery(
-      this.state.model,
-      this.state.fields,
-      this.state.filters,
-      media
-    );
+    return this.getUrlForState(this.state, media);
   }
 
   getModelField(path) {
