@@ -181,7 +181,7 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.fields.map((field, index) => {
-          const modelField = props.config.getModelField(field.path);
+          const modelField = props.config.getField(field.path);
           return (
             <th key={index}>
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
@@ -224,7 +224,7 @@ function ResultsBody(props) {
             <td key={col_index}>
               <ResultsCell
                 value={cell}
-                modelField={props.config.getModelField(props.fields[col_index].path)}
+                modelField={props.config.getField(props.fields[col_index].path)}
               />
             </td>
           ))}

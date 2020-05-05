@@ -185,27 +185,18 @@ class App extends React.Component {
     return this.getUrlForState(this.state, media);
   }
 
-  getModelField(path) {
+  getField(path) {
     const parts = path.split("__");
     const field = parts.slice(-1);
-    const model = this.getFkModel(parts.slice(0, -1).join("__"));
+    let model = this.state.model;
+    for (const field of parts.slice(0, -1)) {
+      model = this.props.allModelFields[model].fks[field].model;
+    }
     return this.props.allModelFields[model].fields[field];
   }
 
   getFieldType(path) {
-    const modelField = this.getModelField(path);
-    const type = modelField.type;
-    return this.props.types[type];
-  }
-
-  getFkModel(path) {
-    let model = this.state.model;
-    if (path) {
-      for (const field of path.split("__")) {
-        model = this.props.allModelFields[model].fks[field].model;
-      }
-    }
-    return model;
+    return this.props.types[this.getField(path).type];
   }
 
   render() {
@@ -215,9 +206,8 @@ class App extends React.Component {
           types: this.props.types,
           allModelFields: this.props.allModelFields,
           sortedModels: this.props.sortedModels,
-          getFkModel: this.getFkModel.bind(this),
           getFieldType: this.getFieldType.bind(this),
-          getModelField: this.getModelField.bind(this),
+          getField: this.getField.bind(this),
         }}
         query={{
           addField: this.addField.bind(this),
