@@ -4,6 +4,25 @@ import Page from "./Components";
 const assert = require("assert");
 let controller;
 
+function getPartsForQuery(state) {
+  return {
+    model: state.model,
+    fields: state.fields
+      .map(
+        (f) =>
+          f.path + { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
+      )
+      .join(","),
+    query: state.filters.map((f) => `${f.path}__${f.lookup}=${f.value}`).join("&"),
+  };
+}
+
+function getUrlForState(baseUrl, state, media) {
+  const parts = getPartsForQuery(state);
+  const basePath = `${baseUrl}query/${parts.model}`;
+  return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -14,6 +33,8 @@ class App extends React.Component {
       data: [],
     };
   }
+
+  /* QUERY FUNCTIONS */
 
   addField(path) {
     const newFields = this.state.fields.slice();
@@ -73,8 +94,7 @@ class App extends React.Component {
       errorMessage: null,
       path: path,
       lookup: fieldType.defaultLookup,
-      value: this.props.types[fieldType.lookups[fieldType.defaultLookup].type]
-        .defaultValue,
+      value: this.getDefaultLookValue(fieldType),
     });
     this.handleQueryChange({ filters: newFilters });
   }
@@ -106,8 +126,20 @@ class App extends React.Component {
     });
   }
 
+  getUrlForSave() {
+    const parts = getPartsForQuery(this.state);
+    const queryString = new URLSearchParams(parts).toString();
+    return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
+  }
+
+  getUrlForMedia(media) {
+    return getUrlForState(this.props.baseUrl, this.state, media);
+  }
+
+  /* LIFE CYCLE FUNCTIONS */
+
   fetchData(state) {
-    const url = this.getUrlForState(state, "json");
+    const url = getUrlForState(this.props.baseUrl, state, "json");
 
     if (controller) controller.abort();
     controller = new AbortController();
@@ -135,7 +167,7 @@ class App extends React.Component {
     window.history.replaceState(
       reqState,
       null,
-      this.getUrlForState(this.state, "html")
+      getUrlForState(this.props.baseUrl, this.state, "html")
     );
     this.fetchData(this.state);
     window.onpopstate = (e) => {
@@ -152,43 +184,20 @@ class App extends React.Component {
       fields: newState.fields,
       filters: newState.filters,
     };
-    window.history.pushState(reqState, null, this.getUrlForState(newState, "html"));
+    window.history.pushState(
+      reqState,
+      null,
+      getUrlForState(this.props.baseUrl, newState, "html")
+    );
     this.fetchData(newState);
   }
 
-  getPartsForQuery(state) {
-    return {
-      model: state.model,
-      fields: state.fields
-        .map(
-          (f) =>
-            f.path + { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
-        )
-        .join(","),
-      query: state.filters.map((f) => `${f.path}__${f.lookup}=${f.value}`).join("&"),
-    };
-  }
-
-  getUrlForSave() {
-    const parts = this.getPartsForQuery(this.state);
-    const queryString = new URLSearchParams(parts).toString();
-    return `${window.location.origin}${this.props.adminUrl}?${queryString}`;
-  }
-
-  getUrlForState(state, media) {
-    const parts = this.getPartsForQuery(state);
-    const basePath = `${this.props.baseUrl}query/${parts.model}`;
-    return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
-  }
-
-  getUrlForMedia(media) {
-    return this.getUrlForState(this.state, media);
-  }
+  /* CONFIG FUNCTIONS */
 
   getField(path) {
     const parts = path.split("__");
     const field = parts.slice(-1);
-    let model = this.state.model;
+    let model = this.state.model; // there shouldn't be state here, this is a config function
     for (const field of parts.slice(0, -1)) {
       model = this.props.allModelFields[model].fks[field].model;
     }
@@ -197,6 +206,11 @@ class App extends React.Component {
 
   getFieldType(path) {
     return this.props.types[this.getField(path).type];
+  }
+
+  getDefaultLookValue(fieldType) {
+    return this.props.types[fieldType.lookups[fieldType.defaultLookup].type]
+      .defaultValue;
   }
 
   render() {
