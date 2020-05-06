@@ -7,16 +7,11 @@ let controller;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      model: props.model,
-      fields: props.fields,
-      filters: props.filters,
-      data: [],
-    };
+    this.state = props.initialState;
   }
 
   fetchData(state) {
-    const url = getUrlForQuery(this.props.baseUrl, state, "json");
+    const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
     if (controller) controller.abort();
     controller = new AbortController();
@@ -28,9 +23,7 @@ class App extends React.Component {
           this.setState(result);
         },
         (error) => {
-          this.setState({
-            error,
-          });
+          this.setState({ error });
         }
       );
   }
@@ -44,7 +37,7 @@ class App extends React.Component {
     window.history.replaceState(
       reqState,
       null,
-      getUrlForQuery(this.props.baseUrl, this.state, "html")
+      getUrlForQuery(this.props.config.baseUrl, this.state, "html")
     );
     this.fetchData(this.state);
     window.onpopstate = (e) => {
@@ -64,7 +57,7 @@ class App extends React.Component {
     window.history.pushState(
       reqState,
       null,
-      getUrlForQuery(this.props.baseUrl, newState, "html")
+      getUrlForQuery(this.props.config.baseUrl, newState, "html")
     );
     this.fetchData(newState);
   }
@@ -72,8 +65,10 @@ class App extends React.Component {
   render() {
     return (
       <Page
-        query={new Query(this.props, this.state, this.handleQueryChange.bind(this))}
-        sortedModels={this.props.sortedModels}
+        query={
+          new Query(this.props.config, this.state, this.handleQueryChange.bind(this))
+        }
+        sortedModels={this.props.config.sortedModels}
         {...this.state}
       />
     );

@@ -86,7 +86,10 @@ def _get_context(request, model_name, fields):
     if query.model_name not in orm_models:
         raise http.Http404(f"query.model_name does not exist")
     bound_query = BoundQuery(query, orm_models)
-    return {**_get_config(orm_models), **_get_query_data(bound_query)}
+    return {
+        "config": _get_config(orm_models),
+        "initialState": {"data": [], **_get_query_data(bound_query)},
+    }
 
 
 @admin_decorators.staff_member_required

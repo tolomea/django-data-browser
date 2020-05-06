@@ -35,33 +35,32 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["ctx"])
-    assert context.keys() == {
-        "baseUrl",
-        "adminUrl",
-        "model",
-        "filters",
-        "fields",
-        "sortedModels",
-        "types",
-        "allModelFields",
-    }
-    assert context["baseUrl"] == "/data_browser/"
-    assert context["adminUrl"] == "/admin/data_browser/view/add/"
+    assert context.keys() == {"config", "initialState"}
 
-    assert context["model"] == "tests.Product"
-    assert context["filters"] == [
-        {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"},
-        {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
-    ]
-
-    print(json.dumps(context["fields"], indent=4, sort_keys=True))
-    assert context["fields"] == [
+    assert context["initialState"].keys() == {"model", "fields", "filters", "data"}
+    assert context["initialState"]["model"] == "tests.Product"
+    print(json.dumps(context["initialState"]["fields"], indent=4, sort_keys=True))
+    assert context["initialState"]["fields"] == [
         {"path": "size", "priority": 0, "sort": "dsc"},
         {"path": "name", "priority": 1, "sort": "asc"},
         {"path": "size_unit", "priority": null, "sort": null},
     ]
+    assert context["initialState"]["filters"] == [
+        {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"},
+        {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
+    ]
+    assert context["initialState"]["data"] == []
 
-    assert context["sortedModels"] == [
+    assert context["config"].keys() == {
+        "baseUrl",
+        "adminUrl",
+        "sortedModels",
+        "types",
+        "allModelFields",
+    }
+    assert context["config"]["baseUrl"] == "/data_browser/"
+    assert context["config"]["adminUrl"] == "/admin/data_browser/view/add/"
+    assert context["config"]["sortedModels"] == [
         "auth.Group",
         "auth.User",
         "data_browser.View",
@@ -74,9 +73,8 @@ def test_query_html(admin_client):
         "tests.SKU",
         "tests.Tag",
     ]
-
-    print(json.dumps(context["types"], indent=4, sort_keys=True))
-    assert context["types"] == {
+    print(json.dumps(context["config"]["types"], indent=4, sort_keys=True))
+    assert context["config"]["types"] == {
         "boolean": {
             "defaultLookup": "equals",
             "defaultValue": true,
@@ -168,9 +166,8 @@ def test_query_html(admin_client):
             ],
         },
     }
-
-    print(json.dumps(context["allModelFields"], indent=4, sort_keys=True))
-    assert context["allModelFields"] == {
+    print(json.dumps(context["config"]["allModelFields"], indent=4, sort_keys=True))
+    assert context["config"]["allModelFields"] == {
         "auth.Group": {
             "fields": {
                 "admin": {"concrete": false, "type": "html"},
