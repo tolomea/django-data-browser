@@ -50,7 +50,7 @@ class Filter extends React.Component {
     const index = this.props.index;
     const lookup = this.props.lookup;
     const query = this.props.query;
-    const fieldType = this.props.config.getFieldType(path);
+    const fieldType = this.props.query.getFieldType(path);
     return (
       <tr>
         <td>
@@ -91,13 +91,7 @@ function Filters(props) {
       <table className="Flat">
         <tbody>
           {props.filters.map((filter, index) => (
-            <Filter
-              config={props.config}
-              query={props.query}
-              key={index}
-              index={index}
-              {...filter}
-            />
+            <Filter query={props.query} key={index} index={index} {...filter} />
           ))}
         </tbody>
       </table>
@@ -137,7 +131,7 @@ class Toggle extends React.Component {
 }
 
 function Fields(props) {
-  const modelFields = props.config.allModelFields[props.model];
+  const modelFields = props.query.getModelFields(props.model);
   return (
     <ul className="FieldsList">
       {modelFields.sorted_fields.map((field_name) => {
@@ -163,7 +157,6 @@ function Fields(props) {
           <li key={fk_name}>
             <Toggle title={fk_name}>
               <Fields
-                config={props.config}
                 query={props.query}
                 model={fk.model}
                 path={`${props.path}${fk_name}__`}
@@ -181,7 +174,7 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.fields.map((field, index) => {
-          const modelField = props.config.getField(field.path);
+          const modelField = props.query.getField(field.path);
           return (
             <th key={index}>
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
@@ -223,8 +216,9 @@ function ResultsBody(props) {
           {row.map((cell, col_index) => (
             <td key={col_index}>
               <ResultsCell
+                query={props.query}
                 value={cell}
-                modelField={props.config.getField(props.fields[col_index].path)}
+                modelField={props.query.getField(props.fields[col_index].path)}
               />
             </td>
           ))}
@@ -237,8 +231,8 @@ function ResultsBody(props) {
 function Results(props) {
   return (
     <table>
-      <ResultsHead config={props.config} query={props.query} fields={props.fields} />
-      <ResultsBody config={props.config} data={props.data} fields={props.fields} />
+      <ResultsHead query={props.query} fields={props.fields} />
+      <ResultsBody query={props.query} data={props.data} fields={props.fields} />
     </table>
   );
 }
@@ -251,11 +245,11 @@ function Page(props) {
         onChange={(e) => props.query.setModel(e.target.value)}
         value={props.model}
       >
-        {props.config.sortedModels.map((model) => (
+        {props.sortedModels.map((model) => (
           <option key={model}>{model}</option>
         ))}
       </select>
-      <Filters config={props.config} query={props.query} filters={props.filters} />
+      <Filters query={props.query} filters={props.filters} />
       <p>
         Showing {props.data.length} results -{" "}
         <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
@@ -264,19 +258,9 @@ function Page(props) {
       </p>
       <div className="MainSpace">
         <div>
-          <Fields
-            config={props.config}
-            query={props.query}
-            model={props.model}
-            path=""
-          />
+          <Fields query={props.query} model={props.model} path="" />
         </div>
-        <Results
-          config={props.config}
-          query={props.query}
-          fields={props.fields}
-          data={props.data}
-        />
+        <Results query={props.query} fields={props.fields} data={props.data} />
       </div>
     </div>
   );
