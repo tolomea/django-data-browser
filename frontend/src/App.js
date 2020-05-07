@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
-import Page from "./Components";
-import { Query, getPartsForQuery, getUrlForQuery } from "./Query";
+import { HomePage, QueryPage } from "./Components";
+import { Query, getUrlForQuery } from "./Query";
 let controller;
 
 class App extends React.Component {
@@ -63,15 +63,21 @@ class App extends React.Component {
   }
 
   render() {
-    return (
-      <Page
-        query={
-          new Query(this.props.config, this.state, this.handleQueryChange.bind(this))
-        }
-        sortedModels={this.props.config.sortedModels}
-        {...this.state}
-      />
+    const query = new Query(
+      this.props.config,
+      this.state,
+      this.handleQueryChange.bind(this)
     );
+    if (this.state.model)
+      return (
+        <QueryPage
+          query={query}
+          sortedModels={this.props.config.sortedModels}
+          {...this.state}
+        />
+      );
+    else
+      return <HomePage query={query} sortedModels={this.props.config.sortedModels} />;
   }
 }
 

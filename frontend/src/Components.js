@@ -237,18 +237,28 @@ function Results(props) {
   );
 }
 
-function Page(props) {
+function ModelSelector(props) {
+  return (
+    <select
+      className="modelSelector"
+      onChange={(e) => props.query.setModel(e.target.value)}
+      value={props.model}
+    >
+      {props.sortedModels.map((model) => (
+        <option key={model}>{model}</option>
+      ))}
+    </select>
+  );
+}
+
+function QueryPage(props) {
   return (
     <div id="body">
-      <select
-        className="modelSelector"
-        onChange={(e) => props.query.setModel(e.target.value)}
-        value={props.model}
-      >
-        {props.sortedModels.map((model) => (
-          <option key={model}>{model}</option>
-        ))}
-      </select>
+      <ModelSelector
+        query={props.query}
+        sortedModels={props.sortedModels}
+        model={props.model}
+      />
       <Filters query={props.query} filters={props.filters} />
       <p>
         Showing {props.data.length} results -{" "}
@@ -266,4 +276,16 @@ function Page(props) {
   );
 }
 
-export default Page;
+function HomePage(props) {
+  return (
+    <div id="body">
+      <ModelSelector
+        query={props.query}
+        sortedModels={props.sortedModels}
+        model={props.model}
+      />
+    </div>
+  );
+}
+
+export { HomePage, QueryPage };

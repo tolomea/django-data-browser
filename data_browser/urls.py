@@ -24,11 +24,15 @@ register_converter(Optional, "optional")
 app_name = "data_browser"
 
 urlpatterns = [
-    path("query/<model_name>/<optional:fields>.html", query_html, name="query_html"),
+    path(
+        "query/<optional:model_name>/<optional:fields>.html",
+        query_html,
+        name="query_html",
+    ),
     path("query/<model_name>/<optional:fields>.ctx", query_ctx, name="query_ctx"),
     path("query/<model_name>/<optional:fields>.<media>", query, name="query"),
     path("view/<pk>.<media>", view, name="view"),
-    path("", lambda: None, name="root"),
+    path("", query_html, name="home"),
 ]
 if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
     urlpatterns.append(path("<path:path>", proxy_js_dev_server))

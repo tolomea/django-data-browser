@@ -72,7 +72,7 @@ def _get_config(orm_models):
     }
 
     return {
-        "baseUrl": reverse("data_browser:root"),
+        "baseUrl": reverse("data_browser:home"),
         "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
         "types": types,
         "allModelFields": orm_models,
@@ -83,7 +83,7 @@ def _get_config(orm_models):
 def _get_context(request, model_name, fields):
     query = Query.from_request(model_name, fields, request.GET)
     orm_models = get_models(request)
-    if query.model_name not in orm_models:
+    if query.model_name and query.model_name not in orm_models:
         raise http.Http404(f"query.model_name does not exist")
     bound_query = BoundQuery(query, orm_models)
     return {
@@ -99,7 +99,7 @@ def query_ctx(request, *, model_name, fields=""):  # pragma: no cover
 
 
 @admin_decorators.staff_member_required
-def query_html(request, *, model_name, fields=""):
+def query_html(request, *, model_name="", fields=""):
     ctx = _get_context(request, model_name, fields)
     ctx = json.dumps(ctx)
     ctx = ctx.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
