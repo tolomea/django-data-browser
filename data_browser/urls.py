@@ -29,8 +29,10 @@ urlpatterns = [
         query_html,
         name="query_html",
     ),
-    path("query/<model_name>/<optional:fields>.ctx", query_ctx, name="query_ctx"),
-    path("query/<model_name>/<optional:fields>.<media>", query, name="query"),
+    path(
+        "query/<optional:model_name>/<optional:fields>.ctx", query_ctx, name="query_ctx"
+    ),
+    path("query/<optional:model_name>/<optional:fields>.<media>", query, name="query"),
     path("view/<pk>.<media>", view, name="view"),
     path("", query_html, name="home"),
 ]

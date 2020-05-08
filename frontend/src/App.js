@@ -33,6 +33,7 @@ class App extends React.Component {
       model: this.state.model,
       fields: this.state.fields,
       filters: this.state.filters,
+      data: [],
     };
     window.history.replaceState(
       reqState,
@@ -41,8 +42,8 @@ class App extends React.Component {
     );
     this.fetchData(this.state);
     window.onpopstate = (e) => {
-      console.log("popstate", e.state);
       this.fetchData(e.state);
+      this.setState(e.state);
     };
   }
 
@@ -53,6 +54,7 @@ class App extends React.Component {
       model: newState.model,
       fields: newState.fields,
       filters: newState.filters,
+      data: [],
     };
     window.history.pushState(
       reqState,

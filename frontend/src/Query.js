@@ -60,8 +60,6 @@ class Query {
     const newData = this.query.data.map((row) =>
       row.slice(0, index).concat(row.slice(index + 1))
     );
-    console.log(this.query.data);
-    console.log(newData);
     this.handleQueryChange({ fields: newFields, data: newData });
   }
 
