@@ -46,6 +46,10 @@ th {
   text-align: center;
 }
 
+h1 {
+  font-size: 28px;
+}
+
 table.Flat,
 table.Flat th,
 table.Flat td {
@@ -53,7 +57,7 @@ table.Flat td {
   padding: 3px 1px;
 }
 
-.modelSelector {
+.ModelSelector {
   margin: 0 auto;
   text-align: center;
   text-align-last: center;
@@ -62,7 +66,7 @@ table.Flat td {
   font-size: 28px;
   color: #333e48;
 }
-.modelSelector:hover {
+.ModelSelector:hover {
   border: 1px solid #ccc;
   border-radius: 3px;
   padding: 0;
@@ -133,10 +137,27 @@ button.Link:hover {
   text-decoration: underline;
 }
 
-div.logo {
+div.Logo {
   position: absolute;
   margin: 0 15px;
   font-size: 30px;
   font-family: Impact, Charcoal, sans-serif;
   cursor: pointer;
+}
+
+div.Index {
+  margin: 30px;
+}
+div.Index > div {
+  width: 46%;
+  float: left;
+  font-size: 20px;
+  color: #333e48;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin: 2%;
+  padding: 0 2% 2% 2%;
+}
+div.Index button {
+  display: block;
 }

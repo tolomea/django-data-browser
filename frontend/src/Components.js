@@ -134,6 +134,20 @@ function Fields(props) {
   const modelFields = props.query.getModelFields(props.model);
   return (
     <ul className="FieldsList">
+      {modelFields.sorted_fks.map((fk_name) => {
+        const fk = modelFields.fks[fk_name];
+        return (
+          <li key={fk_name}>
+            <Toggle title={fk_name}>
+              <Fields
+                query={props.query}
+                model={fk.model}
+                path={`${props.path}${fk_name}__`}
+              />
+            </Toggle>
+          </li>
+        );
+      })}
       {modelFields.sorted_fields.map((field_name) => {
         const modelField = modelFields.fields[field_name];
         return (
@@ -148,20 +162,6 @@ function Fields(props) {
             <Link onClick={() => props.query.addField(`${props.path}${field_name}`)}>
               {field_name}
             </Link>
-          </li>
-        );
-      })}
-      {modelFields.sorted_fks.map((fk_name) => {
-        const fk = modelFields.fks[fk_name];
-        return (
-          <li key={fk_name}>
-            <Toggle title={fk_name}>
-              <Fields
-                query={props.query}
-                model={fk.model}
-                path={`${props.path}${fk_name}__`}
-              />
-            </Toggle>
           </li>
         );
       })}
@@ -240,7 +240,7 @@ function Results(props) {
 function ModelSelector(props) {
   return (
     <select
-      className="modelSelector"
+      className="ModelSelector"
       onChange={(e) => props.query.setModel(e.target.value)}
       value={props.model}
     >
@@ -253,7 +253,7 @@ function ModelSelector(props) {
 
 function Logo(props) {
   return (
-    <div className="logo" onClick={() => props.query.setModel("")}>
+    <div className="Logo" onClick={() => props.query.setModel("")}>
       DDB
     </div>
   );
@@ -289,11 +289,24 @@ function HomePage(props) {
   return (
     <div id="body">
       <Logo query={props.query} />
-      <ModelSelector
-        query={props.query}
-        sortedModels={props.sortedModels}
-        model={props.model}
-      />
+      <div className="Index">
+        <div>
+          <h1>Models</h1>
+          <div className="ModelList">
+            {props.sortedModels.map((model) => (
+              <div key={model}>
+                <button className="Link" onClick={() => props.query.setModel(model)}>
+                  {model}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h1>Saved Views</h1>
+          <div className="ModelList"></div>
+        </div>
+      </div>
     </div>
   );
 }
