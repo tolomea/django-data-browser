@@ -12,12 +12,13 @@ html.html {
 #body {
   flex: 1;
   padding: 0;
-  margin: 0;
+  margin: 10px 0 0 0;
   font-size: 14px;
   color: #333e48;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative;
 }
 
 #body a {
@@ -53,7 +54,7 @@ table.Flat td {
 }
 
 .modelSelector {
-  margin: 10px auto 0 auto;
+  margin: 0 auto;
   text-align: center;
   text-align-last: center;
   border: none;
@@ -130,4 +131,12 @@ button.Link {
 }
 button.Link:hover {
   text-decoration: underline;
+}
+
+div.logo {
+  position: absolute;
+  margin: 0 15px;
+  font-size: 30px;
+  font-family: Impact, Charcoal, sans-serif;
+  cursor: pointer;
 }
