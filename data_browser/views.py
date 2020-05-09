@@ -4,7 +4,6 @@ import json
 import sys
 
 import django.contrib.admin.views.decorators as admin_decorators
-import requests
 from django import http
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
@@ -153,6 +152,8 @@ def _data_response(request, query, media):
 
 
 def _get_from_js_dev_server(request):  # pragma: no cover
+    import requests
+
     upstream_url = f"http://localhost:3000{request.path}"
     method = request.META["REQUEST_METHOD"].lower()
     return getattr(requests, method)(upstream_url, stream=True)

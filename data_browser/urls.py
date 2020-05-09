@@ -2,6 +2,7 @@ import os
 
 from django.conf import settings
 from django.urls import path, register_converter
+from django.views.generic.base import RedirectView
 from django.views.static import serve
 
 from .views import proxy_js_dev_server, query, query_ctx, query_html, view
@@ -34,7 +35,7 @@ urlpatterns = [
     ),
     path("query/<optional:model_name>/<optional:fields>.<media>", query, name="query"),
     path("view/<pk>.<media>", view, name="view"),
-    path("", query_html, name="home"),
+    path("", RedirectView.as_view(url="query//.html?", permanent=False), name="home"),
 ]
 if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
     urlpatterns.append(path("<path:path>", proxy_js_dev_server))

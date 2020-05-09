@@ -2,6 +2,12 @@
 
 Django app for user friendly querying of Django models
 
+## installation
+
+add 'data_browser` to installed_apps
+path("data-browser/", include("data_browser.urls")),
+migrate
+
 ## Development
 
 The easiest way to develop this is against your existing client project.
