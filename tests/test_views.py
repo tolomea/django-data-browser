@@ -35,7 +35,7 @@ def test_query_html(admin_client):
     )
     assert res.status_code == 200
     context = json.loads(res.context["ctx"])
-    assert context.keys() == {"config", "initialState"}
+    assert context.keys() == {"config", "initialState", "sentryDsn"}
 
     assert context["initialState"].keys() == {"model", "fields", "filters", "data"}
     assert context["initialState"]["model"] == "tests.Product"

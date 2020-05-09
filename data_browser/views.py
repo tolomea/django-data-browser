@@ -88,6 +88,7 @@ def _get_context(request, model_name, fields):
     return {
         "config": _get_config(orm_models),
         "initialState": {"data": [], **_get_query_data(bound_query)},
+        "sentryDsn": getattr(settings, "DATA_BROWSER_FE_DSN", None),
     }
 
 
