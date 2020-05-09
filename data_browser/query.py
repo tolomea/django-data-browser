@@ -167,7 +167,7 @@ class TimeFieldType(FieldType):
 
     @staticmethod
     def format(value):
-        return timezone.make_naive(value)
+        return timezone.make_naive(value) if value else None
 
 
 class HTMLFieldType(FieldType):

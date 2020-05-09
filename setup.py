@@ -15,7 +15,7 @@ for directory in "data_browser/fe_build", "data_browser/templates":
 
 setuptools.setup(
     name="django-data-browser",
-    version="0.0.4",
+    version="0.0.5",
     author="Gordon Wrigley",
     author_email="gordon.wrigley@gmail.com",
     description="git@github.com:tolomea/django-data-browser.git",
