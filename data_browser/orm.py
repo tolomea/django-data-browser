@@ -236,6 +236,8 @@ def get_data(request, bound_query):
         qs = qs.prefetch_related(*prefetch_related)
 
     def get_admin_link(obj):
+        if obj is None:
+            return "null"
         model_name = get_model_name(obj.__class__, "_")
         url_name = f"admin:{model_name}_change".lower()
         url = reverse(url_name, args=[obj.pk])
