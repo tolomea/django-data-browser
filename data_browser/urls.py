@@ -2,6 +2,7 @@ import os
 
 from django.conf import settings
 from django.urls import path, register_converter
+from django.urls.converters import StringConverter
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 
@@ -10,14 +11,8 @@ from .views import proxy_js_dev_server, query, query_ctx, query_html, view
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
 
 
-class Optional:
+class Optional(StringConverter):
     regex = "[^/]*"
-
-    def to_python(self, value):
-        return value
-
-    def to_url(self, value):
-        return value
 
 
 register_converter(Optional, "optional")
