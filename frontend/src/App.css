@@ -144,6 +144,12 @@ div.Logo {
   font-family: Impact, Charcoal, sans-serif;
   cursor: pointer;
 }
+div.Logo > span {
+  display: inline-block;
+}
+div.Logo > span.Version {
+  font-size: 20px;
+}
 
 div.Index {
   margin: 30px;

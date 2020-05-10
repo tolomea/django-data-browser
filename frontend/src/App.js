@@ -75,11 +75,18 @@ class App extends React.Component {
         <QueryPage
           query={query}
           sortedModels={this.props.config.sortedModels}
+          version={this.props.config.version}
           {...this.state}
         />
       );
     else
-      return <HomePage query={query} sortedModels={this.props.config.sortedModels} />;
+      return (
+        <HomePage
+          query={query}
+          sortedModels={this.props.config.sortedModels}
+          version={this.props.config.version}
+        />
+      );
   }
 }
 

@@ -254,7 +254,8 @@ function ModelSelector(props) {
 function Logo(props) {
   return (
     <div className="Logo" onClick={() => props.query.setModel("")}>
-      DDB
+      <span>DDB</span>
+      <span className="Version">v{props.version}</span>
     </div>
   );
 }
@@ -262,7 +263,7 @@ function Logo(props) {
 function QueryPage(props) {
   return (
     <div id="body">
-      <Logo query={props.query} />
+      <Logo query={props.query} version={props.version} />
       <ModelSelector
         query={props.query}
         sortedModels={props.sortedModels}
@@ -288,7 +289,7 @@ function QueryPage(props) {
 function HomePage(props) {
   return (
     <div id="body">
-      <Logo query={props.query} />
+      <Logo query={props.query} version={props.version} />
       <div className="Index">
         <div>
           <h1>Models</h1>

@@ -2,6 +2,8 @@ import os
 
 import setuptools
 
+from data_browser import version
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -15,7 +17,7 @@ for directory in "data_browser/fe_build", "data_browser/templates":
 
 setuptools.setup(
     name="django-data-browser",
-    version="0.0.8",
+    version=version,
     author="Gordon Wrigley",
     author_email="gordon.wrigley@gmail.com",
     description="git@github.com:tolomea/django-data-browser.git",

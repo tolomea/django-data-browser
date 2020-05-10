@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
+from . import version
 from .models import View
 from .orm import _OPEN_IN_ADMIN, get_data, get_models
 from .query import TYPES, BoundQuery, Query
@@ -76,6 +77,7 @@ def _get_config(orm_models):
         "types": types,
         "allModelFields": orm_models,
         "sortedModels": sorted(orm_models),
+        "version": version,
     }
 
 
