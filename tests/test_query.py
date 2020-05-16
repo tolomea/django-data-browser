@@ -29,19 +29,35 @@ def bound_query(query):
     orm_models = {
         "app.model": orm.OrmModel(
             fields={
-                "fa": orm.OrmField(type_=StringFieldType, concrete=True),
-                "fd": orm.OrmField(type_=StringFieldType, concrete=True),
-                "fn": orm.OrmField(type_=StringFieldType, concrete=False),
-                "bob": orm.OrmField(type_=StringFieldType, concrete=True),
+                "fa": orm.OrmField(
+                    type_=StringFieldType, concrete=True, model_name="app.model"
+                ),
+                "fd": orm.OrmField(
+                    type_=StringFieldType, concrete=True, model_name="app.model"
+                ),
+                "fn": orm.OrmField(
+                    type_=StringFieldType, concrete=False, model_name="app.model"
+                ),
+                "bob": orm.OrmField(
+                    type_=StringFieldType, concrete=True, model_name="app.model"
+                ),
             },
             fks={"tom": "app.Tom"},
         ),
         "app.Tom": orm.OrmModel(
-            fields={"jones": orm.OrmField(type_=StringFieldType, concrete=True)},
+            fields={
+                "jones": orm.OrmField(
+                    type_=StringFieldType, concrete=True, model_name="app.Tom"
+                )
+            },
             fks={"michael": "app.Michael"},
         ),
         "app.Michael": orm.OrmModel(
-            fields={"bolton": orm.OrmField(type_=StringFieldType, concrete=True)},
+            fields={
+                "bolton": orm.OrmField(
+                    type_=StringFieldType, concrete=True, model_name="app.Michael"
+                )
+            },
             fks={},
         ),
     }

@@ -5,10 +5,6 @@
   font-weight: normal;
 }
 
-html.html {
-  overflow-y: scroll;
-}
-
 #body {
   flex: 1;
   padding: 0;
@@ -122,6 +118,9 @@ select.Lookup {
   list-style-type: none;
   padding: 0;
   margin: 0px 10px;
+}
+.FieldsList li {
+  white-space: nowrap;
 }
 
 button.Link {
