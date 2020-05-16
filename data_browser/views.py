@@ -38,7 +38,7 @@ def _get_query_data(bound_query):
     }
 
 
-def _get_config(orm_models):
+def _get_config(user, orm_models):
     types = {
         name: {
             "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
@@ -70,6 +70,17 @@ def _get_config(orm_models):
         for model_name, orm_model in orm_models.items()
     }
 
+    saved_views = [
+        {
+            "name": view.name,
+            "public": view.public,
+            "model": view.model_name,
+            "description": view.description,
+            "url": view.get_query().get_url("html"),
+        }
+        for view in View.objects.filter(owner=user).order_by("name")
+    ]
+
     admin_url = None
     if "data_browser.View" in orm_models:
         admin_url = reverse(f"admin:{View._meta.db_table}_add")
@@ -81,6 +92,7 @@ def _get_config(orm_models):
         "allModelFields": orm_models,
         "sortedModels": sorted(orm_models),
         "version": version,
+        "savedViews": saved_views,
     }
 
 
@@ -91,7 +103,7 @@ def _get_context(request, model_name, fields):
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery(query, orm_models)
     return {
-        "config": _get_config(orm_models),
+        "config": _get_config(request.user, orm_models),
         "initialState": {"data": [], **_get_query_data(bound_query)},
         "sentryDsn": getattr(settings, "DATA_BROWSER_FE_DSN", None),
     }

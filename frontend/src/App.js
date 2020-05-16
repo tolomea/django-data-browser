@@ -84,6 +84,7 @@ class App extends React.Component {
         <HomePage
           query={query}
           sortedModels={this.props.config.sortedModels}
+          savedViews={this.props.config.savedViews}
           version={this.props.config.version}
         />
       );

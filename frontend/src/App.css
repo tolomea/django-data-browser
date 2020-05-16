@@ -157,7 +157,6 @@ div.Index {
 div.Index > div {
   width: 46%;
   float: left;
-  font-size: 20px;
   color: #333e48;
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -166,4 +165,7 @@ div.Index > div {
 }
 div.Index button {
   display: block;
+}
+div.Index .Link {
+  font-size: 20px;
 }

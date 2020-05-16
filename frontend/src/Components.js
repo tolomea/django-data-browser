@@ -319,7 +319,7 @@ function HomePage(props) {
       <div className="Index">
         <div>
           <h1>Models</h1>
-          <div className="ModelList">
+          <div>
             {props.sortedModels.map((model) => (
               <div key={model}>
                 <button
@@ -334,7 +334,16 @@ function HomePage(props) {
         </div>
         <div>
           <h1>Saved Views</h1>
-          <div className="ModelList"></div>
+          <div>
+            {props.savedViews.map((view, index) => (
+              <div key={index}>
+                <a href={view.url} className="Link">
+                  {view.name} - {view.model}
+                </a>
+                <p>{view.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
