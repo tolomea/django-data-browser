@@ -54,13 +54,15 @@ def test_query_html(admin_client):
     assert context["config"].keys() == {
         "baseUrl",
         "adminUrl",
+        "version",
+        "savedViews",
         "sortedModels",
         "types",
         "allModelFields",
-        "version",
     }
     assert context["config"]["baseUrl"] == "/data_browser/"
     assert context["config"]["adminUrl"] == "/admin/data_browser/view/add/"
+    assert context["config"]["savedViews"] == []
     assert context["config"]["sortedModels"] == [
         "auth.Group",
         "auth.User",
