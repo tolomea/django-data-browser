@@ -16,7 +16,11 @@ function Link(props) {
 function FilterValue(props) {
   if (props.lookup.type === "boolean")
     return (
-      <select className="FilterValue" onChange={props.onChange} value={props.value}>
+      <select
+        className="FilterValue"
+        onChange={props.onChange}
+        value={props.value}
+      >
         <option value={true}>true</option>
         <option value={false}>false</option>
       </select>
@@ -153,13 +157,19 @@ function Fields(props) {
         return (
           <li key={field_name}>
             {modelField.concrete ? (
-              <Link onClick={() => props.query.addFilter(`${props.path}${field_name}`)}>
+              <Link
+                onClick={() =>
+                  props.query.addFilter(`${props.path}${field_name}`)
+                }
+              >
                 Y
               </Link>
             ) : (
               <>&nbsp;&nbsp;</>
             )}{" "}
-            <Link onClick={() => props.query.addField(`${props.path}${field_name}`)}>
+            <Link
+              onClick={() => props.query.addField(`${props.path}${field_name}`)}
+            >
               {field_name}
             </Link>
           </li>
@@ -180,14 +190,18 @@ function ResultsHead(props) {
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
               {modelField.concrete ? (
                 <>
-                  <Link onClick={() => props.query.addFilter(field.path)}>Y</Link>{" "}
+                  <Link onClick={() => props.query.addFilter(field.path)}>
+                    Y
+                  </Link>{" "}
                   <Link onClick={() => props.query.toggleSort(index)}>
                     {field.path}
                   </Link>{" "}
                   {
-                    { dsc: `↑${field.priority}`, asc: `↓${field.priority}`, null: "" }[
-                      field.sort
-                    ]
+                    {
+                      dsc: `↑${field.priority}`,
+                      asc: `↓${field.priority}`,
+                      null: "",
+                    }[field.sort]
                   }
                 </>
               ) : (
@@ -232,7 +246,11 @@ function Results(props) {
   return (
     <table>
       <ResultsHead query={props.query} fields={props.fields} />
-      <ResultsBody query={props.query} data={props.data} fields={props.fields} />
+      <ResultsBody
+        query={props.query}
+        data={props.data}
+        fields={props.fields}
+      />
     </table>
   );
 }
@@ -261,6 +279,7 @@ function Logo(props) {
 }
 
 function QueryPage(props) {
+  const saveUrl = props.query.getUrlForSave();
   return (
     <div id="body">
       <Logo query={props.query} version={props.version} />
@@ -273,8 +292,15 @@ function QueryPage(props) {
       <p>
         Showing {props.data.length} results -{" "}
         <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
-        <a href={props.query.getUrlForMedia("json")}>View as JSON</a> -{" "}
-        <a href={props.query.getUrlForSave()}>Save View</a>
+        <a href={props.query.getUrlForMedia("json")}>View as JSON</a>
+        {saveUrl ? (
+          <>
+            {" "}
+            - <a href={saveUrl}>Save View</a>{" "}
+          </>
+        ) : (
+          ""
+        )}
       </p>
       <div className="MainSpace">
         <div>
@@ -296,7 +322,10 @@ function HomePage(props) {
           <div className="ModelList">
             {props.sortedModels.map((model) => (
               <div key={model}>
-                <button className="Link" onClick={() => props.query.setModel(model)}>
+                <button
+                  className="Link"
+                  onClick={() => props.query.setModel(model)}
+                >
                   {model}
                 </button>
               </div>

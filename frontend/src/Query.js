@@ -4,10 +4,13 @@ function getPartsForQuery(query) {
     fields: query.fields
       .map(
         (f) =>
-          f.path + { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
+          f.path +
+          { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
       )
       .join(","),
-    query: query.filters.map((f) => `${f.path}__${f.lookup}=${f.value}`).join("&"),
+    query: query.filters
+      .map((f) => `${f.path}__${f.lookup}=${f.value}`)
+      .join("&"),
   };
 }
 
@@ -136,6 +139,7 @@ class Query {
   }
 
   getUrlForSave() {
+    if (this.config.adminUrl === null) return null;
     const parts = getPartsForQuery(this.query);
     const queryString = new URLSearchParams(parts).toString();
     return `${window.location.origin}${this.config.adminUrl}?${queryString}`;

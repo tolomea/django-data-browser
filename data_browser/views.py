@@ -70,9 +70,13 @@ def _get_config(orm_models):
         for model_name, orm_model in orm_models.items()
     }
 
+    admin_url = None
+    if "data_browser.View" in orm_models:
+        admin_url = reverse(f"admin:{View._meta.db_table}_add")
+
     return {
         "baseUrl": reverse("data_browser:home"),
-        "adminUrl": reverse(f"admin:{View._meta.db_table}_add"),
+        "adminUrl": admin_url,
         "types": types,
         "allModelFields": orm_models,
         "sortedModels": sorted(orm_models),
@@ -84,7 +88,7 @@ def _get_context(request, model_name, fields):
     query = Query.from_request(model_name, fields, request.GET)
     orm_models = get_models(request)
     if query.model_name and query.model_name not in orm_models:
-        raise http.Http404(f"query.model_name does not exist")
+        raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery(query, orm_models)
     return {
         "config": _get_config(orm_models),
@@ -132,7 +136,7 @@ def view(request, pk, media):
 def _data_response(request, query, media):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
-        raise http.Http404(f"query.model_name does not exist")
+        raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery(query, orm_models)
     data = get_data(request, bound_query)
 
