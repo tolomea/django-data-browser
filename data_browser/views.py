@@ -6,7 +6,6 @@ import sys
 import django.contrib.admin.views.decorators as admin_decorators
 from django import http
 from django.conf import settings
-from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template import engines, loader
 from django.template.response import TemplateResponse
@@ -97,7 +96,7 @@ def _get_context(request, model_name, fields):
 @admin_decorators.staff_member_required
 def query_ctx(request, *, model_name, fields=""):  # pragma: no cover
     ctx = _get_context(request, model_name, fields)
-    return JsonResponse(ctx)
+    return http.JsonResponse(ctx)
 
 
 @admin_decorators.staff_member_required
@@ -124,6 +123,8 @@ def query(request, *, model_name, fields="", media):
 def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), pk=pk)
     request.user = view.owner  # public views are run as the person who owns them
+    if not request.user.has_perm("data_browser.make_view_public"):
+        raise http.Http404(f"bob")
     query = view.get_query()
     return _data_response(request, query, media)
 
@@ -141,7 +142,7 @@ def _data_response(request, query, media):
         writer.writerow(f.path for f in bound_query.fields)
         writer.writerows(data)
         buffer.seek(0)
-        response = HttpResponse(buffer, content_type="text/csv")
+        response = http.HttpResponse(buffer, content_type="text/csv")
         response[
             "Content-Disposition"
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
@@ -149,7 +150,7 @@ def _data_response(request, query, media):
     elif media == "json":
         resp = _get_query_data(bound_query)
         resp["data"] = data
-        return JsonResponse(resp)
+        return http.JsonResponse(resp)
     else:
         assert False
 

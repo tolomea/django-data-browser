@@ -1,6 +1,7 @@
 import threading
 
 from django.contrib import admin
+from django.contrib.admin.utils import flatten_fieldsets
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -31,6 +32,15 @@ class ViewAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ["open_view", "public_link", "google_sheets_formula", "id"]
     list_display = ["__str__", "owner", "public"]
+
+    def get_readonly_fields(self, request, obj):
+        readonly_fields = list(super().get_readonly_fields(request, obj))
+        if request.user.has_perm("data_browser.make_view_public"):
+            return readonly_fields
+        elif obj and obj.public:
+            return flatten_fieldsets(self.get_fieldsets(request, obj))
+        else:
+            return readonly_fields + ["public"]
 
     def change_view(self, request, *args, **kwargs):
         globals.request = request

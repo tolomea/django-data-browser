@@ -9,6 +9,11 @@ def get_id():
 
 
 class View(models.Model):
+    class Meta:
+        permissions = [
+            ("make_view_public", "Can make a saved view publically available")
+        ]
+
     id = models.CharField(primary_key=True, max_length=12, default=get_id)
     created_time = models.DateTimeField(default=timezone.now)
 
