@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import urllib
 from dataclasses import dataclass
 from typing import Optional, Sequence
@@ -5,6 +7,8 @@ from typing import Optional, Sequence
 import dateutil.parser
 from django.urls import reverse
 from django.utils import timezone
+
+from . import orm
 
 ASC, DSC = "asc", "dsc"
 
@@ -235,16 +239,17 @@ class BoundField:
     path: str
     direction: Optional[str]
     priority: Optional[int]
-    concrete: bool
-    type_: FieldType
+    orm_field: orm.OrmField
+
+    def __post_init__(self):
+        self.type_ = self.orm_field.type_
+        self.concrete = self.orm_field.concrete
 
     @classmethod
     def bind(cls, query_field, orm_field):
         direction = query_field.direction if orm_field.concrete else None
         priority = query_field.priority if orm_field.concrete else None
-        return cls(
-            query_field.path, direction, priority, orm_field.concrete, orm_field.type_
-        )
+        return cls(query_field.path, direction, priority, orm_field)
 
 
 class BoundQuery:

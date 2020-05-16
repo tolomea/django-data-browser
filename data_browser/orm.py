@@ -3,7 +3,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from django.contrib import admin
-from django.contrib.admin.options import BaseModelAdmin
+from django.contrib.admin.options import BaseModelAdmin, InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
@@ -55,6 +55,7 @@ class OrmModel:
 class OrmField:
     type_: FieldType
     concrete: bool
+    model_name: str
 
 
 @dataclass
@@ -65,10 +66,10 @@ class OrmFkField:
 def _get_all_admin_fields(request):
     request.data_browser = True
 
-    def from_fieldsets(admin, model):
-        obj = model()  # we want the admin change field sets, not the add ones
+    def from_fieldsets(admin, all_):
+        obj = admin.model()  # we want the admin change field sets, not the add ones
         for f in flatten_fieldsets(admin.get_fieldsets(request, obj)):
-            if hasattr(model, f):
+            if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
                 yield f
 
     def visible(modeladmin, request):
@@ -83,16 +84,14 @@ def _get_all_admin_fields(request):
     for model, modeladmin in admin.site._registry.items():
         model_admins[model] = modeladmin
         if visible(modeladmin, request):
-            all_admin_fields[model].update(from_fieldsets(modeladmin, model))
+            all_admin_fields[model].update(from_fieldsets(modeladmin, True))
             all_admin_fields[model].add(_OPEN_IN_ADMIN)
 
             # check the inlines, these are already filtered for access
             for inline in modeladmin.get_inline_instances(request):
-                if inline.model not in model_admins:  # pragma: no cover
+                if inline.model not in model_admins:
                     model_admins[inline.model] = inline
-                all_admin_fields[inline.model].update(
-                    from_fieldsets(inline, inline.model)
-                )
+                all_admin_fields[inline.model].update(from_fieldsets(inline, False))
                 all_admin_fields[inline.model].add(
                     _get_foreign_key(model, inline.model, inline.fk_name).name
                 )
@@ -109,19 +108,24 @@ def _get_fields_for_model(model, model_admins, admin_fields):
     fields = {}
     fks = {}
 
+    model_name = get_model_name(model)
     model_fields = {f.name: f for f in model._meta.get_fields()}
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
         if field_name == _OPEN_IN_ADMIN:
-            fields[_OPEN_IN_ADMIN] = OrmField(type_=HTMLFieldType, concrete=False)
+            fields[_OPEN_IN_ADMIN] = OrmField(
+                type_=HTMLFieldType, concrete=False, model_name=model_name
+            )
         elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
             if field.related_model in admin_fields:
                 fks[field_name] = OrmFkField(get_model_name(field.related_model))
         elif isinstance(field, type(None)):
-            fields[field_name] = OrmField(type_=StringFieldType, concrete=False)
+            fields[field_name] = OrmField(
+                type_=StringFieldType, concrete=False, model_name=model_name
+            )
         else:
             if field.__class__ in _FIELD_MAP:
                 field_type = _FIELD_MAP[field.__class__]
@@ -133,7 +137,9 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                     field_type = None
 
             if field_type:
-                fields[field_name] = OrmField(type_=field_type, concrete=True)
+                fields[field_name] = OrmField(
+                    type_=field_type, concrete=True, model_name=model_name
+                )
             else:  # pragma: no cover
                 logging.getLogger(__name__).warning(
                     f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
@@ -248,21 +254,26 @@ def get_data(request, bound_query):
         return f'<a href="{url}">{obj}</a>'
 
     # get data
-    def lookup(obj, path):
+    def lookup(obj, field):
         value = obj
-        for part in path.split("__"):
-            if part == _OPEN_IN_ADMIN:
-                value = get_admin_link(value)
-            else:
-                value = getattr(value, part, None)
-        return value() if callable(value) else value
+        *parts, tail = field.path.split("__")
+        for part in parts:
+            value = getattr(value, part, None)
+
+        admin = bound_query.orm_models[field.orm_field.model_name].admin
+        if field.concrete:
+            return getattr(value, tail)
+        elif tail == _OPEN_IN_ADMIN:
+            return get_admin_link(value)
+        elif hasattr(admin, tail):
+            return getattr(admin, tail)(value)
+        else:
+            value = getattr(value, tail)
+            return value() if callable(value) else value
 
     data = []
     for row in qs.distinct():
         data.append(
-            [
-                field.type_.format(lookup(row, field.path))
-                for field in bound_query.fields
-            ]
+            [field.type_.format(lookup(row, field)) for field in bound_query.fields]
         )
     return data
