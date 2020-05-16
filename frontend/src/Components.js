@@ -337,9 +337,12 @@ function HomePage(props) {
           <div>
             {props.savedViews.map((view, index) => (
               <div key={index}>
-                <a href={view.url} className="Link">
+                <button
+                  className="Link"
+                  onClick={() => props.query.setQuery(view.query)}
+                >
                   {view.name} - {view.model}
-                </a>
+                </button>
                 <p>{view.description}</p>
               </div>
             ))}

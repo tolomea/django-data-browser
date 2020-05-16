@@ -54,7 +54,7 @@ def _get_config(user, orm_models):
         front = {"id": 1, _OPEN_IN_ADMIN: 2}
         return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
 
-    orm_models = {
+    all_model_fields = {
         model_name: {
             "fields": {
                 name: {"type": orm_field.type_.name, "concrete": orm_field.concrete}
@@ -76,7 +76,7 @@ def _get_config(user, orm_models):
             "public": view.public,
             "model": view.model_name,
             "description": view.description,
-            "url": view.get_query().get_url("html"),
+            "query": _get_query_data(BoundQuery(view.get_query(), orm_models)),
         }
         for view in View.objects.filter(owner=user).order_by("name")
     ]
@@ -89,8 +89,8 @@ def _get_config(user, orm_models):
         "baseUrl": reverse("data_browser:home"),
         "adminUrl": admin_url,
         "types": types,
-        "allModelFields": orm_models,
-        "sortedModels": sorted(orm_models),
+        "allModelFields": all_model_fields,
+        "sortedModels": sorted(all_model_fields),
         "version": version,
         "savedViews": saved_views,
     }

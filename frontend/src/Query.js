@@ -21,10 +21,10 @@ function getUrlForQuery(baseUrl, query, media) {
 }
 
 class Query {
-  constructor(config, query, handleQueryChange) {
+  constructor(config, query, setQuery) {
     this.config = config;
     this.query = query;
-    this.handleQueryChange = handleQueryChange;
+    this.setQuery = setQuery;
   }
 
   getField(path) {
@@ -54,7 +54,7 @@ class Query {
     const newFields = this.query.fields.slice();
     newFields.push({ path: path, sort: null });
     const newData = this.query.data.map((row) => row.concat([""]));
-    this.handleQueryChange({ fields: newFields, data: newData });
+    this.setQuery({ fields: newFields, data: newData });
   }
 
   removeField(index) {
@@ -63,7 +63,7 @@ class Query {
     const newData = this.query.data.map((row) =>
       row.slice(0, index).concat(row.slice(index + 1))
     );
-    this.handleQueryChange({ fields: newFields, data: newData });
+    this.setQuery({ fields: newFields, data: newData });
   }
 
   toggleSort(index) {
@@ -94,7 +94,7 @@ class Query {
       newFields[index] = { ...field, sort: null, priority: null };
     }
 
-    this.handleQueryChange({
+    this.setQuery({
       fields: newFields,
     });
   }
@@ -108,29 +108,29 @@ class Query {
       lookup: fieldType.defaultLookup,
       value: this.getDefaultLookValue(fieldType),
     });
-    this.handleQueryChange({ filters: newFilters });
+    this.setQuery({ filters: newFilters });
   }
 
   removeFilter(index) {
     const newFilters = this.query.filters.slice();
     newFilters.splice(index, 1);
-    this.handleQueryChange({ filters: newFilters });
+    this.setQuery({ filters: newFilters });
   }
 
   setFilterValue(index, value) {
     const newFilters = this.query.filters.slice();
     newFilters[index] = { ...newFilters[index], value: value };
-    this.handleQueryChange({ filters: newFilters });
+    this.setQuery({ filters: newFilters });
   }
 
   setFilterLookup(index, lookup) {
     const newFilters = this.query.filters.slice();
     newFilters[index] = { ...newFilters[index], lookup: lookup };
-    this.handleQueryChange({ filters: newFilters });
+    this.setQuery({ filters: newFilters });
   }
 
   setModel(model) {
-    this.handleQueryChange({
+    this.setQuery({
       model: model,
       fields: [],
       filters: [],
