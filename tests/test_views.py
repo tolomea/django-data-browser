@@ -57,6 +57,7 @@ def test_query_html(admin_client):
         "sortedModels",
         "types",
         "allModelFields",
+        "version",
     }
     assert context["config"]["baseUrl"] == "/data_browser/"
     assert context["config"]["adminUrl"] == "/admin/data_browser/view/add/"
