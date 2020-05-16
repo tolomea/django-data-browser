@@ -30,6 +30,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.5",
+    python_requires=">=3.7",  # dataclasses
     package_data={"": data_files},
+    install_requires=["Django", "python-dateutil", "requests"],
 )

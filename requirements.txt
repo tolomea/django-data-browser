@@ -1,0 +1,6 @@
+Django
+pytest
+pytest-django
+python-dateutil
+requests
+snapshottest

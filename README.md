@@ -1,12 +1,12 @@
 # django-data-browser
 
-Django app for user friendly querying of Django models.
+A Django app for interactive user friendly browsing of a Django projects DB.
 
 ### Features
 
+-   Zero config, if it's in the admin it's in the browser
 -   Select fields (including calculated fields), sort and fitler
 -   Automatically follow OneToOneFields and ForeignKeys
--   Zero config, if it's in the admin it's in the browser
 -   Respects per user admin permissions
 -   Share views by URL
 -   Save views and optionally make them available to services like Google sheets
@@ -14,7 +14,7 @@ Django app for user friendly querying of Django models.
 
 ### Roadmap (in no particular order)
 
--   ManyToMany and aggregation support
+-   ToMany and aggregation support
 -   Advanced filtering
 -   PII controls
 -   Graphs
@@ -26,7 +26,7 @@ There is a live demo site available. The Django project is a small e-commerce si
 
 You can access the admin here https://data-browser-demo.herokuapp.com/admin/ and the Data Browser here https://data-browser-demo.herokuapp.com/data-browser/
 
-Becuase it's hosted on Heroku free tier it might take up to 30 seconds to respond to the first page load.
+Becuase it's hosted on Heroku free tier it might take a while to respond to the first page load.
 
 ## Installation
 
@@ -84,6 +84,10 @@ If you want to modify the Javascript then you also need to:
 3. Run the Javascript dev server with `WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start`.
    The `WDS_SOCKET_PORT` is so the proxied JS can find it's dev server.
    The `PUBLIC_URL` tells the JS dev server what path to serve from and should be the same as the URL you have mounted the Data Browser on in you urls file.
+
+To run the Python tests, in the top level of you git clone run `pip install -r requirements.txt` then `pytest`.
+
+There is also pre-commit config for lint etc to enable this run `pip install pre-commit && pre-commit install` then lint will run on `git commit`. The linting includes Black and isort autoformatting.
 
 To build the JS, move the files around appropriately and recreate the wheels run `build.sh`.
 
