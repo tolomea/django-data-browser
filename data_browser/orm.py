@@ -1,3 +1,4 @@
+import logging
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -22,24 +23,21 @@ from .query import (
 
 _OPEN_IN_ADMIN = "admin"
 
-_FIELD_MAP = [
-    ((models.BooleanField, models.NullBooleanField), BooleanFieldType),
-    (
-        (
-            models.CharField,
-            models.TextField,
-            models.GenericIPAddressField,
-            models.UUIDField,
-        ),
-        StringFieldType,
-    ),
-    ((models.DateTimeField, models.DateField), TimeFieldType),
-    (
-        (models.DecimalField, models.FloatField, models.IntegerField, models.AutoField),
-        NumberFieldType,
-    ),
-    ((models.FileField,), None),
-]
+_FIELD_MAP = {
+    models.BooleanField: BooleanFieldType,
+    models.NullBooleanField: BooleanFieldType,
+    models.CharField: StringFieldType,
+    models.TextField: StringFieldType,
+    models.GenericIPAddressField: StringFieldType,
+    models.UUIDField: StringFieldType,
+    models.DateTimeField: TimeFieldType,
+    models.DateField: TimeFieldType,
+    models.DecimalField: NumberFieldType,
+    models.FloatField: NumberFieldType,
+    models.IntegerField: NumberFieldType,
+    models.AutoField: NumberFieldType,
+    models.FileField: None,
+}
 
 
 def get_model_name(model, sep="."):
@@ -125,14 +123,20 @@ def _get_fields_for_model(model, model_admins, admin_fields):
         elif isinstance(field, type(None)):
             fields[field_name] = OrmField(type_=StringFieldType, concrete=False)
         else:
-            for django_types, field_type in _FIELD_MAP:
-                if isinstance(field, django_types):
-                    if field_type:
-                        fields[field_name] = OrmField(type_=field_type, concrete=True)
-                    break
+            if field.__class__ in _FIELD_MAP:
+                field_type = _FIELD_MAP[field.__class__]
+            else:
+                for django_type, field_type in _FIELD_MAP.items():
+                    if isinstance(field, django_type):
+                        break
+                else:
+                    field_type = None
+
+            if field_type:
+                fields[field_name] = OrmField(type_=field_type, concrete=True)
             else:  # pragma: no cover
-                print(
-                    f"DataBrowser: {model.__name__}.{field_name} unknown type {type(field).__name__}"
+                logging.getLogger(__name__).warning(
+                    f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
                 )
 
     return OrmModel(fields=fields, fks=fks, admin=model_admins[model])
