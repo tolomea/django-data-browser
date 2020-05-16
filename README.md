@@ -55,7 +55,7 @@ DATA_BROWSER_FE_DSN = "https://af64f22b81994a0e93b82a32add8cb2b@o390136.ingest.s
 
 For concrete fields (as oppose to calculated ones) the Data Browser will do appropriate select and prefetch related calls to minimise it's database impact.
 
-The data-browser calls the normal admin `get_queryset` functions. You can use these to customize querysets as needed.
+The Data Browser calls the normal admin `get_queryset` functions. You can use these to customize querysets as needed.
 
 If necessary you can test to see if the databrowser is making the call as follows:
 
@@ -66,7 +66,7 @@ if request.databrowser:
 
 This is particularly useful if you want to route the Data Browser to a DB replica.
 
-The Data Browser also calls get_fieldsets to find out what fields the current user can access. When it does this it always passes a newly constructed instance of the relevant model. This is necessary to work around Django's User admin messing with the fieldsets when `None` is passed.
+The Data Browser also calls `get_fieldsets` to find out what fields the current user can access. When it does this it always passes a newly constructed instance of the relevant model. This is necessary to work around Django's User admin messing with the fieldsets when `None` is passed.
 
 ## Development
 
@@ -74,27 +74,33 @@ The easiest way to develop this is against your existing client project.
 
 The compiled Javascript is checked into the repo, so if only want to mess with the Python then it's sufficient to:
 
-1. Install data_browser in editable mode `pip install -e <directory to your git clone>`.
+1. Install the Data Browser in editable mode `pip install -e <directory to your git clone>`.
 
 If you want to modify the Javascript then you also need to:
 
 2. Enable proxying to the JS dev server by adding `DATA_BROWSER_DEV = True` to your settings.
-3. Run the dev server with `WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start`.
-   The `WDS_SOCKET_PORT` is so the proxied JS can find the webpack dev server.
-   The `PUBLIC_URL` tells the webpack dev server what path to serve from and should be the same as the URL you have mounted the data-browser on in you urls file.
+3. Run the Javascript dev server with `WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start`.
+   The `WDS_SOCKET_PORT` is so the proxied JS can find it's dev server.
+   The `PUBLIC_URL` tells the JS dev server what path to serve from and should be the same as the URL you have mounted the Data Browser on in you urls file.
 
 To build the JS, move the files around appropriately and recreate the wheels run `build.sh`.
 
+During development it can be useful to look at the `.ctx` and `.json` views. The `.ctx` view will show you the initial context being passed to the Javascript on page load. The `.json` view is the actual API request the Javascript uses to fetch query results.
+
 ### Naming
 
-field name,path
+| Name        | Meaning                                                                                                   |
+| ----------- | --------------------------------------------------------------------------------------------------------- |
+| bound query | A query that has been validated against the config                                                        |
+| config      | Information that doesn't change based on the particular query, includes all the models and their fields.  |
+| data        | The results of performing the query.                                                                      |
+| field name  | Just the name of the field e.g. `created_time`.                                                           |
+| field path  | Includes information on how to reach the model the field is on e.g. `order__seller__created_time`.        |
+| model name  | Fullstop seperated app and model names e.g. `myapp.MyModel`.                                              |
+| model       | In Python the actual model class, in Javascript the model_name.                                           |
+| query       | The information that changes with the query being done, in the Javascript this also includes the results. |
+| view        | A saved query.                                                                                            |
 
-model, model_name
+### Structure
 
-js vs python
-
-### Architecture
-
-include ctx
-
-Diagram of parts
+![structure](structure.svg)
