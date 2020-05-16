@@ -124,7 +124,7 @@ def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), pk=pk)
     request.user = view.owner  # public views are run as the person who owns them
     if not request.user.has_perm("data_browser.make_view_public"):
-        raise http.Http404(f"bob")
+        raise http.Http404("No View matches the given query.")
     query = view.get_query()
     return _data_response(request, query, media)
 

@@ -423,6 +423,11 @@ def test_view_csv(admin_client):
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
     assert rows == [["size", "name", "size_unit"], ["1", "a", "g"], ["1", "b", "g"]]
 
+    view.owner = User.objects.create(is_staff=True)
+    view.save()
+    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    assert res.status_code == 404
+
 
 @pytest.mark.usefixtures("products")
 def test_view_json(admin_client):
@@ -455,3 +460,8 @@ def test_view_json(admin_client):
         ],
         "model": "tests.Product",
     }
+
+    view.owner = User.objects.create(is_staff=True)
+    view.save()
+    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    assert res.status_code == 404
