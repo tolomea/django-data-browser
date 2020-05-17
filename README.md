@@ -112,4 +112,4 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 
 ### Structure
 
-![structure](structure.svg)
+![structure](https://raw.githubusercontent.com/tolomea/django-data-browser/master/structure.svg)
