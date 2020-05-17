@@ -2,6 +2,8 @@
 
 A Django app for interactive user friendly browsing of a Django projects DB.
 
+![screenshot](https://raw.githubusercontent.com/tolomea/django-data-browser/master/screenshot.png)
+
 ### Features
 
 -   Zero config, if it's in the admin it's in the browser
@@ -97,19 +99,19 @@ To build the JS, move the files around appropriately and recreate the wheels run
 
 During development it can be useful to look at the `.ctx` and `.json` views. The `.ctx` view will show you the initial context being passed to the Javascript on page load. The `.json` view is the actual API request the Javascript uses to fetch query results.
 
+### Structure
+
+![structure](https://raw.githubusercontent.com/tolomea/django-data-browser/master/structure.svg)
+
 ### Naming
 
 | Name        | Meaning                                                                                                   |
 | ----------- | --------------------------------------------------------------------------------------------------------- |
-| bound query | A query that has been validated against the config                                                        |
+| bound query | A query that has been validated against the config.                                                       |
 | config      | Information that doesn't change based on the particular query, includes all the models and their fields.  |
 | field name  | Just the name of the field e.g. `created_time`.                                                           |
 | field path  | Includes information on how to reach the model the field is on e.g. `order__seller__created_time`.        |
 | model name  | Fullstop seperated app and model names e.g. `myapp.MyModel`.                                              |
-| model       | In Python the actual model class, in Javascript the model_name.                                           |
+| model       | In Python the actual model class, in Javascript the model name as above.                                  |
 | query       | The information that changes with the query being done, in the Javascript this also includes the results. |
 | view        | A saved query.                                                                                            |
-
-### Structure
-
-![structure](https://raw.githubusercontent.com/tolomea/django-data-browser/master/structure.svg)
