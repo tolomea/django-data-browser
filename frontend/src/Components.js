@@ -132,37 +132,38 @@ class Toggle extends React.Component {
   }
 }
 
-function FkField(props) {
-  const modelField = props.modelFields.fields[props.fieldName];
-  return (
-    <tr key={props.fieldName}>
-      <td></td>
-      <Toggle title={props.fieldName}>
-        <AllFields
-          query={props.query}
-          model={modelField.model}
-          path={`${props.path}__`}
-        />
-      </Toggle>
-    </tr>
-  );
-}
-
 function Field(props) {
   const modelField = props.modelFields.fields[props.fieldName];
+  const title = modelField.type ? (
+    <Link onClick={() => props.query.addField(props.path)}>
+      {props.fieldName}
+    </Link>
+  ) : (
+    props.fieldName
+  );
+
   return (
-    <tr key={props.fieldName}>
+    <tr>
       <td>
         {modelField.concrete && (
           <Link onClick={() => props.query.addFilter(props.path)}>Y</Link>
         )}
       </td>
-      <td></td>
-      <td>
-        <Link onClick={() => props.query.addField(props.path)}>
-          {props.fieldName}
-        </Link>
-      </td>
+
+      {modelField.model ? (
+        <Toggle title={title}>
+          <AllFields
+            query={props.query}
+            model={modelField.model}
+            path={`${props.path}__`}
+          />
+        </Toggle>
+      ) : (
+        <>
+          <td></td>
+          <td>{title}</td>
+        </>
+      )}
     </tr>
   );
 }
@@ -172,28 +173,15 @@ function AllFields(props) {
   return (
     <table>
       <tbody>
-        {modelFields.sortedFields.map((fieldName) => {
-          const modelField = modelFields.fields[fieldName];
-          if (modelField.model) {
-            return (
-              <FkField
-                query={props.query}
-                path={`${props.path}${fieldName}`}
-                fieldName={fieldName}
-                modelFields={modelFields}
-              />
-            );
-          } else {
-            return (
-              <Field
-                query={props.query}
-                path={`${props.path}${fieldName}`}
-                fieldName={fieldName}
-                modelFields={modelFields}
-              />
-            );
-          }
-        })}
+        {modelFields.sortedFields.map((fieldName) => (
+          <Field
+            key={fieldName}
+            query={props.query}
+            path={`${props.path}${fieldName}`}
+            fieldName={fieldName}
+            modelFields={modelFields}
+          />
+        ))}
       </tbody>
     </table>
   );
@@ -237,9 +225,15 @@ function ResultsHead(props) {
 }
 
 function ResultsCell(props) {
-  if (props.modelField.type === "html")
-    return <div dangerouslySetInnerHTML={{ __html: props.value }} />;
-  else return String(props.value);
+  return (
+    <td className={props.modelField.type}>
+      {props.modelField.type === "html" ? (
+        <div dangerouslySetInnerHTML={{ __html: props.value }} />
+      ) : (
+        String(props.value)
+      )}
+    </td>
+  );
 }
 
 function ResultsBody(props) {
@@ -248,13 +242,12 @@ function ResultsBody(props) {
       {props.results.map((row, rowIndex) => (
         <tr key={rowIndex}>
           {row.map((cell, colIndex) => (
-            <td key={colIndex}>
-              <ResultsCell
-                query={props.query}
-                value={cell}
-                modelField={props.query.getField(props.fields[colIndex].path)}
-              />
-            </td>
+            <ResultsCell
+              key={colIndex}
+              query={props.query}
+              value={cell}
+              modelField={props.query.getField(props.fields[colIndex].path)}
+            />
           ))}
         </tr>
       ))}
@@ -264,7 +257,7 @@ function ResultsBody(props) {
 
 function Results(props) {
   return (
-    <table>
+    <table className="Results">
       <ResultsHead query={props.query} fields={props.fields} />
       <ResultsBody
         query={props.query}

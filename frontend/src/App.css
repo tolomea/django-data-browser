@@ -25,32 +25,8 @@
   text-decoration: underline;
 }
 
-table,
-th,
-td {
-  border: 1px solid #ccc;
-  border-radius: 2px;
-}
-th,
-td {
-  padding: 5px;
-}
-td {
-  text-align: right;
-}
-th {
-  text-align: center;
-}
-
 h1 {
   font-size: 28px;
-}
-
-table.Flat,
-table.Flat th,
-table.Flat td {
-  border: none;
-  padding: 3px 1px;
 }
 
 .ModelSelector {
@@ -102,7 +78,7 @@ button.Link:hover {
   display: flex;
   flex-flow: row;
   margin-bottom: 30px;
-  padding: 0 0px;
+  padding: 0 10px;
 }
 
 /* Filters */
@@ -123,14 +99,25 @@ input.FilterValue {
 select.Lookup {
   width: 100%;
 }
+.Filters table,
+.Filters table.Flat th,
+.Filters table.Flat td {
+  border: none;
+  padding: 3px 1px;
+}
 
 /* Fields */
 
 .FieldsList {
-  padding: 0;
+  padding: 0 10px 0 0;
   margin: 0;
+  min-width: 200px;
 }
-.FieldsList table,
+.FieldsList table {
+  border-collapse: collapse;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
 .FieldsList tbody,
 .FieldsList th,
 .FieldsList td {
@@ -140,9 +127,31 @@ select.Lookup {
 .FieldsList th,
 .FieldsList td {
   padding: 0px;
+  padding: 1px;
 }
 .FieldsList td {
   text-align: left;
+}
+
+/* Results */
+
+table.Results,
+.Results th,
+.Results td {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+.Results th,
+.Results td {
+  padding: 5px;
+}
+.Results td.number,
+.Results td.time {
+  text-align: right;
+}
+
+.Results th {
+  text-align: center;
 }
 
 /* Logo */
