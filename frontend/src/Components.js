@@ -151,9 +151,9 @@ function FkField(props) {
 }
 
 function Field(props) {
-  const modelField = props.modelFields.fields[props.field_name];
+  const modelField = props.modelFields.fields[props.fieldName];
   return (
-    <tr key={props.field_name}>
+    <tr key={props.fieldName}>
       <td>
         {modelField.concrete && (
           <Link onClick={() => props.query.addFilter(props.path)}>Y</Link>
@@ -162,7 +162,7 @@ function Field(props) {
       <td></td>
       <td>
         <Link onClick={() => props.query.addField(props.path)}>
-          {props.field_name}
+          {props.fieldName}
         </Link>
       </td>
     </tr>
@@ -182,11 +182,11 @@ function AllFields(props) {
             modelFields={modelFields}
           />
         ))}
-        {modelFields.sorted_fields.map((field_name) => (
+        {modelFields.sorted_fields.map((fieldName) => (
           <Field
             query={props.query}
-            path={`${props.path}${field_name}`}
-            field_name={field_name}
+            path={`${props.path}${fieldName}`}
+            fieldName={fieldName}
             modelFields={modelFields}
           />
         ))}
