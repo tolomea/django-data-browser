@@ -32,7 +32,7 @@ class Query {
     const field = parts.slice(-1);
     let model = this.query.model;
     for (const field of parts.slice(0, -1)) {
-      model = this.config.allModelFields[model].fks[field].model;
+      model = this.config.allModelFields[model].fields[field].model;
     }
     return this.config.allModelFields[model].fields[field];
   }

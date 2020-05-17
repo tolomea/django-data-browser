@@ -133,14 +133,14 @@ class Toggle extends React.Component {
 }
 
 function FkField(props) {
-  const fk = props.modelFields.fks[props.fkName];
+  const modelField = props.modelFields.fields[props.fieldName];
   return (
-    <tr key={props.fkName}>
+    <tr key={props.fieldName}>
       <td></td>
-      <Toggle title={props.fkName}>
+      <Toggle title={props.fieldName}>
         <AllFields
           query={props.query}
-          model={fk.model}
+          model={modelField.model}
           path={`${props.path}__`}
         />
       </Toggle>
@@ -172,22 +172,28 @@ function AllFields(props) {
   return (
     <table>
       <tbody>
-        {modelFields.sortedFks.map((fkName) => (
-          <FkField
-            query={props.query}
-            path={`${props.path}${fkName}`}
-            fkName={fkName}
-            modelFields={modelFields}
-          />
-        ))}
-        {modelFields.sortedFields.map((fieldName) => (
-          <Field
-            query={props.query}
-            path={`${props.path}${fieldName}`}
-            fieldName={fieldName}
-            modelFields={modelFields}
-          />
-        ))}
+        {modelFields.sortedFields.map((fieldName) => {
+          const modelField = modelFields.fields[fieldName];
+          if (modelField.model) {
+            return (
+              <FkField
+                query={props.query}
+                path={`${props.path}${fieldName}`}
+                fieldName={fieldName}
+                modelFields={modelFields}
+              />
+            );
+          } else {
+            return (
+              <Field
+                query={props.query}
+                path={`${props.path}${fieldName}`}
+                fieldName={fieldName}
+                modelFields={modelFields}
+              />
+            );
+          }
+        })}
       </tbody>
     </table>
   );

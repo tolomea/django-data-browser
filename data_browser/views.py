@@ -38,6 +38,29 @@ def _get_query_data(bound_query):
     }
 
 
+def _get_model_fields(orm_model):
+    def sort_model_fields(fields):
+        fields = sorted(fields)
+        front = {"id": 1, _OPEN_IN_ADMIN: 2}
+        return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
+
+    fields = {
+        name: {
+            "model": None,
+            "type": orm_field.type_.name,
+            "concrete": orm_field.concrete,
+        }
+        for name, orm_field in orm_model.fields.items()
+    }
+    fk_fields = {
+        name: {"model": fk_field.model_name, "type": None, "concrete": False}
+        for name, fk_field in orm_model.fks.items()
+    }
+    all_fields = {**fields, **fk_fields}
+
+    return {"fields": all_fields, "sortedFields": sort_model_fields(all_fields)}
+
+
 def _get_config(user, orm_models):
     types = {
         name: {
@@ -49,24 +72,8 @@ def _get_config(user, orm_models):
         for name, type_ in TYPES.items()
     }
 
-    def sort_model_fields(fields):
-        fields = sorted(fields)
-        front = {"id": 1, _OPEN_IN_ADMIN: 2}
-        return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
-
     all_model_fields = {
-        model_name: {
-            "fields": {
-                name: {"type": orm_field.type_.name, "concrete": orm_field.concrete}
-                for name, orm_field in orm_model.fields.items()
-            },
-            "fks": {
-                name: {"model": fk_field.model_name}
-                for name, fk_field in orm_model.fks.items()
-            },
-            "sortedFields": sort_model_fields(orm_model.fields),
-            "sortedFks": sorted(orm_model.fks),
-        }
+        model_name: _get_model_fields(orm_model)
         for model_name, orm_model in orm_models.items()
     }
 
