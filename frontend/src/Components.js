@@ -134,54 +134,62 @@ class Toggle extends React.Component {
   }
 }
 
-function Fields(props) {
+function FkField(props) {
+  const fk = props.modelFields.fks[props.fk_name];
+  return (
+    <tr key={props.fk_name}>
+      <td></td>
+      <Toggle title={props.fk_name}>
+        <AllFields
+          query={props.query}
+          model={fk.model}
+          path={`${props.path}__`}
+        />
+      </Toggle>
+    </tr>
+  );
+}
+
+function Field(props) {
+  const modelField = props.modelFields.fields[props.field_name];
+  return (
+    <tr key={props.field_name}>
+      <td>
+        {modelField.concrete && (
+          <Link onClick={() => props.query.addFilter(props.path)}>Y</Link>
+        )}
+      </td>
+      <td></td>
+      <td>
+        <Link onClick={() => props.query.addField(props.path)}>
+          {props.field_name}
+        </Link>
+      </td>
+    </tr>
+  );
+}
+
+function AllFields(props) {
   const modelFields = props.query.getModelFields(props.model);
   return (
     <table>
       <tbody>
-        {modelFields.sorted_fks.map((fk_name) => {
-          const fk = modelFields.fks[fk_name];
-          return (
-            <tr key={fk_name}>
-              <td></td>
-              <Toggle title={fk_name}>
-                <Fields
-                  query={props.query}
-                  model={fk.model}
-                  path={`${props.path}${fk_name}__`}
-                />
-              </Toggle>
-            </tr>
-          );
-        })}
-        {modelFields.sorted_fields.map((field_name) => {
-          const modelField = modelFields.fields[field_name];
-          return (
-            <tr key={field_name}>
-              <td>
-                {modelField.concrete && (
-                  <Link
-                    onClick={() =>
-                      props.query.addFilter(`${props.path}${field_name}`)
-                    }
-                  >
-                    Y
-                  </Link>
-                )}
-              </td>
-              <td></td>
-              <td>
-                <Link
-                  onClick={() =>
-                    props.query.addField(`${props.path}${field_name}`)
-                  }
-                >
-                  {field_name}
-                </Link>
-              </td>
-            </tr>
-          );
-        })}
+        {modelFields.sorted_fks.map((fk_name) => (
+          <FkField
+            query={props.query}
+            path={`${props.path}${fk_name}`}
+            fk_name={fk_name}
+            modelFields={modelFields}
+          />
+        ))}
+        {modelFields.sorted_fields.map((field_name) => (
+          <Field
+            query={props.query}
+            path={`${props.path}${field_name}`}
+            field_name={field_name}
+            modelFields={modelFields}
+          />
+        ))}
       </tbody>
     </table>
   );
@@ -310,7 +318,7 @@ function QueryPage(props) {
       </p>
       <div className="MainSpace">
         <div className="FieldsList">
-          <Fields query={props.query} model={props.model} path="" />
+          <AllFields query={props.query} model={props.model} path="" />
         </div>
         <Results
           query={props.query}
