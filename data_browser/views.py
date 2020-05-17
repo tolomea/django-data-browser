@@ -123,7 +123,11 @@ def query_html(request, *, model_name="", fields=""):
     ctx = ctx.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
 
     if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
-        response = _get_from_js_dev_server(request)
+        try:
+            response = _get_from_js_dev_server(request)
+        except Exception as e:
+            return http.HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
+
         template = engines["django"].from_string(response.text)
     else:
         template = loader.get_template("data_browser/index.html")
