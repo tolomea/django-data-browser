@@ -45,7 +45,6 @@ def _get_config(user, orm_models):
             "sortedLookups": list(type_.lookups),
             "defaultLookup": type_.default_lookup,
             "defaultValue": type_.default_value,
-            "aggregates": type_.aggregates,
         }
         for name, type_ in TYPES.items()
     }
