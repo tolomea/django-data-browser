@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . import version
 from .models import View
 from .orm import _OPEN_IN_ADMIN, get_models, get_results
-from .query import TYPES, BoundQuery, Query
+from .query import TYPES, BoundQuery, NumberFieldType, Query
 
 
 def _get_query_data(bound_query):
@@ -44,9 +44,15 @@ def _get_model_fields(orm_model):
         front = {"id": 1, _OPEN_IN_ADMIN: 2}
         return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
 
+    def type_model(orm_field):
+        if orm_field.concrete and orm_field.type_.aggregates:
+            return orm_field.type_.name
+        else:
+            return None
+
     fields = {
         name: {
-            "model": None,
+            "model": type_model(orm_field),
             "type": orm_field.type_.name,
             "concrete": orm_field.concrete,
         }
@@ -76,6 +82,18 @@ def _get_config(user, orm_models):
         model_name: _get_model_fields(orm_model)
         for model_name, orm_model in orm_models.items()
     }
+    for type_ in TYPES.values():
+        all_model_fields[type_.name] = {
+            "fields": {
+                aggregate: {
+                    "type": NumberFieldType.name,
+                    "concrete": False,
+                    "model": None,
+                }
+                for aggregate in type_.aggregates
+            },
+            "sortedFields": type_.aggregates,
+        }
 
     saved_views = [
         {
@@ -97,7 +115,7 @@ def _get_config(user, orm_models):
         "adminUrl": admin_url,
         "types": types,
         "allModelFields": all_model_fields,
-        "sortedModels": sorted(all_model_fields),
+        "sortedModels": sorted(orm_models),
         "version": version,
         "savedViews": saved_views,
     }
