@@ -175,7 +175,7 @@ def _data_response(request, query, media, meta):
 def _get_from_js_dev_server(request):  # pragma: no cover
     import requests
 
-    upstream_url = f"http://localhost:3000{request.path}"
+    upstream_url = f"http://127.0.0.1:3000{request.path}"
     method = request.META["REQUEST_METHOD"].lower()
     return getattr(requests, method)(upstream_url, stream=True)
 
@@ -189,19 +189,9 @@ def proxy_js_dev_server(request, path):  # pragma: no cover
 
     """
     response = _get_from_js_dev_server(request)
-    content_type = response.headers.get("Content-Type")
-
-    if request.META.get("HTTP_UPGRADE", "").lower() == "websocket":
-        return http.HttpResponse(
-            content="WebSocket connections aren't supported",
-            status=501,
-            reason="Not Implemented",
-        )
-
-    else:
-        return http.StreamingHttpResponse(
-            streaming_content=response.iter_content(2 ** 12),
-            content_type=content_type,
-            status=response.status_code,
-            reason=response.reason,
-        )
+    return http.StreamingHttpResponse(
+        streaming_content=response.iter_content(2 ** 12),
+        content_type=response.headers.get("Content-Type"),
+        status=response.status_code,
+        reason=response.reason,
+    )
