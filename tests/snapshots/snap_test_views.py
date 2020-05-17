@@ -199,6 +199,7 @@ snapshots["test_query_html context"] = {
         ],
         "types": {
             "boolean": {
+                "aggregates": ["average", "sum"],
                 "defaultLookup": "equals",
                 "defaultValue": True,
                 "lookups": {
@@ -209,12 +210,22 @@ snapshots["test_query_html context"] = {
                 "sortedLookups": ["equals", "not_equals", "is_null"],
             },
             "html": {
+                "aggregates": [],
                 "defaultLookup": None,
                 "defaultValue": None,
                 "lookups": {},
                 "sortedLookups": [],
             },
             "number": {
+                "aggregates": [
+                    "average",
+                    "count",
+                    "max",
+                    "min",
+                    "std_dev",
+                    "sum",
+                    "variance",
+                ],
                 "defaultLookup": "equals",
                 "defaultValue": 0,
                 "lookups": {
@@ -237,6 +248,7 @@ snapshots["test_query_html context"] = {
                 ],
             },
             "string": {
+                "aggregates": ["count"],
                 "defaultLookup": "equals",
                 "defaultValue": "",
                 "lookups": {
@@ -267,6 +279,7 @@ snapshots["test_query_html context"] = {
                 ],
             },
             "time": {
+                "aggregates": ["count"],
                 "defaultLookup": "equals",
                 "defaultValue": "redacted",
                 "lookups": {

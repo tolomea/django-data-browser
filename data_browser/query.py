@@ -185,7 +185,7 @@ class HTMLFieldType(FieldType):
 class BooleanFieldType(FieldType):
     default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
-    aggregates = []
+    aggregates = ["average", "sum"]
 
     @staticmethod
     def parse(value):
