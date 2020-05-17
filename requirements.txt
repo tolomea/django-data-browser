@@ -4,3 +4,4 @@ pytest-django
 python-dateutil
 requests
 snapshottest
+dataclasses; python_version<"3.7"
