@@ -133,11 +133,11 @@ class Toggle extends React.Component {
 }
 
 function FkField(props) {
-  const fk = props.modelFields.fks[props.fk_name];
+  const fk = props.modelFields.fks[props.fkName];
   return (
-    <tr key={props.fk_name}>
+    <tr key={props.fkName}>
       <td></td>
-      <Toggle title={props.fk_name}>
+      <Toggle title={props.fkName}>
         <AllFields
           query={props.query}
           model={fk.model}
@@ -172,15 +172,15 @@ function AllFields(props) {
   return (
     <table>
       <tbody>
-        {modelFields.sorted_fks.map((fk_name) => (
+        {modelFields.sortedFks.map((fkName) => (
           <FkField
             query={props.query}
-            path={`${props.path}${fk_name}`}
-            fk_name={fk_name}
+            path={`${props.path}${fkName}`}
+            fkName={fkName}
             modelFields={modelFields}
           />
         ))}
-        {modelFields.sorted_fields.map((fieldName) => (
+        {modelFields.sortedFields.map((fieldName) => (
           <Field
             query={props.query}
             path={`${props.path}${fieldName}`}
@@ -239,14 +239,14 @@ function ResultsCell(props) {
 function ResultsBody(props) {
   return (
     <tbody>
-      {props.results.map((row, row_index) => (
-        <tr key={row_index}>
-          {row.map((cell, col_index) => (
-            <td key={col_index}>
+      {props.results.map((row, rowIndex) => (
+        <tr key={rowIndex}>
+          {row.map((cell, colIndex) => (
+            <td key={colIndex}>
               <ResultsCell
                 query={props.query}
                 value={cell}
-                modelField={props.query.getField(props.fields[col_index].path)}
+                modelField={props.query.getField(props.fields[colIndex].path)}
               />
             </td>
           ))}

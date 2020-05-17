@@ -17,8 +17,8 @@ snapshots["test_query_html context"] = {
                     "name": {"concrete": True, "type": "string"},
                 },
                 "fks": {},
-                "sorted_fields": ["id", "admin", "name"],
-                "sorted_fks": [],
+                "sortedFields": ["id", "admin", "name"],
+                "sortedFks": [],
             },
             "auth.User": {
                 "fields": {
@@ -36,7 +36,7 @@ snapshots["test_query_html context"] = {
                     "username": {"concrete": True, "type": "string"},
                 },
                 "fks": {},
-                "sorted_fields": [
+                "sortedFields": [
                     "id",
                     "admin",
                     "date_joined",
@@ -50,7 +50,7 @@ snapshots["test_query_html context"] = {
                     "password",
                     "username",
                 ],
-                "sorted_fks": [],
+                "sortedFks": [],
             },
             "data_browser.View": {
                 "fields": {
@@ -68,7 +68,7 @@ snapshots["test_query_html context"] = {
                     "query": {"concrete": True, "type": "string"},
                 },
                 "fks": {"owner": {"model": "auth.User"}},
-                "sorted_fields": [
+                "sortedFields": [
                     "id",
                     "admin",
                     "created_time",
@@ -82,7 +82,7 @@ snapshots["test_query_html context"] = {
                     "public_link",
                     "query",
                 ],
-                "sorted_fks": ["owner"],
+                "sortedFks": ["owner"],
             },
             "tests.Address": {
                 "fields": {
@@ -91,8 +91,8 @@ snapshots["test_query_html context"] = {
                     "id": {"concrete": True, "type": "number"},
                 },
                 "fks": {},
-                "sorted_fields": ["id", "admin", "city"],
-                "sorted_fks": [],
+                "sortedFields": ["id", "admin", "city"],
+                "sortedFks": [],
             },
             "tests.InAdmin": {
                 "fields": {
@@ -101,8 +101,8 @@ snapshots["test_query_html context"] = {
                     "name": {"concrete": True, "type": "string"},
                 },
                 "fks": {},
-                "sorted_fields": ["id", "admin", "name"],
-                "sorted_fks": [],
+                "sortedFields": ["id", "admin", "name"],
+                "sortedFks": [],
             },
             "tests.InlineAdmin": {
                 "fields": {
@@ -110,8 +110,8 @@ snapshots["test_query_html context"] = {
                     "name": {"concrete": True, "type": "string"},
                 },
                 "fks": {"in_admin": {"model": "tests.InAdmin"}},
-                "sorted_fields": ["id", "name"],
-                "sorted_fks": ["in_admin"],
+                "sortedFields": ["id", "name"],
+                "sortedFks": ["in_admin"],
             },
             "tests.Normal": {
                 "fields": {
@@ -123,8 +123,8 @@ snapshots["test_query_html context"] = {
                     "in_admin": {"model": "tests.InAdmin"},
                     "inline_admin": {"model": "tests.InlineAdmin"},
                 },
-                "sorted_fields": ["id", "admin", "name"],
-                "sorted_fks": ["in_admin", "inline_admin"],
+                "sortedFields": ["id", "admin", "name"],
+                "sortedFks": ["in_admin", "inline_admin"],
             },
             "tests.Producer": {
                 "fields": {
@@ -133,8 +133,8 @@ snapshots["test_query_html context"] = {
                     "name": {"concrete": True, "type": "string"},
                 },
                 "fks": {"address": {"model": "tests.Address"}},
-                "sorted_fields": ["id", "admin", "name"],
-                "sorted_fks": ["address"],
+                "sortedFields": ["id", "admin", "name"],
+                "sortedFks": ["address"],
             },
             "tests.Product": {
                 "fields": {
@@ -150,7 +150,7 @@ snapshots["test_query_html context"] = {
                     "default_sku": {"model": "tests.SKU"},
                     "producer": {"model": "tests.Producer"},
                 },
-                "sorted_fields": [
+                "sortedFields": [
                     "id",
                     "admin",
                     "is_onsale",
@@ -159,7 +159,7 @@ snapshots["test_query_html context"] = {
                     "size",
                     "size_unit",
                 ],
-                "sorted_fks": ["default_sku", "producer"],
+                "sortedFks": ["default_sku", "producer"],
             },
             "tests.SKU": {
                 "fields": {
@@ -168,8 +168,8 @@ snapshots["test_query_html context"] = {
                     "name": {"concrete": True, "type": "string"},
                 },
                 "fks": {"product": {"model": "tests.Product"}},
-                "sorted_fields": ["id", "admin", "name"],
-                "sorted_fks": ["product"],
+                "sortedFields": ["id", "admin", "name"],
+                "sortedFks": ["product"],
             },
             "tests.Tag": {
                 "fields": {
@@ -178,8 +178,8 @@ snapshots["test_query_html context"] = {
                     "name": {"concrete": True, "type": "string"},
                 },
                 "fks": {},
-                "sorted_fields": ["id", "admin", "name"],
-                "sorted_fks": [],
+                "sortedFields": ["id", "admin", "name"],
+                "sortedFks": [],
             },
         },
         "baseUrl": "/data_browser/",

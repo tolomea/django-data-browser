@@ -65,8 +65,8 @@ def _get_config(user, orm_models):
                 name: {"model": fk_field.model_name}
                 for name, fk_field in orm_model.fks.items()
             },
-            "sorted_fields": sort_model_fields(orm_model.fields),
-            "sorted_fks": sorted(orm_model.fks),
+            "sortedFields": sort_model_fields(orm_model.fields),
+            "sortedFks": sorted(orm_model.fks),
         }
         for model_name, orm_model in orm_models.items()
     }
