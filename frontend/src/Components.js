@@ -341,7 +341,7 @@ function HomePage(props) {
                   className="Link"
                   onClick={() => props.query.setQuery(view.query)}
                 >
-                  {view.name} - {view.model}
+                  {view.model} - {view.name}
                 </button>
                 <p>{view.description}</p>
               </div>

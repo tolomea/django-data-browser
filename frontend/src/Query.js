@@ -141,6 +141,7 @@ class Query {
   getUrlForSave() {
     if (this.config.adminUrl === null) return null;
     const parts = getPartsForQuery(this.query);
+    parts.model_name = parts.model;
     const queryString = new URLSearchParams(parts).toString();
     return `${window.location.origin}${this.config.adminUrl}?${queryString}`;
   }
