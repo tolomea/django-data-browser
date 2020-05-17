@@ -125,9 +125,7 @@ class Toggle extends React.Component {
         </td>
         <td>
           {this.props.title}
-          {this.state.isToggleOn && (
-            <div className="ToggleDiv">{this.props.children}</div>
-          )}
+          {this.state.isToggleOn && this.props.children}
         </td>
       </>
     );
