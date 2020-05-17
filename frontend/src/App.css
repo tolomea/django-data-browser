@@ -84,13 +84,29 @@ select {
   width: auto;
   padding: 2px;
 }
+button.Link {
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+  cursor: pointer;
+  color: #069;
+  font-size: inherit;
+  font: inherit;
+}
+button.Link:hover {
+  text-decoration: underline;
+}
 
 .MainSpace {
   margin: 0 auto;
   display: flex;
   flex-flow: row;
   margin-bottom: 30px;
+  padding: 0 0px;
 }
+
+/* Filters */
+
 .Filters {
   margin: 0 auto;
   display: flex;
@@ -107,34 +123,29 @@ input.FilterValue {
 select.Lookup {
   width: 100%;
 }
-.ToggleLink {
-  display: block;
-}
-.ToggleDiv {
-  display: block;
-  padding-left: 15px;
-}
+
+/* Fields */
+
 .FieldsList {
-  list-style-type: none;
   padding: 0;
-  margin: 0px 10px;
+  margin: 0;
 }
-.FieldsList li {
-  white-space: nowrap;
+.FieldsList table,
+.FieldsList tbody,
+.FieldsList th,
+.FieldsList td {
+  border: none;
+  vertical-align: top;
+}
+.FieldsList th,
+.FieldsList td {
+  padding: 0px;
+}
+.FieldsList td {
+  text-align: left;
 }
 
-button.Link {
-  background: none !important;
-  border: none;
-  padding: 0 !important;
-  cursor: pointer;
-  color: #069;
-  font-size: inherit;
-  font: inherit;
-}
-button.Link:hover {
-  text-decoration: underline;
-}
+/* Logo */
 
 div.Logo {
   position: absolute;
@@ -149,6 +160,8 @@ div.Logo > span {
 div.Logo > span.Version {
   font-size: 20px;
 }
+
+/* Index Page */
 
 div.Index {
   margin: 30px;

@@ -116,66 +116,74 @@ class Toggle extends React.Component {
   }
 
   render() {
-    if (this.state.isToggleOn)
-      return (
-        <>
+    return (
+      <>
+        <td>
           <Link className="ToggleLink" onClick={this.handleClick.bind(this)}>
-            > {this.props.title}
+            {this.state.isToggleOn ? ">" : "+"}
           </Link>
-          <div className="ToggleDiv">{this.props.children}</div>
-        </>
-      );
-    else
-      return (
-        <Link className="ToggleLink" onClick={this.handleClick.bind(this)}>
-          + {this.props.title}
-        </Link>
-      );
+        </td>
+        <td>
+          {this.props.title}
+          {this.state.isToggleOn && (
+            <div className="ToggleDiv">{this.props.children}</div>
+          )}
+        </td>
+      </>
+    );
   }
 }
 
 function Fields(props) {
   const modelFields = props.query.getModelFields(props.model);
   return (
-    <ul className="FieldsList">
-      {modelFields.sorted_fks.map((fk_name) => {
-        const fk = modelFields.fks[fk_name];
-        return (
-          <li key={fk_name}>
-            <Toggle title={fk_name}>
-              <Fields
-                query={props.query}
-                model={fk.model}
-                path={`${props.path}${fk_name}__`}
-              />
-            </Toggle>
-          </li>
-        );
-      })}
-      {modelFields.sorted_fields.map((field_name) => {
-        const modelField = modelFields.fields[field_name];
-        return (
-          <li key={field_name}>
-            {modelField.concrete ? (
-              <Link
-                onClick={() =>
-                  props.query.addFilter(`${props.path}${field_name}`)
-                }
-              >
-                Y
-              </Link>
-            ) : (
-              <>&nbsp;&nbsp;</>
-            )}{" "}
-            <Link
-              onClick={() => props.query.addField(`${props.path}${field_name}`)}
-            >
-              {field_name}
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+    <table>
+      <tbody>
+        {modelFields.sorted_fks.map((fk_name) => {
+          const fk = modelFields.fks[fk_name];
+          return (
+            <tr key={fk_name}>
+              <td></td>
+              <Toggle title={fk_name}>
+                <Fields
+                  query={props.query}
+                  model={fk.model}
+                  path={`${props.path}${fk_name}__`}
+                />
+              </Toggle>
+            </tr>
+          );
+        })}
+        {modelFields.sorted_fields.map((field_name) => {
+          const modelField = modelFields.fields[field_name];
+          return (
+            <tr key={field_name}>
+              <td>
+                {modelField.concrete && (
+                  <Link
+                    onClick={() =>
+                      props.query.addFilter(`${props.path}${field_name}`)
+                    }
+                  >
+                    Y
+                  </Link>
+                )}
+              </td>
+              <td></td>
+              <td>
+                <Link
+                  onClick={() =>
+                    props.query.addField(`${props.path}${field_name}`)
+                  }
+                >
+                  {field_name}
+                </Link>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }
 
@@ -293,17 +301,15 @@ function QueryPage(props) {
         Showing {props.results.length} results -{" "}
         <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={props.query.getUrlForMedia("json")}>View as JSON</a>
-        {saveUrl ? (
+        {saveUrl && (
           <>
             {" "}
             - <a href={saveUrl}>Save View</a>{" "}
           </>
-        ) : (
-          ""
         )}
       </p>
       <div className="MainSpace">
-        <div>
+        <div className="FieldsList">
           <Fields query={props.query} model={props.model} path="" />
         </div>
         <Results
