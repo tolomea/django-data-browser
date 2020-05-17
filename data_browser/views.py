@@ -133,7 +133,7 @@ def query_html(request, *, model_name="", fields=""):
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
     query = Query.from_request(model_name, fields, request.GET)
-    return _data_response(request, query, media)
+    return _data_response(request, query, media, meta=True)
 
 
 def view(request, pk, media):
@@ -142,10 +142,10 @@ def view(request, pk, media):
     if not request.user.has_perm("data_browser.make_view_public"):
         raise http.Http404("No View matches the given query.")
     query = view.get_query()
-    return _data_response(request, query, media)
+    return _data_response(request, query, media, meta=False)
 
 
-def _data_response(request, query, media):
+def _data_response(request, query, media, meta):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
@@ -164,7 +164,7 @@ def _data_response(request, query, media):
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
         return response
     elif media == "json":
-        resp = _get_query_data(bound_query)
+        resp = _get_query_data(bound_query) if meta else {}
         resp["data"] = data
         return http.JsonResponse(resp)
     else:

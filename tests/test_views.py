@@ -150,19 +150,7 @@ def test_view_json(admin_client):
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
     print(json.dumps(data, indent=4, sort_keys=True))
-    assert data == {
-        "data": [[1, "a", "g"], [1, "b", "g"]],
-        "fields": [
-            {"path": "size", "priority": 0, "sort": "dsc"},
-            {"path": "name", "priority": 1, "sort": "asc"},
-            {"path": "size_unit", "priority": null, "sort": null},
-        ],
-        "filters": [
-            {"errorMessage": null, "lookup": "lt", "path": "size", "value": "2"},
-            {"errorMessage": null, "lookup": "gt", "path": "id", "value": "0"},
-        ],
-        "model": "tests.Product",
-    }
+    assert data == {"data": [[1, "a", "g"], [1, "b", "g"]]}
 
     view.owner = User.objects.create(is_staff=True)
     view.save()
