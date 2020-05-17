@@ -210,7 +210,7 @@ snapshots["test_query_html context"] = {
             },
             "html": {
                 "defaultLookup": None,
-                "defaultValue": "",
+                "defaultValue": None,
                 "lookups": {},
                 "sortedLookups": [],
             },
@@ -292,7 +292,6 @@ snapshots["test_query_html context"] = {
         "version": "redacted",
     },
     "initialState": {
-        "results": [],
         "fields": [
             {"path": "size", "priority": 0, "sort": "dsc"},
             {"path": "name", "priority": 1, "sort": "asc"},
@@ -303,6 +302,7 @@ snapshots["test_query_html context"] = {
             {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
         ],
         "model": "tests.Product",
+        "results": [],
     },
     "sentryDsn": None,
 }

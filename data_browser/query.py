@@ -106,8 +106,6 @@ class MetaFieldType(type):
 
 
 class FieldType(metaclass=MetaFieldType):
-    default_value = ""
-
     def __init__(self):
         assert False
 
@@ -121,6 +119,7 @@ class FieldType(metaclass=MetaFieldType):
 
 
 class StringFieldType(FieldType):
+    default_value = ""
     lookups = {
         "equals": "string",
         "contains": "string",
@@ -134,6 +133,7 @@ class StringFieldType(FieldType):
         "not_regex": "string",
         "is_null": "boolean",
     }
+    aggregates = ["count"]
 
 
 class NumberFieldType(FieldType):
@@ -147,6 +147,7 @@ class NumberFieldType(FieldType):
         "lte": "number",
         "is_null": "boolean",
     }
+    aggregates = ["average", "count", "max", "min", "std_dev", "sum", "variance"]
 
     @staticmethod
     def parse(value):
@@ -154,6 +155,7 @@ class NumberFieldType(FieldType):
 
 
 class TimeFieldType(FieldType):
+    default_value = timezone.now().strftime("%Y-%m-%d %H:%M")
     lookups = {
         "equals": "time",
         "not_equals": "time",
@@ -163,7 +165,7 @@ class TimeFieldType(FieldType):
         "lte": "time",
         "is_null": "boolean",
     }
-    default_value = timezone.now().strftime("%Y-%m-%d %H:%M")
+    aggregates = ["count"]
 
     @staticmethod
     def parse(value):
@@ -175,12 +177,15 @@ class TimeFieldType(FieldType):
 
 
 class HTMLFieldType(FieldType):
+    default_value = None
     lookups = {}
+    aggregates = []
 
 
 class BooleanFieldType(FieldType):
     default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
+    aggregates = []
 
     @staticmethod
     def parse(value):
