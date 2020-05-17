@@ -37,8 +37,8 @@ class Query {
     return this.config.allModelFields[model].fields[field];
   }
 
-  getFieldType(path) {
-    return this.config.types[this.getField(path).type];
+  getFieldType(field) {
+    return this.config.types[field.type];
   }
 
   getModelFields(model) {
@@ -100,7 +100,7 @@ class Query {
   }
 
   addFilter(path) {
-    const fieldType = this.getFieldType(path);
+    const fieldType = this.getFieldType(this.getField(path));
     const newFilters = this.query.filters.slice();
     newFilters.push({
       errorMessage: null,

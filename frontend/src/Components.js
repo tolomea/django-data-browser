@@ -54,7 +54,7 @@ class Filter extends React.Component {
     const index = this.props.index;
     const lookup = this.props.lookup;
     const query = this.props.query;
-    const fieldType = this.props.query.getFieldType(path);
+    const fieldType = query.getFieldType(query.getField(path));
     return (
       <tr>
         <td>
