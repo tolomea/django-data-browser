@@ -51,7 +51,7 @@ def get_query_data(req, orm_models, django_assert_num_queries):
 
         bound_query = BoundQuery(query, orm_models)
         with django_assert_num_queries(queries):
-            return orm.get_data(req, bound_query)
+            return orm.get_results(req, bound_query)
 
     yield helper
 
@@ -64,7 +64,7 @@ def get_product_data(get_query_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_all(get_product_data):
+def test_get_results_all(get_product_data):
     data = get_product_data(1, "size-0,name+1,size_unit", {})
     assert data == [[2, "c", "g"], [1, "a", "g"], [1, "b", "g"]]
 
@@ -80,19 +80,19 @@ def test_get_admin_field(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_empty(get_product_data):
+def test_get_results_empty(get_product_data):
     data = get_product_data(0, "", {})
     assert data == []
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_sort(get_product_data):
+def test_get_results_sort(get_product_data):
     data = get_product_data(1, "size+0,name-1,size_unit", {})
     assert data == [[1, "b", "g"], [1, "a", "g"], [2, "c", "g"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_pks(get_product_data):
+def test_get_results_pks(get_product_data):
     data = get_product_data(1, "id", {})
     assert {d[0] for d in data} == set(
         models.Product.objects.values_list("id", flat=True)
@@ -100,38 +100,38 @@ def test_get_data_pks(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_calculated_field(get_product_data):
+def test_get_results_calculated_field(get_product_data):
     # query + prefetch producer
     data = get_product_data(2, "name+0,producer__name,is_onsale", {})
     assert data == [["a", "Bob", False], ["b", "Bob", False], ["c", "Bob", False]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_filtered(get_product_data):
+def test_get_results_filtered(get_product_data):
     data = get_product_data(1, "size,name", {"name__equals": ["a"]})
     assert data == [[1, "a"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_excluded(get_product_data):
+def test_get_results_excluded(get_product_data):
     data = get_product_data(1, "size-0,name", {"name__not_equals": ["a"]})
     assert data == [[2, "c"], [1, "b"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_multi_excluded(get_product_data):
+def test_get_results_multi_excluded(get_product_data):
     data = get_product_data(1, "size-0,name", {"name__not_equals": ["a", "c"]})
     assert data == [[1, "b"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_collapsed(get_product_data):
+def test_get_results_collapsed(get_product_data):
     data = get_product_data(1, "size-0,size_unit", {})
     assert data == [[2, "g"], [1, "g"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_null_filter(get_product_data):
+def test_get_results_null_filter(get_product_data):
     data = get_product_data(1, "id", {"onsale__is_null": ["True"]})
     assert data == [[1], [2], [3]]
     data = get_product_data(1, "id", {"onsale__is_null": ["true"]})
@@ -143,7 +143,7 @@ def test_get_data_null_filter(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_boolean_filter(get_product_data):
+def test_get_results_boolean_filter(get_product_data):
     models.Product.objects.update(onsale=True)
     data = get_product_data(1, "id", {"onsale__equals": ["True"]})
     assert data == [[1], [2], [3]]
@@ -156,7 +156,7 @@ def test_get_data_boolean_filter(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_string_filter(get_product_data):
+def test_get_results_string_filter(get_product_data):
     data = get_product_data(1, "id", {"producer__name__equals": ["Bob"]})
     assert data == [[1], [2], [3]]
     data = get_product_data(1, "id", {"producer__name__equals": ["bob"]})
@@ -166,7 +166,7 @@ def test_get_data_string_filter(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_prefetch(get_product_data):
+def test_get_results_prefetch(get_product_data):
     # query products, prefetch producer, producer__address
     data = get_product_data(3, "name+0,is_onsale,producer__address__city", {})
     assert data == [
@@ -177,7 +177,7 @@ def test_get_data_prefetch(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_prefetch_with_filter(get_product_data):
+def test_get_results_prefetch_with_filter(get_product_data):
     # query products, join to producer, producer__address
     data = get_product_data(
         1,
@@ -192,14 +192,14 @@ def test_get_data_prefetch_with_filter(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_no_calculated_so_flat(get_product_data):
+def test_get_results_no_calculated_so_flat(get_product_data):
     # query products, join the rest
     data = get_product_data(1, "name+0,producer__address__city", {})
     assert data == [["a", "london"], ["b", "london"], ["c", "london"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_sort_causes_select(get_product_data):
+def test_get_results_sort_causes_select(get_product_data):
     # query products, join the rest
     data = get_product_data(1, "name+0,is_onsale,producer__address__city-1", {})
     assert data == [
@@ -210,7 +210,7 @@ def test_get_data_sort_causes_select(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_data_filter_causes_select(get_product_data):
+def test_get_results_filter_causes_select(get_product_data):
     # query products, join the rest
     data = get_product_data(
         1,

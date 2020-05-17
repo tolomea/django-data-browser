@@ -292,7 +292,7 @@ snapshots["test_query_html context"] = {
         "version": "redacted",
     },
     "initialState": {
-        "data": [],
+        "results": [],
         "fields": [
             {"path": "size", "priority": 0, "sort": "dsc"},
             {"path": "name", "priority": 1, "sort": "asc"},

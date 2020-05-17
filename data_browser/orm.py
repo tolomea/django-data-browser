@@ -176,7 +176,7 @@ def _get_django_lookup(field_type, lookup):
         return lookup
 
 
-def get_data(request, bound_query):
+def get_results(request, bound_query):
     request.data_browser = True
 
     if not bound_query.fields:
@@ -212,12 +212,12 @@ def get_data(request, bound_query):
 
     # no calculated fields early out using qs.values
     if not bound_query.calculated_fields:
-        data = []
+        results = []
         for row in qs.values(*[f.path for f in bound_query.fields]).distinct():
-            data.append(
+            results.append(
                 [field.type_.format(row[field.path]) for field in bound_query.fields]
             )
-        return data
+        return results
 
     # preloading
     select_related = set()
@@ -253,7 +253,7 @@ def get_data(request, bound_query):
         url = reverse(url_name, args=[obj.pk])
         return f'<a href="{url}">{obj}</a>'
 
-    # get data
+    # get results
     def lookup(obj, field):
         value = obj
         *parts, tail = field.path.split("__")
@@ -271,9 +271,9 @@ def get_data(request, bound_query):
             value = getattr(value, tail)
             return value() if callable(value) else value
 
-    data = []
+    results = []
     for row in qs.distinct():
-        data.append(
+        results.append(
             [field.type_.format(lookup(row, field)) for field in bound_query.fields]
         )
-    return data
+    return results

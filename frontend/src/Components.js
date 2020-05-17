@@ -225,7 +225,7 @@ function ResultsCell(props) {
 function ResultsBody(props) {
   return (
     <tbody>
-      {props.data.map((row, row_index) => (
+      {props.results.map((row, row_index) => (
         <tr key={row_index}>
           {row.map((cell, col_index) => (
             <td key={col_index}>
@@ -248,7 +248,7 @@ function Results(props) {
       <ResultsHead query={props.query} fields={props.fields} />
       <ResultsBody
         query={props.query}
-        data={props.data}
+        results={props.results}
         fields={props.fields}
       />
     </table>
@@ -290,7 +290,7 @@ function QueryPage(props) {
       />
       <Filters query={props.query} filters={props.filters} />
       <p>
-        Showing {props.data.length} results -{" "}
+        Showing {props.results.length} results -{" "}
         <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={props.query.getUrlForMedia("json")}>View as JSON</a>
         {saveUrl ? (
@@ -306,7 +306,11 @@ function QueryPage(props) {
         <div>
           <Fields query={props.query} model={props.model} path="" />
         </div>
-        <Results query={props.query} fields={props.fields} data={props.data} />
+        <Results
+          query={props.query}
+          fields={props.fields}
+          results={props.results}
+        />
       </div>
     </div>
   );

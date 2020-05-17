@@ -103,7 +103,6 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 | ----------- | --------------------------------------------------------------------------------------------------------- |
 | bound query | A query that has been validated against the config                                                        |
 | config      | Information that doesn't change based on the particular query, includes all the models and their fields.  |
-| data        | The results of performing the query.                                                                      |
 | field name  | Just the name of the field e.g. `created_time`.                                                           |
 | field path  | Includes information on how to reach the model the field is on e.g. `order__seller__created_time`.        |
 | model name  | Fullstop seperated app and model names e.g. `myapp.MyModel`.                                              |

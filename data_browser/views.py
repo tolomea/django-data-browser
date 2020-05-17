@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import version
 from .models import View
-from .orm import _OPEN_IN_ADMIN, get_data, get_models
+from .orm import _OPEN_IN_ADMIN, get_models, get_results
 from .query import TYPES, BoundQuery, Query
 
 
@@ -104,7 +104,7 @@ def _get_context(request, model_name, fields):
     bound_query = BoundQuery(query, orm_models)
     return {
         "config": _get_config(request.user, orm_models),
-        "initialState": {"data": [], **_get_query_data(bound_query)},
+        "initialState": {"results": [], **_get_query_data(bound_query)},
         "sentryDsn": getattr(settings, "DATA_BROWSER_FE_DSN", None),
     }
 
@@ -150,13 +150,13 @@ def _data_response(request, query, media, meta):
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery(query, orm_models)
-    data = get_data(request, bound_query)
+    results = get_results(request, bound_query)
 
     if media == "csv":
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(f.path for f in bound_query.fields)
-        writer.writerows(data)
+        writer.writerows(results)
         buffer.seek(0)
         response = http.HttpResponse(buffer, content_type="text/csv")
         response[
@@ -165,7 +165,7 @@ def _data_response(request, query, media, meta):
         return response
     elif media == "json":
         resp = _get_query_data(bound_query) if meta else {}
-        resp["data"] = data
+        resp["results"] = results
         return http.JsonResponse(resp)
     else:
         assert False

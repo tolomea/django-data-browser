@@ -10,7 +10,7 @@ class App extends React.Component {
     this.state = props.initialState;
   }
 
-  fetchData(state) {
+  fetchResults(state) {
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
     if (controller) controller.abort();
@@ -33,16 +33,16 @@ class App extends React.Component {
       model: this.state.model,
       fields: this.state.fields,
       filters: this.state.filters,
-      data: [],
+      results: [],
     };
     window.history.replaceState(
       reqState,
       null,
       getUrlForQuery(this.props.config.baseUrl, this.state, "html")
     );
-    this.fetchData(this.state);
+    this.fetchResults(this.state);
     window.onpopstate = (e) => {
-      this.fetchData(e.state);
+      this.fetchResults(e.state);
       this.setState(e.state);
     };
   }
@@ -54,14 +54,14 @@ class App extends React.Component {
       model: newState.model,
       fields: newState.fields,
       filters: newState.filters,
-      data: [],
+      results: [],
     };
     window.history.pushState(
       reqState,
       null,
       getUrlForQuery(this.props.config.baseUrl, newState, "html")
     );
-    this.fetchData(newState);
+    this.fetchResults(newState);
   }
 
   render() {

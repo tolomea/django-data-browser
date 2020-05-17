@@ -71,6 +71,6 @@ class ViewAdmin(admin.ModelAdmin):
             return "N/A"
 
     def get_changeform_initial_data(self, request):
-        get_data = super().get_changeform_initial_data(request)
-        get_data["owner"] = request.user.pk
-        return get_data
+        get_results = super().get_changeform_initial_data(request)
+        get_results["owner"] = request.user.pk
+        return get_results
