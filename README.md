@@ -24,7 +24,11 @@ A Django app for interactive user friendly browsing of a Django projects DB.
 
 There is a live demo site available. The Django project is a small e-commerce site selling microservices.
 
-You can access the admin here https://data-browser-demo.herokuapp.com/admin/ and the Data Browser here https://data-browser-demo.herokuapp.com/data-browser/
+Source: https://github.com/tolomea/data-browser-demo
+
+Admin: https://data-browser-demo.herokuapp.com/admin/
+
+Data Browser: https://data-browser-demo.herokuapp.com/data-browser/
 
 Becuase it's hosted on Heroku free tier it might take a while to respond to the first page load.
 
