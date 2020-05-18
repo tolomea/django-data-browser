@@ -39,6 +39,16 @@ _FIELD_MAP = {
     models.FileField: None,
 }
 
+_AGG_MAP = {
+    "average": models.Avg,
+    "count": models.Count,
+    "max": models.Max,
+    "min": models.Min,
+    "std_dev": models.StdDev,
+    "sum": models.Sum,
+    "variance": models.Variance,
+}
+
 
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
@@ -212,32 +222,43 @@ def get_results(request, bound_query):
 
     # no calculated fields early out using qs.values
     if not bound_query.calculated_fields:
+        qs = qs.values(
+            *[f.path for f in bound_query.fields if not f.aggregate]
+        ).distinct()
+
+        for field in bound_query.fields:
+            if field.aggregate:
+                qs = qs.annotate(
+                    **{
+                        field.path: _AGG_MAP[field.aggregate](
+                            field.path.rsplit("__", 1)[0]
+                        )
+                    }
+                )
+
         results = []
-        for row in qs.values(*[f.path for f in bound_query.fields]).distinct():
+        for row in qs:
             results.append(
                 [field.type_.format(row[field.path]) for field in bound_query.fields]
             )
         return results
 
     # preloading
+    def ancestors(parts):
+        for i in range(1, len(parts)):
+            yield "__".join(parts[:i])
+
     select_related = set()
-
-    def add_select_relateds(path):
-        while "__" in path:
-            path = path.rsplit("__", 1)[0]
-            select_related.add(path)
-
     for field in bound_query.sort_fields:
-        add_select_relateds(field.path)
-
+        select_related.update(ancestors(field.path_parts))
     for filter_ in bound_query.filters:
         if filter_.is_valid:
-            add_select_relateds(filter_.path)
+            select_related.update(ancestors(filter_.path_parts))
 
     prefetch_related = set()
     for field in bound_query.fields:
-        if "__" in field.path:
-            prefetch_related.add(field.path.rsplit("__", 1)[0])
+        if not field.aggregate:
+            prefetch_related.update(ancestors(field.path_parts))
     prefetch_related -= select_related
 
     if select_related:
@@ -245,6 +266,7 @@ def get_results(request, bound_query):
     if prefetch_related:
         qs = qs.prefetch_related(*prefetch_related)
 
+    # get results
     def get_admin_link(obj):
         if obj is None:
             return "null"
@@ -253,7 +275,6 @@ def get_results(request, bound_query):
         url = reverse(url_name, args=[obj.pk])
         return f'<a href="{url}">{obj}</a>'
 
-    # get results
     def lookup(obj, field):
         value = obj
         *parts, tail = field.path.split("__")

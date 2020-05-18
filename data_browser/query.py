@@ -150,6 +150,10 @@ class NumberFieldType(FieldType):
     aggregates = ["average", "count", "max", "min", "std_dev", "sum", "variance"]
 
     @staticmethod
+    def format(value):
+        return float(value) if value is not None else None
+
+    @staticmethod
     def parse(value):
         return float(value)
 
@@ -216,11 +220,18 @@ class BoundFilter:
     lookup: str
     value: str
     type_: FieldType
+    path_parts: Sequence[str]
+    name: str
 
     @classmethod
-    def bind(cls, query_filter, orm_field):
+    def bind(cls, query_filter, orm_field, path, name):
         return cls(
-            query_filter.path, query_filter.lookup, query_filter.value, orm_field.type_
+            query_filter.path,
+            query_filter.lookup,
+            query_filter.value,
+            orm_field.type_,
+            path,
+            name,
         )
 
     def __post_init__(self):
@@ -245,46 +256,74 @@ class BoundField:
     direction: Optional[str]
     priority: Optional[int]
     orm_field: orm.OrmField
+    path_parts: Sequence[str]
+    name: str
+    aggregate: Optional[str]
 
     def __post_init__(self):
         self.type_ = self.orm_field.type_
         self.concrete = self.orm_field.concrete
 
     @classmethod
-    def bind(cls, query_field, orm_field):
+    def bind(cls, query_field, orm_field, path, name, aggregate):
         direction = query_field.direction if orm_field.concrete else None
         priority = query_field.priority if orm_field.concrete else None
-        return cls(query_field.path, direction, priority, orm_field)
+        return cls(
+            query_field.path, direction, priority, orm_field, path, name, aggregate
+        )
 
 
 class BoundQuery:
     def __init__(self, query, orm_models):
         # orm_models = {model_name: {"fields": {field_name, FieldType}, "fks": {field_name: model_name}}}
-        def get_orm_field(path):
-            parts = path.split("__")
-            model_name = query.model_name
-            for part in parts[:-1]:
+        def get_path(parts, model_name):
+            for part in parts:
                 fk_field = orm_models[model_name].fks.get(part)
                 if fk_field is None:
                     return None
                 model_name = fk_field.model_name
-            res = orm_models[model_name].fields.get(parts[-1])
-            return res
+            return model_name
+
+        def get_orm_field(path):
+            parts = path.split("__")
+
+            # path__field
+            model_name = get_path(parts[:-1], query.model_name)
+            if model_name:
+                return (
+                    orm_models[model_name].fields.get(parts[-1]),
+                    parts[:-1],
+                    parts[-1],
+                    None,
+                )
+
+            # path__aggregate__field
+            model_name = get_path(parts[:-2], query.model_name)
+            if model_name:
+                orm_field = orm_models[model_name].fields.get(parts[-2])
+                if orm_field and parts[-1] in orm_field.type_.aggregates:
+                    return orm_field, parts[:-2], parts[-2], parts[-1]
+            return None, None, None, None
 
         self.model_name = query.model_name
         self.orm_models = orm_models
 
         self.fields = []
         for query_field in query.fields:
-            orm_field = get_orm_field(query_field.path)
+            orm_field, path, name, aggregate = get_orm_field(query_field.path)
             if orm_field:
-                self.fields.append(BoundField.bind(query_field, orm_field))
+                self.fields.append(
+                    BoundField.bind(query_field, orm_field, path, name, aggregate)
+                )
 
         self.filters = []
         for query_filter in query.filters:
-            orm_field = get_orm_field(query_filter.path)
+            orm_field, path, name, aggregate = get_orm_field(query_filter.path)
+            assert aggregate is None
             if orm_field:
-                self.filters.append(BoundFilter.bind(query_filter, orm_field))
+                self.filters.append(
+                    BoundFilter.bind(query_filter, orm_field, path, name)
+                )
 
     @property
     def sort_fields(self):
