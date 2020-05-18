@@ -229,11 +229,7 @@ def get_results(request, bound_query):
         for field in bound_query.fields:
             if field.aggregate:
                 qs = qs.annotate(
-                    **{
-                        field.path: _AGG_MAP[field.aggregate](
-                            field.path.rsplit("__", 1)[0]
-                        )
-                    }
+                    **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
                 )
 
         results = []

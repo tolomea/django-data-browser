@@ -57,8 +57,7 @@ class Query:
                 path, lookup = path__lookup.rsplit("__", 1)
                 filters.append(QueryFilter(path, lookup, value))
 
-        res = cls(model_name, fields, filters)
-        return res
+        return cls(model_name, fields, filters)
 
     @property
     def field_str(self):
@@ -214,25 +213,33 @@ TYPES = {
 }
 
 
+class BoundFieldMixin:
+    @property
+    def model_path(self):
+        return "__".join(self.path_parts)
+
+    @property
+    def field_path(self):
+        if self.model_path:
+            return f"{self.model_path}__{self.name}"
+        return self.name
+
+
 @dataclass
-class BoundFilter:
-    path: str
+class BoundFilter(BoundFieldMixin):
     lookup: str
     value: str
     type_: FieldType
     path_parts: Sequence[str]
     name: str
 
+    @property
+    def path(self):
+        return self.field_path
+
     @classmethod
     def bind(cls, query_filter, orm_field, path, name):
-        return cls(
-            query_filter.path,
-            query_filter.lookup,
-            query_filter.value,
-            orm_field.type_,
-            path,
-            name,
-        )
+        return cls(query_filter.lookup, query_filter.value, orm_field.type_, path, name)
 
     def __post_init__(self):
         self.parsed = None
@@ -251,8 +258,7 @@ class BoundFilter:
 
 
 @dataclass
-class BoundField:
-    path: str
+class BoundField(BoundFieldMixin):
     direction: Optional[str]
     priority: Optional[int]
     orm_field: orm.OrmField
@@ -264,13 +270,17 @@ class BoundField:
         self.type_ = self.orm_field.type_
         self.concrete = self.orm_field.concrete
 
+    @property
+    def path(self):
+        if self.aggregate:
+            return f"{self.field_path}__{self.aggregate}"
+        return self.field_path
+
     @classmethod
     def bind(cls, query_field, orm_field, path, name, aggregate):
         direction = query_field.direction if orm_field.concrete else None
         priority = query_field.priority if orm_field.concrete else None
-        return cls(
-            query_field.path, direction, priority, orm_field, path, name, aggregate
-        )
+        return cls(direction, priority, orm_field, path, name, aggregate)
 
 
 class BoundQuery:
