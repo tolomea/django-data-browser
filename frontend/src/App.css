@@ -114,9 +114,8 @@ select.Lookup {
   min-width: 200px;
 }
 .FieldsList table {
-  border-collapse: collapse;
-  padding: 20px;
   border: 1px solid #ccc;
+  border-radius: 3px;
 }
 .FieldsList tbody,
 .FieldsList th,
