@@ -227,19 +227,27 @@ class BoundFieldMixin:
 
 @dataclass
 class BoundFilter(BoundFieldMixin):
+    path_parts: Sequence[str]
+    name: str
+    aggregate: Optional[str]
     lookup: str
     value: str
     type_: FieldType
-    path_parts: Sequence[str]
-    name: str
 
     @property
     def path(self):
         return self.field_path
 
     @classmethod
-    def bind(cls, query_filter, orm_field, path, name):
-        return cls(query_filter.lookup, query_filter.value, orm_field.type_, path, name)
+    def bind(cls, path, name, aggregate, query_filter, orm_field):
+        return cls(
+            path,
+            name,
+            aggregate,
+            query_filter.lookup,
+            query_filter.value,
+            orm_field.type_,
+        )
 
     def __post_init__(self):
         self.parsed = None
@@ -259,12 +267,12 @@ class BoundFilter(BoundFieldMixin):
 
 @dataclass
 class BoundField(BoundFieldMixin):
-    direction: Optional[str]
-    priority: Optional[int]
-    orm_field: orm.OrmField
     path_parts: Sequence[str]
     name: str
     aggregate: Optional[str]
+    direction: Optional[str]
+    priority: Optional[int]
+    orm_field: orm.OrmField
 
     def __post_init__(self):
         self.type_ = self.orm_field.type_
@@ -277,10 +285,10 @@ class BoundField(BoundFieldMixin):
         return self.field_path
 
     @classmethod
-    def bind(cls, query_field, orm_field, path, name, aggregate):
+    def bind(cls, path, name, aggregate, query_field, orm_field):
         direction = query_field.direction if orm_field.concrete else None
         priority = query_field.priority if orm_field.concrete else None
-        return cls(direction, priority, orm_field, path, name, aggregate)
+        return cls(path, name, aggregate, direction, priority, orm_field)
 
 
 class BoundQuery:
@@ -323,7 +331,7 @@ class BoundQuery:
             orm_field, path, name, aggregate = get_orm_field(query_field.path)
             if orm_field:
                 self.fields.append(
-                    BoundField.bind(query_field, orm_field, path, name, aggregate)
+                    BoundField.bind(path, name, aggregate, query_field, orm_field)
                 )
 
         self.filters = []
@@ -332,7 +340,7 @@ class BoundQuery:
             assert aggregate is None
             if orm_field:
                 self.filters.append(
-                    BoundFilter.bind(query_filter, orm_field, path, name)
+                    BoundFilter.bind(path, name, aggregate, query_filter, orm_field)
                 )
 
     @property
