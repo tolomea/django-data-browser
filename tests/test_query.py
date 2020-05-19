@@ -107,7 +107,7 @@ class TestBoundQuery:
 
     def test_filters(self, bound_query):
         assert bound_query.filters == [
-            BoundFilter("bob", "equals", "fred", StringFieldType)
+            BoundFilter([], "bob", None, "equals", "fred", StringFieldType)
         ]
 
 
@@ -118,8 +118,12 @@ class TestFieldType:
 
 class TestStringFieldType:
     def test_validate(self):
-        assert BoundFilter("bob", "contains", "hello", StringFieldType).is_valid
-        assert not BoundFilter("bob", "pontains", "hello", StringFieldType).is_valid
+        assert BoundFilter(
+            [], "bob", None, "contains", "hello", StringFieldType
+        ).is_valid
+        assert not BoundFilter(
+            [], "bob", None, "pontains", "hello", StringFieldType
+        ).is_valid
 
     def test_default_lookup(self):
         assert StringFieldType.default_lookup == "equals"
@@ -127,11 +131,15 @@ class TestStringFieldType:
 
 class TestNumberFieldType:
     def test_validate(self):
-        assert BoundFilter("bob", "gt", "6.1", NumberFieldType).is_valid
-        assert not BoundFilter("bob", "pontains", "6.1", NumberFieldType).is_valid
-        assert not BoundFilter("bob", "gt", "hello", NumberFieldType).is_valid
-        assert BoundFilter("bob", "is_null", "True", NumberFieldType).is_valid
-        assert not BoundFilter("bob", "is_null", "hello", NumberFieldType).is_valid
+        assert BoundFilter([], "bob", None, "gt", "6.1", NumberFieldType).is_valid
+        assert not BoundFilter(
+            [], "bob", None, "pontains", "6.1", NumberFieldType
+        ).is_valid
+        assert not BoundFilter([], "bob", None, "gt", "hello", NumberFieldType).is_valid
+        assert BoundFilter([], "bob", None, "is_null", "True", NumberFieldType).is_valid
+        assert not BoundFilter(
+            [], "bob", None, "is_null", "hello", NumberFieldType
+        ).is_valid
 
     def test_default_lookup(self):
         assert NumberFieldType.default_lookup == "equals"
@@ -139,13 +147,17 @@ class TestNumberFieldType:
 
 class TestTimeFieldType:
     def test_validate(self):
-        assert BoundFilter("bob", "gt", "2018-03-20T22:31:23", TimeFieldType).is_valid
-        assert not BoundFilter("bob", "gt", "hello", TimeFieldType).is_valid
-        assert not BoundFilter(
-            "bob", "pontains", "2018-03-20T22:31:23", TimeFieldType
+        assert BoundFilter(
+            [], "bob", None, "gt", "2018-03-20T22:31:23", TimeFieldType
         ).is_valid
-        assert BoundFilter("bob", "is_null", "True", TimeFieldType).is_valid
-        assert not BoundFilter("bob", "is_null", "hello", TimeFieldType).is_valid
+        assert not BoundFilter([], "bob", None, "gt", "hello", TimeFieldType).is_valid
+        assert not BoundFilter(
+            [], "bob", None, "pontains", "2018-03-20T22:31:23", TimeFieldType
+        ).is_valid
+        assert BoundFilter([], "bob", None, "is_null", "True", TimeFieldType).is_valid
+        assert not BoundFilter(
+            [], "bob", None, "is_null", "hello", TimeFieldType
+        ).is_valid
 
     def test_default_lookup(self):
         assert TimeFieldType.default_lookup == "equals"
@@ -153,9 +165,13 @@ class TestTimeFieldType:
 
 class TestBooleanFieldType:
     def test_validate(self):
-        assert BoundFilter("bob", "equals", "True", BooleanFieldType).is_valid
-        assert not BoundFilter("bob", "equals", "hello", BooleanFieldType).is_valid
-        assert not BoundFilter("bob", "pontains", "True", BooleanFieldType).is_valid
+        assert BoundFilter([], "bob", None, "equals", "True", BooleanFieldType).is_valid
+        assert not BoundFilter(
+            [], "bob", None, "equals", "hello", BooleanFieldType
+        ).is_valid
+        assert not BoundFilter(
+            [], "bob", None, "pontains", "True", BooleanFieldType
+        ).is_valid
 
     def test_default_lookup(self):
         assert BooleanFieldType.default_lookup == "equals"

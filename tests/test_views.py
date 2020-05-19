@@ -12,6 +12,10 @@ false = False
 null = None
 
 
+def dump(val):
+    print(json.dumps(val, indent=4, sort_keys=True))
+
+
 class ANY:  # pragma: no cover
     def __init__(self, type):
         self.type = type
@@ -71,8 +75,10 @@ def test_query_csv(admin_client):
         "/data_browser/query/tests.Product/size-0,name+1,size_unit.csv?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
+    print(res.content.decode("utf-8"))
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
-    assert rows == [["size", "name", "size_unit"], ["1", "a", "g"], ["1", "b", "g"]]
+    dump(rows)
+    assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
 
 
 @pytest.mark.usefixtures("products")
@@ -83,7 +89,7 @@ def test_query_json(admin_client):
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
 
-    print(json.dumps(data, indent=4, sort_keys=True))
+    dump(data)
     assert data == {
         "results": [[1, "a", "g"], [1, "b", "g"]],
         "fields": [
@@ -123,8 +129,10 @@ def test_view_csv(admin_client):
     view.save()
     res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
     assert res.status_code == 200
+    print(res.content.decode("utf-8"))
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
-    assert rows == [["size", "name", "size_unit"], ["1", "a", "g"], ["1", "b", "g"]]
+    dump(rows)
+    assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
 
     view.owner = User.objects.create(is_staff=True)
     view.save()
@@ -149,7 +157,7 @@ def test_view_json(admin_client):
     res = admin_client.get(f"/data_browser/view/{view.pk}.json")
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
-    print(json.dumps(data, indent=4, sort_keys=True))
+    dump(data)
     assert data == {"results": [[1, "a", "g"], [1, "b", "g"]]}
 
     view.owner = User.objects.create(is_staff=True)

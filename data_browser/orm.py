@@ -244,7 +244,7 @@ def get_results(request, bound_query):
 
     # preloading
     def ancestors(parts):
-        for i in range(1, len(parts)):
+        for i in range(1, len(parts) + 1):
             yield "__".join(parts[:i])
 
     select_related = set()
