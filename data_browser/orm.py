@@ -220,18 +220,21 @@ def get_results(request, bound_query):
             else:
                 qs = qs.filter(**{filter_str: filter_.parsed})
 
-    # no calculated fields early out using qs.values
+    # no calculated fields we're going to early out using qs.values
     if not bound_query.calculated_fields:
         qs = qs.values(
             *[f.path for f in bound_query.fields if not f.aggregate]
         ).distinct()
 
-        for field in bound_query.fields:
-            if field.aggregate:
-                qs = qs.annotate(
-                    **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
-                )
+    # aggregates
+    for field in bound_query.fields:
+        if field.aggregate:
+            qs = qs.annotate(
+                **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
+            )
 
+    # no calculated fields early out using qs.values
+    if not bound_query.calculated_fields:
         results = []
         for row in qs:
             results.append(
@@ -273,9 +276,13 @@ def get_results(request, bound_query):
 
     def lookup(obj, field):
         value = obj
-        *parts, tail = field.path.split("__")
-        for part in parts:
-            value = getattr(value, part, None)
+
+        if field.aggregate is None:
+            *parts, tail = field.path.split("__")
+            for part in parts:
+                value = getattr(value, part, None)
+        else:
+            tail = field.path
 
         admin = bound_query.orm_models[field.orm_field.model_name].admin
         if field.concrete:
