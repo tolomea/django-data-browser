@@ -31,7 +31,12 @@ class Tag(admin.ModelAdmin):
 
 @admin.register(models.Address)
 class Address(admin.ModelAdmin):
-    fields = ["pk", "city"]
+    fields = ["pk", "city", "bob", "fred", "tom"]
+    readonly_fields = ["bob", "fred", "tom"]
+
+    def bob(self, obj):
+        assert obj.street != "bad", obj.street
+        return "bob"
 
 
 class ProductMixin:
@@ -47,6 +52,7 @@ class ProductMixin:
         "tags",
         "model_not_in_admin",
         "onsale",
+        "image",
     ]
     readonly_fields = ["is_onsale"]
 
@@ -61,19 +67,15 @@ class Producer(admin.ModelAdmin):
     inlines = [ProductInline]
 
 
-class SKUMixin:
-    fields = ["name", "product"]
-
-
-class SKUInline(SKUMixin, admin.TabularInline):
+class SKUInline(admin.TabularInline):
     model = models.SKU
+    fields = ["name", "product", "bob"]
+    readonly_fields = ["bob"]
+
+    def bob(self, obj):  # pragma: no cover don't show funcs on inlines test
+        return "bob"
 
 
 @admin.register(models.Product)
 class Product(ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
-
-
-@admin.register(models.SKU)
-class SKU(SKUMixin, admin.ModelAdmin):
-    pass

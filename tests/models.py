@@ -32,10 +32,20 @@ class Tag(models.Model):
 
 class Address(models.Model):
     city = models.TextField()
+    street = models.TextField()
+
+    def fred(self):
+        assert self.street != "bad", self.street
+        return "fred"
+
+    @property
+    def tom(self):
+        assert self.street != "bad", self.street
+        return "tom"
 
 
 class Producer(models.Model):
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     name = models.TextField()
 
 
@@ -47,6 +57,7 @@ class Product(models.Model):
     default_sku = models.ForeignKey("SKU", null=True, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag)
     onsale = models.BooleanField(null=True)
+    image = models.FileField()
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)

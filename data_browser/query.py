@@ -2,13 +2,11 @@ from __future__ import annotations
 
 import urllib
 from dataclasses import dataclass
-from typing import Optional, Sequence
+from typing import Any, Optional, Sequence
 
 import dateutil.parser
 from django.urls import reverse
 from django.utils import timezone
-
-from . import orm
 
 ASC, DSC = "asc", "dsc"
 
@@ -176,7 +174,7 @@ class TimeFieldType(FieldType):
 
     @staticmethod
     def format(value):
-        return timezone.make_naive(value) if value else None
+        return str(timezone.make_naive(value)) if value else None
 
 
 class HTMLFieldType(FieldType):
@@ -224,6 +222,12 @@ class BoundFieldMixin:
             return f"{self.model_path}__{self.name}"
         return self.name
 
+    @property
+    def path(self):
+        if self.aggregate:
+            return f"{self.field_path}__{self.aggregate}"
+        return self.field_path
+
 
 @dataclass
 class BoundFilter(BoundFieldMixin):
@@ -233,10 +237,6 @@ class BoundFilter(BoundFieldMixin):
     lookup: str
     value: str
     type_: FieldType
-
-    @property
-    def path(self):
-        return self.field_path
 
     @classmethod
     def bind(cls, path, name, aggregate, query_filter, orm_field):
@@ -272,17 +272,11 @@ class BoundField(BoundFieldMixin):
     aggregate: Optional[str]
     direction: Optional[str]
     priority: Optional[int]
-    orm_field: orm.OrmField
+    orm_field: Any  # orm.OrmField
 
     def __post_init__(self):
         self.type_ = self.orm_field.type_
         self.concrete = self.orm_field.concrete
-
-    @property
-    def path(self):
-        if self.aggregate:
-            return f"{self.field_path}__{self.aggregate}"
-        return self.field_path
 
     @classmethod
     def bind(cls, path, name, aggregate, query_field, orm_field):
@@ -350,3 +344,7 @@ class BoundQuery:
     @property
     def calculated_fields(self):
         return {f.path for f in self.fields if not f.concrete}
+
+    @property
+    def valid_filters(self):
+        return [f for f in self.filters if f.is_valid]

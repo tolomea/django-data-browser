@@ -1,9 +1,12 @@
+from datetime import datetime
+
 import pytest
 from data_browser import orm
 from data_browser.query import (
     ASC,
     DSC,
     BooleanFieldType,
+    BoundField,
     BoundFilter,
     BoundQuery,
     NumberFieldType,
@@ -13,6 +16,7 @@ from data_browser.query import (
     StringFieldType,
     TimeFieldType,
 )
+from django.utils import timezone
 
 
 @pytest.fixture
@@ -25,8 +29,8 @@ def query():
 
 
 @pytest.fixture
-def bound_query(query):
-    orm_models = {
+def orm_models():
+    return {
         "app.model": orm.OrmModel(
             fields={
                 "fa": orm.OrmField(
@@ -41,8 +45,11 @@ def bound_query(query):
                 "bob": orm.OrmField(
                     type_=StringFieldType, concrete=True, model_name="app.model"
                 ),
+                "num": orm.OrmField(
+                    type_=NumberFieldType, concrete=True, model_name="app.model"
+                ),
             },
-            fks={"tom": "app.Tom"},
+            fks={"tom": orm.OrmFkField("app.Tom")},
         ),
         "app.Tom": orm.OrmModel(
             fields={
@@ -50,7 +57,7 @@ def bound_query(query):
                     type_=StringFieldType, concrete=True, model_name="app.Tom"
                 )
             },
-            fks={"michael": "app.Michael"},
+            fks={"michael": orm.OrmFkField("app.Michael")},
         ),
         "app.Michael": orm.OrmModel(
             fields={
@@ -61,7 +68,20 @@ def bound_query(query):
             fks={},
         ),
     }
+
+
+@pytest.fixture
+def bound_query(query, orm_models):
     return BoundQuery(query, orm_models)
+
+
+@pytest.fixture
+def fake_orm_field():
+    class FakeOrmField:
+        type_ = StringFieldType
+        concrete = False
+
+    return FakeOrmField()
 
 
 class TestQuery:
@@ -78,6 +98,10 @@ class TestQuery:
             [QueryField("fa", ASC, 1), QueryField("fd", DSC, 0), QueryField("fn")],
             [QueryFilter("bob__jones", "equals", "fred")],
         )
+
+    def test_from_request_with_missing(self, query):
+        q = Query.from_request("app.model", "fa+1,,fd-0,fn", {"bob__equals": ["fred"]})
+        assert q == query
 
     def test_url(self, query):
         assert (
@@ -110,6 +134,87 @@ class TestBoundQuery:
             BoundFilter([], "bob", None, "equals", "fred", StringFieldType)
         ]
 
+    def test_bad_field(self, orm_models):
+        query = Query("app.model", [QueryField("yata")], [])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.fields] == []
+
+    def test_bad_fk(self, orm_models):
+        query = Query("app.model", [QueryField("yata__yata")], [])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.fields] == []
+
+    def test_bad_fk_field(self, orm_models):
+        query = Query("app.model", [QueryField("tom__yata")], [])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.fields] == []
+
+    def test_bad_fk_field_aggregate(self, orm_models):
+        query = Query("app.model", [QueryField("tom__jones__yata")], [])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.fields] == []
+
+    def test_bad_long_fk(self, orm_models):
+        query = Query("app.model", [QueryField("yata__yata__yata")], [])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.fields] == []
+
+    def test_aggregate(self, orm_models):
+        query = Query("app.model", [QueryField("tom__jones__count")], [])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.fields] == ["tom__jones__count"]
+
+    def test_bad_filter(self, orm_models):
+        query = Query("app.model", [], [QueryFilter("yata", "equals", "fred")])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.fields] == []
+
+    def test_bad_filter_value(self, orm_models):
+        query = Query(
+            "app.model",
+            [],
+            [QueryFilter("num", "equals", "fred"), QueryFilter("num", "equals", 1)],
+        )
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.value for f in bound_query.filters] == ["fred", 1]
+        assert [f.value for f in bound_query.valid_filters] == [1]
+
+
+class TestBoundField:
+    def test_path_properties(self, fake_orm_field):
+        bf = BoundField(["bob", "fred"], "joe", "max", None, None, fake_orm_field)
+        assert bf.model_path == "bob__fred"
+        assert bf.field_path == "bob__fred__joe"
+        assert bf.path == "bob__fred__joe__max"
+
+        bf = BoundField([], "joe", "max", None, None, fake_orm_field)
+        assert bf.model_path == ""
+        assert bf.field_path == "joe"
+        assert bf.path == "joe__max"
+
+        bf = BoundField(["bob", "fred"], "joe", None, None, None, fake_orm_field)
+        assert bf.model_path == "bob__fred"
+        assert bf.field_path == "bob__fred__joe"
+        assert bf.path == "bob__fred__joe"
+
+
+class TestBoundFilter:
+    def test_path_properties(self):
+        bf = BoundFilter(["bob", "fred"], "joe", "max", "gt", 5, StringFieldType)
+        assert bf.model_path == "bob__fred"
+        assert bf.field_path == "bob__fred__joe"
+        assert bf.path == "bob__fred__joe__max"
+
+        bf = BoundFilter([], "joe", "max", "gt", 5, StringFieldType)
+        assert bf.model_path == ""
+        assert bf.field_path == "joe"
+        assert bf.path == "joe__max"
+
+        bf = BoundFilter(["bob", "fred"], "joe", None, "gt", 5, StringFieldType)
+        assert bf.model_path == "bob__fred"
+        assert bf.field_path == "bob__fred__joe"
+        assert bf.path == "bob__fred__joe"
+
 
 class TestFieldType:
     def test_repr(self):
@@ -128,6 +233,9 @@ class TestStringFieldType:
     def test_default_lookup(self):
         assert StringFieldType.default_lookup == "equals"
 
+    def test_format(self):
+        assert StringFieldType.format("bob") == "bob"
+
 
 class TestNumberFieldType:
     def test_validate(self):
@@ -143,6 +251,9 @@ class TestNumberFieldType:
 
     def test_default_lookup(self):
         assert NumberFieldType.default_lookup == "equals"
+
+    def test_format(self):
+        assert NumberFieldType.format(6) == 6
 
 
 class TestTimeFieldType:
@@ -162,10 +273,19 @@ class TestTimeFieldType:
     def test_default_lookup(self):
         assert TimeFieldType.default_lookup == "equals"
 
+    def test_format(self):
+        assert (
+            TimeFieldType.format(timezone.make_aware(datetime(2020, 5, 19, 8, 42, 16)))
+            == "2020-05-19 08:42:16"
+        )
+
 
 class TestBooleanFieldType:
     def test_validate(self):
         assert BoundFilter([], "bob", None, "equals", "True", BooleanFieldType).is_valid
+        assert BoundFilter(
+            [], "bob", None, "equals", "False", BooleanFieldType
+        ).is_valid
         assert not BoundFilter(
             [], "bob", None, "equals", "hello", BooleanFieldType
         ).is_valid

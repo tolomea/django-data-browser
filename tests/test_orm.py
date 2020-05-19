@@ -25,10 +25,15 @@ class KEYS:  # pragma: no cover
 
 @pytest.fixture
 def products(db):
-    address = models.Address.objects.create(city="london")
+    address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     models.Product.objects.create(name="a", size=1, size_unit="g", producer=producer)
+
+    address = models.Address.objects.create(city="london", street="good")
+    producer = models.Producer.objects.create(name="Bob", address=address)
     models.Product.objects.create(name="b", size=1, size_unit="g", producer=producer)
+
+    producer = models.Producer.objects.create(name="Bob", address=None)
     models.Product.objects.create(name="c", size=2, size_unit="g", producer=producer)
 
 
@@ -70,13 +75,49 @@ def test_get_results_all(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_admin_field(get_product_data):
-    data = get_product_data(1, "admin", {})
+def test_get_admin_link(get_product_data):
+    data = get_product_data(3, "producer__address__admin", {})
     assert data == [
-        ['<a href="/admin/tests/product/1/change/">Product object (1)</a>'],
-        ['<a href="/admin/tests/product/2/change/">Product object (2)</a>'],
-        ['<a href="/admin/tests/product/3/change/">Product object (3)</a>'],
+        ['<a href="/admin/tests/address/1/change/">Address object (1)</a>'],
+        ['<a href="/admin/tests/address/2/change/">Address object (2)</a>'],
+        [None],
     ]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_admin_function(get_product_data):
+    data = get_product_data(3, "producer__address__bob", {})
+    assert data == [["bad"], ["bob"], [None]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_function(get_product_data):
+    data = get_product_data(3, "producer__address__fred", {})
+    assert data == [["bad"], ["fred"], [None]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_property(get_product_data):
+    data = get_product_data(3, "producer__address__tom", {})
+    assert data == [["bad"], ["tom"], [None]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_aggregate(get_product_data):
+    data = get_product_data(1, "size_unit,id__count", {})
+    assert data == [["g", 3]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_aggregate_and_function(get_product_data):
+    data = get_product_data(1, "is_onsale,id__count", {})
+    assert data == [[False, 1], [False, 1], [False, 1]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_only_aggregate(get_product_data):
+    data = get_product_data(1, "id__count", {})
+    assert data == [[3]]
 
 
 @pytest.mark.usefixtures("products")
@@ -169,11 +210,7 @@ def test_get_results_string_filter(get_product_data):
 def test_get_results_prefetch(get_product_data):
     # query products, prefetch producer, producer__address
     data = get_product_data(3, "name+0,is_onsale,producer__address__city", {})
-    assert data == [
-        ["a", False, "london"],
-        ["b", False, "london"],
-        ["c", False, "london"],
-    ]
+    assert data == [["a", False, "london"], ["b", False, "london"], ["c", False, None]]
 
 
 @pytest.mark.usefixtures("products")
@@ -184,29 +221,21 @@ def test_get_results_prefetch_with_filter(get_product_data):
         "name+0,is_onsale,producer__address__city",
         {"producer__address__city__not_equals": ["Invercargill"]},
     )
-    assert data == [
-        ["a", False, "london"],
-        ["b", False, "london"],
-        ["c", False, "london"],
-    ]
+    assert data == [["a", False, "london"], ["b", False, "london"], ["c", False, None]]
 
 
 @pytest.mark.usefixtures("products")
 def test_get_results_no_calculated_so_flat(get_product_data):
     # query products, join the rest
     data = get_product_data(1, "name+0,producer__address__city", {})
-    assert data == [["a", "london"], ["b", "london"], ["c", "london"]]
+    assert data == [["a", "london"], ["b", "london"], ["c", None]]
 
 
 @pytest.mark.usefixtures("products")
 def test_get_results_sort_causes_select(get_product_data):
     # query products, join the rest
     data = get_product_data(1, "name+0,is_onsale,producer__address__city-1", {})
-    assert data == [
-        ["a", False, "london"],
-        ["b", False, "london"],
-        ["c", False, "london"],
-    ]
+    assert data == [["a", False, "london"], ["b", False, "london"], ["c", False, None]]
 
 
 @pytest.mark.usefixtures("products")
@@ -217,11 +246,7 @@ def test_get_results_filter_causes_select(get_product_data):
         "name+0,is_onsale,producer__address__city",
         {"producer__address__city__equals": ["london"]},
     )
-    assert data == [
-        ["a", False, "london"],
-        ["b", False, "london"],
-        ["c", False, "london"],
-    ]
+    assert data == [["a", False, "london"], ["b", False, "london"]]
 
 
 def test_get_fields(orm_models):

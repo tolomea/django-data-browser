@@ -227,7 +227,7 @@ function ResultsHead(props) {
 function ResultsCell(props) {
   return (
     <td className={props.modelField.type}>
-      {props.modelField.type === "html" ? (
+      {props.modelField.type === "html" && props.value ? (
         <div dangerouslySetInnerHTML={{ __html: props.value }} />
       ) : (
         String(props.value)

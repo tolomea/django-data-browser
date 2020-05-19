@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import threading
 
 from django.contrib import admin
@@ -30,7 +32,13 @@ class ViewAdmin(admin.ModelAdmin):
         ("Query", {"fields": ["model_name", "fields", "query"]}),
         ("Internal", {"fields": ["id", "created_time"]}),
     ]
-    readonly_fields = ["open_view", "public_link", "google_sheets_formula", "id"]
+    readonly_fields = [
+        "open_view",
+        "public_link",
+        "google_sheets_formula",
+        "id",
+        "created_time",
+    ]
     list_display = ["__str__", "owner", "public"]
 
     def get_readonly_fields(self, request, obj):

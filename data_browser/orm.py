@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
 from dataclasses import dataclass
@@ -36,12 +38,11 @@ _FIELD_MAP = {
     models.FloatField: NumberFieldType,
     models.IntegerField: NumberFieldType,
     models.AutoField: NumberFieldType,
-    models.FileField: None,
 }
 
 _AGG_MAP = {
     "average": models.Avg,
-    "count": models.Count,
+    "count": lambda x: models.Count(x, distinct=True),
     "max": models.Max,
     "min": models.Min,
     "std_dev": models.StdDev,
@@ -79,6 +80,7 @@ def _get_all_admin_fields(request):
     def from_fieldsets(admin, all_):
         obj = admin.model()  # we want the admin change field sets, not the add ones
         for f in flatten_fieldsets(admin.get_fieldsets(request, obj)):
+            # skip calculated fields on inlines
             if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
                 yield f
 
@@ -87,7 +89,8 @@ def _get_all_admin_fields(request):
             return True
         if hasattr(modeladmin, "has_view_permission"):
             return modeladmin.has_view_permission(request)
-        return False
+        else:
+            return False  # pragma: no cover  Django < 2.1 compat
 
     all_admin_fields = defaultdict(set)
     model_admins = {}
@@ -99,7 +102,7 @@ def _get_all_admin_fields(request):
 
             # check the inlines, these are already filtered for access
             for inline in modeladmin.get_inline_instances(request):
-                if inline.model not in model_admins:
+                if inline.model not in model_admins:  # pragma: no branch
                     model_admins[inline.model] = inline
                 all_admin_fields[inline.model].update(from_fieldsets(inline, False))
                 all_admin_fields[inline.model].add(
@@ -150,7 +153,7 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                 fields[field_name] = OrmField(
                     type_=field_type, concrete=True, model_name=model_name
                 )
-            else:  # pragma: no cover
+            else:
                 logging.getLogger(__name__).warning(
                     f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
                 )
@@ -192,6 +195,9 @@ def get_results(request, bound_query):
     if not bound_query.fields:
         return []
 
+    aggregate_fields = [f for f in bound_query.fields if f.aggregate]
+    normal_fields = [f for f in bound_query.fields if not f.aggregate]
+
     admin = bound_query.orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
@@ -205,33 +211,36 @@ def get_results(request, bound_query):
     qs = qs.order_by(*sort_fields)
 
     # filter
-    for filter_ in bound_query.filters:
-        if filter_.is_valid:
-            negation = False
+    for filter_ in bound_query.valid_filters:
+        negation = False
 
-            lookup = filter_.lookup
-            if lookup.startswith("not_"):
-                negation = True
-                lookup = lookup[4:]
+        lookup = filter_.lookup
+        if lookup.startswith("not_"):
+            negation = True
+            lookup = lookup[4:]
 
-            filter_str = f"{filter_.path}__{_get_django_lookup(filter_.type_, lookup)}"
-            if negation:
-                qs = qs.exclude(**{filter_str: filter_.parsed})
-            else:
-                qs = qs.filter(**{filter_str: filter_.parsed})
+        filter_str = f"{filter_.path}__{_get_django_lookup(filter_.type_, lookup)}"
+        if negation:
+            qs = qs.exclude(**{filter_str: filter_.parsed})
+        else:
+            qs = qs.filter(**{filter_str: filter_.parsed})
 
     # no calculated fields we're going to early out using qs.values
-    if not bound_query.calculated_fields:
-        qs = qs.values(
-            *[f.path for f in bound_query.fields if not f.aggregate]
-        ).distinct()
+    if not bound_query.calculated_fields and normal_fields:
+        qs = qs.values(*[f.path for f in normal_fields]).distinct()
 
     # aggregates
-    for field in bound_query.fields:
-        if field.aggregate:
+    for field in aggregate_fields:
+        if normal_fields:
             qs = qs.annotate(
                 **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
             )
+        else:
+            qs = [
+                qs.aggregate(
+                    **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
+                )
+            ]
 
     # no calculated fields early out using qs.values
     if not bound_query.calculated_fields:
@@ -250,14 +259,12 @@ def get_results(request, bound_query):
     select_related = set()
     for field in bound_query.sort_fields:
         select_related.update(ancestors(field.path_parts))
-    for filter_ in bound_query.filters:
-        if filter_.is_valid:
-            select_related.update(ancestors(filter_.path_parts))
+    for filter_ in bound_query.valid_filters:
+        select_related.update(ancestors(filter_.path_parts))
 
     prefetch_related = set()
-    for field in bound_query.fields:
-        if not field.aggregate:
-            prefetch_related.update(ancestors(field.path_parts))
+    for field in normal_fields:
+        prefetch_related.update(ancestors(field.path_parts))
     prefetch_related -= select_related
 
     if select_related:
@@ -268,7 +275,7 @@ def get_results(request, bound_query):
     # get results
     def get_admin_link(obj):
         if obj is None:
-            return "null"
+            return None
         model_name = get_model_name(obj.__class__, "_")
         url_name = f"admin:{model_name}_change".lower()
         url = reverse(url_name, args=[obj.pk])
@@ -286,14 +293,21 @@ def get_results(request, bound_query):
 
         admin = bound_query.orm_models[field.orm_field.model_name].admin
         if field.concrete:
-            return getattr(value, tail)
+            return getattr(value, tail, None)
         elif tail == _OPEN_IN_ADMIN:
             return get_admin_link(value)
         elif hasattr(admin, tail):
-            return getattr(admin, tail)(value)
+            try:
+                func = getattr(admin, tail)
+                return value and func(value)
+            except Exception as e:
+                return str(e)
         else:
-            value = getattr(value, tail)
-            return value() if callable(value) else value
+            try:
+                value = getattr(value, tail, None)
+                return value() if callable(value) else value
+            except Exception as e:
+                return str(e)
 
     results = []
     for row in qs.distinct():

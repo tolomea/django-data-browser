@@ -44,6 +44,26 @@ def test_query_html(admin_client, snapshot):
     snapshot.assert_match(context, "context")
 
 
+def test_query_html_no_perms(admin_user, admin_client, snapshot):
+    admin_user.is_superuser = False
+    admin_user.save()
+    res = admin_client.get("/data_browser/query//.html?")
+    assert res.status_code == 200
+    context = json.loads(res.context["ctx"])
+    context["config"]["types"]["time"]["defaultValue"] = "redacted"
+    context["config"]["version"] = "redacted"
+    snapshot.assert_match(context, "context")
+
+
+def test_query_ctx(admin_client, snapshot):
+    res = admin_client.get("/data_browser/query//.ctx?")
+    assert res.status_code == 200
+    context = res.json()
+    context["config"]["types"]["time"]["defaultValue"] = "redacted"
+    context["config"]["version"] = "redacted"
+    snapshot.assert_match(context, "context")
+
+
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_fields(admin_client):
     res = admin_client.get(

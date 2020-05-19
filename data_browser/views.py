@@ -135,7 +135,7 @@ def _get_context(request, model_name, fields):
 
 
 @admin_decorators.staff_member_required
-def query_ctx(request, *, model_name, fields=""):  # pragma: no cover
+def query_ctx(request, *, model_name, fields=""):
     ctx = _get_context(request, model_name, fields)
     return http.JsonResponse(ctx)
 
