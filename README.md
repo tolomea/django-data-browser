@@ -47,7 +47,7 @@ There are two types of views in the Data Browser.
 
 Query views support general querying of the database (checked against the users admin permissions) but can only be accessed by Django "staff members".
 
-Saved Views can be accessed by anyone but they can only be used to access a view that has been saved and made public and have long random URL's.
+Saved Views can be accessed by anyone but they can only be used to access a view that has been saved and made public and they have long random URL's.
 
 You can use the admin permission `data_browser | view | Can make a saved view publically available` to restrict who can make views public. To be public the view must be marked as public and owned by someone who has the permission. Users without the permission can not mark views as public and can not edit any view that is marked public.
 
@@ -69,7 +69,7 @@ If necessary you can test to see if the databrowser is making the call as follow
 
 ```
 if request.databrowser:
-	# Data Browser specific customization
+    # Data Browser specific customization
 ```
 
 This is particularly useful if you want to route the Data Browser to a DB replica.
@@ -118,5 +118,9 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 
 ### Release History
 
-1.1.0 2020-05-20 Aggregate support
-1.0.0 2020-05-17 Initial version
+| Version | Date       | Summary           |
+| ------- | ---------- | ----------------- |
+| 1.1.0   | 2020-05-20 | Aggregate support |
+| 1.0.2   | 2020-05-17 | Py3.6 support     |
+| 1.0.1   | 2020-05-17 | Small fixes       |
+| 1.0.0   | 2020-05-17 | Initial version   |
