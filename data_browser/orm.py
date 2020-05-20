@@ -226,21 +226,16 @@ def get_results(request, bound_query):
             qs = qs.filter(**{filter_str: filter_.parsed})
 
     # no calculated fields we're going to early out using qs.values
-    if not bound_query.calculated_fields and normal_fields:
-        qs = qs.values(*[f.path for f in normal_fields]).distinct()
+    if not bound_query.calculated_fields:
+        # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
+        qs = qs.values(
+            *[f.path for f in normal_fields],
+            _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
+        ).distinct()
 
     # aggregates
     for field in aggregate_fields:
-        if normal_fields:
-            qs = qs.annotate(
-                **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
-            )
-        else:
-            qs = [
-                qs.aggregate(
-                    **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
-                )
-            ]
+        qs = qs.annotate(**{field.path: _AGG_MAP[field.aggregate](field.field_path)})
 
     # no calculated fields early out using qs.values
     if not bound_query.calculated_fields:
