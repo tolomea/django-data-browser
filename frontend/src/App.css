@@ -68,6 +68,7 @@ button.Link {
   color: #069;
   font-size: inherit;
   font: inherit;
+  text-align: left;
 }
 button.Link:hover {
   text-decoration: underline;
