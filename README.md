@@ -7,7 +7,7 @@ A Django app for interactive user friendly browsing of a Django projects DB.
 ### Features
 
 -   Zero config, if it's in the admin it's in the browser
--   Select fields (including calculated fields), sort and fitler
+-   Select fields (including calculated fields), aggregate, fitler and sort
 -   Automatically follow OneToOneFields and ForeignKeys
 -   Respects per user admin permissions
 -   Share views by URL
@@ -16,7 +16,7 @@ A Django app for interactive user friendly browsing of a Django projects DB.
 
 ### Roadmap (in no particular order)
 
--   ToMany and aggregation support
+-   ToMany support
 -   Advanced filtering
 -   PII controls
 -   Graphs
@@ -115,3 +115,8 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 | model       | In Python the actual model class, in Javascript the model name as above.                                  |
 | query       | The information that changes with the query being done, in the Javascript this also includes the results. |
 | view        | A saved query.                                                                                            |
+
+### Release History
+
+1.1.0 2020-05-20 Aggregate support
+1.0.0 2020-05-17 Initial version
