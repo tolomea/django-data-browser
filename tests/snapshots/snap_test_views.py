@@ -70,8 +70,8 @@ snapshots["test_query_html context"] = {
             },
             "boolean": {
                 "fields": {
-                    "average": {"concrete": False, "model": None, "type": "number"},
-                    "sum": {"concrete": False, "model": None, "type": "number"},
+                    "average": {"concrete": True, "model": None, "type": "number"},
+                    "sum": {"concrete": True, "model": None, "type": "number"},
                 },
                 "sortedFields": ["average", "sum"],
             },
@@ -122,13 +122,13 @@ snapshots["test_query_html context"] = {
             "html": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
-                    "average": {"concrete": False, "model": None, "type": "number"},
-                    "count": {"concrete": False, "model": None, "type": "number"},
-                    "max": {"concrete": False, "model": None, "type": "number"},
-                    "min": {"concrete": False, "model": None, "type": "number"},
-                    "std_dev": {"concrete": False, "model": None, "type": "number"},
-                    "sum": {"concrete": False, "model": None, "type": "number"},
-                    "variance": {"concrete": False, "model": None, "type": "number"},
+                    "average": {"concrete": True, "model": None, "type": "number"},
+                    "count": {"concrete": True, "model": None, "type": "number"},
+                    "max": {"concrete": True, "model": None, "type": "number"},
+                    "min": {"concrete": True, "model": None, "type": "number"},
+                    "std_dev": {"concrete": True, "model": None, "type": "number"},
+                    "sum": {"concrete": True, "model": None, "type": "number"},
+                    "variance": {"concrete": True, "model": None, "type": "number"},
                 },
                 "sortedFields": [
                     "average",
@@ -142,7 +142,7 @@ snapshots["test_query_html context"] = {
             },
             "string": {
                 "fields": {
-                    "count": {"concrete": False, "model": None, "type": "number"}
+                    "count": {"concrete": True, "model": None, "type": "number"}
                 },
                 "sortedFields": ["count"],
             },
@@ -266,7 +266,7 @@ snapshots["test_query_html context"] = {
             },
             "time": {
                 "fields": {
-                    "count": {"concrete": False, "model": None, "type": "number"}
+                    "count": {"concrete": True, "model": None, "type": "number"}
                 },
                 "sortedFields": ["count"],
             },
@@ -402,21 +402,21 @@ snapshots["test_query_html_no_perms context"] = {
         "allModelFields": {
             "boolean": {
                 "fields": {
-                    "average": {"concrete": False, "model": None, "type": "number"},
-                    "sum": {"concrete": False, "model": None, "type": "number"},
+                    "average": {"concrete": True, "model": None, "type": "number"},
+                    "sum": {"concrete": True, "model": None, "type": "number"},
                 },
                 "sortedFields": ["average", "sum"],
             },
             "html": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
-                    "average": {"concrete": False, "model": None, "type": "number"},
-                    "count": {"concrete": False, "model": None, "type": "number"},
-                    "max": {"concrete": False, "model": None, "type": "number"},
-                    "min": {"concrete": False, "model": None, "type": "number"},
-                    "std_dev": {"concrete": False, "model": None, "type": "number"},
-                    "sum": {"concrete": False, "model": None, "type": "number"},
-                    "variance": {"concrete": False, "model": None, "type": "number"},
+                    "average": {"concrete": True, "model": None, "type": "number"},
+                    "count": {"concrete": True, "model": None, "type": "number"},
+                    "max": {"concrete": True, "model": None, "type": "number"},
+                    "min": {"concrete": True, "model": None, "type": "number"},
+                    "std_dev": {"concrete": True, "model": None, "type": "number"},
+                    "sum": {"concrete": True, "model": None, "type": "number"},
+                    "variance": {"concrete": True, "model": None, "type": "number"},
                 },
                 "sortedFields": [
                     "average",
@@ -430,13 +430,13 @@ snapshots["test_query_html_no_perms context"] = {
             },
             "string": {
                 "fields": {
-                    "count": {"concrete": False, "model": None, "type": "number"}
+                    "count": {"concrete": True, "model": None, "type": "number"}
                 },
                 "sortedFields": ["count"],
             },
             "time": {
                 "fields": {
-                    "count": {"concrete": False, "model": None, "type": "number"}
+                    "count": {"concrete": True, "model": None, "type": "number"}
                 },
                 "sortedFields": ["count"],
             },
@@ -606,8 +606,8 @@ snapshots["test_query_ctx context"] = {
             },
             "boolean": {
                 "fields": {
-                    "average": {"concrete": False, "model": None, "type": "number"},
-                    "sum": {"concrete": False, "model": None, "type": "number"},
+                    "average": {"concrete": True, "model": None, "type": "number"},
+                    "sum": {"concrete": True, "model": None, "type": "number"},
                 },
                 "sortedFields": ["average", "sum"],
             },
@@ -658,13 +658,13 @@ snapshots["test_query_ctx context"] = {
             "html": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
-                    "average": {"concrete": False, "model": None, "type": "number"},
-                    "count": {"concrete": False, "model": None, "type": "number"},
-                    "max": {"concrete": False, "model": None, "type": "number"},
-                    "min": {"concrete": False, "model": None, "type": "number"},
-                    "std_dev": {"concrete": False, "model": None, "type": "number"},
-                    "sum": {"concrete": False, "model": None, "type": "number"},
-                    "variance": {"concrete": False, "model": None, "type": "number"},
+                    "average": {"concrete": True, "model": None, "type": "number"},
+                    "count": {"concrete": True, "model": None, "type": "number"},
+                    "max": {"concrete": True, "model": None, "type": "number"},
+                    "min": {"concrete": True, "model": None, "type": "number"},
+                    "std_dev": {"concrete": True, "model": None, "type": "number"},
+                    "sum": {"concrete": True, "model": None, "type": "number"},
+                    "variance": {"concrete": True, "model": None, "type": "number"},
                 },
                 "sortedFields": [
                     "average",
@@ -678,7 +678,7 @@ snapshots["test_query_ctx context"] = {
             },
             "string": {
                 "fields": {
-                    "count": {"concrete": False, "model": None, "type": "number"}
+                    "count": {"concrete": True, "model": None, "type": "number"}
                 },
                 "sortedFields": ["count"],
             },
@@ -802,7 +802,7 @@ snapshots["test_query_ctx context"] = {
             },
             "time": {
                 "fields": {
-                    "count": {"concrete": False, "model": None, "type": "number"}
+                    "count": {"concrete": True, "model": None, "type": "number"}
                 },
                 "sortedFields": ["count"],
             },

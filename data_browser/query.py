@@ -253,7 +253,10 @@ class BoundFilter(BoundFieldMixin):
         self.parsed = None
         self.err_message = None
 
-        lookups = self.type_.lookups
+        if self.aggregate:
+            lookups = NumberFieldType.lookups
+        else:
+            lookups = self.type_.lookups
         if self.lookup not in lookups:
             self.err_message = f"Bad lookup '{self.lookup}' expected {lookups}"
         else:
@@ -331,7 +334,6 @@ class BoundQuery:
         self.filters = []
         for query_filter in query.filters:
             orm_field, path, name, aggregate = get_orm_field(query_filter.path)
-            assert aggregate is None
             if orm_field:
                 self.filters.append(
                     BoundFilter.bind(path, name, aggregate, query_filter, orm_field)

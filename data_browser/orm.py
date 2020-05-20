@@ -190,28 +190,7 @@ def _get_django_lookup(field_type, lookup):
 
 
 def get_results(request, bound_query):
-    request.data_browser = True
-
-    if not bound_query.fields:
-        return []
-
-    aggregate_fields = [f for f in bound_query.fields if f.aggregate]
-    normal_fields = [f for f in bound_query.fields if not f.aggregate]
-
-    admin = bound_query.orm_models[bound_query.model_name].admin
-    qs = admin.get_queryset(request)
-
-    # sort
-    sort_fields = []
-    for field in bound_query.sort_fields:
-        if field.direction is ASC:
-            sort_fields.append(field.path)
-        if field.direction is DSC:
-            sort_fields.append(f"-{field.path}")
-    qs = qs.order_by(*sort_fields)
-
-    # filter
-    for filter_ in bound_query.valid_filters:
+    def filter(qs):
         negation = False
 
         lookup = filter_.lookup
@@ -221,9 +200,24 @@ def get_results(request, bound_query):
 
         filter_str = f"{filter_.path}__{_get_django_lookup(filter_.type_, lookup)}"
         if negation:
-            qs = qs.exclude(**{filter_str: filter_.parsed})
+            return qs.exclude(**{filter_str: filter_.parsed})
         else:
-            qs = qs.filter(**{filter_str: filter_.parsed})
+            return qs.filter(**{filter_str: filter_.parsed})
+
+    request.data_browser = True
+
+    if not bound_query.fields:
+        return []
+
+    normal_fields = [f for f in bound_query.fields if not f.aggregate]
+
+    admin = bound_query.orm_models[bound_query.model_name].admin
+    qs = admin.get_queryset(request)
+
+    # filter normal fields
+    for filter_ in bound_query.valid_filters:
+        if not filter_.aggregate:
+            qs = filter(qs)
 
     # no calculated fields we're going to early out using qs.values
     if not bound_query.calculated_fields:
@@ -231,11 +225,31 @@ def get_results(request, bound_query):
         qs = qs.values(
             *[f.path for f in normal_fields],
             _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
-        ).distinct()
+        )
+
+    # remove duplicates (I think this only happens in the qs.values case)
+    qs = qs.distinct()
 
     # aggregates
-    for field in aggregate_fields:
-        qs = qs.annotate(**{field.path: _AGG_MAP[field.aggregate](field.field_path)})
+    for field in bound_query.fields + bound_query.filters:
+        if field.aggregate:
+            qs = qs.annotate(
+                **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
+            )
+
+    # filter aggregate fields
+    for filter_ in bound_query.valid_filters:
+        if filter_.aggregate:
+            qs = filter(qs)
+
+    # sort
+    sort_fields = []
+    for field in bound_query.sort_fields:
+        if field.direction is ASC:
+            sort_fields.append(field.path)
+        if field.direction is DSC:
+            sort_fields.append(f"-{field.path}")
+    qs = qs.order_by(*sort_fields)
 
     # no calculated fields early out using qs.values
     if not bound_query.calculated_fields:

@@ -87,7 +87,7 @@ def _get_config(user, orm_models):
             "fields": {
                 aggregate: {
                     "type": NumberFieldType.name,
-                    "concrete": False,
+                    "concrete": True,
                     "model": None,
                 }
                 for aggregate in type_.aggregates
