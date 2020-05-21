@@ -20,7 +20,10 @@ setuptools.setup(
     version=version,
     author="Gordon Wrigley",
     author_email="gordon.wrigley@gmail.com",
-    description="git@github.com:tolomea/django-data-browser.git",
+    description=(
+        "A Django app for interactive user friendly browsing "
+        "of a Django projects DB."
+    ),
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/tolomea/django-data-browser",
