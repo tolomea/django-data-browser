@@ -1,6 +1,4 @@
-# django-data-browser
-
-A Django app for interactive user friendly browsing of a Django projects DB.
+# Interactive and user friendly querying of Django project DBs.
 
 ![screenshot](https://raw.githubusercontent.com/tolomea/django-data-browser/master/screenshot.png)
 
