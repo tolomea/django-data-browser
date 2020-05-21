@@ -8,7 +8,7 @@
 #body {
   flex: 1;
   padding: 0;
-  margin: 10px 0 0 0;
+  margin: 10px 0 30px 0;
   font-size: 14px;
   color: #333e48;
   display: flex;
@@ -78,7 +78,6 @@ button.Link:hover {
   margin: 0 auto;
   display: flex;
   flex-flow: row;
-  margin-bottom: 30px;
   padding: 0 10px;
 }
 
@@ -181,7 +180,7 @@ div.Index > div {
   color: #333e48;
   border: 1px solid #ccc;
   border-radius: 3px;
-  margin: 2%;
+  margin: 30px 2% 0 2%;
   padding: 0 2% 2% 2%;
 }
 div.Index .Link {

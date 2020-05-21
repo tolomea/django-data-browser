@@ -19,16 +19,12 @@ register_converter(Optional, "optional")
 
 app_name = "data_browser"
 
+QUERY_PATH = "query/<optional:model_name>/<optional:fields>"
+
 urlpatterns = [
-    path(
-        "query/<optional:model_name>/<optional:fields>.html",
-        query_html,
-        name="query_html",
-    ),
-    path(
-        "query/<optional:model_name>/<optional:fields>.ctx", query_ctx, name="query_ctx"
-    ),
-    path("query/<optional:model_name>/<optional:fields>.<media>", query, name="query"),
+    path(f"{QUERY_PATH}.html", query_html, name="query_html"),
+    path(f"{QUERY_PATH}.ctx", query_ctx, name="query_ctx"),
+    path(f"{QUERY_PATH}.<media>", query, name="query"),
     path("view/<pk>.<media>", view, name="view"),
     path("", RedirectView.as_view(url="query//.html?", permanent=False), name="home"),
 ]
