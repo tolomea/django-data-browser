@@ -112,7 +112,7 @@ select.Lookup {
 .FieldsList {
   padding: 0 10px 0 0;
   margin: 0;
-  min-width: 200px;
+  min-width: max(200px, auto);
 }
 .FieldsList table {
   border: 1px solid #ccc;

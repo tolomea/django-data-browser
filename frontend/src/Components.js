@@ -202,7 +202,7 @@ function ResultsHead(props) {
                     Y
                   </Link>{" "}
                   <Link onClick={() => props.query.toggleSort(index)}>
-                    {field.path}
+                    {field.path.replace("__", " ")}
                   </Link>{" "}
                   {
                     {
@@ -213,7 +213,7 @@ function ResultsHead(props) {
                   }
                 </>
               ) : (
-                field.path
+                field.path.replace("__", " ")
               )}
             </th>
           );
