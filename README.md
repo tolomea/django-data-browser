@@ -118,8 +118,9 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 
 | Version   | Date           | Summary               |
 | --------- | -------------- | --------------------- |
-| 1.1.2     | 2020-05-22     | Small fixes           |
-| 1.1.1     | 2020-05-20     | Small fixes           |
+| 1.1.3     | 2020-05-23     | Cosmetic fixes        |
+| 1.1.2     | 2020-05-22     | Cosmetic fixes        |
+| 1.1.1     | 2020-05-20     | Cosmetic fixes        |
 | **1.1.0** | **2020-05-20** | **Aggregate support** |
 | **1.0.2** | **2020-05-17** | **Py3.6 support**     |
 | 1.0.1     | 2020-05-17     | Small fixes           |
