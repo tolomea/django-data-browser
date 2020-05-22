@@ -319,7 +319,7 @@ def get_results(request, bound_query):
                 return str(e)
 
     results = []
-    for row in qs():
+    for row in qs:
         results.append(
             [field.type_.format(lookup(row, field)) for field in bound_query.fields]
         )
