@@ -5,7 +5,7 @@
 ### Features
 
 -   Zero config, if it's in the admin it's in the browser
--   Select fields (including calculated fields), aggregate, fitler and sort
+-   Select fields (including calculated fields), aggregate, filter and sort
 -   Automatically follow OneToOneFields and ForeignKeys
 -   Respects per user admin permissions
 -   Share views by URL
