@@ -31,7 +31,6 @@ function FilterValue(props) {
         className="FilterValue"
         type="number"
         step="0"
-        name={props.path}
         value={props.value}
         onChange={props.onChange}
       />
@@ -41,7 +40,6 @@ function FilterValue(props) {
       <input
         className="FilterValue"
         type="text"
-        name={props.path}
         value={props.value}
         onChange={props.onChange}
       />
@@ -51,6 +49,7 @@ function FilterValue(props) {
 class Filter extends React.Component {
   render() {
     const path = this.props.path;
+    const prettyPath = this.props.prettyPath;
     const index = this.props.index;
     const lookup = this.props.lookup;
     const query = this.props.query;
@@ -59,7 +58,9 @@ class Filter extends React.Component {
       <tr>
         <td>
           <Link onClick={() => query.removeFilter(index)}>✘</Link>{" "}
-          <Link onClick={() => query.addField(path)}>{path}</Link>{" "}
+          <Link onClick={() => query.addField(path, prettyPath)}>
+            {prettyPath.join(" ")}
+          </Link>{" "}
         </td>
         <td>
           <select
@@ -69,7 +70,7 @@ class Filter extends React.Component {
           >
             {fieldType.sortedLookups.map((lookupName) => (
               <option key={lookupName} value={lookupName}>
-                {lookupName.replace("_", " ")}
+                {lookupName.replace(/_/g, " ")}
               </option>
             ))}
           </select>
@@ -77,7 +78,6 @@ class Filter extends React.Component {
         <td>=</td>
         <td>
           <FilterValue
-            name={`${path}__${lookup}`}
             value={this.props.value}
             onChange={(e) => query.setFilterValue(index, e.target.value)}
             lookup={fieldType.lookups[lookup]}
@@ -133,20 +133,24 @@ class Toggle extends React.Component {
 }
 
 function Field(props) {
-  const modelField = props.modelFields.fields[props.fieldName];
+  const modelField = props.modelField;
   const title = modelField.type ? (
-    <Link onClick={() => props.query.addField(props.path)}>
-      {props.fieldName}
+    <Link onClick={() => props.query.addField(props.path, props.prettyPath)}>
+      {modelField.prettyName}
     </Link>
   ) : (
-    props.fieldName
+    modelField.prettyName
   );
 
   return (
     <tr>
       <td>
         {modelField.concrete && (
-          <Link onClick={() => props.query.addFilter(props.path)}>Y</Link>
+          <Link
+            onClick={() => props.query.addFilter(props.path, props.prettyPath)}
+          >
+            Y
+          </Link>
         )}
       </td>
 
@@ -155,7 +159,8 @@ function Field(props) {
           <AllFields
             query={props.query}
             model={modelField.model}
-            path={`${props.path}__`}
+            path={props.path}
+            prettyPath={props.prettyPath}
           />
         </Toggle>
       ) : (
@@ -173,15 +178,18 @@ function AllFields(props) {
   return (
     <table>
       <tbody>
-        {modelFields.sortedFields.map((fieldName) => (
-          <Field
-            key={fieldName}
-            query={props.query}
-            path={`${props.path}${fieldName}`}
-            fieldName={fieldName}
-            modelFields={modelFields}
-          />
-        ))}
+        {modelFields.sortedFields.map((fieldName) => {
+          const modelField = modelFields.fields[fieldName];
+          return (
+            <Field
+              key={fieldName}
+              query={props.query}
+              path={props.path.concat([fieldName])}
+              prettyPath={props.prettyPath.concat([modelField.prettyName])}
+              modelField={modelField}
+            />
+          );
+        })}
       </tbody>
     </table>
   );
@@ -198,11 +206,15 @@ function ResultsHead(props) {
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
               {modelField.concrete ? (
                 <>
-                  <Link onClick={() => props.query.addFilter(field.path)}>
+                  <Link
+                    onClick={() =>
+                      props.query.addFilter(field.path, field.prettyPath)
+                    }
+                  >
                     Y
                   </Link>{" "}
                   <Link onClick={() => props.query.toggleSort(index)}>
-                    {field.path.replace("__", " ")}
+                    {field.prettyPath.join(" ")}
                   </Link>{" "}
                   {
                     {
@@ -213,7 +225,7 @@ function ResultsHead(props) {
                   }
                 </>
               ) : (
-                field.path.replace("__", " ")
+                field.prettyPath.join(" ")
               )}
             </th>
           );
@@ -315,7 +327,12 @@ function QueryPage(props) {
       </p>
       <div className="MainSpace">
         <div className="FieldsList">
-          <AllFields query={props.query} model={props.model} path="" />
+          <AllFields
+            query={props.query}
+            model={props.model}
+            path={[]}
+            prettyPath={[]}
+          />
         </div>
         <Results
           query={props.query}

@@ -18,6 +18,7 @@ class QueryField:
     priority: int = None
 
     def __post_init__(self):
+        self.path = self.path.split("__")
         assert (self.direction is None) == (self.priority is None)
 
 
@@ -26,6 +27,9 @@ class QueryFilter:
     path: str
     lookup: str
     value: str
+
+    def __post_init__(self):
+        self.path = self.path.split("__")
 
 
 @dataclass
@@ -63,13 +67,14 @@ class Query:
         for field in self.fields:
             direction = {ASC: "+", DSC: "-", None: ""}[field.direction]
             priority = str(field.priority) if field.direction else ""
-            field_strs.append(f"{field.path}{direction}{priority}")
+            field_strs.append(f"{'__'.join(field.path)}{direction}{priority}")
         return ",".join(field_strs)
 
     @property
     def filter_fields(self):
         return [
-            (f"{filter.path}__{filter.lookup}", filter.value) for filter in self.filters
+            ("__".join(filter.path + [filter.lookup]), filter.value)
+            for filter in self.filters
         ]
 
     def get_url(self, media):
@@ -213,37 +218,43 @@ TYPES = {
 
 class BoundFieldMixin:
     @property
-    def model_path(self):
-        return "__".join(self.path_parts)
+    def model_path_str(self):
+        return "__".join(self.model_path)
 
     @property
     def field_path(self):
-        if self.model_path:
-            return f"{self.model_path}__{self.name}"
-        return self.name
+        return (self.model_path or []) + [self.name]
+
+    @property
+    def field_path_str(self):
+        return "__".join(self.field_path)
 
     @property
     def path(self):
-        if self.aggregate:
-            return f"{self.field_path}__{self.aggregate}"
-        return self.field_path
+        return self.field_path + ([self.aggregate] if self.aggregate else [])
+
+    @property
+    def path_str(self):
+        return "__".join(self.path)
 
 
 @dataclass
 class BoundFilter(BoundFieldMixin):
-    path_parts: Sequence[str]
+    model_path: Sequence[str]
     name: str
     aggregate: Optional[str]
+    pretty_path: Sequence[str]
     lookup: str
     value: str
     type_: FieldType
 
     @classmethod
-    def bind(cls, path, name, aggregate, query_filter, orm_field):
+    def bind(cls, path, name, aggregate, pretty_path, query_filter, orm_field):
         return cls(
             path,
             name,
             aggregate,
+            pretty_path,
             query_filter.lookup,
             query_filter.value,
             orm_field.type_,
@@ -270,9 +281,10 @@ class BoundFilter(BoundFieldMixin):
 
 @dataclass
 class BoundField(BoundFieldMixin):
-    path_parts: Sequence[str]
+    model_path: Sequence[str]
     name: str
     aggregate: Optional[str]
+    pretty_path: Sequence[str]
     direction: Optional[str]
     priority: Optional[int]
     orm_field: Any  # orm.OrmField
@@ -282,61 +294,81 @@ class BoundField(BoundFieldMixin):
         self.concrete = self.orm_field.concrete
 
     @classmethod
-    def bind(cls, path, name, aggregate, query_field, orm_field):
+    def bind(cls, path, name, aggregate, pretty_path, query_field, orm_field):
         direction = query_field.direction if orm_field.concrete else None
         priority = query_field.priority if orm_field.concrete else None
-        return cls(path, name, aggregate, direction, priority, orm_field)
+        return cls(path, name, aggregate, pretty_path, direction, priority, orm_field)
 
 
 class BoundQuery:
     def __init__(self, query, orm_models):
         # orm_models = {model_name: {"fields": {field_name, FieldType}, "fks": {field_name: model_name}}}
         def get_path(parts, model_name):
+            pretty_parts = []
             for part in parts:
                 fk_field = orm_models[model_name].fks.get(part)
                 if fk_field is None:
-                    return None
+                    return None, None
+                pretty_parts.append(fk_field.pretty_name)
                 model_name = fk_field.model_name
-            return model_name
+            return model_name, pretty_parts
 
         def get_orm_field(path):
-            parts = path.split("__")
-
             # path__field
-            model_name = get_path(parts[:-1], query.model_name)
+            *model_path, field_name = path
+            model_name, pretty_parts = get_path(model_path, query.model_name)
             if model_name:
-                return (
-                    orm_models[model_name].fields.get(parts[-1]),
-                    parts[:-1],
-                    parts[-1],
-                    None,
-                )
+                orm_field = orm_models[model_name].fields.get(field_name)
+                if orm_field:
+                    return (
+                        orm_field,
+                        model_path,
+                        field_name,
+                        None,
+                        pretty_parts + [orm_field.pretty_name],
+                    )
 
-            # path__aggregate__field
-            model_name = get_path(parts[:-2], query.model_name)
-            if model_name:
-                orm_field = orm_models[model_name].fields.get(parts[-2])
-                if orm_field and parts[-1] in orm_field.type_.aggregates:
-                    return orm_field, parts[:-2], parts[-2], parts[-1]
-            return None, None, None, None
+            # path__field__aggregate
+            if len(path) >= 2:
+                *model_path, field_name, aggregate = path
+                model_name, pretty_parts = get_path(model_path, query.model_name)
+                if model_name:
+                    orm_field = orm_models[model_name].fields.get(field_name)
+                    if orm_field and aggregate in orm_field.type_.aggregates:
+                        return (
+                            orm_field,
+                            model_path,
+                            field_name,
+                            aggregate,
+                            pretty_parts + [orm_field.pretty_name, aggregate],
+                        )
+            return None, None, None, None, None
 
         self.model_name = query.model_name
         self.orm_models = orm_models
 
         self.fields = []
         for query_field in query.fields:
-            orm_field, path, name, aggregate = get_orm_field(query_field.path)
+            orm_field, path, name, aggregate, pretty_path = get_orm_field(
+                query_field.path
+            )
             if orm_field:
                 self.fields.append(
-                    BoundField.bind(path, name, aggregate, query_field, orm_field)
+                    BoundField.bind(
+                        path, name, aggregate, pretty_path, query_field, orm_field
+                    )
                 )
 
         self.filters = []
         for query_filter in query.filters:
-            orm_field, path, name, aggregate = get_orm_field(query_filter.path)
+            orm_field, path, name, aggregate, pretty_path = get_orm_field(
+                query_filter.path
+            )
             if orm_field:
                 self.filters.append(
-                    BoundFilter.bind(path, name, aggregate, query_filter, orm_field)
+                    BoundFilter.bind(
+                        path, name, aggregate, pretty_path, query_filter, orm_field
+                    )
                 )
 
     @property
@@ -345,7 +377,7 @@ class BoundQuery:
 
     @property
     def calculated_fields(self):
-        return {f.path for f in self.fields if not f.concrete}
+        return {f.path_str for f in self.fields if not f.concrete}
 
     @property
     def valid_filters(self):

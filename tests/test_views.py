@@ -113,13 +113,30 @@ def test_query_json(admin_client):
     assert data == {
         "results": [[1, "a", "g"], [1, "b", "g"]],
         "fields": [
-            {"path": "size", "priority": 0, "sort": "dsc"},
-            {"path": "name", "priority": 1, "sort": "asc"},
-            {"path": "size_unit", "priority": null, "sort": null},
+            {"path": ["size"], "prettyPath": ["size"], "priority": 0, "sort": "dsc"},
+            {"path": ["name"], "prettyPath": ["name"], "priority": 1, "sort": "asc"},
+            {
+                "path": ["size_unit"],
+                "prettyPath": ["size_unit"],
+                "priority": null,
+                "sort": null,
+            },
         ],
         "filters": [
-            {"errorMessage": null, "lookup": "lt", "path": "size", "value": "2"},
-            {"errorMessage": null, "lookup": "gt", "path": "id", "value": "0"},
+            {
+                "errorMessage": null,
+                "lookup": "lt",
+                "path": ["size"],
+                "prettyPath": ["size"],
+                "value": "2",
+            },
+            {
+                "errorMessage": null,
+                "lookup": "gt",
+                "path": ["id"],
+                "prettyPath": ["id"],
+                "value": "0",
+            },
         ],
         "model": "tests.Product",
     }

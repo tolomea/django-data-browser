@@ -12,46 +12,101 @@ snapshots["test_query_html context"] = {
         "allModelFields": {
             "auth.Group": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
             "auth.User": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "date_joined": {"concrete": True, "model": "time", "type": "time"},
-                    "email": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "date_joined": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "date_joined",
+                        "type": "time",
+                    },
+                    "email": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "email",
+                        "type": "string",
+                    },
                     "first_name": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "first_name",
                         "type": "string",
                     },
-                    "id": {"concrete": True, "model": "number", "type": "number"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
                     "is_active": {
                         "concrete": True,
                         "model": "boolean",
+                        "prettyName": "is_active",
                         "type": "boolean",
                     },
                     "is_staff": {
                         "concrete": True,
                         "model": "boolean",
+                        "prettyName": "is_staff",
                         "type": "boolean",
                     },
                     "is_superuser": {
                         "concrete": True,
                         "model": "boolean",
+                        "prettyName": "is_superuser",
                         "type": "boolean",
                     },
-                    "last_login": {"concrete": True, "model": "time", "type": "time"},
+                    "last_login": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "last_login",
+                        "type": "time",
+                    },
                     "last_name": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "last_name",
                         "type": "string",
                     },
-                    "password": {"concrete": True, "model": "string", "type": "string"},
-                    "username": {"concrete": True, "model": "string", "type": "string"},
+                    "password": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "password",
+                        "type": "string",
+                    },
+                    "username": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "username",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": [
                     "id",
@@ -70,38 +125,101 @@ snapshots["test_query_html context"] = {
             },
             "boolean": {
                 "fields": {
-                    "average": {"concrete": True, "model": None, "type": "number"},
-                    "sum": {"concrete": True, "model": None, "type": "number"},
+                    "average": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "average",
+                        "type": "number",
+                    },
+                    "sum": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "sum",
+                        "type": "number",
+                    },
                 },
                 "sortedFields": ["average", "sum"],
             },
             "data_browser.View": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "created_time": {"concrete": True, "model": "time", "type": "time"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "created_time": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "created_time",
+                        "type": "time",
+                    },
                     "description": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "description",
                         "type": "string",
                     },
-                    "fields": {"concrete": True, "model": "string", "type": "string"},
+                    "fields": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "fields",
+                        "type": "string",
+                    },
                     "google_sheets_formula": {
                         "concrete": False,
                         "model": None,
+                        "prettyName": "google_sheets_formula",
                         "type": "string",
                     },
-                    "id": {"concrete": True, "model": "string", "type": "string"},
+                    "id": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "id",
+                        "type": "string",
+                    },
                     "model_name": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "model_name",
                         "type": "string",
                     },
-                    "name": {"concrete": True, "model": "string", "type": "string"},
-                    "open_view": {"concrete": False, "model": None, "type": "string"},
-                    "owner": {"concrete": False, "model": "auth.User", "type": None},
-                    "public": {"concrete": True, "model": "boolean", "type": "boolean"},
-                    "public_link": {"concrete": False, "model": None, "type": "string"},
-                    "query": {"concrete": True, "model": "string", "type": "string"},
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
+                    "open_view": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "open_view",
+                        "type": "string",
+                    },
+                    "owner": {
+                        "concrete": False,
+                        "model": "auth.User",
+                        "prettyName": "owner",
+                        "type": None,
+                    },
+                    "public": {
+                        "concrete": True,
+                        "model": "boolean",
+                        "prettyName": "public",
+                        "type": "boolean",
+                    },
+                    "public_link": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "public_link",
+                        "type": "string",
+                    },
+                    "query": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "query",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": [
                     "id",
@@ -122,13 +240,48 @@ snapshots["test_query_html context"] = {
             "html": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
-                    "average": {"concrete": True, "model": None, "type": "number"},
-                    "count": {"concrete": True, "model": None, "type": "number"},
-                    "max": {"concrete": True, "model": None, "type": "number"},
-                    "min": {"concrete": True, "model": None, "type": "number"},
-                    "std_dev": {"concrete": True, "model": None, "type": "number"},
-                    "sum": {"concrete": True, "model": None, "type": "number"},
-                    "variance": {"concrete": True, "model": None, "type": "number"},
+                    "average": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "average",
+                        "type": "number",
+                    },
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    },
+                    "max": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "max",
+                        "type": "number",
+                    },
+                    "min": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "min",
+                        "type": "number",
+                    },
+                    "std_dev": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "std_dev",
+                        "type": "number",
+                    },
+                    "sum": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "sum",
+                        "type": "number",
+                    },
+                    "variance": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "variance",
+                        "type": "number",
+                    },
                 },
                 "sortedFields": [
                     "average",
@@ -142,56 +295,134 @@ snapshots["test_query_html context"] = {
             },
             "string": {
                 "fields": {
-                    "count": {"concrete": True, "model": None, "type": "number"}
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    }
                 },
                 "sortedFields": ["count"],
             },
             "tests.Address": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "bob": {"concrete": False, "model": None, "type": "string"},
-                    "city": {"concrete": True, "model": "string", "type": "string"},
-                    "fred": {"concrete": False, "model": None, "type": "string"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "tom": {"concrete": False, "model": None, "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "bob": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "bob",
+                        "type": "string",
+                    },
+                    "city": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "city",
+                        "type": "string",
+                    },
+                    "fred": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "fred",
+                        "type": "string",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "tom": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "tom",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "bob", "city", "fred", "tom"],
             },
             "tests.InAdmin": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
             "tests.InlineAdmin": {
                 "fields": {
-                    "id": {"concrete": True, "model": "number", "type": "number"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
                     "in_admin": {
                         "concrete": False,
                         "model": "tests.InAdmin",
+                        "prettyName": "in_admin",
                         "type": None,
                     },
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "in_admin", "name"],
             },
             "tests.Normal": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
                     "in_admin": {
                         "concrete": False,
                         "model": "tests.InAdmin",
+                        "prettyName": "in_admin",
                         "type": None,
                     },
                     "inline_admin": {
                         "concrete": False,
                         "model": "tests.InlineAdmin",
+                        "prettyName": "inline_admin",
                         "type": None,
                     },
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "in_admin", "inline_admin", "name"],
             },
@@ -200,36 +431,90 @@ snapshots["test_query_html context"] = {
                     "address": {
                         "concrete": False,
                         "model": "tests.Address",
+                        "prettyName": "address",
                         "type": None,
                     },
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "address", "name"],
             },
             "tests.Product": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "created_time": {"concrete": True, "model": "time", "type": "time"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "created_time": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "created_time",
+                        "type": "time",
+                    },
                     "default_sku": {
                         "concrete": False,
                         "model": "tests.SKU",
+                        "prettyName": "default_sku",
                         "type": None,
                     },
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "is_onsale": {"concrete": False, "model": None, "type": "string"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
-                    "onsale": {"concrete": True, "model": "boolean", "type": "boolean"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "is_onsale": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "is_onsale",
+                        "type": "string",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
+                    "onsale": {
+                        "concrete": True,
+                        "model": "boolean",
+                        "prettyName": "onsale",
+                        "type": "boolean",
+                    },
                     "producer": {
                         "concrete": False,
                         "model": "tests.Producer",
+                        "prettyName": "producer",
                         "type": None,
                     },
-                    "size": {"concrete": True, "model": "number", "type": "number"},
+                    "size": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "size",
+                        "type": "number",
+                    },
                     "size_unit": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "size_unit",
                         "type": "string",
                     },
                 },
@@ -248,11 +533,22 @@ snapshots["test_query_html context"] = {
             },
             "tests.SKU": {
                 "fields": {
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                     "product": {
                         "concrete": False,
                         "model": "tests.Product",
+                        "prettyName": "product",
                         "type": None,
                     },
                 },
@@ -260,15 +556,35 @@ snapshots["test_query_html context"] = {
             },
             "tests.Tag": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
             "time": {
                 "fields": {
-                    "count": {"concrete": True, "model": None, "type": "number"}
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    }
                 },
                 "sortedFields": ["count"],
             },
@@ -384,13 +700,30 @@ snapshots["test_query_html context"] = {
     },
     "initialState": {
         "fields": [
-            {"path": "size", "priority": 0, "sort": "dsc"},
-            {"path": "name", "priority": 1, "sort": "asc"},
-            {"path": "size_unit", "priority": None, "sort": None},
+            {"path": ["size"], "prettyPath": ["size"], "priority": 0, "sort": "dsc"},
+            {"path": ["name"], "prettyPath": ["name"], "priority": 1, "sort": "asc"},
+            {
+                "path": ["size_unit"],
+                "prettyPath": ["size_unit"],
+                "priority": None,
+                "sort": None,
+            },
         ],
         "filters": [
-            {"errorMessage": None, "lookup": "lt", "path": "size", "value": "2"},
-            {"errorMessage": None, "lookup": "gt", "path": "id", "value": "0"},
+            {
+                "errorMessage": None,
+                "lookup": "lt",
+                "path": ["size"],
+                "prettyPath": ["size"],
+                "value": "2",
+            },
+            {
+                "errorMessage": None,
+                "lookup": "gt",
+                "path": ["id"],
+                "prettyPath": ["id"],
+                "value": "0",
+            },
         ],
         "model": "tests.Product",
         "results": [],
@@ -404,21 +737,66 @@ snapshots["test_query_html_no_perms context"] = {
         "allModelFields": {
             "boolean": {
                 "fields": {
-                    "average": {"concrete": True, "model": None, "type": "number"},
-                    "sum": {"concrete": True, "model": None, "type": "number"},
+                    "average": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "average",
+                        "type": "number",
+                    },
+                    "sum": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "sum",
+                        "type": "number",
+                    },
                 },
                 "sortedFields": ["average", "sum"],
             },
             "html": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
-                    "average": {"concrete": True, "model": None, "type": "number"},
-                    "count": {"concrete": True, "model": None, "type": "number"},
-                    "max": {"concrete": True, "model": None, "type": "number"},
-                    "min": {"concrete": True, "model": None, "type": "number"},
-                    "std_dev": {"concrete": True, "model": None, "type": "number"},
-                    "sum": {"concrete": True, "model": None, "type": "number"},
-                    "variance": {"concrete": True, "model": None, "type": "number"},
+                    "average": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "average",
+                        "type": "number",
+                    },
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    },
+                    "max": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "max",
+                        "type": "number",
+                    },
+                    "min": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "min",
+                        "type": "number",
+                    },
+                    "std_dev": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "std_dev",
+                        "type": "number",
+                    },
+                    "sum": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "sum",
+                        "type": "number",
+                    },
+                    "variance": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "variance",
+                        "type": "number",
+                    },
                 },
                 "sortedFields": [
                     "average",
@@ -432,13 +810,23 @@ snapshots["test_query_html_no_perms context"] = {
             },
             "string": {
                 "fields": {
-                    "count": {"concrete": True, "model": None, "type": "number"}
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    }
                 },
                 "sortedFields": ["count"],
             },
             "time": {
                 "fields": {
-                    "count": {"concrete": True, "model": None, "type": "number"}
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    }
                 },
                 "sortedFields": ["count"],
             },
@@ -550,46 +938,101 @@ snapshots["test_query_ctx context"] = {
         "allModelFields": {
             "auth.Group": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
             "auth.User": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "date_joined": {"concrete": True, "model": "time", "type": "time"},
-                    "email": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "date_joined": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "date_joined",
+                        "type": "time",
+                    },
+                    "email": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "email",
+                        "type": "string",
+                    },
                     "first_name": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "first_name",
                         "type": "string",
                     },
-                    "id": {"concrete": True, "model": "number", "type": "number"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
                     "is_active": {
                         "concrete": True,
                         "model": "boolean",
+                        "prettyName": "is_active",
                         "type": "boolean",
                     },
                     "is_staff": {
                         "concrete": True,
                         "model": "boolean",
+                        "prettyName": "is_staff",
                         "type": "boolean",
                     },
                     "is_superuser": {
                         "concrete": True,
                         "model": "boolean",
+                        "prettyName": "is_superuser",
                         "type": "boolean",
                     },
-                    "last_login": {"concrete": True, "model": "time", "type": "time"},
+                    "last_login": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "last_login",
+                        "type": "time",
+                    },
                     "last_name": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "last_name",
                         "type": "string",
                     },
-                    "password": {"concrete": True, "model": "string", "type": "string"},
-                    "username": {"concrete": True, "model": "string", "type": "string"},
+                    "password": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "password",
+                        "type": "string",
+                    },
+                    "username": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "username",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": [
                     "id",
@@ -608,38 +1051,101 @@ snapshots["test_query_ctx context"] = {
             },
             "boolean": {
                 "fields": {
-                    "average": {"concrete": True, "model": None, "type": "number"},
-                    "sum": {"concrete": True, "model": None, "type": "number"},
+                    "average": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "average",
+                        "type": "number",
+                    },
+                    "sum": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "sum",
+                        "type": "number",
+                    },
                 },
                 "sortedFields": ["average", "sum"],
             },
             "data_browser.View": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "created_time": {"concrete": True, "model": "time", "type": "time"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "created_time": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "created_time",
+                        "type": "time",
+                    },
                     "description": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "description",
                         "type": "string",
                     },
-                    "fields": {"concrete": True, "model": "string", "type": "string"},
+                    "fields": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "fields",
+                        "type": "string",
+                    },
                     "google_sheets_formula": {
                         "concrete": False,
                         "model": None,
+                        "prettyName": "google_sheets_formula",
                         "type": "string",
                     },
-                    "id": {"concrete": True, "model": "string", "type": "string"},
+                    "id": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "id",
+                        "type": "string",
+                    },
                     "model_name": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "model_name",
                         "type": "string",
                     },
-                    "name": {"concrete": True, "model": "string", "type": "string"},
-                    "open_view": {"concrete": False, "model": None, "type": "string"},
-                    "owner": {"concrete": False, "model": "auth.User", "type": None},
-                    "public": {"concrete": True, "model": "boolean", "type": "boolean"},
-                    "public_link": {"concrete": False, "model": None, "type": "string"},
-                    "query": {"concrete": True, "model": "string", "type": "string"},
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
+                    "open_view": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "open_view",
+                        "type": "string",
+                    },
+                    "owner": {
+                        "concrete": False,
+                        "model": "auth.User",
+                        "prettyName": "owner",
+                        "type": None,
+                    },
+                    "public": {
+                        "concrete": True,
+                        "model": "boolean",
+                        "prettyName": "public",
+                        "type": "boolean",
+                    },
+                    "public_link": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "public_link",
+                        "type": "string",
+                    },
+                    "query": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "query",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": [
                     "id",
@@ -660,13 +1166,48 @@ snapshots["test_query_ctx context"] = {
             "html": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
-                    "average": {"concrete": True, "model": None, "type": "number"},
-                    "count": {"concrete": True, "model": None, "type": "number"},
-                    "max": {"concrete": True, "model": None, "type": "number"},
-                    "min": {"concrete": True, "model": None, "type": "number"},
-                    "std_dev": {"concrete": True, "model": None, "type": "number"},
-                    "sum": {"concrete": True, "model": None, "type": "number"},
-                    "variance": {"concrete": True, "model": None, "type": "number"},
+                    "average": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "average",
+                        "type": "number",
+                    },
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    },
+                    "max": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "max",
+                        "type": "number",
+                    },
+                    "min": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "min",
+                        "type": "number",
+                    },
+                    "std_dev": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "std_dev",
+                        "type": "number",
+                    },
+                    "sum": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "sum",
+                        "type": "number",
+                    },
+                    "variance": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "variance",
+                        "type": "number",
+                    },
                 },
                 "sortedFields": [
                     "average",
@@ -680,56 +1221,134 @@ snapshots["test_query_ctx context"] = {
             },
             "string": {
                 "fields": {
-                    "count": {"concrete": True, "model": None, "type": "number"}
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    }
                 },
                 "sortedFields": ["count"],
             },
             "tests.Address": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "bob": {"concrete": False, "model": None, "type": "string"},
-                    "city": {"concrete": True, "model": "string", "type": "string"},
-                    "fred": {"concrete": False, "model": None, "type": "string"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "tom": {"concrete": False, "model": None, "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "bob": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "bob",
+                        "type": "string",
+                    },
+                    "city": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "city",
+                        "type": "string",
+                    },
+                    "fred": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "fred",
+                        "type": "string",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "tom": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "tom",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "bob", "city", "fred", "tom"],
             },
             "tests.InAdmin": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
             "tests.InlineAdmin": {
                 "fields": {
-                    "id": {"concrete": True, "model": "number", "type": "number"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
                     "in_admin": {
                         "concrete": False,
                         "model": "tests.InAdmin",
+                        "prettyName": "in_admin",
                         "type": None,
                     },
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "in_admin", "name"],
             },
             "tests.Normal": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
                     "in_admin": {
                         "concrete": False,
                         "model": "tests.InAdmin",
+                        "prettyName": "in_admin",
                         "type": None,
                     },
                     "inline_admin": {
                         "concrete": False,
                         "model": "tests.InlineAdmin",
+                        "prettyName": "inline_admin",
                         "type": None,
                     },
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "in_admin", "inline_admin", "name"],
             },
@@ -738,36 +1357,90 @@ snapshots["test_query_ctx context"] = {
                     "address": {
                         "concrete": False,
                         "model": "tests.Address",
+                        "prettyName": "address",
                         "type": None,
                     },
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "address", "name"],
             },
             "tests.Product": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "created_time": {"concrete": True, "model": "time", "type": "time"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "created_time": {
+                        "concrete": True,
+                        "model": "time",
+                        "prettyName": "created_time",
+                        "type": "time",
+                    },
                     "default_sku": {
                         "concrete": False,
                         "model": "tests.SKU",
+                        "prettyName": "default_sku",
                         "type": None,
                     },
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "is_onsale": {"concrete": False, "model": None, "type": "string"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
-                    "onsale": {"concrete": True, "model": "boolean", "type": "boolean"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "is_onsale": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "is_onsale",
+                        "type": "string",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
+                    "onsale": {
+                        "concrete": True,
+                        "model": "boolean",
+                        "prettyName": "onsale",
+                        "type": "boolean",
+                    },
                     "producer": {
                         "concrete": False,
                         "model": "tests.Producer",
+                        "prettyName": "producer",
                         "type": None,
                     },
-                    "size": {"concrete": True, "model": "number", "type": "number"},
+                    "size": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "size",
+                        "type": "number",
+                    },
                     "size_unit": {
                         "concrete": True,
                         "model": "string",
+                        "prettyName": "size_unit",
                         "type": "string",
                     },
                 },
@@ -786,11 +1459,22 @@ snapshots["test_query_ctx context"] = {
             },
             "tests.SKU": {
                 "fields": {
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                     "product": {
                         "concrete": False,
                         "model": "tests.Product",
+                        "prettyName": "product",
                         "type": None,
                     },
                 },
@@ -798,15 +1482,35 @@ snapshots["test_query_ctx context"] = {
             },
             "tests.Tag": {
                 "fields": {
-                    "admin": {"concrete": False, "model": None, "type": "html"},
-                    "id": {"concrete": True, "model": "number", "type": "number"},
-                    "name": {"concrete": True, "model": "string", "type": "string"},
+                    "admin": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "admin",
+                        "type": "html",
+                    },
+                    "id": {
+                        "concrete": True,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number",
+                    },
+                    "name": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string",
+                    },
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
             "time": {
                 "fields": {
-                    "count": {"concrete": True, "model": None, "type": "number"}
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    }
                 },
                 "sortedFields": ["count"],
             },

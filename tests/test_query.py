@@ -34,35 +34,60 @@ def orm_models():
         "app.model": orm.OrmModel(
             fields={
                 "fa": orm.OrmField(
-                    type_=StringFieldType, concrete=True, model_name="app.model"
+                    type_=StringFieldType,
+                    concrete=True,
+                    model_name="app.model",
+                    pretty_name="fa",
                 ),
                 "fd": orm.OrmField(
-                    type_=StringFieldType, concrete=True, model_name="app.model"
+                    type_=StringFieldType,
+                    concrete=True,
+                    model_name="app.model",
+                    pretty_name="fd",
                 ),
                 "fn": orm.OrmField(
-                    type_=StringFieldType, concrete=False, model_name="app.model"
+                    type_=StringFieldType,
+                    concrete=False,
+                    model_name="app.model",
+                    pretty_name="fn",
                 ),
                 "bob": orm.OrmField(
-                    type_=StringFieldType, concrete=True, model_name="app.model"
+                    type_=StringFieldType,
+                    concrete=True,
+                    model_name="app.model",
+                    pretty_name="bob",
                 ),
                 "num": orm.OrmField(
-                    type_=NumberFieldType, concrete=True, model_name="app.model"
+                    type_=NumberFieldType,
+                    concrete=True,
+                    model_name="app.model",
+                    pretty_name="num",
                 ),
             },
-            fks={"tom": orm.OrmFkField("app.Tom")},
+            fks={"tom": orm.OrmFkField(model_name="app.Tom", pretty_name="tom")},
         ),
         "app.Tom": orm.OrmModel(
             fields={
                 "jones": orm.OrmField(
-                    type_=StringFieldType, concrete=True, model_name="app.Tom"
+                    type_=StringFieldType,
+                    concrete=True,
+                    model_name="app.Tom",
+                    pretty_name="jones",
                 )
             },
-            fks={"michael": orm.OrmFkField("app.Michael")},
+            fks={
+                "michael": orm.OrmFkField(
+                    model_name="app.Michael", pretty_name="michael"
+                )
+            },
         ),
         "app.Michael": orm.OrmModel(
             fields={
                 "bolton": orm.OrmField(
-                    type_=StringFieldType, concrete=True, model_name="app.Michael"
+                    type_=StringFieldType,
+                    concrete=True,
+                    model_name="app.Michael",
+                    pretty_name="bolton",
                 )
             },
             fks={},
@@ -118,56 +143,55 @@ class TestQuery:
 
 class TestBoundQuery:
     def test_fields(self, bound_query):
-        assert [f.path for f in bound_query.fields] == ["fa", "fd", "fn"]
+        assert [f.path_str for f in bound_query.fields] == ["fa", "fd", "fn"]
 
     def test_calculated_fields(self, bound_query):
         assert bound_query.calculated_fields == {"fn"}
 
     def test_sort_fields(self, bound_query):
-        assert [(f.path, f.direction, f.priority) for f in bound_query.sort_fields] == [
-            ("fd", DSC, 0),
-            ("fa", ASC, 1),
-        ]
+        assert [
+            (f.path_str, f.direction, f.priority) for f in bound_query.sort_fields
+        ] == [("fd", DSC, 0), ("fa", ASC, 1)]
 
     def test_filters(self, bound_query):
         assert bound_query.filters == [
-            BoundFilter([], "bob", None, "equals", "fred", StringFieldType)
+            BoundFilter([], "bob", None, ["bob"], "equals", "fred", StringFieldType)
         ]
 
     def test_bad_field(self, orm_models):
         query = Query("app.model", [QueryField("yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path_str for f in bound_query.fields] == []
 
     def test_bad_fk(self, orm_models):
         query = Query("app.model", [QueryField("yata__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path_str for f in bound_query.fields] == []
 
     def test_bad_fk_field(self, orm_models):
         query = Query("app.model", [QueryField("tom__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path_str for f in bound_query.fields] == []
 
     def test_bad_fk_field_aggregate(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path_str for f in bound_query.fields] == []
 
     def test_bad_long_fk(self, orm_models):
         query = Query("app.model", [QueryField("yata__yata__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path_str for f in bound_query.fields] == []
 
     def test_aggregate(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones__count")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == ["tom__jones__count"]
+        assert [f.path_str for f in bound_query.fields] == ["tom__jones__count"]
 
     def test_bad_filter(self, orm_models):
         query = Query("app.model", [], [QueryFilter("yata", "equals", "fred")])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path_str for f in bound_query.fields] == []
 
     def test_bad_filter_value(self, orm_models):
         query = Query(
@@ -182,38 +206,70 @@ class TestBoundQuery:
 
 class TestBoundField:
     def test_path_properties(self, fake_orm_field):
-        bf = BoundField(["bob", "fred"], "joe", "max", None, None, fake_orm_field)
-        assert bf.model_path == "bob__fred"
-        assert bf.field_path == "bob__fred__joe"
-        assert bf.path == "bob__fred__joe__max"
+        bf = BoundField(
+            ["bob", "fred"],
+            "joe",
+            "max",
+            ["bob", "fred", "joe"],
+            None,
+            None,
+            fake_orm_field,
+        )
+        assert bf.model_path_str == "bob__fred"
+        assert bf.field_path_str == "bob__fred__joe"
+        assert bf.path_str == "bob__fred__joe__max"
 
-        bf = BoundField([], "joe", "max", None, None, fake_orm_field)
-        assert bf.model_path == ""
-        assert bf.field_path == "joe"
-        assert bf.path == "joe__max"
+        bf = BoundField([], "joe", "max", ["joe"], None, None, fake_orm_field)
+        assert bf.model_path_str == ""
+        assert bf.field_path_str == "joe"
+        assert bf.path_str == "joe__max"
 
-        bf = BoundField(["bob", "fred"], "joe", None, None, None, fake_orm_field)
-        assert bf.model_path == "bob__fred"
-        assert bf.field_path == "bob__fred__joe"
-        assert bf.path == "bob__fred__joe"
+        bf = BoundField(
+            ["bob", "fred"],
+            "joe",
+            None,
+            ["bob", "fred", "joe"],
+            None,
+            None,
+            fake_orm_field,
+        )
+        assert bf.model_path_str == "bob__fred"
+        assert bf.field_path_str == "bob__fred__joe"
+        assert bf.path_str == "bob__fred__joe"
 
 
 class TestBoundFilter:
     def test_path_properties(self):
-        bf = BoundFilter(["bob", "fred"], "joe", "max", "gt", 5, StringFieldType)
-        assert bf.model_path == "bob__fred"
-        assert bf.field_path == "bob__fred__joe"
-        assert bf.path == "bob__fred__joe__max"
+        bf = BoundFilter(
+            ["bob", "fred"],
+            "joe",
+            "max",
+            ["bob", "fred", "joe"],
+            "gt",
+            5,
+            StringFieldType,
+        )
+        assert bf.model_path_str == "bob__fred"
+        assert bf.field_path_str == "bob__fred__joe"
+        assert bf.path_str == "bob__fred__joe__max"
 
-        bf = BoundFilter([], "joe", "max", "gt", 5, StringFieldType)
-        assert bf.model_path == ""
-        assert bf.field_path == "joe"
-        assert bf.path == "joe__max"
+        bf = BoundFilter([], "joe", "max", ["joe"], "gt", 5, StringFieldType)
+        assert bf.model_path_str == ""
+        assert bf.field_path_str == "joe"
+        assert bf.path_str == "joe__max"
 
-        bf = BoundFilter(["bob", "fred"], "joe", None, "gt", 5, StringFieldType)
-        assert bf.model_path == "bob__fred"
-        assert bf.field_path == "bob__fred__joe"
-        assert bf.path == "bob__fred__joe"
+        bf = BoundFilter(
+            ["bob", "fred"],
+            "joe",
+            None,
+            ["bob", "fred", "joe"],
+            "gt",
+            5,
+            StringFieldType,
+        )
+        assert bf.model_path_str == "bob__fred"
+        assert bf.field_path_str == "bob__fred__joe"
+        assert bf.path_str == "bob__fred__joe"
 
 
 class TestFieldType:
@@ -224,10 +280,10 @@ class TestFieldType:
 class TestStringFieldType:
     def test_validate(self):
         assert BoundFilter(
-            [], "bob", None, "contains", "hello", StringFieldType
+            [], "bob", None, ["bob"], "contains", "hello", StringFieldType
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, "pontains", "hello", StringFieldType
+            [], "bob", None, ["bob"], "pontains", "hello", StringFieldType
         ).is_valid
 
     def test_default_lookup(self):
@@ -239,14 +295,20 @@ class TestStringFieldType:
 
 class TestNumberFieldType:
     def test_validate(self):
-        assert BoundFilter([], "bob", None, "gt", "6.1", NumberFieldType).is_valid
-        assert not BoundFilter(
-            [], "bob", None, "pontains", "6.1", NumberFieldType
+        assert BoundFilter(
+            [], "bob", None, ["bob"], "gt", "6.1", NumberFieldType
         ).is_valid
-        assert not BoundFilter([], "bob", None, "gt", "hello", NumberFieldType).is_valid
-        assert BoundFilter([], "bob", None, "is_null", "True", NumberFieldType).is_valid
         assert not BoundFilter(
-            [], "bob", None, "is_null", "hello", NumberFieldType
+            [], "bob", None, ["bob"], "pontains", "6.1", NumberFieldType
+        ).is_valid
+        assert not BoundFilter(
+            [], "bob", None, ["bob"], "gt", "hello", NumberFieldType
+        ).is_valid
+        assert BoundFilter(
+            [], "bob", None, ["bob"], "is_null", "True", NumberFieldType
+        ).is_valid
+        assert not BoundFilter(
+            [], "bob", None, ["bob"], "is_null", "hello", NumberFieldType
         ).is_valid
 
     def test_default_lookup(self):
@@ -259,15 +321,19 @@ class TestNumberFieldType:
 class TestTimeFieldType:
     def test_validate(self):
         assert BoundFilter(
-            [], "bob", None, "gt", "2018-03-20T22:31:23", TimeFieldType
+            [], "bob", None, ["bob"], "gt", "2018-03-20T22:31:23", TimeFieldType
         ).is_valid
-        assert not BoundFilter([], "bob", None, "gt", "hello", TimeFieldType).is_valid
         assert not BoundFilter(
-            [], "bob", None, "pontains", "2018-03-20T22:31:23", TimeFieldType
+            [], "bob", None, ["bob"], "gt", "hello", TimeFieldType
         ).is_valid
-        assert BoundFilter([], "bob", None, "is_null", "True", TimeFieldType).is_valid
         assert not BoundFilter(
-            [], "bob", None, "is_null", "hello", TimeFieldType
+            [], "bob", None, ["bob"], "pontains", "2018-03-20T22:31:23", TimeFieldType
+        ).is_valid
+        assert BoundFilter(
+            [], "bob", None, ["bob"], "is_null", "True", TimeFieldType
+        ).is_valid
+        assert not BoundFilter(
+            [], "bob", None, ["bob"], "is_null", "hello", TimeFieldType
         ).is_valid
 
     def test_default_lookup(self):
@@ -282,15 +348,17 @@ class TestTimeFieldType:
 
 class TestBooleanFieldType:
     def test_validate(self):
-        assert BoundFilter([], "bob", None, "equals", "True", BooleanFieldType).is_valid
         assert BoundFilter(
-            [], "bob", None, "equals", "False", BooleanFieldType
+            [], "bob", None, ["bob"], "equals", "True", BooleanFieldType
+        ).is_valid
+        assert BoundFilter(
+            [], "bob", None, ["bob"], "equals", "False", BooleanFieldType
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, "equals", "hello", BooleanFieldType
+            [], "bob", None, ["bob"], "equals", "hello", BooleanFieldType
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, "pontains", "True", BooleanFieldType
+            [], "bob", None, ["bob"], "pontains", "True", BooleanFieldType
         ).is_valid
 
     def test_default_lookup(self):

@@ -25,13 +25,19 @@ def _get_query_data(bound_query):
             {
                 "errorMessage": filter_.err_message,
                 "path": filter_.path,
+                "prettyPath": filter_.pretty_path,
                 "lookup": filter_.lookup,
                 "value": filter_.value,
             }
             for filter_ in bound_query.filters
         ],
         "fields": [
-            {"path": field.path, "sort": field.direction, "priority": field.priority}
+            {
+                "path": field.path,
+                "prettyPath": field.pretty_path,
+                "sort": field.direction,
+                "priority": field.priority,
+            }
             for field in bound_query.fields
         ],
         "model": bound_query.model_name,
@@ -55,11 +61,17 @@ def _get_model_fields(orm_model):
             "model": type_model(orm_field),
             "type": orm_field.type_.name,
             "concrete": orm_field.concrete,
+            "prettyName": orm_field.pretty_name,
         }
         for name, orm_field in orm_model.fields.items()
     }
     fk_fields = {
-        name: {"model": fk_field.model_name, "type": None, "concrete": False}
+        name: {
+            "model": fk_field.model_name,
+            "type": None,
+            "concrete": False,
+            "prettyName": fk_field.pretty_name,
+        }
         for name, fk_field in orm_model.fks.items()
     }
     all_fields = {**fields, **fk_fields}
@@ -89,6 +101,7 @@ def _get_config(user, orm_models):
                     "type": NumberFieldType.name,
                     "concrete": True,
                     "model": None,
+                    "prettyName": aggregate,
                 }
                 for aggregate in type_.aggregates
             },
@@ -184,7 +197,7 @@ def _data_response(request, query, media, meta):
     if media == "csv":
         buffer = io.StringIO()
         writer = csv.writer(buffer)
-        writer.writerow(f.path for f in bound_query.fields)
+        writer.writerow(f.path_str for f in bound_query.fields)
         writer.writerows(results)
         buffer.seek(0)
         response = http.HttpResponse(buffer, content_type="text/csv")

@@ -68,11 +68,13 @@ class OrmField:
     type_: FieldType
     concrete: bool
     model_name: str
+    pretty_name: str
 
 
 @dataclass
 class OrmFkField:
     model_name: str
+    pretty_name: str
 
 
 def _get_all_admin_fields(request):
@@ -130,16 +132,25 @@ def _get_fields_for_model(model, model_admins, admin_fields):
         field = model_fields.get(field_name)
         if field_name == _OPEN_IN_ADMIN:
             fields[_OPEN_IN_ADMIN] = OrmField(
-                type_=HTMLFieldType, concrete=False, model_name=model_name
+                type_=HTMLFieldType,
+                concrete=False,
+                model_name=model_name,
+                pretty_name=_OPEN_IN_ADMIN,
             )
         elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
             if field.related_model in admin_fields:
-                fks[field_name] = OrmFkField(get_model_name(field.related_model))
+                fks[field_name] = OrmFkField(
+                    model_name=get_model_name(field.related_model),
+                    pretty_name=field_name,
+                )
         elif isinstance(field, type(None)):
             fields[field_name] = OrmField(
-                type_=StringFieldType, concrete=False, model_name=model_name
+                type_=StringFieldType,
+                concrete=False,
+                model_name=model_name,
+                pretty_name=field_name,
             )
         else:
             if field.__class__ in _FIELD_MAP:
@@ -153,7 +164,10 @@ def _get_fields_for_model(model, model_admins, admin_fields):
 
             if field_type:
                 fields[field_name] = OrmField(
-                    type_=field_type, concrete=True, model_name=model_name
+                    type_=field_type,
+                    concrete=True,
+                    model_name=model_name,
+                    pretty_name=field_name,
                 )
             else:
                 logging.getLogger(__name__).warning(
@@ -200,7 +214,7 @@ def get_results(request, bound_query):
             negation = True
             lookup = lookup[4:]
 
-        filter_str = f"{filter_.path}__{_get_django_lookup(filter_.type_, lookup)}"
+        filter_str = f"{filter_.path_str}__{_get_django_lookup(filter_.type_, lookup)}"
         if negation:
             return qs.exclude(**{filter_str: filter_.parsed})
         else:
@@ -231,7 +245,7 @@ def get_results(request, bound_query):
     if not bound_query.calculated_fields:
         # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
         qs = qs.values(
-            *[f.path for f in normal_fields],
+            *[f.path_str for f in normal_fields],
             _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
         )
 
@@ -242,7 +256,7 @@ def get_results(request, bound_query):
     for field in bound_query.fields + bound_query.filters:
         if field.aggregate:
             qs = qs.annotate(
-                **{field.path: _AGG_MAP[field.aggregate](field.field_path)}
+                **{field.path_str: _AGG_MAP[field.aggregate](field.field_path_str)}
             )
 
     # filter aggregate fields
@@ -254,9 +268,9 @@ def get_results(request, bound_query):
     sort_fields = []
     for field in bound_query.sort_fields:
         if field.direction is ASC:
-            sort_fields.append(field.path)
+            sort_fields.append(field.path_str)
         if field.direction is DSC:
-            sort_fields.append(f"-{field.path}")
+            sort_fields.append(f"-{field.path_str}")
     qs = qs.order_by(*sort_fields)
 
     # no calculated fields early out using qs.values
@@ -264,7 +278,7 @@ def get_results(request, bound_query):
         results = []
         for row in qs:
             results.append(
-                [fmt(field, row[field.path]) for field in bound_query.fields]
+                [fmt(field, row[field.path_str]) for field in bound_query.fields]
             )
         return results
 
@@ -275,13 +289,13 @@ def get_results(request, bound_query):
 
     select_related = set()
     for field in bound_query.sort_fields:
-        select_related.update(ancestors(field.path_parts))
+        select_related.update(ancestors(field.model_path))
     for filter_ in bound_query.valid_filters:
-        select_related.update(ancestors(filter_.path_parts))
+        select_related.update(ancestors(filter_.model_path))
 
     prefetch_related = set()
     for field in normal_fields:
-        prefetch_related.update(ancestors(field.path_parts))
+        prefetch_related.update(ancestors(field.model_path))
     prefetch_related -= select_related
 
     if select_related:
@@ -302,11 +316,11 @@ def get_results(request, bound_query):
         value = obj
 
         if field.aggregate is None:
-            *parts, tail = field.path.split("__")
+            *parts, tail = field.path
             for part in parts:
                 value = getattr(value, part, None)
         else:
-            tail = field.path
+            tail = field.path_str
 
         admin = bound_query.orm_models[field.orm_field.model_name].admin
         if field.concrete:

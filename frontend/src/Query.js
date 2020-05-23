@@ -4,12 +4,12 @@ function getPartsForQuery(query) {
     fields: query.fields
       .map(
         (f) =>
-          f.path +
+          f.path.join("__") +
           { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
       )
       .join(","),
     query: query.filters
-      .map((f) => `${f.path}__${f.lookup}=${f.value}`)
+      .map((f) => `${f.path.join("__")}__${f.lookup}=${f.value}`)
       .join("&"),
   };
 }
@@ -28,10 +28,9 @@ class Query {
   }
 
   getField(path) {
-    const parts = path.split("__");
-    const field = parts.slice(-1);
+    const field = path.slice(-1);
     let model = this.query.model;
-    for (const field of parts.slice(0, -1)) {
+    for (const field of path.slice(0, -1)) {
       model = this.config.allModelFields[model].fields[field].model;
     }
     return this.config.allModelFields[model].fields[field];
@@ -50,9 +49,9 @@ class Query {
       .defaultValue;
   }
 
-  addField(path) {
+  addField(path, prettyPath) {
     const newFields = this.query.fields.slice();
-    newFields.push({ path: path, sort: null });
+    newFields.push({ path: path, prettyPath: prettyPath, sort: null });
     const newResults = this.query.results.map((row) => row.concat([""]));
     this.setQuery({ fields: newFields, results: newResults });
   }
@@ -99,12 +98,13 @@ class Query {
     });
   }
 
-  addFilter(path) {
+  addFilter(path, prettyPath) {
     const fieldType = this.getFieldType(this.getField(path));
     const newFilters = this.query.filters.slice();
     newFilters.push({
       errorMessage: null,
       path: path,
+      prettyPath: prettyPath,
       lookup: fieldType.defaultLookup,
       value: this.getDefaultLookValue(fieldType),
     });
