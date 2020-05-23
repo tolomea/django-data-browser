@@ -53,6 +53,7 @@ class ProductMixin:
         "model_not_in_admin",
         "onsale",
         "image",
+        "created_time",
     ]
     readonly_fields = ["is_onsale"]
 

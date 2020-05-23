@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # models for perm testing
 
@@ -58,6 +59,7 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag)
     onsale = models.BooleanField(null=True)
     image = models.FileField()
+    created_time = models.DateTimeField(default=timezone.now)
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)

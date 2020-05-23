@@ -206,6 +206,12 @@ def get_results(request, bound_query):
         else:
             return qs.filter(**{filter_str: filter_.parsed})
 
+    def fmt(field, value):
+        if field.aggregate:
+            return NumberFieldType.format(value)
+        else:
+            return field.type_.format(value)
+
     request.data_browser = True
 
     if not bound_query.fields:
@@ -258,7 +264,7 @@ def get_results(request, bound_query):
         results = []
         for row in qs:
             results.append(
-                [field.type_.format(row[field.path]) for field in bound_query.fields]
+                [fmt(field, row[field.path]) for field in bound_query.fields]
             )
         return results
 
@@ -322,7 +328,5 @@ def get_results(request, bound_query):
 
     results = []
     for row in qs:
-        results.append(
-            [field.type_.format(lookup(row, field)) for field in bound_query.fields]
-        )
+        results.append([fmt(field, lookup(row, field)) for field in bound_query.fields])
     return results

@@ -211,6 +211,7 @@ snapshots["test_query_html context"] = {
             "tests.Product": {
                 "fields": {
                     "admin": {"concrete": False, "model": None, "type": "html"},
+                    "created_time": {"concrete": True, "model": "time", "type": "time"},
                     "default_sku": {
                         "concrete": False,
                         "model": "tests.SKU",
@@ -235,6 +236,7 @@ snapshots["test_query_html context"] = {
                 "sortedFields": [
                     "id",
                     "admin",
+                    "created_time",
                     "default_sku",
                     "is_onsale",
                     "name",
@@ -747,6 +749,7 @@ snapshots["test_query_ctx context"] = {
             "tests.Product": {
                 "fields": {
                     "admin": {"concrete": False, "model": None, "type": "html"},
+                    "created_time": {"concrete": True, "model": "time", "type": "time"},
                     "default_sku": {
                         "concrete": False,
                         "model": "tests.SKU",
@@ -771,6 +774,7 @@ snapshots["test_query_ctx context"] = {
                 "sortedFields": [
                     "id",
                     "admin",
+                    "created_time",
                     "default_sku",
                     "is_onsale",
                     "name",

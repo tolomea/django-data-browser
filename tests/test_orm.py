@@ -109,6 +109,12 @@ def test_get_aggregate(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
+def test_get_time_aggregate(get_product_data):
+    data = get_product_data(1, "size_unit,created_time__count", {})
+    assert data == [["g", 3]]
+
+
+@pytest.mark.usefixtures("products")
 def test_filter_and_get_aggregate(get_product_data):
     data = get_product_data(1, "size_unit,id__count", {"id__count__gt": [0]})
     assert data == [["g", 3]]
@@ -123,6 +129,12 @@ def test_filter_aggregate(get_product_data):
 @pytest.mark.usefixtures("products")
 def test_get_aggregate_and_function(get_product_data):
     data = get_product_data(1, "is_onsale,id__count", {})
+    assert data == [[False, 1], [False, 1], [False, 1]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_time_aggregate_and_function(get_product_data):
+    data = get_product_data(1, "is_onsale,created_time__count", {})
     assert data == [[False, 1], [False, 1], [False, 1]]
 
 
