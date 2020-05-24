@@ -118,6 +118,7 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 
 | Version   | Date           | Summary                                       |
 | --------- | -------------- | --------------------------------------------- |
+| 1.1.6     | 2020-05-24     | Stronger sanitizing of URL strings            |
 | 1.1.5     | 2020-05-23     | Fix bug aggregating time fields               |
 | 1.1.4     | 2020-05-23     | Fix breaking bug with GenericInlineModelAdmin |
 | 1.1.3     | 2020-05-23     | Cosmetic fixes                                |
