@@ -3,6 +3,7 @@ from data_browser import orm
 from data_browser.query import BoundQuery, Query
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
+from django.utils import timezone
 
 from . import models
 
@@ -25,16 +26,24 @@ class KEYS:  # pragma: no cover
 
 @pytest.fixture
 def products(db):
+    now = timezone.now()
+
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
-    models.Product.objects.create(name="a", size=1, size_unit="g", producer=producer)
+    models.Product.objects.create(
+        created_time=now, name="a", size=1, size_unit="g", producer=producer
+    )
 
     address = models.Address.objects.create(city="london", street="good")
     producer = models.Producer.objects.create(name="Bob", address=address)
-    models.Product.objects.create(name="b", size=1, size_unit="g", producer=producer)
+    models.Product.objects.create(
+        created_time=now, name="b", size=1, size_unit="g", producer=producer
+    )
 
     producer = models.Producer.objects.create(name="Bob", address=None)
-    models.Product.objects.create(name="c", size=2, size_unit="g", producer=producer)
+    models.Product.objects.create(
+        created_time=now, name="c", size=2, size_unit="g", producer=producer
+    )
 
 
 @pytest.fixture
@@ -111,7 +120,7 @@ def test_get_aggregate(get_product_data):
 @pytest.mark.usefixtures("products")
 def test_get_time_aggregate(get_product_data):
     data = get_product_data(1, "size_unit,created_time__count", {})
-    assert data == [["g", 3]]
+    assert data == [["g", 1]]
 
 
 @pytest.mark.usefixtures("products")
