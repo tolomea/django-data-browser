@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { HomePage, QueryPage } from "./Components";
 import { Query, getUrlForQuery } from "./Query";
+const assert = require("assert");
 let controller;
 
 class App extends React.Component {
@@ -16,16 +17,12 @@ class App extends React.Component {
     if (controller) controller.abort();
     controller = new AbortController();
 
-    fetch(url, { signal: controller.signal })
+    return fetch(url, { signal: controller.signal })
       .then((res) => res.json())
-      .then(
-        (result) => {
-          this.setState(result);
-        },
-        (error) => {
-          this.setState({ error });
-        }
-      );
+      .then((response) => {
+        this.setState({ results: response.results });
+        return response;
+      });
   }
 
   componentDidMount() {
@@ -40,28 +37,33 @@ class App extends React.Component {
       null,
       getUrlForQuery(this.props.config.baseUrl, this.state, "html")
     );
-    this.fetchResults(this.state);
+    this.fetchResults(this.state).catch(() => null);
     window.onpopstate = (e) => {
-      this.fetchResults(e.state);
+      this.fetchResults(e.state).catch(() => null);
       this.setState(e.state);
     };
   }
 
   handleQueryChange(queryChange) {
-    const newState = { ...this.state, ...queryChange };
     this.setState(queryChange);
-    const reqState = {
+    const newState = { ...this.state, ...queryChange };
+    const request = {
       model: newState.model,
       fields: newState.fields,
       filters: newState.filters,
       results: [],
     };
     window.history.pushState(
-      reqState,
+      request,
       null,
       getUrlForQuery(this.props.config.baseUrl, newState, "html")
     );
-    this.fetchResults(newState);
+    this.fetchResults(newState)
+      .then((response) => {
+        response.results = [];
+        assert.deepEqual(request, response);
+      })
+      .catch(() => null);
   }
 
   render() {

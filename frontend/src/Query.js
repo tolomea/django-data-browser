@@ -51,7 +51,12 @@ class Query {
 
   addField(path, prettyPath) {
     const newFields = this.query.fields.slice();
-    newFields.push({ path: path, prettyPath: prettyPath, sort: null });
+    newFields.push({
+      path: path,
+      prettyPath: prettyPath,
+      sort: null,
+      priority: null,
+    });
     const newResults = this.query.results.map((row) => row.concat([""]));
     this.setQuery({ fields: newFields, results: newResults });
   }
