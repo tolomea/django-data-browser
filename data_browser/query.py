@@ -32,6 +32,14 @@ class QueryFilter:
         self.path = self.path.split("__")
 
 
+def parse_sort(value, symbol, direction):
+    path, priority = value.split(symbol)
+    try:
+        return path, direction, int(priority)
+    except:  # noqa: E722  input sanitization
+        return path, None, None
+
+
 @dataclass
 class Query:
     model_name: str
@@ -45,19 +53,20 @@ class Query:
             field = field.strip()
             if field:
                 if "+" in field:
-                    path, priority = field.split("+")
-                    fields.append(QueryField(path, ASC, int(priority)))
+                    path, direction, priority = parse_sort(field, "+", ASC)
+                    fields.append(QueryField(path, direction, priority))
                 elif "-" in field:
-                    path, priority = field.split("-")
-                    fields.append(QueryField(path, DSC, int(priority)))
+                    path, direction, priority = parse_sort(field, "-", DSC)
+                    fields.append(QueryField(path, direction, priority))
                 else:
                     fields.append(QueryField(field, None, None))
 
         filters = []
         for path__lookup, values in dict(get_args).items():
             for value in values:
-                path, lookup = path__lookup.rsplit("__", 1)
-                filters.append(QueryFilter(path, lookup, value))
+                if "__" in path__lookup:
+                    path, lookup = path__lookup.rsplit("__", 1)
+                    filters.append(QueryFilter(path, lookup, value))
 
         return cls(model_name, fields, filters)
 

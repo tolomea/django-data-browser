@@ -16,6 +16,7 @@ from data_browser.query import (
     StringFieldType,
     TimeFieldType,
 )
+from django.http import QueryDict
 from django.utils import timezone
 
 
@@ -111,22 +112,48 @@ def fake_orm_field():
 
 class TestQuery:
     def test_from_request(self, query):
-        q = Query.from_request("app.model", "fa+1,fd-0,fn", {"bob__equals": ["fred"]})
+        q = Query.from_request(
+            "app.model", "fa+1,fd-0,fn", QueryDict("bob__equals=fred")
+        )
         assert q == query
 
     def test_from_request_with_related_filter(self):
-        q = Query.from_request(
-            "app.model", "fa+1,fd-0,fn", {"bob__jones__equals": ["fred"]}
-        )
+        q = Query.from_request("app.model", "", QueryDict("bob__jones__equals=fred"))
         assert q == Query(
-            "app.model",
-            [QueryField("fa", ASC, 1), QueryField("fd", DSC, 0), QueryField("fn")],
-            [QueryFilter("bob__jones", "equals", "fred")],
+            "app.model", [], [QueryFilter("bob__jones", "equals", "fred")]
         )
 
-    def test_from_request_with_missing(self, query):
-        q = Query.from_request("app.model", "fa+1,,fd-0,fn", {"bob__equals": ["fred"]})
-        assert q == query
+    def test_from_request_with_missing(self):
+        q = Query.from_request("app.model", ",,", QueryDict(""))
+        assert q == Query("app.model", [], [])
+
+    def test_from_request_filter_no_value(self):
+        q = Query.from_request("app.model", "", QueryDict("joe__equals="))
+        assert q == Query("app.model", [], [QueryFilter("joe", "equals", "")])
+
+    def test_from_request_filter_no_lookup(self):
+        q = Query.from_request("app.model", "", QueryDict("joe=tom"))
+        assert q == Query("app.model", [], [])
+
+    def test_from_request_filter_bad_lookup(self):
+        q = Query.from_request("app.model", "", QueryDict("joe__blah=123"))
+        assert q == Query("app.model", [], [QueryFilter("joe", "blah", "123")])
+
+    def test_from_request_filter_no_name(self):
+        q = Query.from_request("app.model", "", QueryDict("=123"))
+        assert q == Query("app.model", [], [])
+
+    def test_from_request_field_no_name(self):
+        q = Query.from_request("app.model", "+2", QueryDict(""))
+        assert q == Query("app.model", [QueryField("", ASC, 2)], [])
+
+    def test_from_request_field_no_priority(self):
+        q = Query.from_request("app.model", "fn+", QueryDict(""))
+        assert q == Query("app.model", [QueryField("fn", None, None)], [])
+
+    def test_from_request_field_bad_priority(self):
+        q = Query.from_request("app.model", "fn+x", QueryDict(""))
+        assert q == Query("app.model", [QueryField("fn", None, None)], [])
 
     def test_url(self, query):
         assert (
