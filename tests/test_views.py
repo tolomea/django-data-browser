@@ -3,6 +3,7 @@ import json
 
 import data_browser.models
 import pytest
+from data_browser import version
 from django.contrib.auth.models import User
 
 from . import models
@@ -41,6 +42,7 @@ def test_query_html(admin_client, snapshot):
     context = json.loads(res.context["ctx"])
     context["config"]["types"]["time"]["defaultValue"] = "redacted"
     context["config"]["version"] = "redacted"
+    context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
 
 
@@ -52,6 +54,7 @@ def test_query_html_no_perms(admin_user, admin_client, snapshot):
     context = json.loads(res.context["ctx"])
     context["config"]["types"]["time"]["defaultValue"] = "redacted"
     context["config"]["version"] = "redacted"
+    context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
 
 
@@ -61,6 +64,7 @@ def test_query_ctx(admin_client, snapshot):
     context = res.json()
     context["config"]["types"]["time"]["defaultValue"] = "redacted"
     context["config"]["version"] = "redacted"
+    context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
 
 
@@ -139,6 +143,7 @@ def test_query_json(admin_client):
             },
         ],
         "model": "tests.Product",
+        "version": version,
     }
 
 

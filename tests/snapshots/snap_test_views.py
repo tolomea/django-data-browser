@@ -734,6 +734,7 @@ snapshots["test_query_html context"] = {
         ],
         "model": "tests.Product",
         "results": [],
+        "version": "redacted",
     },
     "sentryDsn": None,
 }
@@ -935,7 +936,13 @@ snapshots["test_query_html_no_perms context"] = {
         },
         "version": "redacted",
     },
-    "initialState": {"fields": [], "filters": [], "model": "", "results": []},
+    "initialState": {
+        "fields": [],
+        "filters": [],
+        "model": "",
+        "results": [],
+        "version": "redacted",
+    },
     "sentryDsn": None,
 }
 
@@ -1638,6 +1645,12 @@ snapshots["test_query_ctx context"] = {
         },
         "version": "redacted",
     },
-    "initialState": {"fields": [], "filters": [], "model": "", "results": []},
+    "initialState": {
+        "fields": [],
+        "filters": [],
+        "model": "",
+        "results": [],
+        "version": "redacted",
+    },
     "sentryDsn": None,
 }

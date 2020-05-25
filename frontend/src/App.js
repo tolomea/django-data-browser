@@ -20,6 +20,12 @@ class App extends React.Component {
     return fetch(url, { signal: controller.signal })
       .then((res) => res.json())
       .then((response) => {
+        if (response.version !== this.state.version)
+          window.location.reload(true);
+        delete response.version;
+        return response;
+      })
+      .then((response) => {
         this.setState({ results: response.results });
         return response;
       });

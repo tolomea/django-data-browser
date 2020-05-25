@@ -41,6 +41,7 @@ def _get_query_data(bound_query):
             for field in bound_query.fields
         ],
         "model": bound_query.model_name,
+        "version": version,
     }
 
 
