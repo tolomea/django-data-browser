@@ -80,3 +80,4 @@ class SKUInline(admin.TabularInline):
 @admin.register(models.Product)
 class Product(ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
+    list_display = ["only_in_list_view"]

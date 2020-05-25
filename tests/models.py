@@ -60,6 +60,7 @@ class Product(models.Model):
     onsale = models.BooleanField(null=True)
     image = models.FileField()
     created_time = models.DateTimeField(default=timezone.now)
+    only_in_list_view = models.TextField()
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)

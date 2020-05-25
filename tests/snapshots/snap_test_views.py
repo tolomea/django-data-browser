@@ -493,6 +493,12 @@ snapshots["test_query_html context"] = {
                         "prettyName": "name",
                         "type": "string",
                     },
+                    "only_in_list_view": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "only_in_list_view",
+                        "type": "string",
+                    },
                     "onsale": {
                         "concrete": True,
                         "model": "boolean",
@@ -525,6 +531,7 @@ snapshots["test_query_html context"] = {
                     "default_sku",
                     "is_onsale",
                     "name",
+                    "only_in_list_view",
                     "onsale",
                     "producer",
                     "size",
@@ -1419,6 +1426,12 @@ snapshots["test_query_ctx context"] = {
                         "prettyName": "name",
                         "type": "string",
                     },
+                    "only_in_list_view": {
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "only_in_list_view",
+                        "type": "string",
+                    },
                     "onsale": {
                         "concrete": True,
                         "model": "boolean",
@@ -1451,6 +1464,7 @@ snapshots["test_query_ctx context"] = {
                     "default_sku",
                     "is_onsale",
                     "name",
+                    "only_in_list_view",
                     "onsale",
                     "producer",
                     "size",

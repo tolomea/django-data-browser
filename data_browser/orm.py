@@ -87,24 +87,25 @@ def _get_all_admin_fields(request):
             if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
                 yield f
 
-    def visible(modeladmin, request):
-        if modeladmin.has_change_permission(request):
+    def visible(model_admin, request):
+        if model_admin.has_change_permission(request):
             return True
-        if hasattr(modeladmin, "has_view_permission"):
-            return modeladmin.has_view_permission(request)
+        if hasattr(model_admin, "has_view_permission"):
+            return model_admin.has_view_permission(request)
         else:
             return False  # pragma: no cover  Django < 2.1 compat
 
     all_admin_fields = defaultdict(set)
     model_admins = {}
-    for model, modeladmin in admin.site._registry.items():
-        model_admins[model] = modeladmin
-        if visible(modeladmin, request):
-            all_admin_fields[model].update(from_fieldsets(modeladmin, True))
+    for model, model_admin in admin.site._registry.items():
+        model_admins[model] = model_admin
+        if visible(model_admin, request):
+            all_admin_fields[model].update(from_fieldsets(model_admin, True))
+            all_admin_fields[model].update(model_admin.get_list_display(request))
             all_admin_fields[model].add(_OPEN_IN_ADMIN)
 
             # check the inlines, these are already filtered for access
-            for inline in modeladmin.get_inline_instances(request):
+            for inline in model_admin.get_inline_instances(request):
                 if not isinstance(inline, GenericInlineModelAdmin):  # pragma: no branch
                     if inline.model not in model_admins:  # pragma: no branch
                         model_admins[inline.model] = inline
@@ -117,6 +118,7 @@ def _get_all_admin_fields(request):
     for fields in all_admin_fields.values():
         fields.add("id")
         fields.discard("pk")
+        fields.discard("__str__")
 
     return model_admins, all_admin_fields
 
