@@ -66,6 +66,9 @@ def test_query_ctx(admin_client, snapshot):
     context["config"]["version"] = "redacted"
     context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
+    with open("frontend/src/context_fixture.json", "w") as f:
+        json.dump(context, f, indent=4, sort_keys=True)
+        f.write("\n")
 
 
 @pytest.mark.usefixtures("products")

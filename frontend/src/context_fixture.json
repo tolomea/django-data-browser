@@ -1,0 +1,816 @@
+{
+    "config": {
+        "adminUrl": "/admin/data_browser/view/add/",
+        "allModelFields": {
+            "auth.Group": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "name"
+                ]
+            },
+            "auth.User": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "date_joined": {
+                        "concrete": true,
+                        "model": "time",
+                        "prettyName": "date_joined",
+                        "type": "time"
+                    },
+                    "email": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "email",
+                        "type": "string"
+                    },
+                    "first_name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "first_name",
+                        "type": "string"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "is_active": {
+                        "concrete": true,
+                        "model": "boolean",
+                        "prettyName": "is_active",
+                        "type": "boolean"
+                    },
+                    "is_staff": {
+                        "concrete": true,
+                        "model": "boolean",
+                        "prettyName": "is_staff",
+                        "type": "boolean"
+                    },
+                    "is_superuser": {
+                        "concrete": true,
+                        "model": "boolean",
+                        "prettyName": "is_superuser",
+                        "type": "boolean"
+                    },
+                    "last_login": {
+                        "concrete": true,
+                        "model": "time",
+                        "prettyName": "last_login",
+                        "type": "time"
+                    },
+                    "last_name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "last_name",
+                        "type": "string"
+                    },
+                    "password": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "password",
+                        "type": "string"
+                    },
+                    "username": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "username",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "date_joined",
+                    "email",
+                    "first_name",
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "last_login",
+                    "last_name",
+                    "password",
+                    "username"
+                ]
+            },
+            "boolean": {
+                "fields": {
+                    "average": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "average",
+                        "type": "number"
+                    },
+                    "sum": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "sum",
+                        "type": "number"
+                    }
+                },
+                "sortedFields": [
+                    "average",
+                    "sum"
+                ]
+            },
+            "data_browser.View": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "created_time": {
+                        "concrete": true,
+                        "model": "time",
+                        "prettyName": "created_time",
+                        "type": "time"
+                    },
+                    "description": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "description",
+                        "type": "string"
+                    },
+                    "fields": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "fields",
+                        "type": "string"
+                    },
+                    "google_sheets_formula": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "google_sheets_formula",
+                        "type": "string"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "id",
+                        "type": "string"
+                    },
+                    "model_name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "model_name",
+                        "type": "string"
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    },
+                    "open_view": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "open_view",
+                        "type": "string"
+                    },
+                    "owner": {
+                        "concrete": false,
+                        "model": "auth.User",
+                        "prettyName": "owner",
+                        "type": null
+                    },
+                    "public": {
+                        "concrete": true,
+                        "model": "boolean",
+                        "prettyName": "public",
+                        "type": "boolean"
+                    },
+                    "public_link": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "public_link",
+                        "type": "string"
+                    },
+                    "query": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "query",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "created_time",
+                    "description",
+                    "fields",
+                    "google_sheets_formula",
+                    "model_name",
+                    "name",
+                    "open_view",
+                    "owner",
+                    "public",
+                    "public_link",
+                    "query"
+                ]
+            },
+            "html": {
+                "fields": {},
+                "sortedFields": []
+            },
+            "number": {
+                "fields": {
+                    "average": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "average",
+                        "type": "number"
+                    },
+                    "count": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "count",
+                        "type": "number"
+                    },
+                    "max": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "max",
+                        "type": "number"
+                    },
+                    "min": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "min",
+                        "type": "number"
+                    },
+                    "std_dev": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "std_dev",
+                        "type": "number"
+                    },
+                    "sum": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "sum",
+                        "type": "number"
+                    },
+                    "variance": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "variance",
+                        "type": "number"
+                    }
+                },
+                "sortedFields": [
+                    "average",
+                    "count",
+                    "max",
+                    "min",
+                    "std_dev",
+                    "sum",
+                    "variance"
+                ]
+            },
+            "string": {
+                "fields": {
+                    "count": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "count",
+                        "type": "number"
+                    }
+                },
+                "sortedFields": [
+                    "count"
+                ]
+            },
+            "tests.Address": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "bob": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "bob",
+                        "type": "string"
+                    },
+                    "city": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "city",
+                        "type": "string"
+                    },
+                    "fred": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "fred",
+                        "type": "string"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "tom": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "tom",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "bob",
+                    "city",
+                    "fred",
+                    "tom"
+                ]
+            },
+            "tests.InAdmin": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "name"
+                ]
+            },
+            "tests.InlineAdmin": {
+                "fields": {
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "in_admin": {
+                        "concrete": false,
+                        "model": "tests.InAdmin",
+                        "prettyName": "in_admin",
+                        "type": null
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "in_admin",
+                    "name"
+                ]
+            },
+            "tests.Normal": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "in_admin": {
+                        "concrete": false,
+                        "model": "tests.InAdmin",
+                        "prettyName": "in_admin",
+                        "type": null
+                    },
+                    "inline_admin": {
+                        "concrete": false,
+                        "model": "tests.InlineAdmin",
+                        "prettyName": "inline_admin",
+                        "type": null
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "in_admin",
+                    "inline_admin",
+                    "name"
+                ]
+            },
+            "tests.Producer": {
+                "fields": {
+                    "address": {
+                        "concrete": false,
+                        "model": "tests.Address",
+                        "prettyName": "address",
+                        "type": null
+                    },
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "address",
+                    "name"
+                ]
+            },
+            "tests.Product": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "created_time": {
+                        "concrete": true,
+                        "model": "time",
+                        "prettyName": "created_time",
+                        "type": "time"
+                    },
+                    "default_sku": {
+                        "concrete": false,
+                        "model": "tests.SKU",
+                        "prettyName": "default_sku",
+                        "type": null
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "is_onsale": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "is_onsale",
+                        "type": "string"
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    },
+                    "only_in_list_view": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "only_in_list_view",
+                        "type": "string"
+                    },
+                    "onsale": {
+                        "concrete": true,
+                        "model": "boolean",
+                        "prettyName": "onsale",
+                        "type": "boolean"
+                    },
+                    "producer": {
+                        "concrete": false,
+                        "model": "tests.Producer",
+                        "prettyName": "producer",
+                        "type": null
+                    },
+                    "size": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "size",
+                        "type": "number"
+                    },
+                    "size_unit": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "size_unit",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "created_time",
+                    "default_sku",
+                    "is_onsale",
+                    "name",
+                    "only_in_list_view",
+                    "onsale",
+                    "producer",
+                    "size",
+                    "size_unit"
+                ]
+            },
+            "tests.SKU": {
+                "fields": {
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    },
+                    "product": {
+                        "concrete": false,
+                        "model": "tests.Product",
+                        "prettyName": "product",
+                        "type": null
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "name",
+                    "product"
+                ]
+            },
+            "tests.Tag": {
+                "fields": {
+                    "admin": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "admin",
+                        "type": "html"
+                    },
+                    "id": {
+                        "concrete": true,
+                        "model": "number",
+                        "prettyName": "id",
+                        "type": "number"
+                    },
+                    "name": {
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "name",
+                        "type": "string"
+                    }
+                },
+                "sortedFields": [
+                    "id",
+                    "admin",
+                    "name"
+                ]
+            },
+            "time": {
+                "fields": {
+                    "count": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "count",
+                        "type": "number"
+                    }
+                },
+                "sortedFields": [
+                    "count"
+                ]
+            }
+        },
+        "baseUrl": "/data_browser/",
+        "savedViews": [],
+        "sortedModels": [
+            "auth.Group",
+            "auth.User",
+            "data_browser.View",
+            "tests.Address",
+            "tests.InAdmin",
+            "tests.InlineAdmin",
+            "tests.Normal",
+            "tests.Producer",
+            "tests.Product",
+            "tests.SKU",
+            "tests.Tag"
+        ],
+        "types": {
+            "boolean": {
+                "defaultLookup": "equals",
+                "defaultValue": true,
+                "lookups": {
+                    "equals": {
+                        "type": "boolean"
+                    },
+                    "is_null": {
+                        "type": "boolean"
+                    },
+                    "not_equals": {
+                        "type": "boolean"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "is_null"
+                ]
+            },
+            "html": {
+                "defaultLookup": null,
+                "defaultValue": null,
+                "lookups": {},
+                "sortedLookups": []
+            },
+            "number": {
+                "defaultLookup": "equals",
+                "defaultValue": 0,
+                "lookups": {
+                    "equals": {
+                        "type": "number"
+                    },
+                    "gt": {
+                        "type": "number"
+                    },
+                    "gte": {
+                        "type": "number"
+                    },
+                    "is_null": {
+                        "type": "boolean"
+                    },
+                    "lt": {
+                        "type": "number"
+                    },
+                    "lte": {
+                        "type": "number"
+                    },
+                    "not_equals": {
+                        "type": "number"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "is_null"
+                ]
+            },
+            "string": {
+                "defaultLookup": "equals",
+                "defaultValue": "",
+                "lookups": {
+                    "contains": {
+                        "type": "string"
+                    },
+                    "ends_with": {
+                        "type": "string"
+                    },
+                    "equals": {
+                        "type": "string"
+                    },
+                    "is_null": {
+                        "type": "boolean"
+                    },
+                    "not_contains": {
+                        "type": "string"
+                    },
+                    "not_ends_with": {
+                        "type": "string"
+                    },
+                    "not_equals": {
+                        "type": "string"
+                    },
+                    "not_regex": {
+                        "type": "string"
+                    },
+                    "not_starts_with": {
+                        "type": "string"
+                    },
+                    "regex": {
+                        "type": "string"
+                    },
+                    "starts_with": {
+                        "type": "string"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "contains",
+                    "starts_with",
+                    "ends_with",
+                    "regex",
+                    "not_equals",
+                    "not_contains",
+                    "not_starts_with",
+                    "not_ends_with",
+                    "not_regex",
+                    "is_null"
+                ]
+            },
+            "time": {
+                "defaultLookup": "equals",
+                "defaultValue": "redacted",
+                "lookups": {
+                    "equals": {
+                        "type": "time"
+                    },
+                    "gt": {
+                        "type": "time"
+                    },
+                    "gte": {
+                        "type": "time"
+                    },
+                    "is_null": {
+                        "type": "boolean"
+                    },
+                    "lt": {
+                        "type": "time"
+                    },
+                    "lte": {
+                        "type": "time"
+                    },
+                    "not_equals": {
+                        "type": "time"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "is_null"
+                ]
+            }
+        },
+        "version": "redacted"
+    },
+    "initialState": {
+        "fields": [],
+        "filters": [],
+        "model": "",
+        "results": [],
+        "version": "redacted"
+    },
+    "sentryDsn": null
+}
