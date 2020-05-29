@@ -17,7 +17,6 @@ from .query import (
     ASC,
     DSC,
     BooleanFieldType,
-    FieldType,
     HTMLFieldType,
     NumberFieldType,
     StringFieldType,
@@ -63,18 +62,44 @@ class OrmModel:
     admin: BaseModelAdmin = None
 
 
-@dataclass
-class OrmField:
-    type_: FieldType
-    concrete: bool
-    model_name: str
-    pretty_name: str
+class OrmBaseField:
+    def __init__(self, model_name, name, pretty_name):
+        self.model_name = model_name
+        self.name = name
+        self.pretty_name = pretty_name
+
+    type_ = None  # can't add
+    concrete = False  # can't sort or filter
+    rel_name = None  # can't expand
+
+    def bind(name, previous=None):
+        raise NotImplementedError
 
 
-@dataclass
-class OrmFkField:
-    model_name: str
-    pretty_name: str
+class OrmConcreteField(OrmBaseField):
+    concrete = True
+
+    def __init__(self, model_name, name, pretty_name, type_):
+        super().__init__(model_name, name, pretty_name)
+        self.type_ = type_
+        self.rel_name = type_.name if type_.aggregates else None
+
+
+class OrmFkField(OrmBaseField):
+    def __init__(self, model_name, name, pretty_name, rel_name):
+        super().__init__(model_name, name, pretty_name)
+        self.rel_name = rel_name
+
+
+class OrmCalculatedField(OrmBaseField):
+    type_ = StringFieldType
+
+
+class OrmAdminField(OrmBaseField):
+    type_ = HTMLFieldType
+
+    def __init__(self, model_name):
+        super().__init__(model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN)
 
 
 def _get_all_admin_fields(request):
@@ -133,26 +158,20 @@ def _get_fields_for_model(model, model_admins, admin_fields):
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
         if field_name == _OPEN_IN_ADMIN:
-            fields[_OPEN_IN_ADMIN] = OrmField(
-                type_=HTMLFieldType,
-                concrete=False,
-                model_name=model_name,
-                pretty_name=_OPEN_IN_ADMIN,
-            )
+            fields[_OPEN_IN_ADMIN] = OrmAdminField(model_name=model_name)
         elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
             if field.related_model in admin_fields:
                 fks[field_name] = OrmFkField(
-                    model_name=get_model_name(field.related_model),
+                    model_name=model_name,
+                    name=field_name,
                     pretty_name=field_name,
+                    rel_name=get_model_name(field.related_model),
                 )
         elif isinstance(field, type(None)):
-            fields[field_name] = OrmField(
-                type_=StringFieldType,
-                concrete=False,
-                model_name=model_name,
-                pretty_name=field_name,
+            fields[field_name] = OrmCalculatedField(
+                model_name=model_name, name=field_name, pretty_name=field_name
             )
         else:
             if field.__class__ in _FIELD_MAP:
@@ -165,11 +184,11 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                     field_type = None
 
             if field_type:
-                fields[field_name] = OrmField(
-                    type_=field_type,
-                    concrete=True,
+                fields[field_name] = OrmConcreteField(
                     model_name=model_name,
+                    name=field_name,
                     pretty_name=field_name,
+                    type_=field_type,
                 )
             else:
                 logging.getLogger(__name__).warning(

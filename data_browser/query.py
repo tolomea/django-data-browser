@@ -311,7 +311,6 @@ class BoundField(BoundFieldMixin):
 
 class BoundQuery:
     def __init__(self, query, orm_models):
-        # orm_models = {model_name: {"fields": {field_name, FieldType}, "fks": {field_name: model_name}}}
         def get_path(parts, model_name):
             pretty_parts = []
             for part in parts:
@@ -319,7 +318,7 @@ class BoundQuery:
                 if fk_field is None:
                     return None, None
                 pretty_parts.append(fk_field.pretty_name)
-                model_name = fk_field.model_name
+                model_name = fk_field.rel_name
             return model_name, pretty_parts
 
         def get_orm_field(path):

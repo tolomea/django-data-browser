@@ -51,31 +51,15 @@ def _get_model_fields(orm_model):
         front = {"id": 1, _OPEN_IN_ADMIN: 2}
         return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
 
-    def type_model(orm_field):
-        if orm_field.concrete and orm_field.type_.aggregates:
-            return orm_field.type_.name
-        else:
-            return None
-
-    fields = {
+    all_fields = {
         name: {
-            "model": type_model(orm_field),
-            "type": orm_field.type_.name,
+            "model": orm_field.rel_name,
+            "type": orm_field.type_.name if orm_field.type_ else None,
             "concrete": orm_field.concrete,
             "prettyName": orm_field.pretty_name,
         }
-        for name, orm_field in orm_model.fields.items()
+        for name, orm_field in {**orm_model.fields, **orm_model.fks}.items()
     }
-    fk_fields = {
-        name: {
-            "model": fk_field.model_name,
-            "type": None,
-            "concrete": False,
-            "prettyName": fk_field.pretty_name,
-        }
-        for name, fk_field in orm_model.fks.items()
-    }
-    all_fields = {**fields, **fk_fields}
 
     return {"fields": all_fields, "sortedFields": sort_model_fields(all_fields)}
 

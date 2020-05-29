@@ -34,61 +34,68 @@ def orm_models():
     return {
         "app.model": orm.OrmModel(
             fields={
-                "fa": orm.OrmField(
-                    type_=StringFieldType,
-                    concrete=True,
+                "fa": orm.OrmConcreteField(
                     model_name="app.model",
+                    name="fa",
                     pretty_name="fa",
-                ),
-                "fd": orm.OrmField(
                     type_=StringFieldType,
-                    concrete=True,
+                ),
+                "fd": orm.OrmConcreteField(
                     model_name="app.model",
+                    name="fd",
                     pretty_name="fd",
-                ),
-                "fn": orm.OrmField(
                     type_=StringFieldType,
-                    concrete=False,
-                    model_name="app.model",
-                    pretty_name="fn",
                 ),
-                "bob": orm.OrmField(
-                    type_=StringFieldType,
-                    concrete=True,
+                "fn": orm.OrmCalculatedField(
+                    model_name="app.model", name="fn", pretty_name="fn"
+                ),
+                "bob": orm.OrmConcreteField(
                     model_name="app.model",
+                    name="bob",
                     pretty_name="bob",
+                    type_=StringFieldType,
                 ),
-                "num": orm.OrmField(
-                    type_=NumberFieldType,
-                    concrete=True,
+                "num": orm.OrmConcreteField(
                     model_name="app.model",
+                    name="num",
                     pretty_name="num",
+                    type_=NumberFieldType,
                 ),
             },
-            fks={"tom": orm.OrmFkField(model_name="app.Tom", pretty_name="tom")},
+            fks={
+                "tom": orm.OrmFkField(
+                    model_name="app.model",
+                    name="tom",
+                    pretty_name="tom",
+                    rel_name="app.Tom",
+                )
+            },
         ),
         "app.Tom": orm.OrmModel(
             fields={
-                "jones": orm.OrmField(
-                    type_=StringFieldType,
-                    concrete=True,
+                "jones": orm.OrmConcreteField(
                     model_name="app.Tom",
+                    name="jones",
                     pretty_name="jones",
+                    type_=StringFieldType,
                 )
             },
             fks={
                 "michael": orm.OrmFkField(
-                    model_name="app.Michael", pretty_name="michael"
+                    model_name="app.Tom",
+                    name="michael",
+                    pretty_name="michael",
+                    rel_name="app.Michael",
                 )
             },
         ),
         "app.Michael": orm.OrmModel(
             fields={
-                "bolton": orm.OrmField(
-                    type_=StringFieldType,
-                    concrete=True,
+                "bolton": orm.OrmConcreteField(
                     model_name="app.Michael",
+                    name="bolton",
                     pretty_name="bolton",
+                    type_=StringFieldType,
                 )
             },
             fks={},
