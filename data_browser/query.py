@@ -330,8 +330,7 @@ class BoundQuery:
         def get_path(parts, model_name):
             from .orm import OrmBoundField  # todo remove this
 
-            pretty_parts = []
-            orm_bound_field = OrmBoundField([])  # todo this should be None
+            orm_bound_field = OrmBoundField()  # todo this should be None
             for part in parts:
                 orm_field = orm_models[model_name].fields.get(part)
                 if (
@@ -340,18 +339,15 @@ class BoundQuery:
                     or orm_field.rel_name not in orm_models
                     or not orm_models[orm_field.rel_name].root
                 ):
-                    return None, None, None
+                    return None, None
                 orm_bound_field = orm_field.bind(orm_bound_field)
-                pretty_parts.append(orm_field.pretty_name)
                 model_name = orm_field.rel_name
-            return model_name, pretty_parts, orm_bound_field
+            return model_name, orm_bound_field
 
         def get_orm_field(path):
             # path__field
             *model_path, field_name = path
-            model_name, pretty_parts, orm_bound_field = get_path(
-                model_path, query.model_name
-            )
+            model_name, orm_bound_field = get_path(model_path, query.model_name)
             if model_name:
                 orm_field = orm_models[model_name].fields.get(field_name)
                 if orm_field:
@@ -360,15 +356,13 @@ class BoundQuery:
                         orm_bound_field,
                         field_name,
                         None,
-                        pretty_parts + [orm_field.pretty_name],
+                        orm_bound_field.pretty_path + [orm_field.pretty_name],
                     )
 
             # path__field__aggregate
             if len(path) >= 2:
                 *model_path, field_name, aggregate = path
-                model_name, pretty_parts, orm_bound_field = get_path(
-                    model_path, query.model_name
-                )
+                model_name, orm_bound_field = get_path(model_path, query.model_name)
                 if model_name:
                     orm_field = orm_models[model_name].fields.get(field_name)
                     if (
@@ -381,7 +375,8 @@ class BoundQuery:
                             orm_bound_field,
                             field_name,
                             aggregate,
-                            pretty_parts + [orm_field.pretty_name, aggregate],
+                            orm_bound_field.pretty_path
+                            + [orm_field.pretty_name, aggregate],
                         )
             return None, None, None, None, None
 

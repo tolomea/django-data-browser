@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 import logging
 from collections import defaultdict
 from dataclasses import dataclass
@@ -59,7 +60,8 @@ def get_model_name(model, sep="."):
 
 @dataclass
 class OrmBoundField:
-    model_path: Sequence[str]
+    model_path: Sequence[str] = dataclasses.field(default_factory=list)
+    pretty_path: Sequence[str] = dataclasses.field(default_factory=list)
 
 
 @dataclass
@@ -83,8 +85,9 @@ class OrmBaseField:
     rel_name = None  # can't expand
 
     def bind(self, previous):
+        previous = previous or OrmBoundField()
         return OrmBoundField(
-            previous.model_path + [self.name] if previous else [self.name]
+            previous.model_path + [self.name], previous.pretty_path + [self.pretty_name]
         )
 
     def __repr__(self):  # pragma: no cover
