@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . import version
 from .models import View
 from .orm import _OPEN_IN_ADMIN, get_models, get_results
-from .query import TYPES, BoundQuery, NumberFieldType, Query
+from .query import TYPES, BoundQuery, Query
 
 
 def _get_query_data(bound_query):
@@ -79,19 +79,6 @@ def _get_config(user, orm_models):
         model_name: _get_model_fields(orm_model)
         for model_name, orm_model in orm_models.items()
     }
-    for type_ in TYPES.values():
-        all_model_fields[type_.name] = {
-            "fields": {
-                aggregate: {
-                    "type": NumberFieldType.name,
-                    "concrete": True,
-                    "model": None,
-                    "prettyName": aggregate,
-                }
-                for aggregate in type_.aggregates
-            },
-            "sortedFields": type_.aggregates,
-        }
 
     saved_views = [
         {

@@ -16,6 +16,7 @@ from django.urls import reverse
 from .query import (
     ASC,
     DSC,
+    TYPES,
     BooleanFieldType,
     HTMLFieldType,
     NumberFieldType,
@@ -103,6 +104,14 @@ class OrmAdminField(OrmBaseField):
 
     def __init__(self, model_name):
         super().__init__(model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN)
+
+
+class OrmAggregateField(OrmBaseField):
+    type_ = NumberFieldType
+    concrete = True
+
+    def __init__(self, model_name, name):
+        super().__init__(model_name, name, name)
 
 
 def _get_all_admin_fields(request):
@@ -200,12 +209,24 @@ def _get_fields_for_model(model, model_admins, admin_fields):
     return OrmModel(fields=fields, admin=model_admins[model])
 
 
+def _get_fields_for_type(type_):
+    return OrmModel(
+        {
+            aggregate: OrmAggregateField(type_.name, aggregate)
+            for aggregate in type_.aggregates
+        }
+    )
+
+
 def get_models(request):
     model_admins, admin_fields = _get_all_admin_fields(request)
-    return {
+    models = {
         get_model_name(model): _get_fields_for_model(model, model_admins, admin_fields)
         for model in admin_fields
     }
+    types = {type_.name: _get_fields_for_type(type_) for type_ in TYPES.values()}
+
+    return {**models, **types}
 
 
 def _get_django_lookup(field_type, lookup):
