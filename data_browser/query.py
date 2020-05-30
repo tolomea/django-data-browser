@@ -306,10 +306,8 @@ class BoundField(BoundFieldMixin):
 class BoundQuery:
     def __init__(self, query, orm_models):
         def get_orm_field(parts):
-            from .orm import OrmBoundField  # todo remove this
-
             model_name = query.model_name
-            orm_bound_field = OrmBoundField()  # todo this should be None
+            orm_bound_field = None
             for part in parts:
                 orm_field = orm_models[model_name].fields.get(part)
                 if orm_field is None:
