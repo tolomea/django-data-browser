@@ -32,6 +32,8 @@ def query():
 @pytest.fixture
 def orm_models():
     return {
+        "string": orm._get_fields_for_type(StringFieldType),
+        "number": orm._get_fields_for_type(NumberFieldType),
         "app.model": orm.OrmModel(
             fields={
                 "fa": orm.OrmConcreteField(

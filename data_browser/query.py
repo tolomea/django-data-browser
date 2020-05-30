@@ -180,7 +180,7 @@ class TimeFieldType(FieldType):
         "lte": "time",
         "is_null": "boolean",
     }
-    aggregates = ["count"]
+    aggregates = ["count"]  # average, min and max might be nice here but sqlite...
 
     @staticmethod
     def parse(value):
@@ -336,7 +336,6 @@ class BoundQuery:
                 if (
                     orm_field is None
                     or orm_field.rel_name is None
-                    or orm_field.rel_name not in orm_models
                     or not orm_models[orm_field.rel_name].root
                 ):
                     return None, None
