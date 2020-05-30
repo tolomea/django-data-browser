@@ -65,7 +65,24 @@ class OrmBoundField:
     db_field: MetaFieldType = None
     model_path: Sequence[str] = dataclasses.field(default_factory=list)
     pretty_path: Sequence[str] = dataclasses.field(default_factory=list)
-    aggregate: str = None
+
+    @property
+    def aggregate(self):
+        # todo this is kinda ugly
+        if self.orm_field == self.db_field:
+            return None
+        return self.orm_field.name
+
+    @property
+    def field_path(self):
+        return self.model_path + [self.db_field.name]
+
+    @property
+    def full_path(self):
+        # todo this is kinda ugly
+        if self.orm_field == self.db_field:
+            return self.field_path
+        return self.field_path + [self.orm_field.name]
 
 
 @dataclass
@@ -155,7 +172,6 @@ class OrmAggregateField(OrmBaseField):
             previous.db_field,
             previous.model_path,
             previous.pretty_path + [self.pretty_name],
-            self.name,
         )
 
 

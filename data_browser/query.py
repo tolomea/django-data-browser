@@ -231,12 +231,8 @@ class BoundFieldMixin:
         return self.orm_bound_field.model_path
 
     @property
-    def model_path_str(self):
-        return "__".join(self.model_path)
-
-    @property
     def field_path(self):
-        return (self.model_path or []) + [self.orm_bound_field.db_field.name]
+        return self.orm_bound_field.field_path
 
     @property
     def field_path_str(self):
@@ -244,7 +240,7 @@ class BoundFieldMixin:
 
     @property
     def path(self):
-        return self.field_path + ([self.aggregate] if self.aggregate else [])
+        return self.orm_bound_field.full_path
 
     @property
     def path_str(self):

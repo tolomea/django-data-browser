@@ -244,25 +244,17 @@ class TestBoundField:
 
         bf = BoundField(
             orm.OrmBoundField(
-                orm_field,
-                db_field,
-                ["bob", "fred"],
-                ["bob", "fred", "joe", "max"],
-                "max",
+                orm_field, db_field, ["bob", "fred"], ["bob", "fred", "joe", "max"]
             ),
             None,
             None,
         )
-        assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe__max"
 
         bf = BoundField(
-            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"], "max"),
-            None,
-            None,
+            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"]), None, None
         )
-        assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
@@ -273,7 +265,6 @@ class TestBoundField:
             None,
             None,
         )
-        assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe"
 
@@ -285,23 +276,17 @@ class TestBoundFilter:
 
         bf = BoundFilter(
             orm.OrmBoundField(
-                orm_field,
-                db_field,
-                ["bob", "fred"],
-                ["bob", "fred", "joe", "max"],
-                "max",
+                orm_field, db_field, ["bob", "fred"], ["bob", "fred", "joe", "max"]
             ),
             "gt",
             5,
         )
-        assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe__max"
 
         bf = BoundFilter(
-            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"], "max"), "gt", 5
+            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"]), "gt", 5
         )
-        assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
@@ -312,7 +297,6 @@ class TestBoundFilter:
             "gt",
             5,
         )
-        assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe"
 
