@@ -113,7 +113,9 @@ def _get_config(user, orm_models):
         "adminUrl": admin_url,
         "types": types,
         "allModelFields": all_model_fields,
-        "sortedModels": sorted(orm_models),
+        "sortedModels": sorted(
+            name for name, model in orm_models.items() if model.root
+        ),
         "version": version,
         "savedViews": saved_views,
     }

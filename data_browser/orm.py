@@ -60,6 +60,10 @@ class OrmModel:
     fields: dict
     admin: BaseModelAdmin = None
 
+    @property
+    def root(self):
+        return bool(self.admin)
+
 
 class OrmBaseField:
     def __init__(self, model_name, name, pretty_name):

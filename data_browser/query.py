@@ -319,6 +319,7 @@ class BoundQuery:
                     field is None
                     or field.rel_name is None
                     or field.rel_name not in orm_models
+                    or not orm_models[field.rel_name].root
                 ):
                     return None, None
                 pretty_parts.append(field.pretty_name)

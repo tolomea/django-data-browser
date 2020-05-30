@@ -67,7 +67,8 @@ def orm_models():
                     pretty_name="tom",
                     rel_name="app.Tom",
                 ),
-            }
+            },
+            admin=True,
         ),
         "app.Tom": orm.OrmModel(
             fields={
@@ -83,7 +84,8 @@ def orm_models():
                     pretty_name="michael",
                     rel_name="app.Michael",
                 ),
-            }
+            },
+            admin=True,
         ),
         "app.Michael": orm.OrmModel(
             fields={
@@ -93,7 +95,8 @@ def orm_models():
                     pretty_name="bolton",
                     type_=StringFieldType,
                 )
-            }
+            },
+            admin=True,
         ),
     }
 
