@@ -63,6 +63,7 @@ class OrmBoundField:
     field: OrmBaseField = None
     model_path: Sequence[str] = dataclasses.field(default_factory=list)
     pretty_path: Sequence[str] = dataclasses.field(default_factory=list)
+    aggregate: str = None
 
 
 @dataclass
@@ -155,6 +156,15 @@ class OrmAggregateField(OrmBaseField):
 
     def __init__(self, model_name, name):
         super().__init__(model_name, name, name)
+
+    def bind(self, previous):
+        previous = previous or OrmBoundField()
+        return OrmBoundField(
+            previous.field,
+            previous.model_path,
+            previous.pretty_path + [self.pretty_name],
+            self.name,
+        )
 
 
 def _get_all_admin_fields(request):

@@ -327,26 +327,13 @@ class BoundQuery:
             return orm_bound_field
 
         def get_orm_field(path):
-            # path__field__aggregate
-            if len(path) >= 2:
-                *model_path, aggregate = path
-                orm_bound_field = get_path(model_path, query.model_name)
-                if (
-                    orm_bound_field
-                    and orm_bound_field.field.type_
-                    and aggregate in orm_bound_field.field.type_.aggregates
-                ):
-                    return (
-                        orm_bound_field,
-                        aggregate,
-                        orm_bound_field.pretty_path + [aggregate],
-                    )
-
-            # path__field
-            model_path = path
-            orm_bound_field = get_path(model_path, query.model_name)
+            orm_bound_field = get_path(path, query.model_name)
             if orm_bound_field and orm_bound_field.field.type_:
-                return orm_bound_field, None, orm_bound_field.pretty_path
+                return (
+                    orm_bound_field,
+                    orm_bound_field.aggregate,
+                    orm_bound_field.pretty_path,
+                )
 
             return None, None, None
 
