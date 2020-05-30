@@ -60,6 +60,7 @@ def get_model_name(model, sep="."):
 
 @dataclass
 class OrmBoundField:
+    field: OrmBaseField = None
     model_path: Sequence[str] = dataclasses.field(default_factory=list)
     pretty_path: Sequence[str] = dataclasses.field(default_factory=list)
 
@@ -84,12 +85,6 @@ class OrmBaseField:
     concrete = False  # can't sort or filter
     rel_name = None  # can't expand
 
-    def bind(self, previous):
-        previous = previous or OrmBoundField()
-        return OrmBoundField(
-            previous.model_path + [self.name], previous.pretty_path + [self.pretty_name]
-        )
-
     def __repr__(self):  # pragma: no cover
         params = [
             self.model_name,
@@ -110,15 +105,35 @@ class OrmConcreteField(OrmBaseField):
         self.type_ = type_
         self.rel_name = type_.name if type_.aggregates else None
 
+    def bind(self, previous):
+        previous = previous or OrmBoundField()
+        return OrmBoundField(
+            self, previous.model_path, previous.pretty_path + [self.pretty_name]
+        )
+
 
 class OrmFkField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, rel_name):
         super().__init__(model_name, name, pretty_name)
         self.rel_name = rel_name
 
+    def bind(self, previous):
+        previous = previous or OrmBoundField()
+        return OrmBoundField(
+            self,
+            previous.model_path + [self.name],
+            previous.pretty_path + [self.pretty_name],
+        )
+
 
 class OrmCalculatedField(OrmBaseField):
     type_ = StringFieldType
+
+    def bind(self, previous):
+        previous = previous or OrmBoundField()
+        return OrmBoundField(
+            self, previous.model_path, previous.pretty_path + [self.pretty_name]
+        )
 
 
 class OrmAdminField(OrmBaseField):
@@ -126,6 +141,12 @@ class OrmAdminField(OrmBaseField):
 
     def __init__(self, model_name):
         super().__init__(model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN)
+
+    def bind(self, previous):
+        previous = previous or OrmBoundField()
+        return OrmBoundField(
+            self, previous.model_path, previous.pretty_path + [self.pretty_name]
+        )
 
 
 class OrmAggregateField(OrmBaseField):

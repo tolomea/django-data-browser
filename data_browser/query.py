@@ -333,50 +333,42 @@ class BoundQuery:
             orm_bound_field = OrmBoundField()  # todo this should be None
             for part in parts:
                 orm_field = orm_models[model_name].fields.get(part)
-                if (
-                    orm_field is None
-                    or orm_field.rel_name is None
-                    or not orm_models[orm_field.rel_name].root
-                ):
-                    return None, None
+                if orm_field is None:
+                    return None
                 orm_bound_field = orm_field.bind(orm_bound_field)
                 model_name = orm_field.rel_name
-            return model_name, orm_bound_field
+            return orm_bound_field
 
         def get_orm_field(path):
-            # path__field
-            *model_path, field_name = path
-            model_name, orm_bound_field = get_path(model_path, query.model_name)
-            if model_name:
-                orm_field = orm_models[model_name].fields.get(field_name)
-                if orm_field:
-                    return (
-                        orm_field,
-                        orm_bound_field,
-                        field_name,
-                        None,
-                        orm_bound_field.pretty_path + [orm_field.pretty_name],
-                    )
-
             # path__field__aggregate
             if len(path) >= 2:
-                *model_path, field_name, aggregate = path
-                model_name, orm_bound_field = get_path(model_path, query.model_name)
-                if model_name:
-                    orm_field = orm_models[model_name].fields.get(field_name)
-                    if (
-                        orm_field
-                        and orm_field.type_
-                        and aggregate in orm_field.type_.aggregates
-                    ):
-                        return (
-                            orm_field,
-                            orm_bound_field,
-                            field_name,
-                            aggregate,
-                            orm_bound_field.pretty_path
-                            + [orm_field.pretty_name, aggregate],
-                        )
+                *model_path, aggregate = path
+                orm_bound_field = get_path(model_path, query.model_name)
+                if (
+                    orm_bound_field
+                    and orm_bound_field.field.type_
+                    and aggregate in orm_bound_field.field.type_.aggregates
+                ):
+                    return (
+                        orm_bound_field.field,  # todo
+                        orm_bound_field,
+                        orm_bound_field.field.name,  # todo
+                        aggregate,
+                        orm_bound_field.pretty_path + [aggregate],
+                    )
+
+            # path__field
+            model_path = path
+            orm_bound_field = get_path(model_path, query.model_name)
+            if orm_bound_field and orm_bound_field.field.type_:
+                return (
+                    orm_bound_field.field,  # todo
+                    orm_bound_field,
+                    orm_bound_field.field.name,  # todo
+                    None,
+                    orm_bound_field.pretty_path,
+                )
+
             return None, None, None, None, None
 
         self.model_name = query.model_name
