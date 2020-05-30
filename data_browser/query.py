@@ -314,16 +314,16 @@ class BoundQuery:
         def get_path(parts, model_name):
             pretty_parts = []
             for part in parts:
-                field = orm_models[model_name].fields.get(part)
+                orm_field = orm_models[model_name].fields.get(part)
                 if (
-                    field is None
-                    or field.rel_name is None
-                    or field.rel_name not in orm_models
-                    or not orm_models[field.rel_name].root
+                    orm_field is None
+                    or orm_field.rel_name is None
+                    or orm_field.rel_name not in orm_models
+                    or not orm_models[orm_field.rel_name].root
                 ):
                     return None, None
-                pretty_parts.append(field.pretty_name)
-                model_name = field.rel_name
+                pretty_parts.append(orm_field.pretty_name)
+                model_name = orm_field.rel_name
             return model_name, pretty_parts
 
         def get_orm_field(path):
