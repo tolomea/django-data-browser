@@ -55,6 +55,14 @@ _AGG_MAP = {
 }
 
 
+_AGGREGATES = {
+    StringFieldType: ["count"],
+    NumberFieldType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
+    TimeFieldType: ["count"],  # average, min and max might be nice here but sqlite...
+    BooleanFieldType: ["average", "sum"],
+}
+
+
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
 
@@ -144,7 +152,7 @@ class OrmConcreteField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, type_):
         super().__init__(model_name, name, pretty_name)
         self.type_ = type_
-        self.rel_name = type_.name if type_.aggregates else None
+        self.rel_name = type_.name if type_ in _AGGREGATES else None
 
 
 class OrmCalculatedField(OrmBaseField):
@@ -274,7 +282,7 @@ def _get_fields_for_type(type_):
     return OrmModel(
         {
             aggregate: OrmAggregateField(type_.name, aggregate)
-            for aggregate in type_.aggregates
+            for aggregate in _AGGREGATES.get(type_, [])
         }
     )
 

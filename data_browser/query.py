@@ -144,7 +144,6 @@ class StringFieldType(FieldType):
         "not_regex": "string",
         "is_null": "boolean",
     }
-    aggregates = ["count"]
 
 
 class NumberFieldType(FieldType):
@@ -158,7 +157,6 @@ class NumberFieldType(FieldType):
         "lte": "number",
         "is_null": "boolean",
     }
-    aggregates = ["average", "count", "max", "min", "std_dev", "sum", "variance"]
 
     @staticmethod
     def format(value):
@@ -180,7 +178,6 @@ class TimeFieldType(FieldType):
         "lte": "time",
         "is_null": "boolean",
     }
-    aggregates = ["count"]  # average, min and max might be nice here but sqlite...
 
     @staticmethod
     def parse(value):
@@ -194,13 +191,11 @@ class TimeFieldType(FieldType):
 class HTMLFieldType(FieldType):
     default_value = None
     lookups = {}
-    aggregates = []
 
 
 class BooleanFieldType(FieldType):
     default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
-    aggregates = ["average", "sum"]
 
     @staticmethod
     def parse(value):
@@ -227,6 +222,26 @@ TYPES = {
 
 class BoundFieldMixin:
     @property
+    def type_(self):
+        return self.orm_bound_field.orm_field.type_
+
+    @property
+    def concrete(self):
+        return self.orm_bound_field.orm_field.concrete
+
+    # todo maybe remove
+
+    @property
+    def path(self):
+        return self.orm_bound_field.full_path
+
+    @property
+    def pretty_path(self):
+        return self.orm_bound_field.pretty_path
+
+    # todo definitely remove
+
+    @property
     def model_path(self):
         return self.orm_bound_field.model_path
 
@@ -239,24 +254,12 @@ class BoundFieldMixin:
         return "__".join(self.field_path)
 
     @property
-    def path(self):
-        return self.orm_bound_field.full_path
-
-    @property
-    def path_str(self):
-        return "__".join(self.path)
-
-    @property
     def aggregate(self):
         return self.orm_bound_field.aggregate
 
     @property
-    def pretty_path(self):
-        return self.orm_bound_field.pretty_path
-
-    @property
-    def type_(self):
-        return self.orm_bound_field.orm_field.type_
+    def path_str(self):
+        return "__".join(self.path)
 
 
 @dataclass
@@ -290,10 +293,6 @@ class BoundField(BoundFieldMixin):
     orm_bound_field: Any
     direction: Optional[str]
     priority: Optional[int]
-
-    @property
-    def concrete(self):
-        return self.orm_bound_field.orm_field.concrete
 
     @classmethod
     def bind(cls, orm_bound_field, query_field):
