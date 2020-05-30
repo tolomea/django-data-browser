@@ -187,7 +187,15 @@ class TestBoundQuery:
 
     def test_filters(self, bound_query):
         assert bound_query.filters == [
-            BoundFilter([], "bob", None, ["bob"], "equals", "fred", StringFieldType)
+            BoundFilter(
+                orm.OrmBoundField([]),
+                "bob",
+                None,
+                ["bob"],
+                "equals",
+                "fred",
+                StringFieldType,
+            )
         ]
 
     def test_bad_field(self, orm_models):
@@ -239,7 +247,7 @@ class TestBoundQuery:
 class TestBoundField:
     def test_path_properties(self, fake_orm_field):
         bf = BoundField(
-            ["bob", "fred"],
+            orm.OrmBoundField(["bob", "fred"]),
             "joe",
             "max",
             ["bob", "fred", "joe"],
@@ -251,13 +259,15 @@ class TestBoundField:
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe__max"
 
-        bf = BoundField([], "joe", "max", ["joe"], None, None, fake_orm_field)
+        bf = BoundField(
+            orm.OrmBoundField([]), "joe", "max", ["joe"], None, None, fake_orm_field
+        )
         assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
         bf = BoundField(
-            ["bob", "fred"],
+            orm.OrmBoundField(["bob", "fred"]),
             "joe",
             None,
             ["bob", "fred", "joe"],
@@ -273,7 +283,7 @@ class TestBoundField:
 class TestBoundFilter:
     def test_path_properties(self):
         bf = BoundFilter(
-            ["bob", "fred"],
+            orm.OrmBoundField(["bob", "fred"]),
             "joe",
             "max",
             ["bob", "fred", "joe"],
@@ -285,13 +295,15 @@ class TestBoundFilter:
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe__max"
 
-        bf = BoundFilter([], "joe", "max", ["joe"], "gt", 5, StringFieldType)
+        bf = BoundFilter(
+            orm.OrmBoundField([]), "joe", "max", ["joe"], "gt", 5, StringFieldType
+        )
         assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
         bf = BoundFilter(
-            ["bob", "fred"],
+            orm.OrmBoundField(["bob", "fred"]),
             "joe",
             None,
             ["bob", "fred", "joe"],

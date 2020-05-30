@@ -227,6 +227,10 @@ TYPES = {
 
 class BoundFieldMixin:
     @property
+    def model_path(self):
+        return self.orm_bound_field.model_path
+
+    @property
     def model_path_str(self):
         return "__".join(self.model_path)
 
@@ -249,7 +253,7 @@ class BoundFieldMixin:
 
 @dataclass
 class BoundFilter(BoundFieldMixin):
-    model_path: Sequence[str]
+    orm_bound_field: Any
     name: str
     aggregate: Optional[str]
     pretty_path: Sequence[str]
@@ -258,9 +262,11 @@ class BoundFilter(BoundFieldMixin):
     type_: FieldType
 
     @classmethod
-    def bind(cls, path, name, aggregate, pretty_path, query_filter, orm_field):
+    def bind(
+        cls, orm_bound_field, name, aggregate, pretty_path, query_filter, orm_field
+    ):
         return cls(
-            path,
+            orm_bound_field,
             name,
             aggregate,
             pretty_path,
@@ -290,7 +296,7 @@ class BoundFilter(BoundFieldMixin):
 
 @dataclass
 class BoundField(BoundFieldMixin):
-    model_path: Sequence[str]
+    orm_bound_field: Any
     name: str
     aggregate: Optional[str]
     pretty_path: Sequence[str]
@@ -303,16 +309,29 @@ class BoundField(BoundFieldMixin):
         self.concrete = self.orm_field.concrete
 
     @classmethod
-    def bind(cls, path, name, aggregate, pretty_path, query_field, orm_field):
+    def bind(
+        cls, orm_bound_field, name, aggregate, pretty_path, query_field, orm_field
+    ):
         direction = query_field.direction if orm_field.concrete else None
         priority = query_field.priority if orm_field.concrete else None
-        return cls(path, name, aggregate, pretty_path, direction, priority, orm_field)
+        return cls(
+            orm_bound_field,
+            name,
+            aggregate,
+            pretty_path,
+            direction,
+            priority,
+            orm_field,
+        )
 
 
 class BoundQuery:
     def __init__(self, query, orm_models):
         def get_path(parts, model_name):
+            from .orm import OrmBoundField  # todo remove this
+
             pretty_parts = []
+            orm_bound_field = OrmBoundField([])  # todo this should be None
             for part in parts:
                 orm_field = orm_models[model_name].fields.get(part)
                 if (
@@ -321,21 +340,24 @@ class BoundQuery:
                     or orm_field.rel_name not in orm_models
                     or not orm_models[orm_field.rel_name].root
                 ):
-                    return None, None
+                    return None, None, None
+                orm_bound_field = orm_field.bind(orm_bound_field)
                 pretty_parts.append(orm_field.pretty_name)
                 model_name = orm_field.rel_name
-            return model_name, pretty_parts
+            return model_name, pretty_parts, orm_bound_field
 
         def get_orm_field(path):
             # path__field
             *model_path, field_name = path
-            model_name, pretty_parts = get_path(model_path, query.model_name)
+            model_name, pretty_parts, orm_bound_field = get_path(
+                model_path, query.model_name
+            )
             if model_name:
                 orm_field = orm_models[model_name].fields.get(field_name)
                 if orm_field:
                     return (
                         orm_field,
-                        model_path,
+                        orm_bound_field,
                         field_name,
                         None,
                         pretty_parts + [orm_field.pretty_name],
@@ -344,7 +366,9 @@ class BoundQuery:
             # path__field__aggregate
             if len(path) >= 2:
                 *model_path, field_name, aggregate = path
-                model_name, pretty_parts = get_path(model_path, query.model_name)
+                model_name, pretty_parts, orm_bound_field = get_path(
+                    model_path, query.model_name
+                )
                 if model_name:
                     orm_field = orm_models[model_name].fields.get(field_name)
                     if (
@@ -354,7 +378,7 @@ class BoundQuery:
                     ):
                         return (
                             orm_field,
-                            model_path,
+                            orm_bound_field,
                             field_name,
                             aggregate,
                             pretty_parts + [orm_field.pretty_name, aggregate],
@@ -366,25 +390,35 @@ class BoundQuery:
 
         self.fields = []
         for query_field in query.fields:
-            orm_field, path, name, aggregate, pretty_path = get_orm_field(
+            orm_field, orm_bound_field, name, aggregate, pretty_path = get_orm_field(
                 query_field.path
             )
             if orm_field:
                 self.fields.append(
                     BoundField.bind(
-                        path, name, aggregate, pretty_path, query_field, orm_field
+                        orm_bound_field,
+                        name,
+                        aggregate,
+                        pretty_path,
+                        query_field,
+                        orm_field,
                     )
                 )
 
         self.filters = []
         for query_filter in query.filters:
-            orm_field, path, name, aggregate, pretty_path = get_orm_field(
+            orm_field, orm_bound_field, name, aggregate, pretty_path = get_orm_field(
                 query_filter.path
             )
             if orm_field:
                 self.filters.append(
                     BoundFilter.bind(
-                        path, name, aggregate, pretty_path, query_filter, orm_field
+                        orm_bound_field,
+                        name,
+                        aggregate,
+                        pretty_path,
+                        query_filter,
+                        orm_field,
                     )
                 )
 

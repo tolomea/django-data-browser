@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass
+from typing import Sequence
 
 from django.contrib import admin
 from django.contrib.admin.options import BaseModelAdmin, InlineModelAdmin
@@ -57,6 +58,11 @@ def get_model_name(model, sep="."):
 
 
 @dataclass
+class OrmBoundField:
+    model_path: Sequence[str]
+
+
+@dataclass
 class OrmModel:
     fields: dict
     admin: BaseModelAdmin = None
@@ -76,8 +82,21 @@ class OrmBaseField:
     concrete = False  # can't sort or filter
     rel_name = None  # can't expand
 
-    def bind(name, previous=None):
-        raise NotImplementedError
+    def bind(self, previous):
+        return OrmBoundField(
+            previous.model_path + [self.name] if previous else [self.name]
+        )
+
+    def __repr__(self):  # pragma: no cover
+        params = [
+            self.model_name,
+            self.name,
+            self.pretty_name,
+            self.type_,
+            self.concrete,
+            self.rel_name,
+        ]
+        return f"{self.__class__.__name__}({', '.join(str(p) for p in params)})"
 
 
 class OrmConcreteField(OrmBaseField):
