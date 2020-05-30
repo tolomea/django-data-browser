@@ -236,7 +236,7 @@ class BoundFieldMixin:
 
     @property
     def field_path(self):
-        return (self.model_path or []) + [self.name]
+        return (self.model_path or []) + [self.orm_bound_field.db_field.name]
 
     @property
     def field_path_str(self):
@@ -251,10 +251,6 @@ class BoundFieldMixin:
         return "__".join(self.path)
 
     @property
-    def name(self):
-        return self.orm_bound_field.field.name
-
-    @property
     def aggregate(self):
         return self.orm_bound_field.aggregate
 
@@ -263,8 +259,8 @@ class BoundFieldMixin:
         return self.orm_bound_field.pretty_path
 
     @property
-    def type_(self):  # todo this is wrong for aggregates
-        return self.orm_bound_field.field.type_
+    def type_(self):
+        return self.orm_bound_field.orm_field.type_
 
 
 @dataclass
@@ -281,10 +277,7 @@ class BoundFilter(BoundFieldMixin):
         self.parsed = None
         self.err_message = None
 
-        if self.aggregate:
-            lookups = NumberFieldType.lookups
-        else:
-            lookups = self.type_.lookups
+        lookups = self.orm_bound_field.orm_field.type_.lookups
         if self.lookup not in lookups:
             self.err_message = f"Bad lookup '{self.lookup}' expected {lookups}"
         else:
@@ -302,13 +295,15 @@ class BoundField(BoundFieldMixin):
     direction: Optional[str]
     priority: Optional[int]
 
-    def __post_init__(self):
-        self.concrete = self.orm_bound_field.field.concrete
+    @property
+    def concrete(self):
+        return self.orm_bound_field.orm_field.concrete
 
     @classmethod
     def bind(cls, orm_bound_field, query_field):
-        direction = query_field.direction if orm_bound_field.field.concrete else None
-        priority = query_field.priority if orm_bound_field.field.concrete else None
+        concrete = orm_bound_field.orm_field.concrete
+        direction = query_field.direction if concrete else None
+        priority = query_field.priority if concrete else None
         return cls(orm_bound_field, direction, priority)
 
 
@@ -325,7 +320,7 @@ class BoundQuery:
                     return None
                 orm_bound_field = orm_field.bind(orm_bound_field)
                 model_name = orm_field.rel_name
-            if not orm_bound_field.field.type_:
+            if not orm_bound_field.orm_field.type_:
                 return None
             return orm_bound_field
 

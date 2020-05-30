@@ -21,6 +21,7 @@ from .query import (
     TYPES,
     BooleanFieldType,
     HTMLFieldType,
+    MetaFieldType,
     NumberFieldType,
     StringFieldType,
     TimeFieldType,
@@ -60,7 +61,8 @@ def get_model_name(model, sep="."):
 
 @dataclass
 class OrmBoundField:
-    field: OrmBaseField = None
+    orm_field: OrmBaseField = None
+    db_field: MetaFieldType = None
     model_path: Sequence[str] = dataclasses.field(default_factory=list)
     pretty_path: Sequence[str] = dataclasses.field(default_factory=list)
     aggregate: str = None
@@ -95,21 +97,12 @@ class OrmBaseField:
             self.concrete,
             self.rel_name,
         ]
-        return f"{self.__class__.__name__}({', '.join(str(p) for p in params)})"
-
-
-class OrmConcreteField(OrmBaseField):
-    concrete = True
-
-    def __init__(self, model_name, name, pretty_name, type_):
-        super().__init__(model_name, name, pretty_name)
-        self.type_ = type_
-        self.rel_name = type_.name if type_.aggregates else None
+        return f"{self.__class__.__name__}({', '.join(repr(p) for p in params)})"
 
     def bind(self, previous):
         previous = previous or OrmBoundField()
         return OrmBoundField(
-            self, previous.model_path, previous.pretty_path + [self.pretty_name]
+            self, self, previous.model_path, previous.pretty_path + [self.pretty_name]
         )
 
 
@@ -122,19 +115,23 @@ class OrmFkField(OrmBaseField):
         previous = previous or OrmBoundField()
         return OrmBoundField(
             self,
+            None,
             previous.model_path + [self.name],
             previous.pretty_path + [self.pretty_name],
         )
 
 
+class OrmConcreteField(OrmBaseField):
+    concrete = True
+
+    def __init__(self, model_name, name, pretty_name, type_):
+        super().__init__(model_name, name, pretty_name)
+        self.type_ = type_
+        self.rel_name = type_.name if type_.aggregates else None
+
+
 class OrmCalculatedField(OrmBaseField):
     type_ = StringFieldType
-
-    def bind(self, previous):
-        previous = previous or OrmBoundField()
-        return OrmBoundField(
-            self, previous.model_path, previous.pretty_path + [self.pretty_name]
-        )
 
 
 class OrmAdminField(OrmBaseField):
@@ -142,12 +139,6 @@ class OrmAdminField(OrmBaseField):
 
     def __init__(self, model_name):
         super().__init__(model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN)
-
-    def bind(self, previous):
-        previous = previous or OrmBoundField()
-        return OrmBoundField(
-            self, previous.model_path, previous.pretty_path + [self.pretty_name]
-        )
 
 
 class OrmAggregateField(OrmBaseField):
@@ -158,9 +149,10 @@ class OrmAggregateField(OrmBaseField):
         super().__init__(model_name, name, name)
 
     def bind(self, previous):
-        previous = previous or OrmBoundField()
+        assert previous.db_field
         return OrmBoundField(
-            previous.field,
+            self,
+            previous.db_field,
             previous.model_path,
             previous.pretty_path + [self.pretty_name],
             self.name,
@@ -418,7 +410,7 @@ def get_results(request, bound_query):
         else:
             tail = field.path_str
 
-        admin = bound_query.orm_models[field.orm_bound_field.field.model_name].admin
+        admin = bound_query.orm_models[field.orm_bound_field.db_field.model_name].admin
         if field.concrete:
             return getattr(value, tail, None)
         elif tail == _OPEN_IN_ADMIN:

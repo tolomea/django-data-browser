@@ -179,11 +179,10 @@ class TestBoundQuery:
         ] == [("fd", DSC, 0), ("fa", ASC, 1)]
 
     def test_filters(self, bound_query, orm_models):
+        orm_field = orm_models["app.model"].fields["bob"]
         assert bound_query.filters == [
             BoundFilter(
-                orm.OrmBoundField(orm_models["app.model"].fields["bob"], [], ["bob"]),
-                "equals",
-                "fred",
+                orm.OrmBoundField(orm_field, orm_field, [], ["bob"]), "equals", "fred"
             )
         ]
 
@@ -240,11 +239,16 @@ class TestBoundQuery:
 
 class TestBoundField:
     def test_path_properties(self):
-        orm_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
+        db_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
+        orm_field = orm.OrmConcreteField("string", "max", "max", NumberFieldType)
 
         bf = BoundField(
             orm.OrmBoundField(
-                orm_field, ["bob", "fred"], ["bob", "fred", "joe", "max"], "max"
+                orm_field,
+                db_field,
+                ["bob", "fred"],
+                ["bob", "fred", "joe", "max"],
+                "max",
             ),
             None,
             None,
@@ -254,14 +258,18 @@ class TestBoundField:
         assert bf.path_str == "bob__fred__joe__max"
 
         bf = BoundField(
-            orm.OrmBoundField(orm_field, [], ["joe", "max"], "max"), None, None
+            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"], "max"),
+            None,
+            None,
         )
         assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
         bf = BoundField(
-            orm.OrmBoundField(orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
+            orm.OrmBoundField(
+                db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"]
+            ),
             None,
             None,
         )
@@ -272,11 +280,16 @@ class TestBoundField:
 
 class TestBoundFilter:
     def test_path_properties(self):
-        orm_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
+        db_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
+        orm_field = orm.OrmConcreteField("string", "max", "max", NumberFieldType)
 
         bf = BoundFilter(
             orm.OrmBoundField(
-                orm_field, ["bob", "fred"], ["bob", "fred", "joe", "max"], "max"
+                orm_field,
+                db_field,
+                ["bob", "fred"],
+                ["bob", "fred", "joe", "max"],
+                "max",
             ),
             "gt",
             5,
@@ -286,14 +299,16 @@ class TestBoundFilter:
         assert bf.path_str == "bob__fred__joe__max"
 
         bf = BoundFilter(
-            orm.OrmBoundField(orm_field, [], ["joe", "max"], "max"), "gt", 5
+            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"], "max"), "gt", 5
         )
         assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
         bf = BoundFilter(
-            orm.OrmBoundField(orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
+            orm.OrmBoundField(
+                db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"]
+            ),
             "gt",
             5,
         )
@@ -310,7 +325,7 @@ class TestFieldType:
 class TestStringFieldType:
     def test_validate(self):
         orm_field = orm.OrmConcreteField("", "bob", "bob", StringFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, [], ["bob"])
+        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
         assert BoundFilter(orm_bound_field, "contains", "hello").is_valid
         assert not BoundFilter(orm_bound_field, "pontains", "hello").is_valid
 
@@ -324,7 +339,7 @@ class TestStringFieldType:
 class TestNumberFieldType:
     def test_validate(self):
         orm_field = orm.OrmConcreteField("", "bob", "bob", NumberFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, [], ["bob"])
+        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
         assert BoundFilter(orm_bound_field, "gt", "6.1").is_valid
         assert not BoundFilter(orm_bound_field, "pontains", "6.1").is_valid
         assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
@@ -341,7 +356,7 @@ class TestNumberFieldType:
 class TestTimeFieldType:
     def test_validate(self):
         orm_field = orm.OrmConcreteField("", "bob", "bob", TimeFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, [], ["bob"])
+        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
         assert BoundFilter(orm_bound_field, "gt", "2018-03-20T22:31:23").is_valid
         assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
         assert not BoundFilter(
@@ -363,7 +378,7 @@ class TestTimeFieldType:
 class TestBooleanFieldType:
     def test_validate(self):
         orm_field = orm.OrmConcreteField("", "bob", "bob", BooleanFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, [], ["bob"])
+        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
         assert BoundFilter(orm_bound_field, "equals", "True").is_valid
         assert BoundFilter(orm_bound_field, "equals", "False").is_valid
         assert not BoundFilter(orm_bound_field, "equals", "hello").is_valid
