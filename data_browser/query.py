@@ -350,9 +350,7 @@ class BoundQuery:
                     and aggregate in orm_bound_field.field.type_.aggregates
                 ):
                     return (
-                        orm_bound_field.field,  # todo
                         orm_bound_field,
-                        orm_bound_field.field.name,  # todo
                         aggregate,
                         orm_bound_field.pretty_path + [aggregate],
                     )
@@ -361,50 +359,40 @@ class BoundQuery:
             model_path = path
             orm_bound_field = get_path(model_path, query.model_name)
             if orm_bound_field and orm_bound_field.field.type_:
-                return (
-                    orm_bound_field.field,  # todo
-                    orm_bound_field,
-                    orm_bound_field.field.name,  # todo
-                    None,
-                    orm_bound_field.pretty_path,
-                )
+                return (orm_bound_field, None, orm_bound_field.pretty_path)
 
-            return None, None, None, None, None
+            return None, None, None
 
         self.model_name = query.model_name
         self.orm_models = orm_models
 
         self.fields = []
         for query_field in query.fields:
-            orm_field, orm_bound_field, name, aggregate, pretty_path = get_orm_field(
-                query_field.path
-            )
-            if orm_field:
+            orm_bound_field, aggregate, pretty_path = get_orm_field(query_field.path)
+            if orm_bound_field:
                 self.fields.append(
                     BoundField.bind(
                         orm_bound_field,
-                        name,
+                        orm_bound_field.field.name,
                         aggregate,
                         pretty_path,
                         query_field,
-                        orm_field,
+                        orm_bound_field.field,
                     )
                 )
 
         self.filters = []
         for query_filter in query.filters:
-            orm_field, orm_bound_field, name, aggregate, pretty_path = get_orm_field(
-                query_filter.path
-            )
-            if orm_field:
+            orm_bound_field, aggregate, pretty_path = get_orm_field(query_filter.path)
+            if orm_bound_field:
                 self.filters.append(
                     BoundFilter.bind(
                         orm_bound_field,
-                        name,
+                        orm_bound_field.field.name,
                         aggregate,
                         pretty_path,
                         query_filter,
-                        orm_field,
+                        orm_bound_field.field,
                     )
                 )
 
