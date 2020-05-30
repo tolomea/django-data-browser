@@ -171,7 +171,7 @@ def _data_response(request, query, media, meta):
     if media == "csv":
         buffer = io.StringIO()
         writer = csv.writer(buffer)
-        writer.writerow(f.path_str for f in bound_query.fields)
+        writer.writerow(" ".join(f.pretty_path) for f in bound_query.fields)
         writer.writerows(results)
         buffer.seek(0)
         response = http.HttpResponse(buffer, content_type="text/csv")

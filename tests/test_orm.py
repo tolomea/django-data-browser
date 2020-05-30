@@ -1,6 +1,6 @@
 import pytest
 from data_browser import orm
-from data_browser.query import BoundQuery, Query
+from data_browser.query import BoundQuery, NumberFieldType, Query, StringFieldType
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
@@ -356,3 +356,24 @@ class TestPermissions:
         assert orm_models["tests.Normal"] == orm.OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
+
+
+def test_path_properties():
+    db_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
+    orm_field = orm.OrmConcreteField("string", "max", "max", NumberFieldType)
+
+    bf = orm.OrmBoundField(
+        orm_field, db_field, ["bob", "fred"], ["bob", "fred", "joe", "max"]
+    )
+    assert bf.field_path_str == "bob__fred__joe"
+    assert bf.full_path_str == "bob__fred__joe__max"
+
+    bf = orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"])
+
+    assert bf.field_path_str == "joe"
+    assert bf.full_path_str == "joe__max"
+
+    bf = orm.OrmBoundField(db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"])
+
+    assert bf.field_path_str == "bob__fred__joe"
+    assert bf.full_path_str == "bob__fred__joe"

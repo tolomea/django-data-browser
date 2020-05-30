@@ -6,7 +6,6 @@ from data_browser.query import (
     ASC,
     DSC,
     BooleanFieldType,
-    BoundField,
     BoundFilter,
     BoundQuery,
     NumberFieldType,
@@ -168,15 +167,13 @@ class TestQuery:
 
 class TestBoundQuery:
     def test_fields(self, bound_query):
-        assert [f.path_str for f in bound_query.fields] == ["fa", "fd", "fn"]
-
-    def test_calculated_fields(self, bound_query):
-        assert bound_query.calculated_fields == {"fn"}
+        assert [f.path for f in bound_query.fields] == [["fa"], ["fd"], ["fn"]]
 
     def test_sort_fields(self, bound_query):
-        assert [
-            (f.path_str, f.direction, f.priority) for f in bound_query.sort_fields
-        ] == [("fd", DSC, 0), ("fa", ASC, 1)]
+        assert [(f.path, f.direction, f.priority) for f in bound_query.sort_fields] == [
+            (["fd"], DSC, 0),
+            (["fa"], ASC, 1),
+        ]
 
     def test_filters(self, bound_query, orm_models):
         orm_field = orm_models["app.model"].fields["bob"]
@@ -189,37 +186,37 @@ class TestBoundQuery:
     def test_bad_field(self, orm_models):
         query = Query("app.model", [QueryField("yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == []
 
     def test_bad_fk(self, orm_models):
         query = Query("app.model", [QueryField("yata__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == []
 
     def test_bad_fk_field(self, orm_models):
         query = Query("app.model", [QueryField("tom__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == []
 
     def test_bad_fk_field_aggregate(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == []
 
     def test_bad_long_fk(self, orm_models):
         query = Query("app.model", [QueryField("yata__yata__yata")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == []
 
     def test_aggregate(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones__count")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == ["tom__jones__count"]
+        assert [f.path for f in bound_query.fields] == [["tom", "jones", "count"]]
 
     def test_bad_filter(self, orm_models):
         query = Query("app.model", [], [QueryFilter("yata", "equals", "fred")])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == []
 
     def test_bad_filter_value(self, orm_models):
         query = Query(
@@ -234,71 +231,7 @@ class TestBoundQuery:
     def test_fk(self, orm_models):
         query = Query("app.model", [QueryField("tom")], [])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path_str for f in bound_query.fields] == []
-
-
-class TestBoundField:
-    def test_path_properties(self):
-        db_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
-        orm_field = orm.OrmConcreteField("string", "max", "max", NumberFieldType)
-
-        bf = BoundField(
-            orm.OrmBoundField(
-                orm_field, db_field, ["bob", "fred"], ["bob", "fred", "joe", "max"]
-            ),
-            None,
-            None,
-        )
-        assert bf.field_path_str == "bob__fred__joe"
-        assert bf.path_str == "bob__fred__joe__max"
-
-        bf = BoundField(
-            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"]), None, None
-        )
-        assert bf.field_path_str == "joe"
-        assert bf.path_str == "joe__max"
-
-        bf = BoundField(
-            orm.OrmBoundField(
-                db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"]
-            ),
-            None,
-            None,
-        )
-        assert bf.field_path_str == "bob__fred__joe"
-        assert bf.path_str == "bob__fred__joe"
-
-
-class TestBoundFilter:
-    def test_path_properties(self):
-        db_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
-        orm_field = orm.OrmConcreteField("string", "max", "max", NumberFieldType)
-
-        bf = BoundFilter(
-            orm.OrmBoundField(
-                orm_field, db_field, ["bob", "fred"], ["bob", "fred", "joe", "max"]
-            ),
-            "gt",
-            5,
-        )
-        assert bf.field_path_str == "bob__fred__joe"
-        assert bf.path_str == "bob__fred__joe__max"
-
-        bf = BoundFilter(
-            orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"]), "gt", 5
-        )
-        assert bf.field_path_str == "joe"
-        assert bf.path_str == "joe__max"
-
-        bf = BoundFilter(
-            orm.OrmBoundField(
-                db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"]
-            ),
-            "gt",
-            5,
-        )
-        assert bf.field_path_str == "bob__fred__joe"
-        assert bf.path_str == "bob__fred__joe"
+        assert [f.path for f in bound_query.fields] == []
 
 
 class TestFieldType:

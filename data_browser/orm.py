@@ -92,6 +92,26 @@ class OrmBoundField:
             return self.field_path
         return self.field_path + [self.orm_field.name]
 
+    @property
+    def full_path_str(self):
+        return "__".join(self.full_path)
+
+    @property
+    def field_path_str(self):
+        return "__".join(self.field_path)
+
+    @property
+    def model_name(self):
+        return self.db_field.model_name
+
+    @property
+    def concrete(self):
+        return self.orm_field.concrete
+
+    @property
+    def type_(self):
+        return self.orm_field.type_
+
 
 @dataclass
 class OrmModel:
@@ -326,38 +346,38 @@ def get_results(request, bound_query):
             negation = True
             lookup = lookup[4:]
 
-        filter_str = f"{filter_.path_str}__{_get_django_lookup(filter_.type_, lookup)}"
+        filter_str = f"{filter_.orm_bound_field.full_path_str}__{_get_django_lookup(filter_.orm_bound_field.type_, lookup)}"
         if negation:
             return qs.exclude(**{filter_str: filter_.parsed})
         else:
             return qs.filter(**{filter_str: filter_.parsed})
 
     def fmt(field, value):
-        if field.aggregate:
-            return NumberFieldType.format(value)
-        else:
-            return field.type_.format(value)
+        return field.orm_bound_field.type_.format(value)
 
     request.data_browser = True
 
     if not bound_query.fields:
         return []
 
-    normal_fields = [f for f in bound_query.fields if not f.aggregate]
+    normal_fields = [f for f in bound_query.fields if not f.orm_bound_field.aggregate]
+    calculated_fields = [
+        f for f in bound_query.fields if not f.orm_bound_field.concrete
+    ]
 
     admin = bound_query.orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
     # filter normal fields
     for filter_ in bound_query.valid_filters:
-        if not filter_.aggregate:
+        if not filter_.orm_bound_field.aggregate:
             qs = filter(qs)
 
     # no calculated fields we're going to early out using qs.values
-    if not bound_query.calculated_fields:
+    if not calculated_fields:
         # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
         qs = qs.values(
-            *[f.path_str for f in normal_fields],
+            *[f.orm_bound_field.full_path_str for f in normal_fields],
             _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
         )
 
@@ -366,31 +386,35 @@ def get_results(request, bound_query):
 
     # aggregates
     for field in bound_query.fields + bound_query.filters:
+        field = field.orm_bound_field
         if field.aggregate:
             qs = qs.annotate(
-                **{field.path_str: _AGG_MAP[field.aggregate](field.field_path_str)}
+                **{field.full_path_str: _AGG_MAP[field.aggregate](field.field_path_str)}
             )
 
     # filter aggregate fields
     for filter_ in bound_query.valid_filters:
-        if filter_.aggregate:
+        if filter_.orm_bound_field.aggregate:
             qs = filter(qs)
 
     # sort
     sort_fields = []
     for field in bound_query.sort_fields:
         if field.direction is ASC:
-            sort_fields.append(field.path_str)
+            sort_fields.append(field.orm_bound_field.full_path_str)
         if field.direction is DSC:
-            sort_fields.append(f"-{field.path_str}")
+            sort_fields.append(f"-{field.orm_bound_field.full_path_str}")
     qs = qs.order_by(*sort_fields)
 
     # no calculated fields early out using qs.values
-    if not bound_query.calculated_fields:
+    if not calculated_fields:
         results = []
         for row in qs:
             results.append(
-                [fmt(field, row[field.path_str]) for field in bound_query.fields]
+                [
+                    fmt(field, row[field.orm_bound_field.full_path_str])
+                    for field in bound_query.fields
+                ]
             )
         return results
 
@@ -401,13 +425,13 @@ def get_results(request, bound_query):
 
     select_related = set()
     for field in bound_query.sort_fields:
-        select_related.update(ancestors(field.model_path))
+        select_related.update(ancestors(field.orm_bound_field.model_path))
     for filter_ in bound_query.valid_filters:
-        select_related.update(ancestors(filter_.model_path))
+        select_related.update(ancestors(filter_.orm_bound_field.model_path))
 
     prefetch_related = set()
     for field in normal_fields:
-        prefetch_related.update(ancestors(field.model_path))
+        prefetch_related.update(ancestors(field.orm_bound_field.model_path))
     prefetch_related -= select_related
 
     if select_related:
@@ -428,13 +452,13 @@ def get_results(request, bound_query):
         value = obj
 
         if field.aggregate is None:
-            *parts, tail = field.path
+            *parts, tail = field.full_path
             for part in parts:
                 value = getattr(value, part, None)
         else:
-            tail = field.path_str
+            tail = field.full_path_str
 
-        admin = bound_query.orm_models[field.orm_bound_field.db_field.model_name].admin
+        admin = bound_query.orm_models[field.model_name].admin
         if field.concrete:
             return getattr(value, tail, None)
         elif tail == _OPEN_IN_ADMIN:
@@ -454,5 +478,10 @@ def get_results(request, bound_query):
 
     results = []
     for row in qs:
-        results.append([fmt(field, lookup(row, field)) for field in bound_query.fields])
+        results.append(
+            [
+                fmt(field, lookup(row, field.orm_bound_field))
+                for field in bound_query.fields
+            ]
+        )
     return results

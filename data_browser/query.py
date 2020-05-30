@@ -222,44 +222,12 @@ TYPES = {
 
 class BoundFieldMixin:
     @property
-    def type_(self):
-        return self.orm_bound_field.orm_field.type_
-
-    @property
-    def concrete(self):
-        return self.orm_bound_field.orm_field.concrete
-
-    # todo maybe remove
-
-    @property
     def path(self):
         return self.orm_bound_field.full_path
 
     @property
     def pretty_path(self):
         return self.orm_bound_field.pretty_path
-
-    # todo definitely remove
-
-    @property
-    def model_path(self):
-        return self.orm_bound_field.model_path
-
-    @property
-    def field_path(self):
-        return self.orm_bound_field.field_path
-
-    @property
-    def field_path_str(self):
-        return "__".join(self.field_path)
-
-    @property
-    def aggregate(self):
-        return self.orm_bound_field.aggregate
-
-    @property
-    def path_str(self):
-        return "__".join(self.path)
 
 
 @dataclass
@@ -276,7 +244,7 @@ class BoundFilter(BoundFieldMixin):
         self.parsed = None
         self.err_message = None
 
-        lookups = self.orm_bound_field.orm_field.type_.lookups
+        lookups = self.orm_bound_field.type_.lookups
         if self.lookup not in lookups:
             self.err_message = f"Bad lookup '{self.lookup}' expected {lookups}"
         else:
@@ -296,7 +264,7 @@ class BoundField(BoundFieldMixin):
 
     @classmethod
     def bind(cls, orm_bound_field, query_field):
-        concrete = orm_bound_field.orm_field.concrete
+        concrete = orm_bound_field.concrete
         direction = query_field.direction if concrete else None
         priority = query_field.priority if concrete else None
         return cls(orm_bound_field, direction, priority)
@@ -313,7 +281,7 @@ class BoundQuery:
                     return None
                 orm_bound_field = orm_field.bind(orm_bound_field)
                 model_name = orm_field.rel_name
-            if not orm_bound_field.orm_field.type_:
+            if not orm_bound_field.type_:
                 return None
             return orm_bound_field
 
@@ -335,10 +303,6 @@ class BoundQuery:
     @property
     def sort_fields(self):
         return sorted((f for f in self.fields if f.direction), key=lambda f: f.priority)
-
-    @property
-    def calculated_fields(self):
-        return {f.path_str for f in self.fields if not f.concrete}
 
     @property
     def valid_filters(self):
