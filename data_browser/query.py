@@ -254,27 +254,30 @@ class BoundFieldMixin:
     def name(self):
         return self.orm_bound_field.field.name
 
+    @property
+    def aggregate(self):
+        return self.orm_bound_field.aggregate
+
+    @property
+    def pretty_path(self):
+        return self.orm_bound_field.pretty_path
+
+    @property
+    def type_(self):  # todo this is wrong for aggregates
+        return self.orm_bound_field.field.type_
+
 
 @dataclass
 class BoundFilter(BoundFieldMixin):
     orm_bound_field: Any
-    aggregate: Optional[str]
-    pretty_path: Sequence[str]
     lookup: str
     value: str
 
     @classmethod
-    def bind(cls, orm_bound_field, aggregate, pretty_path, query_filter):
-        return cls(
-            orm_bound_field,
-            aggregate,
-            pretty_path,
-            query_filter.lookup,
-            query_filter.value,
-        )
+    def bind(cls, orm_bound_field, query_filter):
+        return cls(orm_bound_field, query_filter.lookup, query_filter.value)
 
     def __post_init__(self):
-        self.type_ = self.orm_bound_field.field.type_
         self.parsed = None
         self.err_message = None
 
@@ -296,27 +299,25 @@ class BoundFilter(BoundFieldMixin):
 @dataclass
 class BoundField(BoundFieldMixin):
     orm_bound_field: Any
-    aggregate: Optional[str]
-    pretty_path: Sequence[str]
     direction: Optional[str]
     priority: Optional[int]
 
     def __post_init__(self):
-        self.type_ = self.orm_bound_field.field.type_
         self.concrete = self.orm_bound_field.field.concrete
 
     @classmethod
-    def bind(cls, orm_bound_field, aggregate, pretty_path, query_field):
+    def bind(cls, orm_bound_field, query_field):
         direction = query_field.direction if orm_bound_field.field.concrete else None
         priority = query_field.priority if orm_bound_field.field.concrete else None
-        return cls(orm_bound_field, aggregate, pretty_path, direction, priority)
+        return cls(orm_bound_field, direction, priority)
 
 
 class BoundQuery:
     def __init__(self, query, orm_models):
-        def get_path(parts, model_name):
+        def get_orm_field(parts):
             from .orm import OrmBoundField  # todo remove this
 
+            model_name = query.model_name
             orm_bound_field = OrmBoundField()  # todo this should be None
             for part in parts:
                 orm_field = orm_models[model_name].fields.get(part)
@@ -324,41 +325,24 @@ class BoundQuery:
                     return None
                 orm_bound_field = orm_field.bind(orm_bound_field)
                 model_name = orm_field.rel_name
+            if not orm_bound_field.field.type_:
+                return None
             return orm_bound_field
-
-        def get_orm_field(path):
-            orm_bound_field = get_path(path, query.model_name)
-            if orm_bound_field and orm_bound_field.field.type_:
-                return (
-                    orm_bound_field,
-                    orm_bound_field.aggregate,
-                    orm_bound_field.pretty_path,
-                )
-
-            return None, None, None
 
         self.model_name = query.model_name
         self.orm_models = orm_models
 
         self.fields = []
         for query_field in query.fields:
-            orm_bound_field, aggregate, pretty_path = get_orm_field(query_field.path)
+            orm_bound_field = get_orm_field(query_field.path)
             if orm_bound_field:
-                self.fields.append(
-                    BoundField.bind(
-                        orm_bound_field, aggregate, pretty_path, query_field
-                    )
-                )
+                self.fields.append(BoundField.bind(orm_bound_field, query_field))
 
         self.filters = []
         for query_filter in query.filters:
-            orm_bound_field, aggregate, pretty_path = get_orm_field(query_filter.path)
+            orm_bound_field = get_orm_field(query_filter.path)
             if orm_bound_field:
-                self.filters.append(
-                    BoundFilter.bind(
-                        orm_bound_field, aggregate, pretty_path, query_filter
-                    )
-                )
+                self.filters.append(BoundFilter.bind(orm_bound_field, query_filter))
 
     @property
     def sort_fields(self):
