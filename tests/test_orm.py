@@ -312,14 +312,13 @@ class TestPermissions:
 
         assert "tests.NotInAdmin" not in orm_models
         assert orm_models["tests.InAdmin"] == orm.OrmModel(
-            fields=KEYS("admin", "id", "name"), fks=KEYS(), admin=ANY(BaseModelAdmin)
+            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
         assert orm_models["tests.InlineAdmin"] == orm.OrmModel(
-            fields=KEYS("id", "name"), fks=KEYS("in_admin"), admin=ANY(BaseModelAdmin)
+            fields=KEYS("id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
         assert orm_models["tests.Normal"] == orm.OrmModel(
-            fields=KEYS("admin", "id", "name"),
-            fks=KEYS("in_admin", "inline_admin"),
+            fields=KEYS("admin", "id", "name", "in_admin", "inline_admin"),
             admin=ANY(BaseModelAdmin),
         )
 
@@ -331,7 +330,7 @@ class TestPermissions:
         assert "tests.InAdmin" not in orm_models
         assert "tests.InlineAdmin" not in orm_models
         assert orm_models["tests.Normal"] == orm.OrmModel(
-            fields=KEYS("admin", "id", "name"), fks=KEYS(), admin=ANY(BaseModelAdmin)
+            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
     @pytest.mark.django_db
@@ -342,7 +341,7 @@ class TestPermissions:
         assert "tests.InAdmin" not in orm_models
         assert "tests.InlineAdmin" not in orm_models
         assert orm_models["tests.Normal"] == orm.OrmModel(
-            fields=KEYS("admin", "id", "name"), fks=KEYS(), admin=ANY(BaseModelAdmin)
+            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
     @pytest.mark.django_db
@@ -351,11 +350,9 @@ class TestPermissions:
 
         assert "tests.NotInAdmin" not in orm_models
         assert orm_models["tests.InAdmin"] == orm.OrmModel(
-            fields=KEYS("admin", "id", "name"), fks=KEYS(), admin=ANY(BaseModelAdmin)
+            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
         assert "tests.InlineAdmin" not in orm_models
         assert orm_models["tests.Normal"] == orm.OrmModel(
-            fields=KEYS("admin", "id", "name"),
-            fks=KEYS("in_admin"),
-            admin=ANY(BaseModelAdmin),
+            fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )

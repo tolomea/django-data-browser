@@ -61,15 +61,13 @@ def orm_models():
                     pretty_name="num",
                     type_=NumberFieldType,
                 ),
-            },
-            fks={
                 "tom": orm.OrmFkField(
                     model_name="app.model",
                     name="tom",
                     pretty_name="tom",
                     rel_name="app.Tom",
-                )
-            },
+                ),
+            }
         ),
         "app.Tom": orm.OrmModel(
             fields={
@@ -78,16 +76,14 @@ def orm_models():
                     name="jones",
                     pretty_name="jones",
                     type_=StringFieldType,
-                )
-            },
-            fks={
+                ),
                 "michael": orm.OrmFkField(
                     model_name="app.Tom",
                     name="michael",
                     pretty_name="michael",
                     rel_name="app.Michael",
-                )
-            },
+                ),
+            }
         ),
         "app.Michael": orm.OrmModel(
             fields={
@@ -97,8 +93,7 @@ def orm_models():
                     pretty_name="bolton",
                     type_=StringFieldType,
                 )
-            },
-            fks={},
+            }
         ),
     }
 

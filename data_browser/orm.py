@@ -58,7 +58,6 @@ def get_model_name(model, sep="."):
 @dataclass
 class OrmModel:
     fields: dict
-    fks: dict
     admin: BaseModelAdmin = None
 
 
@@ -150,7 +149,6 @@ def _get_all_admin_fields(request):
 
 def _get_fields_for_model(model, model_admins, admin_fields):
     fields = {}
-    fks = {}
 
     model_name = get_model_name(model)
     model_fields = {f.name: f for f in model._meta.get_fields()}
@@ -163,7 +161,7 @@ def _get_fields_for_model(model, model_admins, admin_fields):
             pass  # TODO 2many support
         elif isinstance(field, models.ForeignKey):
             if field.related_model in admin_fields:
-                fks[field_name] = OrmFkField(
+                fields[field_name] = OrmFkField(
                     model_name=model_name,
                     name=field_name,
                     pretty_name=field_name,
@@ -195,12 +193,11 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                     f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
                 )
 
-    return OrmModel(fields=fields, fks=fks, admin=model_admins[model])
+    return OrmModel(fields=fields, admin=model_admins[model])
 
 
 def get_models(request):
     model_admins, admin_fields = _get_all_admin_fields(request)
-    # {model: {"fields": {field_name, FieldType}, "fks": {field_name: model}}}
     return {
         get_model_name(model): _get_fields_for_model(model, model_admins, admin_fields)
         for model in admin_fields

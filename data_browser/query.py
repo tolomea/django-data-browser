@@ -314,11 +314,15 @@ class BoundQuery:
         def get_path(parts, model_name):
             pretty_parts = []
             for part in parts:
-                fk_field = orm_models[model_name].fks.get(part)
-                if fk_field is None:
+                field = orm_models[model_name].fields.get(part)
+                if (
+                    field is None
+                    or field.rel_name is None
+                    or field.rel_name not in orm_models
+                ):
                     return None, None
-                pretty_parts.append(fk_field.pretty_name)
-                model_name = fk_field.rel_name
+                pretty_parts.append(field.pretty_name)
+                model_name = field.rel_name
             return model_name, pretty_parts
 
         def get_orm_field(path):
@@ -342,7 +346,11 @@ class BoundQuery:
                 model_name, pretty_parts = get_path(model_path, query.model_name)
                 if model_name:
                     orm_field = orm_models[model_name].fields.get(field_name)
-                    if orm_field and aggregate in orm_field.type_.aggregates:
+                    if (
+                        orm_field
+                        and orm_field.type_
+                        and aggregate in orm_field.type_.aggregates
+                    ):
                         return (
                             orm_field,
                             model_path,

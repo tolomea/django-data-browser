@@ -58,7 +58,7 @@ def _get_model_fields(orm_model):
             "concrete": orm_field.concrete,
             "prettyName": orm_field.pretty_name,
         }
-        for name, orm_field in {**orm_model.fields, **orm_model.fks}.items()
+        for name, orm_field in orm_model.fields.items()
     }
 
     return {"fields": all_fields, "sortedFields": sort_model_fields(all_fields)}
