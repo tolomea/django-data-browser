@@ -250,32 +250,31 @@ class BoundFieldMixin:
     def path_str(self):
         return "__".join(self.path)
 
+    @property
+    def name(self):
+        return self.orm_bound_field.field.name
+
 
 @dataclass
 class BoundFilter(BoundFieldMixin):
     orm_bound_field: Any
-    name: str
     aggregate: Optional[str]
     pretty_path: Sequence[str]
     lookup: str
     value: str
-    type_: FieldType
 
     @classmethod
-    def bind(
-        cls, orm_bound_field, name, aggregate, pretty_path, query_filter, orm_field
-    ):
+    def bind(cls, orm_bound_field, aggregate, pretty_path, query_filter):
         return cls(
             orm_bound_field,
-            name,
             aggregate,
             pretty_path,
             query_filter.lookup,
             query_filter.value,
-            orm_field.type_,
         )
 
     def __post_init__(self):
+        self.type_ = self.orm_bound_field.field.type_
         self.parsed = None
         self.err_message = None
 
@@ -297,32 +296,20 @@ class BoundFilter(BoundFieldMixin):
 @dataclass
 class BoundField(BoundFieldMixin):
     orm_bound_field: Any
-    name: str
     aggregate: Optional[str]
     pretty_path: Sequence[str]
     direction: Optional[str]
     priority: Optional[int]
-    orm_field: Any  # orm.OrmField
 
     def __post_init__(self):
-        self.type_ = self.orm_field.type_
-        self.concrete = self.orm_field.concrete
+        self.type_ = self.orm_bound_field.field.type_
+        self.concrete = self.orm_bound_field.field.concrete
 
     @classmethod
-    def bind(
-        cls, orm_bound_field, name, aggregate, pretty_path, query_field, orm_field
-    ):
-        direction = query_field.direction if orm_field.concrete else None
-        priority = query_field.priority if orm_field.concrete else None
-        return cls(
-            orm_bound_field,
-            name,
-            aggregate,
-            pretty_path,
-            direction,
-            priority,
-            orm_field,
-        )
+    def bind(cls, orm_bound_field, aggregate, pretty_path, query_field):
+        direction = query_field.direction if orm_bound_field.field.concrete else None
+        priority = query_field.priority if orm_bound_field.field.concrete else None
+        return cls(orm_bound_field, aggregate, pretty_path, direction, priority)
 
 
 class BoundQuery:
@@ -359,7 +346,7 @@ class BoundQuery:
             model_path = path
             orm_bound_field = get_path(model_path, query.model_name)
             if orm_bound_field and orm_bound_field.field.type_:
-                return (orm_bound_field, None, orm_bound_field.pretty_path)
+                return orm_bound_field, None, orm_bound_field.pretty_path
 
             return None, None, None
 
@@ -372,12 +359,7 @@ class BoundQuery:
             if orm_bound_field:
                 self.fields.append(
                     BoundField.bind(
-                        orm_bound_field,
-                        orm_bound_field.field.name,
-                        aggregate,
-                        pretty_path,
-                        query_field,
-                        orm_bound_field.field,
+                        orm_bound_field, aggregate, pretty_path, query_field
                     )
                 )
 
@@ -387,12 +369,7 @@ class BoundQuery:
             if orm_bound_field:
                 self.filters.append(
                     BoundFilter.bind(
-                        orm_bound_field,
-                        orm_bound_field.field.name,
-                        aggregate,
-                        pretty_path,
-                        query_filter,
-                        orm_bound_field.field,
+                        orm_bound_field, aggregate, pretty_path, query_filter
                     )
                 )
 

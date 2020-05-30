@@ -408,7 +408,7 @@ def get_results(request, bound_query):
         else:
             tail = field.path_str
 
-        admin = bound_query.orm_models[field.orm_field.model_name].admin
+        admin = bound_query.orm_models[field.orm_bound_field.field.model_name].admin
         if field.concrete:
             return getattr(value, tail, None)
         elif tail == _OPEN_IN_ADMIN:

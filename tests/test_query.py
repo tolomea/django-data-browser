@@ -108,15 +108,6 @@ def bound_query(query, orm_models):
     return BoundQuery(query, orm_models)
 
 
-@pytest.fixture
-def fake_orm_field():
-    class FakeOrmField:
-        type_ = StringFieldType
-        concrete = False
-
-    return FakeOrmField()
-
-
 class TestQuery:
     def test_from_request(self, query):
         q = Query.from_request(
@@ -191,12 +182,10 @@ class TestBoundQuery:
         assert bound_query.filters == [
             BoundFilter(
                 orm.OrmBoundField(orm_models["app.model"].fields["bob"], [], ["bob"]),
-                "bob",
                 None,
                 ["bob"],
                 "equals",
                 "fred",
-                StringFieldType,
             )
         ]
 
@@ -247,41 +236,32 @@ class TestBoundQuery:
 
 
 class TestBoundField:
-    def test_path_properties(self, fake_orm_field):
+    def test_path_properties(self):
+        orm_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
         bf = BoundField(
-            orm.OrmBoundField(fake_orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
-            "joe",
+            orm.OrmBoundField(orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
             "max",
-            ["bob", "fred", "joe"],
+            ["bob", "fred", "joe", "max"],
             None,
             None,
-            fake_orm_field,
         )
         assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe__max"
 
         bf = BoundField(
-            orm.OrmBoundField(fake_orm_field, [], ["joe"]),
-            "joe",
-            "max",
-            ["joe"],
-            None,
-            None,
-            fake_orm_field,
+            orm.OrmBoundField(orm_field, [], ["joe"]), "max", ["joe", "max"], None, None
         )
         assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
         bf = BoundField(
-            orm.OrmBoundField(fake_orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
-            "joe",
+            orm.OrmBoundField(orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
             None,
             ["bob", "fred", "joe"],
             None,
             None,
-            fake_orm_field,
         )
         assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
@@ -290,40 +270,31 @@ class TestBoundField:
 
 class TestBoundFilter:
     def test_path_properties(self):
+        orm_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
         bf = BoundFilter(
-            orm.OrmBoundField(None, ["bob", "fred"], ["bob", "fred", "joe"]),
-            "joe",
+            orm.OrmBoundField(orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
             "max",
-            ["bob", "fred", "joe"],
+            ["bob", "fred", "joe", "max"],
             "gt",
             5,
-            StringFieldType,
         )
         assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
         assert bf.path_str == "bob__fred__joe__max"
 
         bf = BoundFilter(
-            orm.OrmBoundField(None, [], ["joe"]),
-            "joe",
-            "max",
-            ["joe"],
-            "gt",
-            5,
-            StringFieldType,
+            orm.OrmBoundField(orm_field, [], ["joe"]), "max", ["joe", "max"], "gt", 5
         )
         assert bf.model_path_str == ""
         assert bf.field_path_str == "joe"
         assert bf.path_str == "joe__max"
 
         bf = BoundFilter(
-            orm.OrmBoundField(None, ["bob", "fred"], ["bob", "fred", "joe"]),
-            "joe",
+            orm.OrmBoundField(orm_field, ["bob", "fred"], ["bob", "fred", "joe"]),
             None,
             ["bob", "fred", "joe"],
             "gt",
             5,
-            StringFieldType,
         )
         assert bf.model_path_str == "bob__fred"
         assert bf.field_path_str == "bob__fred__joe"
@@ -337,11 +308,20 @@ class TestFieldType:
 
 class TestStringFieldType:
     def test_validate(self):
+        orm_field = orm.OrmConcreteField("", "bob", "bob", StringFieldType)
         assert BoundFilter(
-            [], "bob", None, ["bob"], "contains", "hello", StringFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]),
+            None,
+            ["bob"],
+            "contains",
+            "hello",
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "pontains", "hello", StringFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]),
+            None,
+            ["bob"],
+            "pontains",
+            "hello",
         ).is_valid
 
     def test_default_lookup(self):
@@ -353,20 +333,21 @@ class TestStringFieldType:
 
 class TestNumberFieldType:
     def test_validate(self):
+        orm_field = orm.OrmConcreteField("", "bob", "bob", NumberFieldType)
         assert BoundFilter(
-            [], "bob", None, ["bob"], "gt", "6.1", NumberFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "gt", "6.1"
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "pontains", "6.1", NumberFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "pontains", "6.1"
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "gt", "hello", NumberFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "gt", "hello"
         ).is_valid
         assert BoundFilter(
-            [], "bob", None, ["bob"], "is_null", "True", NumberFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "is_null", "True"
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "is_null", "hello", NumberFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "is_null", "hello"
         ).is_valid
 
     def test_default_lookup(self):
@@ -378,20 +359,29 @@ class TestNumberFieldType:
 
 class TestTimeFieldType:
     def test_validate(self):
+        orm_field = orm.OrmConcreteField("", "bob", "bob", TimeFieldType)
         assert BoundFilter(
-            [], "bob", None, ["bob"], "gt", "2018-03-20T22:31:23", TimeFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]),
+            None,
+            ["bob"],
+            "gt",
+            "2018-03-20T22:31:23",
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "gt", "hello", TimeFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "gt", "hello"
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "pontains", "2018-03-20T22:31:23", TimeFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]),
+            None,
+            ["bob"],
+            "pontains",
+            "2018-03-20T22:31:23",
         ).is_valid
         assert BoundFilter(
-            [], "bob", None, ["bob"], "is_null", "True", TimeFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "is_null", "True"
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "is_null", "hello", TimeFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "is_null", "hello"
         ).is_valid
 
     def test_default_lookup(self):
@@ -406,17 +396,18 @@ class TestTimeFieldType:
 
 class TestBooleanFieldType:
     def test_validate(self):
+        orm_field = orm.OrmConcreteField("", "bob", "bob", BooleanFieldType)
         assert BoundFilter(
-            [], "bob", None, ["bob"], "equals", "True", BooleanFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "equals", "True"
         ).is_valid
         assert BoundFilter(
-            [], "bob", None, ["bob"], "equals", "False", BooleanFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "equals", "False"
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "equals", "hello", BooleanFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "equals", "hello"
         ).is_valid
         assert not BoundFilter(
-            [], "bob", None, ["bob"], "pontains", "True", BooleanFieldType
+            orm.OrmBoundField(orm_field, [], ["bob"]), None, ["bob"], "pontains", "True"
         ).is_valid
 
     def test_default_lookup(self):
