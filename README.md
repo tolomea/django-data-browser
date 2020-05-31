@@ -139,6 +139,7 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 
 | Version   | Date           | Summary                                                                         |
 | --------- | -------------- | ------------------------------------------------------------------------------- |
+| **1.2.0** | 2020-05-31     | **Support for date functions "year", "month" etc and filtering based on "now"** |
 | 1.1.6     | 2020-05-24     | Stronger sanitizing of URL strings                                              |
 | 1.1.5     | 2020-05-23     | Fix bug aggregating time fields                                                 |
 | 1.1.4     | 2020-05-23     | Fix breaking bug with GenericInlineModelAdmin                                   |
