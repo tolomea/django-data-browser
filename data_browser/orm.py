@@ -75,13 +75,6 @@ class OrmBoundField:
     pretty_path: Sequence[str] = dataclasses.field(default_factory=list)
 
     @property
-    def aggregate(self):
-        # todo this is kinda ugly
-        if self.orm_field == self.db_field:
-            return None
-        return self.orm_field.name
-
-    @property
     def field_path(self):
         return self.model_path + [self.db_field.name]
 
@@ -112,6 +105,10 @@ class OrmBoundField:
     def type_(self):
         return self.orm_field.type_
 
+    @property
+    def aggregate(self):
+        return self.orm_field.aggregate
+
 
 @dataclass
 class OrmModel:
@@ -132,6 +129,9 @@ class OrmBaseField:
     type_ = None  # can't add
     concrete = False  # can't sort or filter
     rel_name = None  # can't expand
+
+    # internal
+    aggregate = None
 
     def __repr__(self):  # pragma: no cover
         params = [
@@ -192,6 +192,7 @@ class OrmAggregateField(OrmBaseField):
 
     def __init__(self, model_name, name):
         super().__init__(model_name, name, name)
+        self.aggregate = name
 
     def bind(self, previous):
         assert previous.db_field
