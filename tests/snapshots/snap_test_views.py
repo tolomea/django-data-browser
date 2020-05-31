@@ -740,7 +740,7 @@ snapshots["test_query_html context"] = {
             },
             "time": {
                 "defaultLookup": "equals",
-                "defaultValue": "redacted",
+                "defaultValue": "now",
                 "lookups": {
                     "equals": {"type": "time"},
                     "gt": {"type": "time"},
@@ -1018,7 +1018,7 @@ snapshots["test_query_html_no_perms context"] = {
             },
             "time": {
                 "defaultLookup": "equals",
-                "defaultValue": "redacted",
+                "defaultValue": "now",
                 "lookups": {
                     "equals": {"type": "time"},
                     "gt": {"type": "time"},
@@ -1786,7 +1786,7 @@ snapshots["test_query_ctx context"] = {
             },
             "time": {
                 "defaultLookup": "equals",
-                "defaultValue": "redacted",
+                "defaultValue": "now",
                 "lookups": {
                     "equals": {"type": "time"},
                     "gt": {"type": "time"},

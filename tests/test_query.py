@@ -281,6 +281,7 @@ class TestTimeFieldType:
         ).is_valid
         assert BoundFilter(orm_bound_field, "is_null", "True").is_valid
         assert not BoundFilter(orm_bound_field, "is_null", "hello").is_valid
+        assert BoundFilter(orm_bound_field, "gt", "now").is_valid
 
     def test_default_lookup(self):
         assert TimeFieldType.default_lookup == "equals"

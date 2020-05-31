@@ -168,7 +168,7 @@ class NumberFieldType(FieldType):
 
 
 class TimeFieldType(FieldType):
-    default_value = timezone.now().strftime("%Y-%m-%d %H:%M")
+    default_value = "now"
     lookups = {
         "equals": "time",
         "not_equals": "time",
@@ -181,6 +181,8 @@ class TimeFieldType(FieldType):
 
     @staticmethod
     def parse(value):
+        if value.lower().strip() == "now":
+            return timezone.now()
         return timezone.make_aware(dateutil.parser.parse(value))
 
     @staticmethod
