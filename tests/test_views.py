@@ -3,7 +3,6 @@ import json
 
 import data_browser.models
 import pytest
-from data_browser import version
 from django.contrib.auth.models import User
 
 from . import models
@@ -109,45 +108,14 @@ def test_query_csv(admin_client):
 
 
 @pytest.mark.usefixtures("products")
-def test_query_json(admin_client):
+def test_query_json(admin_client, snapshot):
     res = admin_client.get(
         "/data_browser/query/tests.Product/size-0,name+1,size_unit.json?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
-
-    dump(data)
-    assert data == {
-        "results": [[1, "a", "g"], [1, "b", "g"]],
-        "fields": [
-            {"path": ["size"], "prettyPath": ["size"], "priority": 0, "sort": "dsc"},
-            {"path": ["name"], "prettyPath": ["name"], "priority": 1, "sort": "asc"},
-            {
-                "path": ["size_unit"],
-                "prettyPath": ["size_unit"],
-                "priority": null,
-                "sort": null,
-            },
-        ],
-        "filters": [
-            {
-                "errorMessage": null,
-                "lookup": "lt",
-                "path": ["size"],
-                "prettyPath": ["size"],
-                "value": "2",
-            },
-            {
-                "errorMessage": null,
-                "lookup": "gt",
-                "path": ["id"],
-                "prettyPath": ["id"],
-                "value": "0",
-            },
-        ],
-        "model": "tests.Product",
-        "version": version,
-    }
+    data["version"] = "redacted"
+    snapshot.assert_match(data, "data")
 
 
 @pytest.mark.usefixtures("products")

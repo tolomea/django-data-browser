@@ -82,7 +82,7 @@ class Filter extends React.Component {
             onChange={(e) => query.setFilterValue(index, e.target.value)}
             lookup={fieldType.lookups[lookup]}
           />
-          {this.props.errorMessage}
+          {this.props.errorMessage ? <p>{this.props.errorMessage}</p> : ""}
         </td>
       </tr>
     );
@@ -95,7 +95,13 @@ function Filters(props) {
       <table className="Flat">
         <tbody>
           {props.filters.map((filter, index) => (
-            <Filter query={props.query} key={index} index={index} {...filter} />
+            <Filter
+              query={props.query}
+              key={index}
+              index={index}
+              {...filter}
+              errorMessage={props.filterErrors[index]}
+            />
           ))}
         </tbody>
       </table>
@@ -313,7 +319,11 @@ function QueryPage(props) {
         sortedModels={props.sortedModels}
         model={props.model}
       />
-      <Filters query={props.query} filters={props.filters} />
+      <Filters
+        query={props.query}
+        filters={props.filters}
+        filterErrors={props.filterErrors}
+      />
       <p>
         Showing {props.results.length} results -{" "}
         <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}

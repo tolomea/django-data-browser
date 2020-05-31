@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/browser";
 import React from "react";
 import "./App.css";
 import { HomePage, QueryPage } from "./Components";
@@ -26,7 +27,10 @@ class App extends React.Component {
         return response;
       })
       .then((response) => {
-        this.setState({ results: response.results });
+        this.setState({
+          results: response.results,
+          filterErrors: response.filterErrors,
+        });
         return response;
       });
   }
@@ -37,6 +41,7 @@ class App extends React.Component {
       fields: this.state.fields,
       filters: this.state.filters,
       results: [],
+      filterErrors: [],
     };
     window.history.replaceState(
       reqState,
@@ -58,6 +63,7 @@ class App extends React.Component {
       fields: newState.fields,
       filters: newState.filters,
       results: [],
+      filterErrors: [],
     };
     window.history.pushState(
       request,
@@ -67,9 +73,13 @@ class App extends React.Component {
     this.fetchResults(newState)
       .then((response) => {
         response.results = [];
+        response.filterErrors = [];
         assert.deepEqual(request, response);
       })
-      .catch(() => null);
+      .catch((e) => {
+        console.log(e);
+        Sentry.captureException(e);
+      });
   }
 
   render() {

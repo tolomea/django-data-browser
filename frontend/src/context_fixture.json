@@ -863,6 +863,7 @@
     },
     "initialState": {
         "fields": [],
+        "filterErrors": [],
         "filters": [],
         "model": "",
         "results": [],

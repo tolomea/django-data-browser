@@ -23,7 +23,6 @@ def _get_query_data(bound_query):
     return {
         "filters": [
             {
-                "errorMessage": filter_.err_message,
                 "path": filter_.path,
                 "prettyPath": filter_.pretty_path,
                 "lookup": filter_.lookup,
@@ -31,6 +30,7 @@ def _get_query_data(bound_query):
             }
             for filter_ in bound_query.filters
         ],
+        "filterErrors": [filter_.err_message for filter_ in bound_query.filters],
         "fields": [
             {
                 "path": field.path,

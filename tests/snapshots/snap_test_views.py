@@ -774,21 +774,10 @@ snapshots["test_query_html context"] = {
                 "sort": None,
             },
         ],
+        "filterErrors": [None, None],
         "filters": [
-            {
-                "errorMessage": None,
-                "lookup": "lt",
-                "path": ["size"],
-                "prettyPath": ["size"],
-                "value": "2",
-            },
-            {
-                "errorMessage": None,
-                "lookup": "gt",
-                "path": ["id"],
-                "prettyPath": ["id"],
-                "value": "0",
-            },
+            {"lookup": "lt", "path": ["size"], "prettyPath": ["size"], "value": "2"},
+            {"lookup": "gt", "path": ["id"], "prettyPath": ["id"], "value": "0"},
         ],
         "model": "tests.Product",
         "results": [],
@@ -1054,6 +1043,7 @@ snapshots["test_query_html_no_perms context"] = {
     },
     "initialState": {
         "fields": [],
+        "filterErrors": [],
         "filters": [],
         "model": "",
         "results": [],
@@ -1821,10 +1811,32 @@ snapshots["test_query_ctx context"] = {
     },
     "initialState": {
         "fields": [],
+        "filterErrors": [],
         "filters": [],
         "model": "",
         "results": [],
         "version": "redacted",
     },
     "sentryDsn": None,
+}
+
+snapshots["test_query_json data"] = {
+    "fields": [
+        {"path": ["size"], "prettyPath": ["size"], "priority": 0, "sort": "dsc"},
+        {"path": ["name"], "prettyPath": ["name"], "priority": 1, "sort": "asc"},
+        {
+            "path": ["size_unit"],
+            "prettyPath": ["size_unit"],
+            "priority": None,
+            "sort": None,
+        },
+    ],
+    "filterErrors": [None, None],
+    "filters": [
+        {"lookup": "lt", "path": ["size"], "prettyPath": ["size"], "value": "2"},
+        {"lookup": "gt", "path": ["id"], "prettyPath": ["id"], "value": "0"},
+    ],
+    "model": "tests.Product",
+    "results": [[1.0, "a", "g"], [1.0, "b", "g"]],
+    "version": "redacted",
 }
