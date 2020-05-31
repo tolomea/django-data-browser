@@ -30,7 +30,7 @@ Admin: https://data-browser-demo.herokuapp.com/admin/
 
 Data Browser: https://data-browser-demo.herokuapp.com/data-browser/
 
-Becuase it's hosted on Heroku free tier it might take a while to respond to the first page load.
+Because it's hosted on Heroku free tier it might take a while to respond to the first page load.
 
 ## Installation
 
@@ -89,7 +89,7 @@ If you want to modify the Javascript then you also need to:
    The `WDS_SOCKET_PORT` is so the proxied JS can find it's dev server.
    The `PUBLIC_URL` tells the JS dev server what path to serve from and should be the same as the URL you have mounted the Data Browser on in you urls file.
 
-To run the Python tests, in the top level of you git clone run `pip install -r requirements.txt` then `pytest`.
+To run the Python tests, in the top level of your git clone run `pip install -r requirements.txt` then `pytest`.
 
 There is also pre-commit config for lint etc to enable this run `pip install pre-commit && pre-commit install` then lint will run on `git commit`. The linting includes Black and isort autoformatting.
 
@@ -101,30 +101,51 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 
 ![structure](https://raw.githubusercontent.com/tolomea/django-data-browser/master/structure.svg)
 
-### Naming
+### Terminology
 
-| Name        | Meaning                                                                                                   |
-| ----------- | --------------------------------------------------------------------------------------------------------- |
-| bound query | A query that has been validated against the config.                                                       |
-| config      | Information that doesn't change based on the particular query, includes all the models and their fields.  |
-| field name  | Just the name of the field e.g. `created_time`.                                                           |
-| path        | Includes information on how to reach the model the field is on e.g. `["order","seller","created_time"]`.  |
-| model name  | Fullstop seperated app and model names e.g. `myapp.MyModel`.                                              |
-| model       | In Python the actual model class, in Javascript the model name as above.                                  |
-| query       | The information that changes with the query being done, in the Javascript this also includes the results. |
-| view        | A saved query.                                                                                            |
+| Term        | Meaning                                                                                                                                  |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| aggregate   | Corresponds to a Django aggregation function.                                                                                            |
+| bound query | A query that has been validated against the config.                                                                                      |
+| concrete    | A field that can be sorted and filtered                                                                                                  |
+| config      | Information that doesn't change based on the particular query, includes all the models and their fields.                                 |
+| field name  | Just the name of the field e.g. `created_time`.                                                                                          |
+| field path  | Includes information on how to reach the model the field is on e.g. `["order","seller","created_time"]`.                                 |
+| function    | Corresponds to a Django database function for transforming a value, e.g. `ExtractYear`.                                                  |
+| model name  | Fullstop separated app and model names e.g. `myapp.MyModel`, also includes synthetic 'models' for hosting aggregate and function fields. |
+| model path  | Like field path for the model the field is on.                                                                                           |
+| model       | In Python the actual model class, in Javascript the model name as above.                                                                 |
+| pretty...   | User friendly field, and path values                                                                                                     |
+| query       | The information that changes with the query being done, in the Javascript this also includes the results.                                |
+| type        | A data type, like string or number                                                                                                       |
+| view        | A saved query.                                                                                                                           |
+
+Most of the code deals with "models" that have "fields" that have "types".
+In this context a "model" is just anything which might have fields.
+So types also have associated models which hold the relevant aggregate and function fields.
+Fields also include foreign keys which may refer to other models.
+The special meanings of foreignkeys, aggregates, functions and calculated fields is confined to `orm.py`
+
+#### Fields have 4 main properties.
+
+| Poperty  | Meaning and impact                                                                            |
+| -------- | --------------------------------------------------------------------------------------------- |
+| name     | The only required one.                                                                        |
+| type     | If set then this field can be added to a query and will return results of the specified type. |
+| concrete | Can this field be sorted and filtered.                                                        |
+| model    | If set then this field has additional nested fields that are detailed on the given model.     |
 
 ### Release History
 
-| Version   | Date           | Summary                                       |
-| --------- | -------------- | --------------------------------------------- |
-| 1.1.6     | 2020-05-24     | Stronger sanitizing of URL strings            |
-| 1.1.5     | 2020-05-23     | Fix bug aggregating time fields               |
-| 1.1.4     | 2020-05-23     | Fix breaking bug with GenericInlineModelAdmin |
-| 1.1.3     | 2020-05-23     | Cosmetic fixes                                |
-| 1.1.2     | 2020-05-22     | Cosmetic fixes                                |
-| 1.1.1     | 2020-05-20     | Cosmetic fixes                                |
-| **1.1.0** | **2020-05-20** | **Aggregate support**                         |
-| **1.0.2** | **2020-05-17** | **Py3.6 support**                             |
-| 1.0.1     | 2020-05-17     | Small fixes                                   |
-| 1.0.0     | 2020-05-17     | Initial version                               |
+| Version   | Date           | Summary                                                                         |
+| --------- | -------------- | ------------------------------------------------------------------------------- |
+| 1.1.6     | 2020-05-24     | Stronger sanitizing of URL strings                                              |
+| 1.1.5     | 2020-05-23     | Fix bug aggregating time fields                                                 |
+| 1.1.4     | 2020-05-23     | Fix breaking bug with GenericInlineModelAdmin                                   |
+| 1.1.3     | 2020-05-23     | Cosmetic fixes                                                                  |
+| 1.1.2     | 2020-05-22     | Cosmetic fixes                                                                  |
+| 1.1.1     | 2020-05-20     | Cosmetic fixes                                                                  |
+| **1.1.0** | **2020-05-20** | **Aggregate support**                                                           |
+| **1.0.2** | **2020-05-17** | **Py3.6 support**                                                               |
+| 1.0.1     | 2020-05-17     | Small fixes                                                                     |
+| 1.0.0     | 2020-05-17     | Initial version                                                                 |
