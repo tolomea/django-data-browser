@@ -94,13 +94,13 @@ def test_get_admin_link(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_admin_function(get_product_data):
+def test_get_calculated_field_on_admin(get_product_data):
     data = get_product_data(3, "producer__address__bob", {})
     assert data == [["bad"], ["bob"], [None]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_function(get_product_data):
+def test_get_calculated_field(get_product_data):
     data = get_product_data(3, "producer__address__fred", {})
     assert data == [["bad"], ["fred"], [None]]
 
@@ -109,6 +109,12 @@ def test_get_function(get_product_data):
 def test_get_property(get_product_data):
     data = get_product_data(3, "producer__address__tom", {})
     assert data == [["bad"], ["tom"], [None]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_time_function(get_product_data):
+    data = get_product_data(1, "created_time__year", {})
+    assert data == [[timezone.now().year]]
 
 
 @pytest.mark.usefixtures("products")
@@ -136,13 +142,13 @@ def test_filter_aggregate(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
-def test_get_aggregate_and_function(get_product_data):
+def test_get_aggregate_and_calculated_field(get_product_data):
     data = get_product_data(1, "is_onsale,id__count", {})
     assert data == [[False, 1], [False, 1], [False, 1]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_time_aggregate_and_function(get_product_data):
+def test_get_time_aggregate_and_calculated_field(get_product_data):
     data = get_product_data(1, "is_onsale,created_time__count", {})
     assert data == [[False, 1], [False, 1], [False, 1]]
 

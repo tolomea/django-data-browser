@@ -11,6 +11,7 @@ from django.contrib.admin.options import BaseModelAdmin, InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db import models
+from django.db.models import functions
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 from django.urls import reverse
@@ -63,6 +64,36 @@ _AGGREGATES = {
 }
 
 
+_FUNC_MAP = {
+    "year": functions.ExtractYear,
+    "quarter": functions.ExtractQuarter,
+    "month": functions.ExtractMonth,
+    "day": functions.ExtractDay,
+    "week_day": functions.ExtractWeekDay,
+    "hour": functions.ExtractHour,
+    "minute": functions.ExtractMinute,
+    "second": functions.ExtractSecond,
+}
+
+if hasattr(functions, "ExtractIsoYear"):  # pragma: no branch
+    _FUNC_MAP.update(
+        {"iso_year": functions.ExtractIsoYear, "iso_week": functions.ExtractWeek}
+    )
+
+_FUNCTIONS = {
+    TimeFieldType: [
+        "year",
+        "quarter",
+        "month",
+        "day",
+        "week_day",
+        "hour",
+        "minute",
+        "second",
+    ]
+}
+
+
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
 
@@ -109,6 +140,10 @@ class OrmBoundField:
     def aggregate(self):
         return self.orm_field.aggregate
 
+    @property
+    def function(self):
+        return self.orm_field.function
+
 
 @dataclass
 class OrmModel:
@@ -132,6 +167,7 @@ class OrmBaseField:
 
     # internal
     aggregate = None
+    function = None
 
     def __repr__(self):  # pragma: no cover
         params = [
@@ -172,7 +208,9 @@ class OrmConcreteField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, type_):
         super().__init__(model_name, name, pretty_name)
         self.type_ = type_
-        self.rel_name = type_.name if type_ in _AGGREGATES else None
+        self.rel_name = (
+            type_.name if type_ in _AGGREGATES or type_ in _FUNCTIONS else None
+        )
 
 
 class OrmCalculatedField(OrmBaseField):
@@ -193,6 +231,24 @@ class OrmAggregateField(OrmBaseField):
     def __init__(self, model_name, name):
         super().__init__(model_name, name, name)
         self.aggregate = name
+
+    def bind(self, previous):
+        assert previous.db_field
+        return OrmBoundField(
+            self,
+            previous.db_field,
+            previous.model_path,
+            previous.pretty_path + [self.pretty_name],
+        )
+
+
+class OrmFunctionField(OrmBaseField):
+    type_ = NumberFieldType
+    concrete = True
+
+    def __init__(self, model_name, name):
+        super().__init__(model_name, name, name)
+        self.function = name
 
     def bind(self, previous):
         assert previous.db_field
@@ -300,12 +356,11 @@ def _get_fields_for_model(model, model_admins, admin_fields):
 
 
 def _get_fields_for_type(type_):
-    return OrmModel(
-        {
-            aggregate: OrmAggregateField(type_.name, aggregate)
-            for aggregate in _AGGREGATES.get(type_, [])
-        }
-    )
+    aggregates = {
+        a: OrmAggregateField(type_.name, a) for a in _AGGREGATES.get(type_, [])
+    }
+    functions = {f: OrmFunctionField(type_.name, f) for f in _FUNCTIONS.get(type_, [])}
+    return OrmModel({**aggregates, **functions})
 
 
 def get_models(request):
@@ -369,7 +424,15 @@ def get_results(request, bound_query):
     admin = bound_query.orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
-    # filter normal fields
+    # functions
+    for field in bound_query.fields + bound_query.filters:
+        field = field.orm_bound_field
+        if field.function:
+            qs = qs.annotate(
+                **{field.full_path_str: _FUNC_MAP[field.function](field.field_path_str)}
+            )
+
+    # filter normal and function fields
     for filter_ in bound_query.valid_filters:
         if not filter_.orm_bound_field.aggregate:
             qs = filter(qs)
@@ -452,7 +515,7 @@ def get_results(request, bound_query):
     def lookup(obj, field):
         value = obj
 
-        if field.aggregate is None:
+        if field.aggregate is None and field.function is None:
             *parts, tail = field.full_path
             for part in parts:
                 value = getattr(value, part, None)

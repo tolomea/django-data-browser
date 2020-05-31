@@ -629,10 +629,66 @@
                         "model": null,
                         "prettyName": "count",
                         "type": "number"
+                    },
+                    "day": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "day",
+                        "type": "number"
+                    },
+                    "hour": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "hour",
+                        "type": "number"
+                    },
+                    "minute": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "minute",
+                        "type": "number"
+                    },
+                    "month": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "month",
+                        "type": "number"
+                    },
+                    "quarter": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "quarter",
+                        "type": "number"
+                    },
+                    "second": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "second",
+                        "type": "number"
+                    },
+                    "week_day": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "week_day",
+                        "type": "number"
+                    },
+                    "year": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "year",
+                        "type": "number"
                     }
                 },
                 "sortedFields": [
-                    "count"
+                    "count",
+                    "day",
+                    "hour",
+                    "minute",
+                    "month",
+                    "quarter",
+                    "second",
+                    "week_day",
+                    "year"
                 ]
             }
         },
