@@ -237,6 +237,54 @@ snapshots["test_query_html context"] = {
                     "query",
                 ],
             },
+            "date": {
+                "fields": {
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    },
+                    "day": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "day",
+                        "type": "number",
+                    },
+                    "month": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "month",
+                        "type": "month",
+                    },
+                    "quarter": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "quarter",
+                        "type": "number",
+                    },
+                    "week_day": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "week_day",
+                        "type": "weekday",
+                    },
+                    "year": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "year",
+                        "type": "number",
+                    },
+                },
+                "sortedFields": [
+                    "count",
+                    "day",
+                    "month",
+                    "quarter",
+                    "week_day",
+                    "year",
+                ],
+            },
             "datetime": {
                 "fields": {
                     "count": {
@@ -244,6 +292,12 @@ snapshots["test_query_html context"] = {
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
+                    },
+                    "date": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "date",
+                        "type": "date",
                     },
                     "day": {
                         "concrete": True,
@@ -296,6 +350,7 @@ snapshots["test_query_html context"] = {
                 },
                 "sortedFields": [
                     "count",
+                    "date",
                     "day",
                     "hour",
                     "minute",
@@ -307,6 +362,7 @@ snapshots["test_query_html context"] = {
                 ],
             },
             "html": {"fields": {}, "sortedFields": []},
+            "month": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
                     "average": {
@@ -653,6 +709,7 @@ snapshots["test_query_html context"] = {
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
+            "weekday": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
         "savedViews": [],
@@ -680,6 +737,28 @@ snapshots["test_query_html context"] = {
                 },
                 "sortedLookups": ["equals", "not_equals", "is_null"],
             },
+            "date": {
+                "defaultLookup": "equals",
+                "defaultValue": "today",
+                "lookups": {
+                    "equals": {"type": "date"},
+                    "gt": {"type": "date"},
+                    "gte": {"type": "date"},
+                    "is_null": {"type": "boolean"},
+                    "lt": {"type": "date"},
+                    "lte": {"type": "date"},
+                    "not_equals": {"type": "date"},
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "is_null",
+                ],
+            },
             "datetime": {
                 "defaultLookup": "equals",
                 "defaultValue": "now",
@@ -703,6 +782,12 @@ snapshots["test_query_html context"] = {
                 ],
             },
             "html": {
+                "defaultLookup": None,
+                "defaultValue": None,
+                "lookups": {},
+                "sortedLookups": [],
+            },
+            "month": {
                 "defaultLookup": None,
                 "defaultValue": None,
                 "lookups": {},
@@ -760,6 +845,12 @@ snapshots["test_query_html context"] = {
                     "is_null",
                 ],
             },
+            "weekday": {
+                "defaultLookup": None,
+                "defaultValue": None,
+                "lookups": {},
+                "sortedLookups": [],
+            },
         },
         "version": "redacted",
     },
@@ -807,6 +898,54 @@ snapshots["test_query_html_no_perms context"] = {
                 },
                 "sortedFields": ["average", "sum"],
             },
+            "date": {
+                "fields": {
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    },
+                    "day": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "day",
+                        "type": "number",
+                    },
+                    "month": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "month",
+                        "type": "month",
+                    },
+                    "quarter": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "quarter",
+                        "type": "number",
+                    },
+                    "week_day": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "week_day",
+                        "type": "weekday",
+                    },
+                    "year": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "year",
+                        "type": "number",
+                    },
+                },
+                "sortedFields": [
+                    "count",
+                    "day",
+                    "month",
+                    "quarter",
+                    "week_day",
+                    "year",
+                ],
+            },
             "datetime": {
                 "fields": {
                     "count": {
@@ -814,6 +953,12 @@ snapshots["test_query_html_no_perms context"] = {
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
+                    },
+                    "date": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "date",
+                        "type": "date",
                     },
                     "day": {
                         "concrete": True,
@@ -866,6 +1011,7 @@ snapshots["test_query_html_no_perms context"] = {
                 },
                 "sortedFields": [
                     "count",
+                    "date",
                     "day",
                     "hour",
                     "minute",
@@ -877,6 +1023,7 @@ snapshots["test_query_html_no_perms context"] = {
                 ],
             },
             "html": {"fields": {}, "sortedFields": []},
+            "month": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
                     "average": {
@@ -943,6 +1090,7 @@ snapshots["test_query_html_no_perms context"] = {
                 },
                 "sortedFields": ["count"],
             },
+            "weekday": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
         "savedViews": [],
@@ -957,6 +1105,28 @@ snapshots["test_query_html_no_perms context"] = {
                     "not_equals": {"type": "boolean"},
                 },
                 "sortedLookups": ["equals", "not_equals", "is_null"],
+            },
+            "date": {
+                "defaultLookup": "equals",
+                "defaultValue": "today",
+                "lookups": {
+                    "equals": {"type": "date"},
+                    "gt": {"type": "date"},
+                    "gte": {"type": "date"},
+                    "is_null": {"type": "boolean"},
+                    "lt": {"type": "date"},
+                    "lte": {"type": "date"},
+                    "not_equals": {"type": "date"},
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "is_null",
+                ],
             },
             "datetime": {
                 "defaultLookup": "equals",
@@ -981,6 +1151,12 @@ snapshots["test_query_html_no_perms context"] = {
                 ],
             },
             "html": {
+                "defaultLookup": None,
+                "defaultValue": None,
+                "lookups": {},
+                "sortedLookups": [],
+            },
+            "month": {
                 "defaultLookup": None,
                 "defaultValue": None,
                 "lookups": {},
@@ -1037,6 +1213,12 @@ snapshots["test_query_html_no_perms context"] = {
                     "not_regex",
                     "is_null",
                 ],
+            },
+            "weekday": {
+                "defaultLookup": None,
+                "defaultValue": None,
+                "lookups": {},
+                "sortedLookups": [],
             },
         },
         "version": "redacted",
@@ -1283,6 +1465,54 @@ snapshots["test_query_ctx context"] = {
                     "query",
                 ],
             },
+            "date": {
+                "fields": {
+                    "count": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "count",
+                        "type": "number",
+                    },
+                    "day": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "day",
+                        "type": "number",
+                    },
+                    "month": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "month",
+                        "type": "month",
+                    },
+                    "quarter": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "quarter",
+                        "type": "number",
+                    },
+                    "week_day": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "week_day",
+                        "type": "weekday",
+                    },
+                    "year": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "year",
+                        "type": "number",
+                    },
+                },
+                "sortedFields": [
+                    "count",
+                    "day",
+                    "month",
+                    "quarter",
+                    "week_day",
+                    "year",
+                ],
+            },
             "datetime": {
                 "fields": {
                     "count": {
@@ -1290,6 +1520,12 @@ snapshots["test_query_ctx context"] = {
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
+                    },
+                    "date": {
+                        "concrete": True,
+                        "model": None,
+                        "prettyName": "date",
+                        "type": "date",
                     },
                     "day": {
                         "concrete": True,
@@ -1342,6 +1578,7 @@ snapshots["test_query_ctx context"] = {
                 },
                 "sortedFields": [
                     "count",
+                    "date",
                     "day",
                     "hour",
                     "minute",
@@ -1353,6 +1590,7 @@ snapshots["test_query_ctx context"] = {
                 ],
             },
             "html": {"fields": {}, "sortedFields": []},
+            "month": {"fields": {}, "sortedFields": []},
             "number": {
                 "fields": {
                     "average": {
@@ -1699,6 +1937,7 @@ snapshots["test_query_ctx context"] = {
                 },
                 "sortedFields": ["id", "admin", "name"],
             },
+            "weekday": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
         "savedViews": [],
@@ -1726,6 +1965,28 @@ snapshots["test_query_ctx context"] = {
                 },
                 "sortedLookups": ["equals", "not_equals", "is_null"],
             },
+            "date": {
+                "defaultLookup": "equals",
+                "defaultValue": "today",
+                "lookups": {
+                    "equals": {"type": "date"},
+                    "gt": {"type": "date"},
+                    "gte": {"type": "date"},
+                    "is_null": {"type": "boolean"},
+                    "lt": {"type": "date"},
+                    "lte": {"type": "date"},
+                    "not_equals": {"type": "date"},
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "is_null",
+                ],
+            },
             "datetime": {
                 "defaultLookup": "equals",
                 "defaultValue": "now",
@@ -1749,6 +2010,12 @@ snapshots["test_query_ctx context"] = {
                 ],
             },
             "html": {
+                "defaultLookup": None,
+                "defaultValue": None,
+                "lookups": {},
+                "sortedLookups": [],
+            },
+            "month": {
                 "defaultLookup": None,
                 "defaultValue": None,
                 "lookups": {},
@@ -1805,6 +2072,12 @@ snapshots["test_query_ctx context"] = {
                     "not_regex",
                     "is_null",
                 ],
+            },
+            "weekday": {
+                "defaultLookup": None,
+                "defaultValue": None,
+                "lookups": {},
+                "sortedLookups": [],
             },
         },
         "version": "redacted",

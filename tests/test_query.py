@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 import pytest
 from data_browser import orm
@@ -8,6 +8,7 @@ from data_browser.query import (
     BooleanFieldType,
     BoundFilter,
     BoundQuery,
+    DateFieldType,
     DateTimeFieldType,
     MonthFieldType,
     NumberFieldType,
@@ -295,6 +296,26 @@ class TestDateTimeFieldType:
             )
             == "2020-05-19 08:42:16"
         )
+
+
+class TestDateFieldType:
+    def test_validate(self):
+        orm_field = orm.OrmConcreteField("", "bob", "bob", DateFieldType)
+        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
+        assert BoundFilter(orm_bound_field, "gt", "2018-03-20T22:31:23").is_valid
+        assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
+        assert not BoundFilter(
+            orm_bound_field, "pontains", "2018-03-20T22:31:23"
+        ).is_valid
+        assert BoundFilter(orm_bound_field, "is_null", "True").is_valid
+        assert not BoundFilter(orm_bound_field, "is_null", "hello").is_valid
+        assert BoundFilter(orm_bound_field, "gt", "today").is_valid
+
+    def test_default_lookup(self):
+        assert DateFieldType.default_lookup == "equals"
+
+    def test_format(self):
+        assert DateFieldType.format(date(2020, 5, 19)) == "2020-05-19"
 
 
 class TestWeekDayFieldType:

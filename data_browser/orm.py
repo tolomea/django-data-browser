@@ -21,6 +21,7 @@ from .query import (
     DSC,
     TYPES,
     BooleanFieldType,
+    DateFieldType,
     DateTimeFieldType,
     HTMLFieldType,
     MetaFieldType,
@@ -40,7 +41,7 @@ _FIELD_MAP = {
     models.GenericIPAddressField: StringFieldType,
     models.UUIDField: StringFieldType,
     models.DateTimeField: DateTimeFieldType,
-    models.DateField: DateTimeFieldType,
+    models.DateField: DateFieldType,
     models.DecimalField: NumberFieldType,
     models.FloatField: NumberFieldType,
     models.IntegerField: NumberFieldType,
@@ -61,9 +62,8 @@ _AGG_MAP = {
 _AGGREGATES = {
     StringFieldType: ["count"],
     NumberFieldType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
-    DateTimeFieldType: [
-        "count"
-    ],  # average, min and max might be nice here but sqlite...
+    DateTimeFieldType: ["count"],  # average, min and max might be nice here but sqlite
+    DateFieldType: ["count"],  # average, min and max might be nice here but sqlite
     BooleanFieldType: ["average", "sum"],
 }
 
@@ -77,6 +77,7 @@ _FUNC_MAP = {
     "hour": (functions.ExtractHour, NumberFieldType),
     "minute": (functions.ExtractMinute, NumberFieldType),
     "second": (functions.ExtractSecond, NumberFieldType),
+    "date": (functions.TruncDate, DateFieldType),
 }
 
 if hasattr(functions, "ExtractIsoYear"):  # pragma: no branch
@@ -94,7 +95,9 @@ _FUNCTIONS = {
         "hour",
         "minute",
         "second",
-    ]
+        "date",
+    ],
+    DateFieldType: ["year", "quarter", "month", "day", "week_day"],
 }
 
 

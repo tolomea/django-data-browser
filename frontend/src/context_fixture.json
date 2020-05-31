@@ -236,6 +236,54 @@
                     "query"
                 ]
             },
+            "date": {
+                "fields": {
+                    "count": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "count",
+                        "type": "number"
+                    },
+                    "day": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "day",
+                        "type": "number"
+                    },
+                    "month": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "month",
+                        "type": "month"
+                    },
+                    "quarter": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "quarter",
+                        "type": "number"
+                    },
+                    "week_day": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "week_day",
+                        "type": "weekday"
+                    },
+                    "year": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "year",
+                        "type": "number"
+                    }
+                },
+                "sortedFields": [
+                    "count",
+                    "day",
+                    "month",
+                    "quarter",
+                    "week_day",
+                    "year"
+                ]
+            },
             "datetime": {
                 "fields": {
                     "count": {
@@ -243,6 +291,12 @@
                         "model": null,
                         "prettyName": "count",
                         "type": "number"
+                    },
+                    "date": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "date",
+                        "type": "date"
                     },
                     "day": {
                         "concrete": true,
@@ -295,6 +349,7 @@
                 },
                 "sortedFields": [
                     "count",
+                    "date",
                     "day",
                     "hour",
                     "minute",
@@ -306,6 +361,10 @@
                 ]
             },
             "html": {
+                "fields": {},
+                "sortedFields": []
+            },
+            "month": {
                 "fields": {},
                 "sortedFields": []
             },
@@ -690,6 +749,10 @@
                     "admin",
                     "name"
                 ]
+            },
+            "weekday": {
+                "fields": {},
+                "sortedFields": []
             }
         },
         "baseUrl": "/data_browser/",
@@ -725,6 +788,42 @@
                 "sortedLookups": [
                     "equals",
                     "not_equals",
+                    "is_null"
+                ]
+            },
+            "date": {
+                "defaultLookup": "equals",
+                "defaultValue": "today",
+                "lookups": {
+                    "equals": {
+                        "type": "date"
+                    },
+                    "gt": {
+                        "type": "date"
+                    },
+                    "gte": {
+                        "type": "date"
+                    },
+                    "is_null": {
+                        "type": "boolean"
+                    },
+                    "lt": {
+                        "type": "date"
+                    },
+                    "lte": {
+                        "type": "date"
+                    },
+                    "not_equals": {
+                        "type": "date"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
                     "is_null"
                 ]
             },
@@ -765,6 +864,12 @@
                 ]
             },
             "html": {
+                "defaultLookup": null,
+                "defaultValue": null,
+                "lookups": {},
+                "sortedLookups": []
+            },
+            "month": {
                 "defaultLookup": null,
                 "defaultValue": null,
                 "lookups": {},
@@ -857,6 +962,12 @@
                     "not_regex",
                     "is_null"
                 ]
+            },
+            "weekday": {
+                "defaultLookup": null,
+                "defaultValue": null,
+                "lookups": {},
+                "sortedLookups": []
             }
         },
         "version": "redacted"

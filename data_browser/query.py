@@ -193,6 +193,29 @@ class DateTimeFieldType(FieldType):
         return str(timezone.make_naive(value)) if value else None
 
 
+class DateFieldType(FieldType):
+    default_value = "today"
+    lookups = {
+        "equals": "date",
+        "not_equals": "date",
+        "gt": "date",
+        "gte": "date",
+        "lt": "date",
+        "lte": "date",
+        "is_null": "boolean",
+    }
+
+    @staticmethod
+    def parse(value):
+        if value.lower().strip() == "today":
+            return timezone.now().date()
+        return timezone.make_aware(dateutil.parser.parse(value)).date()
+
+    @staticmethod
+    def format(value):
+        return str(value) if value else None
+
+
 class WeekDayFieldType(FieldType):
     @staticmethod
     def format(value):
@@ -249,16 +272,7 @@ class BooleanFieldType(FieldType):
             raise ValueError("Expected 'true' or 'false'")
 
 
-TYPES = {
-    field_type.name: field_type
-    for field_type in [
-        StringFieldType,
-        NumberFieldType,
-        DateTimeFieldType,
-        BooleanFieldType,
-        HTMLFieldType,
-    ]
-}
+TYPES = {field_type.name: field_type for field_type in FieldType.__subclasses__()}
 
 
 class BoundFieldMixin:
@@ -289,8 +303,9 @@ class BoundFilter(BoundFieldMixin):
         if self.lookup not in lookups:
             self.err_message = f"Bad lookup '{self.lookup}' expected {lookups}"
         else:
+            type_ = TYPES[lookups[self.lookup]]
             try:
-                self.parsed = TYPES[lookups[self.lookup]].parse(self.value)
+                self.parsed = type_.parse(self.value)
             except Exception as e:
                 self.err_message = str(e) if str(e) else repr(e)
 
