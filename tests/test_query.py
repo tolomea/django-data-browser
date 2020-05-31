@@ -8,12 +8,14 @@ from data_browser.query import (
     BooleanFieldType,
     BoundFilter,
     BoundQuery,
+    DateTimeFieldType,
+    MonthFieldType,
     NumberFieldType,
     Query,
     QueryField,
     QueryFilter,
     StringFieldType,
-    TimeFieldType,
+    WeekDayFieldType,
 )
 from django.http import QueryDict
 from django.utils import timezone
@@ -270,9 +272,9 @@ class TestNumberFieldType:
         assert NumberFieldType.format(6) == 6
 
 
-class TestTimeFieldType:
+class TestDateTimeFieldType:
     def test_validate(self):
-        orm_field = orm.OrmConcreteField("", "bob", "bob", TimeFieldType)
+        orm_field = orm.OrmConcreteField("", "bob", "bob", DateTimeFieldType)
         orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
         assert BoundFilter(orm_bound_field, "gt", "2018-03-20T22:31:23").is_valid
         assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
@@ -284,13 +286,29 @@ class TestTimeFieldType:
         assert BoundFilter(orm_bound_field, "gt", "now").is_valid
 
     def test_default_lookup(self):
-        assert TimeFieldType.default_lookup == "equals"
+        assert DateTimeFieldType.default_lookup == "equals"
 
     def test_format(self):
         assert (
-            TimeFieldType.format(timezone.make_aware(datetime(2020, 5, 19, 8, 42, 16)))
+            DateTimeFieldType.format(
+                timezone.make_aware(datetime(2020, 5, 19, 8, 42, 16))
+            )
             == "2020-05-19 08:42:16"
         )
+
+
+class TestWeekDayFieldType:
+    def test_format(self):
+        assert WeekDayFieldType.format(None) is None
+        assert WeekDayFieldType.format(1) == "Sunday"
+        assert WeekDayFieldType.format(7) == "Saturday"
+
+
+class TestMonthFieldType:
+    def test_format(self):
+        assert MonthFieldType.format(None) is None
+        assert MonthFieldType.format(1) == "January"
+        assert MonthFieldType.format(12) == "December"
 
 
 class TestBooleanFieldType:

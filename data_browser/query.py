@@ -117,6 +117,9 @@ class MetaFieldType(type):
 
 
 class FieldType(metaclass=MetaFieldType):
+    default_value = None
+    lookups = {}
+
     def __init__(self):
         assert False
 
@@ -167,15 +170,15 @@ class NumberFieldType(FieldType):
         return float(value)
 
 
-class TimeFieldType(FieldType):
+class DateTimeFieldType(FieldType):
     default_value = "now"
     lookups = {
-        "equals": "time",
-        "not_equals": "time",
-        "gt": "time",
-        "gte": "time",
-        "lt": "time",
-        "lte": "time",
+        "equals": "datetime",
+        "not_equals": "datetime",
+        "gt": "datetime",
+        "gte": "datetime",
+        "lt": "datetime",
+        "lte": "datetime",
         "is_null": "boolean",
     }
 
@@ -190,9 +193,45 @@ class TimeFieldType(FieldType):
         return str(timezone.make_naive(value)) if value else None
 
 
+class WeekDayFieldType(FieldType):
+    @staticmethod
+    def format(value):
+        days = [
+            None,
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ]
+        return days[value] if value else None
+
+
+class MonthFieldType(FieldType):
+    @staticmethod
+    def format(value):
+        days = [
+            None,
+            "January",
+            "Feburary",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ]
+        return days[value] if value else None
+
+
 class HTMLFieldType(FieldType):
-    default_value = None
-    lookups = {}
+    pass
 
 
 class BooleanFieldType(FieldType):
@@ -215,7 +254,7 @@ TYPES = {
     for field_type in [
         StringFieldType,
         NumberFieldType,
-        TimeFieldType,
+        DateTimeFieldType,
         BooleanFieldType,
         HTMLFieldType,
     ]

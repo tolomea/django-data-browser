@@ -39,9 +39,9 @@
                     },
                     "date_joined": {
                         "concrete": true,
-                        "model": "time",
+                        "model": "datetime",
                         "prettyName": "date_joined",
-                        "type": "time"
+                        "type": "datetime"
                     },
                     "email": {
                         "concrete": true,
@@ -81,9 +81,9 @@
                     },
                     "last_login": {
                         "concrete": true,
-                        "model": "time",
+                        "model": "datetime",
                         "prettyName": "last_login",
-                        "type": "time"
+                        "type": "datetime"
                     },
                     "last_name": {
                         "concrete": true,
@@ -149,9 +149,9 @@
                     },
                     "created_time": {
                         "concrete": true,
-                        "model": "time",
+                        "model": "datetime",
                         "prettyName": "created_time",
-                        "type": "time"
+                        "type": "datetime"
                     },
                     "description": {
                         "concrete": true,
@@ -234,6 +234,75 @@
                     "public",
                     "public_link",
                     "query"
+                ]
+            },
+            "datetime": {
+                "fields": {
+                    "count": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "count",
+                        "type": "number"
+                    },
+                    "day": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "day",
+                        "type": "number"
+                    },
+                    "hour": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "hour",
+                        "type": "number"
+                    },
+                    "minute": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "minute",
+                        "type": "number"
+                    },
+                    "month": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "month",
+                        "type": "month"
+                    },
+                    "quarter": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "quarter",
+                        "type": "number"
+                    },
+                    "second": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "second",
+                        "type": "number"
+                    },
+                    "week_day": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "week_day",
+                        "type": "weekday"
+                    },
+                    "year": {
+                        "concrete": true,
+                        "model": null,
+                        "prettyName": "year",
+                        "type": "number"
+                    }
+                },
+                "sortedFields": [
+                    "count",
+                    "day",
+                    "hour",
+                    "minute",
+                    "month",
+                    "quarter",
+                    "second",
+                    "week_day",
+                    "year"
                 ]
             },
             "html": {
@@ -495,9 +564,9 @@
                     },
                     "created_time": {
                         "concrete": true,
-                        "model": "time",
+                        "model": "datetime",
                         "prettyName": "created_time",
-                        "type": "time"
+                        "type": "datetime"
                     },
                     "default_sku": {
                         "concrete": false,
@@ -621,75 +690,6 @@
                     "admin",
                     "name"
                 ]
-            },
-            "time": {
-                "fields": {
-                    "count": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "count",
-                        "type": "number"
-                    },
-                    "day": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "day",
-                        "type": "number"
-                    },
-                    "hour": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "hour",
-                        "type": "number"
-                    },
-                    "minute": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "minute",
-                        "type": "number"
-                    },
-                    "month": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "month",
-                        "type": "number"
-                    },
-                    "quarter": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "quarter",
-                        "type": "number"
-                    },
-                    "second": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "second",
-                        "type": "number"
-                    },
-                    "week_day": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "week_day",
-                        "type": "number"
-                    },
-                    "year": {
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "year",
-                        "type": "number"
-                    }
-                },
-                "sortedFields": [
-                    "count",
-                    "day",
-                    "hour",
-                    "minute",
-                    "month",
-                    "quarter",
-                    "second",
-                    "week_day",
-                    "year"
-                ]
             }
         },
         "baseUrl": "/data_browser/",
@@ -725,6 +725,42 @@
                 "sortedLookups": [
                     "equals",
                     "not_equals",
+                    "is_null"
+                ]
+            },
+            "datetime": {
+                "defaultLookup": "equals",
+                "defaultValue": "now",
+                "lookups": {
+                    "equals": {
+                        "type": "datetime"
+                    },
+                    "gt": {
+                        "type": "datetime"
+                    },
+                    "gte": {
+                        "type": "datetime"
+                    },
+                    "is_null": {
+                        "type": "boolean"
+                    },
+                    "lt": {
+                        "type": "datetime"
+                    },
+                    "lte": {
+                        "type": "datetime"
+                    },
+                    "not_equals": {
+                        "type": "datetime"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
                     "is_null"
                 ]
             },
@@ -819,42 +855,6 @@
                     "not_starts_with",
                     "not_ends_with",
                     "not_regex",
-                    "is_null"
-                ]
-            },
-            "time": {
-                "defaultLookup": "equals",
-                "defaultValue": "now",
-                "lookups": {
-                    "equals": {
-                        "type": "time"
-                    },
-                    "gt": {
-                        "type": "time"
-                    },
-                    "gte": {
-                        "type": "time"
-                    },
-                    "is_null": {
-                        "type": "boolean"
-                    },
-                    "lt": {
-                        "type": "time"
-                    },
-                    "lte": {
-                        "type": "time"
-                    },
-                    "not_equals": {
-                        "type": "time"
-                    }
-                },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals",
-                    "gt",
-                    "gte",
-                    "lt",
-                    "lte",
                     "is_null"
                 ]
             }

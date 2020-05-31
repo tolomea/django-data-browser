@@ -21,11 +21,13 @@ from .query import (
     DSC,
     TYPES,
     BooleanFieldType,
+    DateTimeFieldType,
     HTMLFieldType,
     MetaFieldType,
+    MonthFieldType,
     NumberFieldType,
     StringFieldType,
-    TimeFieldType,
+    WeekDayFieldType,
 )
 
 _OPEN_IN_ADMIN = "admin"
@@ -37,8 +39,8 @@ _FIELD_MAP = {
     models.TextField: StringFieldType,
     models.GenericIPAddressField: StringFieldType,
     models.UUIDField: StringFieldType,
-    models.DateTimeField: TimeFieldType,
-    models.DateField: TimeFieldType,
+    models.DateTimeField: DateTimeFieldType,
+    models.DateField: DateTimeFieldType,
     models.DecimalField: NumberFieldType,
     models.FloatField: NumberFieldType,
     models.IntegerField: NumberFieldType,
@@ -59,20 +61,22 @@ _AGG_MAP = {
 _AGGREGATES = {
     StringFieldType: ["count"],
     NumberFieldType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
-    TimeFieldType: ["count"],  # average, min and max might be nice here but sqlite...
+    DateTimeFieldType: [
+        "count"
+    ],  # average, min and max might be nice here but sqlite...
     BooleanFieldType: ["average", "sum"],
 }
 
 
 _FUNC_MAP = {
-    "year": functions.ExtractYear,
-    "quarter": functions.ExtractQuarter,
-    "month": functions.ExtractMonth,
-    "day": functions.ExtractDay,
-    "week_day": functions.ExtractWeekDay,
-    "hour": functions.ExtractHour,
-    "minute": functions.ExtractMinute,
-    "second": functions.ExtractSecond,
+    "year": (functions.ExtractYear, NumberFieldType),
+    "quarter": (functions.ExtractQuarter, NumberFieldType),
+    "month": (functions.ExtractMonth, MonthFieldType),
+    "day": (functions.ExtractDay, NumberFieldType),
+    "week_day": (functions.ExtractWeekDay, WeekDayFieldType),
+    "hour": (functions.ExtractHour, NumberFieldType),
+    "minute": (functions.ExtractMinute, NumberFieldType),
+    "second": (functions.ExtractSecond, NumberFieldType),
 }
 
 if hasattr(functions, "ExtractIsoYear"):  # pragma: no branch
@@ -81,7 +85,7 @@ if hasattr(functions, "ExtractIsoYear"):  # pragma: no branch
     )
 
 _FUNCTIONS = {
-    TimeFieldType: [
+    DateTimeFieldType: [
         "year",
         "quarter",
         "month",
@@ -243,12 +247,12 @@ class OrmAggregateField(OrmBaseField):
 
 
 class OrmFunctionField(OrmBaseField):
-    type_ = NumberFieldType
     concrete = True
 
-    def __init__(self, model_name, name):
+    def __init__(self, model_name, name, type_):
         super().__init__(model_name, name, name)
         self.function = name
+        self.type_ = type_
 
     def bind(self, previous):
         assert previous.db_field
@@ -359,7 +363,10 @@ def _get_fields_for_type(type_):
     aggregates = {
         a: OrmAggregateField(type_.name, a) for a in _AGGREGATES.get(type_, [])
     }
-    functions = {f: OrmFunctionField(type_.name, f) for f in _FUNCTIONS.get(type_, [])}
+    functions = {
+        f: OrmFunctionField(type_.name, f, _FUNC_MAP[f][1])
+        for f in _FUNCTIONS.get(type_, [])
+    }
     return OrmModel({**aggregates, **functions})
 
 
@@ -429,7 +436,11 @@ def get_results(request, bound_query):
         field = field.orm_bound_field
         if field.function:
             qs = qs.annotate(
-                **{field.full_path_str: _FUNC_MAP[field.function](field.field_path_str)}
+                **{
+                    field.full_path_str: _FUNC_MAP[field.function][0](
+                        field.field_path_str
+                    )
+                }
             )
 
     # filter normal and function fields
