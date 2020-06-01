@@ -107,7 +107,6 @@ class Query {
     const fieldType = this.getFieldType(this.getField(path));
     const newFilters = this.query.filters.slice();
     newFilters.push({
-      errorMessage: null,
       path: path,
       prettyPath: prettyPath,
       lookup: fieldType.defaultLookup,
