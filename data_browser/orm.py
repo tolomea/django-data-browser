@@ -23,6 +23,7 @@ from .query import (
     BooleanFieldType,
     DateFieldType,
     DateTimeFieldType,
+    FieldType,
     HTMLFieldType,
     MetaFieldType,
     MonthFieldType,
@@ -162,30 +163,26 @@ class OrmModel:
         return bool(self.admin)
 
 
+@dataclass
 class OrmBaseField:
-    def __init__(self, model_name, name, pretty_name):
-        self.model_name = model_name
-        self.name = name
-        self.pretty_name = pretty_name
-
-    type_ = None  # can't add
-    concrete = False  # can't sort or filter
-    rel_name = None  # can't expand
-
+    model_name: str
+    name: str
+    pretty_name: str
+    type_: FieldType = None
+    concrete: bool = False
+    rel_name: str = None
     # internal
-    aggregate = None
-    function = None
+    aggregate: str = None
+    function: str = None
 
-    def __repr__(self):  # pragma: no cover
-        params = [
-            self.model_name,
-            self.name,
-            self.pretty_name,
-            self.type_,
-            self.concrete,
-            self.rel_name,
-        ]
-        return f"{self.__class__.__name__}({', '.join(repr(p) for p in params)})"
+    def __post_init__(self):
+        if not self.type_:
+            assert self.rel_name
+        if self.concrete:
+            assert self.type_
+        if self.aggregate or self.function:
+            assert self.concrete
+            assert not self.rel_name
 
     def bind(self, previous):
         previous = previous or OrmBoundField()
@@ -196,8 +193,7 @@ class OrmBaseField:
 
 class OrmFkField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, rel_name):
-        super().__init__(model_name, name, pretty_name)
-        self.rel_name = rel_name
+        super().__init__(model_name, name, pretty_name, rel_name=rel_name)
 
     def bind(self, previous):
         previous = previous or OrmBoundField()
@@ -210,34 +206,36 @@ class OrmFkField(OrmBaseField):
 
 
 class OrmConcreteField(OrmBaseField):
-    concrete = True
-
     def __init__(self, model_name, name, pretty_name, type_):
-        super().__init__(model_name, name, pretty_name)
-        self.type_ = type_
-        self.rel_name = (
-            type_.name if type_ in _AGGREGATES or type_ in _FUNCTIONS else None
+        super().__init__(
+            model_name,
+            name,
+            pretty_name,
+            concrete=True,
+            type_=type_,
+            rel_name=(
+                type_.name if type_ in _AGGREGATES or type_ in _FUNCTIONS else None
+            ),
         )
 
 
 class OrmCalculatedField(OrmBaseField):
-    type_ = StringFieldType
+    def __init__(self, model_name, name, pretty_name):
+        super().__init__(model_name, name, pretty_name, type_=StringFieldType)
 
 
 class OrmAdminField(OrmBaseField):
-    type_ = HTMLFieldType
-
     def __init__(self, model_name):
-        super().__init__(model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN)
+        super().__init__(
+            model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN, type_=HTMLFieldType
+        )
 
 
 class OrmAggregateField(OrmBaseField):
-    type_ = NumberFieldType
-    concrete = True
-
     def __init__(self, model_name, name):
-        super().__init__(model_name, name, name)
-        self.aggregate = name
+        super().__init__(
+            model_name, name, name, type_=NumberFieldType, concrete=True, aggregate=name
+        )
 
     def bind(self, previous):
         assert previous.db_field
@@ -250,12 +248,10 @@ class OrmAggregateField(OrmBaseField):
 
 
 class OrmFunctionField(OrmBaseField):
-    concrete = True
-
     def __init__(self, model_name, name, type_):
-        super().__init__(model_name, name, name)
-        self.function = name
-        self.type_ = type_
+        super().__init__(
+            model_name, name, name, concrete=True, function=name, type_=type_
+        )
 
     def bind(self, previous):
         assert previous.db_field
