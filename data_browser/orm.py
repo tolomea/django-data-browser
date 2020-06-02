@@ -20,10 +20,10 @@ from .query import (
     ASC,
     DSC,
     TYPES,
+    BaseFieldType,
     BooleanFieldType,
     DateFieldType,
     DateTimeFieldType,
-    FieldType,
     HTMLFieldType,
     MetaFieldType,
     MonthFieldType,
@@ -168,7 +168,7 @@ class OrmBaseField:
     model_name: str
     name: str
     pretty_name: str
-    type_: FieldType = None
+    type_: BaseFieldType = None
     concrete: bool = False
     rel_name: str = None
     # internal

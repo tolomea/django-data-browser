@@ -116,7 +116,7 @@ class MetaFieldType(type):
         return name[: -len("fieldtype")]
 
 
-class FieldType(metaclass=MetaFieldType):
+class BaseFieldType(metaclass=MetaFieldType):
     default_value = None
     lookups = {}
 
@@ -132,7 +132,7 @@ class FieldType(metaclass=MetaFieldType):
         return value
 
 
-class StringFieldType(FieldType):
+class StringFieldType(BaseFieldType):
     default_value = ""
     lookups = {
         "equals": "string",
@@ -149,7 +149,7 @@ class StringFieldType(FieldType):
     }
 
 
-class NumberFieldType(FieldType):
+class NumberFieldType(BaseFieldType):
     default_value = 0
     lookups = {
         "equals": "number",
@@ -170,7 +170,7 @@ class NumberFieldType(FieldType):
         return float(value)
 
 
-class DateTimeFieldType(FieldType):
+class DateTimeFieldType(BaseFieldType):
     default_value = "now"
     lookups = {
         "equals": "datetime",
@@ -193,7 +193,7 @@ class DateTimeFieldType(FieldType):
         return str(timezone.make_naive(value)) if value else None
 
 
-class DateFieldType(FieldType):
+class DateFieldType(BaseFieldType):
     default_value = "today"
     lookups = {
         "equals": "date",
@@ -216,7 +216,7 @@ class DateFieldType(FieldType):
         return str(value) if value else None
 
 
-class WeekDayFieldType(FieldType):
+class WeekDayFieldType(BaseFieldType):
     @staticmethod
     def format(value):
         days = [
@@ -232,7 +232,7 @@ class WeekDayFieldType(FieldType):
         return days[value] if value else None
 
 
-class MonthFieldType(FieldType):
+class MonthFieldType(BaseFieldType):
     @staticmethod
     def format(value):
         days = [
@@ -253,11 +253,11 @@ class MonthFieldType(FieldType):
         return days[value] if value else None
 
 
-class HTMLFieldType(FieldType):
+class HTMLFieldType(BaseFieldType):
     pass
 
 
-class BooleanFieldType(FieldType):
+class BooleanFieldType(BaseFieldType):
     default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
 
@@ -272,7 +272,7 @@ class BooleanFieldType(FieldType):
             raise ValueError("Expected 'true' or 'false'")
 
 
-TYPES = {field_type.name: field_type for field_type in FieldType.__subclasses__()}
+TYPES = {field_type.name: field_type for field_type in BaseFieldType.__subclasses__()}
 
 
 class BoundFieldMixin:
