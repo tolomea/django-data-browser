@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import dataclasses
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Sequence, Tuple
 
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
@@ -14,7 +13,6 @@ from .query import (
     DateFieldType,
     DateTimeFieldType,
     HTMLFieldType,
-    MetaFieldType,
     MonthFieldType,
     NumberFieldType,
     StringFieldType,
@@ -84,49 +82,23 @@ def s(path):
 
 @dataclass
 class OrmBoundField:
-    orm_field: OrmBaseField = None
-    db_field: MetaFieldType = None
-    model_path: Sequence[str] = dataclasses.field(default_factory=list)
-    pretty_path: Sequence[str] = dataclasses.field(default_factory=list)
+    full_path: Sequence[str]
+    pretty_path: Sequence[str]
+    type_: BaseFieldType = None
+    function: Tuple[str, models.Func] = None
+    filter_: str = None
+    group_by: str = None
+    aggregate_clause: Tuple[str, models.Func] = None
+    having: str = None
+    select: str = None
 
-    @property
-    def field_path(self):
-        return self.model_path + [self.db_field.name]
-
-    @property
-    def full_path(self):
-        # todo this is kinda ugly
-        if self.orm_field == self.db_field:
-            return self.field_path
-        return self.field_path + [self.orm_field.name]
+    # todo remove?
+    concrete: bool = False
+    model_name: str = None
 
     @property
     def full_path_str(self):
         return s(self.full_path)
-
-    @property
-    def field_path_str(self):
-        return s(self.field_path)
-
-    @property
-    def model_name(self):
-        return self.db_field.model_name
-
-    @property
-    def concrete(self):
-        return self.orm_field.concrete
-
-    @property
-    def type_(self):
-        return self.orm_field.type_
-
-    @property
-    def aggregate(self):
-        return self.orm_field.aggregate
-
-    @property
-    def function(self):
-        return self.orm_field.function
 
 
 @dataclass
@@ -160,24 +132,16 @@ class OrmBaseField:
             assert self.concrete
             assert not self.rel_name
 
-    def bind(self, previous):
-        previous = previous or OrmBoundField()
-        return OrmBoundField(
-            self, self, previous.model_path, previous.pretty_path + [self.pretty_name]
-        )
-
 
 class OrmFkField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, rel_name):
         super().__init__(model_name, name, pretty_name, rel_name=rel_name)
 
     def bind(self, previous):
-        previous = previous or OrmBoundField()
+        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        full_path = previous.full_path + [self.name]
         return OrmBoundField(
-            self,
-            None,
-            previous.model_path + [self.name],
-            previous.pretty_path + [self.pretty_name],
+            full_path=full_path, pretty_path=previous.pretty_path + [self.pretty_name]
         )
 
 
@@ -194,16 +158,49 @@ class OrmConcreteField(OrmBaseField):
             ),
         )
 
+    def bind(self, previous):
+        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        full_path = previous.full_path + [self.name]
+        return OrmBoundField(
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            type_=self.type_,
+            filter_=s(full_path),
+            group_by=s(full_path),
+            concrete=True,
+        )
+
 
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name):
         super().__init__(model_name, name, pretty_name, type_=StringFieldType)
+
+    def bind(self, previous):
+        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        full_path = previous.full_path + [self.name]
+        return OrmBoundField(
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            type_=self.type_,
+            group_by=s(previous.full_path + ["id"]),
+            model_name=self.model_name,
+        )
 
 
 class OrmAdminField(OrmBaseField):
     def __init__(self, model_name):
         super().__init__(
             model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN, type_=HTMLFieldType
+        )
+
+    def bind(self, previous):
+        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        full_path = previous.full_path + [self.name]
+        return OrmBoundField(
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            type_=self.type_,
+            group_by=s(previous.full_path + ["id"]),
         )
 
 
@@ -214,12 +211,17 @@ class OrmAggregateField(OrmBaseField):
         )
 
     def bind(self, previous):
-        assert previous.db_field
+        assert previous
+        full_path = previous.full_path + [self.name]
+        agg = _AGG_MAP[self.aggregate](s(previous.full_path))
         return OrmBoundField(
-            self,
-            previous.db_field,
-            previous.model_path,
-            previous.pretty_path + [self.pretty_name],
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            type_=self.type_,
+            aggregate_clause=(s(full_path), agg),
+            having=s(full_path),
+            select=s(full_path),
+            concrete=True,
         )
 
 
@@ -230,10 +232,16 @@ class OrmFunctionField(OrmBaseField):
         )
 
     def bind(self, previous):
-        assert previous.db_field
+        assert previous
+        full_path = previous.full_path + [self.name]
+        func = _FUNC_MAP[self.function][0](s(previous.full_path))
         return OrmBoundField(
-            self,
-            previous.db_field,
-            previous.model_path,
-            previous.pretty_path + [self.pretty_name],
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            type_=self.type_,
+            function=(s(full_path), func),
+            filter_=s(full_path),
+            group_by=s(full_path),
+            select=s(full_path),
+            concrete=True,
         )

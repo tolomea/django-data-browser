@@ -13,7 +13,6 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 
 from .orm_fields import (
-    _AGG_MAP,
     _AGGREGATES,
     _FUNC_MAP,
     _FUNCTIONS,
@@ -193,21 +192,23 @@ def _get_django_lookup(field_type, lookup):
         return lookup
 
 
+def _filter(qs, filter_, filter_str):
+    negation = False
+    lookup = filter_.lookup
+
+    if lookup.startswith("not_"):
+        negation = True
+        lookup = lookup[4:]
+
+    lookup = _get_django_lookup(filter_.orm_bound_field.type_, lookup)
+    filter_str = f"{filter_str}__{lookup}"
+    if negation:
+        return qs.exclude(**{filter_str: filter_.parsed})
+    else:
+        return qs.filter(**{filter_str: filter_.parsed})
+
+
 def get_results(request, bound_query):
-    def filter(qs):
-        negation = False
-
-        lookup = filter_.lookup
-        if lookup.startswith("not_"):
-            negation = True
-            lookup = lookup[4:]
-
-        filter_str = f"{filter_.orm_bound_field.full_path_str}__{_get_django_lookup(filter_.orm_bound_field.type_, lookup)}"
-        if negation:
-            return qs.exclude(**{filter_str: filter_.parsed})
-        else:
-            return qs.filter(**{filter_str: filter_.parsed})
-
     def fmt(field, value):
         return field.orm_bound_field.type_.format(value)
 
@@ -216,54 +217,48 @@ def get_results(request, bound_query):
     if not bound_query.fields:
         return []
 
-    normal_fields = [f for f in bound_query.fields if not f.orm_bound_field.aggregate]
-    calculated_fields = [
-        f for f in bound_query.fields if not f.orm_bound_field.concrete
-    ]
-
     admin = bound_query.orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
     # functions
-    for field in bound_query.fields + bound_query.filters:
-        field = field.orm_bound_field
-        if field.function:
-            qs = qs.annotate(
-                **{
-                    field.full_path_str: _FUNC_MAP[field.function][0](
-                        field.field_path_str
-                    )
-                }
-            )
+    qs = qs.annotate(
+        **dict(
+            field.orm_bound_field.function
+            for field in bound_query.fields + bound_query.filters
+            if field.orm_bound_field.function
+        )
+    )
 
     # filter normal and function fields
     for filter_ in bound_query.valid_filters:
-        if not filter_.orm_bound_field.aggregate:
-            qs = filter(qs)
+        if filter_.orm_bound_field.filter_:
+            qs = _filter(qs, filter_, filter_.orm_bound_field.filter_)
 
-    # no calculated fields we're going to early out using qs.values
-    if not calculated_fields:
-        # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
+    # group by
+    if all(f.orm_bound_field.concrete for f in bound_query.fields):  # todo remove
         qs = qs.values(
-            *[f.orm_bound_field.full_path_str for f in normal_fields],
+            *[
+                field.orm_bound_field.group_by
+                for field in bound_query.fields
+                if field.orm_bound_field.group_by
+            ],
+            # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
             _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
-        )
-
-    # remove duplicates (I think this only happens in the qs.values case)
-    qs = qs.distinct()
+        ).distinct()
 
     # aggregates
-    for field in bound_query.fields + bound_query.filters:
-        field = field.orm_bound_field
-        if field.aggregate:
-            qs = qs.annotate(
-                **{field.full_path_str: _AGG_MAP[field.aggregate](field.field_path_str)}
-            )
+    qs = qs.annotate(
+        **dict(
+            field.orm_bound_field.aggregate_clause
+            for field in bound_query.fields + bound_query.filters
+            if field.orm_bound_field.aggregate_clause
+        )
+    )
 
-    # filter aggregate fields
+    # having, aka filter aggregate fields
     for filter_ in bound_query.valid_filters:
-        if filter_.orm_bound_field.aggregate:
-            qs = filter(qs)
+        if filter_.orm_bound_field.having:
+            qs = _filter(qs, filter_, filter_.orm_bound_field.having)
 
     # sort
     sort_fields = []
@@ -275,7 +270,7 @@ def get_results(request, bound_query):
     qs = qs.order_by(*sort_fields)
 
     # no calculated fields early out using qs.values
-    if not calculated_fields:
+    if all(f.orm_bound_field.concrete for f in bound_query.fields):
         results = []
         for row in qs:
             results.append(
@@ -286,6 +281,7 @@ def get_results(request, bound_query):
             )
         return results
 
+    """
     # preloading
     def ancestors(parts):
         for i in range(1, len(parts) + 1):
@@ -306,6 +302,7 @@ def get_results(request, bound_query):
         qs = qs.select_related(*select_related)
     if prefetch_related:
         qs = qs.prefetch_related(*prefetch_related)
+    """
 
     # get results
     def get_admin_link(obj):
@@ -319,14 +316,16 @@ def get_results(request, bound_query):
     def lookup(obj, field):
         value = obj
 
-        if field.aggregate is None and field.function is None:
+        if field.select is None:
             *parts, tail = field.full_path
             for part in parts:
                 value = getattr(value, part, None)
         else:
-            tail = field.full_path_str
+            tail = field.select
 
-        admin = bound_query.orm_models[field.model_name].admin
+        admin = (
+            bound_query.orm_models[field.model_name].admin if field.model_name else None
+        )
         if field.concrete:
             return getattr(value, tail, None)
         elif tail == _OPEN_IN_ADMIN:

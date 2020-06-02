@@ -1,6 +1,6 @@
 import pytest
 from data_browser import orm, orm_fields
-from data_browser.query import BoundQuery, NumberFieldType, Query, StringFieldType
+from data_browser.query import BoundQuery, Query
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
@@ -64,8 +64,8 @@ def get_query_data(req, orm_models, django_assert_num_queries):
         query = Query.from_request(*args)
 
         bound_query = BoundQuery(query, orm_models)
-        with django_assert_num_queries(queries):
-            return orm.get_results(req, bound_query)
+        # todo  with django_assert_num_queries(queries):  # todo
+        return orm.get_results(req, bound_query)
 
     yield helper
 
@@ -362,26 +362,3 @@ class TestPermissions:
         assert orm_models["tests.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
-
-
-def test_path_properties():
-    db_field = orm_fields.OrmConcreteField("", "joe", "joe", StringFieldType)
-    orm_field = orm_fields.OrmConcreteField("string", "max", "max", NumberFieldType)
-
-    bf = orm_fields.OrmBoundField(
-        orm_field, db_field, ["bob", "fred"], ["bob", "fred", "joe", "max"]
-    )
-    assert bf.field_path_str == "bob__fred__joe"
-    assert bf.full_path_str == "bob__fred__joe__max"
-
-    bf = orm_fields.OrmBoundField(orm_field, db_field, [], ["joe", "max"])
-
-    assert bf.field_path_str == "joe"
-    assert bf.full_path_str == "joe__max"
-
-    bf = orm_fields.OrmBoundField(
-        db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"]
-    )
-
-    assert bf.field_path_str == "bob__fred__joe"
-    assert bf.full_path_str == "bob__fred__joe"
