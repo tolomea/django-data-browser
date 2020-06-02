@@ -5,10 +5,16 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-const djangoData = JSON.parse(document.getElementById("django-data").textContent);
+const djangoData = JSON.parse(
+    document.getElementById("django-data").textContent
+);
 
 if (djangoData.sentryDsn) {
-    Sentry.init({ dsn: djangoData.sentryDsn });
+    Sentry.init({
+        dsn: djangoData.sentryDsn,
+        release: djangoData.config.version,
+        attachStacktrace: true,
+    });
 }
 
 ReactDOM.render(
