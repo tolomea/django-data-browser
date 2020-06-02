@@ -6,6 +6,15 @@ import { Query, getUrlForQuery } from "./Query";
 const assert = require("assert");
 let controller;
 
+function handleError(e) {
+  if (e.name === "AbortError") {
+    console.log("request aborted");
+  } else {
+    console.log(e);
+    Sentry.captureException(e);
+  }
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -48,9 +57,9 @@ class App extends React.Component {
       null,
       getUrlForQuery(this.props.config.baseUrl, this.state, "html")
     );
-    this.fetchResults(this.state).catch(() => null);
+    this.fetchResults(this.state).catch((e) => handleError);
     window.onpopstate = (e) => {
-      this.fetchResults(e.state).catch(() => null);
+      this.fetchResults(e.state).catch((e) => handleError);
       this.setState(e.state);
     };
   }
@@ -74,12 +83,9 @@ class App extends React.Component {
       .then((response) => {
         response.results = [];
         response.filterErrors = [];
-        assert.deepEqual(request, response);
+        assert.deepEqual(response, request);
       })
-      .catch((e) => {
-        console.log(e);
-        Sentry.captureException(e);
-      });
+      .catch((e) => handleError);
   }
 
   render() {
