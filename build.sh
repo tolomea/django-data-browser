@@ -13,6 +13,7 @@ rm -Rf dist
 pip install --upgrade setuptools wheel twine
 python setup.py sdist bdist_wheel
 
-#git tag -a -m ""
+#git tag -a -m "" x.y.z
+#git push --tags
 #python -m twine upload -u __token__ dist/*
 echo SUCCESS

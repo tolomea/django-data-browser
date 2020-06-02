@@ -106,6 +106,10 @@ def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
 
 
+def s(path):
+    return "__".join(path)
+
+
 @dataclass
 class OrmBoundField:
     orm_field: OrmBaseField = None
@@ -126,11 +130,11 @@ class OrmBoundField:
 
     @property
     def full_path_str(self):
-        return "__".join(self.full_path)
+        return s(self.full_path)
 
     @property
     def field_path_str(self):
-        return "__".join(self.field_path)
+        return s(self.field_path)
 
     @property
     def model_name(self):
@@ -495,7 +499,7 @@ def get_results(request, bound_query):
     # preloading
     def ancestors(parts):
         for i in range(1, len(parts) + 1):
-            yield "__".join(parts[:i])
+            yield s(parts[:i])
 
     select_related = set()
     for field in bound_query.sort_fields:
