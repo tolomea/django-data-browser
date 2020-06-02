@@ -1,5 +1,5 @@
 import pytest
-from data_browser import orm
+from data_browser import orm, orm_fields
 from data_browser.query import BoundQuery, NumberFieldType, Query, StringFieldType
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
@@ -317,13 +317,13 @@ class TestPermissions:
         )
 
         assert "tests.NotInAdmin" not in orm_models
-        assert orm_models["tests.InAdmin"] == orm.OrmModel(
+        assert orm_models["tests.InAdmin"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
-        assert orm_models["tests.InlineAdmin"] == orm.OrmModel(
+        assert orm_models["tests.InlineAdmin"] == orm_fields.OrmModel(
             fields=KEYS("id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
-        assert orm_models["tests.Normal"] == orm.OrmModel(
+        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin", "inline_admin"),
             admin=ANY(BaseModelAdmin),
         )
@@ -335,7 +335,7 @@ class TestPermissions:
         assert "tests.NotInAdmin" not in orm_models
         assert "tests.InAdmin" not in orm_models
         assert "tests.InlineAdmin" not in orm_models
-        assert orm_models["tests.Normal"] == orm.OrmModel(
+        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
@@ -346,7 +346,7 @@ class TestPermissions:
         assert "tests.NotInAdmin" not in orm_models
         assert "tests.InAdmin" not in orm_models
         assert "tests.InlineAdmin" not in orm_models
-        assert orm_models["tests.Normal"] == orm.OrmModel(
+        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
@@ -355,31 +355,33 @@ class TestPermissions:
         orm_models = self.get_fields_with_perms(rf, ["normal", "inadmin"])
 
         assert "tests.NotInAdmin" not in orm_models
-        assert orm_models["tests.InAdmin"] == orm.OrmModel(
+        assert orm_models["tests.InAdmin"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
         assert "tests.InlineAdmin" not in orm_models
-        assert orm_models["tests.Normal"] == orm.OrmModel(
+        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
 
 
 def test_path_properties():
-    db_field = orm.OrmConcreteField("", "joe", "joe", StringFieldType)
-    orm_field = orm.OrmConcreteField("string", "max", "max", NumberFieldType)
+    db_field = orm_fields.OrmConcreteField("", "joe", "joe", StringFieldType)
+    orm_field = orm_fields.OrmConcreteField("string", "max", "max", NumberFieldType)
 
-    bf = orm.OrmBoundField(
+    bf = orm_fields.OrmBoundField(
         orm_field, db_field, ["bob", "fred"], ["bob", "fred", "joe", "max"]
     )
     assert bf.field_path_str == "bob__fred__joe"
     assert bf.full_path_str == "bob__fred__joe__max"
 
-    bf = orm.OrmBoundField(orm_field, db_field, [], ["joe", "max"])
+    bf = orm_fields.OrmBoundField(orm_field, db_field, [], ["joe", "max"])
 
     assert bf.field_path_str == "joe"
     assert bf.full_path_str == "joe__max"
 
-    bf = orm.OrmBoundField(db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"])
+    bf = orm_fields.OrmBoundField(
+        db_field, db_field, ["bob", "fred"], ["bob", "fred", "joe"]
+    )
 
     assert bf.field_path_str == "bob__fred__joe"
     assert bf.full_path_str == "bob__fred__joe"

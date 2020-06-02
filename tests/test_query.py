@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 import pytest
-from data_browser import orm
+from data_browser import orm, orm_fields
 from data_browser.query import (
     ASC,
     DSC,
@@ -36,36 +36,36 @@ def orm_models():
     return {
         "string": orm._get_fields_for_type(StringFieldType),
         "number": orm._get_fields_for_type(NumberFieldType),
-        "app.model": orm.OrmModel(
+        "app.model": orm_fields.OrmModel(
             fields={
-                "fa": orm.OrmConcreteField(
+                "fa": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="fa",
                     pretty_name="fa",
                     type_=StringFieldType,
                 ),
-                "fd": orm.OrmConcreteField(
+                "fd": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="fd",
                     pretty_name="fd",
                     type_=StringFieldType,
                 ),
-                "fn": orm.OrmCalculatedField(
+                "fn": orm_fields.OrmCalculatedField(
                     model_name="app.model", name="fn", pretty_name="fn"
                 ),
-                "bob": orm.OrmConcreteField(
+                "bob": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="bob",
                     pretty_name="bob",
                     type_=StringFieldType,
                 ),
-                "num": orm.OrmConcreteField(
+                "num": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="num",
                     pretty_name="num",
                     type_=NumberFieldType,
                 ),
-                "tom": orm.OrmFkField(
+                "tom": orm_fields.OrmFkField(
                     model_name="app.model",
                     name="tom",
                     pretty_name="tom",
@@ -74,15 +74,15 @@ def orm_models():
             },
             admin=True,
         ),
-        "app.Tom": orm.OrmModel(
+        "app.Tom": orm_fields.OrmModel(
             fields={
-                "jones": orm.OrmConcreteField(
+                "jones": orm_fields.OrmConcreteField(
                     model_name="app.Tom",
                     name="jones",
                     pretty_name="jones",
                     type_=StringFieldType,
                 ),
-                "michael": orm.OrmFkField(
+                "michael": orm_fields.OrmFkField(
                     model_name="app.Tom",
                     name="michael",
                     pretty_name="michael",
@@ -91,9 +91,9 @@ def orm_models():
             },
             admin=True,
         ),
-        "app.Michael": orm.OrmModel(
+        "app.Michael": orm_fields.OrmModel(
             fields={
-                "bolton": orm.OrmConcreteField(
+                "bolton": orm_fields.OrmConcreteField(
                     model_name="app.Michael",
                     name="bolton",
                     pretty_name="bolton",
@@ -182,7 +182,9 @@ class TestBoundQuery:
         orm_field = orm_models["app.model"].fields["bob"]
         assert bound_query.filters == [
             BoundFilter(
-                orm.OrmBoundField(orm_field, orm_field, [], ["bob"]), "equals", "fred"
+                orm_fields.OrmBoundField(orm_field, orm_field, [], ["bob"]),
+                "equals",
+                "fred",
             )
         ]
 
@@ -244,8 +246,10 @@ class TestFieldType:
 
 class TestStringFieldType:
     def test_validate(self):
-        orm_field = orm.OrmConcreteField("", "bob", "bob", StringFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
+        orm_field = orm_fields.OrmConcreteField("", "bob", "bob", StringFieldType)
+        orm_bound_field = orm_fields.OrmBoundField(
+            orm_field, orm_field.type_, [], ["bob"]
+        )
         assert BoundFilter(orm_bound_field, "contains", "hello").is_valid
         assert not BoundFilter(orm_bound_field, "pontains", "hello").is_valid
 
@@ -258,8 +262,10 @@ class TestStringFieldType:
 
 class TestNumberFieldType:
     def test_validate(self):
-        orm_field = orm.OrmConcreteField("", "bob", "bob", NumberFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
+        orm_field = orm_fields.OrmConcreteField("", "bob", "bob", NumberFieldType)
+        orm_bound_field = orm_fields.OrmBoundField(
+            orm_field, orm_field.type_, [], ["bob"]
+        )
         assert BoundFilter(orm_bound_field, "gt", "6.1").is_valid
         assert not BoundFilter(orm_bound_field, "pontains", "6.1").is_valid
         assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
@@ -275,8 +281,10 @@ class TestNumberFieldType:
 
 class TestDateTimeFieldType:
     def test_validate(self):
-        orm_field = orm.OrmConcreteField("", "bob", "bob", DateTimeFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
+        orm_field = orm_fields.OrmConcreteField("", "bob", "bob", DateTimeFieldType)
+        orm_bound_field = orm_fields.OrmBoundField(
+            orm_field, orm_field.type_, [], ["bob"]
+        )
         assert BoundFilter(orm_bound_field, "gt", "2018-03-20T22:31:23").is_valid
         assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
         assert not BoundFilter(
@@ -300,8 +308,10 @@ class TestDateTimeFieldType:
 
 class TestDateFieldType:
     def test_validate(self):
-        orm_field = orm.OrmConcreteField("", "bob", "bob", DateFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
+        orm_field = orm_fields.OrmConcreteField("", "bob", "bob", DateFieldType)
+        orm_bound_field = orm_fields.OrmBoundField(
+            orm_field, orm_field.type_, [], ["bob"]
+        )
         assert BoundFilter(orm_bound_field, "gt", "2018-03-20T22:31:23").is_valid
         assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
         assert not BoundFilter(
@@ -334,8 +344,10 @@ class TestMonthFieldType:
 
 class TestBooleanFieldType:
     def test_validate(self):
-        orm_field = orm.OrmConcreteField("", "bob", "bob", BooleanFieldType)
-        orm_bound_field = orm.OrmBoundField(orm_field, orm_field.type_, [], ["bob"])
+        orm_field = orm_fields.OrmConcreteField("", "bob", "bob", BooleanFieldType)
+        orm_bound_field = orm_fields.OrmBoundField(
+            orm_field, orm_field.type_, [], ["bob"]
+        )
         assert BoundFilter(orm_bound_field, "equals", "True").is_valid
         assert BoundFilter(orm_bound_field, "equals", "False").is_valid
         assert not BoundFilter(orm_bound_field, "equals", "hello").is_valid
