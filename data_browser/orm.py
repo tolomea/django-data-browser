@@ -326,10 +326,3 @@ def get_results(request, bound_query):
             res_row.append(res)
         results.append(res_row)
     return results
-
-    # admin links
-
-    """
-    # get results
-
-    """
