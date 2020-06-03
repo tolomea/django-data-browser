@@ -87,28 +87,28 @@ def test_get_results_all(get_product_data):
 def test_get_admin_link(get_product_data):
     data = get_product_data(3, "producer__address__admin", {})
     assert data == [
+        [None],
         ['<a href="/admin/tests/address/1/change/">Address object (1)</a>'],
         ['<a href="/admin/tests/address/2/change/">Address object (2)</a>'],
-        [None],
     ]
 
 
 @pytest.mark.usefixtures("products")
 def test_get_calculated_field_on_admin(get_product_data):
     data = get_product_data(3, "producer__address__bob", {})
-    assert data == [["bad"], ["bob"], [None]]
+    assert data == [[None], ["bad"], ["bob"]]
 
 
 @pytest.mark.usefixtures("products")
 def test_get_calculated_field(get_product_data):
     data = get_product_data(3, "producer__address__fred", {})
-    assert data == [["bad"], ["fred"], [None]]
+    assert data == [[None], ["bad"], ["fred"]]
 
 
 @pytest.mark.usefixtures("products")
 def test_get_property(get_product_data):
     data = get_product_data(3, "producer__address__tom", {})
-    assert data == [["bad"], ["tom"], [None]]
+    assert data == [[None], ["bad"], ["tom"]]
 
 
 @pytest.mark.usefixtures("products")

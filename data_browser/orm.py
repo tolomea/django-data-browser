@@ -209,9 +209,6 @@ def _filter(qs, filter_, filter_str):
 
 
 def get_results(request, bound_query):
-    def fmt(field, value):
-        return field.orm_bound_field.type_.format(value)
-
     request.data_browser = True
 
     if not bound_query.fields:
@@ -235,16 +232,15 @@ def get_results(request, bound_query):
             qs = _filter(qs, filter_, filter_.orm_bound_field.filter_)
 
     # group by
-    if all(f.orm_bound_field.concrete for f in bound_query.fields):  # todo remove
-        qs = qs.values(
-            *[
-                field.orm_bound_field.group_by
-                for field in bound_query.fields
-                if field.orm_bound_field.group_by
-            ],
-            # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
-            _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
-        ).distinct()
+    qs = qs.values(
+        *[
+            field.orm_bound_field.group_by
+            for field in bound_query.fields
+            if field.orm_bound_field.group_by
+        ],
+        # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
+        _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
+    ).distinct()
 
     # aggregates
     qs = qs.annotate(
@@ -269,86 +265,71 @@ def get_results(request, bound_query):
             sort_fields.append(f"-{field.orm_bound_field.full_path_str}")
     qs = qs.order_by(*sort_fields)
 
-    # no calculated fields early out using qs.values
-    if all(f.orm_bound_field.concrete for f in bound_query.fields):
-        results = []
-        for row in qs:
-            results.append(
-                [
-                    fmt(field, row[field.orm_bound_field.full_path_str])
-                    for field in bound_query.fields
-                ]
-            )
-        return results
+    # gather up all the objects to fetch for calculated fields
+    to_load = defaultdict(set)
+    for field in bound_query.fields:
+        if not field.orm_bound_field.concrete:
+            pks = to_load[field.orm_bound_field.model_name]
+            for row in qs:
+                pks.add(row[field.orm_bound_field.group_by])
 
-    """
-    # preloading
-    def ancestors(parts):
-        for i in range(1, len(parts) + 1):
-            yield "__".join(parts[:i])
+    # fetch all the calculated field objects
+    cache = {}
+    for model_name, pks in to_load.items():
+        admin = bound_query.orm_models[model_name].admin
+        cache[model_name] = admin.get_queryset(request).in_bulk(pks)
 
-    select_related = set()
-    for field in bound_query.sort_fields:
-        select_related.update(ancestors(field.orm_bound_field.model_path))
-    for filter_ in bound_query.valid_filters:
-        select_related.update(ancestors(filter_.orm_bound_field.model_path))
+    # dump out the results
+    def fmt(field, value):
+        return field.orm_bound_field.type_.format(value)
 
-    prefetch_related = set()
-    for field in normal_fields:
-        prefetch_related.update(ancestors(field.orm_bound_field.model_path))
-    prefetch_related -= select_related
-
-    if select_related:
-        qs = qs.select_related(*select_related)
-    if prefetch_related:
-        qs = qs.prefetch_related(*prefetch_related)
-    """
-
-    # get results
     def get_admin_link(obj):
-        if obj is None:
-            return None
         model_name = get_model_name(obj.__class__, "_")
         url_name = f"admin:{model_name}_change".lower()
         url = reverse(url_name, args=[obj.pk])
         return f'<a href="{url}">{obj}</a>'
 
-    def lookup(obj, field):
-        value = obj
-
-        if field.select is None:
-            *parts, tail = field.full_path
-            for part in parts:
-                value = getattr(value, part, None)
-        else:
-            tail = field.select
-
-        admin = (
-            bound_query.orm_models[field.model_name].admin if field.model_name else None
-        )
-        if field.concrete:
-            return getattr(value, tail, None)
-        elif tail == _OPEN_IN_ADMIN:
-            return get_admin_link(value)
-        elif hasattr(admin, tail):
-            try:
-                func = getattr(admin, tail)
-                return value and func(value)
-            except Exception as e:
-                return str(e)
-        else:
-            try:
-                value = getattr(value, tail, None)
-                return value() if callable(value) else value
-            except Exception as e:
-                return str(e)
-
     results = []
     for row in qs:
-        results.append(
-            [
-                fmt(field, lookup(row, field.orm_bound_field))
-                for field in bound_query.fields
-            ]
-        )
+        res_row = []
+        for field in bound_query.fields:
+            if field.orm_bound_field.concrete:
+                # normal field
+                res = fmt(field, row[field.orm_bound_field.full_path_str])
+            else:
+                pk = row[field.orm_bound_field.group_by]
+                if pk is None:
+                    # null object
+                    res = None
+                else:
+                    obj = cache[field.orm_bound_field.model_name][pk]
+                    if field.orm_bound_field.admin_link:
+                        # link to admin
+                        res = get_admin_link(obj)
+                    else:
+                        tail = field.orm_bound_field.full_path[-1]
+                        if hasattr(admin, tail):
+                            # admin callable
+                            func = getattr(admin, tail)
+                            try:
+                                res = func(obj)
+                            except Exception as e:
+                                res = str(e)
+                        else:
+                            # model property or callable
+                            try:
+                                value = getattr(obj, tail, None)
+                                res = value() if callable(value) else value
+                            except Exception as e:
+                                res = str(e)
+
+            res_row.append(res)
+        results.append(res_row)
     return results
+
+    # admin links
+
+    """
+    # get results
+
+    """

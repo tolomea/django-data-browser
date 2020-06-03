@@ -91,6 +91,8 @@ class OrmBoundField:
     aggregate_clause: Tuple[str, models.Func] = None
     having: str = None
     select: str = None
+    admin_link: bool = False
+    calculated: bool = False
 
     # todo remove?
     concrete: bool = False
@@ -184,6 +186,7 @@ class OrmCalculatedField(OrmBaseField):
             type_=self.type_,
             group_by=s(previous.full_path + ["id"]),
             model_name=self.model_name,
+            calculated=True,
         )
 
 
@@ -201,6 +204,8 @@ class OrmAdminField(OrmBaseField):
             pretty_path=previous.pretty_path + [self.pretty_name],
             type_=self.type_,
             group_by=s(previous.full_path + ["id"]),
+            model_name=self.model_name,
+            admin_link=True,
         )
 
 
