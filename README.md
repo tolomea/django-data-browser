@@ -132,13 +132,14 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 | -------- | --------------------------------------------------------------------------------------------- |
 | name     | The only required one.                                                                        |
 | type     | If set then this field can be added to a query and will return results of the specified type. |
-| concrete | Can this field be sorted and filtered.                                                        |
+| concrete | Can this field be sorted and filtered. Requires type to be set.                               |
 | model    | If set then this field has additional nested fields that are detailed on the given model.     |
 
 ### Release History
 
 | Version   | Date           | Summary                                                                         |
 | --------- | -------------- | ------------------------------------------------------------------------------- |
+| **1.2.4** | 2020-06-03     | **Calculated fields interact better with aggregation.**                         |
 | 1.2.3     | 2020-06-02     | JS error handling tweaks                                                        |
 | 1.2.2     | 2020-06-01     | Minor fix                                                                       |
 | **1.2.1** | 2020-05-31     | **Improved date handling**                                                      |
