@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
-from django.contrib import admin
+from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
@@ -76,7 +76,7 @@ def _get_all_admin_fields(request):
 
     all_admin_fields = defaultdict(set)
     model_admins = {}
-    for model, model_admin in admin.site._registry.items():
+    for model, model_admin in site._registry.items():
         model_admins[model] = model_admin
         if visible(model_admin, request):
             all_admin_fields[model].update(from_fieldsets(model_admin, True))
@@ -220,24 +220,20 @@ def get_results(request, bound_query):
     # functions
     qs = qs.annotate(
         **dict(
-            field.orm_bound_field.function
-            for field in bound_query.fields + bound_query.filters
-            if field.orm_bound_field.function
+            field.function_clause
+            for field in bound_query.bound_fields + bound_query.bound_filters
+            if field.function_clause
         )
     )
 
     # filter normal and function fields
     for filter_ in bound_query.valid_filters:
         if filter_.orm_bound_field.filter_:
-            qs = _filter(qs, filter_, filter_.orm_bound_field.filter_)
+            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
 
     # group by
     qs = qs.values(
-        *[
-            field.orm_bound_field.group_by
-            for field in bound_query.fields
-            if field.orm_bound_field.group_by
-        ],
+        *[field.queryset_path for field in bound_query.bound_fields if field.group_by],
         # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
         _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
     ).distinct()
@@ -245,33 +241,33 @@ def get_results(request, bound_query):
     # aggregates
     qs = qs.annotate(
         **dict(
-            field.orm_bound_field.aggregate_clause
-            for field in bound_query.fields + bound_query.filters
-            if field.orm_bound_field.aggregate_clause
+            field.aggregate_clause
+            for field in bound_query.bound_fields + bound_query.bound_filters
+            if field.aggregate_clause
         )
     )
 
     # having, aka filter aggregate fields
     for filter_ in bound_query.valid_filters:
         if filter_.orm_bound_field.having:
-            qs = _filter(qs, filter_, filter_.orm_bound_field.having)
+            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
 
     # sort
     sort_fields = []
     for field in bound_query.sort_fields:
         if field.direction is ASC:
-            sort_fields.append(field.orm_bound_field.full_path_str)
+            sort_fields.append(field.orm_bound_field.queryset_path)
         if field.direction is DSC:
-            sort_fields.append(f"-{field.orm_bound_field.full_path_str}")
+            sort_fields.append(f"-{field.orm_bound_field.queryset_path}")
     qs = qs.order_by(*sort_fields)
 
     # gather up all the objects to fetch for calculated fields
     to_load = defaultdict(set)
-    for field in bound_query.fields:
-        if not field.orm_bound_field.concrete:
-            pks = to_load[field.orm_bound_field.model_name]
+    for field in bound_query.bound_fields:
+        if field.model_name:
+            pks = to_load[field.model_name]
             for row in qs:
-                pks.add(row[field.orm_bound_field.group_by])
+                pks.add(row[field.queryset_path])
 
     # fetch all the calculated field objects
     cache = {}
@@ -280,9 +276,6 @@ def get_results(request, bound_query):
         cache[model_name] = admin.get_queryset(request).in_bulk(pks)
 
     # dump out the results
-    def fmt(field, value):
-        return field.orm_bound_field.type_.format(value)
-
     def get_admin_link(obj):
         model_name = get_model_name(obj.__class__, "_")
         url_name = f"admin:{model_name}_change".lower()
@@ -292,37 +285,36 @@ def get_results(request, bound_query):
     results = []
     for row in qs:
         res_row = []
-        for field in bound_query.fields:
-            if field.orm_bound_field.concrete:
+        for field in bound_query.bound_fields:
+            value = row[field.queryset_path]
+            if value is None:
+                # null
+                res = None
+            elif not field.model_name:
                 # normal field
-                res = fmt(field, row[field.orm_bound_field.full_path_str])
+                res = value
             else:
-                pk = row[field.orm_bound_field.group_by]
-                if pk is None:
-                    # null object
-                    res = None
+                obj = cache[field.model_name][value]
+                if field.admin_link:
+                    # link to admin
+                    res = get_admin_link(obj)
                 else:
-                    obj = cache[field.orm_bound_field.model_name][pk]
-                    if field.orm_bound_field.admin_link:
-                        # link to admin
-                        res = get_admin_link(obj)
+                    tail = field.full_path[-1]
+                    admin = bound_query.orm_models[field.model_name].admin
+                    if hasattr(admin, tail):
+                        # admin callable
+                        func = getattr(admin, tail)
+                        try:
+                            res = func(obj)
+                        except Exception as e:
+                            res = str(e)
                     else:
-                        tail = field.orm_bound_field.full_path[-1]
-                        if hasattr(admin, tail):
-                            # admin callable
-                            func = getattr(admin, tail)
-                            try:
-                                res = func(obj)
-                            except Exception as e:
-                                res = str(e)
-                        else:
-                            # model property or callable
-                            try:
-                                value = getattr(obj, tail, None)
-                                res = value() if callable(value) else value
-                            except Exception as e:
-                                res = str(e)
-
-            res_row.append(res)
+                        # model property or callable
+                        try:
+                            value = getattr(obj, tail)
+                            res = value() if callable(value) else value
+                        except Exception as e:
+                            res = str(e)
+            res_row.append(field.type_.format(res))
         results.append(res_row)
     return results

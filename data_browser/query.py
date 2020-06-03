@@ -320,7 +320,7 @@ class BoundField(BoundFieldMixin):
 
     @classmethod
     def bind(cls, orm_bound_field, query_field):
-        concrete = orm_bound_field.concrete
+        concrete = not orm_bound_field.model_name  # todo not very clean
         direction = query_field.direction if concrete else None
         priority = query_field.priority if concrete else None
         return cls(orm_bound_field, direction, priority)
@@ -363,3 +363,11 @@ class BoundQuery:
     @property
     def valid_filters(self):
         return [f for f in self.filters if f.is_valid]
+
+    @property
+    def bound_fields(self):
+        return [f.orm_bound_field for f in self.fields]
+
+    @property
+    def bound_filters(self):
+        return [f.orm_bound_field for f in self.valid_filters]

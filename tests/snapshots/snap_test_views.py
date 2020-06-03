@@ -565,6 +565,12 @@ snapshots["test_query_html context"] = {
                         "prettyName": "admin",
                         "type": "html",
                     },
+                    "frank": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "frank",
+                        "type": "string",
+                    },
                     "id": {
                         "concrete": True,
                         "model": "number",
@@ -578,7 +584,7 @@ snapshots["test_query_html context"] = {
                         "type": "string",
                     },
                 },
-                "sortedFields": ["id", "admin", "address", "name"],
+                "sortedFields": ["id", "admin", "address", "frank", "name"],
             },
             "tests.Product": {
                 "fields": {
@@ -1793,6 +1799,12 @@ snapshots["test_query_ctx context"] = {
                         "prettyName": "admin",
                         "type": "html",
                     },
+                    "frank": {
+                        "concrete": False,
+                        "model": None,
+                        "prettyName": "frank",
+                        "type": "string",
+                    },
                     "id": {
                         "concrete": True,
                         "model": "number",
@@ -1806,7 +1818,7 @@ snapshots["test_query_ctx context"] = {
                         "type": "string",
                     },
                 },
-                "sortedFields": ["id", "admin", "address", "name"],
+                "sortedFields": ["id", "admin", "address", "frank", "name"],
             },
             "tests.Product": {
                 "fields": {

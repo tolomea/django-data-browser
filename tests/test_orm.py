@@ -100,6 +100,12 @@ def test_get_calculated_field_on_admin(get_product_data):
 
 
 @pytest.mark.usefixtures("products")
+def test_get_multiple_calculated_fields_on_admins(get_product_data):
+    data = get_product_data(3, "producer__address__bob,producer__frank", {})
+    assert data == [[None, "frank"], ["bad", "frank"], ["bob", "frank"]]
+
+
+@pytest.mark.usefixtures("products")
 def test_get_calculated_field(get_product_data):
     data = get_product_data(2, "producer__address__fred", {})
     assert data == [[None], ["bad"], ["fred"]]

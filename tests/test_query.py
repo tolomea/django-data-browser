@@ -178,22 +178,6 @@ class TestBoundQuery:
             (["fa"], ASC, 1),
         ]
 
-    def test_filters(self, bound_query, orm_models):
-        assert bound_query.filters == [
-            BoundFilter(
-                orm_fields.OrmBoundField(
-                    full_path=["bob"],
-                    pretty_path=["bob"],
-                    type_=StringFieldType,
-                    filter_="bob",
-                    group_by="bob",
-                    concrete=True,
-                ),
-                "equals",
-                "fred",
-            )
-        ]
-
     def test_bad_field(self, orm_models):
         query = Query("app.model", [QueryField("yata")], [])
         bound_query = BoundQuery(query, orm_models)

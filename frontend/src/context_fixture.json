@@ -593,6 +593,12 @@
                         "prettyName": "admin",
                         "type": "html"
                     },
+                    "frank": {
+                        "concrete": false,
+                        "model": null,
+                        "prettyName": "frank",
+                        "type": "string"
+                    },
                     "id": {
                         "concrete": true,
                         "model": "number",
@@ -610,6 +616,7 @@
                     "id",
                     "admin",
                     "address",
+                    "frank",
                     "name"
                 ]
             },

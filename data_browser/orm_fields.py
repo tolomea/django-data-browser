@@ -85,22 +85,14 @@ class OrmBoundField:
     full_path: Sequence[str]
     pretty_path: Sequence[str]
     type_: BaseFieldType = None
-    function: Tuple[str, models.Func] = None
-    filter_: str = None
-    group_by: str = None
+    queryset_path: str = None
+    function_clause: Tuple[str, models.Func] = None
     aggregate_clause: Tuple[str, models.Func] = None
-    having: str = None
-    select: str = None
-    admin_link: bool = False
-    calculated: bool = False
-
-    # todo remove?
-    concrete: bool = False
+    filter_: bool = False
+    group_by: bool = False
+    having: bool = False
     model_name: str = None
-
-    @property
-    def full_path_str(self):
-        return s(self.full_path)
+    admin_link: bool = False
 
 
 @dataclass
@@ -167,9 +159,9 @@ class OrmConcreteField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             type_=self.type_,
-            filter_=s(full_path),
-            group_by=s(full_path),
-            concrete=True,
+            queryset_path=s(full_path),
+            filter_=True,
+            group_by=True,
         )
 
 
@@ -184,9 +176,9 @@ class OrmCalculatedField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             type_=self.type_,
-            group_by=s(previous.full_path + ["id"]),
+            queryset_path=s(previous.full_path + ["id"]),
+            group_by=True,
             model_name=self.model_name,
-            calculated=True,
         )
 
 
@@ -203,7 +195,8 @@ class OrmAdminField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             type_=self.type_,
-            group_by=s(previous.full_path + ["id"]),
+            queryset_path=s(previous.full_path + ["id"]),
+            group_by=True,
             model_name=self.model_name,
             admin_link=True,
         )
@@ -223,10 +216,9 @@ class OrmAggregateField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             type_=self.type_,
+            queryset_path=s(full_path),
             aggregate_clause=(s(full_path), agg),
-            having=s(full_path),
-            select=s(full_path),
-            concrete=True,
+            having=True,
         )
 
 
@@ -244,9 +236,8 @@ class OrmFunctionField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             type_=self.type_,
-            function=(s(full_path), func),
-            filter_=s(full_path),
-            group_by=s(full_path),
-            select=s(full_path),
-            concrete=True,
+            queryset_path=s(full_path),
+            function_clause=(s(full_path), func),
+            filter_=True,
+            group_by=True,
         )

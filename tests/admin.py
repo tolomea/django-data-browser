@@ -64,8 +64,12 @@ class ProductInline(ProductMixin, admin.TabularInline):
 
 @admin.register(models.Producer)
 class Producer(admin.ModelAdmin):
-    fields = ["name", "address"]
+    fields = ["name", "address", "frank"]
+    readonly_fields = ["frank"]
     inlines = [ProductInline]
+
+    def frank(self, obj):
+        return "frank"
 
 
 class SKUInline(admin.TabularInline):
