@@ -6,7 +6,6 @@ from data_browser.query import (
     ASC,
     DSC,
     BooleanFieldType,
-    BoundFilter,
     BoundQuery,
     DateFieldType,
     DateTimeFieldType,
@@ -20,6 +19,8 @@ from data_browser.query import (
 )
 from django.http import QueryDict
 from django.utils import timezone
+
+from .util import ANY
 
 
 @pytest.fixture
@@ -241,9 +242,8 @@ class TestFieldType:
 
 class TestStringFieldType:
     def test_validate(self):
-        orm_bound_field = orm_fields.OrmBoundField([], [], StringFieldType)
-        assert BoundFilter(orm_bound_field, "contains", "hello").is_valid
-        assert not BoundFilter(orm_bound_field, "pontains", "hello").is_valid
+        assert StringFieldType.parse("contains", "hello") == ("hello", None)
+        assert StringFieldType.parse("pontains", "hello") == (None, ANY(str))
 
     def test_default_lookup(self):
         assert StringFieldType.default_lookup == "equals"
@@ -254,12 +254,11 @@ class TestStringFieldType:
 
 class TestNumberFieldType:
     def test_validate(self):
-        orm_bound_field = orm_fields.OrmBoundField([], [], NumberFieldType)
-        assert BoundFilter(orm_bound_field, "gt", "6.1").is_valid
-        assert not BoundFilter(orm_bound_field, "pontains", "6.1").is_valid
-        assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
-        assert BoundFilter(orm_bound_field, "is_null", "True").is_valid
-        assert not BoundFilter(orm_bound_field, "is_null", "hello").is_valid
+        assert NumberFieldType.parse("gt", "6.1") == (6.1, None)
+        assert NumberFieldType.parse("pontains", "6.1") == (None, ANY(str))
+        assert NumberFieldType.parse("gt", "hello") == (None, ANY(str))
+        assert NumberFieldType.parse("is_null", "True") == (True, None)
+        assert NumberFieldType.parse("is_null", "hello") == (None, ANY(str))
 
     def test_default_lookup(self):
         assert NumberFieldType.default_lookup == "equals"
@@ -270,15 +269,18 @@ class TestNumberFieldType:
 
 class TestDateTimeFieldType:
     def test_validate(self):
-        orm_bound_field = orm_fields.OrmBoundField([], [], DateTimeFieldType)
-        assert BoundFilter(orm_bound_field, "gt", "2018-03-20T22:31:23").is_valid
-        assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
-        assert not BoundFilter(
-            orm_bound_field, "pontains", "2018-03-20T22:31:23"
-        ).is_valid
-        assert BoundFilter(orm_bound_field, "is_null", "True").is_valid
-        assert not BoundFilter(orm_bound_field, "is_null", "hello").is_valid
-        assert BoundFilter(orm_bound_field, "gt", "now").is_valid
+        assert DateTimeFieldType.parse("gt", "2018-03-20T22:31:23") == (
+            ANY(datetime),
+            None,
+        )
+        assert DateTimeFieldType.parse("gt", "hello") == (None, ANY(str))
+        assert DateTimeFieldType.parse("pontains", "2018-03-20T22:31:23") == (
+            None,
+            ANY(str),
+        )
+        assert DateTimeFieldType.parse("is_null", "True") == (True, None)
+        assert DateTimeFieldType.parse("is_null", "hello") == (None, ANY(str))
+        assert DateTimeFieldType.parse("gt", "now") == (ANY(datetime), None)
 
     def test_default_lookup(self):
         assert DateTimeFieldType.default_lookup == "equals"
@@ -294,15 +296,15 @@ class TestDateTimeFieldType:
 
 class TestDateFieldType:
     def test_validate(self):
-        orm_bound_field = orm_fields.OrmBoundField([], [], DateFieldType)
-        assert BoundFilter(orm_bound_field, "gt", "2018-03-20T22:31:23").is_valid
-        assert not BoundFilter(orm_bound_field, "gt", "hello").is_valid
-        assert not BoundFilter(
-            orm_bound_field, "pontains", "2018-03-20T22:31:23"
-        ).is_valid
-        assert BoundFilter(orm_bound_field, "is_null", "True").is_valid
-        assert not BoundFilter(orm_bound_field, "is_null", "hello").is_valid
-        assert BoundFilter(orm_bound_field, "gt", "today").is_valid
+        assert DateFieldType.parse("gt", "2018-03-20T22:31:23") == (ANY(date), None)
+        assert DateFieldType.parse("gt", "hello") == (None, ANY(str))
+        assert DateFieldType.parse("pontains", "2018-03-20T22:31:23") == (
+            None,
+            ANY(str),
+        )
+        assert DateFieldType.parse("is_null", "True") == (True, None)
+        assert DateFieldType.parse("is_null", "hello") == (None, ANY(str))
+        assert DateFieldType.parse("gt", "today") == (ANY(date), None)
 
     def test_default_lookup(self):
         assert DateFieldType.default_lookup == "equals"
@@ -327,11 +329,10 @@ class TestMonthFieldType:
 
 class TestBooleanFieldType:
     def test_validate(self):
-        orm_bound_field = orm_fields.OrmBoundField([], [], BooleanFieldType)
-        assert BoundFilter(orm_bound_field, "equals", "True").is_valid
-        assert BoundFilter(orm_bound_field, "equals", "False").is_valid
-        assert not BoundFilter(orm_bound_field, "equals", "hello").is_valid
-        assert not BoundFilter(orm_bound_field, "pontains", "True").is_valid
+        assert BooleanFieldType.parse("equals", "True") == (True, None)
+        assert BooleanFieldType.parse("equals", "False") == (False, None)
+        assert BooleanFieldType.parse("equals", "hello") == (None, ANY(str))
+        assert BooleanFieldType.parse("pontains", "True") == (None, ANY(str))
 
     def test_default_lookup(self):
         assert BooleanFieldType.default_lookup == "equals"

@@ -128,8 +128,20 @@ class BaseFieldType(metaclass=MetaFieldType):
         return value
 
     @staticmethod
-    def parse(value):
+    def _parse(value):
         return value
+
+    @classmethod
+    def parse(cls, lookup, value):
+        if lookup not in cls.lookups:
+            return None, f"Bad lookup '{lookup}' expected {cls.lookups}"
+        else:
+            type_ = TYPES[cls.lookups[lookup]]
+            try:
+                return type_._parse(value), None
+            except Exception as e:
+                err_message = str(e) if str(e) else repr(e)
+                return None, err_message
 
 
 class StringFieldType(BaseFieldType):
@@ -166,7 +178,7 @@ class NumberFieldType(BaseFieldType):
         return float(value) if value is not None else None
 
     @staticmethod
-    def parse(value):
+    def _parse(value):
         return float(value)
 
 
@@ -183,7 +195,7 @@ class DateTimeFieldType(BaseFieldType):
     }
 
     @staticmethod
-    def parse(value):
+    def _parse(value):
         if value.lower().strip() == "now":
             return timezone.now()
         return timezone.make_aware(dateutil.parser.parse(value))
@@ -206,7 +218,7 @@ class DateFieldType(BaseFieldType):
     }
 
     @staticmethod
-    def parse(value):
+    def _parse(value):
         if value.lower().strip() == "today":
             return timezone.now().date()
         return timezone.make_aware(dateutil.parser.parse(value)).date()
@@ -262,7 +274,7 @@ class BooleanFieldType(BaseFieldType):
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
 
     @staticmethod
-    def parse(value):
+    def _parse(value):
         value = value.lower()
         if value == "true":
             return True
@@ -296,19 +308,9 @@ class BoundFilter(BoundFieldMixin):
         return cls(orm_bound_field, query_filter.lookup, query_filter.value)
 
     def __post_init__(self):
-        self.parsed = None
-        self.err_message = None
-
-        lookups = self.orm_bound_field.type_.lookups
-        if self.lookup not in lookups:
-            self.err_message = f"Bad lookup '{self.lookup}' expected {lookups}"
-        else:
-            type_ = TYPES[lookups[self.lookup]]
-            try:
-                self.parsed = type_.parse(self.value)
-            except Exception as e:
-                self.err_message = str(e) if str(e) else repr(e)
-
+        self.parsed, self.err_message = self.orm_bound_field.type_.parse(
+            self.lookup, self.value
+        )
         self.is_valid = not self.err_message
 
 
