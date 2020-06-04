@@ -82,9 +82,9 @@ def s(path):
 
 @dataclass
 class OrmBoundField:
+    field: OrmBaseField
     full_path: Sequence[str]
     pretty_path: Sequence[str]
-    type_: BaseFieldType = None
     queryset_path: str = None
     function_clause: Tuple[str, models.Func] = None
     aggregate_clause: Tuple[str, models.Func] = None
@@ -94,6 +94,10 @@ class OrmBoundField:
     model_name: str = None
     admin_link: bool = False
     concrete: bool = False
+
+    @property
+    def type_(self):
+        return self.field.type_
 
 
 @dataclass
@@ -133,10 +137,12 @@ class OrmFkField(OrmBaseField):
         super().__init__(model_name, name, pretty_name, rel_name=rel_name)
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
-            full_path=full_path, pretty_path=previous.pretty_path + [self.pretty_name]
+            field=self,
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
         )
 
 
@@ -154,12 +160,12 @@ class OrmConcreteField(OrmBaseField):
         )
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
+            field=self,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            type_=self.type_,
             queryset_path=s(full_path),
             filter_=True,
             group_by=True,
@@ -172,12 +178,12 @@ class OrmCalculatedField(OrmBaseField):
         super().__init__(model_name, name, pretty_name, type_=StringFieldType)
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
+            field=self,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            type_=self.type_,
             queryset_path=s(previous.full_path + ["id"]),
             group_by=True,
             model_name=self.model_name,
@@ -191,12 +197,12 @@ class OrmAdminField(OrmBaseField):
         )
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
+            field=self,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            type_=self.type_,
             queryset_path=s(previous.full_path + ["id"]),
             group_by=True,
             model_name=self.model_name,
@@ -215,9 +221,9 @@ class OrmAggregateField(OrmBaseField):
         full_path = previous.full_path + [self.name]
         agg = _AGG_MAP[self.aggregate](s(previous.full_path))
         return OrmBoundField(
+            field=self,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            type_=self.type_,
             queryset_path=s(full_path),
             aggregate_clause=(s(full_path), agg),
             having=True,
@@ -236,9 +242,9 @@ class OrmFunctionField(OrmBaseField):
         full_path = previous.full_path + [self.name]
         func = _FUNC_MAP[self.function][0](s(previous.full_path))
         return OrmBoundField(
+            field=self,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            type_=self.type_,
             queryset_path=s(full_path),
             function_clause=(s(full_path), func),
             filter_=True,
