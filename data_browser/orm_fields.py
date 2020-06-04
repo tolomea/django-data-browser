@@ -6,6 +6,7 @@ from typing import Sequence, Tuple
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
 from django.db.models import functions
+from django.urls import reverse
 
 from .query import (
     BaseFieldType,
@@ -80,6 +81,10 @@ def s(path):
     return "__".join(path)
 
 
+def get_model_name(model, sep="."):
+    return f"{model._meta.app_label}{sep}{model.__name__}"
+
+
 @dataclass
 class OrmBoundField:
     field: OrmBaseField
@@ -92,12 +97,14 @@ class OrmBoundField:
     group_by: bool = False
     having: bool = False
     model_name: str = None
-    admin_link: bool = False
     concrete: bool = False
 
     @property
     def type_(self):
         return self.field.type_
+
+    def format(self, value):
+        return self.field.format(value)
 
 
 @dataclass
@@ -130,6 +137,9 @@ class OrmBaseField:
         if self.aggregate or self.function:
             assert self.concrete
             assert not self.rel_name
+
+    def format(self, value):
+        return self.type_.format(value)
 
 
 class OrmFkField(OrmBaseField):
@@ -189,6 +199,27 @@ class OrmCalculatedField(OrmBaseField):
             model_name=self.model_name,
         )
 
+    def format(self, value):
+        obj, admin = value
+
+        if obj is None:
+            return None
+
+        if hasattr(admin, self.name):
+            # admin callable
+            func = getattr(admin, self.name)
+            try:
+                return func(obj)
+            except Exception as e:
+                return str(e)
+        else:
+            # model property or callable
+            try:
+                value = getattr(obj, self.name)
+                return value() if callable(value) else value
+            except Exception as e:
+                return str(e)
+
 
 class OrmAdminField(OrmBaseField):
     def __init__(self, model_name):
@@ -206,8 +237,18 @@ class OrmAdminField(OrmBaseField):
             queryset_path=s(previous.full_path + ["id"]),
             group_by=True,
             model_name=self.model_name,
-            admin_link=True,
         )
+
+    def format(self, value):
+        obj, admin = value
+
+        if obj is None:
+            return None
+
+        model_name = get_model_name(obj.__class__, "_")
+        url_name = f"admin:{model_name}_change".lower()
+        url = reverse(url_name, args=[obj.pk])
+        return f'<a href="{url}">{obj}</a>'
 
 
 class OrmAggregateField(OrmBaseField):

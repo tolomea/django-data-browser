@@ -10,7 +10,6 @@ from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
-from django.urls import reverse
 
 from .orm_fields import (
     _AGGREGATES,
@@ -24,6 +23,7 @@ from .orm_fields import (
     OrmFkField,
     OrmFunctionField,
     OrmModel,
+    get_model_name,
 )
 from .query import (
     ASC,
@@ -50,10 +50,6 @@ _FIELD_MAP = {
     models.IntegerField: NumberFieldType,
     models.AutoField: NumberFieldType,
 }
-
-
-def get_model_name(model, sep="."):
-    return f"{model._meta.app_label}{sep}{model.__name__}"
 
 
 def _get_all_admin_fields(request):
@@ -276,45 +272,15 @@ def get_results(request, bound_query):
         cache[model_name] = admin.get_queryset(request).in_bulk(pks)
 
     # dump out the results
-    def get_admin_link(obj):
-        model_name = get_model_name(obj.__class__, "_")
-        url_name = f"admin:{model_name}_change".lower()
-        url = reverse(url_name, args=[obj.pk])
-        return f'<a href="{url}">{obj}</a>'
-
     results = []
     for row in qs:
         res_row = []
         for field in bound_query.bound_fields:
             value = row[field.queryset_path]
-            if value is None:
-                # null
-                res = None
-            elif not field.model_name:
-                # normal field
-                res = value
-            else:
-                obj = cache[field.model_name][value]
-                if field.admin_link:
-                    # link to admin
-                    res = get_admin_link(obj)
-                else:
-                    tail = field.full_path[-1]
-                    admin = bound_query.orm_models[field.model_name].admin
-                    if hasattr(admin, tail):
-                        # admin callable
-                        func = getattr(admin, tail)
-                        try:
-                            res = func(obj)
-                        except Exception as e:
-                            res = str(e)
-                    else:
-                        # model property or callable
-                        try:
-                            value = getattr(obj, tail)
-                            res = value() if callable(value) else value
-                        except Exception as e:
-                            res = str(e)
-            res_row.append(field.type_.format(res))
+            if field.model_name:
+                admin = bound_query.orm_models[field.model_name].admin
+                obj = cache[field.model_name].get(value)
+                value = obj, admin
+            res_row.append(field.format(value))
         results.append(res_row)
     return results
