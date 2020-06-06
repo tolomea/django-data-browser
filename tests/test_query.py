@@ -211,7 +211,7 @@ class TestBoundQuery:
     def test_bad_filter(self, orm_models):
         query = Query("app.model", [], [QueryFilter("yata", "equals", "fred")])
         bound_query = BoundQuery(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.filters] == []
 
     def test_bad_filter_value(self, orm_models):
         query = Query(
@@ -227,6 +227,11 @@ class TestBoundQuery:
         query = Query("app.model", [QueryField("tom")], [])
         bound_query = BoundQuery(query, orm_models)
         assert [f.path for f in bound_query.fields] == []
+
+    def test_filter_calculated_field(self, orm_models):
+        query = Query("app.model", [], [QueryFilter("fn", "equals", "fred")])
+        bound_query = BoundQuery(query, orm_models)
+        assert [f.path for f in bound_query.filters] == []
 
 
 class TestFieldType:

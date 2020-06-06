@@ -353,7 +353,7 @@ class BoundQuery:
         self.filters = []
         for query_filter in query.filters:
             orm_bound_field = get_orm_field(query_filter.path)
-            if orm_bound_field:
+            if orm_bound_field and orm_bound_field.concrete:
                 self.filters.append(BoundFilter.bind(orm_bound_field, query_filter))
 
     @property
