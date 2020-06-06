@@ -94,7 +94,6 @@ class OrmBoundField:
     function_clause: Tuple[str, models.Func] = None
     aggregate_clause: Tuple[str, models.Func] = None
     filter_: bool = False
-    group_by: bool = False
     having: bool = False
     model_name: str = None
     concrete: bool = False
@@ -102,6 +101,10 @@ class OrmBoundField:
     @property
     def type_(self):
         return self.field.type_
+
+    @property
+    def group_by(self):
+        return self.field.can_pivot
 
     def format(self, value):
         return self.field.format(value)
@@ -125,11 +128,12 @@ class OrmBaseField:
     type_: BaseFieldType = None
     concrete: bool = False
     rel_name: str = None
+    can_pivot: bool = False
 
     def __post_init__(self):
         if not self.type_:
             assert self.rel_name
-        if self.concrete:
+        if self.concrete or self.can_pivot:
             assert self.type_
 
     def format(self, value):
@@ -161,6 +165,7 @@ class OrmConcreteField(OrmBaseField):
             rel_name=(
                 type_.name if type_ in _AGGREGATES or type_ in _FUNCTIONS else None
             ),
+            can_pivot=True,
         )
 
     def bind(self, previous):
@@ -172,14 +177,15 @@ class OrmConcreteField(OrmBaseField):
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
             filter_=True,
-            group_by=True,
             concrete=True,
         )
 
 
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name):
-        super().__init__(model_name, name, pretty_name, type_=StringFieldType)
+        super().__init__(
+            model_name, name, pretty_name, type_=StringFieldType, can_pivot=True
+        )
 
     def bind(self, previous):
         previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
@@ -189,7 +195,6 @@ class OrmCalculatedField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(previous.full_path + ["id"]),
-            group_by=True,
             model_name=self.model_name,
         )
 
@@ -218,7 +223,11 @@ class OrmCalculatedField(OrmBaseField):
 class OrmAdminField(OrmBaseField):
     def __init__(self, model_name):
         super().__init__(
-            model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN, type_=HTMLFieldType
+            model_name,
+            _OPEN_IN_ADMIN,
+            _OPEN_IN_ADMIN,
+            type_=HTMLFieldType,
+            can_pivot=True,
         )
 
     def bind(self, previous):
@@ -229,7 +238,6 @@ class OrmAdminField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(previous.full_path + ["id"]),
-            group_by=True,
             model_name=self.model_name,
         )
 
@@ -267,7 +275,9 @@ class OrmAggregateField(OrmBaseField):
 
 class OrmFunctionField(OrmBaseField):
     def __init__(self, model_name, name, type_):
-        super().__init__(model_name, name, name, type_=type_, concrete=True)
+        super().__init__(
+            model_name, name, name, type_=type_, concrete=True, can_pivot=True
+        )
         self.function = name
 
     def bind(self, previous):
@@ -281,6 +291,5 @@ class OrmFunctionField(OrmBaseField):
             queryset_path=s(full_path),
             function_clause=(s(full_path), func),
             filter_=True,
-            group_by=True,
             concrete=True,
         )
