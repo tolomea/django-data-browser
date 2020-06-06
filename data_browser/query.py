@@ -14,6 +14,7 @@ ASC, DSC = "asc", "dsc"
 @dataclass
 class QueryField:
     path: str
+    pivoted: bool = False
     direction: str = None
     priority: int = None
 
@@ -52,14 +53,22 @@ class Query:
         for field in field_str.split(","):
             field = field.strip()
             if field:
+                # pivot
+                if field.startswith("&"):
+                    field = field[1:]
+                    pivoted = True
+                else:
+                    pivoted = False
+
+                # sort
                 if "+" in field:
                     path, direction, priority = parse_sort(field, "+", ASC)
-                    fields.append(QueryField(path, direction, priority))
+                    fields.append(QueryField(path, pivoted, direction, priority))
                 elif "-" in field:
                     path, direction, priority = parse_sort(field, "-", DSC)
-                    fields.append(QueryField(path, direction, priority))
+                    fields.append(QueryField(path, pivoted, direction, priority))
                 else:
-                    fields.append(QueryField(field, None, None))
+                    fields.append(QueryField(field, pivoted, None, None))
 
         filters = []
         for path__lookup, values in dict(get_args).items():
@@ -74,9 +83,10 @@ class Query:
     def field_str(self):
         field_strs = []
         for field in self.fields:
+            pivot = "&" if field.pivoted else ""
             direction = {ASC: "+", DSC: "-", None: ""}[field.direction]
             priority = str(field.priority) if field.direction else ""
-            field_strs.append(f"{'__'.join(field.path)}{direction}{priority}")
+            field_strs.append(f"{pivot}{'__'.join(field.path)}{direction}{priority}")
         return ",".join(field_strs)
 
     @property

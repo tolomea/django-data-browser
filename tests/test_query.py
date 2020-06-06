@@ -27,7 +27,11 @@ from .util import ANY
 def query():
     return Query(
         "app.model",
-        [QueryField("fa", ASC, 1), QueryField("fd", DSC, 0), QueryField("fn")],
+        [
+            QueryField("fa", False, ASC, 1),
+            QueryField("fd", False, DSC, 0),
+            QueryField("fn"),
+        ],
         [QueryFilter("bob", "equals", "fred")],
     )
 
@@ -146,15 +150,19 @@ class TestQuery:
 
     def test_from_request_field_no_name(self):
         q = Query.from_request("app.model", "+2", QueryDict(""))
-        assert q == Query("app.model", [QueryField("", ASC, 2)], [])
+        assert q == Query("app.model", [QueryField("", False, ASC, 2)], [])
 
     def test_from_request_field_no_priority(self):
         q = Query.from_request("app.model", "fn+", QueryDict(""))
-        assert q == Query("app.model", [QueryField("fn", None, None)], [])
+        assert q == Query("app.model", [QueryField("fn")], [])
 
     def test_from_request_field_bad_priority(self):
         q = Query.from_request("app.model", "fn+x", QueryDict(""))
-        assert q == Query("app.model", [QueryField("fn", None, None)], [])
+        assert q == Query("app.model", [QueryField("fn")], [])
+
+    def test_from_request_field_pivoted(self):
+        q = Query.from_request("app.model", "&fn", QueryDict(""))
+        assert q == Query("app.model", [QueryField("fn", True)], [])
 
     def test_url(self, query):
         assert (
