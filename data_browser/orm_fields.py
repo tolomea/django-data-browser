@@ -125,18 +125,12 @@ class OrmBaseField:
     type_: BaseFieldType = None
     concrete: bool = False
     rel_name: str = None
-    # internal
-    aggregate: str = None
-    function: str = None
 
     def __post_init__(self):
         if not self.type_:
             assert self.rel_name
         if self.concrete:
             assert self.type_
-        if self.aggregate or self.function:
-            assert self.concrete
-            assert not self.rel_name
 
     def format(self, value):
         return self.type_.format(value)
@@ -253,9 +247,8 @@ class OrmAdminField(OrmBaseField):
 
 class OrmAggregateField(OrmBaseField):
     def __init__(self, model_name, name):
-        super().__init__(
-            model_name, name, name, type_=NumberFieldType, concrete=True, aggregate=name
-        )
+        super().__init__(model_name, name, name, type_=NumberFieldType, concrete=True)
+        self.aggregate = name
 
     def bind(self, previous):
         assert previous
@@ -274,9 +267,8 @@ class OrmAggregateField(OrmBaseField):
 
 class OrmFunctionField(OrmBaseField):
     def __init__(self, model_name, name, type_):
-        super().__init__(
-            model_name, name, name, concrete=True, function=name, type_=type_
-        )
+        super().__init__(model_name, name, name, type_=type_, concrete=True)
+        self.function = name
 
     def bind(self, previous):
         assert previous
