@@ -53,7 +53,7 @@ class Producer(models.Model):
 class Product(models.Model):
     name = models.TextField()
     producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
-    size = models.IntegerField()
+    size = models.IntegerField(default=0)
     size_unit = models.TextField()
     default_sku = models.ForeignKey("SKU", null=True, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag)

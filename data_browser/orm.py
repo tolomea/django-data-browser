@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
+from itertools import cycle
 
 from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
@@ -276,7 +277,7 @@ def get_results(request, bound_query):
         results = []
         for row in data:
             res_row = []
-            for field, value in zip(fields, row):
+            for field, value in zip(cycle(fields), row):
                 if field.model_name:
                     admin = bound_query.orm_models[field.model_name].admin
                     obj = cache[field.model_name].get(value)
@@ -285,10 +286,43 @@ def get_results(request, bound_query):
             results.append(res_row)
         return results
 
-    return format_table(
-        bound_query.bound_fields,
-        (
-            [row[field.queryset_path] for field in bound_query.bound_fields]
-            for row in qs
-        ),
-    )
+    row_fields = [
+        field.orm_bound_field for field in bound_query.fields if field.pivoted
+    ]
+    if row_fields:
+        col_fields = [
+            field.orm_bound_field
+            for field in bound_query.fields
+            if field.orm_bound_field.can_pivot and not field.pivoted
+        ]
+        data_fields = [
+            field.orm_bound_field
+            for field in bound_query.fields
+            if not field.orm_bound_field.can_pivot
+        ]
+
+        data = defaultdict(dict)
+        col_keys = {}  # abuse dictonary ordering
+        for row in qs:
+            row_key = tuple(row[field.queryset_path] for field in row_fields)
+            col_key = tuple(row[field.queryset_path] for field in col_fields)
+            data[row_key][col_key] = [row[field.queryset_path] for field in data_fields]
+            col_keys[col_key] = None
+
+        results = []
+        blank = [None] * len(data_fields)
+        for row_key, row in data.items():
+            res_row = []
+            for col_key in col_keys:
+                res_row.extend(row.get(col_key, blank))
+            results.append(res_row)
+        return format_table(data_fields, results)
+
+    else:
+        return format_table(
+            bound_query.bound_fields,
+            (
+                [row[field.queryset_path] for field in bound_query.bound_fields]
+                for row in qs
+            ),
+        )

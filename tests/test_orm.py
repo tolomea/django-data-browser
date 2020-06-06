@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from data_browser import orm, orm_fields
 from data_browser.query import BoundQuery, Query
@@ -267,6 +269,29 @@ def test_get_results_admin_causes_query(get_product_data):
         ],
         ["c", '<a href="/admin/tests/product/3/change/">Product object (3)</a>', None],
     ]
+
+
+@pytest.mark.usefixtures("db")
+def test_get_pivot(get_product_data):
+    address = models.Address.objects.create(city="london", street="bad")
+    producer = models.Producer.objects.create(name="Bob", address=address)
+    datetimes = [
+        datetime(2020, 1, 1),
+        datetime(2020, 2, 1),
+        datetime(2020, 2, 2),
+        datetime(2021, 1, 1),
+        datetime(2021, 1, 2),
+        datetime(2021, 1, 3),
+        datetime(2021, 2, 1),
+        datetime(2021, 2, 2),
+        datetime(2021, 2, 3),
+        datetime(2021, 2, 4),
+    ]
+    for dt in datetimes:
+        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
+
+    data = get_product_data(1, "&created_time__month,created_time__year,id__count", {})
+    assert data == [[1, 3], [2, 4]]
 
 
 def test_get_fields(orm_models):
