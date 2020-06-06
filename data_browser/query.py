@@ -327,15 +327,18 @@ class BoundFilter(BoundFieldMixin):
 @dataclass
 class BoundField(BoundFieldMixin):
     orm_bound_field: Any
+    pivoted: bool
     direction: Optional[str]
     priority: Optional[int]
 
     @classmethod
     def bind(cls, orm_bound_field, query_field):
-        concrete = orm_bound_field.concrete
-        direction = query_field.direction if concrete else None
-        priority = query_field.priority if concrete else None
-        return cls(orm_bound_field, direction, priority)
+        return cls(
+            orm_bound_field,
+            query_field.pivoted and orm_bound_field.can_pivot,
+            query_field.direction if orm_bound_field.concrete else None,
+            query_field.priority if orm_bound_field.concrete else None,
+        )
 
 
 class BoundQuery:

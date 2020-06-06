@@ -106,6 +106,10 @@ class OrmBoundField:
         return self.field.can_pivot
 
     @property
+    def can_pivot(self):
+        return self.field.can_pivot
+
+    @property
     def concrete(self):
         return self.field.concrete
 
