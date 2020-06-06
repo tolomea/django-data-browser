@@ -96,7 +96,6 @@ class OrmBoundField:
     filter_: bool = False
     having: bool = False
     model_name: str = None
-    concrete: bool = False
 
     @property
     def type_(self):
@@ -105,6 +104,10 @@ class OrmBoundField:
     @property
     def group_by(self):
         return self.field.can_pivot
+
+    @property
+    def concrete(self):
+        return self.field.concrete
 
     def format(self, value):
         return self.field.format(value)
@@ -177,7 +180,6 @@ class OrmConcreteField(OrmBaseField):
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
             filter_=True,
-            concrete=True,
         )
 
 
@@ -265,7 +267,6 @@ class OrmAggregateField(OrmBaseField):
             queryset_path=s(full_path),
             aggregate_clause=(s(full_path), agg),
             having=True,
-            concrete=True,
         )
 
 
@@ -287,5 +288,4 @@ class OrmFunctionField(OrmBaseField):
             queryset_path=s(full_path),
             function_clause=(s(full_path), func),
             filter_=True,
-            concrete=True,
         )
