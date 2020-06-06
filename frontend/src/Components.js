@@ -53,7 +53,7 @@ class Filter extends React.Component {
     const index = this.props.index;
     const lookup = this.props.lookup;
     const query = this.props.query;
-    const fieldType = query.getFieldType(query.getField(path));
+    const type = query.getType(query.getField(path));
     return (
       <tr>
         <td>
@@ -68,7 +68,7 @@ class Filter extends React.Component {
             value={lookup}
             onChange={(e) => query.setFilterLookup(index, e.target.value)}
           >
-            {fieldType.sortedLookups.map((lookupName) => (
+            {type.sortedLookups.map((lookupName) => (
               <option key={lookupName} value={lookupName}>
                 {lookupName.replace(/_/g, " ")}
               </option>
@@ -80,7 +80,7 @@ class Filter extends React.Component {
           <FilterValue
             value={this.props.value}
             onChange={(e) => query.setFilterValue(index, e.target.value)}
-            lookup={fieldType.lookups[lookup]}
+            lookup={type.lookups[lookup]}
           />
           {this.props.errorMessage ? <p>{this.props.errorMessage}</p> : ""}
         </td>
@@ -147,7 +147,7 @@ function Field(props) {
   ) : (
     modelField.prettyName
   );
-  const type = props.query.getFieldType(modelField);
+  const type = props.query.getType(modelField);
   return (
     <tr>
       <td>
@@ -207,7 +207,7 @@ function ResultsHead(props) {
       <tr>
         {props.fields.map((field, index) => {
           const modelField = props.query.getField(field.path);
-          const type = props.query.getFieldType(modelField);
+          const type = props.query.getType(modelField);
           return (
             <th key={index}>
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}

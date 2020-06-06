@@ -29,26 +29,26 @@ from .query import (
     ASC,
     DSC,
     TYPES,
-    BooleanFieldType,
-    DateFieldType,
-    DateTimeFieldType,
-    NumberFieldType,
-    StringFieldType,
+    BooleanType,
+    DateTimeType,
+    DateType,
+    NumberType,
+    StringType,
 )
 
 _FIELD_MAP = {
-    models.BooleanField: BooleanFieldType,
-    models.NullBooleanField: BooleanFieldType,
-    models.CharField: StringFieldType,
-    models.TextField: StringFieldType,
-    models.GenericIPAddressField: StringFieldType,
-    models.UUIDField: StringFieldType,
-    models.DateTimeField: DateTimeFieldType,
-    models.DateField: DateFieldType,
-    models.DecimalField: NumberFieldType,
-    models.FloatField: NumberFieldType,
-    models.IntegerField: NumberFieldType,
-    models.AutoField: NumberFieldType,
+    models.BooleanField: BooleanType,
+    models.NullBooleanField: BooleanType,
+    models.CharField: StringType,
+    models.TextField: StringType,
+    models.GenericIPAddressField: StringType,
+    models.UUIDField: StringType,
+    models.DateTimeField: DateTimeType,
+    models.DateField: DateType,
+    models.DecimalField: NumberType,
+    models.FloatField: NumberType,
+    models.IntegerField: NumberType,
+    models.AutoField: NumberType,
 }
 
 
@@ -170,7 +170,7 @@ def get_models(request):
 
 
 def _get_django_lookup(field_type, lookup):
-    if field_type == StringFieldType and lookup == "equals":
+    if field_type == StringType and lookup == "equals":
         return "iexact"
     else:
         lookup = {

@@ -5,17 +5,17 @@ from data_browser import orm, orm_fields
 from data_browser.query import (
     ASC,
     DSC,
-    BooleanFieldType,
+    BooleanType,
     BoundQuery,
-    DateFieldType,
-    DateTimeFieldType,
-    MonthFieldType,
-    NumberFieldType,
+    DateTimeType,
+    DateType,
+    MonthType,
+    NumberType,
     Query,
     QueryField,
     QueryFilter,
-    StringFieldType,
-    WeekDayFieldType,
+    StringType,
+    WeekDayType,
 )
 from django.http import QueryDict
 from django.utils import timezone
@@ -35,21 +35,21 @@ def query():
 @pytest.fixture
 def orm_models():
     return {
-        "string": orm._get_fields_for_type(StringFieldType),
-        "number": orm._get_fields_for_type(NumberFieldType),
+        "string": orm._get_fields_for_type(StringType),
+        "number": orm._get_fields_for_type(NumberType),
         "app.model": orm_fields.OrmModel(
             fields={
                 "fa": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="fa",
                     pretty_name="fa",
-                    type_=StringFieldType,
+                    type_=StringType,
                 ),
                 "fd": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="fd",
                     pretty_name="fd",
-                    type_=StringFieldType,
+                    type_=StringType,
                 ),
                 "fn": orm_fields.OrmCalculatedField(
                     model_name="app.model", name="fn", pretty_name="fn"
@@ -58,13 +58,13 @@ def orm_models():
                     model_name="app.model",
                     name="bob",
                     pretty_name="bob",
-                    type_=StringFieldType,
+                    type_=StringType,
                 ),
                 "num": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="num",
                     pretty_name="num",
-                    type_=NumberFieldType,
+                    type_=NumberType,
                 ),
                 "tom": orm_fields.OrmFkField(
                     model_name="app.model",
@@ -81,7 +81,7 @@ def orm_models():
                     model_name="app.Tom",
                     name="jones",
                     pretty_name="jones",
-                    type_=StringFieldType,
+                    type_=StringType,
                 ),
                 "michael": orm_fields.OrmFkField(
                     model_name="app.Tom",
@@ -98,7 +98,7 @@ def orm_models():
                     model_name="app.Michael",
                     name="bolton",
                     pretty_name="bolton",
-                    type_=StringFieldType,
+                    type_=StringType,
                 )
             },
             admin=True,
@@ -235,104 +235,93 @@ class TestBoundQuery:
         assert [f.path for f in bound_query.filters] == []
 
 
-class TestFieldType:
+class TestType:
     def test_repr(self):
-        assert repr(StringFieldType) == f"StringFieldType"
+        assert repr(StringType) == f"StringType"
 
 
-class TestStringFieldType:
+class TestStringType:
     def test_validate(self):
-        assert StringFieldType.parse("contains", "hello") == ("hello", None)
-        assert StringFieldType.parse("pontains", "hello") == (None, ANY(str))
+        assert StringType.parse("contains", "hello") == ("hello", None)
+        assert StringType.parse("pontains", "hello") == (None, ANY(str))
 
     def test_default_lookup(self):
-        assert StringFieldType.default_lookup == "equals"
+        assert StringType.default_lookup == "equals"
 
     def test_format(self):
-        assert StringFieldType.format("bob") == "bob"
+        assert StringType.format("bob") == "bob"
 
 
-class TestNumberFieldType:
+class TestNumberType:
     def test_validate(self):
-        assert NumberFieldType.parse("gt", "6.1") == (6.1, None)
-        assert NumberFieldType.parse("pontains", "6.1") == (None, ANY(str))
-        assert NumberFieldType.parse("gt", "hello") == (None, ANY(str))
-        assert NumberFieldType.parse("is_null", "True") == (True, None)
-        assert NumberFieldType.parse("is_null", "hello") == (None, ANY(str))
+        assert NumberType.parse("gt", "6.1") == (6.1, None)
+        assert NumberType.parse("pontains", "6.1") == (None, ANY(str))
+        assert NumberType.parse("gt", "hello") == (None, ANY(str))
+        assert NumberType.parse("is_null", "True") == (True, None)
+        assert NumberType.parse("is_null", "hello") == (None, ANY(str))
 
     def test_default_lookup(self):
-        assert NumberFieldType.default_lookup == "equals"
+        assert NumberType.default_lookup == "equals"
 
     def test_format(self):
-        assert NumberFieldType.format(6) == 6
+        assert NumberType.format(6) == 6
 
 
-class TestDateTimeFieldType:
+class TestDateTimeType:
     def test_validate(self):
-        assert DateTimeFieldType.parse("gt", "2018-03-20T22:31:23") == (
-            ANY(datetime),
-            None,
-        )
-        assert DateTimeFieldType.parse("gt", "hello") == (None, ANY(str))
-        assert DateTimeFieldType.parse("pontains", "2018-03-20T22:31:23") == (
-            None,
-            ANY(str),
-        )
-        assert DateTimeFieldType.parse("is_null", "True") == (True, None)
-        assert DateTimeFieldType.parse("is_null", "hello") == (None, ANY(str))
-        assert DateTimeFieldType.parse("gt", "now") == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "2018-03-20T22:31:23") == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "hello") == (None, ANY(str))
+        assert DateTimeType.parse("pontains", "2018-03-20T22:31:23") == (None, ANY(str))
+        assert DateTimeType.parse("is_null", "True") == (True, None)
+        assert DateTimeType.parse("is_null", "hello") == (None, ANY(str))
+        assert DateTimeType.parse("gt", "now") == (ANY(datetime), None)
 
     def test_default_lookup(self):
-        assert DateTimeFieldType.default_lookup == "equals"
+        assert DateTimeType.default_lookup == "equals"
 
     def test_format(self):
         assert (
-            DateTimeFieldType.format(
-                timezone.make_aware(datetime(2020, 5, 19, 8, 42, 16))
-            )
+            DateTimeType.format(timezone.make_aware(datetime(2020, 5, 19, 8, 42, 16)))
             == "2020-05-19 08:42:16"
         )
 
 
-class TestDateFieldType:
+class TestDateType:
     def test_validate(self):
-        assert DateFieldType.parse("gt", "2018-03-20T22:31:23") == (ANY(date), None)
-        assert DateFieldType.parse("gt", "hello") == (None, ANY(str))
-        assert DateFieldType.parse("pontains", "2018-03-20T22:31:23") == (
-            None,
-            ANY(str),
-        )
-        assert DateFieldType.parse("is_null", "True") == (True, None)
-        assert DateFieldType.parse("is_null", "hello") == (None, ANY(str))
-        assert DateFieldType.parse("gt", "today") == (ANY(date), None)
+        assert DateType.parse("gt", "2018-03-20T22:31:23") == (ANY(date), None)
+        assert DateType.parse("gt", "hello") == (None, ANY(str))
+        assert DateType.parse("pontains", "2018-03-20T22:31:23") == (None, ANY(str))
+        assert DateType.parse("is_null", "True") == (True, None)
+        assert DateType.parse("is_null", "hello") == (None, ANY(str))
+        assert DateType.parse("gt", "today") == (ANY(date), None)
 
     def test_default_lookup(self):
-        assert DateFieldType.default_lookup == "equals"
+        assert DateType.default_lookup == "equals"
 
     def test_format(self):
-        assert DateFieldType.format(date(2020, 5, 19)) == "2020-05-19"
+        assert DateType.format(date(2020, 5, 19)) == "2020-05-19"
 
 
-class TestWeekDayFieldType:
+class TestWeekDayType:
     def test_format(self):
-        assert WeekDayFieldType.format(None) is None
-        assert WeekDayFieldType.format(1) == "Sunday"
-        assert WeekDayFieldType.format(7) == "Saturday"
+        assert WeekDayType.format(None) is None
+        assert WeekDayType.format(1) == "Sunday"
+        assert WeekDayType.format(7) == "Saturday"
 
 
-class TestMonthFieldType:
+class TestMonthType:
     def test_format(self):
-        assert MonthFieldType.format(None) is None
-        assert MonthFieldType.format(1) == "January"
-        assert MonthFieldType.format(12) == "December"
+        assert MonthType.format(None) is None
+        assert MonthType.format(1) == "January"
+        assert MonthType.format(12) == "December"
 
 
-class TestBooleanFieldType:
+class TestBooleanType:
     def test_validate(self):
-        assert BooleanFieldType.parse("equals", "True") == (True, None)
-        assert BooleanFieldType.parse("equals", "False") == (False, None)
-        assert BooleanFieldType.parse("equals", "hello") == (None, ANY(str))
-        assert BooleanFieldType.parse("pontains", "True") == (None, ANY(str))
+        assert BooleanType.parse("equals", "True") == (True, None)
+        assert BooleanType.parse("equals", "False") == (False, None)
+        assert BooleanType.parse("equals", "hello") == (None, ANY(str))
+        assert BooleanType.parse("pontains", "True") == (None, ANY(str))
 
     def test_default_lookup(self):
-        assert BooleanFieldType.default_lookup == "equals"
+        assert BooleanType.default_lookup == "equals"

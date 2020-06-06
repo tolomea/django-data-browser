@@ -9,15 +9,15 @@ from django.db.models import functions
 from django.urls import reverse
 
 from .query import (
-    BaseFieldType,
-    BooleanFieldType,
-    DateFieldType,
-    DateTimeFieldType,
-    HTMLFieldType,
-    MonthFieldType,
-    NumberFieldType,
-    StringFieldType,
-    WeekDayFieldType,
+    BaseType,
+    BooleanType,
+    DateTimeType,
+    DateType,
+    HTMLType,
+    MonthType,
+    NumberType,
+    StringType,
+    WeekDayType,
 )
 
 _OPEN_IN_ADMIN = "admin"
@@ -35,24 +35,24 @@ _AGG_MAP = {
 
 
 _AGGREGATES = {
-    StringFieldType: ["count"],
-    NumberFieldType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
-    DateTimeFieldType: ["count"],  # average, min and max might be nice here but sqlite
-    DateFieldType: ["count"],  # average, min and max might be nice here but sqlite
-    BooleanFieldType: ["average", "sum"],
+    StringType: ["count"],
+    NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
+    DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
+    DateType: ["count"],  # average, min and max might be nice here but sqlite
+    BooleanType: ["average", "sum"],
 }
 
 
 _FUNC_MAP = {
-    "year": (functions.ExtractYear, NumberFieldType),
-    "quarter": (functions.ExtractQuarter, NumberFieldType),
-    "month": (functions.ExtractMonth, MonthFieldType),
-    "day": (functions.ExtractDay, NumberFieldType),
-    "week_day": (functions.ExtractWeekDay, WeekDayFieldType),
-    "hour": (functions.ExtractHour, NumberFieldType),
-    "minute": (functions.ExtractMinute, NumberFieldType),
-    "second": (functions.ExtractSecond, NumberFieldType),
-    "date": (functions.TruncDate, DateFieldType),
+    "year": (functions.ExtractYear, NumberType),
+    "quarter": (functions.ExtractQuarter, NumberType),
+    "month": (functions.ExtractMonth, MonthType),
+    "day": (functions.ExtractDay, NumberType),
+    "week_day": (functions.ExtractWeekDay, WeekDayType),
+    "hour": (functions.ExtractHour, NumberType),
+    "minute": (functions.ExtractMinute, NumberType),
+    "second": (functions.ExtractSecond, NumberType),
+    "date": (functions.TruncDate, DateType),
 }
 
 if hasattr(functions, "ExtractIsoYear"):  # pragma: no branch
@@ -62,7 +62,7 @@ if hasattr(functions, "ExtractIsoYear"):  # pragma: no branch
 
 
 _FUNCTIONS = {
-    DateTimeFieldType: [
+    DateTimeType: [
         "year",
         "quarter",
         "month",
@@ -73,7 +73,7 @@ _FUNCTIONS = {
         "second",
         "date",
     ],
-    DateFieldType: ["year", "quarter", "month", "day", "week_day"],
+    DateType: ["year", "quarter", "month", "day", "week_day"],
 }
 
 
@@ -125,7 +125,7 @@ class OrmBaseField:
     model_name: str
     name: str
     pretty_name: str
-    type_: BaseFieldType = None
+    type_: BaseType = None
     concrete: bool = False
     rel_name: str = None
     can_pivot: bool = False
@@ -184,7 +184,7 @@ class OrmConcreteField(OrmBaseField):
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name):
         super().__init__(
-            model_name, name, pretty_name, type_=StringFieldType, can_pivot=True
+            model_name, name, pretty_name, type_=StringType, can_pivot=True
         )
 
     def bind(self, previous):
@@ -223,11 +223,7 @@ class OrmCalculatedField(OrmBaseField):
 class OrmAdminField(OrmBaseField):
     def __init__(self, model_name):
         super().__init__(
-            model_name,
-            _OPEN_IN_ADMIN,
-            _OPEN_IN_ADMIN,
-            type_=HTMLFieldType,
-            can_pivot=True,
+            model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN, type_=HTMLType, can_pivot=True
         )
 
     def bind(self, previous):
@@ -255,7 +251,7 @@ class OrmAdminField(OrmBaseField):
 
 class OrmAggregateField(OrmBaseField):
     def __init__(self, model_name, name):
-        super().__init__(model_name, name, name, type_=NumberFieldType, concrete=True)
+        super().__init__(model_name, name, name, type_=NumberType, concrete=True)
         self.aggregate = name
 
     def bind(self, previous):

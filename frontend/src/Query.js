@@ -36,7 +36,7 @@ class Query {
     return this.config.allModelFields[model].fields[field];
   }
 
-  getFieldType(field) {
+  getType(field) {
     return this.config.types[field.type];
   }
 
@@ -44,8 +44,8 @@ class Query {
     return this.config.allModelFields[model];
   }
 
-  getDefaultLookValue(fieldType) {
-    return this.config.types[fieldType.lookups[fieldType.defaultLookup].type]
+  getDefaultLookValue(type) {
+    return this.config.types[type.lookups[type.defaultLookup].type]
       .defaultValue;
   }
 
@@ -104,13 +104,13 @@ class Query {
   }
 
   addFilter(path, prettyPath) {
-    const fieldType = this.getFieldType(this.getField(path));
+    const type = this.getType(this.getField(path));
     const newFilters = this.query.filters.slice();
     newFilters.push({
       path: path,
       prettyPath: prettyPath,
-      lookup: fieldType.defaultLookup,
-      value: this.getDefaultLookValue(fieldType),
+      lookup: type.defaultLookup,
+      value: this.getDefaultLookValue(type),
     });
     this.setQuery({ filters: newFilters });
   }

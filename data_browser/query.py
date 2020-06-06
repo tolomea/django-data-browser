@@ -101,7 +101,7 @@ class Query:
         return f"{base_url}?{params}"
 
 
-class MetaFieldType(type):
+class TypeMeta(type):
     def __repr__(cls):
         return cls.__name__
 
@@ -112,11 +112,11 @@ class MetaFieldType(type):
     @property
     def name(cls):
         name = cls.__name__.lower()
-        assert name.endswith("fieldtype")
-        return name[: -len("fieldtype")]
+        assert name.endswith("type")
+        return name[: -len("type")]
 
 
-class BaseFieldType(metaclass=MetaFieldType):
+class BaseType(metaclass=TypeMeta):
     default_value = None
     lookups = {}
 
@@ -144,7 +144,7 @@ class BaseFieldType(metaclass=MetaFieldType):
                 return None, err_message
 
 
-class StringFieldType(BaseFieldType):
+class StringType(BaseType):
     default_value = ""
     lookups = {
         "equals": "string",
@@ -161,7 +161,7 @@ class StringFieldType(BaseFieldType):
     }
 
 
-class NumberFieldType(BaseFieldType):
+class NumberType(BaseType):
     default_value = 0
     lookups = {
         "equals": "number",
@@ -182,7 +182,7 @@ class NumberFieldType(BaseFieldType):
         return float(value)
 
 
-class DateTimeFieldType(BaseFieldType):
+class DateTimeType(BaseType):
     default_value = "now"
     lookups = {
         "equals": "datetime",
@@ -205,7 +205,7 @@ class DateTimeFieldType(BaseFieldType):
         return str(timezone.make_naive(value)) if value else None
 
 
-class DateFieldType(BaseFieldType):
+class DateType(BaseType):
     default_value = "today"
     lookups = {
         "equals": "date",
@@ -228,7 +228,7 @@ class DateFieldType(BaseFieldType):
         return str(value) if value else None
 
 
-class WeekDayFieldType(BaseFieldType):
+class WeekDayType(BaseType):
     @staticmethod
     def format(value):
         days = [
@@ -244,7 +244,7 @@ class WeekDayFieldType(BaseFieldType):
         return days[value] if value else None
 
 
-class MonthFieldType(BaseFieldType):
+class MonthType(BaseType):
     @staticmethod
     def format(value):
         days = [
@@ -265,11 +265,11 @@ class MonthFieldType(BaseFieldType):
         return days[value] if value else None
 
 
-class HTMLFieldType(BaseFieldType):
+class HTMLType(BaseType):
     pass
 
 
-class BooleanFieldType(BaseFieldType):
+class BooleanType(BaseType):
     default_value = True
     lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
 
@@ -284,7 +284,7 @@ class BooleanFieldType(BaseFieldType):
             raise ValueError("Expected 'true' or 'false'")
 
 
-TYPES = {field_type.name: field_type for field_type in BaseFieldType.__subclasses__()}
+TYPES = {field_type.name: field_type for field_type in BaseType.__subclasses__()}
 
 
 class BoundFieldMixin:
