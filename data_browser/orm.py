@@ -272,15 +272,23 @@ def get_results(request, bound_query):
         cache[model_name] = admin.get_queryset(request).in_bulk(pks)
 
     # dump out the results
-    results = []
-    for row in qs:
-        res_row = []
-        for field in bound_query.bound_fields:
-            value = row[field.queryset_path]
-            if field.model_name:
-                admin = bound_query.orm_models[field.model_name].admin
-                obj = cache[field.model_name].get(value)
-                value = obj, admin
-            res_row.append(field.format(value))
-        results.append(res_row)
-    return results
+    def format_table(fields, data):
+        results = []
+        for row in data:
+            res_row = []
+            for field, value in zip(fields, row):
+                if field.model_name:
+                    admin = bound_query.orm_models[field.model_name].admin
+                    obj = cache[field.model_name].get(value)
+                    value = obj, admin
+                res_row.append(field.format(value))
+            results.append(res_row)
+        return results
+
+    return format_table(
+        bound_query.bound_fields,
+        (
+            [row[field.queryset_path] for field in bound_query.bound_fields]
+            for row in qs
+        ),
+    )
