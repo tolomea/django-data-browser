@@ -57,9 +57,9 @@ class App extends React.Component {
       null,
       getUrlForQuery(this.props.config.baseUrl, this.state, "html")
     );
-    this.fetchResults(this.state).catch((e) => handleError);
+    this.fetchResults(this.state).catch(handleError);
     window.onpopstate = (e) => {
-      this.fetchResults(e.state).catch((e) => handleError);
+      this.fetchResults(e.state).catch(handleError);
       this.setState(e.state);
     };
   }
@@ -85,7 +85,7 @@ class App extends React.Component {
         response.filterErrors = [];
         assert.deepEqual(response, request);
       })
-      .catch((e) => handleError);
+      .catch(handleError);
   }
 
   render() {
