@@ -179,7 +179,7 @@ def _data_response(request, query, media, meta):
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(" ".join(f.pretty_path) for f in bound_query.fields)
-        writer.writerows(results)
+        writer.writerows(results["results"])
         buffer.seek(0)
         response = http.HttpResponse(buffer, content_type="text/csv")
         response[
@@ -188,7 +188,7 @@ def _data_response(request, query, media, meta):
         return response
     elif media == "json":
         resp = _get_query_data(bound_query) if meta else {}
-        resp["results"] = results
+        resp.update(results)
         return http.JsonResponse(resp)
     else:
         assert False

@@ -209,7 +209,7 @@ def get_results(request, bound_query):
     request.data_browser = True
 
     if not bound_query.fields:
-        return []
+        return {"results": []}
 
     admin = bound_query.orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
@@ -316,13 +316,20 @@ def get_results(request, bound_query):
             for col_key in col_keys:
                 res_row.extend(row.get(col_key, blank))
             results.append(res_row)
-        return format_table(data_fields, results)
+
+        return {
+            "results": format_table(data_fields, results),
+            "rows": format_table(row_fields, data.keys()),
+            "cols": format_table(col_fields, col_keys),
+        }
 
     else:
-        return format_table(
-            bound_query.bound_fields,
-            (
-                [row[field.queryset_path] for field in bound_query.bound_fields]
-                for row in qs
-            ),
-        )
+        return {
+            "results": format_table(
+                bound_query.bound_fields,
+                (
+                    [row[field.queryset_path] for field in bound_query.bound_fields]
+                    for row in qs
+                ),
+            )
+        }
