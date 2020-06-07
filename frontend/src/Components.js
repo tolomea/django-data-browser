@@ -201,42 +201,51 @@ function AllFields(props) {
   );
 }
 
+function RestulsFieldCell(props) {
+  const modelField = props.query.getField(props.field.path);
+  const type = props.query.getType(modelField);
+  return (
+    <th>
+      <Link onClick={() => props.query.removeField(props.index)}>✘</Link>{" "}
+      {modelField.concrete && type.defaultLookup ? (
+        <>
+          <Link
+            onClick={() =>
+              props.query.addFilter(props.field.path, props.field.prettyPath)
+            }
+          >
+            Y
+          </Link>{" "}
+          <Link onClick={() => props.query.toggleSort(props.index)}>
+            {props.field.prettyPath.join(" ")}
+          </Link>{" "}
+          {
+            {
+              dsc: `↑${props.field.priority}`,
+              asc: `↓${props.field.priority}`,
+              null: "",
+            }[props.field.sort]
+          }
+        </>
+      ) : (
+        props.field.prettyPath.join(" ")
+      )}
+    </th>
+  );
+}
+
 function ResultsHead(props) {
   return (
     <thead>
       <tr>
-        {props.fields.map((field, index) => {
-          const modelField = props.query.getField(field.path);
-          const type = props.query.getType(modelField);
-          return (
-            <th key={index}>
-              <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}
-              {modelField.concrete && type.defaultLookup ? (
-                <>
-                  <Link
-                    onClick={() =>
-                      props.query.addFilter(field.path, field.prettyPath)
-                    }
-                  >
-                    Y
-                  </Link>{" "}
-                  <Link onClick={() => props.query.toggleSort(index)}>
-                    {field.prettyPath.join(" ")}
-                  </Link>{" "}
-                  {
-                    {
-                      dsc: `↑${field.priority}`,
-                      asc: `↓${field.priority}`,
-                      null: "",
-                    }[field.sort]
-                  }
-                </>
-              ) : (
-                field.prettyPath.join(" ")
-              )}
-            </th>
-          );
-        })}
+        {props.fields.map((field, index) => (
+          <RestulsFieldCell
+            query={props.query}
+            field={field}
+            index={index}
+            key={index}
+          />
+        ))}
         {!props.fields.length && <th>No fields selected</th>}
       </tr>
     </thead>
