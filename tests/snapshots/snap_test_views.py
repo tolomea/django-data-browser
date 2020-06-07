@@ -862,10 +862,23 @@ snapshots["test_query_html context"] = {
     },
     "initialState": {
         "fields": [
-            {"path": ["size"], "prettyPath": ["size"], "priority": 0, "sort": "dsc"},
-            {"path": ["name"], "prettyPath": ["name"], "priority": 1, "sort": "asc"},
+            {
+                "path": ["size"],
+                "pivoted": False,
+                "prettyPath": ["size"],
+                "priority": 0,
+                "sort": "dsc",
+            },
+            {
+                "path": ["name"],
+                "pivoted": False,
+                "prettyPath": ["name"],
+                "priority": 1,
+                "sort": "asc",
+            },
             {
                 "path": ["size_unit"],
+                "pivoted": False,
                 "prettyPath": ["size_unit"],
                 "priority": None,
                 "sort": None,
@@ -2107,10 +2120,23 @@ snapshots["test_query_ctx context"] = {
 
 snapshots["test_query_json data"] = {
     "fields": [
-        {"path": ["size"], "prettyPath": ["size"], "priority": 0, "sort": "dsc"},
-        {"path": ["name"], "prettyPath": ["name"], "priority": 1, "sort": "asc"},
+        {
+            "path": ["size"],
+            "pivoted": False,
+            "prettyPath": ["size"],
+            "priority": 0,
+            "sort": "dsc",
+        },
+        {
+            "path": ["name"],
+            "pivoted": False,
+            "prettyPath": ["name"],
+            "priority": 1,
+            "sort": "asc",
+        },
         {
             "path": ["size_unit"],
+            "pivoted": False,
             "prettyPath": ["size_unit"],
             "priority": None,
             "sort": None,

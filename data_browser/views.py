@@ -37,6 +37,7 @@ def _get_query_data(bound_query):
                 "prettyPath": field.pretty_path,
                 "sort": field.direction,
                 "priority": field.priority,
+                "pivoted": field.pivoted,
             }
             for field in bound_query.fields
         ],
