@@ -72,6 +72,8 @@ class App extends React.Component {
       fields: newState.fields,
       filters: newState.filters,
       results: [],
+      rows: [],
+      cols: [],
       filterErrors: [],
     };
     window.history.pushState(
@@ -82,6 +84,8 @@ class App extends React.Component {
     this.fetchResults(newState)
       .then((response) => {
         response.results = [];
+        response.cols = [];
+        response.rows = [];
         response.filterErrors = [];
         assert.deepEqual(response, request);
       })

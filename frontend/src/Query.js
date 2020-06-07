@@ -4,6 +4,7 @@ function getPartsForQuery(query) {
     fields: query.fields
       .map(
         (f) =>
+          (f.pivoted ? "&" : "") +
           f.path.join("__") +
           { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
       )
@@ -56,6 +57,7 @@ class Query {
       prettyPath: prettyPath,
       sort: null,
       priority: null,
+      pivoted: false,
     });
     const newResults = this.query.results.map((row) => row.concat([""]));
     this.setQuery({ fields: newFields, results: newResults });
