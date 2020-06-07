@@ -861,6 +861,7 @@ snapshots["test_query_html context"] = {
         "version": "redacted",
     },
     "initialState": {
+        "cols": [],
         "fields": [
             {
                 "path": ["size"],
@@ -891,6 +892,7 @@ snapshots["test_query_html context"] = {
         ],
         "model": "tests.Product",
         "results": [],
+        "rows": [],
         "version": "redacted",
     },
     "sentryDsn": None,
@@ -1243,11 +1245,13 @@ snapshots["test_query_html_no_perms context"] = {
         "version": "redacted",
     },
     "initialState": {
+        "cols": [],
         "fields": [],
         "filterErrors": [],
         "filters": [],
         "model": "",
         "results": [],
+        "rows": [],
         "version": "redacted",
     },
     "sentryDsn": None,
@@ -2108,11 +2112,13 @@ snapshots["test_query_ctx context"] = {
         "version": "redacted",
     },
     "initialState": {
+        "cols": [],
         "fields": [],
         "filterErrors": [],
         "filters": [],
         "model": "",
         "results": [],
+        "rows": [],
         "version": "redacted",
     },
     "sentryDsn": None,

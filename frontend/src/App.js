@@ -38,6 +38,8 @@ class App extends React.Component {
       .then((response) => {
         this.setState({
           results: response.results,
+          cols: response.cols || [],
+          rows: response.rows || [],
           filterErrors: response.filterErrors,
         });
         return response;
