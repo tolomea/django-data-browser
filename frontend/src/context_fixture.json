@@ -5,18 +5,21 @@
             "auth.Group": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
@@ -32,72 +35,84 @@
             "auth.User": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "date_joined": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "datetime",
                         "prettyName": "date_joined",
                         "type": "datetime"
                     },
                     "email": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "email",
                         "type": "string"
                     },
                     "first_name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "first_name",
                         "type": "string"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "is_active": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "boolean",
                         "prettyName": "is_active",
                         "type": "boolean"
                     },
                     "is_staff": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "boolean",
                         "prettyName": "is_staff",
                         "type": "boolean"
                     },
                     "is_superuser": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "boolean",
                         "prettyName": "is_superuser",
                         "type": "boolean"
                     },
                     "last_login": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "datetime",
                         "prettyName": "last_login",
                         "type": "datetime"
                     },
                     "last_name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "last_name",
                         "type": "string"
                     },
                     "password": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "password",
                         "type": "string"
                     },
                     "username": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "username",
@@ -122,12 +137,14 @@
             "boolean": {
                 "fields": {
                     "average": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "average",
                         "type": "number"
                     },
                     "sum": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "sum",
@@ -142,78 +159,91 @@
             "data_browser.View": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "created_time": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "datetime",
                         "prettyName": "created_time",
                         "type": "datetime"
                     },
                     "description": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "description",
                         "type": "string"
                     },
                     "fields": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "fields",
                         "type": "string"
                     },
                     "google_sheets_formula": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "google_sheets_formula",
                         "type": "string"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "id",
                         "type": "string"
                     },
                     "model_name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "model_name",
                         "type": "string"
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string"
                     },
                     "open_view": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "open_view",
                         "type": "string"
                     },
                     "owner": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "auth.User",
                         "prettyName": "owner",
                         "type": null
                     },
                     "public": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "boolean",
                         "prettyName": "public",
                         "type": "boolean"
                     },
                     "public_link": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "public_link",
                         "type": "string"
                     },
                     "query": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "query",
@@ -239,36 +269,42 @@
             "date": {
                 "fields": {
                     "count": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "count",
                         "type": "number"
                     },
                     "day": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "day",
                         "type": "number"
                     },
                     "month": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "month",
                         "type": "month"
                     },
                     "quarter": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "quarter",
                         "type": "number"
                     },
                     "week_day": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "week_day",
                         "type": "weekday"
                     },
                     "year": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "year",
@@ -287,60 +323,70 @@
             "datetime": {
                 "fields": {
                     "count": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "count",
                         "type": "number"
                     },
                     "date": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "date",
                         "type": "date"
                     },
                     "day": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "day",
                         "type": "number"
                     },
                     "hour": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "hour",
                         "type": "number"
                     },
                     "minute": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "minute",
                         "type": "number"
                     },
                     "month": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "month",
                         "type": "month"
                     },
                     "quarter": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "quarter",
                         "type": "number"
                     },
                     "second": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "second",
                         "type": "number"
                     },
                     "week_day": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "week_day",
                         "type": "weekday"
                     },
                     "year": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": null,
                         "prettyName": "year",
@@ -371,42 +417,49 @@
             "number": {
                 "fields": {
                     "average": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "average",
                         "type": "number"
                     },
                     "count": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "count",
                         "type": "number"
                     },
                     "max": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "max",
                         "type": "number"
                     },
                     "min": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "min",
                         "type": "number"
                     },
                     "std_dev": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "std_dev",
                         "type": "number"
                     },
                     "sum": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "sum",
                         "type": "number"
                     },
                     "variance": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "variance",
@@ -426,6 +479,7 @@
             "string": {
                 "fields": {
                     "count": {
+                        "canPivot": false,
                         "concrete": true,
                         "model": null,
                         "prettyName": "count",
@@ -439,36 +493,42 @@
             "tests.Address": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "bob": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "bob",
                         "type": "string"
                     },
                     "city": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "city",
                         "type": "string"
                     },
                     "fred": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "fred",
                         "type": "string"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "tom": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "tom",
@@ -487,18 +547,21 @@
             "tests.InAdmin": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
@@ -514,18 +577,21 @@
             "tests.InlineAdmin": {
                 "fields": {
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "in_admin": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "tests.InAdmin",
                         "prettyName": "in_admin",
                         "type": null
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
@@ -541,30 +607,35 @@
             "tests.Normal": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "in_admin": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "tests.InAdmin",
                         "prettyName": "in_admin",
                         "type": null
                     },
                     "inline_admin": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "tests.InlineAdmin",
                         "prettyName": "inline_admin",
                         "type": null
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
@@ -582,30 +653,35 @@
             "tests.Producer": {
                 "fields": {
                     "address": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "tests.Address",
                         "prettyName": "address",
                         "type": null
                     },
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "frank": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "frank",
                         "type": "string"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
@@ -623,66 +699,77 @@
             "tests.Product": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "created_time": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "datetime",
                         "prettyName": "created_time",
                         "type": "datetime"
                     },
                     "default_sku": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "tests.SKU",
                         "prettyName": "default_sku",
                         "type": null
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "is_onsale": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "is_onsale",
                         "type": "string"
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string"
                     },
                     "only_in_list_view": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "only_in_list_view",
                         "type": "string"
                     },
                     "onsale": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "boolean",
                         "prettyName": "onsale",
                         "type": "boolean"
                     },
                     "producer": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "tests.Producer",
                         "prettyName": "producer",
                         "type": null
                     },
                     "size": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "size",
                         "type": "number"
                     },
                     "size_unit": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "size_unit",
@@ -706,18 +793,21 @@
             "tests.SKU": {
                 "fields": {
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string"
                     },
                     "product": {
+                        "canPivot": false,
                         "concrete": false,
                         "model": "tests.Product",
                         "prettyName": "product",
@@ -733,18 +823,21 @@
             "tests.Tag": {
                 "fields": {
                     "admin": {
+                        "canPivot": true,
                         "concrete": false,
                         "model": null,
                         "prettyName": "admin",
                         "type": "html"
                     },
                     "id": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number"
                     },
                     "name": {
+                        "canPivot": true,
                         "concrete": true,
                         "model": "string",
                         "prettyName": "name",

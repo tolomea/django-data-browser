@@ -13,18 +13,21 @@ snapshots["test_query_html context"] = {
             "auth.Group": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -36,72 +39,84 @@ snapshots["test_query_html context"] = {
             "auth.User": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "date_joined": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "date_joined",
                         "type": "datetime",
                     },
                     "email": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "email",
                         "type": "string",
                     },
                     "first_name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "first_name",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "is_active": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "is_active",
                         "type": "boolean",
                     },
                     "is_staff": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "is_staff",
                         "type": "boolean",
                     },
                     "is_superuser": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "is_superuser",
                         "type": "boolean",
                     },
                     "last_login": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "last_login",
                         "type": "datetime",
                     },
                     "last_name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "last_name",
                         "type": "string",
                     },
                     "password": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "password",
                         "type": "string",
                     },
                     "username": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "username",
@@ -126,12 +141,14 @@ snapshots["test_query_html context"] = {
             "boolean": {
                 "fields": {
                     "average": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "average",
                         "type": "number",
                     },
                     "sum": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "sum",
@@ -143,78 +160,91 @@ snapshots["test_query_html context"] = {
             "data_browser.View": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "created_time": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "created_time",
                         "type": "datetime",
                     },
                     "description": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "description",
                         "type": "string",
                     },
                     "fields": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "fields",
                         "type": "string",
                     },
                     "google_sheets_formula": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "google_sheets_formula",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "id",
                         "type": "string",
                     },
                     "model_name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "model_name",
                         "type": "string",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string",
                     },
                     "open_view": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "open_view",
                         "type": "string",
                     },
                     "owner": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "auth.User",
                         "prettyName": "owner",
                         "type": None,
                     },
                     "public": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "public",
                         "type": "boolean",
                     },
                     "public_link": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "public_link",
                         "type": "string",
                     },
                     "query": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "query",
@@ -240,36 +270,42 @@ snapshots["test_query_html context"] = {
             "date": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "day",
                         "type": "number",
                     },
                     "month": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "month",
                         "type": "month",
                     },
                     "quarter": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "quarter",
                         "type": "number",
                     },
                     "week_day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "week_day",
                         "type": "weekday",
                     },
                     "year": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "year",
@@ -288,60 +324,70 @@ snapshots["test_query_html context"] = {
             "datetime": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "date": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "date",
                         "type": "date",
                     },
                     "day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "day",
                         "type": "number",
                     },
                     "hour": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "hour",
                         "type": "number",
                     },
                     "minute": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "minute",
                         "type": "number",
                     },
                     "month": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "month",
                         "type": "month",
                     },
                     "quarter": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "quarter",
                         "type": "number",
                     },
                     "second": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "second",
                         "type": "number",
                     },
                     "week_day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "week_day",
                         "type": "weekday",
                     },
                     "year": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "year",
@@ -366,42 +412,49 @@ snapshots["test_query_html context"] = {
             "number": {
                 "fields": {
                     "average": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "average",
                         "type": "number",
                     },
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "max": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "max",
                         "type": "number",
                     },
                     "min": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "min",
                         "type": "number",
                     },
                     "std_dev": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "std_dev",
                         "type": "number",
                     },
                     "sum": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "sum",
                         "type": "number",
                     },
                     "variance": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "variance",
@@ -421,6 +474,7 @@ snapshots["test_query_html context"] = {
             "string": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
@@ -432,36 +486,42 @@ snapshots["test_query_html context"] = {
             "tests.Address": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "bob": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "bob",
                         "type": "string",
                     },
                     "city": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "city",
                         "type": "string",
                     },
                     "fred": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "fred",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "tom": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "tom",
@@ -473,18 +533,21 @@ snapshots["test_query_html context"] = {
             "tests.InAdmin": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -496,18 +559,21 @@ snapshots["test_query_html context"] = {
             "tests.InlineAdmin": {
                 "fields": {
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "in_admin": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.InAdmin",
                         "prettyName": "in_admin",
                         "type": None,
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -519,30 +585,35 @@ snapshots["test_query_html context"] = {
             "tests.Normal": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "in_admin": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.InAdmin",
                         "prettyName": "in_admin",
                         "type": None,
                     },
                     "inline_admin": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.InlineAdmin",
                         "prettyName": "inline_admin",
                         "type": None,
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -554,30 +625,35 @@ snapshots["test_query_html context"] = {
             "tests.Producer": {
                 "fields": {
                     "address": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.Address",
                         "prettyName": "address",
                         "type": None,
                     },
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "frank": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "frank",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -589,66 +665,77 @@ snapshots["test_query_html context"] = {
             "tests.Product": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "created_time": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "created_time",
                         "type": "datetime",
                     },
                     "default_sku": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.SKU",
                         "prettyName": "default_sku",
                         "type": None,
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "is_onsale": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "is_onsale",
                         "type": "string",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string",
                     },
                     "only_in_list_view": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "only_in_list_view",
                         "type": "string",
                     },
                     "onsale": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "onsale",
                         "type": "boolean",
                     },
                     "producer": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.Producer",
                         "prettyName": "producer",
                         "type": None,
                     },
                     "size": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "size",
                         "type": "number",
                     },
                     "size_unit": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "size_unit",
@@ -672,18 +759,21 @@ snapshots["test_query_html context"] = {
             "tests.SKU": {
                 "fields": {
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string",
                     },
                     "product": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.Product",
                         "prettyName": "product",
@@ -695,18 +785,21 @@ snapshots["test_query_html context"] = {
             "tests.Tag": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -905,12 +998,14 @@ snapshots["test_query_html_no_perms context"] = {
             "boolean": {
                 "fields": {
                     "average": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "average",
                         "type": "number",
                     },
                     "sum": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "sum",
@@ -922,36 +1017,42 @@ snapshots["test_query_html_no_perms context"] = {
             "date": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "day",
                         "type": "number",
                     },
                     "month": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "month",
                         "type": "month",
                     },
                     "quarter": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "quarter",
                         "type": "number",
                     },
                     "week_day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "week_day",
                         "type": "weekday",
                     },
                     "year": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "year",
@@ -970,60 +1071,70 @@ snapshots["test_query_html_no_perms context"] = {
             "datetime": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "date": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "date",
                         "type": "date",
                     },
                     "day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "day",
                         "type": "number",
                     },
                     "hour": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "hour",
                         "type": "number",
                     },
                     "minute": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "minute",
                         "type": "number",
                     },
                     "month": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "month",
                         "type": "month",
                     },
                     "quarter": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "quarter",
                         "type": "number",
                     },
                     "second": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "second",
                         "type": "number",
                     },
                     "week_day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "week_day",
                         "type": "weekday",
                     },
                     "year": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "year",
@@ -1048,42 +1159,49 @@ snapshots["test_query_html_no_perms context"] = {
             "number": {
                 "fields": {
                     "average": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "average",
                         "type": "number",
                     },
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "max": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "max",
                         "type": "number",
                     },
                     "min": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "min",
                         "type": "number",
                     },
                     "std_dev": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "std_dev",
                         "type": "number",
                     },
                     "sum": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "sum",
                         "type": "number",
                     },
                     "variance": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "variance",
@@ -1103,6 +1221,7 @@ snapshots["test_query_html_no_perms context"] = {
             "string": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
@@ -1264,18 +1383,21 @@ snapshots["test_query_ctx context"] = {
             "auth.Group": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -1287,72 +1409,84 @@ snapshots["test_query_ctx context"] = {
             "auth.User": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "date_joined": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "date_joined",
                         "type": "datetime",
                     },
                     "email": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "email",
                         "type": "string",
                     },
                     "first_name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "first_name",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "is_active": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "is_active",
                         "type": "boolean",
                     },
                     "is_staff": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "is_staff",
                         "type": "boolean",
                     },
                     "is_superuser": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "is_superuser",
                         "type": "boolean",
                     },
                     "last_login": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "last_login",
                         "type": "datetime",
                     },
                     "last_name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "last_name",
                         "type": "string",
                     },
                     "password": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "password",
                         "type": "string",
                     },
                     "username": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "username",
@@ -1377,12 +1511,14 @@ snapshots["test_query_ctx context"] = {
             "boolean": {
                 "fields": {
                     "average": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "average",
                         "type": "number",
                     },
                     "sum": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "sum",
@@ -1394,78 +1530,91 @@ snapshots["test_query_ctx context"] = {
             "data_browser.View": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "created_time": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "created_time",
                         "type": "datetime",
                     },
                     "description": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "description",
                         "type": "string",
                     },
                     "fields": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "fields",
                         "type": "string",
                     },
                     "google_sheets_formula": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "google_sheets_formula",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "id",
                         "type": "string",
                     },
                     "model_name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "model_name",
                         "type": "string",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string",
                     },
                     "open_view": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "open_view",
                         "type": "string",
                     },
                     "owner": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "auth.User",
                         "prettyName": "owner",
                         "type": None,
                     },
                     "public": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "public",
                         "type": "boolean",
                     },
                     "public_link": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "public_link",
                         "type": "string",
                     },
                     "query": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "query",
@@ -1491,36 +1640,42 @@ snapshots["test_query_ctx context"] = {
             "date": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "day",
                         "type": "number",
                     },
                     "month": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "month",
                         "type": "month",
                     },
                     "quarter": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "quarter",
                         "type": "number",
                     },
                     "week_day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "week_day",
                         "type": "weekday",
                     },
                     "year": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "year",
@@ -1539,60 +1694,70 @@ snapshots["test_query_ctx context"] = {
             "datetime": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "date": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "date",
                         "type": "date",
                     },
                     "day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "day",
                         "type": "number",
                     },
                     "hour": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "hour",
                         "type": "number",
                     },
                     "minute": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "minute",
                         "type": "number",
                     },
                     "month": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "month",
                         "type": "month",
                     },
                     "quarter": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "quarter",
                         "type": "number",
                     },
                     "second": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "second",
                         "type": "number",
                     },
                     "week_day": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "week_day",
                         "type": "weekday",
                     },
                     "year": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": None,
                         "prettyName": "year",
@@ -1617,42 +1782,49 @@ snapshots["test_query_ctx context"] = {
             "number": {
                 "fields": {
                     "average": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "average",
                         "type": "number",
                     },
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
                         "type": "number",
                     },
                     "max": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "max",
                         "type": "number",
                     },
                     "min": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "min",
                         "type": "number",
                     },
                     "std_dev": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "std_dev",
                         "type": "number",
                     },
                     "sum": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "sum",
                         "type": "number",
                     },
                     "variance": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "variance",
@@ -1672,6 +1844,7 @@ snapshots["test_query_ctx context"] = {
             "string": {
                 "fields": {
                     "count": {
+                        "canPivot": False,
                         "concrete": True,
                         "model": None,
                         "prettyName": "count",
@@ -1683,36 +1856,42 @@ snapshots["test_query_ctx context"] = {
             "tests.Address": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "bob": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "bob",
                         "type": "string",
                     },
                     "city": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "city",
                         "type": "string",
                     },
                     "fred": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "fred",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "tom": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "tom",
@@ -1724,18 +1903,21 @@ snapshots["test_query_ctx context"] = {
             "tests.InAdmin": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -1747,18 +1929,21 @@ snapshots["test_query_ctx context"] = {
             "tests.InlineAdmin": {
                 "fields": {
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "in_admin": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.InAdmin",
                         "prettyName": "in_admin",
                         "type": None,
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -1770,30 +1955,35 @@ snapshots["test_query_ctx context"] = {
             "tests.Normal": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "in_admin": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.InAdmin",
                         "prettyName": "in_admin",
                         "type": None,
                     },
                     "inline_admin": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.InlineAdmin",
                         "prettyName": "inline_admin",
                         "type": None,
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -1805,30 +1995,35 @@ snapshots["test_query_ctx context"] = {
             "tests.Producer": {
                 "fields": {
                     "address": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.Address",
                         "prettyName": "address",
                         "type": None,
                     },
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "frank": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "frank",
                         "type": "string",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
@@ -1840,66 +2035,77 @@ snapshots["test_query_ctx context"] = {
             "tests.Product": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "created_time": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "datetime",
                         "prettyName": "created_time",
                         "type": "datetime",
                     },
                     "default_sku": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.SKU",
                         "prettyName": "default_sku",
                         "type": None,
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "is_onsale": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "is_onsale",
                         "type": "string",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string",
                     },
                     "only_in_list_view": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "only_in_list_view",
                         "type": "string",
                     },
                     "onsale": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "boolean",
                         "prettyName": "onsale",
                         "type": "boolean",
                     },
                     "producer": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.Producer",
                         "prettyName": "producer",
                         "type": None,
                     },
                     "size": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "size",
                         "type": "number",
                     },
                     "size_unit": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "size_unit",
@@ -1923,18 +2129,21 @@ snapshots["test_query_ctx context"] = {
             "tests.SKU": {
                 "fields": {
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",
                         "type": "string",
                     },
                     "product": {
+                        "canPivot": False,
                         "concrete": False,
                         "model": "tests.Product",
                         "prettyName": "product",
@@ -1946,18 +2155,21 @@ snapshots["test_query_ctx context"] = {
             "tests.Tag": {
                 "fields": {
                     "admin": {
+                        "canPivot": True,
                         "concrete": False,
                         "model": None,
                         "prettyName": "admin",
                         "type": "html",
                     },
                     "id": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "number",
                         "prettyName": "id",
                         "type": "number",
                     },
                     "name": {
+                        "canPivot": True,
                         "concrete": True,
                         "model": "string",
                         "prettyName": "name",

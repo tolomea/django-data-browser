@@ -201,7 +201,7 @@ function AllFields(props) {
   );
 }
 
-function RestulsFieldCell(props) {
+function ResultsFieldCell(props) {
   const modelField = props.query.getField(props.field.path);
   const type = props.query.getType(modelField);
   return (
@@ -239,7 +239,7 @@ function ResultsHead(props) {
     <thead>
       <tr>
         {props.fields.map((field, index) => (
-          <RestulsFieldCell
+          <ResultsFieldCell
             query={props.query}
             field={field}
             index={index}
@@ -254,7 +254,7 @@ function ResultsHead(props) {
 
 function ResultsCell(props) {
   return (
-    <td className={props.modelField.type}>
+    <td className={props.modelField.type} colSpan={props.span || 1}>
       {props.modelField.type === "html" && props.value ? (
         <div dangerouslySetInnerHTML={{ __html: props.value }} />
       ) : (
@@ -292,6 +292,92 @@ function Results(props) {
         results={props.results}
         fields={props.fields}
       />
+    </table>
+  );
+}
+
+function PivotResults(props) {
+  const colFields = props.fields.filter((f) => f.pivoted);
+  const rowFields = props.fields.filter(
+    (f) => !f.pivoted && props.query.getField(f.path).canPivot
+  );
+  const resFields = props.fields.filter(
+    (f) => !props.query.getField(f.path).canPivot
+  );
+  return (
+    <table className="Results">
+      <thead>
+        {/* col headers */}
+        {colFields.map((field, index) => {
+          return (
+            <tr key={index}>
+              {[...Array(rowFields.length ? rowFields.length - 1 : 0)].map(
+                () => (
+                  <td />
+                )
+              )}
+              <ResultsFieldCell
+                query={props.query}
+                field={field}
+                index={0} /* TODO how are we going to get this? */
+              />
+              {props.cols.map((cells) => (
+                <ResultsCell
+                  query={props.query}
+                  value={cells[index]}
+                  modelField={props.query.getField(field.path)}
+                  span={resFields.length}
+                />
+              ))}
+            </tr>
+          );
+        })}
+
+        {/* res headers */}
+        <tr>
+          {rowFields.length ? undefined : <td />}
+          {rowFields.map((field) => (
+            <ResultsFieldCell
+              query={props.query}
+              field={field}
+              index={0} /* TODO how are we going to get this? */
+            />
+          ))}
+          {props.cols.map(() =>
+            resFields.map((field, index) => (
+              <ResultsFieldCell
+                query={props.query}
+                field={field}
+                index={0} /* TODO how are we going to get this? */
+              />
+            ))
+          )}
+        </tr>
+      </thead>
+      <tbody>
+        {props.rows.map((row, index) => (
+          <tr>
+            {/* row headers */}
+            {rowFields.length ? undefined : <td />}
+            {row.map((cell, i) => (
+              <ResultsCell
+                query={props.query}
+                value={cell}
+                modelField={props.query.getField(rowFields[i].path)}
+              />
+            ))}
+            {/* results */}
+            {props.results[index].map((cell, i) => (
+              <ResultsCell
+                query={props.query}
+                value={cell}
+                modelField={props.query.getField(
+                  resFields[i % resFields.length].path
+              />
+            ))}
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 }
@@ -354,11 +440,21 @@ function QueryPage(props) {
             prettyPath={[]}
           />
         </div>
-        <Results
-          query={props.query}
-          fields={props.fields}
-          results={props.results}
-        />
+        {props.cols.length ? (
+          <PivotResults
+            query={props.query}
+            fields={props.fields}
+            results={props.results}
+            cols={props.cols}
+            rows={props.rows}
+          />
+        ) : (
+          <Results
+            query={props.query}
+            fields={props.fields}
+            results={props.results}
+          />
+        )}
       </div>
     </div>
   );
