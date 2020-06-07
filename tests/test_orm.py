@@ -34,6 +34,26 @@ def products(db):
 
 
 @pytest.fixture
+def pivot_products(db):
+    address = models.Address.objects.create(city="london", street="bad")
+    producer = models.Producer.objects.create(name="Bob", address=address)
+    datetimes = [
+        datetime(2020, 1, 1),
+        datetime(2020, 2, 1),
+        datetime(2020, 2, 2),
+        datetime(2021, 1, 1),
+        datetime(2021, 1, 2),
+        datetime(2021, 1, 3),
+        datetime(2021, 2, 1),
+        datetime(2021, 2, 2),
+        datetime(2021, 2, 3),
+        datetime(2021, 2, 4),
+    ]
+    for dt in datetimes:
+        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
+
+
+@pytest.fixture
 def req(rf, admin_user):
     req = rf.get("/")
     req.user = admin_user
@@ -283,30 +303,30 @@ def test_get_results_admin_causes_query(get_product_data):
     }
 
 
-@pytest.mark.usefixtures("db")
+@pytest.mark.usefixtures("pivot_products")
 def test_get_pivot(get_product_data):
-    address = models.Address.objects.create(city="london", street="bad")
-    producer = models.Producer.objects.create(name="Bob", address=address)
-    datetimes = [
-        datetime(2020, 1, 1),
-        datetime(2020, 2, 1),
-        datetime(2020, 2, 2),
-        datetime(2021, 1, 1),
-        datetime(2021, 1, 2),
-        datetime(2021, 1, 3),
-        datetime(2021, 2, 1),
-        datetime(2021, 2, 2),
-        datetime(2021, 2, 3),
-        datetime(2021, 2, 4),
-    ]
-    for dt in datetimes:
-        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
-
-    data = get_product_data(1, "&created_time__month,created_time__year,id__count", {})
+    data = get_product_data(1, "created_time__year,&created_time__month,id__count", {})
     assert data == {
         "results": [[1, 2], [3, 4]],
         "cols": [["January"], ["Feburary"]],
         "rows": [[2020], [2021]],
+    }
+
+
+@pytest.mark.usefixtures("pivot_products")
+def test_get_pivot_all(get_product_data):
+    data = get_product_data(
+        1, "&created_time__year, &created_time__month,id__count", {}
+    )
+    assert data == {
+        "results": [[1, 2, 3, 4]],
+        "cols": [
+            [2020, "January"],
+            [2020, "Feburary"],
+            [2021, "January"],
+            [2021, "Feburary"],
+        ],
+        "rows": [[]],
     }
 
 
