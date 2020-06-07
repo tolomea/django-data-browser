@@ -304,9 +304,9 @@ def test_get_pivot(get_product_data):
 
     data = get_product_data(1, "&created_time__month,created_time__year,id__count", {})
     assert data == {
-        "results": [[1, 3], [2, 4]],
-        "rows": [["January"], ["Feburary"]],
-        "cols": [[2020], [2021]],
+        "results": [[1, 2], [3, 4]],
+        "cols": [["January"], ["Feburary"]],
+        "rows": [[2020], [2021]],
     }
 
 

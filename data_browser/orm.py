@@ -286,11 +286,11 @@ def get_results(request, bound_query):
             results.append(res_row)
         return results
 
-    row_fields = [
+    col_fields = [
         field.orm_bound_field for field in bound_query.fields if field.pivoted
     ]
-    if row_fields:
-        col_fields = [
+    if col_fields:
+        row_fields = [
             field.orm_bound_field
             for field in bound_query.fields
             if field.orm_bound_field.can_pivot and not field.pivoted
