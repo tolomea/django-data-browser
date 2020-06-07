@@ -205,7 +205,7 @@ function ResultsFieldCell(props) {
   const modelField = props.query.getField(props.field.path);
   const type = props.query.getType(modelField);
   return (
-    <th>
+    <th className={props.className}>
       <Link onClick={() => props.query.removeField(props.index)}>✘</Link>{" "}
       {modelField.concrete && type.defaultLookup ? (
         <>
@@ -244,6 +244,7 @@ function ResultsHead(props) {
             field={field}
             index={index}
             key={index}
+            className={"HoriBorder"}
           />
         ))}
         {!props.fields.length && <th>No fields selected</th>}
@@ -254,7 +255,10 @@ function ResultsHead(props) {
 
 function ResultsCell(props) {
   return (
-    <td className={props.modelField.type} colSpan={props.span || 1}>
+    <td
+      className={props.modelField.type + " " + props.className || ""}
+      colSpan={props.span || 1}
+    >
       {props.modelField.type === "html" && props.value ? (
         <div dangerouslySetInnerHTML={{ __html: props.value }} />
       ) : (
@@ -313,7 +317,7 @@ function PivotResults(props) {
             <tr key={index}>
               {[...Array(rowFields.length ? rowFields.length - 1 : 0)].map(
                 () => (
-                  <td />
+                  <td className="Empty" />
                 )
               )}
               <ResultsFieldCell
@@ -327,6 +331,7 @@ function PivotResults(props) {
                   value={cells[index]}
                   modelField={props.query.getField(field.path)}
                   span={resFields.length}
+                  className="SoftLeftBorder"
                 />
               ))}
             </tr>
@@ -335,12 +340,13 @@ function PivotResults(props) {
 
         {/* res headers */}
         <tr>
-          {rowFields.length ? undefined : <td />}
+          {rowFields.length ? undefined : <td className="Empty" />}
           {rowFields.map((field) => (
             <ResultsFieldCell
               query={props.query}
               field={field}
               index={0} /* TODO how are we going to get this? */
+              className="HoriBorder"
             />
           ))}
           {props.cols.map(() =>
@@ -349,6 +355,7 @@ function PivotResults(props) {
                 query={props.query}
                 field={field}
                 index={0} /* TODO how are we going to get this? */
+                className={"HoriBorder" + (index ? "" : " LeftBorder")}
               />
             ))
           )}
@@ -358,7 +365,7 @@ function PivotResults(props) {
         {props.rows.map((row, index) => (
           <tr>
             {/* row headers */}
-            {rowFields.length ? undefined : <td />}
+            {rowFields.length ? undefined : <td className="Empty" />}
             {row.map((cell, i) => (
               <ResultsCell
                 query={props.query}
@@ -367,14 +374,17 @@ function PivotResults(props) {
               />
             ))}
             {/* results */}
-            {props.results[index].map((cell, i) => (
-              <ResultsCell
-                query={props.query}
-                value={cell}
-                modelField={props.query.getField(
-                  resFields[i % resFields.length].path
-              />
-            ))}
+            {props.results[index].map((cell, i) => {
+              const resIndex = i % resFields.length;
+              return (
+                <ResultsCell
+                  query={props.query}
+                  value={cell}
+                  modelField={props.query.getField(resFields[resIndex].path)}
+                  className={resIndex ? "" : "LeftBorder"}
+                />
+              );
+            })}
           </tr>
         ))}
       </tbody>

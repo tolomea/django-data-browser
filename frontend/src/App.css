@@ -135,6 +135,9 @@ select.Lookup {
 
 /* Results */
 
+.Results th {
+  background-color: #eee;
+}
 table.Results,
 .Results th,
 .Results td {
@@ -148,6 +151,22 @@ table.Results,
 .Results td.number,
 .Results td.time {
   text-align: right;
+}
+.Results td.HoriBorder,
+.Results th.HoriBorder {
+  border-top: 2px solid black;
+  /*border-bottom: 1px solid black;*/
+}
+.Results td.LeftBorder,
+.Results th.LeftBorder {
+  border-left: 2px solid black;
+}
+.Results td.SoftLeftBorder,
+.Results th.SoftLeftBorder {
+  /*border-left: 1px solid black;*/
+}
+.Results td.Empty {
+  border: none;
 }
 
 .Results th {
