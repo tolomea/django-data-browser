@@ -147,7 +147,7 @@ function Field(props) {
   ) : (
     modelField.prettyName
   );
-  const type = props.query.getType(modelField);
+  const type = props.query.getFieldType(modelField);
   return (
     <tr>
       <td>
@@ -207,7 +207,7 @@ function ResultsHead(props) {
       <tr>
         {props.fields.map((field, index) => {
           const modelField = props.query.getField(field.path);
-          const type = props.query.getType(modelField);
+          const type = props.query.getFieldType(modelField);
           return (
             <th key={index}>
               <Link onClick={() => props.query.removeField(index)}>✘</Link>{" "}

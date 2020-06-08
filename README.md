@@ -149,6 +149,7 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 
 | Version   | Date           | Summary                                                                         |
 | --------- | -------------- | ------------------------------------------------------------------------------- |
+| 1.2.6     | 2020-06-08     | Bug fixes                                                                       |
 | 1.2.5     | 2020-06-08     | Bug fixes                                                                       |
 | **1.2.4** | 2020-06-03     | **Calculated fields interact better with aggregation.**                         |
 | 1.2.3     | 2020-06-02     | JS error handling tweaks                                                        |
