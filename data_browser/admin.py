@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import threading
 
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.urls import reverse
@@ -64,17 +65,27 @@ class ViewAdmin(admin.ModelAdmin):
     @staticmethod
     def public_link(obj):
         if obj.public:
-            url = reverse("data_browser:view", kwargs={"pk": obj.pk, "media": "csv"})
-            return globals.request.build_absolute_uri(url)
+            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
+                url = reverse(
+                    "data_browser:view", kwargs={"pk": obj.pk, "media": "csv"}
+                )
+                return globals.request.build_absolute_uri(url)
+            else:
+                return "Public URL's are disabled in Django settings."
         else:
             return "N/A"
 
     @staticmethod
     def google_sheets_formula(obj):
         if obj.public:
-            url = reverse("data_browser:view", kwargs={"pk": obj.pk, "media": "csv"})
-            url = globals.request.build_absolute_uri(url)
-            return f'=importdata("{url}")'
+            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
+                url = reverse(
+                    "data_browser:view", kwargs={"pk": obj.pk, "media": "csv"}
+                )
+                url = globals.request.build_absolute_uri(url)
+                return f'=importdata("{url}")'
+            else:
+                return "Public URL's are disabled in Django settings."
         else:
             return "N/A"
 

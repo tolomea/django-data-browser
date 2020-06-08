@@ -15,21 +15,30 @@ def test_open_view(view, rf):
     assert ViewAdmin.open_view(view) == expected
 
 
-def test_public_link(view, rf):
+def test_public_link(view, rf, settings):
     globals.request = rf.get("/")
     assert ViewAdmin.public_link(view) == "N/A"
     view.public = True
     expected = f"http://testserver/data_browser/view/{view.pk}.csv"
     assert ViewAdmin.public_link(view) == expected
+    settings.DATA_BROWSER_ALLOW_PUBLIC = False
+    assert (
+        ViewAdmin.public_link(view) == "Public URL's are disabled in Django settings."
+    )
     globals.request = None
 
 
-def test_google_sheets_formula(view, rf):
+def test_google_sheets_formula(view, rf, settings):
     globals.request = rf.get("/")
     assert ViewAdmin.google_sheets_formula(view) == "N/A"
     view.public = True
     expected = f'=importdata("http://testserver/data_browser/view/{view.pk}.csv")'
     assert ViewAdmin.google_sheets_formula(view) == expected
+    settings.DATA_BROWSER_ALLOW_PUBLIC = False
+    assert (
+        ViewAdmin.google_sheets_formula(view)
+        == "Public URL's are disabled in Django settings."
+    )
     globals.request = None
 
 

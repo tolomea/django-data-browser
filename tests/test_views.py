@@ -124,7 +124,7 @@ def test_query_json_bad_model(admin_client):
 
 
 @pytest.mark.usefixtures("products")
-def test_view_csv(admin_client):
+def test_view_csv(admin_client, settings):
     view = data_browser.models.View.objects.create(
         model_name="tests.Product",
         fields="size-0,name+1,size_unit",
@@ -143,6 +143,11 @@ def test_view_csv(admin_client):
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
     dump(rows)
     assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
+
+    settings.DATA_BROWSER_ALLOW_PUBLIC = False
+    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    assert res.status_code == 404
+    settings.DATA_BROWSER_ALLOW_PUBLIC = True
 
     view.owner = User.objects.create(is_staff=True)
     view.save()

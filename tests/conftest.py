@@ -36,4 +36,5 @@ settings.configure(
         }
     ],
     STATIC_URL="/static/",
+    DATA_BROWSER_ALLOW_PUBLIC=True,
 )

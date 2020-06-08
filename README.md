@@ -39,15 +39,25 @@ Because it's hosted on Heroku free tier it might take a while to respond to the 
 1. Add `path("data-browser/", include("data_browser.urls"))` to your urls.
 1. Run `python manage.py migrate`.
 
+## Settings
+
+| Name                      | Docs Section | Function                                                                        |
+| ------------------------- | ------------ | ------------------------------------------------------------------------------- |
+| DATA_BROWSER_ALLOW_PUBLIC | Security     | Allow saved views to be accessed without admin login in limitied circumstances. |
+| DATA_BROWSER_DEV          | Development  | Enable proxying frontend to JS dev server.                                      |
+| DATA_BROWSER_FE_DSN       | Sentry       | The DSN the frontend sentry should report to, disabled by default               |
+
 ## Security
 
-There are two types of views in the Data Browser.
+There are two types of django views in the Data Browser.
 
-Query views support general querying of the database (checked against the users admin permissions) but can only be accessed by Django "staff members".
+Queries support general querying of the database (checked against the users admin permissions) but can only be accessed by Django "staff members".
 
-Saved Views can be accessed by anyone but they can only be used to access a view that has been saved and made public and they have long random URL's.
+Views can be accessed by anyone but they can only be used to access a query that has been saved and made public and they have long random URL's.
 
 You can use the admin permission `data_browser | view | Can make a saved view publically available` to restrict who can make views public. To be public the view must be marked as public and owned by someone who has the permission. Users without the permission can not mark views as public and can not edit any view that is marked public.
+
+Additionally the entire public views system is gated by the Django settings value `DATA_BROWSER_ALLOW_PUBLIC`.
 
 ## Sentry
 

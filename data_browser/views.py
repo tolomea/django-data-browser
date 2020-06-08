@@ -154,11 +154,18 @@ def query(request, *, model_name, fields="", media):
 
 def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), pk=pk)
-    request.user = view.owner  # public views are run as the person who owns them
-    if not request.user.has_perm("data_browser.make_view_public"):
+    if (
+        # some of these are checked by the admin but this is a good time to be paranoid
+        view.owner.is_active
+        and view.owner.is_staff
+        and view.owner.has_perm("data_browser.make_view_public")
+        and getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False)
+    ):
+        request.user = view.owner  # public views are run as the person who owns them
+        query = view.get_query()
+        return _data_response(request, query, media, meta=False)
+    else:
         raise http.Http404("No View matches the given query.")
-    query = view.get_query()
-    return _data_response(request, query, media, meta=False)
 
 
 def _data_response(request, query, media, meta):
