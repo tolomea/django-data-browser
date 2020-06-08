@@ -332,7 +332,7 @@ function PivotResults(props) {
               {props.cols.map((cells) => (
                 <ResultsCell
                   query={props.query}
-                  value={cells[index]}
+                  value={cells[field.pathStr]}
                   modelField={props.query.getField(field.path)}
                   span={resFields.length}
                   className="SoftLeftBorder"
@@ -370,25 +370,24 @@ function PivotResults(props) {
           <tr>
             {/* row headers */}
             {rowFields.length ? undefined : <td className="Empty" />}
-            {row.map((cell, i) => (
+            {rowFields.map((field) => (
               <ResultsCell
                 query={props.query}
-                value={cell}
-                modelField={props.query.getField(rowFields[i].path)}
+                value={row[field.pathStr]}
+                modelField={props.query.getField(field.path)}
               />
             ))}
             {/* results */}
-            {props.results[index].map((cell, i) => {
-              const resIndex = i % resFields.length;
-              return (
+            {props.results[index].map((row) =>
+              resFields.map((field, i) => (
                 <ResultsCell
                   query={props.query}
-                  value={cell}
-                  modelField={props.query.getField(resFields[resIndex].path)}
-                  className={resIndex ? "" : "LeftBorder"}
+                  value={row[field.pathStr]}
+                  modelField={props.query.getField(field.path)}
+                  className={i ? "" : "LeftBorder"}
                 />
-              );
-            })}
+              ))
+            )}
           </tr>
         ))}
       </tbody>
