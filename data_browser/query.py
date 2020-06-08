@@ -306,6 +306,10 @@ class BoundFieldMixin:
     def pretty_path(self):
         return self.orm_bound_field.pretty_path
 
+    @property
+    def path_str(self):
+        return self.orm_bound_field.path_str
+
 
 @dataclass
 class BoundFilter(BoundFieldMixin):

@@ -98,6 +98,10 @@ class OrmBoundField:
     model_name: str = None
 
     @property
+    def path_str(self):
+        return s(self.full_path)
+
+    @property
     def type_(self):
         return self.field.type_
 

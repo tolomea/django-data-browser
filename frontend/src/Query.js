@@ -54,6 +54,7 @@ class Query {
     const newFields = this.query.fields.slice();
     newFields.push({
       path: path,
+      pathStr: path.join("__"),
       prettyPath: prettyPath,
       sort: null,
       priority: null,
@@ -110,6 +111,7 @@ class Query {
     const newFilters = this.query.filters.slice();
     newFilters.push({
       path: path,
+      pathStr: path.join("__"),
       prettyPath: prettyPath,
       lookup: type.defaultLookup,
       value: this.getDefaultLookValue(type),

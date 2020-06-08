@@ -958,6 +958,7 @@ snapshots["test_query_html context"] = {
         "fields": [
             {
                 "path": ["size"],
+                "pathStr": "size",
                 "pivoted": False,
                 "prettyPath": ["size"],
                 "priority": 0,
@@ -965,6 +966,7 @@ snapshots["test_query_html context"] = {
             },
             {
                 "path": ["name"],
+                "pathStr": "name",
                 "pivoted": False,
                 "prettyPath": ["name"],
                 "priority": 1,
@@ -972,6 +974,7 @@ snapshots["test_query_html context"] = {
             },
             {
                 "path": ["size_unit"],
+                "pathStr": "size_unit",
                 "pivoted": False,
                 "prettyPath": ["size_unit"],
                 "priority": None,
@@ -980,8 +983,20 @@ snapshots["test_query_html context"] = {
         ],
         "filterErrors": [None, None],
         "filters": [
-            {"lookup": "lt", "path": ["size"], "prettyPath": ["size"], "value": "2"},
-            {"lookup": "gt", "path": ["id"], "prettyPath": ["id"], "value": "0"},
+            {
+                "lookup": "lt",
+                "path": ["size"],
+                "pathStr": "size",
+                "prettyPath": ["size"],
+                "value": "2",
+            },
+            {
+                "lookup": "gt",
+                "path": ["id"],
+                "pathStr": "id",
+                "prettyPath": ["id"],
+                "value": "0",
+            },
         ],
         "model": "tests.Product",
         "results": [],
@@ -2340,6 +2355,7 @@ snapshots["test_query_json data"] = {
     "fields": [
         {
             "path": ["size"],
+            "pathStr": "size",
             "pivoted": False,
             "prettyPath": ["size"],
             "priority": 0,
@@ -2347,6 +2363,7 @@ snapshots["test_query_json data"] = {
         },
         {
             "path": ["name"],
+            "pathStr": "name",
             "pivoted": False,
             "prettyPath": ["name"],
             "priority": 1,
@@ -2354,6 +2371,7 @@ snapshots["test_query_json data"] = {
         },
         {
             "path": ["size_unit"],
+            "pathStr": "size_unit",
             "pivoted": False,
             "prettyPath": ["size_unit"],
             "priority": None,
@@ -2362,8 +2380,20 @@ snapshots["test_query_json data"] = {
     ],
     "filterErrors": [None, None],
     "filters": [
-        {"lookup": "lt", "path": ["size"], "prettyPath": ["size"], "value": "2"},
-        {"lookup": "gt", "path": ["id"], "prettyPath": ["id"], "value": "0"},
+        {
+            "lookup": "lt",
+            "path": ["size"],
+            "pathStr": "size",
+            "prettyPath": ["size"],
+            "value": "2",
+        },
+        {
+            "lookup": "gt",
+            "path": ["id"],
+            "pathStr": "id",
+            "prettyPath": ["id"],
+            "value": "0",
+        },
     ],
     "model": "tests.Product",
     "results": [[1.0, "a", "g"], [1.0, "b", "g"]],

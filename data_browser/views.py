@@ -24,6 +24,7 @@ def _get_query_data(bound_query):
         "filters": [
             {
                 "path": filter_.path,
+                "pathStr": filter_.path_str,
                 "prettyPath": filter_.pretty_path,
                 "lookup": filter_.lookup,
                 "value": filter_.value,
@@ -34,6 +35,7 @@ def _get_query_data(bound_query):
         "fields": [
             {
                 "path": field.path,
+                "pathStr": field.path_str,
                 "prettyPath": field.pretty_path,
                 "sort": field.direction,
                 "priority": field.priority,
