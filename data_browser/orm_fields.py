@@ -93,6 +93,7 @@ class OrmBoundField:
     having: bool = False
     model_name: str = None
     admin_link: bool = False
+    concrete: bool = False
 
 
 @dataclass
@@ -162,6 +163,7 @@ class OrmConcreteField(OrmBaseField):
             queryset_path=s(full_path),
             filter_=True,
             group_by=True,
+            concrete=True,
         )
 
 
@@ -219,6 +221,7 @@ class OrmAggregateField(OrmBaseField):
             queryset_path=s(full_path),
             aggregate_clause=(s(full_path), agg),
             having=True,
+            concrete=True,
         )
 
 
@@ -240,4 +243,5 @@ class OrmFunctionField(OrmBaseField):
             function_clause=(s(full_path), func),
             filter_=True,
             group_by=True,
+            concrete=True,
         )
