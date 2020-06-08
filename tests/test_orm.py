@@ -67,24 +67,6 @@ def orm_models(req):
 
 
 @pytest.fixture
-def get_query_data(req, orm_models, django_assert_num_queries):
-    def helper(queries, *args):
-        query = Query.from_request(*args)
-        bound_query = BoundQuery(query, orm_models)
-        with django_assert_num_queries(queries):
-            return orm.get_results(req, bound_query)
-
-    yield helper
-
-
-@pytest.fixture
-def get_product_data(get_query_data):
-    return lambda queries, *args, **kwargs: get_query_data(
-        queries, "tests.Product", *args, **kwargs
-    )
-
-
-@pytest.fixture
 def get_product_flat(req, orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
         query = Query.from_request("tests.Product", *args)
@@ -92,6 +74,25 @@ def get_product_flat(req, orm_models, django_assert_num_queries):
         with django_assert_num_queries(queries):
             data = orm.get_results(req, bound_query)
             return flatten_table(bound_query.fields, data["results"])
+
+    return helper
+
+
+@pytest.fixture
+def get_product_pivot(req, orm_models, django_assert_num_queries):
+    def helper(queries, *args, **kwargs):
+        query = Query.from_request("tests.Product", *args)
+        bound_query = BoundQuery(query, orm_models)
+        with django_assert_num_queries(queries):
+            data = orm.get_results(req, bound_query)
+            return {
+                "cols": flatten_table(bound_query.col_fields, data["cols"]),
+                "rows": flatten_table(bound_query.row_fields, data["rows"]),
+                "results": [
+                    flatten_table(bound_query.data_fields, row)
+                    for row in data["results"]
+                ],
+            }
 
     return helper
 
@@ -304,22 +305,34 @@ def test_get_results_admin_causes_query(get_product_flat):
 
 
 @pytest.mark.usefixtures("pivot_products")
-def test_get_pivot(get_product_data):
-    data = get_product_data(1, "created_time__year,&created_time__month,id__count", {})
+def test_get_pivot(get_product_pivot):
+    data = get_product_pivot(1, "created_time__year,&created_time__month,id__count", {})
     assert data == {
-        "results": [[1, 2], [3, 4]],
+        "results": [[[1], [2]], [[3], [4]]],
         "cols": [["January"], ["Feburary"]],
         "rows": [[2020], [2021]],
     }
 
 
 @pytest.mark.usefixtures("pivot_products")
-def test_get_pivot_all(get_product_data):
-    data = get_product_data(
+def test_get_pivot_multi_agg(get_product_pivot):
+    data = get_product_pivot(
+        1, "created_time__year,&created_time__month,id__count,id__max", {}
+    )
+    assert data == {
+        "results": [[[1, 1], [2, 3]], [[3, 6], [4, 10]]],
+        "cols": [["January"], ["Feburary"]],
+        "rows": [[2020], [2021]],
+    }
+
+
+@pytest.mark.usefixtures("pivot_products")
+def test_get_pivot_all(get_product_pivot):
+    data = get_product_pivot(
         1, "&created_time__year, &created_time__month,id__count", {}
     )
     assert data == {
-        "results": [[1, 2, 3, 4]],
+        "results": [[[1], [2], [3], [4]]],
         "cols": [
             [2020, "January"],
             [2020, "Feburary"],
