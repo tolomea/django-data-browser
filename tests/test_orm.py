@@ -3,6 +3,7 @@ from datetime import datetime
 import pytest
 from data_browser import orm, orm_fields
 from data_browser.query import BoundQuery, Query
+from data_browser.views import flatten_table
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
@@ -69,7 +70,6 @@ def orm_models(req):
 def get_query_data(req, orm_models, django_assert_num_queries):
     def helper(queries, *args):
         query = Query.from_request(*args)
-
         bound_query = BoundQuery(query, orm_models)
         with django_assert_num_queries(queries):
             return orm.get_results(req, bound_query)
@@ -84,223 +84,223 @@ def get_product_data(get_query_data):
     )
 
 
-@pytest.mark.usefixtures("products")
-def test_get_results_all(get_product_data):
-    data = get_product_data(1, "size-0,name+1,size_unit", {})
-    assert data == {"results": [[2, "c", "g"], [1, "a", "g"], [1, "b", "g"]]}
+@pytest.fixture
+def get_product_flat(req, orm_models, django_assert_num_queries):
+    def helper(queries, *args, **kwargs):
+        query = Query.from_request("tests.Product", *args)
+        bound_query = BoundQuery(query, orm_models)
+        with django_assert_num_queries(queries):
+            data = orm.get_results(req, bound_query)
+            return flatten_table(bound_query.fields, data["results"])
+
+    return helper
 
 
 @pytest.mark.usefixtures("products")
-def test_get_admin_link(get_product_data):
-    data = get_product_data(2, "producer__address__admin", {})
-    assert data == {
-        "results": [
-            [None],
-            ['<a href="/admin/tests/address/1/change/">Address object (1)</a>'],
-            ['<a href="/admin/tests/address/2/change/">Address object (2)</a>'],
-        ]
-    }
+def test_get_results_all(get_product_flat):
+    data = get_product_flat(1, "size-0,name+1,size_unit", {})
+    assert data == [[2, "c", "g"], [1, "a", "g"], [1, "b", "g"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_calculated_field_on_admin(get_product_data):
-    data = get_product_data(2, "producer__address__bob", {})
-    assert data == {"results": [[None], ["bad"], ["bob"]]}
+def test_get_admin_link(get_product_flat):
+    data = get_product_flat(2, "producer__address__admin", {})
+    assert data == [
+        [None],
+        ['<a href="/admin/tests/address/1/change/">Address object (1)</a>'],
+        ['<a href="/admin/tests/address/2/change/">Address object (2)</a>'],
+    ]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_multiple_calculated_fields_on_admins(get_product_data):
-    data = get_product_data(3, "producer__address__bob,producer__frank", {})
-    assert data == {"results": [[None, "frank"], ["bad", "frank"], ["bob", "frank"]]}
+def test_get_calculated_field_on_admin(get_product_flat):
+    data = get_product_flat(2, "producer__address__bob", {})
+    assert data == [[None], ["bad"], ["bob"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_calculated_field(get_product_data):
-    data = get_product_data(2, "producer__address__fred", {})
-    assert data == {"results": [[None], ["bad"], ["fred"]]}
+def test_get_multiple_calculated_fields_on_admins(get_product_flat):
+    data = get_product_flat(3, "producer__address__bob,producer__frank", {})
+    assert data == [[None, "frank"], ["bad", "frank"], ["bob", "frank"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_property(get_product_data):
-    data = get_product_data(2, "producer__address__tom", {})
-    assert data == {"results": [[None], ["bad"], ["tom"]]}
+def test_get_calculated_field(get_product_flat):
+    data = get_product_flat(2, "producer__address__fred", {})
+    assert data == [[None], ["bad"], ["fred"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_time_function(get_product_data):
-    data = get_product_data(1, "created_time__year", {})
-    assert data == {"results": [[timezone.now().year]]}
+def test_get_property(get_product_flat):
+    data = get_product_flat(2, "producer__address__tom", {})
+    assert data == [[None], ["bad"], ["tom"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_aggregate(get_product_data):
-    data = get_product_data(1, "size_unit,id__count", {})
-    assert data == {"results": [["g", 3]]}
+def test_get_time_function(get_product_flat):
+    data = get_product_flat(1, "created_time__year", {})
+    assert data == [[timezone.now().year]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_time_aggregate(get_product_data):
-    data = get_product_data(1, "size_unit,created_time__count", {})
-    assert data == {"results": [["g", 1]]}
+def test_get_aggregate(get_product_flat):
+    data = get_product_flat(1, "size_unit,id__count", {})
+    assert data == [["g", 3]]
 
 
 @pytest.mark.usefixtures("products")
-def test_filter_and_get_aggregate(get_product_data):
-    data = get_product_data(1, "size_unit,id__count", {"id__count__gt": [0]})
-    assert data == {"results": [["g", 3]]}
+def test_get_time_aggregate(get_product_flat):
+    data = get_product_flat(1, "size_unit,created_time__count", {})
+    assert data == [["g", 1]]
 
 
 @pytest.mark.usefixtures("products")
-def test_filter_aggregate(get_product_data):
-    data = get_product_data(1, "size_unit", {"id__count__gt": [0]})
-    assert data == {"results": [["g"]]}
+def test_filter_and_get_aggregate(get_product_flat):
+    data = get_product_flat(1, "size_unit,id__count", {"id__count__gt": [0]})
+    assert data == [["g", 3]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_aggregate_and_calculated_field(get_product_data):
-    data = get_product_data(2, "is_onsale,id__count", {})
-    assert data == {"results": [[False, 1], [False, 1], [False, 1]]}
+def test_filter_aggregate(get_product_flat):
+    data = get_product_flat(1, "size_unit", {"id__count__gt": [0]})
+    assert data == [["g"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_time_aggregate_and_calculated_field(get_product_data):
-    data = get_product_data(2, "is_onsale,created_time__count", {})
-    assert data == {"results": [[False, 1], [False, 1], [False, 1]]}
+def test_get_aggregate_and_calculated_field(get_product_flat):
+    data = get_product_flat(2, "is_onsale,id__count", {})
+    assert data == [[False, 1], [False, 1], [False, 1]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_only_aggregate(get_product_data):
-    data = get_product_data(1, "id__count", {})
-    assert data == {"results": [[3]]}
+def test_get_time_aggregate_and_calculated_field(get_product_flat):
+    data = get_product_flat(2, "is_onsale,created_time__count", {})
+    assert data == [[False, 1], [False, 1], [False, 1]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_empty(get_product_data):
-    data = get_product_data(0, "", {})
-    assert data == {"results": []}
+def test_get_only_aggregate(get_product_flat):
+    data = get_product_flat(1, "id__count", {})
+    assert data == [[3]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_sort(get_product_data):
-    data = get_product_data(1, "size+0,name-1,size_unit", {})
-    assert data == {"results": [[1, "b", "g"], [1, "a", "g"], [2, "c", "g"]]}
+def test_get_results_empty(get_product_flat):
+    data = get_product_flat(0, "", {})
+    assert data == []
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_pks(get_product_data):
-    data = get_product_data(1, "id", {})
-    assert {d[0] for d in data["results"]} == set(
+def test_get_results_sort(get_product_flat):
+    data = get_product_flat(1, "size+0,name-1,size_unit", {})
+    assert data == [[1, "b", "g"], [1, "a", "g"], [2, "c", "g"]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_results_pks(get_product_flat):
+    data = get_product_flat(1, "id", {})
+    assert {d[0] for d in data} == set(
         models.Product.objects.values_list("id", flat=True)
     )
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_calculated_field(get_product_data):
+def test_get_results_calculated_field(get_product_flat):
     # query + prefetch producer
-    data = get_product_data(2, "name+0,producer__name,is_onsale", {})
-    assert data == {
-        "results": [["a", "Bob", False], ["b", "Bob", False], ["c", "Bob", False]]
-    }
+    data = get_product_flat(2, "name+0,producer__name,is_onsale", {})
+    assert data == [["a", "Bob", False], ["b", "Bob", False], ["c", "Bob", False]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_filtered(get_product_data):
-    data = get_product_data(1, "size,name", {"name__equals": ["a"]})
-    assert data == {"results": [[1, "a"]]}
+def test_get_results_filtered(get_product_flat):
+    data = get_product_flat(1, "size,name", {"name__equals": ["a"]})
+    assert data == [[1, "a"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_excluded(get_product_data):
-    data = get_product_data(1, "size-0,name", {"name__not_equals": ["a"]})
-    assert data == {"results": [[2, "c"], [1, "b"]]}
+def test_get_results_excluded(get_product_flat):
+    data = get_product_flat(1, "size-0,name", {"name__not_equals": ["a"]})
+    assert data == [[2, "c"], [1, "b"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_multi_excluded(get_product_data):
-    data = get_product_data(1, "size-0,name", {"name__not_equals": ["a", "c"]})
-    assert data == {"results": [[1, "b"]]}
+def test_get_results_multi_excluded(get_product_flat):
+    data = get_product_flat(1, "size-0,name", {"name__not_equals": ["a", "c"]})
+    assert data == [[1, "b"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_collapsed(get_product_data):
-    data = get_product_data(1, "size-0,size_unit", {})
-    assert data == {"results": [[2, "g"], [1, "g"]]}
+def test_get_results_collapsed(get_product_flat):
+    data = get_product_flat(1, "size-0,size_unit", {})
+    assert data == [[2, "g"], [1, "g"]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_null_filter(get_product_data):
-    data = get_product_data(1, "id", {"onsale__is_null": ["True"]})
-    assert data == {"results": [[1], [2], [3]]}
-    data = get_product_data(1, "id", {"onsale__is_null": ["true"]})
-    assert data == {"results": [[1], [2], [3]]}
-    data = get_product_data(1, "id", {"onsale__is_null": ["False"]})
-    assert data == {"results": []}
-    data = get_product_data(1, "id", {"onsale__is_null": ["false"]})
-    assert data == {"results": []}
+def test_get_results_null_filter(get_product_flat):
+    data = get_product_flat(1, "id", {"onsale__is_null": ["True"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_flat(1, "id", {"onsale__is_null": ["true"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_flat(1, "id", {"onsale__is_null": ["False"]})
+    assert data == []
+    data = get_product_flat(1, "id", {"onsale__is_null": ["false"]})
+    assert data == []
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_boolean_filter(get_product_data):
+def test_get_results_boolean_filter(get_product_flat):
     models.Product.objects.update(onsale=True)
-    data = get_product_data(1, "id", {"onsale__equals": ["True"]})
-    assert data == {"results": [[1], [2], [3]]}
-    data = get_product_data(1, "id", {"onsale__equals": ["true"]})
-    assert data == {"results": [[1], [2], [3]]}
-    data = get_product_data(1, "id", {"onsale__equals": ["False"]})
-    assert data == {"results": []}
-    data = get_product_data(1, "id", {"onsale__equals": ["false"]})
-    assert data == {"results": []}
+    data = get_product_flat(1, "id", {"onsale__equals": ["True"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_flat(1, "id", {"onsale__equals": ["true"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_flat(1, "id", {"onsale__equals": ["False"]})
+    assert data == []
+    data = get_product_flat(1, "id", {"onsale__equals": ["false"]})
+    assert data == []
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_string_filter(get_product_data):
-    data = get_product_data(1, "id", {"producer__name__equals": ["Bob"]})
-    assert data == {"results": [[1], [2], [3]]}
-    data = get_product_data(1, "id", {"producer__name__equals": ["bob"]})
-    assert data == {"results": [[1], [2], [3]]}
-    data = get_product_data(1, "id", {"producer__name__equals": ["fred"]})
-    assert data == {"results": []}
+def test_get_results_string_filter(get_product_flat):
+    data = get_product_flat(1, "id", {"producer__name__equals": ["Bob"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_flat(1, "id", {"producer__name__equals": ["bob"]})
+    assert data == [[1], [2], [3]]
+    data = get_product_flat(1, "id", {"producer__name__equals": ["fred"]})
+    assert data == []
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_basic_flat(get_product_data):
+def test_get_results_basic_flat(get_product_flat):
     # just a query
-    data = get_product_data(1, "name+0,producer__address__city", {})
-    assert data == {"results": [["a", "london"], ["b", "london"], ["c", None]]}
+    data = get_product_flat(1, "name+0,producer__address__city", {})
+    assert data == [["a", "london"], ["b", "london"], ["c", None]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_calculated_causes_query(get_product_data):
+def test_get_results_calculated_causes_query(get_product_flat):
     # query products, fetch objects for calculated
-    data = get_product_data(2, "name+0,is_onsale,producer__address__city", {})
-    assert data == {
-        "results": [["a", False, "london"], ["b", False, "london"], ["c", False, None]]
-    }
+    data = get_product_flat(2, "name+0,is_onsale,producer__address__city", {})
+    assert data == [["a", False, "london"], ["b", False, "london"], ["c", False, None]]
 
 
 @pytest.mark.usefixtures("products")
-def test_get_results_admin_causes_query(get_product_data):
+def test_get_results_admin_causes_query(get_product_flat):
     # query products, fetch objects for calculated
-    data = get_product_data(2, "name+0,admin,producer__address__city", {})
-    assert data == {
-        "results": [
-            [
-                "a",
-                '<a href="/admin/tests/product/1/change/">Product object (1)</a>',
-                "london",
-            ],
-            [
-                "b",
-                '<a href="/admin/tests/product/2/change/">Product object (2)</a>',
-                "london",
-            ],
-            [
-                "c",
-                '<a href="/admin/tests/product/3/change/">Product object (3)</a>',
-                None,
-            ],
-        ]
-    }
+    data = get_product_flat(2, "name+0,admin,producer__address__city", {})
+    assert data == [
+        [
+            "a",
+            '<a href="/admin/tests/product/1/change/">Product object (1)</a>',
+            "london",
+        ],
+        [
+            "b",
+            '<a href="/admin/tests/product/2/change/">Product object (2)</a>',
+            "london",
+        ],
+        ["c", '<a href="/admin/tests/product/3/change/">Product object (3)</a>', None],
+    ]
 
 
 @pytest.mark.usefixtures("pivot_products")

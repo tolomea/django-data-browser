@@ -2396,6 +2396,9 @@ snapshots["test_query_json data"] = {
         },
     ],
     "model": "tests.Product",
-    "results": [[1.0, "a", "g"], [1.0, "b", "g"]],
+    "results": [
+        {"name": "a", "size": 1.0, "size_unit": "g"},
+        {"name": "b", "size": 1.0, "size_unit": "g"},
+    ],
     "version": "redacted",
 }

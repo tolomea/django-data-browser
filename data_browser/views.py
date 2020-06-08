@@ -177,6 +177,10 @@ def view(request, pk, media):
         raise http.Http404("No View matches the given query.")
 
 
+def flatten_table(fields, data):
+    return [[row[f.path_str] for f in fields] for row in data]
+
+
 def _data_response(request, query, media, meta):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
@@ -188,7 +192,7 @@ def _data_response(request, query, media, meta):
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(" ".join(f.pretty_path) for f in bound_query.fields)
-        writer.writerows(results["results"])
+        writer.writerows(flatten_table(bound_query.fields, results["results"]))
         buffer.seek(0)
         response = http.HttpResponse(buffer, content_type="text/csv")
         response[

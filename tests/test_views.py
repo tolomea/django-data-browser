@@ -80,8 +80,20 @@ def test_query_json_bad_fields(admin_client):
     )
     assert res.status_code == 200
     assert json.loads(res.content.decode("utf-8"))["results"] == [
-        [1, "a", "g", False, "Bob"],
-        [1, "b", "g", False, "Bob"],
+        {
+            "size": 1,
+            "name": "a",
+            "size_unit": "g",
+            "is_onsale": False,
+            "producer__name": "Bob",
+        },
+        {
+            "size": 1,
+            "name": "b",
+            "size_unit": "g",
+            "is_onsale": False,
+            "producer__name": "Bob",
+        },
     ]
 
 
@@ -173,7 +185,12 @@ def test_view_json(admin_client):
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
     dump(data)
-    assert data == {"results": [[1, "a", "g"], [1, "b", "g"]]}
+    assert data == {
+        "results": [
+            {"size": 1, "name": "a", "size_unit": "g"},
+            {"size": 1, "name": "b", "size_unit": "g"},
+        ]
+    }
 
     view.owner = User.objects.create(is_staff=True)
     view.save()

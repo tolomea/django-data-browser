@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from itertools import cycle
 
 from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
@@ -276,13 +275,14 @@ def get_results(request, bound_query):
     def format_table(fields, data):
         results = []
         for row in data:
-            res_row = []
-            for field, value in zip(cycle(fields), row):
+            res_row = {}
+            for field in fields:
+                value = row[field.path_str]
                 if field.model_name:
                     admin = bound_query.orm_models[field.model_name].admin
                     obj = cache[field.model_name].get(value)
                     value = obj, admin
-                res_row.append(field.format(value))
+                res_row[field.path_str] = field.format(value)
             results.append(res_row)
         return results
 
@@ -328,7 +328,10 @@ def get_results(request, bound_query):
             "results": format_table(
                 bound_query.bound_fields,
                 (
-                    [row[field.queryset_path] for field in bound_query.bound_fields]
+                    {
+                        field.path_str: row[field.queryset_path]
+                        for field in bound_query.bound_fields
+                    }
                     for row in qs
                 ),
             )

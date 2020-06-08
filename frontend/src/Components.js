@@ -254,16 +254,20 @@ function ResultsHead(props) {
 }
 
 function ResultsCell(props) {
+  let value;
+  if (props.value === undefined) {
+    value = "";
+  } else if (props.modelField.type === "html" && props.value) {
+    value = <div dangerouslySetInnerHTML={{ __html: props.value }} />;
+  } else {
+    value = String(props.value);
+  }
   return (
     <td
       className={props.modelField.type + " " + props.className || ""}
       colSpan={props.span || 1}
     >
-      {props.modelField.type === "html" && props.value ? (
-        <div dangerouslySetInnerHTML={{ __html: props.value }} />
-      ) : (
-        String(props.value)
-      )}
+      {value}
     </td>
   );
 }
@@ -273,12 +277,12 @@ function ResultsBody(props) {
     <tbody>
       {props.results.map((row, rowIndex) => (
         <tr key={rowIndex}>
-          {row.map((cell, colIndex) => (
+          {props.fields.map((field, colIndex) => (
             <ResultsCell
               key={colIndex}
               query={props.query}
-              value={cell}
-              modelField={props.query.getField(props.fields[colIndex].path)}
+              value={row[field.pathStr]}
+              modelField={props.query.getField(field.path)}
             />
           ))}
         </tr>

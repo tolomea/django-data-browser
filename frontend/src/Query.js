@@ -60,17 +60,13 @@ class Query {
       priority: null,
       pivoted: false,
     });
-    const newResults = this.query.results.map((row) => row.concat([""]));
-    this.setQuery({ fields: newFields, results: newResults });
+    this.setQuery({ fields: newFields });
   }
 
   removeField(index) {
     const newFields = this.query.fields.slice();
     newFields.splice(index, 1);
-    const newResults = this.query.results.map((row) =>
-      row.slice(0, index).concat(row.slice(index + 1))
-    );
-    this.setQuery({ fields: newFields, results: newResults });
+    this.setQuery({ fields: newFields });
   }
 
   toggleSort(index) {
