@@ -4,7 +4,9 @@ import { Link } from "./Util.js";
 
 function Spacer(props) {
   if (props.spaces > 0) {
-    return [...Array(props.spaces)].map(() => <td className="Empty" />);
+    return [...Array(props.spaces)].map((_, key) => (
+      <td className="Empty" key={key} />
+    ));
   }
   return null;
 }
@@ -62,25 +64,25 @@ function DataCell(props) {
 }
 
 function VTableHeadRow(props) {
-  return props.fields.map((field, index) => (
+  return props.fields.map((field, i) => (
     <HeadCell
       query={props.query}
       field={field}
-      index={index}
-      key={index}
-      className={"HoriBorder " + (index ? "" : props.classNameFirst)}
+      index={i} // todo remove
+      key={field.pathStr}
+      className={"HoriBorder " + (i ? "" : props.classNameFirst)}
     />
   ));
 }
 
 function VTableBodyRow(props) {
-  return props.fields.map((field, index) => (
+  return props.fields.map((field, i) => (
     <DataCell
-      key={index}
+      key={field.pathStr}
       query={props.query}
       value={props.row[field.pathStr]}
       modelField={props.query.getField(field.path)}
-      className={index ? "" : props.classNameFirst}
+      className={i ? "" : props.classNameFirst}
     />
   ));
 }
@@ -93,8 +95,9 @@ function HTableRow(props) {
         field={props.field}
         index={0} /* TODO how are we going to get this? */
       />
-      {props.data.map((col) => (
+      {props.data.map((col, key) => (
         <DataCell
+          key={key}
           query={props.query}
           value={col[props.field.pathStr]}
           modelField={props.query.getField(props.field.path)}
@@ -116,8 +119,8 @@ function Results(props) {
       </thead>
 
       <tbody>
-        {props.results.map((row, rowIndex) => (
-          <tr key={rowIndex}>
+        {props.results.map((row, key) => (
+          <tr key={key}>
             <VTableBodyRow
               query={props.query}
               row={row}
@@ -142,9 +145,9 @@ function PivotResults(props) {
     <table className="Results">
       <thead>
         {/* pivoted data */}
-        {colFields.map((field, index) => {
+        {colFields.map((field) => {
           return (
-            <tr key={index}>
+            <tr key={field.pathStr}>
               <Spacer spaces={rowFields.length - 1} />
               <HTableRow
                 query={props.query}
@@ -161,8 +164,9 @@ function PivotResults(props) {
           {rowFields.length ? undefined : <td className="Empty" />}
           <VTableHeadRow query={props.query} fields={rowFields} />
 
-          {props.cols.map(() => (
+          {props.cols.map((_, key) => (
             <VTableHeadRow
+              key={key}
               query={props.query}
               fields={resFields}
               classNameFirst="LeftBorder"
@@ -172,12 +176,13 @@ function PivotResults(props) {
       </thead>
 
       <tbody>
-        {props.rows.map((row, index) => (
-          <tr>
+        {props.rows.map((row, rowIndex) => (
+          <tr key={rowIndex}>
             <Spacer spaces={1 - rowFields.length} />
             <VTableBodyRow query={props.query} fields={rowFields} row={row} />
-            {props.results[index].map((row) => (
+            {props.results[rowIndex].map((row, key) => (
               <VTableBodyRow
+                key={key}
                 query={props.query}
                 fields={resFields}
                 row={row}
