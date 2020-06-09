@@ -63,14 +63,16 @@ class Query {
     this.setQuery({ fields: newFields });
   }
 
-  removeField(index) {
-    const newFields = this.query.fields.slice();
-    newFields.splice(index, 1);
-    this.setQuery({ fields: newFields });
+  removeField(field) {
+    this.setQuery({
+      fields: this.query.fields.filter((f) => f.pathStr !== field.pathStr),
+    });
   }
 
-  toggleSort(index) {
-    const field = this.query.fields[index];
+  toggleSort(field) {
+    const index = this.query.fields.findIndex(
+      (f) => f.pathStr === field.pathStr
+    );
     const newSort = { asc: "dsc", dsc: null, null: "asc" }[field.sort];
     let newFields = this.query.fields.slice();
 

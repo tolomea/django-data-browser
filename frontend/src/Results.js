@@ -16,7 +16,7 @@ function HeadCell(props) {
   const type = props.query.getType(modelField);
   return (
     <th className={props.className}>
-      <Link onClick={() => props.query.removeField(props.index)}>✘</Link>{" "}
+      <Link onClick={() => props.query.removeField(props.field)}>✘</Link>{" "}
       {modelField.concrete && type.defaultLookup ? (
         <>
           <Link
@@ -26,7 +26,7 @@ function HeadCell(props) {
           >
             Y
           </Link>{" "}
-          <Link onClick={() => props.query.toggleSort(props.index)}>
+          <Link onClick={() => props.query.toggleSort(props.field)}>
             {props.field.prettyPath.join(" ")}
           </Link>{" "}
           {
