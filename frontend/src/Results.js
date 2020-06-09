@@ -45,17 +45,18 @@ function HeadCell(props) {
 }
 
 function DataCell(props) {
+  let modelField = props.query.getField(props.field.path);
   let value;
   if (props.value === undefined) {
     value = "";
-  } else if (props.modelField.type === "html" && props.value) {
+  } else if (modelField.type === "html" && props.value) {
     value = <div dangerouslySetInnerHTML={{ __html: props.value }} />;
   } else {
     value = String(props.value);
   }
   return (
     <td
-      className={props.modelField.type + " " + props.className || ""}
+      className={modelField.type + " " + props.className || ""}
       colSpan={props.span || 1}
     >
       {value}
@@ -68,7 +69,7 @@ function VTableHeadRow(props) {
     <HeadCell
       query={props.query}
       field={field}
-      index={i} // todo remove
+      index={i} // TODO remove
       key={field.pathStr}
       className={"HoriBorder " + (i ? "" : props.classNameFirst)}
     />
@@ -81,7 +82,7 @@ function VTableBodyRow(props) {
       key={field.pathStr}
       query={props.query}
       value={props.row[field.pathStr]}
-      modelField={props.query.getField(field.path)}
+      field={field}
       className={i ? "" : props.classNameFirst}
     />
   ));
@@ -93,14 +94,14 @@ function HTableRow(props) {
       <HeadCell
         query={props.query}
         field={props.field}
-        index={0} /* TODO how are we going to get this? */
+        index={0} /* TODO remove */
       />
       {props.data.map((col, key) => (
         <DataCell
           key={key}
           query={props.query}
           value={col[props.field.pathStr]}
-          modelField={props.query.getField(props.field.path)}
+          field={props.field}
           span={props.span}
         />
       ))}
