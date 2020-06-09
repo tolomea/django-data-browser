@@ -17,6 +17,15 @@ function HeadCell(props) {
   return (
     <th className={props.className}>
       <Link onClick={() => props.query.removeField(props.field)}>✘</Link>{" "}
+      {modelField.canPivot ? (
+        <>
+          <Link onClick={() => props.query.togglePivot(props.field)}>
+            {props.field.pivoted ? "⮦" : "⮥"}
+          </Link>{" "}
+        </>
+      ) : (
+        ""
+      )}
       {modelField.concrete && type.defaultLookup ? (
         <>
           <Link

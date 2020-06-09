@@ -104,6 +104,17 @@ class Query {
     });
   }
 
+  togglePivot(field) {
+    const index = this.query.fields.findIndex(
+      (f) => f.pathStr === field.pathStr
+    );
+    let newFields = this.query.fields.slice();
+    newFields[index].pivoted = !newFields[index].pivoted;
+    this.setQuery({
+      fields: newFields,
+    });
+  }
+
   addFilter(path, prettyPath) {
     const type = this.getType(this.getField(path));
     const newFilters = this.query.filters.slice();
