@@ -161,10 +161,6 @@ table.Results,
 .Results th.LeftBorder {
   border-left: 2px solid black;
 }
-.Results td.SoftLeftBorder,
-.Results th.SoftLeftBorder {
-  /*border-left: 1px solid black;*/
-}
 .Results td.Empty {
   border: none;
 }

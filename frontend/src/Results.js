@@ -2,7 +2,14 @@ import React from "react";
 import "./App.css";
 import { Link } from "./Util.js";
 
-function ResultsFieldCell(props) {
+function Spacer(props) {
+  if (props.spaces > 0) {
+    return [...Array(props.spaces)].map(() => <td className="Empty" />);
+  }
+  return null;
+}
+
+function HeadCell(props) {
   const modelField = props.query.getField(props.field.path);
   const type = props.query.getType(modelField);
   return (
@@ -35,26 +42,7 @@ function ResultsFieldCell(props) {
   );
 }
 
-function ResultsHead(props) {
-  return (
-    <thead>
-      <tr>
-        {props.fields.map((field, index) => (
-          <ResultsFieldCell
-            query={props.query}
-            field={field}
-            index={index}
-            key={index}
-            className={"HoriBorder"}
-          />
-        ))}
-        {!props.fields.length && <th>No fields selected</th>}
-      </tr>
-    </thead>
-  );
-}
-
-function ResultsCell(props) {
+function DataCell(props) {
   let value;
   if (props.value === undefined) {
     value = "";
@@ -73,34 +61,71 @@ function ResultsCell(props) {
   );
 }
 
-function ResultsBody(props) {
+function VTableHeadRow(props) {
+  return props.fields.map((field, index) => (
+    <HeadCell
+      query={props.query}
+      field={field}
+      index={index}
+      key={index}
+      className={"HoriBorder " + (index ? "" : props.classNameFirst)}
+    />
+  ));
+}
+
+function VTableBodyRow(props) {
+  return props.fields.map((field, index) => (
+    <DataCell
+      key={index}
+      query={props.query}
+      value={props.row[field.pathStr]}
+      modelField={props.query.getField(field.path)}
+      className={index ? "" : props.classNameFirst}
+    />
+  ));
+}
+
+function HTableRow(props) {
   return (
-    <tbody>
-      {props.results.map((row, rowIndex) => (
-        <tr key={rowIndex}>
-          {props.fields.map((field, colIndex) => (
-            <ResultsCell
-              key={colIndex}
-              query={props.query}
-              value={row[field.pathStr]}
-              modelField={props.query.getField(field.path)}
-            />
-          ))}
-        </tr>
+    <>
+      <HeadCell
+        query={props.query}
+        field={props.field}
+        index={0} /* TODO how are we going to get this? */
+      />
+      {props.data.map((col) => (
+        <DataCell
+          query={props.query}
+          value={col[props.field.pathStr]}
+          modelField={props.query.getField(props.field.path)}
+          span={props.span}
+        />
       ))}
-    </tbody>
+    </>
   );
 }
 
 function Results(props) {
   return (
     <table className="Results">
-      <ResultsHead query={props.query} fields={props.fields} />
-      <ResultsBody
-        query={props.query}
-        results={props.results}
-        fields={props.fields}
-      />
+      <thead>
+        <tr>
+          <VTableHeadRow query={props.query} fields={props.fields} />
+          {!props.fields.length && <th>No fields selected</th>}
+        </tr>
+      </thead>
+
+      <tbody>
+        {props.results.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            <VTableBodyRow
+              query={props.query}
+              row={row}
+              fields={props.fields}
+            />
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 }
@@ -116,79 +141,49 @@ function PivotResults(props) {
   return (
     <table className="Results">
       <thead>
-        {/* col headers */}
+        {/* pivoted data */}
         {colFields.map((field, index) => {
           return (
             <tr key={index}>
-              {[...Array(rowFields.length ? rowFields.length - 1 : 0)].map(
-                () => (
-                  <td className="Empty" />
-                )
-              )}
-              <ResultsFieldCell
+              <Spacer spaces={rowFields.length - 1} />
+              <HTableRow
                 query={props.query}
                 field={field}
-                index={0} /* TODO how are we going to get this? */
+                span={resFields.length}
+                data={props.cols}
               />
-              {props.cols.map((cells) => (
-                <ResultsCell
-                  query={props.query}
-                  value={cells[field.pathStr]}
-                  modelField={props.query.getField(field.path)}
-                  span={resFields.length}
-                  className="SoftLeftBorder"
-                />
-              ))}
             </tr>
           );
         })}
 
-        {/* res headers */}
+        {/* column headers */}
         <tr>
           {rowFields.length ? undefined : <td className="Empty" />}
-          {rowFields.map((field) => (
-            <ResultsFieldCell
+          <VTableHeadRow query={props.query} fields={rowFields} />
+
+          {props.cols.map(() => (
+            <VTableHeadRow
               query={props.query}
-              field={field}
-              index={0} /* TODO how are we going to get this? */
-              className="HoriBorder"
+              fields={resFields}
+              classNameFirst="LeftBorder"
             />
           ))}
-          {props.cols.map(() =>
-            resFields.map((field, index) => (
-              <ResultsFieldCell
-                query={props.query}
-                field={field}
-                index={0} /* TODO how are we going to get this? */
-                className={"HoriBorder" + (index ? "" : " LeftBorder")}
-              />
-            ))
-          )}
         </tr>
       </thead>
+
       <tbody>
         {props.rows.map((row, index) => (
           <tr>
-            {/* row headers */}
-            {rowFields.length ? undefined : <td className="Empty" />}
-            {rowFields.map((field) => (
-              <ResultsCell
+            <Spacer spaces={1 - rowFields.length} />
+            <VTableBodyRow query={props.query} fields={rowFields} row={row} />
+            {props.results[index].map((row) => (
+              <VTableBodyRow
                 query={props.query}
-                value={row[field.pathStr]}
-                modelField={props.query.getField(field.path)}
+                fields={resFields}
+                row={row}
+                classNameFirst="LeftBorder"
               />
             ))}
-            {/* results */}
-            {props.results[index].map((row) =>
-              resFields.map((field, i) => (
-                <ResultsCell
-                  query={props.query}
-                  value={row[field.pathStr]}
-                  modelField={props.query.getField(field.path)}
-                  className={i ? "" : "LeftBorder"}
-                />
-              ))
-            )}
           </tr>
         ))}
       </tbody>
