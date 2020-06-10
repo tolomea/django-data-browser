@@ -6,10 +6,7 @@ import pytest
 from django.contrib.auth.models import User
 
 from . import models
-
-true = True
-false = False
-null = None
+from .util import update_fe_fixture
 
 
 def dump(val):
@@ -62,9 +59,7 @@ def test_query_ctx(admin_client, snapshot):
     context["config"]["version"] = "redacted"
     context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
-    with open("frontend/src/context_fixture.json", "w") as f:
-        json.dump(context, f, indent=4, sort_keys=True)
-        f.write("\n")
+    update_fe_fixture("frontend/src/context_fixture.json", context)
 
 
 @pytest.mark.usefixtures("products")
