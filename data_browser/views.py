@@ -1,5 +1,6 @@
 import csv
 import io
+import itertools
 import json
 import sys
 
@@ -189,6 +190,10 @@ def pad(x):
     return [None] * max(0, x)
 
 
+def concat(*lists):
+    return list(itertools.chain.from_iterable(lists))
+
+
 def _data_response(request, query, media, meta):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
@@ -200,41 +205,36 @@ def _data_response(request, query, media, meta):
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         if bound_query.col_fields:
+            row_fields = bound_query.row_fields
+            col_fields = bound_query.col_fields
+            data_fields = bound_query.data_fields
+
             # pivoted data
-            for field in bound_query.col_fields:
-                writer.writerow(
-                    pad(len(bound_query.row_fields) - 1)
-                    + [header(field)]
-                    + sum(
-                        (
-                            [col[field.path_str]]
-                            + pad(len(bound_query.data_fields) - 1)
-                            for col in results["cols"]
-                        ),
-                        [],
-                    )
+            writer.writerows(
+                concat(
+                    pad(len(row_fields) - 1),
+                    [header(field)],
+                    *(
+                        [col[field.path_str]] + pad(len(data_fields) - 1)
+                        for col in results["cols"]
+                    ),
                 )
+                for field in col_fields
+            )
 
             # column headers
             writer.writerow(
-                pad(1 - len(bound_query.row_fields))
-                + [header(f) for f in bound_query.row_fields]
-                + sum(
-                    (
-                        [header(f) for f in bound_query.data_fields]
-                        for _ in results["cols"]
-                    ),
-                    [],
-                )
+                pad(1 - len(row_fields))
+                + [header(f) for f in row_fields]
+                + [header(f) for _ in results["cols"] for f in data_fields]
             )
 
             # the row headers and data area
             writer.writerows(
-                pad(1 - len(bound_query.row_fields))
-                + flatten_row(bound_query.row_fields, row_head)
-                + sum(
-                    (flatten_row(bound_query.data_fields, sub_row) for sub_row in row),
-                    [],
+                concat(
+                    pad(1 - len(row_fields)),
+                    flatten_row(row_fields, row_head),
+                    *(flatten_row(data_fields, sub_row) for sub_row in row),
                 )
                 for row_head, row in zip(results["rows"], results["results"])
             )
