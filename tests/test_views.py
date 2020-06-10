@@ -128,6 +128,23 @@ def test_query_csv(admin_client):
     assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
 
 
+@pytest.mark.usefixtures("pivot_products")
+def test_query_csv_pivoted(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests.Product/created_time__year,&created_time__month,id__count,id__max.csv?"
+    )
+    assert res.status_code == 200
+    print(res.content.decode("utf-8"))
+    rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
+    dump(rows)
+    assert rows == [
+        ["created_time month", "January", "", "Feburary", ""],
+        ["created_time year", "id count", "id max", "id count", "id max"],
+        ["2020.0", "1.0", "1.0", "2.0", "3.0"],
+        ["2021.0", "3.0", "6.0", "", ""],
+    ]
+
+
 @pytest.mark.usefixtures("products")
 def test_query_json(admin_client, snapshot):
     res = admin_client.get(

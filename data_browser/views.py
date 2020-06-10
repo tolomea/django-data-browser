@@ -177,8 +177,16 @@ def view(request, pk, media):
         raise http.Http404("No View matches the given query.")
 
 
-def flatten_table(fields, data):
-    return [[row[f.path_str] for f in fields] for row in data]
+def flatten_row(fields, row):
+    return [row[f.path_str] for f in fields]
+
+
+def header(field):
+    return " ".join(field.pretty_path)
+
+
+def pad(x):
+    return [None] * max(0, x)
 
 
 def _data_response(request, query, media, meta):
@@ -191,10 +199,52 @@ def _data_response(request, query, media, meta):
     if media == "csv":
         buffer = io.StringIO()
         writer = csv.writer(buffer)
-        writer.writerow(" ".join(f.pretty_path) for f in bound_query.fields)
-        writer.writerows(flatten_table(bound_query.fields, results["results"]))
+        if bound_query.col_fields:
+            # pivoted data
+            for field in bound_query.col_fields:
+                writer.writerow(
+                    pad(len(bound_query.row_fields) - 1)
+                    + [header(field)]
+                    + sum(
+                        (
+                            [col[field.path_str]]
+                            + pad(len(bound_query.data_fields) - 1)
+                            for col in results["cols"]
+                        ),
+                        [],
+                    )
+                )
+
+            # column headers
+            writer.writerow(
+                pad(1 - len(bound_query.row_fields))
+                + [header(f) for f in bound_query.row_fields]
+                + sum(
+                    (
+                        [header(f) for f in bound_query.data_fields]
+                        for _ in results["cols"]
+                    ),
+                    [],
+                )
+            )
+
+            # the row headers and data area
+            writer.writerows(
+                pad(1 - len(bound_query.row_fields))
+                + flatten_row(bound_query.row_fields, row_head)
+                + sum(
+                    (flatten_row(bound_query.data_fields, sub_row) for sub_row in row),
+                    [],
+                )
+                for row_head, row in zip(results["rows"], results["results"])
+            )
+        else:
+            writer.writerow(header(f) for f in bound_query.fields)
+            writer.writerows(
+                flatten_row(bound_query.fields, row) for row in results["results"]
+            )
         buffer.seek(0)
-        response = http.HttpResponse(buffer, content_type="text/csv")
+        response = http.HttpResponse(buffer, content_type="text")
         response[
             "Content-Disposition"
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"

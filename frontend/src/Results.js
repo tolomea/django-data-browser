@@ -171,9 +171,8 @@ function PivotResults(props) {
 
         {/* column headers */}
         <tr>
-          {rowFields.length ? undefined : <td className="Empty" />}
+          <Spacer spaces={1 - rowFields.length} />
           <VTableHeadRow query={props.query} fields={rowFields} />
-
           {props.cols.map((_, key) => (
             <VTableHeadRow
               key={key}
@@ -185,6 +184,7 @@ function PivotResults(props) {
         </tr>
       </thead>
 
+      {/* row headers and body */}
       <tbody>
         {props.rows.map((row, rowIndex) => (
           <tr key={rowIndex}>
