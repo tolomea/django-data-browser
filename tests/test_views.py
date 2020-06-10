@@ -1,5 +1,6 @@
 import csv
 import json
+from datetime import datetime
 
 import data_browser.models
 import pytest
@@ -28,6 +29,22 @@ def products(db):
     models.Product.objects.create(name="a", size=1, size_unit="g", producer=producer)
     models.Product.objects.create(name="b", size=1, size_unit="g", producer=producer)
     models.Product.objects.create(name="c", size=2, size_unit="g", producer=producer)
+
+
+@pytest.fixture
+def pivot_products(db):
+    address = models.Address.objects.create(city="london", street="bad")
+    producer = models.Producer.objects.create(name="Bob", address=address)
+    datetimes = [
+        datetime(2020, 1, 1),
+        datetime(2020, 2, 1),
+        datetime(2020, 2, 2),
+        datetime(2021, 1, 1),
+        datetime(2021, 1, 2),
+        datetime(2021, 1, 3),
+    ]
+    for dt in datetimes:
+        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
 
 
 def test_query_html(admin_client, snapshot):
@@ -115,6 +132,17 @@ def test_query_csv(admin_client):
 def test_query_json(admin_client, snapshot):
     res = admin_client.get(
         "/data_browser/query/tests.Product/size-0,name+1,size_unit.json?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+    data = json.loads(res.content.decode("utf-8"))
+    data["version"] = "redacted"
+    snapshot.assert_match(data, "data")
+
+
+@pytest.mark.usefixtures("pivot_products")
+def test_query_json_pivot(admin_client, snapshot):
+    res = admin_client.get(
+        "/data_browser/query/tests.Product/created_time__year,&created_time__month,id__count,id__max.json?"
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))

@@ -2402,3 +2402,50 @@ snapshots["test_query_json data"] = {
     ],
     "version": "redacted",
 }
+
+snapshots["test_query_json_pivot data"] = {
+    "cols": [{"created_time__month": "January"}, {"created_time__month": "Feburary"}],
+    "fields": [
+        {
+            "path": ["created_time", "year"],
+            "pathStr": "created_time__year",
+            "pivoted": False,
+            "prettyPath": ["created_time", "year"],
+            "priority": None,
+            "sort": None,
+        },
+        {
+            "path": ["created_time", "month"],
+            "pathStr": "created_time__month",
+            "pivoted": True,
+            "prettyPath": ["created_time", "month"],
+            "priority": None,
+            "sort": None,
+        },
+        {
+            "path": ["id", "count"],
+            "pathStr": "id__count",
+            "pivoted": False,
+            "prettyPath": ["id", "count"],
+            "priority": None,
+            "sort": None,
+        },
+        {
+            "path": ["id", "max"],
+            "pathStr": "id__max",
+            "pivoted": False,
+            "prettyPath": ["id", "max"],
+            "priority": None,
+            "sort": None,
+        },
+    ],
+    "filterErrors": [],
+    "filters": [],
+    "model": "tests.Product",
+    "results": [
+        [{"id__count": 1.0, "id__max": 1.0}, {"id__count": 2.0, "id__max": 3.0}],
+        [{"id__count": 3.0, "id__max": 6.0}, {"id__count": None, "id__max": None}],
+    ],
+    "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],
+    "version": "redacted",
+}
