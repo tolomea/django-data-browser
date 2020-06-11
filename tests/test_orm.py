@@ -3,7 +3,6 @@ from datetime import datetime
 import pytest
 from data_browser import orm, orm_fields
 from data_browser.query import BoundQuery, Query
-from data_browser.views import flatten_row
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
@@ -13,7 +12,7 @@ from .util import ANY, KEYS
 
 
 def flatten_table(fields, data):
-    return [flatten_row(fields, row) for row in data]
+    return [[row[f.path_str] for f in fields] for row in data]
 
 
 @pytest.fixture

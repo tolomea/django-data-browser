@@ -178,20 +178,34 @@ def view(request, pk, media):
         raise http.Http404("No View matches the given query.")
 
 
-def flatten_row(fields, row):
-    return [row[f.path_str] for f in fields]
-
-
-def header(field):
-    return " ".join(field.pretty_path)
-
-
 def pad(x):
     return [None] * max(0, x)
 
 
 def concat(*lists):
     return list(itertools.chain.from_iterable(lists))
+
+
+def flip_table(table):
+    return [list(x) for x in zip(*table)]
+
+
+def join_tables(*tables):
+    return [concat(*ts) for ts in zip(*tables)]
+
+
+def format_table(fields, table, spacing=0):
+    return concat(
+        [[" ".join(f.pretty_path) for f in fields]],
+        *[
+            [[row[f.path_str] for f in fields]] + [pad(len(fields))] * spacing
+            for row in table
+        ],
+    )
+
+
+def pad_table(x, table):
+    return [pad(x) + row for row in table]
 
 
 def _data_response(request, query, media, meta):
@@ -205,44 +219,39 @@ def _data_response(request, query, media, meta):
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         if bound_query.col_fields:
-            row_fields = bound_query.row_fields
-            col_fields = bound_query.col_fields
-            data_fields = bound_query.data_fields
+            data = flip_table(results["results"])
 
-            # pivoted data
+            # the pivoted column headers
             writer.writerows(
-                concat(
-                    pad(len(row_fields) - 1),
-                    [header(field)],
-                    *(
-                        [col[field.path_str]] + pad(len(data_fields) - 1)
-                        for col in results["cols"]
+                pad_table(
+                    len(bound_query.row_fields) - 1,
+                    flip_table(
+                        format_table(
+                            bound_query.col_fields,
+                            results["cols"],
+                            spacing=len(bound_query.data_fields) - 1,
+                        )
                     ),
                 )
-                for field in col_fields
-            )
-
-            # column headers
-            writer.writerow(
-                pad(1 - len(row_fields))
-                + [header(f) for f in row_fields]
-                + [header(f) for _ in results["cols"] for f in data_fields]
             )
 
             # the row headers and data area
             writer.writerows(
-                concat(
-                    pad(1 - len(row_fields)),
-                    flatten_row(row_fields, row_head),
-                    *(flatten_row(data_fields, sub_row) for sub_row in row),
+                pad_table(
+                    1 - len(bound_query.row_fields),
+                    join_tables(
+                        format_table(bound_query.row_fields, results["rows"]),
+                        *(
+                            format_table(bound_query.data_fields, sub_table)
+                            for sub_table in data
+                        ),
+                    ),
                 )
-                for row_head, row in zip(results["rows"], results["results"])
             )
+
         else:
-            writer.writerow(header(f) for f in bound_query.fields)
-            writer.writerows(
-                flatten_row(bound_query.fields, row) for row in results["results"]
-            )
+            writer.writerows(format_table(bound_query.fields, results["results"]))
+
         buffer.seek(0)
         response = http.HttpResponse(buffer, content_type="text")
         response[
