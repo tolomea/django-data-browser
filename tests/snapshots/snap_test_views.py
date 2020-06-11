@@ -2443,8 +2443,8 @@ snapshots["test_query_json_pivot data"] = {
     "filters": [],
     "model": "tests.Product",
     "results": [
-        [{"id__count": 1.0, "id__max": 1.0}, {"id__count": 2.0, "id__max": 3.0}],
-        [{"id__count": 3.0, "id__max": 6.0}, {"id__count": None, "id__max": None}],
+        [{"id__count": 1.0, "id__max": 1.0}, {"id__count": 3.0, "id__max": 6.0}],
+        [{"id__count": 2.0, "id__max": 3.0}, {"id__count": None, "id__max": None}],
     ],
     "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],
     "version": "redacted",

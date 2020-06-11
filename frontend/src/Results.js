@@ -190,12 +190,12 @@ function PivotResults(props) {
           <tr key={rowIndex}>
             <Spacer spaces={1 - rowFields.length} />
             <VTableBodyRow query={props.query} fields={rowFields} row={row} />
-            {props.results[rowIndex].map((row, key) => (
+            {props.results.map((table, key) => (
               <VTableBodyRow
                 key={key}
                 query={props.query}
                 fields={resFields}
-                row={row}
+                row={table[rowIndex]}
                 classNameFirst="LeftBorder"
               />
             ))}

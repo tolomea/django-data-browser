@@ -311,7 +311,7 @@ def test_get_results_admin_causes_query(get_product_flat):
 def test_get_pivot(get_product_pivot):
     data = get_product_pivot(1, "created_time__year,&created_time__month,id__count", {})
     assert data == {
-        "results": [[[1], [2]], [[3], [4]]],
+        "results": [[[1], [3]], [[2], [4]]],
         "cols": [["January"], ["Feburary"]],
         "rows": [[2020], [2021]],
     }
@@ -323,7 +323,7 @@ def test_get_pivot_multi_agg(get_product_pivot):
         1, "created_time__year,&created_time__month,id__count,id__max", {}
     )
     assert data == {
-        "results": [[[1, 1], [2, 3]], [[3, 6], [4, 10]]],
+        "results": [[[1, 1], [3, 6]], [[2, 3], [4, 10]]],
         "cols": [["January"], ["Feburary"]],
         "rows": [[2020], [2021]],
     }
@@ -335,7 +335,7 @@ def test_get_pivot_all(get_product_pivot):
         1, "&created_time__year, &created_time__month,id__count", {}
     )
     assert data == {
-        "results": [[[1], [2], [3], [4]]],
+        "results": [[[1]], [[2]], [[3]], [[4]]],
         "cols": [
             [2020, "January"],
             [2020, "Feburary"],

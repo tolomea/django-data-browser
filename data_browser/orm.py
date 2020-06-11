@@ -306,14 +306,14 @@ def get_results(request, bound_query):
 
         results = []
         blank = {field.path_str: None for field in bound_query.data_fields}
-        for row_key, row in data.items():
-            res_row = []
-            for col_key in col_keys:
-                res_row.append(row.get(col_key, blank))
-            results.append(res_row)
+        for col_key in col_keys:
+            table = []
+            for row_key, row in data.items():
+                table.append(row.get(col_key, blank))
+            results.append(format_table(bound_query.data_fields, table))
 
         return {
-            "results": [format_table(bound_query.data_fields, row) for row in results],
+            "results": results,
             "rows": format_table(
                 bound_query.row_fields, [dict(row) for row in data.keys()]
             ),

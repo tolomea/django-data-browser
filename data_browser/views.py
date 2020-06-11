@@ -219,8 +219,6 @@ def _data_response(request, query, media, meta):
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         if bound_query.col_fields:
-            data = flip_table(results["results"])
-
             # the pivoted column headers
             writer.writerows(
                 pad_table(
@@ -243,7 +241,7 @@ def _data_response(request, query, media, meta):
                         format_table(bound_query.row_fields, results["rows"]),
                         *(
                             format_table(bound_query.data_fields, sub_table)
-                            for sub_table in data
+                            for sub_table in results["results"]
                         ),
                     ),
                 )
