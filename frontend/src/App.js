@@ -27,6 +27,14 @@ class App extends React.Component {
     if (controller) controller.abort();
     controller = new AbortController();
 
+    if (!state.model)
+      return Promise.resolve({
+        model: "",
+        fields: [],
+        filters: [],
+        ...empty,
+      });
+
     return fetch(url, { signal: controller.signal })
       .then((res) => res.json())
       .then((response) => {
