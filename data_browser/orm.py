@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
+from django.conf import settings
 from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
@@ -140,9 +141,10 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                     type_=field_type,
                 )
             else:
-                logging.getLogger(__name__).warning(
-                    f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
-                )
+                if settings.DEBUG:
+                    logging.getLogger(__name__).warning(
+                        f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
+                    )
 
     return OrmModel(fields=fields, admin=model_admins[model])
 
