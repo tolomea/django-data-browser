@@ -252,7 +252,6 @@ function QueryPage(props) {
         {props.cols.length ? (
           <PivotResults
             query={props.query}
-            fields={props.fields}
             results={props.results}
             cols={props.cols}
             rows={props.rows}

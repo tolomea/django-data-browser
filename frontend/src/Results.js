@@ -144,25 +144,18 @@ function Results(props) {
 }
 
 function PivotResults(props) {
-  const colFields = props.fields.filter((f) => f.pivoted);
-  const rowFields = props.fields.filter(
-    (f) => !f.pivoted && props.query.getField(f.path).canPivot
-  );
-  const resFields = props.fields.filter(
-    (f) => !props.query.getField(f.path).canPivot
-  );
   return (
     <table className="Results">
       <thead>
         {/* pivoted data */}
-        {colFields.map((field) => {
+        {props.query.colFields().map((field) => {
           return (
             <tr key={field.pathStr}>
-              <Spacer spaces={rowFields.length - 1} />
+              <Spacer spaces={props.query.rowFields().length - 1} />
               <HTableRow
                 query={props.query}
                 field={field}
-                span={resFields.length}
+                span={props.query.resFields().length}
                 data={props.cols}
               />
             </tr>
@@ -171,13 +164,13 @@ function PivotResults(props) {
 
         {/* column headers */}
         <tr>
-          <Spacer spaces={1 - rowFields.length} />
-          <VTableHeadRow query={props.query} fields={rowFields} />
+          <Spacer spaces={1 - props.query.rowFields().length} />
+          <VTableHeadRow query={props.query} fields={props.query.rowFields()} />
           {props.cols.map((_, key) => (
             <VTableHeadRow
               key={key}
               query={props.query}
-              fields={resFields}
+              fields={props.query.resFields()}
               classNameFirst="LeftBorder"
             />
           ))}
@@ -188,13 +181,17 @@ function PivotResults(props) {
       <tbody>
         {props.rows.map((row, rowIndex) => (
           <tr key={rowIndex}>
-            <Spacer spaces={1 - rowFields.length} />
-            <VTableBodyRow query={props.query} fields={rowFields} row={row} />
+            <Spacer spaces={1 - props.query.rowFields().length} />
+            <VTableBodyRow
+              query={props.query}
+              fields={props.query.rowFields()}
+              row={row}
+            />
             {props.results.map((table, key) => (
               <VTableBodyRow
                 key={key}
                 query={props.query}
-                fields={resFields}
+                fields={props.query.resFields()}
                 row={table[rowIndex]}
                 classNameFirst="LeftBorder"
               />

@@ -166,6 +166,20 @@ class Query {
   getUrlForMedia(media) {
     return getUrlForQuery(this.config.baseUrl, this.query, media);
   }
+
+  colFields() {
+    return this.query.fields.filter((f) => f.pivoted);
+  }
+
+  rowFields() {
+    return this.query.fields.filter(
+      (f) => !f.pivoted && this.getField(f.path).canPivot
+    );
+  }
+
+  resFields() {
+    return this.query.fields.filter((f) => !this.getField(f.path).canPivot);
+  }
 }
 
 export { Query, getPartsForQuery, getUrlForQuery };
