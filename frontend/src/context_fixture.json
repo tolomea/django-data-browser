@@ -970,10 +970,20 @@
                 "sortedLookups": []
             },
             "month": {
-                "defaultLookup": null,
-                "defaultValue": null,
-                "lookups": {},
-                "sortedLookups": []
+                "defaultLookup": "equals",
+                "defaultValue": "January",
+                "lookups": {
+                    "equals": {
+                        "type": "month"
+                    },
+                    "not_equals": {
+                        "type": "month"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals"
+                ]
             },
             "number": {
                 "defaultLookup": "equals",
@@ -1064,10 +1074,20 @@
                 ]
             },
             "weekday": {
-                "defaultLookup": null,
-                "defaultValue": null,
-                "lookups": {},
-                "sortedLookups": []
+                "defaultLookup": "equals",
+                "defaultValue": "Monday",
+                "lookups": {
+                    "equals": {
+                        "type": "weekday"
+                    },
+                    "not_equals": {
+                        "type": "weekday"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals"
+                ]
             }
         },
         "version": "redacted"

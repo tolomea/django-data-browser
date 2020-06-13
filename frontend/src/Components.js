@@ -15,6 +15,51 @@ function FilterValue(props) {
         <option value={false}>false</option>
       </select>
     );
+  else if (props.lookup.type === "weekday")
+    return (
+      <select
+        className="FilterValue"
+        onChange={props.onChange}
+        value={props.value}
+      >
+        {[
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ].map((weekday) => (
+          <option value={weekday}>{weekday}</option>
+        ))}
+      </select>
+    );
+  else if (props.lookup.type === "month")
+    return (
+      <select
+        className="FilterValue"
+        onChange={props.onChange}
+        value={props.value}
+      >
+        {[
+          "January",
+          "Febuary",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ].map((month) => (
+          <option value={month}>{month}</option>
+        ))}
+      </select>
+    );
   else if (props.lookup.type === "number")
     return (
       <input

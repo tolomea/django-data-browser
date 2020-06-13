@@ -140,7 +140,7 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                     pretty_name=field_name,
                     type_=field_type,
                 )
-            else:
+            else:  # pragma: no cover
                 if settings.DEBUG:
                     logging.getLogger(__name__).warning(
                         f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"

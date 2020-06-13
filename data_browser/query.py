@@ -239,40 +239,60 @@ class DateType(BaseType):
 
 
 class WeekDayType(BaseType):
-    @staticmethod
-    def format(value):
-        days = [
-            None,
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-        ]
-        return days[value] if value else None
+    default_value = "Monday"
+    lookups = {"equals": "weekday", "not_equals": "weekday"}
+
+    _days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+    ]
+
+    @classmethod
+    def format(cls, value):
+        return cls._days[value - 1] if value else None
+
+    @classmethod
+    def _parse(cls, value):
+        for i, v in enumerate(cls._days):
+            if v.lower()[:3] == value.lower()[:3]:
+                return i + 1
+        raise Exception("not a day of the week")
 
 
 class MonthType(BaseType):
-    @staticmethod
-    def format(value):
-        days = [
-            None,
-            "January",
-            "Feburary",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December",
-        ]
-        return days[value] if value else None
+    default_value = "January"
+    lookups = {"equals": "month", "not_equals": "month"}
+
+    _months = [
+        "January",
+        "Feburary",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
+
+    @classmethod
+    def format(cls, value):
+        return cls._months[value - 1] if value else None
+
+    @classmethod
+    def _parse(cls, value):
+        for i, v in enumerate(cls._months):
+            if v.lower()[:3] == value.lower()[:3]:
+                return i + 1
+        raise Exception("not a month")
 
 
 class HTMLType(BaseType):

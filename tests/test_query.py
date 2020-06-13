@@ -321,17 +321,35 @@ class TestDateType:
 
 
 class TestWeekDayType:
+    def test_validate(self):
+        assert WeekDayType.parse("equals", "Sunday") == (1, None)
+        assert WeekDayType.parse("equals", "Saturday") == (7, None)
+        assert WeekDayType.parse("equals", "Bob") == (None, ANY(str))
+        assert WeekDayType.parse("gt", "Monday") == (None, ANY(str))
+
     def test_format(self):
         assert WeekDayType.format(None) is None
         assert WeekDayType.format(1) == "Sunday"
         assert WeekDayType.format(7) == "Saturday"
 
+    def test_default_lookup(self):
+        assert WeekDayType.default_lookup == "equals"
+
 
 class TestMonthType:
+    def test_validate(self):
+        assert MonthType.parse("equals", "January") == (1, None)
+        assert MonthType.parse("equals", "December") == (12, None)
+        assert MonthType.parse("equals", "Bob") == (None, ANY(str))
+        assert MonthType.parse("gt", "January") == (None, ANY(str))
+
     def test_format(self):
         assert MonthType.format(None) is None
         assert MonthType.format(1) == "January"
         assert MonthType.format(12) == "December"
+
+    def test_default_lookup(self):
+        assert MonthType.default_lookup == "equals"
 
 
 class TestBooleanType:
