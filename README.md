@@ -5,20 +5,20 @@
 ### Features
 
 -   Zero config, if it's in the admin it's in the browser
--   Select fields (including calculated fields), aggregate, filter and sort
+-   Select fields (including calculated fields), aggregate, filter, sort and pivot
 -   Automatically follow OneToOneFields and ForeignKeys
 -   Respects per user admin permissions
--   Share views by URL
+-   Share views simply by sharing URLs
 -   Save views and optionally make them available to services like Google sheets
 -   Download views as CSV or JSON
 
 ### Roadmap (in no particular order)
 
+-   UI improvements
 -   ToMany support
 -   Advanced filtering
 -   PII controls
 -   Graphs
--   Pivoting
 
 ## Demo
 
@@ -41,17 +41,17 @@ Because it's hosted on Heroku free tier it might take a while to respond to the 
 
 ## Settings
 
-| Name                      | Docs Section | Function                                                                        |
-| ------------------------- | ------------ | ------------------------------------------------------------------------------- |
-| DATA_BROWSER_ALLOW_PUBLIC | Security     | Allow saved views to be accessed without admin login in limitied circumstances. |
-| DATA_BROWSER_DEV          | Development  | Enable proxying frontend to JS dev server.                                      |
-| DATA_BROWSER_FE_DSN       | Sentry       | The DSN the frontend sentry should report to, disabled by default               |
+| Name                      | Docs Section | Function                                                                                |
+| ------------------------- | ------------ | --------------------------------------------------------------------------------------- |
+| DATA_BROWSER_ALLOW_PUBLIC | Security     | Allow selected saved views to be accessed without admin login in limited circumstances. |
+| DATA_BROWSER_DEV          | Development  | Enable proxying frontend to JS dev server.                                              |
+| DATA_BROWSER_FE_DSN       | Sentry       | The DSN the frontend sentry should report to, disabled by default.                      |
 
 ## Security
 
-There are two types of django views in the Data Browser.
+There are two types of Django views in the Data Browser.
 
-Queries support general querying of the database (checked against the users admin permissions) but can only be accessed by Django "staff members".
+Queries can only be accessed by Django "staff members" and support general querying of the database (checked against the users admin permissions).
 
 Views can be accessed by anyone but they can only be used to access a query that has been saved and made public and they have long random URL's.
 
@@ -67,13 +67,31 @@ The frontend code has builtin Sentry support, it is **disabled by default**. To 
 DATA_BROWSER_FE_DSN = "https://af64f22b81994a0e93b82a32add8cb2b@o390136.ingest.sentry.io/5231151"
 ```
 
+## Version numbers
+
+The Data Browser uses the standard `Major.Minor.Patch` version numbering scheme.
+
+Patch versions may include bug fixes and minor features.
+
+Minor versions are for significant new features.
+
+Major versions are for major features, significant changes to existing functionality and breaking changes.
+
+Patch and Minor versions should never contain breaking changes and should always be backward compatible. A breaking change is a change that makes backward incompatible changes to one or more of the following:
+
+-   The query URL format.
+-   The json, csv etc data formats.
+-   `request.databrowser`.
+-   Invalidates saved views.
+-   Changes the URL's of public saved views.
+
 ## Customization and Performance
 
 ### get_queryset
 
 The Data Browser does it's fetching in two stages.
 
-First it does a single DB query to get the majority of the data. To construct the queryset for this it will call get_queryset on the ModelAdmin of the curent Model. It uses `.values()` to fetch only the data it needs from the database and it will inline all referenced models to ensure it doesn't do multiple queries.
+First it does a single DB query to get the majority of the data. To construct the queryset for this it will call get_queryset on the ModelAdmin of the current Model. It uses `.values()` to fetch only the data it needs from the database and it will inline all referenced models to ensure it doesn't do multiple queries.
 
 Secondly for any calculated fields it will then fetch the complete objects that are needed for those calculated fields. To construct the querysets for these it will call get_queryset on their associated ModelAdmins. These calls are aggregated so it will only make one per model.
 
@@ -115,6 +133,25 @@ The Data Browser also calls `get_fieldsets` to find out what fields the current 
 
 As with `get_queryset` the Data Browser will set `request.databrowser` when calling `get_fieldsets` and you can test this to detect it and make Data Browser specific customizations.
 
+## URL Format
+
+The query URL format is `query/<model>/<fields>.<format>?<filters>`.
+
+Model is a Django app and model name for example `library.Book`
+
+Fields are a series of comma separated fields, where each field is the path to that field from the model with the parts separated by `__`, e.g. `author__name`. This path structure also includes aggregates and functions e.g. `author__birthday__month__count`. Fields can be pivoted (where appropriate) by prefixing them with `&`. And sorted by suffixing with a direction `+`/`-` and a priority e.g. `author__birthday+1`.
+
+Filters use the same `__` path format as fields including a lookup e.g. `author__name__contains=Joe`.
+
+Format determines the returned data format, the currently available formats are:
+
+| Format | Details                                                              |
+| ------ | -------------------------------------------------------------------- |
+| html   | Load the interactive Javascript frontend.                            |
+| csv    | Standard CSV format.                                                 |
+| json   | Standard JSON format, the JS frontend uses this for all data access. |
+| ctx    | See the JSON encoded config context passed to the JS on page load.   |
+
 ## Development
 
 The easiest way to develop this is against your existing client project.
@@ -128,7 +165,7 @@ If you want to modify the Javascript then you also need to:
 2. Enable proxying to the JS dev server by adding `DATA_BROWSER_DEV = True` to your settings.
 3. Run the Javascript dev server with `WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start`.
    The `WDS_SOCKET_PORT` is so the proxied JS can find it's dev server.
-   The `PUBLIC_URL` tells the JS dev server what path to serve from and should be the same as the URL you have mounted the Data Browser on in you urls file.
+   The `PUBLIC_URL` tells the JS dev server what path to serve from and should be the same as the URL you have mounted the Data Browser on in your urls file.
 
 To run the Python tests, in the top level of your git clone run `pip install -r requirements.txt` then `pytest`.
 
@@ -165,12 +202,11 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 Most of the code deals with "models" that have "fields" that have "types".
 In this context a "model" is just anything which might have fields.
 An important consequence of this is that most types also have associated models which hold that types aggregate and function fields.
-Fields also include foreign keys which may refer to other models.
-The special meanings of foreignkeys, aggregates, functions and calculated fields is confined to `orm.py`.
+The special meanings of foreignkeys, aggregates, functions and calculated fields is confined to `orm.py` and `orm_fields.py`.
 
 #### Fields have 5 main properties.
 
-| Poperty   | Meaning and impact                                                                            |
+| Property  | Meaning and impact                                                                            |
 | --------- | --------------------------------------------------------------------------------------------- |
 | name      | The only required one.                                                                        |
 | type      | If set then this field can be added to a query and will return results of the specified type. |
@@ -178,7 +214,7 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 | can_pivot | The field goes on the outside of a pivot table and as such can be pivoted.                    |
 | model     | If set then this field has additional nested fields that are detailed on the given model.     |
 
-### Release History
+## Release History
 
 | Version   | Date           | Summary                                                                         |
 | --------- | -------------- | ------------------------------------------------------------------------------- |
