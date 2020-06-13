@@ -218,37 +218,34 @@ def _data_response(request, query, media, meta):
     if media == "csv":
         buffer = io.StringIO()
         writer = csv.writer(buffer)
-        if bound_query.col_fields:
-            # the pivoted column headers
-            writer.writerows(
-                pad_table(
-                    len(bound_query.row_fields) - 1,
-                    flip_table(
-                        format_table(
-                            bound_query.col_fields,
-                            results["cols"],
-                            spacing=len(bound_query.data_fields) - 1,
-                        )
-                    ),
-                )
-            )
 
-            # the row headers and data area
-            writer.writerows(
-                pad_table(
-                    1 - len(bound_query.row_fields),
-                    join_tables(
-                        format_table(bound_query.row_fields, results["rows"]),
-                        *(
-                            format_table(bound_query.data_fields, sub_table)
-                            for sub_table in results["results"]
-                        ),
-                    ),
-                )
+        # the pivoted column headers
+        writer.writerows(
+            pad_table(
+                len(bound_query.row_fields) - 1,
+                flip_table(
+                    format_table(
+                        bound_query.col_fields,
+                        results["cols"],
+                        spacing=len(bound_query.data_fields) - 1,
+                    )
+                ),
             )
+        )
 
-        else:
-            writer.writerows(format_table(bound_query.fields, results["results"]))
+        # the row headers and data area
+        writer.writerows(
+            pad_table(
+                1 - len(bound_query.row_fields),
+                join_tables(
+                    format_table(bound_query.row_fields, results["rows"]),
+                    *(
+                        format_table(bound_query.data_fields, sub_table)
+                        for sub_table in results["body"]
+                    ),
+                ),
+            )
+        )
 
         buffer.seek(0)
         response = http.HttpResponse(buffer, content_type="text")

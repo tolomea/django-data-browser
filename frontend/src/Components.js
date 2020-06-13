@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Link } from "./Util.js";
-import { Results, PivotResults } from "./Results.js";
+import { Results } from "./Results.js";
 
 function FilterValue(props) {
   if (props.lookup.type === "boolean")
@@ -230,7 +230,7 @@ function QueryPage(props) {
         filterErrors={props.filterErrors}
       />
       <p>
-        Showing {props.results.length} results -{" "}
+        Showing {props.rows.length * props.cols.length} results -{" "}
         <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={props.query.getUrlForMedia("json")}>View as JSON</a>
         {saveUrl && (
@@ -249,19 +249,15 @@ function QueryPage(props) {
             prettyPath={[]}
           />
         </div>
-        {props.cols.length ? (
-          <PivotResults
-            query={props.query}
-            results={props.results}
-            cols={props.cols}
-            rows={props.rows}
-          />
-        ) : (
+        {props.query.rowFields().length || props.query.colFields().length ? (
           <Results
             query={props.query}
-            fields={props.fields}
-            results={props.results}
+            rows={props.rows}
+            cols={props.cols}
+            body={props.body}
           />
+        ) : (
+          <h2>No fields selected</h2>
         )}
       </div>
     </div>

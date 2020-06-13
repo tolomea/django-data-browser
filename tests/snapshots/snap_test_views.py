@@ -2352,6 +2352,8 @@ snapshots["test_query_ctx context"] = {
 }
 
 snapshots["test_query_json data"] = {
+    "body": [[{}, {}]],
+    "cols": [{}],
     "fields": [
         {
             "path": ["size"],
@@ -2396,7 +2398,7 @@ snapshots["test_query_json data"] = {
         },
     ],
     "model": "tests.Product",
-    "results": [
+    "rows": [
         {"name": "a", "size": 1.0, "size_unit": "g"},
         {"name": "b", "size": 1.0, "size_unit": "g"},
     ],
@@ -2404,6 +2406,10 @@ snapshots["test_query_json data"] = {
 }
 
 snapshots["test_query_json_pivot data"] = {
+    "body": [
+        [{"id__count": 1.0, "id__max": 1.0}, {"id__count": 3.0, "id__max": 6.0}],
+        [{"id__count": 2.0, "id__max": 3.0}, {"id__count": None, "id__max": None}],
+    ],
     "cols": [{"created_time__month": "January"}, {"created_time__month": "Feburary"}],
     "fields": [
         {
@@ -2442,10 +2448,84 @@ snapshots["test_query_json_pivot data"] = {
     "filterErrors": [],
     "filters": [],
     "model": "tests.Product",
-    "results": [
-        [{"id__count": 1.0, "id__max": 1.0}, {"id__count": 3.0, "id__max": 6.0}],
-        [{"id__count": 2.0, "id__max": 3.0}, {"id__count": None, "id__max": None}],
-    ],
     "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],
     "version": "redacted",
 }
+
+snapshots["test_query_csv_pivot_permutations[----] key"] = [[""]]
+
+snapshots["test_query_csv_pivot_permutations[---b] key"] = [
+    ["id count", "id max"],
+    ["0.0", ""],
+]
+
+snapshots["test_query_csv_pivot_permutations[--c-] key"] = [
+    ["created_time month"],
+    [""],
+]
+
+snapshots["test_query_csv_pivot_permutations[--cb] key"] = [
+    ["created_time month"],
+    [""],
+]
+
+snapshots["test_query_csv_pivot_permutations[-r--] key"] = [["created_time year"]]
+
+snapshots["test_query_csv_pivot_permutations[-r-b] key"] = [
+    ["created_time year", "id count", "id max"]
+]
+
+snapshots["test_query_csv_pivot_permutations[-rc-] key"] = [
+    ["created_time month"],
+    ["created_time year"],
+]
+
+snapshots["test_query_csv_pivot_permutations[-rcb] key"] = [
+    ["created_time month"],
+    ["created_time year"],
+]
+
+snapshots["test_query_csv_pivot_permutations[d---] key"] = [[""]]
+
+snapshots["test_query_csv_pivot_permutations[d--b] key"] = [
+    ["id count", "id max"],
+    ["6.0", "6.0"],
+]
+
+snapshots["test_query_csv_pivot_permutations[d-c-] key"] = [
+    ["created_time month", "January", "Feburary"],
+    [""],
+    [""],
+]
+
+snapshots["test_query_csv_pivot_permutations[d-cb] key"] = [
+    ["created_time month", "January", "", "Feburary", ""],
+    ["", "id count", "id max", "id count", "id max"],
+    ["", "4.0", "6.0", "2.0", "3.0"],
+]
+
+snapshots["test_query_csv_pivot_permutations[dr--] key"] = [
+    ["created_time year"],
+    ["2020.0"],
+    ["2021.0"],
+]
+
+snapshots["test_query_csv_pivot_permutations[dr-b] key"] = [
+    ["created_time year", "id count", "id max"],
+    ["2020.0", "3.0", "3.0"],
+    ["2021.0", "3.0", "6.0"],
+]
+
+snapshots["test_query_csv_pivot_permutations[drc-] key"] = [
+    ["created_time month", "January", "Feburary"],
+    ["created_time year"],
+    ["2020.0"],
+    ["2021.0"],
+]
+
+snapshots["test_query_csv_pivot_permutations[drcb] key"] = [
+    ["created_time month", "January", "", "Feburary", ""],
+    ["created_time year", "id count", "id max", "id count", "id max"],
+    ["2020.0", "1.0", "1.0", "2.0", "3.0"],
+    ["2021.0", "3.0", "6.0", "", ""],
+]

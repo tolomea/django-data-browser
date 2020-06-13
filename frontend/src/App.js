@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/browser";
 import React from "react";
 import "./App.css";
 import { HomePage, QueryPage } from "./Components";
-import { Query, getUrlForQuery } from "./Query";
+import { Query, getUrlForQuery, empty } from "./Query";
 const assert = require("assert");
 let controller;
 
@@ -37,9 +37,9 @@ class App extends React.Component {
       })
       .then((response) => {
         this.setState({
-          results: response.results,
-          cols: response.cols || [],
-          rows: response.rows || [],
+          body: response.body,
+          cols: response.cols,
+          rows: response.rows,
           filterErrors: response.filterErrors,
         });
         return response;
@@ -51,8 +51,7 @@ class App extends React.Component {
       model: this.state.model,
       fields: this.state.fields,
       filters: this.state.filters,
-      results: [],
-      filterErrors: [],
+      ...empty,
     };
     window.history.replaceState(
       reqState,
@@ -73,10 +72,7 @@ class App extends React.Component {
       model: newState.model,
       fields: newState.fields,
       filters: newState.filters,
-      results: [],
-      rows: [],
-      cols: [],
-      filterErrors: [],
+      ...empty,
     };
     window.history.pushState(
       request,
@@ -85,10 +81,7 @@ class App extends React.Component {
     );
     this.fetchResults(newState)
       .then((response) => {
-        response.results = [];
-        response.cols = [];
-        response.rows = [];
-        response.filterErrors = [];
+        response = { ...response, ...empty };
         assert.deepEqual(response, request);
       })
       .catch(handleError);

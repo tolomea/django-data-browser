@@ -76,7 +76,7 @@ def get_product_flat(req, orm_models, django_assert_num_queries):
         bound_query = BoundQuery(query, orm_models)
         with django_assert_num_queries(queries):
             data = orm.get_results(req, bound_query)
-            return flatten_table(bound_query.fields, data["results"])
+            return flatten_table(bound_query.fields, data["rows"])
 
     return helper
 
@@ -91,9 +91,8 @@ def get_product_pivot(req, orm_models, django_assert_num_queries):
             return {
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),
-                "results": [
-                    flatten_table(bound_query.data_fields, row)
-                    for row in data["results"]
+                "body": [
+                    flatten_table(bound_query.data_fields, row) for row in data["body"]
                 ],
             }
 
@@ -311,7 +310,7 @@ def test_get_results_admin_causes_query(get_product_flat):
 def test_get_pivot(get_product_pivot):
     data = get_product_pivot(1, "created_time__year,&created_time__month,id__count", {})
     assert data == {
-        "results": [[[1], [3]], [[2], [4]]],
+        "body": [[[1], [3]], [[2], [4]]],
         "cols": [["January"], ["Feburary"]],
         "rows": [[2020], [2021]],
     }
@@ -323,7 +322,7 @@ def test_get_pivot_multi_agg(get_product_pivot):
         1, "created_time__year,&created_time__month,id__count,id__max", {}
     )
     assert data == {
-        "results": [[[1, 1], [3, 6]], [[2, 3], [4, 10]]],
+        "body": [[[1, 1], [3, 6]], [[2, 3], [4, 10]]],
         "cols": [["January"], ["Feburary"]],
         "rows": [[2020], [2021]],
     }
@@ -335,7 +334,7 @@ def test_get_pivot_all(get_product_pivot):
         1, "&created_time__year, &created_time__month,id__count", {}
     )
     assert data == {
-        "results": [[[1]], [[2]], [[3]], [[4]]],
+        "body": [[[1]], [[2]], [[3]], [[4]]],
         "cols": [
             [2020, "January"],
             [2020, "Feburary"],
@@ -344,6 +343,47 @@ def test_get_pivot_all(get_product_pivot):
         ],
         "rows": [[]],
     }
+
+
+jan = "January"
+feb = "Feburary"
+testdata = [
+    ("----", [], [], []),
+    ("---b", [[0, None]], [[]], [[[]]]),
+    ("--c-", [], [], []),
+    ("--cb", [], [], []),
+    ("-r--", [], [], []),
+    ("-r-b", [], [], []),
+    ("-rc-", [], [], []),
+    ("-rcb", [], [], []),
+    ("d---", [], [], []),
+    ("d--b", [[10, 10]], [[]], [[[]]]),
+    ("d-c-", [[]], [[jan], [feb]], [[[]], [[]]]),
+    ("d-cb", [[]], [[jan], [feb]], [[[4, 6]], [[6, 10]]]),
+    ("dr--", [[2020], [2021]], [[]], [[[], []]]),
+    ("dr-b", [[2020, 3, 3], [2021, 7, 10]], [[]], [[[], []]]),
+    ("drc-", [[2020], [2021]], [[jan], [feb]], [[[], []], [[], []]]),
+    ("drcb", [[2020], [2021]], [[jan], [feb]], [[[1, 1], [3, 6]], [[2, 3], [4, 10]]]),
+]
+
+
+@pytest.mark.usefixtures("pivot_products")
+@pytest.mark.parametrize("key,rows,cols,body", testdata)
+def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
+    fields = []
+    if "r" in key:
+        fields.append("created_time__year")
+    if "c" in key:
+        fields.append("&created_time__month")
+    if "b" in key:
+        fields.extend(["id__count", "id__max"])
+    filters = {} if "d" in key else {"id__equals": ["123"]}
+
+    queries = 0 if key.endswith("---") else 1
+    results = get_product_pivot(queries, ",".join(fields), filters)
+    assert results["rows"] == rows
+    assert results["cols"] == cols
+    assert results["body"] == body
 
 
 def test_get_fields(orm_models):

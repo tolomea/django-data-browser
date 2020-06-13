@@ -397,16 +397,22 @@ class BoundQuery:
 
     @property
     def row_fields(self):
-        return [
-            field.orm_bound_field
-            for field in self.fields
-            if field.orm_bound_field.can_pivot and not field.pivoted
-        ]
+        if self.col_fields:
+            return [
+                field.orm_bound_field
+                for field in self.fields
+                if field.orm_bound_field.can_pivot and not field.pivoted
+            ]
+        else:
+            return [field.orm_bound_field for field in self.fields]
 
     @property
     def data_fields(self):
-        return [
-            field.orm_bound_field
-            for field in self.fields
-            if not field.orm_bound_field.can_pivot
-        ]
+        if self.col_fields:
+            return [
+                field.orm_bound_field
+                for field in self.fields
+                if not field.orm_bound_field.can_pivot
+            ]
+        else:
+            return []

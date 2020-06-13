@@ -1,3 +1,10 @@
+const empty = {
+  rows: [{}],
+  cols: [{}],
+  body: [[{}]],
+  filterErrors: [],
+};
+
 function getPartsForQuery(query) {
   return {
     model: query.model,
@@ -151,7 +158,7 @@ class Query {
       model: model,
       fields: [],
       filters: [],
-      results: [],
+      ...empty,
     });
   }
 
@@ -172,14 +179,22 @@ class Query {
   }
 
   rowFields() {
-    return this.query.fields.filter(
-      (f) => !f.pivoted && this.getField(f.path).canPivot
-    );
+    if (this.colFields().length) {
+      return this.query.fields.filter(
+        (f) => !f.pivoted && this.getField(f.path).canPivot
+      );
+    } else {
+      return this.query.fields;
+    }
   }
 
   resFields() {
-    return this.query.fields.filter((f) => !this.getField(f.path).canPivot);
+    if (this.colFields().length) {
+      return this.query.fields.filter((f) => !this.getField(f.path).canPivot);
+    } else {
+      return [];
+    }
   }
 }
 
-export { Query, getPartsForQuery, getUrlForQuery };
+export { Query, getPartsForQuery, getUrlForQuery, empty };

@@ -208,7 +208,7 @@ def get_results(request, bound_query):
     request.data_browser = True
 
     if not bound_query.fields:
-        return {"results": []}
+        return {"rows": [], "cols": [], "body": []}
 
     admin = bound_query.orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
@@ -286,52 +286,35 @@ def get_results(request, bound_query):
             results.append(res_row)
         return results
 
-    if bound_query.col_fields:
-        data = defaultdict(dict)
-        col_keys = {}  # abuse dictonary ordering
-        for row in qs:
-            row_key = tuple(
-                (field.path_str, row[field.queryset_path])
-                for field in bound_query.row_fields
-            )
-            col_key = tuple(
-                (field.path_str, row[field.queryset_path])
-                for field in bound_query.col_fields
-            )
-            data[row_key][col_key] = {
-                field.path_str: row[field.queryset_path]
-                for field in bound_query.data_fields
-            }
-            col_keys[col_key] = None
-
-        results = []
-        blank = {field.path_str: None for field in bound_query.data_fields}
-        for col_key in col_keys:
-            table = []
-            for row_key, row in data.items():
-                table.append(row.get(col_key, blank))
-            results.append(format_table(bound_query.data_fields, table))
-
-        return {
-            "results": results,
-            "rows": format_table(
-                bound_query.row_fields, [dict(row) for row in data.keys()]
-            ),
-            "cols": format_table(
-                bound_query.col_fields, [dict(col) for col in col_keys]
-            ),
+    data = defaultdict(dict)
+    col_keys = {}  # abuse dictonary ordering
+    for row in qs:
+        row_key = tuple(
+            (field.path_str, row[field.queryset_path])
+            for field in bound_query.row_fields
+        )
+        col_key = tuple(
+            (field.path_str, row[field.queryset_path])
+            for field in bound_query.col_fields
+        )
+        data[row_key][col_key] = {
+            field.path_str: row[field.queryset_path]
+            for field in bound_query.data_fields
         }
+        col_keys[col_key] = None
 
-    else:
-        return {
-            "results": format_table(
-                bound_query.bound_fields,
-                (
-                    {
-                        field.path_str: row[field.queryset_path]
-                        for field in bound_query.bound_fields
-                    }
-                    for row in qs
-                ),
-            )
-        }
+    results = []
+    blank = {field.path_str: None for field in bound_query.data_fields}
+    for col_key in col_keys:
+        table = []
+        for row_key, row in data.items():
+            table.append(row.get(col_key, blank))
+        results.append(format_table(bound_query.data_fields, table))
+
+    return {
+        "rows": format_table(
+            bound_query.row_fields, [dict(row) for row in data.keys()]
+        ),
+        "cols": format_table(bound_query.col_fields, [dict(col) for col in col_keys]),
+        "body": results,
+    }

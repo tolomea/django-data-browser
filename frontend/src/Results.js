@@ -122,31 +122,6 @@ function Results(props) {
   return (
     <table className="Results">
       <thead>
-        <tr>
-          <VTableHeadRow query={props.query} fields={props.fields} />
-          {!props.fields.length && <th>No fields selected</th>}
-        </tr>
-      </thead>
-
-      <tbody>
-        {props.results.map((row, key) => (
-          <tr key={key}>
-            <VTableBodyRow
-              query={props.query}
-              row={row}
-              fields={props.fields}
-            />
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
-function PivotResults(props) {
-  return (
-    <table className="Results">
-      <thead>
         {/* pivoted data */}
         {props.query.colFields().map((field) => {
           return (
@@ -187,7 +162,7 @@ function PivotResults(props) {
               fields={props.query.rowFields()}
               row={row}
             />
-            {props.results.map((table, key) => (
+            {props.body.map((table, key) => (
               <VTableBodyRow
                 key={key}
                 query={props.query}
@@ -203,4 +178,4 @@ function PivotResults(props) {
   );
 }
 
-export { Results, PivotResults };
+export { Results };

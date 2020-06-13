@@ -91,7 +91,7 @@ def test_query_json_bad_fields(admin_client):
         )
     )
     assert res.status_code == 200
-    assert json.loads(res.content.decode("utf-8"))["results"] == [
+    assert json.loads(res.content.decode("utf-8"))["rows"] == [
         {
             "size": 1,
             "name": "a",
@@ -143,6 +143,48 @@ def test_query_csv_pivoted(admin_client):
         ["2020.0", "1.0", "1.0", "2.0", "3.0"],
         ["2021.0", "3.0", "6.0", "", ""],
     ]
+
+
+testdata = [
+    ("----"),
+    ("---b"),
+    ("--c-"),
+    ("--cb"),
+    ("-r--"),
+    ("-r-b"),
+    ("-rc-"),
+    ("-rcb"),
+    ("d---"),
+    ("d--b"),
+    ("d-c-"),
+    ("d-cb"),
+    ("dr--"),
+    ("dr-b"),
+    ("drc-"),
+    ("drcb"),
+]
+
+
+@pytest.mark.usefixtures("pivot_products")
+@pytest.mark.parametrize("key", testdata)
+def test_query_csv_pivot_permutations(admin_client, key, snapshot):
+    fields = []
+    if "r" in key:
+        fields.append("created_time__year")
+    if "c" in key:
+        fields.append("&created_time__month")
+    if "b" in key:
+        fields.extend(["id__count", "id__max"])
+    filters = "" if "d" in key else "id__equals=123"
+
+    res = admin_client.get(
+        f"/data_browser/query/tests.Product/{','.join(fields)}.csv?{filters}"
+    )
+    assert res.status_code == 200
+    print(res.content.decode("utf-8"))
+    rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
+    dump(rows)
+    snapshot.assert_match(rows, "key")
 
 
 @pytest.mark.usefixtures("products")
@@ -226,10 +268,12 @@ def test_view_json(admin_client):
     data = json.loads(res.content.decode("utf-8"))
     dump(data)
     assert data == {
-        "results": [
+        "rows": [
             {"size": 1, "name": "a", "size_unit": "g"},
             {"size": 1, "name": "b", "size_unit": "g"},
-        ]
+        ],
+        "cols": [{}],
+        "body": [[{}, {}]],
     }
 
     view.owner = User.objects.create(is_staff=True)
