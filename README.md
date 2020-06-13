@@ -69,11 +69,31 @@ DATA_BROWSER_FE_DSN = "https://af64f22b81994a0e93b82a32add8cb2b@o390136.ingest.s
 
 ## Customization and Performance
 
-For concrete fields (as oppose to calculated ones) the Data Browser will do appropriate select and prefetch related calls to minimise it's database impact.
+### get_queryset
 
-The Data Browser calls the normal admin `get_queryset` functions. You can use these to customize querysets as needed.
+The Data Browser does it's fetching in two stages.
 
-If necessary you can test to see if the databrowser is making the call as follows:
+First it does a single DB query to get the majority of the data. To construct the queryset for this it will call get_queryset on the ModelAdmin of the curent Model. It uses `.values()` to fetch only the data it needs from the database and it will inline all referenced models to ensure it doesn't do multiple queries.
+
+Secondly for any calculated fields it will then fetch the complete objects that are needed for those calculated fields. To construct the querysets for these it will call get_queryset on their associated ModelAdmins. These calls are aggregated so it will only make one per model.
+
+As a simple example. If you did a query against the Book model for the fields:
+
+-   `book.name`
+-   `book.author.name`
+-   `book.author.age`
+-   `book.publisher.name`
+
+Where the `author.age` is actually a property on the Author Model then it would do the following two queries:
+
+```
+BookAdmin.get_queryset().values("name", "author__name", "author__id", "publisher__name")
+AuthorAdmin.get_queryset().in_bulk(pks=...)
+```
+
+Where the `pks` passed to in_bulk in the second query came from `author__id` in the first.
+
+When the Data Browser calls the admin `get_queryset` functions it will put some context in `request.databrowser`. This means you can test to see if the Data Browser is making the call as follows:
 
 ```
 if request.databrowser:
@@ -82,7 +102,18 @@ if request.databrowser:
 
 This is particularly useful if you want to route the Data Browser to a DB replica.
 
+The context includes a `calculated_fields` member that is set when doing the second stage requests for calculated fields. You can use this to do conditional prefetching or annotating to support those fields like this:
+
+```
+if not hasattr(request, "databrowser") or "my_field" in request.databrowser[`calculated_fields`]:
+	# do prefetching and annotating associated with my_field
+```
+
+### get_fieldsets
+
 The Data Browser also calls `get_fieldsets` to find out what fields the current user can access. When it does this it always passes a newly constructed instance of the relevant model. This is necessary to work around Django's User admin messing with the fieldsets when `None` is passed.
+
+As with `get_queryset` the Data Browser will set `request.databrowser` when calling `get_fieldsets` and you can test this to detect it and make Data Browser specific customizations.
 
 ## Development
 
@@ -113,37 +144,39 @@ During development it can be useful to look at the `.ctx` and `.json` views. The
 
 ### Terminology
 
-| Term        | Meaning                                                                                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| aggregate   | Corresponds to a Django aggregation function.                                                                                            |
-| bound query | A query that has been validated against the config.                                                                                      |
-| concrete    | A field that can be sorted and filtered                                                                                                  |
-| config      | Information that doesn't change based on the particular query, includes all the models and their fields.                                 |
-| field name  | Just the name of the field e.g. `created_time`.                                                                                          |
-| field path  | Includes information on how to reach the model the field is on e.g. `["order","seller","created_time"]`.                                 |
-| function    | Corresponds to a Django database function for transforming a value, e.g. `ExtractYear`.                                                  |
-| model name  | Fullstop separated app and model names e.g. `myapp.MyModel`, also includes synthetic 'models' for hosting aggregate and function fields. |
-| model path  | Like field path for the model the field is on.                                                                                           |
-| model       | In Python the actual model class, in Javascript the model name as above.                                                                 |
-| pretty...   | User friendly field, and path values                                                                                                     |
-| query       | The information that changes with the query being done, in the Javascript this also includes the results.                                |
-| type        | A data type, like string or number                                                                                                       |
-| view        | A saved query.                                                                                                                           |
+| Term             | Meaning                                                                                                                                  |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| aggregate        | Corresponds to a Django aggregation function.                                                                                            |
+| bound query      | A query that has been validated against the config.                                                                                      |
+| calculated field | A field that can not be sorted or filtered, generally a field whose value comes from a property or function on the Admin or Model.       |
+| concrete field   | A field that can be sorted and filtered, generally anything that came directly from the ORM.                                             |
+| config           | Information that doesn't change based on the particular query, includes all the models and their fields.                                 |
+| field name       | Just the name of the field e.g. `created_time`.                                                                                          |
+| field path       | Includes information on how to reach the model the field is on e.g. `["order","seller","created_time"]`.                                 |
+| function         | Corresponds to a Django database function for transforming a value, e.g. `ExtractYear`.                                                  |
+| model name       | Fullstop separated app and model names e.g. `myapp.MyModel`, also includes synthetic 'models' for hosting aggregate and function fields. |
+| model path       | Like field path for the model the field is on.                                                                                           |
+| model            | In Python the actual model class, in Javascript the model name as above.                                                                 |
+| pretty...        | User friendly field, and path values                                                                                                     |
+| query            | The information that changes with the query being done, in the Javascript this also includes the results.                                |
+| type             | A data type, like string or number                                                                                                       |
+| view             | A saved query.                                                                                                                           |
 
 Most of the code deals with "models" that have "fields" that have "types".
 In this context a "model" is just anything which might have fields.
-So types also have associated models which hold the relevant aggregate and function fields.
+An important consequence of this is that most types also have associated models which hold that types aggregate and function fields.
 Fields also include foreign keys which may refer to other models.
-The special meanings of foreignkeys, aggregates, functions and calculated fields is confined to `orm.py`
+The special meanings of foreignkeys, aggregates, functions and calculated fields is confined to `orm.py`.
 
-#### Fields have 4 main properties.
+#### Fields have 5 main properties.
 
-| Poperty  | Meaning and impact                                                                            |
-| -------- | --------------------------------------------------------------------------------------------- |
-| name     | The only required one.                                                                        |
-| type     | If set then this field can be added to a query and will return results of the specified type. |
-| concrete | Can this field be sorted and filtered. Requires type to be set.                               |
-| model    | If set then this field has additional nested fields that are detailed on the given model.     |
+| Poperty   | Meaning and impact                                                                            |
+| --------- | --------------------------------------------------------------------------------------------- |
+| name      | The only required one.                                                                        |
+| type      | If set then this field can be added to a query and will return results of the specified type. |
+| concrete  | Can this field be sorted and filtered. Requires type to be set.                               |
+| can_pivot | The field goes on the outside of a pivot table and as such can be pivoted.                    |
+| model     | If set then this field has additional nested fields that are detailed on the given model.     |
 
 ### Release History
 

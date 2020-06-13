@@ -109,16 +109,8 @@ class OrmBoundField:
     def group_by(self):
         return self.field.can_pivot
 
-    @property
-    def can_pivot(self):
-        return self.field.can_pivot
-
-    @property
-    def concrete(self):
-        return self.field.concrete
-
-    def format(self, value):
-        return self.field.format(value)
+    def __getattr__(self, name):
+        return getattr(self.field, name)
 
 
 @dataclass

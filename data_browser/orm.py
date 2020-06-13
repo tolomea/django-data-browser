@@ -54,7 +54,7 @@ _FIELD_MAP = {
 
 
 def _get_all_admin_fields(request):
-    request.data_browser = True
+    request.data_browser = {"calculated_fields": set()}
 
     def from_fieldsets(admin, all_):
         obj = admin.model()  # we want the admin change field sets, not the add ones
@@ -207,7 +207,7 @@ def _filter(qs, filter_, filter_str):
 
 
 def get_results(request, bound_query):
-    request.data_browser = True
+    request.data_browser = {"calculated_fields": set()}
 
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": []}
@@ -261,8 +261,10 @@ def get_results(request, bound_query):
 
     # gather up all the objects to fetch for calculated fields
     to_load = defaultdict(set)
+    loading_for = defaultdict(set)
     for field in bound_query.bound_fields:
         if field.model_name:
+            loading_for[field.model_name].add(field.name)
             pks = to_load[field.model_name]
             for row in qs:
                 pks.add(row[field.queryset_path])
@@ -271,6 +273,7 @@ def get_results(request, bound_query):
     cache = {}
     for model_name, pks in to_load.items():
         admin = bound_query.orm_models[model_name].admin
+        request.data_browser["calculated_fields"] = loading_for[model_name]
         cache[model_name] = admin.get_queryset(request).in_bulk(pks)
 
     # dump out the results
