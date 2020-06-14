@@ -218,6 +218,7 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 
 | Version   | Date           | Summary                                                                                       |
 | --------- | -------------- | --------------------------------------------------------------------------------------------- |
+| 2.0.1     | 2020-06-14     | Improve sorting when pivoted.                                                                 |
 | **2.0.0** | **2020-06-14** | **Pivot tables.**<br>All public view URL's have changed.<br>The JSON data format has changed. |
 | 1.2.6     | 2020-06-08     | Bug fixes                                                                                     |
 | 1.2.5     | 2020-06-08     | Bug fixes                                                                                     |
