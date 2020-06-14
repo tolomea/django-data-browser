@@ -242,6 +242,13 @@
                         "prettyName": "public_link",
                         "type": "string"
                     },
+                    "public_slug": {
+                        "canPivot": true,
+                        "concrete": true,
+                        "model": "string",
+                        "prettyName": "public_slug",
+                        "type": "string"
+                    },
                     "query": {
                         "canPivot": true,
                         "concrete": true,
@@ -263,6 +270,7 @@
                     "owner",
                     "public",
                     "public_link",
+                    "public_slug",
                     "query"
                 ]
             },

@@ -163,7 +163,7 @@ def query(request, *, model_name, fields="", media):
 
 
 def view(request, pk, media):
-    view = get_object_or_404(View.objects.filter(public=True), pk=pk)
+    view = get_object_or_404(View.objects.filter(public=True), public_slug=pk)
     if (
         # some of these are checked by the admin but this is a good time to be paranoid
         view.owner.is_active

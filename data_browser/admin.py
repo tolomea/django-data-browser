@@ -16,17 +16,15 @@ globals = threading.local()
 @admin.register(models.View)
 class ViewAdmin(admin.ModelAdmin):
     fieldsets = [
+        (None, {"fields": ["name", "owner", "open_view", "description"]}),
         (
-            None,
+            "Public",
             {
                 "fields": [
-                    "name",
-                    "owner",
                     "public",
-                    "open_view",
+                    "public_slug",
                     "public_link",
                     "google_sheets_formula",
-                    "description",
                 ]
             },
         ),
@@ -49,7 +47,13 @@ class ViewAdmin(admin.ModelAdmin):
         elif obj and obj.public:
             return flatten_fieldsets(self.get_fieldsets(request, obj))
         else:
-            return readonly_fields + ["public"]
+            return readonly_fields + ["public", "public_slug"]
+
+    def get_fieldsets(self, request, obj=None):
+        res = super().get_fieldsets(request, obj)
+        if not request.user.has_perm("data_browser.make_view_public"):
+            res = [fs for fs in res if fs[0] != "Public"]
+        return res
 
     def change_view(self, request, *args, **kwargs):
         globals.request = request
@@ -67,7 +71,7 @@ class ViewAdmin(admin.ModelAdmin):
         if obj.public:
             if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
                 url = reverse(
-                    "data_browser:view", kwargs={"pk": obj.pk, "media": "csv"}
+                    "data_browser:view", kwargs={"pk": obj.public_slug, "media": "csv"}
                 )
                 return globals.request.build_absolute_uri(url)
             else:
@@ -80,7 +84,7 @@ class ViewAdmin(admin.ModelAdmin):
         if obj.public:
             if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
                 url = reverse(
-                    "data_browser:view", kwargs={"pk": obj.pk, "media": "csv"}
+                    "data_browser:view", kwargs={"pk": obj.public_slug, "media": "csv"}
                 )
                 url = globals.request.build_absolute_uri(url)
                 return f'=importdata("{url}")'

@@ -243,6 +243,13 @@ snapshots["test_query_html context"] = {
                         "prettyName": "public_link",
                         "type": "string",
                     },
+                    "public_slug": {
+                        "canPivot": True,
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "public_slug",
+                        "type": "string",
+                    },
                     "query": {
                         "canPivot": True,
                         "concrete": True,
@@ -264,6 +271,7 @@ snapshots["test_query_html context"] = {
                     "owner",
                     "public",
                     "public_link",
+                    "public_slug",
                     "query",
                 ],
             },
@@ -1640,6 +1648,13 @@ snapshots["test_query_ctx context"] = {
                         "prettyName": "public_link",
                         "type": "string",
                     },
+                    "public_slug": {
+                        "canPivot": True,
+                        "concrete": True,
+                        "model": "string",
+                        "prettyName": "public_slug",
+                        "type": "string",
+                    },
                     "query": {
                         "canPivot": True,
                         "concrete": True,
@@ -1661,6 +1676,7 @@ snapshots["test_query_ctx context"] = {
                     "owner",
                     "public",
                     "public_link",
+                    "public_slug",
                     "query",
                 ],
             },

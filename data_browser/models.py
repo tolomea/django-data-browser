@@ -19,10 +19,12 @@ class View(models.Model):
 
     name = models.CharField(max_length=64, blank=False)
     description = models.TextField(blank=True)
-    public = models.BooleanField(default=False)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL
     )
+
+    public = models.BooleanField(default=False)
+    public_slug = models.CharField(max_length=12, default=get_id, blank=False)
 
     model_name = models.CharField(max_length=32, blank=False)
     fields = models.TextField(blank=True)

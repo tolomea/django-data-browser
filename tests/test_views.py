@@ -226,12 +226,12 @@ def test_view_csv(admin_client, settings):
         owner=User.objects.get(),
     )
 
-    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 404
 
     view.public = True
     view.save()
-    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 200
     print(res.content.decode("utf-8"))
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
@@ -239,13 +239,13 @@ def test_view_csv(admin_client, settings):
     assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
 
     settings.DATA_BROWSER_ALLOW_PUBLIC = False
-    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 404
     settings.DATA_BROWSER_ALLOW_PUBLIC = True
 
     view.owner = User.objects.create(is_staff=True)
     view.save()
-    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 404
 
 
@@ -258,12 +258,12 @@ def test_view_json(admin_client):
         owner=User.objects.get(),
     )
 
-    res = admin_client.get(f"/data_browser/view/{view.pk}.json")
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.json")
     assert res.status_code == 404
 
     view.public = True
     view.save()
-    res = admin_client.get(f"/data_browser/view/{view.pk}.json")
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.json")
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
     dump(data)
@@ -278,5 +278,5 @@ def test_view_json(admin_client):
 
     view.owner = User.objects.create(is_staff=True)
     view.save()
-    res = admin_client.get(f"/data_browser/view/{view.pk}.csv")
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 404
