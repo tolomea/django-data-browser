@@ -308,7 +308,7 @@ def test_get_results_admin_causes_query(get_product_flat):
 
 @pytest.mark.usefixtures("pivot_products")
 def test_get_pivot(get_product_pivot):
-    data = get_product_pivot(1, "created_time__year,&created_time__month,id__count", {})
+    data = get_product_pivot(3, "created_time__year,&created_time__month,id__count", {})
     assert data == {
         "body": [[[1], [3]], [[2], [4]]],
         "cols": [["January"], ["Feburary"]],
@@ -319,7 +319,7 @@ def test_get_pivot(get_product_pivot):
 @pytest.mark.usefixtures("pivot_products")
 def test_get_pivot_multi_agg(get_product_pivot):
     data = get_product_pivot(
-        1, "created_time__year,&created_time__month,id__count,id__max", {}
+        3, "created_time__year,&created_time__month,id__count,id__max", {}
     )
     assert data == {
         "body": [[[1, 1], [3, 6]], [[2, 3], [4, 10]]],
@@ -361,21 +361,21 @@ def test_pivot_sorting(get_product_pivot):
         models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
 
     data = get_product_pivot(
-        1, "created_time__year+1,&created_time__month+2,id__count", {}
+        3, "&created_time__year+1,created_time__month+2,id__count", {}
     )
     assert data == {
-        "body": [[[None], [2]], [[1], [3]]],
-        "cols": [["January"], ["Feburary"]],
-        "rows": [[2021], [2022]],
+        "body": [[[None], [1]], [[2], [3]]],
+        "rows": [["January"], ["Feburary"]],
+        "cols": [[2021], [2022]],
     }
 
     data = get_product_pivot(
-        1, "created_time__year+2,&created_time__month+1,id__count", {}
+        3, "&created_time__year+2,created_time__month+1,id__count", {}
     )
     assert data == {
-        "body": [[[None], [2]], [[1], [3]]],
-        "cols": [["January"], ["Feburary"]],
-        "rows": [[2021], [2022]],
+        "body": [[[None], [1]], [[2], [3]]],
+        "rows": [["January"], ["Feburary"]],
+        "cols": [[2021], [2022]],
     }
 
 
@@ -414,6 +414,9 @@ def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
     filters = {} if "d" in key else {"id__equals": ["123"]}
 
     queries = 0 if key.endswith("---") else 1
+    if "r" in key and "c" in key:
+        queries += 2
+
     results = get_product_pivot(queries, ",".join(fields), filters)
     assert results["rows"] == rows
     assert results["cols"] == cols

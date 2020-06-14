@@ -31,6 +31,7 @@ from .query import (
     DSC,
     TYPES,
     BooleanType,
+    BoundQuery,
     DateTimeType,
     DateType,
     NumberType,
@@ -206,6 +207,26 @@ def _filter(qs, filter_, filter_str):
         return qs.filter(**{filter_str: filter_.parsed})
 
 
+def cols_sub_query(bound_query):
+    return BoundQuery(
+        bound_query.model_name,
+        [f for f in bound_query.fields if f.pivoted],
+        [f for f in bound_query.valid_filters if f.orm_bound_field.filter_],
+    )
+
+
+def rows_sub_query(bound_query):
+    return BoundQuery(
+        bound_query.model_name,
+        [
+            f
+            for f in bound_query.fields
+            if f.orm_bound_field.can_pivot and not f.pivoted
+        ],
+        [f for f in bound_query.valid_filters if f.orm_bound_field.filter_],
+    )
+
+
 def _get_results(request, bound_query, orm_models):
     admin = orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
@@ -263,7 +284,14 @@ def get_results(request, bound_query, orm_models):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": []}
 
-    qs = _get_results(request, bound_query, orm_models)
+    if bound_query.col_fields and bound_query.row_fields:
+        qs = _get_results(request, bound_query, orm_models)
+        rows_qs = _get_results(request, rows_sub_query(bound_query), orm_models)
+        cols_qs = _get_results(request, cols_sub_query(bound_query), orm_models)
+    else:
+        qs = list(_get_results(request, bound_query, orm_models))
+        rows_qs = qs
+        cols_qs = qs
 
     # gather up all the objects to fetch for calculated fields
     to_load = defaultdict(set)
@@ -298,7 +326,25 @@ def get_results(request, bound_query, orm_models):
         return results
 
     data = defaultdict(dict)
-    col_keys = {}  # abuse dictonary ordering
+
+    col_keys = {}
+    for row in cols_qs:
+        col_keys[
+            tuple(
+                (field.path_str, row[field.queryset_path])
+                for field in bound_query.col_fields
+            )
+        ] = None
+
+    row_keys = {}
+    for row in rows_qs:
+        row_keys[
+            tuple(
+                (field.path_str, row[field.queryset_path])
+                for field in bound_query.row_fields
+            )
+        ] = None
+
     for row in qs:
         row_key = tuple(
             (field.path_str, row[field.queryset_path])
@@ -312,20 +358,17 @@ def get_results(request, bound_query, orm_models):
             field.path_str: row[field.queryset_path]
             for field in bound_query.data_fields
         }
-        col_keys[col_key] = None
 
     results = []
     blank = {field.path_str: None for field in bound_query.data_fields}
     for col_key in col_keys:
         table = []
-        for row_key, row in data.items():
-            table.append(row.get(col_key, blank))
+        for row_key in row_keys:
+            table.append(data[row_key].get(col_key, blank))
         results.append(format_table(bound_query.data_fields, table))
 
     return {
-        "rows": format_table(
-            bound_query.row_fields, [dict(row) for row in data.keys()]
-        ),
+        "rows": format_table(bound_query.row_fields, [dict(row) for row in row_keys]),
         "cols": format_table(bound_query.col_fields, [dict(col) for col in col_keys]),
         "body": results,
     }
