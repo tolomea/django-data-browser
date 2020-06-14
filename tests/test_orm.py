@@ -345,6 +345,40 @@ def test_get_pivot_all(get_product_pivot):
     }
 
 
+def test_pivot_sorting(get_product_pivot):
+    address = models.Address.objects.create(city="london", street="bad")
+    producer = models.Producer.objects.create(name="Bob", address=address)
+    datetimes = [
+        # 2021, 1, 1 is notably missing
+        datetime(2021, 2, 1),
+        datetime(2022, 1, 1),
+        datetime(2022, 1, 2),
+        datetime(2022, 2, 1),
+        datetime(2022, 2, 2),
+        datetime(2022, 2, 3),
+    ]
+    for dt in datetimes:
+        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
+
+    data = get_product_pivot(
+        1, "created_time__year+1,&created_time__month+2,id__count", {}
+    )
+    assert data == {
+        "body": [[[None], [2]], [[1], [3]]],
+        "cols": [["January"], ["Feburary"]],
+        "rows": [[2021], [2022]],
+    }
+
+    data = get_product_pivot(
+        1, "created_time__year+2,&created_time__month+1,id__count", {}
+    )
+    assert data == {
+        "body": [[[None], [2]], [[1], [3]]],
+        "cols": [["January"], ["Feburary"]],
+        "rows": [[2021], [2022]],
+    }
+
+
 jan = "January"
 feb = "Feburary"
 testdata = [
