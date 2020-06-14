@@ -75,7 +75,7 @@ def get_product_flat(req, orm_models, django_assert_num_queries):
         query = Query.from_request("tests.Product", *args)
         bound_query = BoundQuery(query, orm_models)
         with django_assert_num_queries(queries):
-            data = orm.get_results(req, bound_query)
+            data = orm.get_results(req, bound_query, orm_models)
             return flatten_table(bound_query.fields, data["rows"])
 
     return helper
@@ -87,7 +87,7 @@ def get_product_pivot(req, orm_models, django_assert_num_queries):
         query = Query.from_request("tests.Product", *args)
         bound_query = BoundQuery(query, orm_models)
         with django_assert_num_queries(queries):
-            data = orm.get_results(req, bound_query)
+            data = orm.get_results(req, bound_query, orm_models)
             return {
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),

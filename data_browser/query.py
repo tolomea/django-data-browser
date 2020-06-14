@@ -381,7 +381,6 @@ class BoundQuery:
             return orm_bound_field
 
         self.model_name = query.model_name
-        self.orm_models = orm_models
 
         self.fields = []
         for query_field in query.fields:

@@ -206,13 +206,13 @@ def _filter(qs, filter_, filter_str):
         return qs.filter(**{filter_str: filter_.parsed})
 
 
-def get_results(request, bound_query):
+def get_results(request, bound_query, orm_models):
     request.data_browser = {"calculated_fields": set()}
 
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": []}
 
-    admin = bound_query.orm_models[bound_query.model_name].admin
+    admin = orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
     # functions
@@ -272,7 +272,7 @@ def get_results(request, bound_query):
     # fetch all the calculated field objects
     cache = {}
     for model_name, pks in to_load.items():
-        admin = bound_query.orm_models[model_name].admin
+        admin = orm_models[model_name].admin
         request.data_browser["calculated_fields"] = loading_for[model_name]
         cache[model_name] = admin.get_queryset(request).in_bulk(pks)
 
@@ -284,7 +284,7 @@ def get_results(request, bound_query):
             for field in fields:
                 value = row[field.path_str]
                 if field.model_name:
-                    admin = bound_query.orm_models[field.model_name].admin
+                    admin = orm_models[field.model_name].admin
                     obj = cache[field.model_name].get(value)
                     value = obj, admin
                 res_row[field.path_str] = field.format(value)

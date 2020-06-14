@@ -213,7 +213,7 @@ def _data_response(request, query, media, meta):
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery(query, orm_models)
-    results = get_results(request, bound_query)
+    results = get_results(request, bound_query, orm_models)
 
     if media == "csv":
         buffer = io.StringIO()
