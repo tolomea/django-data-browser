@@ -206,12 +206,7 @@ def _filter(qs, filter_, filter_str):
         return qs.filter(**{filter_str: filter_.parsed})
 
 
-def get_results(request, bound_query, orm_models):
-    request.data_browser = {"calculated_fields": set()}
-
-    if not bound_query.fields:
-        return {"rows": [], "cols": [], "body": []}
-
+def _get_results(request, bound_query, orm_models):
     admin = orm_models[bound_query.model_name].admin
     qs = admin.get_queryset(request)
 
@@ -258,6 +253,17 @@ def get_results(request, bound_query, orm_models):
         if field.direction is DSC:
             sort_fields.append(f"-{field.orm_bound_field.queryset_path}")
     qs = qs.order_by(*sort_fields)
+
+    return qs
+
+
+def get_results(request, bound_query, orm_models):
+    request.data_browser = {"calculated_fields": set()}
+
+    if not bound_query.fields:
+        return {"rows": [], "cols": [], "body": []}
+
+    qs = _get_results(request, bound_query, orm_models)
 
     # gather up all the objects to fetch for calculated fields
     to_load = defaultdict(set)
