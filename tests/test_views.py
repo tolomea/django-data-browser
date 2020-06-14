@@ -116,6 +116,13 @@ def test_query_html_bad_model(admin_client):
     assert res.status_code == 404
 
 
+def test_query_html_bad_media(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/tests.Product/size-0,name+1,size_unit.bob?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 404
+
+
 @pytest.mark.usefixtures("products")
 def test_query_csv(admin_client):
     res = admin_client.get(

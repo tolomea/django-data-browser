@@ -258,7 +258,7 @@ def _data_response(request, query, media, meta):
         resp.update(results)
         return http.JsonResponse(resp)
     else:
-        assert False
+        raise http.Http404(f"Bad file format {media} requested")
 
 
 def _get_from_js_dev_server(request):  # pragma: no cover
