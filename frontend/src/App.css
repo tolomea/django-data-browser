@@ -85,7 +85,7 @@ button.sLink {
   padding: 0 !important;
   cursor: pointer;
   color: #069;
-  vertical-align: bottom;
+  vertical-align: -20%;
   font-size: inherit;
   font-weight: inherit;
 }
@@ -164,7 +164,7 @@ table.Results,
   border-radius: 2px;
 }
 .Results tr {
-  line-height: 100%;
+  line-height: 120%;
 }
 .Results th,
 .Results td {
