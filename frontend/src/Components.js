@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Link } from "./Util.js";
+import { Link, SLink } from "./Util.js";
 import { Results } from "./Results.js";
 
 function FilterValue(props) {
@@ -92,7 +92,7 @@ class Filter extends React.Component {
     return (
       <tr>
         <td>
-          <Link onClick={() => query.removeFilter(index)}>✘</Link>{" "}
+          <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
           <Link onClick={() => query.addField(path, prettyPath)}>
             {prettyPath.join(" ")}
           </Link>{" "}
@@ -160,9 +160,9 @@ class Toggle extends React.Component {
     return (
       <>
         <td>
-          <Link className="ToggleLink" onClick={this.handleClick.bind(this)}>
-            {this.state.isToggleOn ? ">" : "+"}
-          </Link>
+          <SLink className="ToggleLink" onClick={this.handleClick.bind(this)}>
+            {this.state.isToggleOn ? "remove" : "add"}
+          </SLink>
         </td>
         <td>
           {this.props.title}
@@ -187,11 +187,11 @@ function Field(props) {
     <tr>
       <td>
         {modelField.concrete && type.defaultLookup && (
-          <Link
+          <SLink
             onClick={() => props.query.addFilter(props.path, props.prettyPath)}
           >
-            Y
-          </Link>
+            filter_alt
+          </SLink>
         )}
       </td>
 

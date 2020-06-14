@@ -13,4 +13,16 @@ function Link(props) {
     );
 }
 
-export { Link };
+function SLink(props) {
+    return (
+        <button
+            type="button"
+            className={"sLink material-icons " + (props.className || "")}
+            onClick={props.onClick}
+        >
+            {props.children}
+        </button>
+    );
+}
+
+export { Link, SLink };

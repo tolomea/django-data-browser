@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Link } from "./Util.js";
+import { Link, SLink } from "./Util.js";
 
 function Spacer(props) {
   if (props.spaces > 0) {
@@ -16,38 +16,38 @@ function HeadCell(props) {
   const type = props.query.getType(modelField);
   return (
     <th className={props.className}>
-      <Link onClick={() => props.query.removeField(props.field)}>✘</Link>{" "}
+      <SLink onClick={() => props.query.removeField(props.field)}>close</SLink>
       {modelField.canPivot ? (
         <>
-          <Link onClick={() => props.query.togglePivot(props.field)}>
-            {props.field.pivoted ? "⮦" : "⮥"}
-          </Link>{" "}
+          <SLink onClick={() => props.query.togglePivot(props.field)}>
+            {props.field.pivoted ? "call_received" : "call_made"}
+          </SLink>
         </>
       ) : (
         ""
       )}
       {modelField.concrete && type.defaultLookup ? (
         <>
-          <Link
+          <SLink
             onClick={() =>
               props.query.addFilter(props.field.path, props.field.prettyPath)
             }
           >
-            Y
-          </Link>{" "}
+            filter_alt
+          </SLink>{" "}
           <Link onClick={() => props.query.toggleSort(props.field)}>
             {props.field.prettyPath.join(" ")}
-          </Link>{" "}
-          {
             {
-              dsc: `↑${props.field.priority}`,
-              asc: `↓${props.field.priority}`,
-              null: "",
-            }[props.field.sort]
-          }
+              {
+                dsc: `↑${props.field.priority}`,
+                asc: `↓${props.field.priority}`,
+                null: "",
+              }[props.field.sort]
+            }
+          </Link>
         </>
       ) : (
-        props.field.prettyPath.join(" ")
+        " " + props.field.prettyPath.join(" ")
       )}
     </th>
   );
