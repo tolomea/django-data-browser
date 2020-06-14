@@ -91,7 +91,7 @@ def _get_config(user, orm_models):
             "public": view.public,
             "model": view.model_name,
             "description": view.description,
-            "query": _get_query_data(BoundQuery(view.get_query(), orm_models)),
+            "query": _get_query_data(BoundQuery.bind(view.get_query(), orm_models)),
         }
         for view in View.objects.filter(owner=user).order_by("name")
     ]
@@ -118,7 +118,7 @@ def _get_context(request, model_name, fields):
     orm_models = get_models(request)
     if query.model_name and query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
-    bound_query = BoundQuery(query, orm_models)
+    bound_query = BoundQuery.bind(query, orm_models)
     return {
         "config": _get_config(request.user, orm_models),
         "initialState": {
@@ -212,7 +212,7 @@ def _data_response(request, query, media, meta):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
-    bound_query = BoundQuery(query, orm_models)
+    bound_query = BoundQuery.bind(query, orm_models)
     results = get_results(request, bound_query, orm_models)
 
     if media == "csv":

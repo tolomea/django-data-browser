@@ -366,7 +366,13 @@ class BoundField(BoundFieldMixin):
 
 
 class BoundQuery:
-    def __init__(self, query, orm_models):
+    def __init__(self, model_name, fields, filters):
+        self.model_name = model_name
+        self.fields = fields
+        self.filters = filters
+
+    @classmethod
+    def bind(cls, query, orm_models):
         def get_orm_field(parts):
             model_name = query.model_name
             orm_bound_field = None
@@ -380,19 +386,21 @@ class BoundQuery:
                 return None
             return orm_bound_field
 
-        self.model_name = query.model_name
+        model_name = query.model_name
 
-        self.fields = []
+        fields = []
         for query_field in query.fields:
             orm_bound_field = get_orm_field(query_field.path)
             if orm_bound_field:
-                self.fields.append(BoundField.bind(orm_bound_field, query_field))
+                fields.append(BoundField.bind(orm_bound_field, query_field))
 
-        self.filters = []
+        filters = []
         for query_filter in query.filters:
             orm_bound_field = get_orm_field(query_filter.path)
             if orm_bound_field and orm_bound_field.concrete:
-                self.filters.append(BoundFilter.bind(orm_bound_field, query_filter))
+                filters.append(BoundFilter.bind(orm_bound_field, query_filter))
+
+        return cls(model_name, fields, filters)
 
     @property
     def sort_fields(self):
