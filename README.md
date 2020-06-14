@@ -216,22 +216,23 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 
 ## Release History
 
-| Version   | Date           | Summary                                                                         |
-| --------- | -------------- | ------------------------------------------------------------------------------- |
-| 1.2.6     | 2020-06-08     | Bug fixes                                                                       |
-| 1.2.5     | 2020-06-08     | Bug fixes                                                                       |
-| **1.2.4** | 2020-06-03     | **Calculated fields interact better with aggregation.**                         |
-| 1.2.3     | 2020-06-02     | JS error handling tweaks                                                        |
-| 1.2.2     | 2020-06-01     | Minor fix                                                                       |
-| **1.2.1** | 2020-05-31     | **Improved date handling**                                                      |
-| **1.2.0** | 2020-05-31     | **Support for date functions "year", "month" etc and filtering based on "now"** |
-| 1.1.6     | 2020-05-24     | Stronger sanitizing of URL strings                                              |
-| 1.1.5     | 2020-05-23     | Fix bug aggregating time fields                                                 |
-| 1.1.4     | 2020-05-23     | Fix breaking bug with GenericInlineModelAdmin                                   |
-| 1.1.3     | 2020-05-23     | Cosmetic fixes                                                                  |
-| 1.1.2     | 2020-05-22     | Cosmetic fixes                                                                  |
-| 1.1.1     | 2020-05-20     | Cosmetic fixes                                                                  |
-| **1.1.0** | **2020-05-20** | **Aggregate support**                                                           |
-| **1.0.2** | **2020-05-17** | **Py3.6 support**                                                               |
-| 1.0.1     | 2020-05-17     | Small fixes                                                                     |
-| 1.0.0     | 2020-05-17     | Initial version                                                                 |
+| Version   | Date           | Summary                                                                                       |
+| --------- | -------------- | --------------------------------------------------------------------------------------------- |
+| **2.0.0** | **2020-06-14** | **Pivot tables.**<br>All public view URL's have changed.<br>The JSON data format has changed. |
+| 1.2.6     | 2020-06-08     | Bug fixes                                                                                     |
+| 1.2.5     | 2020-06-08     | Bug fixes                                                                                     |
+| **1.2.4** | **2020-06-03** | **Calculated fields interact better with aggregation.**                                       |
+| 1.2.3     | 2020-06-02     | JS error handling tweaks                                                                      |
+| 1.2.2     | 2020-06-01     | Minor fix                                                                                     |
+| 1.2.1     | 2020-05-31     | Improved date handling                                                                        |
+| **1.2.0** | **2020-05-31** | **Support for date functions "year", "month" etc and filtering based on "now"**               |
+| 1.1.6     | 2020-05-24     | Stronger sanitizing of URL strings                                                            |
+| 1.1.5     | 2020-05-23     | Fix bug aggregating time fields                                                               |
+| 1.1.4     | 2020-05-23     | Fix breaking bug with GenericInlineModelAdmin                                                 |
+| 1.1.3     | 2020-05-23     | Cosmetic fixes                                                                                |
+| 1.1.2     | 2020-05-22     | Cosmetic fixes                                                                                |
+| 1.1.1     | 2020-05-20     | Cosmetic fixes                                                                                |
+| **1.1.0** | **2020-05-20** | **Aggregate support**                                                                         |
+| **1.0.2** | **2020-05-17** | **Py3.6 support**                                                                             |
+| 1.0.1     | 2020-05-17     | Small fixes                                                                                   |
+| 1.0.0     | 2020-05-17     | Initial version                                                                               |
