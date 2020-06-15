@@ -3,8 +3,9 @@ import "./App.css";
 import { Link, SLink } from "./Util.js";
 
 function Spacer(props) {
-  if (props.spaces > 0) {
-    return [...Array(props.spaces)].map((_, key) => (
+  const { spaces } = props;
+  if (spaces > 0) {
+    return [...Array(spaces)].map((_, key) => (
       <td className="Empty" key={key} />
     ));
   }
@@ -12,124 +13,109 @@ function Spacer(props) {
 }
 
 function HeadCell(props) {
-  const modelField = props.query.getField(props.field.path);
-  const type = props.query.getType(modelField);
+  const { query, field, className } = props;
+  const modelField = query.getField(field.path);
+  const type = query.getType(modelField);
   return (
-    <th className={props.className}>
-      <SLink onClick={() => props.query.removeField(props.field)}>close</SLink>
+    <th {...{ className }}>
+      <SLink onClick={() => query.removeField(field)}>close</SLink>
       {modelField.canPivot && (
         <>
-          <SLink onClick={() => props.query.togglePivot(props.field)}>
-            {props.field.pivoted ? "call_received" : "call_made"}
+          <SLink onClick={() => query.togglePivot(field)}>
+            {field.pivoted ? "call_received" : "call_made"}
           </SLink>
         </>
       )}
       {modelField.concrete && type.defaultLookup ? (
         <>
-          <SLink
-            onClick={() =>
-              props.query.addFilter(props.field.path, props.field.prettyPath)
-            }
-          >
+          <SLink onClick={() => query.addFilter(field.path, field.prettyPath)}>
             filter_alt
           </SLink>{" "}
-          <Link onClick={() => props.query.toggleSort(props.field)}>
-            {props.field.prettyPath.join(" ")}
+          <Link onClick={() => query.toggleSort(field)}>
+            {field.prettyPath.join(" ")}
             {
               {
-                dsc: `↑${props.field.priority}`,
-                asc: `↓${props.field.priority}`,
+                dsc: `↑${field.priority}`,
+                asc: `↓${field.priority}`,
                 null: "",
-              }[props.field.sort]
+              }[field.sort]
             }
           </Link>
         </>
       ) : (
-        " " + props.field.prettyPath.join(" ")
+        " " + field.prettyPath.join(" ")
       )}
     </th>
   );
 }
 
 function DataCell(props) {
-  let modelField = props.query.getField(props.field.path);
-  let value;
-  if (props.value === undefined) {
-    value = "";
-  } else if (modelField.type === "html" && props.value) {
-    value = <div dangerouslySetInnerHTML={{ __html: props.value }} />;
+  const { query, field, className, span, value } = props;
+  let modelField = query.getField(field.path);
+  let formattedValue;
+  if (value === undefined) {
+    formattedValue = "";
+  } else if (modelField.type === "html" && value) {
+    formattedValue = <div dangerouslySetInnerHTML={{ __html: value }} />;
   } else {
-    value = String(props.value);
+    formattedValue = String(value);
   }
   return (
-    <td
-      className={modelField.type + " " + props.className || ""}
-      colSpan={props.span || 1}
-    >
-      {value}
+    <td className={modelField.type + " " + className || ""} colSpan={span || 1}>
+      {formattedValue}
     </td>
   );
 }
 
 function VTableHeadRow(props) {
-  return props.fields.map((field, i) => (
+  const { fields, query, classNameFirst } = props;
+  return fields.map((field, i) => (
     <HeadCell
-      query={props.query}
-      field={field}
-      index={i} // TODO remove
+      {...{ query, field }}
       key={field.pathStr}
-      className={"HoriBorder " + (i ? "" : props.classNameFirst)}
+      className={"HoriBorder " + (i ? "" : classNameFirst)}
     />
   ));
 }
 
 function VTableBodyRow(props) {
-  return props.fields.map((field, i) => (
+  const { fields, query, classNameFirst, row } = props;
+  return fields.map((field, i) => (
     <DataCell
+      {...{ query, field }}
       key={field.pathStr}
-      query={props.query}
-      value={props.row[field.pathStr]}
-      field={field}
-      className={i ? "" : props.classNameFirst}
+      value={row[field.pathStr]}
+      className={i ? "" : classNameFirst}
     />
   ));
 }
 
 function HTableRow(props) {
+  const { query, field, data, span } = props;
   return (
     <>
-      <HeadCell
-        query={props.query}
-        field={props.field}
-        index={0} /* TODO remove */
-      />
-      {props.data.map((col, key) => (
-        <DataCell
-          key={key}
-          query={props.query}
-          value={col[props.field.pathStr]}
-          field={props.field}
-          span={props.span}
-        />
+      <HeadCell {...{ query, field }} />
+      {data.map((col, key) => (
+        <DataCell {...{ key, query, field, span }} value={col[field.pathStr]} />
       ))}
     </>
   );
 }
 
 function Results(props) {
+  const { query, cols, rows, body } = props;
   return (
     <table className="Results">
       <thead>
         {/* pivoted data */}
-        {props.query.colFields().map((field) => {
+        {query.colFields().map((field) => {
           return (
             <tr key={field.pathStr}>
-              <Spacer spaces={props.query.rowFields().length - 1} />
+              <Spacer spaces={query.rowFields().length - 1} />
               <HTableRow
-                query={props.query}
-                field={field}
-                span={props.query.resFields().length}
-                data={props.cols}
+                {...{ query, field }}
+                span={query.resFields().length}
+                data={cols}
               />
             </tr>
           );
@@ -137,13 +123,12 @@ function Results(props) {
 
         {/* column headers */}
         <tr>
-          <Spacer spaces={1 - props.query.rowFields().length} />
-          <VTableHeadRow query={props.query} fields={props.query.rowFields()} />
-          {props.cols.map((_, key) => (
+          <Spacer spaces={1 - query.rowFields().length} />
+          <VTableHeadRow {...{ query }} fields={query.rowFields()} />
+          {cols.map((_, key) => (
             <VTableHeadRow
-              key={key}
-              query={props.query}
-              fields={props.query.resFields()}
+              {...{ key, query }}
+              fields={query.resFields()}
               classNameFirst="LeftBorder"
             />
           ))}
@@ -152,19 +137,14 @@ function Results(props) {
 
       {/* row headers and body */}
       <tbody>
-        {props.rows.map((row, rowIndex) => (
+        {rows.map((row, rowIndex) => (
           <tr key={rowIndex}>
-            <Spacer spaces={1 - props.query.rowFields().length} />
-            <VTableBodyRow
-              query={props.query}
-              fields={props.query.rowFields()}
-              row={row}
-            />
-            {props.body.map((table, key) => (
+            <Spacer spaces={1 - query.rowFields().length} />
+            <VTableBodyRow {...{ query, row }} fields={query.rowFields()} />
+            {body.map((table, key) => (
               <VTableBodyRow
-                key={key}
-                query={props.query}
-                fields={props.query.resFields()}
+                {...{ key, query }}
+                fields={query.resFields()}
                 row={table[rowIndex]}
                 classNameFirst="LeftBorder"
               />

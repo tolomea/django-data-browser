@@ -2,25 +2,27 @@ import React from "react";
 import "./App.css";
 
 function Link(props) {
+    const { className, onClick, children } = props;
     return (
         <button
+            {...{ onClick }}
             type="button"
-            className={"Link " + (props.className || "")}
-            onClick={props.onClick}
+            className={"Link " + (className || "")}
         >
-            {props.children}
+            {children}
         </button>
     );
 }
 
 function SLink(props) {
+    const { className, onClick, children } = props;
     return (
         <button
+            {...{ onClick }}
             type="button"
-            className={"sLink material-icons " + (props.className || "")}
-            onClick={props.onClick}
+            className={"sLink material-icons " + (className || "")}
         >
-            {props.children}
+            {children}
         </button>
     );
 }

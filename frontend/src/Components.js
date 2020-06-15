@@ -4,24 +4,17 @@ import { Link, SLink } from "./Util.js";
 import { Results } from "./Results.js";
 
 function FilterValue(props) {
+  const { lookup, onChange, value } = props;
   if (props.lookup.type === "boolean")
     return (
-      <select
-        className="FilterValue"
-        onChange={props.onChange}
-        value={props.value}
-      >
+      <select {...{ onChange, value }} className="FilterValue">
         <option value={true}>true</option>
         <option value={false}>false</option>
       </select>
     );
-  else if (props.lookup.type === "weekday")
+  else if (lookup.type === "weekday")
     return (
-      <select
-        className="FilterValue"
-        onChange={props.onChange}
-        value={props.value}
-      >
+      <select {...{ onChange, value }} className="FilterValue">
         {[
           "Sunday",
           "Monday",
@@ -35,13 +28,9 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (props.lookup.type === "month")
+  else if (lookup.type === "month")
     return (
-      <select
-        className="FilterValue"
-        onChange={props.onChange}
-        value={props.value}
-      >
+      <select {...{ onChange, value }} className="FilterValue">
         {[
           "January",
           "Febuary",
@@ -60,34 +49,32 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (props.lookup.type === "number" || props.lookup.type === "year")
+  else if (lookup.type === "number" || lookup.type === "year")
     return (
       <input
+        {...{ onChange, value }}
         className="FilterValue"
         type="number"
         step="0"
-        value={props.value}
-        onChange={props.onChange}
       />
     );
   else
     return (
-      <input
-        className="FilterValue"
-        type="text"
-        value={props.value}
-        onChange={props.onChange}
-      />
+      <input {...{ onChange, value }} className="FilterValue" type="text" />
     );
 }
 
 class Filter extends React.Component {
   render() {
-    const path = this.props.path;
-    const prettyPath = this.props.prettyPath;
-    const index = this.props.index;
-    const lookup = this.props.lookup;
-    const query = this.props.query;
+    const {
+      path,
+      prettyPath,
+      index,
+      lookup,
+      query,
+      value,
+      errorMessage,
+    } = this.props;
     const type = query.getType(query.getField(path));
     return (
       <tr>
@@ -113,11 +100,11 @@ class Filter extends React.Component {
         <td>=</td>
         <td>
           <FilterValue
-            value={this.props.value}
+            {...{ value }}
             onChange={(e) => query.setFilterValue(index, e.target.value)}
             lookup={type.lookups[lookup]}
           />
-          {this.props.errorMessage && <p>{this.props.errorMessage}</p>}
+          {errorMessage && <p>{errorMessage}</p>}
         </td>
       </tr>
     );
@@ -125,17 +112,17 @@ class Filter extends React.Component {
 }
 
 function Filters(props) {
+  const { query, filterErrors } = props;
   return (
     <form className="Filters">
       <table className="Flat">
         <tbody>
           {props.filters.map((filter, index) => (
             <Filter
-              query={props.query}
-              key={index}
-              index={index}
+              {...{ query, index }}
               {...filter}
-              errorMessage={props.filterErrors[index]}
+              key={index}
+              errorMessage={filterErrors[index]}
             />
           ))}
         </tbody>
@@ -191,10 +178,8 @@ class Field extends React.Component {
             <td></td>
             <td colSpan="2">
               <AllFields
-                query={query}
+                {...{ query, path, prettyPath }}
                 model={modelField.model}
-                path={path}
-                prettyPath={prettyPath}
               />
             </td>
           </tr>
@@ -205,7 +190,8 @@ class Field extends React.Component {
 }
 
 function AllFields(props) {
-  const modelFields = props.query.getModelFields(props.model);
+  const { query, model, path, prettyPath } = props;
+  const modelFields = query.getModelFields(model);
   return (
     <table>
       <tbody>
@@ -214,10 +200,9 @@ function AllFields(props) {
           return (
             <Field
               key={fieldName}
-              query={props.query}
-              path={props.path.concat([fieldName])}
-              prettyPath={props.prettyPath.concat([modelField.prettyName])}
-              modelField={modelField}
+              {...{ query, modelField }}
+              path={path.concat([fieldName])}
+              prettyPath={prettyPath.concat([modelField.prettyName])}
             />
           );
         })}
@@ -250,24 +235,27 @@ function Logo(props) {
 }
 
 function QueryPage(props) {
-  const saveUrl = props.query.getUrlForSave();
+  const {
+    query,
+    rows,
+    cols,
+    body,
+    version,
+    sortedModels,
+    model,
+    filters,
+    filterErrors,
+  } = props;
+  const saveUrl = query.getUrlForSave();
   return (
     <div id="body">
-      <Logo query={props.query} version={props.version} />
-      <ModelSelector
-        query={props.query}
-        sortedModels={props.sortedModels}
-        model={props.model}
-      />
-      <Filters
-        query={props.query}
-        filters={props.filters}
-        filterErrors={props.filterErrors}
-      />
+      <Logo {...{ query, version }} />
+      <ModelSelector {...{ query, sortedModels, model }} />
+      <Filters {...{ query, filters, filterErrors }} />
       <p>
-        Showing {props.rows.length * props.cols.length} results -{" "}
-        <a href={props.query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
-        <a href={props.query.getUrlForMedia("json")}>View as JSON</a>
+        Showing {rows.length * cols.length} results -{" "}
+        <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
+        <a href={query.getUrlForMedia("json")}>View as JSON</a>
         {saveUrl && (
           <>
             {" "}
@@ -277,20 +265,10 @@ function QueryPage(props) {
       </p>
       <div className="MainSpace">
         <div className="FieldsList">
-          <AllFields
-            query={props.query}
-            model={props.model}
-            path={[]}
-            prettyPath={[]}
-          />
+          <AllFields {...{ query, model }} path={[]} prettyPath={[]} />
         </div>
-        {props.query.rowFields().length || props.query.colFields().length ? (
-          <Results
-            query={props.query}
-            rows={props.rows}
-            cols={props.cols}
-            body={props.body}
-          />
+        {query.rowFields().length || query.colFields().length ? (
+          <Results {...{ query, rows, cols, body }} />
         ) : (
           <h2>No fields selected</h2>
         )}
@@ -300,19 +278,17 @@ function QueryPage(props) {
 }
 
 function HomePage(props) {
+  const { query, version, sortedModels, savedViews } = props;
   return (
     <div id="body">
-      <Logo query={props.query} version={props.version} />
+      <Logo {...{ query, version }} />
       <div className="Index">
         <div>
           <h1>Models</h1>
           <div>
-            {props.sortedModels.map((model) => (
+            {sortedModels.map((model) => (
               <div key={model}>
-                <button
-                  className="Link"
-                  onClick={() => props.query.setModel(model)}
-                >
+                <button className="Link" onClick={() => query.setModel(model)}>
                   {model}
                 </button>
               </div>
@@ -322,11 +298,11 @@ function HomePage(props) {
         <div>
           <h1>Saved Views</h1>
           <div>
-            {props.savedViews.map((view, index) => (
+            {savedViews.map((view, index) => (
               <div key={index}>
                 <button
                   className="Link"
-                  onClick={() => props.query.setQuery(view.query)}
+                  onClick={() => query.setQuery(view.query)}
                 >
                   {view.model} - {view.name}
                 </button>
