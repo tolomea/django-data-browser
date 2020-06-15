@@ -207,22 +207,18 @@ def _filter(qs, filter_, filter_str):
         return qs.filter(**{filter_str: filter_.parsed})
 
 
-def cols_sub_query(bound_query):
+def _cols_sub_query(bound_query):
     return BoundQuery(
         bound_query.model_name,
-        [f for f in bound_query.fields if f.pivoted],
+        bound_query.col_fields,
         [f for f in bound_query.valid_filters if f.orm_bound_field.filter_],
     )
 
 
-def rows_sub_query(bound_query):
+def _rows_sub_query(bound_query):
     return BoundQuery(
         bound_query.model_name,
-        [
-            f
-            for f in bound_query.fields
-            if f.orm_bound_field.can_pivot and not f.pivoted
-        ],
+        bound_query.row_fields,
         [f for f in bound_query.valid_filters if f.orm_bound_field.filter_],
     )
 
@@ -275,7 +271,7 @@ def _get_results(request, bound_query, orm_models):
             sort_fields.append(f"-{field.orm_bound_field.queryset_path}")
     qs = qs.order_by(*sort_fields)
 
-    return qs
+    return list(qs)
 
 
 def get_results(request, bound_query, orm_models):
@@ -284,14 +280,14 @@ def get_results(request, bound_query, orm_models):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": []}
 
-    if bound_query.col_fields and bound_query.row_fields:
-        qs = _get_results(request, bound_query, orm_models)
-        rows_qs = _get_results(request, rows_sub_query(bound_query), orm_models)
-        cols_qs = _get_results(request, cols_sub_query(bound_query), orm_models)
+    if bound_query.bound_col_fields and bound_query.bound_row_fields:
+        res = _get_results(request, bound_query, orm_models)
+        rows_res = _get_results(request, _rows_sub_query(bound_query), orm_models)
+        cols_res = _get_results(request, _cols_sub_query(bound_query), orm_models)
     else:
-        qs = list(_get_results(request, bound_query, orm_models))
-        rows_qs = qs
-        cols_qs = qs
+        res = _get_results(request, bound_query, orm_models)
+        rows_res = res
+        cols_res = res
 
     # gather up all the objects to fetch for calculated fields
     to_load = defaultdict(set)
@@ -300,7 +296,7 @@ def get_results(request, bound_query, orm_models):
         if field.model_name:
             loading_for[field.model_name].add(field.name)
             pks = to_load[field.model_name]
-            for row in qs:
+            for row in res:
                 pks.add(row[field.queryset_path])
 
     # fetch all the calculated field objects
@@ -329,29 +325,33 @@ def get_results(request, bound_query, orm_models):
         return tuple((field.path_str, row[field.queryset_path]) for field in fields)
 
     col_keys = {}
-    for row in cols_qs:
-        col_keys[get_fields(row, bound_query.col_fields)] = None
+    for row in cols_res:
+        col_keys[get_fields(row, bound_query.bound_col_fields)] = None
 
     row_keys = {}
-    for row in rows_qs:
-        row_keys[get_fields(row, bound_query.row_fields)] = None
+    for row in rows_res:
+        row_keys[get_fields(row, bound_query.bound_row_fields)] = None
 
     data = defaultdict(dict)
-    for row in qs:
-        row_key = get_fields(row, bound_query.row_fields)
-        col_key = get_fields(row, bound_query.col_fields)
-        data[row_key][col_key] = dict(get_fields(row, bound_query.data_fields))
+    for row in res:
+        row_key = get_fields(row, bound_query.bound_row_fields)
+        col_key = get_fields(row, bound_query.bound_col_fields)
+        data[row_key][col_key] = dict(get_fields(row, bound_query.bound_data_fields))
 
     body = []
-    blank = {field.path_str: None for field in bound_query.data_fields}
+    blank = {field.path_str: None for field in bound_query.bound_data_fields}
     for col_key in col_keys:
         table = []
         for row_key in row_keys:
             table.append(data[row_key].get(col_key, blank))
-        body.append(format_table(bound_query.data_fields, table))
+        body.append(format_table(bound_query.bound_data_fields, table))
 
     return {
-        "rows": format_table(bound_query.row_fields, [dict(row) for row in row_keys]),
-        "cols": format_table(bound_query.col_fields, [dict(col) for col in col_keys]),
+        "rows": format_table(
+            bound_query.bound_row_fields, [dict(row) for row in row_keys]
+        ),
+        "cols": format_table(
+            bound_query.bound_col_fields, [dict(col) for col in col_keys]
+        ),
         "body": body,
     }

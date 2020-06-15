@@ -396,6 +396,10 @@ class BoundField(BoundFieldMixin):
         )
 
 
+def _orm_fields(fields):
+    return [f.orm_bound_field for f in fields]
+
+
 class BoundQuery:
     def __init__(self, model_name, fields, filters):
         self.model_name = model_name
@@ -442,35 +446,41 @@ class BoundQuery:
         return [f for f in self.filters if f.is_valid]
 
     @property
-    def bound_fields(self):
-        return [f.orm_bound_field for f in self.fields]
-
-    @property
-    def bound_filters(self):
-        return [f.orm_bound_field for f in self.valid_filters]
-
-    @property
     def col_fields(self):
-        return [field.orm_bound_field for field in self.fields if field.pivoted]
+        return [f for f in self.fields if f.pivoted]
 
     @property
     def row_fields(self):
         if self.col_fields:
             return [
-                field.orm_bound_field
-                for field in self.fields
-                if field.orm_bound_field.can_pivot and not field.pivoted
+                f for f in self.fields if f.orm_bound_field.can_pivot and not f.pivoted
             ]
         else:
-            return [field.orm_bound_field for field in self.fields]
+            return self.fields
 
     @property
     def data_fields(self):
         if self.col_fields:
-            return [
-                field.orm_bound_field
-                for field in self.fields
-                if not field.orm_bound_field.can_pivot
-            ]
+            return [f for f in self.fields if not f.orm_bound_field.can_pivot]
         else:
             return []
+
+    @property
+    def bound_fields(self):
+        return _orm_fields(self.fields)
+
+    @property
+    def bound_filters(self):
+        return _orm_fields(self.valid_filters)
+
+    @property
+    def bound_col_fields(self):
+        return _orm_fields(self.col_fields)
+
+    @property
+    def bound_row_fields(self):
+        return _orm_fields(self.row_fields)
+
+    @property
+    def bound_data_fields(self):
+        return _orm_fields(self.data_fields)
