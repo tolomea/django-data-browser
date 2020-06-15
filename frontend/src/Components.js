@@ -60,7 +60,7 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (props.lookup.type === "number")
+  else if (props.lookup.type === "number" || props.lookup.type === "year")
     return (
       <input
         className="FilterValue"
@@ -117,7 +117,7 @@ class Filter extends React.Component {
             onChange={(e) => query.setFilterValue(index, e.target.value)}
             lookup={type.lookups[lookup]}
           />
-          {this.props.errorMessage ? <p>{this.props.errorMessage}</p> : ""}
+          {this.props.errorMessage && <p>{this.props.errorMessage}</p>}
         </td>
       </tr>
     );
@@ -147,76 +147,59 @@ function Filters(props) {
 class Field extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isToggleOn: false };
+    this.state = { toggled: false };
   }
 
-  handleClick() {
+  toggle() {
     this.setState((state) => ({
-      isToggleOn: !state.isToggleOn,
+      toggled: !state.toggled,
     }));
   }
 
   render() {
-    const modelField = this.props.modelField;
-    const type = this.props.query.getType(modelField);
-    const title = modelField.type ? (
-      <Link
-        onClick={() =>
-          this.props.query.addField(this.props.path, this.props.prettyPath)
-        }
-      >
-        {modelField.prettyName}
-      </Link>
-    ) : (
-      modelField.prettyName
-    );
-
+    const { query, path, prettyPath, modelField } = this.props;
+    const type = query.getType(modelField);
     return (
-      <tr>
-        <td>
-          {modelField.concrete && type.defaultLookup && (
-            <SLink
-              onClick={() =>
-                this.props.query.addFilter(
-                  this.props.path,
-                  this.props.prettyPath
-                )
-              }
-            >
-              filter_alt
-            </SLink>
-          )}
-        </td>
-
-        {modelField.model ? (
-          <>
-            <td>
-              <SLink
-                className="ToggleLink"
-                onClick={this.handleClick.bind(this)}
-              >
-                {this.state.isToggleOn ? "remove" : "add"}
+      <>
+        <tr>
+          <td>
+            {modelField.concrete && type.defaultLookup && (
+              <SLink onClick={() => query.addFilter(path, prettyPath)}>
+                filter_alt
               </SLink>
-            </td>
-            <td>
-              {title}
-              {this.state.isToggleOn && (
-                <AllFields
-                  query={this.props.query}
-                  model={modelField.model}
-                  path={this.props.path}
-                  prettyPath={this.props.prettyPath}
-                />
-              )}
-            </td>
-          </>
-        ) : (
-          <>
+            )}
+          </td>
+          <td>
+            {modelField.model && (
+              <SLink className="ToggleLink" onClick={this.toggle.bind(this)}>
+                {this.state.toggled ? "remove" : "add"}
+              </SLink>
+            )}
+          </td>
+          <td>
+            {modelField.type ? (
+              <Link onClick={() => query.addField(path, prettyPath)}>
+                {modelField.prettyName}
+              </Link>
+            ) : (
+              modelField.prettyName
+            )}
+          </td>
+        </tr>
+        {this.state.toggled && (
+          <tr>
             <td></td>
-            <td>{title}</td>
-          </>
+            <td colSpan="2">
+              <AllFields
+                query={query}
+                model={modelField.model}
+                path={path}
+                prettyPath={prettyPath}
+              />
+            </td>
+          </tr>
         )}
-      </tr>
+      </>
     );
   }
 }

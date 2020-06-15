@@ -17,14 +17,12 @@ function HeadCell(props) {
   return (
     <th className={props.className}>
       <SLink onClick={() => props.query.removeField(props.field)}>close</SLink>
-      {modelField.canPivot ? (
+      {modelField.canPivot && (
         <>
           <SLink onClick={() => props.query.togglePivot(props.field)}>
             {props.field.pivoted ? "call_received" : "call_made"}
           </SLink>
         </>
-      ) : (
-        ""
       )}
       {modelField.concrete && type.defaultLookup ? (
         <>
