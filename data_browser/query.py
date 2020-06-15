@@ -395,6 +395,9 @@ class BoundField(BoundFieldMixin):
             query_field.priority if orm_bound_field.concrete else None,
         )
 
+    def unsorted(self):
+        return self.__class__(self.orm_bound_field, self.pivoted, None, None)
+
 
 def _orm_fields(fields):
     return [f.orm_bound_field for f in fields]

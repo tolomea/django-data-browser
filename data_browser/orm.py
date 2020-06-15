@@ -208,18 +208,20 @@ def _filter(qs, filter_, filter_str):
 
 
 def _cols_sub_query(bound_query):
+    row_fields = [f.unsorted() for f in bound_query.row_fields]
     return BoundQuery(
         bound_query.model_name,
-        bound_query.col_fields,
-        [f for f in bound_query.valid_filters if f.orm_bound_field.filter_],
+        bound_query.col_fields + row_fields,
+        bound_query.valid_filters,
     )
 
 
 def _rows_sub_query(bound_query):
+    col_fields = [f.unsorted() for f in bound_query.col_fields]
     return BoundQuery(
         bound_query.model_name,
-        bound_query.row_fields,
-        [f for f in bound_query.valid_filters if f.orm_bound_field.filter_],
+        bound_query.row_fields + col_fields,
+        bound_query.valid_filters,
     )
 
 

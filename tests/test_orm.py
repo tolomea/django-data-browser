@@ -379,6 +379,16 @@ def test_pivot_sorting(get_product_pivot):
     }
 
 
+@pytest.mark.usefixtures("pivot_products")
+def test_pivot_having(get_product_pivot):
+    data = get_product_pivot(
+        3,
+        "&created_time__year,created_time__month,id__count",
+        {"id__count__equals": [4]},
+    )
+    assert data == {"body": [[[4]]], "rows": [["Feburary"]], "cols": [[2021]]}
+
+
 jan = "January"
 feb = "Feburary"
 testdata = [
