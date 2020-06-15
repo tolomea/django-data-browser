@@ -18,6 +18,7 @@ from .query import (
     NumberType,
     StringType,
     WeekDayType,
+    YearType,
 )
 
 _OPEN_IN_ADMIN = "admin"
@@ -44,7 +45,7 @@ _AGGREGATES = {
 
 
 _FUNC_MAP = {
-    "year": (functions.ExtractYear, NumberType),
+    "year": (functions.ExtractYear, YearType),
     "quarter": (functions.ExtractQuarter, NumberType),
     "month": (functions.ExtractMonth, MonthType),
     "day": (functions.ExtractDay, NumberType),

@@ -16,6 +16,7 @@ from data_browser.query import (
     QueryFilter,
     StringType,
     WeekDayType,
+    YearType,
 )
 from django.http import QueryDict
 from django.utils import timezone
@@ -283,6 +284,22 @@ class TestNumberType:
 
     def test_format(self):
         assert NumberType.format(6) == 6
+
+
+class TestYearType:
+    def test_validate(self):
+        assert YearType.parse("gt", "6") == (6, None)
+        assert YearType.parse("pontains", "6.1") == (None, ANY(str))
+        assert YearType.parse("gt", "hello") == (None, ANY(str))
+        assert YearType.parse("is_null", "True") == (True, None)
+        assert YearType.parse("is_null", "hello") == (None, ANY(str))
+        assert YearType.parse("equals", "0") == (None, ANY(str))
+
+    def test_default_lookup(self):
+        assert YearType.default_lookup == "equals"
+
+    def test_format(self):
+        assert YearType.format(6) == 6
 
 
 class TestDateTimeType:

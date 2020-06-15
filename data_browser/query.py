@@ -192,6 +192,26 @@ class NumberType(BaseType):
         return float(value)
 
 
+class YearType(NumberType):
+    default_value = timezone.now().year
+    lookups = {
+        "equals": "year",
+        "not_equals": "year",
+        "gt": "year",
+        "gte": "year",
+        "lt": "year",
+        "lte": "year",
+        "is_null": "boolean",
+    }
+
+    @staticmethod
+    def _parse(value):
+        res = int(value)
+        if res <= 1:
+            raise Exception("Years must be > 1")
+        return res
+
+
 class DateTimeType(BaseType):
     default_value = "now"
     lookups = {
@@ -314,7 +334,18 @@ class BooleanType(BaseType):
             raise ValueError("Expected 'true' or 'false'")
 
 
-TYPES = {field_type.name: field_type for field_type in BaseType.__subclasses__()}
+def all_subclasses(cls):
+    res = set()
+    queue = {cls}
+    while queue:
+        cls = queue.pop()
+        subs = set(cls.__subclasses__())
+        queue.update(subs - res)
+        res.update(subs)
+    return res
+
+
+TYPES = {cls.name: cls for cls in all_subclasses(BaseType)}
 
 
 class BoundFieldMixin:

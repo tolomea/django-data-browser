@@ -316,7 +316,7 @@
                         "concrete": true,
                         "model": null,
                         "prettyName": "year",
-                        "type": "number"
+                        "type": "year"
                     }
                 },
                 "sortedFields": [
@@ -398,7 +398,7 @@
                         "concrete": true,
                         "model": null,
                         "prettyName": "year",
-                        "type": "number"
+                        "type": "year"
                     }
                 },
                 "sortedFields": [
@@ -861,6 +861,10 @@
             "weekday": {
                 "fields": {},
                 "sortedFields": []
+            },
+            "year": {
+                "fields": {},
+                "sortedFields": []
             }
         },
         "baseUrl": "/data_browser/",
@@ -1095,6 +1099,42 @@
                 "sortedLookups": [
                     "equals",
                     "not_equals"
+                ]
+            },
+            "year": {
+                "defaultLookup": "equals",
+                "defaultValue": 2020,
+                "lookups": {
+                    "equals": {
+                        "type": "year"
+                    },
+                    "gt": {
+                        "type": "year"
+                    },
+                    "gte": {
+                        "type": "year"
+                    },
+                    "is_null": {
+                        "type": "boolean"
+                    },
+                    "lt": {
+                        "type": "year"
+                    },
+                    "lte": {
+                        "type": "year"
+                    },
+                    "not_equals": {
+                        "type": "year"
+                    }
+                },
+                "sortedLookups": [
+                    "equals",
+                    "not_equals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "is_null"
                 ]
             }
         },
