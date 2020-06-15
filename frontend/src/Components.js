@@ -173,45 +173,60 @@ class Toggle extends React.Component {
   }
 }
 
-function Field(props) {
-  const modelField = props.modelField;
-  const title = modelField.type ? (
-    <Link onClick={() => props.query.addField(props.path, props.prettyPath)}>
-      {modelField.prettyName}
-    </Link>
-  ) : (
-    modelField.prettyName
-  );
-  const type = props.query.getType(modelField);
-  return (
-    <tr>
-      <td>
-        {modelField.concrete && type.defaultLookup && (
-          <SLink
-            onClick={() => props.query.addFilter(props.path, props.prettyPath)}
-          >
-            filter_alt
-          </SLink>
-        )}
-      </td>
+class Field extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-      {modelField.model ? (
-        <Toggle title={title}>
-          <AllFields
-            query={props.query}
-            model={modelField.model}
-            path={props.path}
-            prettyPath={props.prettyPath}
-          />
-        </Toggle>
-      ) : (
-        <>
-          <td></td>
-          <td>{title}</td>
-        </>
-      )}
-    </tr>
-  );
+  render() {
+    const modelField = this.props.modelField;
+    const title = modelField.type ? (
+      <Link
+        onClick={() =>
+          this.props.query.addField(this.props.path, this.props.prettyPath)
+        }
+      >
+        {modelField.prettyName}
+      </Link>
+    ) : (
+      modelField.prettyName
+    );
+    const type = this.props.query.getType(modelField);
+    return (
+      <tr>
+        <td>
+          {modelField.concrete && type.defaultLookup && (
+            <SLink
+              onClick={() =>
+                this.props.query.addFilter(
+                  this.props.path,
+                  this.props.prettyPath
+                )
+              }
+            >
+              filter_alt
+            </SLink>
+          )}
+        </td>
+
+        {modelField.model ? (
+          <Toggle title={title}>
+            <AllFields
+              query={this.props.query}
+              model={modelField.model}
+              path={this.props.path}
+              prettyPath={this.props.prettyPath}
+            />
+          </Toggle>
+        ) : (
+          <>
+            <td></td>
+            <td>{title}</td>
+          </>
+        )}
+      </tr>
+    );
+  }
 }
 
 function AllFields(props) {
