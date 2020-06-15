@@ -144,7 +144,7 @@ function Filters(props) {
   );
 }
 
-class Toggle extends React.Component {
+class Field extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isToggleOn: false };
@@ -157,29 +157,8 @@ class Toggle extends React.Component {
   }
 
   render() {
-    return (
-      <>
-        <td>
-          <SLink className="ToggleLink" onClick={this.handleClick.bind(this)}>
-            {this.state.isToggleOn ? "remove" : "add"}
-          </SLink>
-        </td>
-        <td>
-          {this.props.title}
-          {this.state.isToggleOn && this.props.children}
-        </td>
-      </>
-    );
-  }
-}
-
-class Field extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
     const modelField = this.props.modelField;
+    const type = this.props.query.getType(modelField);
     const title = modelField.type ? (
       <Link
         onClick={() =>
@@ -191,7 +170,7 @@ class Field extends React.Component {
     ) : (
       modelField.prettyName
     );
-    const type = this.props.query.getType(modelField);
+
     return (
       <tr>
         <td>
@@ -210,14 +189,27 @@ class Field extends React.Component {
         </td>
 
         {modelField.model ? (
-          <Toggle title={title}>
-            <AllFields
-              query={this.props.query}
-              model={modelField.model}
-              path={this.props.path}
-              prettyPath={this.props.prettyPath}
-            />
-          </Toggle>
+          <>
+            <td>
+              <SLink
+                className="ToggleLink"
+                onClick={this.handleClick.bind(this)}
+              >
+                {this.state.isToggleOn ? "remove" : "add"}
+              </SLink>
+            </td>
+            <td>
+              {title}
+              {this.state.isToggleOn && (
+                <AllFields
+                  query={this.props.query}
+                  model={modelField.model}
+                  path={this.props.path}
+                  prettyPath={this.props.prettyPath}
+                />
+              )}
+            </td>
+          </>
         ) : (
           <>
             <td></td>
