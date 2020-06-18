@@ -218,6 +218,7 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 
 | Version   | Date           | Summary                                                                                       |
 | --------- | -------------- | --------------------------------------------------------------------------------------------- |
+| **2.0.4** | **2020-06-18** | **Fix Py3.6 support**                                                                         |
 | 2.0.3     | 2020-06-14     | Improve filtering on aggregates when pivoted.                                                 |
 | 2.0.2     | 2020-06-14     | Improve fonts and symbols.                                                                    |
 | 2.0.1     | 2020-06-14     | Improve sorting when pivoted.                                                                 |
@@ -236,6 +237,6 @@ The special meanings of foreignkeys, aggregates, functions and calculated fields
 | 1.1.2     | 2020-05-22     | Cosmetic fixes                                                                                |
 | 1.1.1     | 2020-05-20     | Cosmetic fixes                                                                                |
 | **1.1.0** | **2020-05-20** | **Aggregate support**                                                                         |
-| **1.0.2** | **2020-05-17** | **Py3.6 support**                                                                             |
+| 1.0.2     | 2020-05-17     | Py3.6 support                                                                                 |
 | 1.0.1     | 2020-05-17     | Small fixes                                                                                   |
 | 1.0.0     | 2020-05-17     | Initial version                                                                               |
