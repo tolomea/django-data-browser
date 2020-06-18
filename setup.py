@@ -35,5 +35,9 @@ setuptools.setup(
     ],
     python_requires=">=3.6",
     package_data={"": data_files},
-    install_requires=["Django", "python-dateutil", 'dataclasses; python_version<"3.7"'],
+    install_requires=[
+        "Django>=2.0",
+        "python-dateutil",
+        'dataclasses; python_version<"3.7"',
+    ],
 )

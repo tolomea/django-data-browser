@@ -56,12 +56,6 @@ _FUNC_MAP = {
     "date": (functions.TruncDate, DateType),
 }
 
-if hasattr(functions, "ExtractIsoYear"):  # pragma: no branch
-    _FUNC_MAP.update(
-        {"iso_year": functions.ExtractIsoYear, "iso_week": functions.ExtractWeek}
-    )
-
-
 _FUNCTIONS = {
     DateTimeType: [
         "year",

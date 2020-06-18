@@ -70,7 +70,7 @@ def _get_all_admin_fields(request):
         if hasattr(model_admin, "has_view_permission"):
             return model_admin.has_view_permission(request)
         else:
-            return False  # pragma: no cover  Django < 2.1 compat
+            return False  # pragma: no cover  Django < 2.1
 
     all_admin_fields = defaultdict(set)
     model_admins = {}
