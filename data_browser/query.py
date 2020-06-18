@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import urllib
 from dataclasses import dataclass
 from typing import Any, Optional, Sequence

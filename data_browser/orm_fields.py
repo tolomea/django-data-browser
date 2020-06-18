@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 from typing import Sequence, Tuple
 
@@ -82,7 +80,7 @@ def get_model_name(model, sep="."):
 
 @dataclass
 class OrmBoundField:
-    field: OrmBaseField
+    field: "OrmBaseField"
     full_path: Sequence[str]
     pretty_path: Sequence[str]
     queryset_path: str = None
