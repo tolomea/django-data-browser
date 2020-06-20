@@ -43,8 +43,10 @@ def pivot_products(db):
         datetime(2021, 1, 2),
         datetime(2021, 1, 3),
     ]
-    for dt in datetimes:
-        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
+    for i, dt in enumerate(datetimes):
+        models.Product.objects.create(
+            created_time=dt, name=str(dt), size=i + 1, producer=producer
+        )
 
 
 def test_query_html(admin_client, snapshot):
@@ -138,7 +140,7 @@ def test_query_csv(admin_client):
 @pytest.mark.usefixtures("pivot_products")
 def test_query_csv_pivoted(admin_client):
     res = admin_client.get(
-        "/data_browser/query/tests.Product/created_time__year,&created_time__month,id__count,id__max.csv?"
+        "/data_browser/query/tests.Product/created_time__year+0,&created_time__month+1,id__count,size__max.csv?"
     )
     assert res.status_code == 200
     print(res.content.decode("utf-8"))
@@ -146,7 +148,7 @@ def test_query_csv_pivoted(admin_client):
     dump(rows)
     assert rows == [
         ["created_time month", "January", "", "Feburary", ""],
-        ["created_time year", "id count", "id max", "id count", "id max"],
+        ["created_time year", "id count", "size max", "id count", "size max"],
         ["2020.0", "1.0", "1.0", "2.0", "3.0"],
         ["2021.0", "3.0", "6.0", "", ""],
     ]
@@ -177,11 +179,11 @@ testdata = [
 def test_query_csv_pivot_permutations(admin_client, key, snapshot):
     fields = []
     if "r" in key:
-        fields.append("created_time__year")
+        fields.append("created_time__year+0")
     if "c" in key:
-        fields.append("&created_time__month")
+        fields.append("&created_time__month+1")
     if "b" in key:
-        fields.extend(["id__count", "id__max"])
+        fields.extend(["id__count", "size__max"])
     filters = "" if "d" in key else "id__equals=123"
 
     res = admin_client.get(
@@ -208,7 +210,7 @@ def test_query_json(admin_client, snapshot):
 @pytest.mark.usefixtures("pivot_products")
 def test_query_json_pivot(admin_client, snapshot):
     res = admin_client.get(
-        "/data_browser/query/tests.Product/created_time__year,&created_time__month,id__count,id__max.json?"
+        "/data_browser/query/tests.Product/created_time__year+0,&created_time__month+1,id__count,size__max.json?"
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))

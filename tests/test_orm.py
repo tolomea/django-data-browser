@@ -11,6 +11,15 @@ from . import models
 from .util import ANY, KEYS
 
 
+def sortedAssert(a, b):
+    assert sorted(a, key=str) == sorted(b, key=str)
+
+
+def admin_link(obj):
+    model = obj.__class__.__name__.lower()
+    return f'<a href="/admin/tests/{model}/{obj.pk}/change/">{obj}</a>'
+
+
 def flatten_table(fields, data):
     return [[row[f.path_str] for f in fields] for row in data]
 
@@ -18,23 +27,32 @@ def flatten_table(fields, data):
 @pytest.fixture
 def products(db):
     now = timezone.now()
+    res = []
 
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
-    models.Product.objects.create(
-        created_time=now, name="a", size=1, size_unit="g", producer=producer
+    res.append(
+        models.Product.objects.create(
+            created_time=now, name="a", size=1, size_unit="g", producer=producer
+        )
     )
 
     address = models.Address.objects.create(city="london", street="good")
     producer = models.Producer.objects.create(name="Bob", address=address)
-    models.Product.objects.create(
-        created_time=now, name="b", size=1, size_unit="g", producer=producer
+    res.append(
+        models.Product.objects.create(
+            created_time=now, name="b", size=1, size_unit="g", producer=producer
+        )
     )
 
     producer = models.Producer.objects.create(name="Bob", address=None)
-    models.Product.objects.create(
-        created_time=now, name="c", size=2, size_unit="g", producer=producer
+    res.append(
+        models.Product.objects.create(
+            created_time=now, name="c", size=2, size_unit="g", producer=producer
+        )
     )
+
+    return res
 
 
 @pytest.fixture
@@ -53,8 +71,10 @@ def pivot_products(db):
         datetime(2021, 2, 3),
         datetime(2021, 2, 4),
     ]
-    for dt in datetimes:
-        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
+    for i, dt in enumerate(datetimes):
+        models.Product.objects.create(
+            created_time=dt, name=str(dt), size=i + 1, producer=producer
+        )
 
 
 @pytest.fixture
@@ -105,38 +125,40 @@ def test_get_results_all(get_product_flat):
     assert data == [[2, "c", "g"], [1, "a", "g"], [1, "b", "g"]]
 
 
-@pytest.mark.usefixtures("products")
-def test_get_admin_link(get_product_flat):
+def test_get_admin_link(get_product_flat, products):
     data = get_product_flat(2, "producer__address__admin", {})
-    assert data == [
-        [None],
-        ['<a href="/admin/tests/address/1/change/">Address object (1)</a>'],
-        ['<a href="/admin/tests/address/2/change/">Address object (2)</a>'],
-    ]
+    sortedAssert(
+        data,
+        [
+            [None],
+            [admin_link(products[0].producer.address)],
+            [admin_link(products[1].producer.address)],
+        ],
+    )
 
 
 @pytest.mark.usefixtures("products")
 def test_get_calculated_field_on_admin(get_product_flat):
     data = get_product_flat(2, "producer__address__bob", {})
-    assert data == [[None], ["bad"], ["bob"]]
+    sortedAssert(data, [[None], ["bad"], ["bob"]])
 
 
 @pytest.mark.usefixtures("products")
 def test_get_multiple_calculated_fields_on_admins(get_product_flat):
     data = get_product_flat(3, "producer__address__bob,producer__frank", {})
-    assert data == [[None, "frank"], ["bad", "frank"], ["bob", "frank"]]
+    sortedAssert(data, [[None, "frank"], ["bad", "frank"], ["bob", "frank"]])
 
 
 @pytest.mark.usefixtures("products")
 def test_get_calculated_field(get_product_flat):
     data = get_product_flat(2, "producer__address__fred", {})
-    assert data == [[None], ["bad"], ["fred"]]
+    sortedAssert(data, [[None], ["bad"], ["fred"]])
 
 
 @pytest.mark.usefixtures("products")
 def test_get_property(get_product_flat):
     data = get_product_flat(2, "producer__address__tom", {})
-    assert data == [[None], ["bad"], ["tom"]]
+    sortedAssert(data, [[None], ["bad"], ["tom"]])
 
 
 @pytest.mark.usefixtures("products")
@@ -178,13 +200,13 @@ def test_filter_aggregate_no_fields(get_product_flat):
 @pytest.mark.usefixtures("products")
 def test_get_aggregate_and_calculated_field(get_product_flat):
     data = get_product_flat(2, "is_onsale,id__count", {})
-    assert data == [[False, 1], [False, 1], [False, 1]]
+    sortedAssert(data, [[False, 1], [False, 1], [False, 1]])
 
 
 @pytest.mark.usefixtures("products")
 def test_get_time_aggregate_and_calculated_field(get_product_flat):
     data = get_product_flat(2, "is_onsale,created_time__count", {})
-    assert data == [[False, 1], [False, 1], [False, 1]]
+    sortedAssert(data, [[False, 1], [False, 1], [False, 1]])
 
 
 @pytest.mark.usefixtures("products")
@@ -246,39 +268,39 @@ def test_get_results_collapsed(get_product_flat):
 
 @pytest.mark.usefixtures("products")
 def test_get_results_null_filter(get_product_flat):
-    data = get_product_flat(1, "id", {"onsale__is_null": ["True"]})
-    assert data == [[1], [2], [3]]
-    data = get_product_flat(1, "id", {"onsale__is_null": ["true"]})
-    assert data == [[1], [2], [3]]
-    data = get_product_flat(1, "id", {"onsale__is_null": ["False"]})
-    assert data == []
-    data = get_product_flat(1, "id", {"onsale__is_null": ["false"]})
-    assert data == []
+    data = get_product_flat(1, "name", {"onsale__is_null": ["True"]})
+    sortedAssert(data, [["a"], ["b"], ["c"]])
+    data = get_product_flat(1, "name", {"onsale__is_null": ["true"]})
+    sortedAssert(data, [["a"], ["b"], ["c"]])
+    data = get_product_flat(1, "name", {"onsale__is_null": ["False"]})
+    sortedAssert(data, [])
+    data = get_product_flat(1, "name", {"onsale__is_null": ["false"]})
+    sortedAssert(data, [])
 
 
 @pytest.mark.usefixtures("products")
 def test_get_results_boolean_filter(get_product_flat):
     models.Product.objects.update(onsale=True)
-    data = get_product_flat(1, "id", {"onsale__equals": ["True"]})
-    assert data == [[1], [2], [3]]
-    data = get_product_flat(1, "id", {"onsale__equals": ["true"]})
-    assert data == [[1], [2], [3]]
-    data = get_product_flat(1, "id", {"onsale__equals": ["False"]})
-    assert data == []
-    data = get_product_flat(1, "id", {"onsale__equals": ["false"]})
-    assert data == []
+    data = get_product_flat(1, "name", {"onsale__equals": ["True"]})
+    sortedAssert(data, [["a"], ["b"], ["c"]])
+    data = get_product_flat(1, "name", {"onsale__equals": ["true"]})
+    sortedAssert(data, [["a"], ["b"], ["c"]])
+    data = get_product_flat(1, "name", {"onsale__equals": ["False"]})
+    sortedAssert(data, [])
+    data = get_product_flat(1, "name", {"onsale__equals": ["false"]})
+    sortedAssert(data, [])
 
 
 @pytest.mark.usefixtures("products")
 def test_get_results_string_filter(get_product_flat):
-    data = get_product_flat(1, "id", {"producer__name__equals": ["Bob"]})
-    assert data == [[1], [2], [3]]
-    data = get_product_flat(1, "id", {"producer__name__equals": ["bob"]})
-    assert data == [[1], [2], [3]]
-    data = get_product_flat(1, "id", {"producer__name__equals": ["fred"]})
-    assert data == []
-    data = get_product_flat(1, "id", {"producer__name__regex": ["\\"]})
-    assert data == []
+    data = get_product_flat(1, "name", {"producer__name__equals": ["Bob"]})
+    sortedAssert(data, [["a"], ["b"], ["c"]])
+    data = get_product_flat(1, "name", {"producer__name__equals": ["bob"]})
+    sortedAssert(data, [["a"], ["b"], ["c"]])
+    data = get_product_flat(1, "name", {"producer__name__equals": ["fred"]})
+    sortedAssert(data, [])
+    data = get_product_flat(1, "name", {"producer__name__regex": ["\\"]})
+    sortedAssert(data, [])
 
 
 @pytest.mark.usefixtures("products")
@@ -295,28 +317,21 @@ def test_get_results_calculated_causes_query(get_product_flat):
     assert data == [["a", False, "london"], ["b", False, "london"], ["c", False, None]]
 
 
-@pytest.mark.usefixtures("products")
-def test_get_results_admin_causes_query(get_product_flat):
+def test_get_results_admin_causes_query(get_product_flat, products):
     # query products, fetch objects for calculated
     data = get_product_flat(2, "name+0,admin,producer__address__city", {})
     assert data == [
-        [
-            "a",
-            '<a href="/admin/tests/product/1/change/">Product object (1)</a>',
-            "london",
-        ],
-        [
-            "b",
-            '<a href="/admin/tests/product/2/change/">Product object (2)</a>',
-            "london",
-        ],
-        ["c", '<a href="/admin/tests/product/3/change/">Product object (3)</a>', None],
+        ["a", admin_link(products[0]), "london"],
+        ["b", admin_link(products[1]), "london"],
+        ["c", admin_link(products[2]), None],
     ]
 
 
 @pytest.mark.usefixtures("pivot_products")
 def test_get_pivot(get_product_pivot):
-    data = get_product_pivot(3, "created_time__year,&created_time__month,id__count", {})
+    data = get_product_pivot(
+        3, "created_time__year+0,&created_time__month+1,id__count", {}
+    )
     assert data == {
         "body": [[[1], [3]], [[2], [4]]],
         "cols": [["January"], ["Feburary"]],
@@ -327,7 +342,7 @@ def test_get_pivot(get_product_pivot):
 @pytest.mark.usefixtures("pivot_products")
 def test_get_pivot_multi_agg(get_product_pivot):
     data = get_product_pivot(
-        3, "created_time__year,&created_time__month,id__count,id__max", {}
+        3, "created_time__year+0,&created_time__month+1,size__count,size__max", {}
     )
     assert data == {
         "body": [[[1, 1], [3, 6]], [[2, 3], [4, 10]]],
@@ -339,7 +354,7 @@ def test_get_pivot_multi_agg(get_product_pivot):
 @pytest.mark.usefixtures("pivot_products")
 def test_get_pivot_all(get_product_pivot):
     data = get_product_pivot(
-        1, "&created_time__year, &created_time__month,id__count", {}
+        1, "&created_time__year+0, &created_time__month+1,id__count", {}
     )
     assert data == {
         "body": [[[1]], [[2]], [[3]], [[4]]],
@@ -424,11 +439,11 @@ testdata = [
 def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
     fields = []
     if "r" in key:
-        fields.append("created_time__year")
+        fields.append("created_time__year+0")
     if "c" in key:
-        fields.append("&created_time__month")
+        fields.append("&created_time__month+1")
     if "b" in key:
-        fields.extend(["id__count", "id__max"])
+        fields.extend(["size__count", "size__max"])
     filters = {} if "d" in key else {"id__equals": ["123"]}
 
     queries = 0 if key.endswith("---") else 1

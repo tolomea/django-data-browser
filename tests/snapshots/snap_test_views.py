@@ -2457,7 +2457,7 @@ snapshots["test_query_ctx context"] = {
 snapshots["test_query_csv_pivot_permutations[----] key"] = [[""]]
 
 snapshots["test_query_csv_pivot_permutations[---b] key"] = [
-    ["id count", "id max"],
+    ["id count", "size max"],
     ["0.0", ""],
 ]
 
@@ -2474,7 +2474,7 @@ snapshots["test_query_csv_pivot_permutations[--cb] key"] = [
 snapshots["test_query_csv_pivot_permutations[-r--] key"] = [["created_time year"]]
 
 snapshots["test_query_csv_pivot_permutations[-r-b] key"] = [
-    ["created_time year", "id count", "id max"]
+    ["created_time year", "id count", "size max"]
 ]
 
 snapshots["test_query_csv_pivot_permutations[-rc-] key"] = [
@@ -2490,7 +2490,7 @@ snapshots["test_query_csv_pivot_permutations[-rcb] key"] = [
 snapshots["test_query_csv_pivot_permutations[d---] key"] = [[""]]
 
 snapshots["test_query_csv_pivot_permutations[d--b] key"] = [
-    ["id count", "id max"],
+    ["id count", "size max"],
     ["6.0", "6.0"],
 ]
 
@@ -2502,7 +2502,7 @@ snapshots["test_query_csv_pivot_permutations[d-c-] key"] = [
 
 snapshots["test_query_csv_pivot_permutations[d-cb] key"] = [
     ["created_time month", "January", "", "Feburary", ""],
-    ["", "id count", "id max", "id count", "id max"],
+    ["", "id count", "size max", "id count", "size max"],
     ["", "4.0", "6.0", "2.0", "3.0"],
 ]
 
@@ -2513,7 +2513,7 @@ snapshots["test_query_csv_pivot_permutations[dr--] key"] = [
 ]
 
 snapshots["test_query_csv_pivot_permutations[dr-b] key"] = [
-    ["created_time year", "id count", "id max"],
+    ["created_time year", "id count", "size max"],
     ["2020.0", "3.0", "3.0"],
     ["2021.0", "3.0", "6.0"],
 ]
@@ -2527,7 +2527,7 @@ snapshots["test_query_csv_pivot_permutations[drc-] key"] = [
 
 snapshots["test_query_csv_pivot_permutations[drcb] key"] = [
     ["created_time month", "January", "", "Feburary", ""],
-    ["created_time year", "id count", "id max", "id count", "id max"],
+    ["created_time year", "id count", "size max", "id count", "size max"],
     ["2020.0", "1.0", "1.0", "2.0", "3.0"],
     ["2021.0", "3.0", "6.0", "", ""],
 ]
@@ -2588,8 +2588,8 @@ snapshots["test_query_json data"] = {
 
 snapshots["test_query_json_pivot data"] = {
     "body": [
-        [{"id__count": 1.0, "id__max": 1.0}, {"id__count": 3.0, "id__max": 6.0}],
-        [{"id__count": 2.0, "id__max": 3.0}, {"id__count": None, "id__max": None}],
+        [{"id__count": 1.0, "size__max": 1.0}, {"id__count": 3.0, "size__max": 6.0}],
+        [{"id__count": 2.0, "size__max": 3.0}, {"id__count": None, "size__max": None}],
     ],
     "cols": [{"created_time__month": "January"}, {"created_time__month": "Feburary"}],
     "fields": [
@@ -2598,16 +2598,16 @@ snapshots["test_query_json_pivot data"] = {
             "pathStr": "created_time__year",
             "pivoted": False,
             "prettyPath": ["created_time", "year"],
-            "priority": None,
-            "sort": None,
+            "priority": 0,
+            "sort": "asc",
         },
         {
             "path": ["created_time", "month"],
             "pathStr": "created_time__month",
             "pivoted": True,
             "prettyPath": ["created_time", "month"],
-            "priority": None,
-            "sort": None,
+            "priority": 1,
+            "sort": "asc",
         },
         {
             "path": ["id", "count"],
@@ -2618,10 +2618,10 @@ snapshots["test_query_json_pivot data"] = {
             "sort": None,
         },
         {
-            "path": ["id", "max"],
-            "pathStr": "id__max",
+            "path": ["size", "max"],
+            "pathStr": "size__max",
             "pivoted": False,
-            "prettyPath": ["id", "max"],
+            "prettyPath": ["size", "max"],
             "priority": None,
             "sort": None,
         },
