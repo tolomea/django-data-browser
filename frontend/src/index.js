@@ -14,6 +14,7 @@ if (djangoData.sentryDsn) {
         dsn: djangoData.sentryDsn,
         release: djangoData.config.version,
         attachStacktrace: true,
+        maxValueLength: 10000,
     });
 }
 
