@@ -90,7 +90,7 @@ class App extends React.Component {
     this.fetchResults(newState)
       .then((response) => {
         response = { ...response, ...empty };
-        assert.deepEqual(response, request);
+        assert.deepStrictEqual(response, request);
       })
       .catch(handleError);
   }

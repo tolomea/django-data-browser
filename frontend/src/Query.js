@@ -53,7 +53,7 @@ class Query {
   }
 
   getDefaultLookupValue(type, lookup) {
-    return this.config.types[type.lookups[lookup].type].defaultValue;
+    return String(this.config.types[type.lookups[lookup].type].defaultValue);
   }
 
   addField(path, prettyPath) {
