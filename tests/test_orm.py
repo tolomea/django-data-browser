@@ -193,8 +193,9 @@ def test_filter_aggregate(get_product_flat):
 
 @pytest.mark.usefixtures("products")
 def test_filter_aggregate_no_fields(get_product_flat):
-    data = get_product_flat(1, "", {"id__count__gt": [0]})
-    assert data == [["g"]]
+    # no group by -> no having
+    data = get_product_flat(1, "id__count", {"id__count__lt": [0]})
+    assert data == [[3]]
 
 
 @pytest.mark.usefixtures("products")

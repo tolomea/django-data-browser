@@ -258,9 +258,10 @@ def _get_results(request, bound_query, orm_models):
     )
 
     # having, aka filter aggregate fields
-    for filter_ in bound_query.valid_filters:
-        if filter_.orm_bound_field.having:
-            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
+    if any(f.group_by for f in bound_query.bound_fields):  # no group by -> no having
+        for filter_ in bound_query.valid_filters:
+            if filter_.orm_bound_field.having:
+                qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
 
     # sort
     sort_fields = []
