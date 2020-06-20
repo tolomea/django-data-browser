@@ -170,6 +170,12 @@ def test_filter_aggregate(get_product_flat):
 
 
 @pytest.mark.usefixtures("products")
+def test_filter_aggregate_no_fields(get_product_flat):
+    data = get_product_flat(1, "", {"id__count__gt": [0]})
+    assert data == [["g"]]
+
+
+@pytest.mark.usefixtures("products")
 def test_get_aggregate_and_calculated_field(get_product_flat):
     data = get_product_flat(2, "is_onsale,id__count", {})
     assert data == [[False, 1], [False, 1], [False, 1]]
@@ -270,6 +276,8 @@ def test_get_results_string_filter(get_product_flat):
     data = get_product_flat(1, "id", {"producer__name__equals": ["bob"]})
     assert data == [[1], [2], [3]]
     data = get_product_flat(1, "id", {"producer__name__equals": ["fred"]})
+    assert data == []
+    data = get_product_flat(1, "id", {"producer__name__regex": ["\\"]})
     assert data == []
 
 
