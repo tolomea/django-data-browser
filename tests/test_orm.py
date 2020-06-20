@@ -192,9 +192,28 @@ def test_filter_aggregate(get_product_flat):
 
 
 @pytest.mark.usefixtures("products")
-def test_filter_aggregate_no_fields(get_product_flat):
+def test_filter_sum_boolean(get_product_flat):
+    data = get_product_flat(1, "size_unit", {"onsale__sum__gt": [100]})
+    assert data == []
+
+
+@pytest.mark.usefixtures("products")
+def test_filter_average_boolean(get_product_flat):
+    data = get_product_flat(1, "size_unit", {"onsale__average__gt": [100]})
+    assert data == []
+
+
+@pytest.mark.usefixtures("products")
+def test_filter_aggregate_no_fields_filter(get_product_flat):
     # no group by -> no having
     data = get_product_flat(1, "id__count", {"id__count__lt": [0]})
+    assert data == [[3]]
+
+
+@pytest.mark.usefixtures("products")
+def test_filter_aggregate_no_fields_filter_different(get_product_flat):
+    # no group by -> no having
+    data = get_product_flat(1, "id__count", {"onsale__count__lt": [0]})
     assert data == [[3]]
 
 

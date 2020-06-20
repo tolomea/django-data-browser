@@ -23,17 +23,18 @@ _OPEN_IN_ADMIN = "admin"
 
 
 _AGG_MAP = {
-    "average": models.Avg,
+    "average": lambda x: models.Avg(x, output_field=models.FloatField()),
     "count": lambda x: models.Count(x, distinct=True),
     "max": models.Max,
     "min": models.Min,
     "std_dev": models.StdDev,
-    "sum": models.Sum,
+    "sum": lambda x: models.Sum(x, output_field=models.FloatField()),
     "variance": models.Variance,
 }
 
 
 _AGGREGATES = {
+    # NTS beware that Sum(type) -> type
     StringType: ["count"],
     NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
     DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
