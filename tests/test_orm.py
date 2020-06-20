@@ -206,15 +206,15 @@ def test_filter_average_boolean(get_product_flat):
 @pytest.mark.usefixtures("products")
 def test_filter_aggregate_no_fields_filter(get_product_flat):
     # no group by -> no having
-    data = get_product_flat(1, "id__count", {"id__count__lt": [0]})
-    assert data == [[3]]
+    data = get_product_flat(1, "onsale__sum", {"onsale__sum__lt": [0]})
+    assert data == [[None]]
 
 
 @pytest.mark.usefixtures("products")
 def test_filter_aggregate_no_fields_filter_different(get_product_flat):
     # no group by -> no having
-    data = get_product_flat(1, "id__count", {"onsale__count__lt": [0]})
-    assert data == [[3]]
+    data = get_product_flat(1, "onsale__sum", {"onsale__average__lt": [0]})
+    assert data == [[None]]
 
 
 @pytest.mark.usefixtures("products")

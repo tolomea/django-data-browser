@@ -4,6 +4,7 @@ from typing import Sequence, Tuple
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
 from django.db.models import functions
+from django.db.models.functions import Cast
 from django.urls import reverse
 
 from .query import (
@@ -23,12 +24,12 @@ _OPEN_IN_ADMIN = "admin"
 
 
 _AGG_MAP = {
-    "average": lambda x: models.Avg(x, output_field=models.FloatField()),
+    "average": lambda x: models.Avg(Cast(x, output_field=models.IntegerField())),
     "count": lambda x: models.Count(x, distinct=True),
     "max": models.Max,
     "min": models.Min,
     "std_dev": models.StdDev,
-    "sum": lambda x: models.Sum(x, output_field=models.FloatField()),
+    "sum": lambda x: models.Sum(Cast(x, output_field=models.IntegerField())),
     "variance": models.Variance,
 }
 

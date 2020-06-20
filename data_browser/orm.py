@@ -241,11 +241,21 @@ def _get_results(request, bound_query, orm_models):
         if filter_.orm_bound_field.filter_:
             qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
 
+    # nothing to group on, early out with an aggregate
+    if not any(f.group_by for f in bound_query.bound_fields):
+        return [
+            qs.aggregate(
+                **dict(
+                    field.aggregate_clause
+                    for field in bound_query.bound_fields + bound_query.bound_filters
+                    if field.aggregate_clause
+                )
+            )
+        ]
+
     # group by
     qs = qs.values(
-        *[field.queryset_path for field in bound_query.bound_fields if field.group_by],
-        # .values() is interpreted as all values, _ddb_dummy ensures there's always at least one
-        _ddb_dummy=models.Value(1, output_field=models.IntegerField()),
+        *[field.queryset_path for field in bound_query.bound_fields if field.group_by]
     ).distinct()
 
     # aggregates
@@ -258,10 +268,9 @@ def _get_results(request, bound_query, orm_models):
     )
 
     # having, aka filter aggregate fields
-    if any(f.group_by for f in bound_query.bound_fields):  # no group by -> no having
-        for filter_ in bound_query.valid_filters:
-            if filter_.orm_bound_field.having:
-                qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
+    for filter_ in bound_query.valid_filters:
+        if filter_.orm_bound_field.having:
+            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
 
     # sort
     sort_fields = []
