@@ -484,6 +484,10 @@
                     "variance"
                 ]
             },
+            "regex": {
+                "fields": {},
+                "sortedFields": []
+            },
             "string": {
                 "fields": {
                     "count": {
@@ -1033,6 +1037,12 @@
                     "is_null"
                 ]
             },
+            "regex": {
+                "defaultLookup": null,
+                "defaultValue": ".*",
+                "lookups": {},
+                "sortedLookups": []
+            },
             "string": {
                 "defaultLookup": "equals",
                 "defaultValue": "",
@@ -1059,13 +1069,13 @@
                         "type": "string"
                     },
                     "not_regex": {
-                        "type": "string"
+                        "type": "regex"
                     },
                     "not_starts_with": {
                         "type": "string"
                     },
                     "regex": {
-                        "type": "string"
+                        "type": "regex"
                     },
                     "starts_with": {
                         "type": "string"

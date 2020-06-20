@@ -1,5 +1,6 @@
 import urllib
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Any, Optional, Sequence
 
 import dateutil.parser
@@ -159,14 +160,31 @@ class StringType(BaseType):
         "contains": "string",
         "starts_with": "string",
         "ends_with": "string",
-        "regex": "string",
+        "regex": "regex",
         "not_equals": "string",
         "not_contains": "string",
         "not_starts_with": "string",
         "not_ends_with": "string",
-        "not_regex": "string",
+        "not_regex": "regex",
         "is_null": "boolean",
     }
+
+
+class RegexType(BaseType):
+    default_value = ".*"
+
+    @staticmethod
+    @lru_cache(maxsize=None)
+    def _parse(value):
+        from django.contrib.contenttypes.models import ContentType
+        from django.db.transaction import atomic
+
+        # this is dirty
+        # we need to check if the regex is going to cause a db exception
+        # and not kill any in progress transaction as we check
+        with atomic():
+            list(ContentType.objects.filter(model__regex=value))
+        return value
 
 
 class NumberType(BaseType):

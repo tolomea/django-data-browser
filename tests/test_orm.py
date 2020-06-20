@@ -300,7 +300,7 @@ def test_get_results_string_filter(get_product_flat):
     data = get_product_flat(1, "name", {"producer__name__equals": ["fred"]})
     sortedAssert(data, [])
     data = get_product_flat(1, "name", {"producer__name__regex": ["\\"]})
-    sortedAssert(data, [])
+    sortedAssert(data, [["a"], ["b"], ["c"]])
 
 
 @pytest.mark.usefixtures("products")

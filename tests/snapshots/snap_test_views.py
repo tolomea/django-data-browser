@@ -479,6 +479,7 @@ snapshots["test_query_html context"] = {
                     "variance",
                 ],
             },
+            "regex": {"fields": {}, "sortedFields": []},
             "string": {
                 "fields": {
                     "count": {
@@ -926,6 +927,12 @@ snapshots["test_query_html context"] = {
                     "is_null",
                 ],
             },
+            "regex": {
+                "defaultLookup": None,
+                "defaultValue": ".*",
+                "lookups": {},
+                "sortedLookups": [],
+            },
             "string": {
                 "defaultLookup": "equals",
                 "defaultValue": "",
@@ -937,9 +944,9 @@ snapshots["test_query_html context"] = {
                     "not_contains": {"type": "string"},
                     "not_ends_with": {"type": "string"},
                     "not_equals": {"type": "string"},
-                    "not_regex": {"type": "string"},
+                    "not_regex": {"type": "regex"},
                     "not_starts_with": {"type": "string"},
-                    "regex": {"type": "string"},
+                    "regex": {"type": "regex"},
                     "starts_with": {"type": "string"},
                 },
                 "sortedLookups": [
@@ -1270,6 +1277,7 @@ snapshots["test_query_html_no_perms context"] = {
                     "variance",
                 ],
             },
+            "regex": {"fields": {}, "sortedFields": []},
             "string": {
                 "fields": {
                     "count": {
@@ -1380,6 +1388,12 @@ snapshots["test_query_html_no_perms context"] = {
                     "is_null",
                 ],
             },
+            "regex": {
+                "defaultLookup": None,
+                "defaultValue": ".*",
+                "lookups": {},
+                "sortedLookups": [],
+            },
             "string": {
                 "defaultLookup": "equals",
                 "defaultValue": "",
@@ -1391,9 +1405,9 @@ snapshots["test_query_html_no_perms context"] = {
                     "not_contains": {"type": "string"},
                     "not_ends_with": {"type": "string"},
                     "not_equals": {"type": "string"},
-                    "not_regex": {"type": "string"},
+                    "not_regex": {"type": "regex"},
                     "not_starts_with": {"type": "string"},
-                    "regex": {"type": "string"},
+                    "regex": {"type": "regex"},
                     "starts_with": {"type": "string"},
                 },
                 "sortedLookups": [
@@ -1930,6 +1944,7 @@ snapshots["test_query_ctx context"] = {
                     "variance",
                 ],
             },
+            "regex": {"fields": {}, "sortedFields": []},
             "string": {
                 "fields": {
                     "count": {
@@ -2377,6 +2392,12 @@ snapshots["test_query_ctx context"] = {
                     "is_null",
                 ],
             },
+            "regex": {
+                "defaultLookup": None,
+                "defaultValue": ".*",
+                "lookups": {},
+                "sortedLookups": [],
+            },
             "string": {
                 "defaultLookup": "equals",
                 "defaultValue": "",
@@ -2388,9 +2409,9 @@ snapshots["test_query_ctx context"] = {
                     "not_contains": {"type": "string"},
                     "not_ends_with": {"type": "string"},
                     "not_equals": {"type": "string"},
-                    "not_regex": {"type": "string"},
+                    "not_regex": {"type": "regex"},
                     "not_starts_with": {"type": "string"},
-                    "regex": {"type": "string"},
+                    "regex": {"type": "regex"},
                     "starts_with": {"type": "string"},
                 },
                 "sortedLookups": [

@@ -260,9 +260,12 @@ class TestType:
 
 
 class TestStringType:
+    @pytest.mark.django_db
     def test_validate(self):
         assert StringType.parse("contains", "hello") == ("hello", None)
         assert StringType.parse("pontains", "hello") == (None, ANY(str))
+        assert StringType.parse("regex", ".*") == (".*", None)
+        assert StringType.parse("regex", "\\") == (None, ANY(str))
 
     def test_default_lookup(self):
         assert StringType.default_lookup == "equals"
