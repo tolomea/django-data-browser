@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from . import version
+from .common import can_make_public
 from .models import View
 from .orm import _OPEN_IN_ADMIN, get_models, get_results
 from .query import TYPES, BoundQuery, Query
@@ -85,31 +86,15 @@ def _get_config(user, orm_models):
         for model_name, orm_model in orm_models.items()
     }
 
-    saved_views = [
-        {
-            "name": view.name,
-            "public": view.public,
-            "model": view.model_name,
-            "description": view.description,
-            "link": f"query/{view.model_name}/{view.fields}.html?{view.query}",
-        }
-        for view in View.objects.filter(owner=user).order_by("name")
-    ]
-
-    admin_url = None
-    if "data_browser.View" in orm_models:
-        admin_url = reverse(f"admin:{View._meta.db_table}_add")
-
     return {
         "baseUrl": reverse("data_browser:home"),
-        "adminUrl": admin_url,
         "types": types,
         "allModelFields": all_model_fields,
         "sortedModels": sorted(
             name for name, model in orm_models.items() if model.root
         ),
         "version": version,
-        "savedViews": saved_views,
+        "can_make_public": can_make_public(user),
     }
 
 
@@ -157,7 +142,7 @@ def view(request, pk, media):
         # some of these are checked by the admin but this is a good time to be paranoid
         view.owner.is_active
         and view.owner.is_staff
-        and view.owner.has_perm("data_browser.make_view_public")
+        and can_make_public(view.owner)
         and getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False)
     ):
         request.user = view.owner  # public views are run as the person who owns them

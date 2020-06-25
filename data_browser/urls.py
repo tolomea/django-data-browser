@@ -6,6 +6,7 @@ from django.urls.converters import StringConverter
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 
+from .api import view_detail, view_list
 from .views import proxy_js_dev_server, query, query_ctx, query_html, view
 
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
@@ -35,6 +36,9 @@ urlpatterns = [
     path(f"{QUERY_PATH}.<media>", query, name="query"),
     # views
     path("view/<pk>.<media>", view, name="view"),
+    # api
+    path("api/views/", view_list, name="view_list"),
+    path("api/views/<pk>/", view_detail, name="view_detail"),
     # other html pages
     re_path(r".*\.html", query_html),
     re_path(r".*\.ctx", query_ctx),

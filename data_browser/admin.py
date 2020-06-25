@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from . import models
+from .common import can_make_public
 
 globals = threading.local()
 
@@ -40,7 +41,7 @@ class ViewAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj):
         readonly_fields = list(super().get_readonly_fields(request, obj))
-        if request.user.has_perm("data_browser.make_view_public"):
+        if can_make_public(request.user):
             return readonly_fields
         elif obj and obj.public:
             return flatten_fieldsets(self.get_fieldsets(request, obj))
@@ -49,7 +50,7 @@ class ViewAdmin(admin.ModelAdmin):
 
     def get_fieldsets(self, request, obj=None):
         res = super().get_fieldsets(request, obj)
-        if not request.user.has_perm("data_browser.make_view_public"):
+        if not can_make_public(request.user):
             res = [fs for fs in res if fs[0] != "Public"]
         return res
 

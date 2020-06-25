@@ -8,7 +8,6 @@ snapshots = Snapshot()
 
 snapshots["test_query_html context"] = {
     "config": {
-        "adminUrl": "/admin/data_browser/view/add/",
         "allModelFields": {
             "auth.Group": {
                 "fields": {
@@ -821,7 +820,7 @@ snapshots["test_query_html context"] = {
             "year": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
-        "savedViews": [],
+        "can_make_public": True,
         "sortedModels": [
             "auth.Group",
             "auth.User",
@@ -1050,7 +1049,6 @@ snapshots["test_query_query query"] = {
 
 snapshots["test_query_html_no_perms context"] = {
     "config": {
-        "adminUrl": None,
         "allModelFields": {
             "boolean": {
                 "fields": {
@@ -1292,7 +1290,7 @@ snapshots["test_query_html_no_perms context"] = {
             "year": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
-        "savedViews": [],
+        "can_make_public": False,
         "sortedModels": [],
         "types": {
             "boolean": {
@@ -1461,7 +1459,6 @@ snapshots["test_query_html_no_perms context"] = {
 
 snapshots["test_query_ctx context"] = {
     "config": {
-        "adminUrl": "/admin/data_browser/view/add/",
         "allModelFields": {
             "auth.Group": {
                 "fields": {
@@ -2274,7 +2271,7 @@ snapshots["test_query_ctx context"] = {
             "year": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
-        "savedViews": [],
+        "can_make_public": True,
         "sortedModels": [
             "auth.Group",
             "auth.User",
