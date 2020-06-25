@@ -69,6 +69,8 @@ class TestViewList:
                 "model": "core.Product",
                 "fields": "admin",
                 "query": "name__contains=sql",
+                "public_link": "N/A",
+                "google_sheets_formula": "N/A",
             }
         ]
 
@@ -87,6 +89,10 @@ class TestViewList:
             content_type="application/json",
         )
         assert resp.status_code == 200
+
+        view = View.objects.get()
+        link = f"http://testserver/data_browser/view/{view.public_slug}.csv"
+
         assert resp.json() == {
             "name": "test",
             "description": "lorem ipsum",
@@ -94,9 +100,10 @@ class TestViewList:
             "model": "core.Product",
             "fields": "",
             "query": "",
+            "public_link": link,
+            "google_sheets_formula": f'=importdata("{link}")',
         }
 
-        view = View.objects.get()
         assert view.owner == admin_user
         assert view.name == "test"
         assert view.description == "lorem ipsum"
@@ -144,6 +151,8 @@ class TestViewDetail:
             "model": "core.Product",
             "fields": "admin",
             "query": "name__contains=sql",
+            "public_link": "N/A",
+            "google_sheets_formula": "N/A",
         }
 
     def test_get_other_owner(self, admin_client, other_view):
@@ -177,6 +186,10 @@ class TestViewDetail:
             content_type="application/json",
         )
         assert resp.status_code == 200
+
+        view.refresh_from_db()
+        link = f"http://testserver/data_browser/view/{view.public_slug}.csv"
+
         assert resp.json() == {
             "name": "test",
             "description": "lorem ipsum",
@@ -184,9 +197,10 @@ class TestViewDetail:
             "model": "core.Product",
             "fields": "admin",
             "query": "name__contains=sql",
+            "public_link": link,
+            "google_sheets_formula": f'=importdata("{link}")',
         }
 
-        view.refresh_from_db()
         assert view.owner == admin_user
         assert view.name == "test"
         assert view.description == "lorem ipsum"

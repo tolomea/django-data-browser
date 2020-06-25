@@ -1,9 +1,14 @@
+import threading
+
 from django.conf import settings
 from django.db import models
 from django.http import QueryDict
+from django.urls import reverse
 from django.utils import crypto, timezone
 
 from .common import MAKE_PUBLIC_CODENAME
+
+global_data = threading.local()
 
 
 def get_id():
@@ -36,6 +41,31 @@ class View(models.Model):
         from .query import Query
 
         return Query.from_request(self.model_name, self.fields, QueryDict(self.query))
+
+    def public_link(self):
+        if self.public:
+            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
+                url = reverse(
+                    "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
+                )
+                return global_data.request.build_absolute_uri(url)
+            else:
+                return "Public URL's are disabled in Django settings."
+        else:
+            return "N/A"
+
+    def google_sheets_formula(self):
+        if self.public:
+            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
+                url = reverse(
+                    "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
+                )
+                url = global_data.request.build_absolute_uri(url)
+                return f'=importdata("{url}")'
+            else:
+                return "Public URL's are disabled in Django settings."
+        else:
+            return "N/A"
 
     def __str__(self):
         return f"{self.model_name} view: {self.name}"

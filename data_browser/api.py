@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 
 from .common import can_make_public
-from .models import View
+from .models import View, global_data
 
 
 def deserialize(request):
@@ -32,7 +32,8 @@ def serialize(view):
         "model": view.model_name,
         "fields": view.fields,
         "query": view.query,
-        # public link fields
+        "public_link": view.public_link(),
+        "google_sheets_formula": view.google_sheets_formula(),
     }
 
 
@@ -42,6 +43,8 @@ def get_queryset(request):
 
 @admin_decorators.staff_member_required
 def view_list(request):
+    global_data.request = request
+
     if request.method == "GET":
         return JsonResponse(
             [serialize(view) for view in get_queryset(request).order_by("name")],
@@ -56,6 +59,7 @@ def view_list(request):
 
 @admin_decorators.staff_member_required
 def view_detail(request, pk):
+    global_data.request = request
     view = get_object_or_404(get_queryset(request), pk=pk)
 
     if request.method == "GET":

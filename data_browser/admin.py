@@ -1,15 +1,9 @@
-import threading
-
-from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
-from django.urls import reverse
 from django.utils.html import format_html
 
 from . import models
 from .common import can_make_public
-
-globals = threading.local()
 
 
 @admin.register(models.View)
@@ -55,7 +49,7 @@ class ViewAdmin(admin.ModelAdmin):
         return res
 
     def change_view(self, request, *args, **kwargs):
-        globals.request = request
+        models.global_data.request = request
         return super().change_view(request, *args, **kwargs)
 
     @staticmethod
@@ -64,33 +58,6 @@ class ViewAdmin(admin.ModelAdmin):
             return "N/A"
         url = obj.get_query().get_url("html")
         return format_html(f'<a href="{url}">view</a>')
-
-    @staticmethod
-    def public_link(obj):
-        if obj.public:
-            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
-                url = reverse(
-                    "data_browser:view", kwargs={"pk": obj.public_slug, "media": "csv"}
-                )
-                return globals.request.build_absolute_uri(url)
-            else:
-                return "Public URL's are disabled in Django settings."
-        else:
-            return "N/A"
-
-    @staticmethod
-    def google_sheets_formula(obj):
-        if obj.public:
-            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
-                url = reverse(
-                    "data_browser:view", kwargs={"pk": obj.public_slug, "media": "csv"}
-                )
-                url = globals.request.build_absolute_uri(url)
-                return f'=importdata("{url}")'
-            else:
-                return "Public URL's are disabled in Django settings."
-        else:
-            return "N/A"
 
     def get_changeform_initial_data(self, request):
         get_results = super().get_changeform_initial_data(request)
