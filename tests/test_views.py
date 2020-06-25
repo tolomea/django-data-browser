@@ -2,9 +2,10 @@ import csv
 import json
 from datetime import datetime
 
-import data_browser.models
 import pytest
 from django.contrib.auth.models import User
+
+import data_browser.models
 
 from . import models
 from .util import update_fe_fixture

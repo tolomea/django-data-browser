@@ -1,11 +1,12 @@
 from datetime import datetime
 
 import pytest
-from data_browser import orm, orm_fields
-from data_browser.query import BoundQuery, Query
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
+
+from data_browser import orm, orm_fields
+from data_browser.query import BoundQuery, Query
 
 from . import models
 from .util import ANY, KEYS

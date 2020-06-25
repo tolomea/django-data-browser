@@ -1,6 +1,9 @@
 from datetime import date, datetime
 
 import pytest
+from django.http import QueryDict
+from django.utils import timezone
+
 from data_browser import orm, orm_fields
 from data_browser.query import (
     ASC,
@@ -18,8 +21,6 @@ from data_browser.query import (
     WeekDayType,
     YearType,
 )
-from django.http import QueryDict
-from django.utils import timezone
 
 from .util import ANY
 

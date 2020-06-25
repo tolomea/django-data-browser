@@ -23,5 +23,9 @@ repos:
     rev: 3.7.9
     hooks:
     -   id: flake8
+        additional_dependencies:
+        -   flake8-use-fstring
+        -   flake8-tidy-imports
+        -   flake8-comprehensions
 exclude:
     data_browser/fe_build/|data_browser/templates/data_browser/index.html

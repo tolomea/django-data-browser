@@ -1,9 +1,10 @@
 import pytest
-from data_browser.admin import ViewAdmin, globals
-from data_browser.models import View
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.models import Permission, User
+
+from data_browser.admin import ViewAdmin, globals
+from data_browser.models import View
 
 
 @pytest.fixture
