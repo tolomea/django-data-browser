@@ -24,23 +24,10 @@ class ViewAdmin(admin.ModelAdmin):
         ("Query", {"fields": ["model_name", "fields", "query"]}),
         ("Internal", {"fields": ["id", "created_time"]}),
     ]
-    readonly_fields = [
-        "open_view",
-        "public_link",
-        "google_sheets_formula",
-        "id",
-        "created_time",
-    ]
     list_display = ["__str__", "owner", "public"]
 
     def get_readonly_fields(self, request, obj):
-        readonly_fields = list(super().get_readonly_fields(request, obj))
-        if can_make_public(request.user):
-            return readonly_fields
-        elif obj and obj.public:
-            return flatten_fieldsets(self.get_fieldsets(request, obj))
-        else:
-            return readonly_fields + ["public", "public_slug"]
+        return flatten_fieldsets(self.get_fieldsets(request, obj))
 
     def get_fieldsets(self, request, obj=None):
         res = super().get_fieldsets(request, obj)

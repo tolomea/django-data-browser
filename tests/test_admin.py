@@ -50,9 +50,8 @@ def get_admin_details(rf):
         view_admin = ViewAdmin(View, admin.site)
         fields = set(flatten_fieldsets(view_admin.get_fieldsets(request, obj)))
         read_only = set(view_admin.get_readonly_fields(request, obj))
-        editable = fields - read_only
-        read_only = read_only & fields
-        return editable, read_only
+        assert fields == read_only
+        return fields
 
     return helper
 
@@ -66,8 +65,8 @@ def staff_user(admin_user):
 
 class TestAdminFieldsSuperUser:
     def test_add_page_edit_everything(self, admin_user, get_admin_details):
-        editable, read_only = get_admin_details(admin_user, None)
-        assert editable == {
+        fields = get_admin_details(admin_user, None)
+        assert fields == {
             "description",
             "fields",
             "model_name",
@@ -76,8 +75,6 @@ class TestAdminFieldsSuperUser:
             "public",
             "public_slug",
             "query",
-        }
-        assert read_only == {
             "created_time",
             "google_sheets_formula",
             "id",
@@ -86,8 +83,8 @@ class TestAdminFieldsSuperUser:
         }
 
     def test_private_view_edit_everything(self, admin_user, get_admin_details, view):
-        editable, read_only = get_admin_details(admin_user, view)
-        assert editable == {
+        fields = get_admin_details(admin_user, view)
+        assert fields == {
             "description",
             "fields",
             "model_name",
@@ -96,8 +93,6 @@ class TestAdminFieldsSuperUser:
             "public",
             "public_slug",
             "query",
-        }
-        assert read_only == {
             "created_time",
             "google_sheets_formula",
             "id",
@@ -107,8 +102,8 @@ class TestAdminFieldsSuperUser:
 
     def test_public_view_edit_everything(self, admin_user, get_admin_details, view):
         view.public = True
-        editable, read_only = get_admin_details(admin_user, view)
-        assert editable == {
+        fields = get_admin_details(admin_user, view)
+        assert fields == {
             "description",
             "fields",
             "model_name",
@@ -117,8 +112,6 @@ class TestAdminFieldsSuperUser:
             "public",
             "public_slug",
             "query",
-        }
-        assert read_only == {
             "created_time",
             "google_sheets_formula",
             "id",
@@ -129,34 +122,37 @@ class TestAdminFieldsSuperUser:
 
 class TestAdminFieldsStaffUser:
     def test_add_page_no_public_fields(self, staff_user, get_admin_details):
-        editable, read_only = get_admin_details(staff_user, None)
-        assert editable == {
+        fields = get_admin_details(staff_user, None)
+        assert fields == {
             "description",
             "fields",
             "model_name",
             "name",
             "owner",
             "query",
+            "created_time",
+            "id",
+            "open_view",
         }
-        assert read_only == {"created_time", "id", "open_view"}
 
     def test_private_view_no_public_fields(self, staff_user, get_admin_details, view):
-        editable, read_only = get_admin_details(staff_user, view)
-        assert editable == {
+        fields = get_admin_details(staff_user, view)
+        assert fields == {
             "description",
             "fields",
             "model_name",
             "name",
             "owner",
             "query",
+            "created_time",
+            "id",
+            "open_view",
         }
-        assert read_only == {"created_time", "id", "open_view"}
 
     def test_public_view_readonly(self, staff_user, get_admin_details, view):
         view.public = True
-        editable, read_only = get_admin_details(staff_user, view)
-        assert editable == set()
-        assert read_only == {
+        fields = get_admin_details(staff_user, view)
+        assert fields == {
             "created_time",
             "description",
             "fields",
