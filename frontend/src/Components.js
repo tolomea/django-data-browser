@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Link, SLink } from "./Util.js";
+import { TLink, SLink } from "./Util.js";
 import { Results } from "./Results.js";
 
 function FilterValue(props) {
@@ -80,9 +80,9 @@ class Filter extends React.Component {
       <tr>
         <td>
           <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
-          <Link onClick={() => query.addField(path, prettyPath)}>
+          <TLink onClick={() => query.addField(path, prettyPath)}>
             {prettyPath.join(" ")}
-          </Link>{" "}
+          </TLink>{" "}
         </td>
         <td>
           <select
@@ -165,9 +165,9 @@ class Field extends React.Component {
           </td>
           <td>
             {modelField.type ? (
-              <Link onClick={() => query.addField(path, prettyPath)}>
+              <TLink onClick={() => query.addField(path, prettyPath)}>
                 {modelField.prettyName}
-              </Link>
+              </TLink>
             ) : (
               modelField.prettyName
             )}

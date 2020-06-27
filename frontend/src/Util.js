@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 
-function Link(props) {
+function TLink(props) {
     const { className, onClick, children } = props;
     return (
         <button
@@ -27,4 +27,4 @@ function SLink(props) {
     );
 }
 
-export { Link, SLink };
+export { TLink, SLink };

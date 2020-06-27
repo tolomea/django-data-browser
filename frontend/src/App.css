@@ -68,7 +68,7 @@ select {
   width: auto;
   padding: 2px;
 }
-button.Link {
+.Link {
   background: none !important;
   border: none;
   padding: 0 !important;
@@ -76,10 +76,10 @@ button.Link {
   color: #069;
   text-align: left;
 }
-button.Link:hover {
+.Link:hover {
   text-decoration: underline;
 }
-button.sLink {
+.sLink {
   background: none !important;
   border: none;
   padding: 0 !important;
@@ -89,7 +89,7 @@ button.sLink {
   font-size: inherit;
   font-weight: inherit;
 }
-button.sLink:hover {
+.sLink:hover {
   text-decoration: underline;
 }
 
@@ -193,17 +193,18 @@ table.Results,
 
 /* Logo */
 
-div.Logo {
+a.Logo {
   position: absolute;
   margin: 0 15px;
   font-size: 40px;
   font-family: "Anton", sans-serif;
   cursor: pointer;
+  color: #333e48;
 }
-div.Logo > span {
+a.Logo > span {
   display: inline-block;
 }
-div.Logo > span.Version {
+a.Logo > span.Version {
   font-size: 20px;
 }
 

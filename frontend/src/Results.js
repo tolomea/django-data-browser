@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Link, SLink } from "./Util.js";
+import { TLink, SLink } from "./Util.js";
 
 function Spacer(props) {
   const { spaces } = props;
@@ -31,7 +31,7 @@ function HeadCell(props) {
           <SLink onClick={() => query.addFilter(field.path, field.prettyPath)}>
             filter_alt
           </SLink>{" "}
-          <Link onClick={() => query.toggleSort(field)}>
+          <TLink onClick={() => query.toggleSort(field)}>
             {field.prettyPath.join(" ")}
             {
               {
@@ -40,7 +40,7 @@ function HeadCell(props) {
                 null: "",
               }[field.sort]
             }
-          </Link>
+          </TLink>
         </>
       ) : (
         " " + field.prettyPath.join(" ")
