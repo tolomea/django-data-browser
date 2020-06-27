@@ -265,6 +265,7 @@ def _get_from_js_dev_server(request):  # pragma: no cover
     import requests
 
     upstream_url = f"http://127.0.0.1:3000{request.path}"
+    print(f"Proxy request: {upstream_url}")
     method = request.META["REQUEST_METHOD"].lower()
     return getattr(requests, method)(upstream_url, stream=True)
 

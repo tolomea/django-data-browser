@@ -197,7 +197,7 @@ div.Logo {
   position: absolute;
   margin: 0 15px;
   font-size: 40px;
-  font-family: Impact, Charcoal, sans-serif;
+  font-family: "Anton", sans-serif;
   cursor: pointer;
 }
 div.Logo > span {
