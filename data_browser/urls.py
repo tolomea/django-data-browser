@@ -6,7 +6,7 @@ from django.urls.converters import StringConverter
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 
-from .views import proxy_js_dev_server, query, query_ctx, query_html, view
+from .views import no_query, proxy_js_dev_server, query, query_ctx, query_html, view
 
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
 WEB_ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web_root")
@@ -43,6 +43,7 @@ urlpatterns = [
     # other html pages
     path("<opt_path:>.html", query_html, name="query_html"),
     path("<opt_path:>.ctx", query_ctx, name="query_ctx"),
+    path(".query", no_query),  # TODO remove
     path("", query_html, name="home"),
     # static files
     re_path(r"^(?P<path>static/.*)$", *static_view, name="static"),

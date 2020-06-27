@@ -1150,15 +1150,5 @@
         },
         "version": "redacted"
     },
-    "initialState": {
-        "cols": [],
-        "fields": [],
-        "filterErrors": [],
-        "filters": [],
-        "model": "",
-        "results": [],
-        "rows": [],
-        "version": "redacted"
-    },
     "sentryDsn": null
 }

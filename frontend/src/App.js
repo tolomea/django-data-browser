@@ -18,7 +18,14 @@ function handleError(e) {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = props.initialState;
+    this.state = {
+      booting: true,
+      version: props.config.version,
+      model: "",
+      fields: [],
+      filters: [],
+      ...empty,
+    };
   }
 
   fetchResults(state) {
@@ -28,6 +35,7 @@ class App extends React.Component {
     controller = new AbortController();
 
     if (!state.model)
+      // TODO do we need this clause?
       return Promise.resolve({
         model: "",
         fields: [],
@@ -38,8 +46,10 @@ class App extends React.Component {
     return fetch(url, { signal: controller.signal })
       .then((res) => res.json())
       .then((response) => {
-        if (response.version !== this.state.version)
+        if (response.version !== this.state.version) {
+          console.log("Version mismatch, hard reload");
           window.location.reload(true);
+        }
         delete response.version;
         return response;
       })
@@ -55,22 +65,34 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const reqState = {
-      model: this.state.model,
-      fields: this.state.fields,
-      filters: this.state.filters,
-      ...empty,
-    };
-    window.history.replaceState(
-      reqState,
-      null,
-      getUrlForQuery(this.props.config.baseUrl, this.state, "html")
-    );
-    this.fetchResults(this.state).catch(handleError);
-    window.onpopstate = (e) => {
-      this.fetchResults(e.state).catch(handleError);
-      this.setState(e.state);
-    };
+    const loc = window.location;
+    const path =
+      (loc.pathname.endsWith(".html")
+        ? loc.pathname.slice(0, -5)
+        : loc.pathname) + ".query";
+    const url = `${loc.protocol}//${loc.host}${path}${loc.search}`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((response) => {
+        const reqState = {
+          booting: false,
+          model: response.model,
+          fields: response.fields,
+          filters: response.filters,
+          ...empty,
+        };
+        this.setState(reqState);
+        window.history.replaceState(
+          reqState,
+          null,
+          getUrlForQuery(this.props.config.baseUrl, reqState, "html")
+        );
+        window.onpopstate = (e) => {
+          this.fetchResults(e.state).catch(handleError);
+          this.setState(e.state);
+        };
+        this.fetchResults(this.state).catch(handleError);
+      });
   }
 
   handleQueryChange(queryChange) {
@@ -96,6 +118,7 @@ class App extends React.Component {
   }
 
   render() {
+    if (this.state.booting) return "";
     const query = new Query(
       this.props.config,
       this.state,

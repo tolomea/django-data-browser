@@ -114,19 +114,8 @@ def _get_config(user, orm_models):
 
 
 def _get_context(request, model_name, fields):
-    query = Query.from_request(model_name, fields, request.GET)
-    orm_models = get_models(request)
-    if query.model_name and query.model_name not in orm_models:
-        raise http.Http404(f"{query.model_name} does not exist")
-    bound_query = BoundQuery.bind(query, orm_models)
     return {
-        "config": _get_config(request.user, orm_models),
-        "initialState": {
-            "results": [],
-            "cols": [],
-            "rows": [],
-            **_get_query_data(bound_query),
-        },
+        "config": _get_config(request.user, get_models(request)),
         "sentryDsn": getattr(settings, "DATA_BROWSER_FE_DSN", None),
     }
 
@@ -208,14 +197,23 @@ def pad_table(x, table):
     return [pad(x) + row for row in table]
 
 
+@admin_decorators.staff_member_required
+def no_query(request):  # TODO remove
+    query = Query.from_request("", "", {})
+    orm_models = get_models(request)
+    bound_query = BoundQuery.bind(query, orm_models)
+    resp = _get_query_data(bound_query)
+    return http.JsonResponse(resp)
+
+
 def _data_response(request, query, media, meta):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)
-    results = get_results(request, bound_query, orm_models)
 
     if media == "csv":
+        results = get_results(request, bound_query, orm_models)
         buffer = io.StringIO()
         writer = csv.writer(buffer)
 
@@ -254,8 +252,12 @@ def _data_response(request, query, media, meta):
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
         return response
     elif media == "json":
+        results = get_results(request, bound_query, orm_models)
         resp = _get_query_data(bound_query) if meta else {}
         resp.update(results)
+        return http.JsonResponse(resp)
+    elif media == "query":
+        resp = _get_query_data(bound_query) if meta else {}
         return http.JsonResponse(resp)
     else:
         raise http.Http404(f"Bad file format {media} requested")

@@ -997,57 +997,63 @@ snapshots["test_query_html context"] = {
         },
         "version": "redacted",
     },
-    "initialState": {
-        "cols": [],
-        "fields": [
-            {
-                "path": ["size"],
-                "pathStr": "size",
-                "pivoted": False,
-                "prettyPath": ["size"],
-                "priority": 0,
-                "sort": "dsc",
-            },
-            {
-                "path": ["name"],
-                "pathStr": "name",
-                "pivoted": False,
-                "prettyPath": ["name"],
-                "priority": 1,
-                "sort": "asc",
-            },
-            {
-                "path": ["size_unit"],
-                "pathStr": "size_unit",
-                "pivoted": False,
-                "prettyPath": ["size_unit"],
-                "priority": None,
-                "sort": None,
-            },
-        ],
-        "filterErrors": [None, None],
-        "filters": [
-            {
-                "lookup": "lt",
-                "path": ["size"],
-                "pathStr": "size",
-                "prettyPath": ["size"],
-                "value": "2",
-            },
-            {
-                "lookup": "gt",
-                "path": ["id"],
-                "pathStr": "id",
-                "prettyPath": ["id"],
-                "value": "0",
-            },
-        ],
-        "model": "tests.Product",
-        "results": [],
-        "rows": [],
-        "version": "redacted",
-    },
     "sentryDsn": None,
+}
+
+snapshots["test_query_query query"] = {
+    "fields": [
+        {
+            "path": ["size"],
+            "pathStr": "size",
+            "pivoted": False,
+            "prettyPath": ["size"],
+            "priority": 0,
+            "sort": "dsc",
+        },
+        {
+            "path": ["name"],
+            "pathStr": "name",
+            "pivoted": False,
+            "prettyPath": ["name"],
+            "priority": 1,
+            "sort": "asc",
+        },
+        {
+            "path": ["size_unit"],
+            "pathStr": "size_unit",
+            "pivoted": False,
+            "prettyPath": ["size_unit"],
+            "priority": None,
+            "sort": None,
+        },
+    ],
+    "filterErrors": [None, None],
+    "filters": [
+        {
+            "lookup": "lt",
+            "path": ["size"],
+            "pathStr": "size",
+            "prettyPath": ["size"],
+            "value": "2",
+        },
+        {
+            "lookup": "gt",
+            "path": ["id"],
+            "pathStr": "id",
+            "prettyPath": ["id"],
+            "value": "0",
+        },
+    ],
+    "model": "tests.Product",
+    "version": "redacted",
+}
+
+snapshots["test_query_query_no_model query"] = {
+    "fields": [],
+    "filterErrors": [],
+    "filters": [],
+    "model": "",
+    "version": "redacted",
 }
 
 snapshots["test_query_html_no_perms context"] = {
@@ -1456,16 +1462,6 @@ snapshots["test_query_html_no_perms context"] = {
                 ],
             },
         },
-        "version": "redacted",
-    },
-    "initialState": {
-        "cols": [],
-        "fields": [],
-        "filterErrors": [],
-        "filters": [],
-        "model": "",
-        "results": [],
-        "rows": [],
         "version": "redacted",
     },
     "sentryDsn": None,
@@ -2460,16 +2456,6 @@ snapshots["test_query_ctx context"] = {
                 ],
             },
         },
-        "version": "redacted",
-    },
-    "initialState": {
-        "cols": [],
-        "fields": [],
-        "filterErrors": [],
-        "filters": [],
-        "model": "",
-        "results": [],
-        "rows": [],
         "version": "redacted",
     },
     "sentryDsn": None,

@@ -56,8 +56,25 @@ def test_query_html(admin_client, snapshot):
     assert res.status_code == 200
     context = json.loads(res.context["ctx"])
     context["config"]["version"] = "redacted"
-    context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
+
+
+def test_query_query(admin_client, snapshot):
+    res = admin_client.get(
+        "/data_browser/query/tests.Product/size-0,name+1,size_unit.query?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+    query = json.loads(res.content.decode("utf-8"))
+    query["version"] = "redacted"
+    snapshot.assert_match(query, "query")
+
+
+def test_query_query_no_model(admin_client, snapshot):
+    res = admin_client.get("/data_browser/.query")
+    assert res.status_code == 200
+    query = json.loads(res.content.decode("utf-8"))
+    query["version"] = "redacted"
+    snapshot.assert_match(query, "query")
 
 
 def test_query_html_no_perms(admin_user, admin_client, snapshot):
@@ -67,7 +84,6 @@ def test_query_html_no_perms(admin_user, admin_client, snapshot):
     assert res.status_code == 200
     context = json.loads(res.context["ctx"])
     context["config"]["version"] = "redacted"
-    context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
 
 
@@ -76,7 +92,6 @@ def test_query_ctx(admin_client, snapshot):
     assert res.status_code == 200
     context = res.json()
     context["config"]["version"] = "redacted"
-    context["initialState"]["version"] = "redacted"
     snapshot.assert_match(context, "context")
     update_fe_fixture("frontend/src/context_fixture.json", context)
 
@@ -111,14 +126,7 @@ def test_query_json_bad_fields(admin_client):
     ]
 
 
-def test_query_html_bad_model(admin_client):
-    res = admin_client.get(
-        "/data_browser/query/tests.Bob/size-0,name+1,size_unit.html?size__lt=2&id__gt=0"
-    )
-    assert res.status_code == 404
-
-
-def test_query_html_bad_media(admin_client):
+def test_query_bad_media(admin_client):
     res = admin_client.get(
         "/data_browser/query/tests.Product/size-0,name+1,size_unit.bob?size__lt=2&id__gt=0"
     )
