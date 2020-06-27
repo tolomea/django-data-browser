@@ -3,6 +3,14 @@ import React from "react";
 import "./App.css";
 import { HomePage, QueryPage } from "./Components";
 import { Query, getUrlForQuery, empty } from "./Query";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  useParams,
+  useLocation,
+} from "react-router-dom";
+
 const assert = require("assert");
 let controller;
 
@@ -15,7 +23,7 @@ function handleError(e) {
   }
 }
 
-class App extends React.Component {
+class QueryApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,12 +73,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const loc = window.location;
-    const path =
-      (loc.pathname.endsWith(".html")
-        ? loc.pathname.slice(0, -5)
-        : loc.pathname) + ".query";
-    const url = `${loc.protocol}//${loc.host}${path}${loc.search}`;
+    const { model, fieldStr, queryStr, config } = this.props;
+    const url = `${config.baseUrl}query/${model}/${fieldStr}.query${queryStr}`;
     fetch(url)
       .then((res) => res.json())
       .then((response) => {
@@ -93,6 +97,10 @@ class App extends React.Component {
         };
         this.fetchResults(this.state).catch(handleError);
       });
+  }
+
+  componentWillUnmount() {
+    window.onpopstate = () => {};
   }
 
   handleQueryChange(queryChange) {
@@ -124,25 +132,47 @@ class App extends React.Component {
       this.state,
       this.handleQueryChange.bind(this)
     );
-    if (this.state.model)
-      return (
-        <QueryPage
-          query={query}
-          sortedModels={this.props.config.sortedModels}
-          version={this.props.config.version}
-          {...this.state}
-        />
-      );
-    else
-      return (
-        <HomePage
-          query={query}
-          sortedModels={this.props.config.sortedModels}
-          savedViews={this.props.config.savedViews}
-          version={this.props.config.version}
-        />
-      );
+    return (
+      <QueryPage
+        query={query}
+        sortedModels={this.props.config.sortedModels}
+        version={this.props.config.version}
+        {...this.state}
+      />
+    );
   }
+}
+
+function Bob(props) {
+  const params = useParams();
+  return (
+    <QueryApp
+      {...props}
+      model={params.model}
+      fieldStr={params.fieldStr || ""}
+      queryStr={useLocation().search}
+    />
+  );
+}
+
+function App(props) {
+  const { config, sortedModels } = props;
+  return (
+    <BrowserRouter basename={config.baseUrl}>
+      <Switch>
+        <Route path="/query/:model/:fieldStr?.html">
+          <Bob {...{ config, sortedModels }} />
+        </Route>
+        <Route path="/">
+          <HomePage
+            sortedModels={config.sortedModels}
+            savedViews={config.savedViews}
+            version={config.version}
+          />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
 }
 
 export default App;

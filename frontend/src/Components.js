@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { TLink, SLink } from "./Util.js";
 import { Results } from "./Results.js";
+import { Link } from "react-router-dom";
 
 function FilterValue(props) {
   const { lookup, onChange, value } = props;
@@ -226,11 +227,12 @@ function ModelSelector(props) {
 }
 
 function Logo(props) {
+  const { version } = props;
   return (
-    <div className="Logo" onClick={() => props.query.setModel("")}>
+    <Link to="/" className="Logo">
       <span>DDB</span>
-      <span className="Version">v{props.version}</span>
-    </div>
+      <span className="Version">v{version}</span>
+    </Link>
   );
 }
 
@@ -249,7 +251,7 @@ function QueryPage(props) {
   const saveUrl = query.getUrlForSave();
   return (
     <div id="body">
-      <Logo {...{ query, version }} />
+      <Logo {...{ version }} />
       <ModelSelector {...{ query, sortedModels, model }} />
       <Filters {...{ query, filters, filterErrors }} />
       <p>
@@ -278,19 +280,19 @@ function QueryPage(props) {
 }
 
 function HomePage(props) {
-  const { query, version, sortedModels, savedViews } = props;
+  const { version, sortedModels, savedViews } = props;
   return (
     <div id="body">
-      <Logo {...{ query, version }} />
+      <Logo {...{ version }} />
       <div className="Index">
         <div>
           <h1>Models</h1>
           <div>
             {sortedModels.map((model) => (
               <div key={model}>
-                <button className="Link" onClick={() => query.setModel(model)}>
+                <Link to={`/query/${model}/.html`} className="Link">
                   {model}
-                </button>
+                </Link>
               </div>
             ))}
           </div>
@@ -300,12 +302,9 @@ function HomePage(props) {
           <div>
             {savedViews.map((view, index) => (
               <div key={index}>
-                <button
-                  className="Link"
-                  onClick={() => query.setQuery(view.query)}
-                >
+                <Link className="Link" to={view.link}>
                   {view.model} - {view.name}
-                </button>
+                </Link>
                 <p>{view.description}</p>
               </div>
             ))}

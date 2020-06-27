@@ -91,7 +91,7 @@ def _get_config(user, orm_models):
             "public": view.public,
             "model": view.model_name,
             "description": view.description,
-            "query": _get_query_data(BoundQuery.bind(view.get_query(), orm_models)),
+            "link": f"query/{view.model_name}/{view.fields}.html?{view.query}",
         }
         for view in View.objects.filter(owner=user).order_by("name")
     ]
