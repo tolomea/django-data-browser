@@ -121,7 +121,7 @@ def _get_context(request, model_name, fields):
 
 
 @admin_decorators.staff_member_required
-def query_ctx(request, *, model_name, fields=""):
+def query_ctx(request, *, model_name="", fields=""):
     ctx = _get_context(request, model_name, fields)
     return http.JsonResponse(ctx)
 
@@ -195,15 +195,6 @@ def format_table(fields, table, spacing=0):
 
 def pad_table(x, table):
     return [pad(x) + row for row in table]
-
-
-@admin_decorators.staff_member_required
-def no_query(request):  # TODO remove
-    query = Query.from_request("", "", {})
-    orm_models = get_models(request)
-    bound_query = BoundQuery.bind(query, orm_models)
-    resp = _get_query_data(bound_query)
-    return http.JsonResponse(resp)
 
 
 def _data_response(request, query, media, meta):

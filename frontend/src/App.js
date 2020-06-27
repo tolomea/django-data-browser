@@ -42,15 +42,6 @@ class QueryApp extends React.Component {
     if (controller) controller.abort();
     controller = new AbortController();
 
-    if (!state.model)
-      // TODO do we need this clause?
-      return Promise.resolve({
-        model: "",
-        fields: [],
-        filters: [],
-        ...empty,
-      });
-
     return fetch(url, { signal: controller.signal })
       .then((res) => res.json())
       .then((response) => {

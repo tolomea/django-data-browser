@@ -69,14 +69,6 @@ def test_query_query(admin_client, snapshot):
     snapshot.assert_match(query, "query")
 
 
-def test_query_query_no_model(admin_client, snapshot):
-    res = admin_client.get("/data_browser/.query")
-    assert res.status_code == 200
-    query = json.loads(res.content.decode("utf-8"))
-    query["version"] = "redacted"
-    snapshot.assert_match(query, "query")
-
-
 def test_query_html_no_perms(admin_user, admin_client, snapshot):
     admin_user.is_superuser = False
     admin_user.save()

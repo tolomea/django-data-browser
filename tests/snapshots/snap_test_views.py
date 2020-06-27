@@ -1048,14 +1048,6 @@ snapshots["test_query_query query"] = {
     "version": "redacted",
 }
 
-snapshots["test_query_query_no_model query"] = {
-    "fields": [],
-    "filterErrors": [],
-    "filters": [],
-    "model": "",
-    "version": "redacted",
-}
-
 snapshots["test_query_html_no_perms context"] = {
     "config": {
         "adminUrl": None,
