@@ -4,12 +4,13 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@sentry/browser": "^5.15.5",
+    "@sentry/browser": "^5.18.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router": "^5.2.0",
     "react-scripts": "3.4.1"
   },
   "scripts": {
@@ -34,6 +35,6 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^2.0.4"
+    "prettier": "^2.0.5"
   }
 }
