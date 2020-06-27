@@ -12,15 +12,21 @@ FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_buil
 WEB_ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web_root")
 
 
-class Optional(StringConverter):
+class OptionalString(StringConverter):
     regex = "[^/]*"
 
 
-register_converter(Optional, "optional")
+class OptionalPath(StringConverter):
+    regex = ".*"
+
+
+register_converter(OptionalString, "opt_str")
+register_converter(OptionalPath, "opt_path")
+
 
 app_name = "data_browser"
 
-QUERY_PATH = "query/<optional:model_name>/<optional:fields>"
+QUERY_PATH = "query/<opt_str:model_name>/<opt_str:fields>"
 
 if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
     static_view = (proxy_js_dev_server,)
@@ -28,13 +34,18 @@ else:
     static_view = (serve, {"document_root": FE_BUILD_DIR})
 
 urlpatterns = [
+    # queries
     path(f"{QUERY_PATH}.html", query_html, name="query_html"),
     path(f"{QUERY_PATH}.ctx", query_ctx, name="query_ctx"),
     path(f"{QUERY_PATH}.<media>", query, name="query"),
+    # views
     path("view/<pk>.<media>", view, name="view"),
+    # other html pages
+    path("<opt_path:>.html", query_html, name="query_html"),
+    path("<opt_path:>.ctx", query_ctx, name="query_ctx"),
     path("", query_html, name="home"),
-    # hook up the static file serving
-    re_path(r"^(?P<path>static/.*)$", *static_view),
+    # static files
+    re_path(r"^(?P<path>static/.*)$", *static_view, name="static"),
     re_path(
         r"^.*/(?P<path>static/.*)$",
         RedirectView.as_view(pattern_name="data_browser:static", permanent=True),
