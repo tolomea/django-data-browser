@@ -229,15 +229,16 @@ div.Index .Link {
 /* Edit View */
 
 .EditSavedView {
-  margin: 60px auto 30px auto;
+  margin: 40px auto 30px auto;
 }
 .EditSavedView form {
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding: 15px 15px 12px;
+  padding: 15px 15px 12px 15px;
 }
 .EditSavedView .SavedViewName {
   font-size: 20px;
+  width: 100%;
 }
 .EditSavedView textarea {
   border: 1px solid #ccc;
@@ -258,7 +259,8 @@ div.Index .Link {
 .EditSavedView table {
   padding: 5px 2px;
 }
-.EditSavedView .BackLink {
-  text-align: right;
-  width: 100%;
+.SavedViewActions {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
 }

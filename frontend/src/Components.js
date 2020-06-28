@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
-import { TLink, SLink, patch, get } from "./Util.js";
+import React, { useState } from "react";
+import { Link, useParams, Redirect } from "react-router-dom";
+import { TLink, SLink, doDelete, useData } from "./Util.js";
 import { Results } from "./Results.js";
-import { Link, useParams } from "react-router-dom";
+import "./App.css";
 
 function FilterValue(props) {
   const { lookup, onChange, value } = props;
@@ -277,28 +277,44 @@ function QueryPage(props) {
   );
 }
 
-function useData(url) {
-  const [data, setData] = useState();
-  useEffect(() => {
-    get(url).then((response) => setData(response));
-  }, [url]);
-  return [
-    data,
-    (updates) => {
-      const new_value = { ...data, ...updates };
-      setData(new_value);
-      patch(url, new_value).then((response) => setData(response));
-    },
-  ];
+function Delete(props) {
+  const [state, setState] = useState("normal");
+  const { apiUrl, redirectUrl } = props;
+  if (state === "normal")
+    return (
+      <TLink
+        onClick={(event) => {
+          setState("confirm");
+        }}
+      >
+        Delete
+      </TLink>
+    );
+  else if (state === "confirm")
+    return (
+      <TLink
+        onClick={(event) => {
+          setState("deleting");
+          doDelete(apiUrl).then((response) => setState("deleted"));
+        }}
+      >
+        Are you sure?
+      </TLink>
+    );
+  else if (state === "deleting") return "Deleting";
+  else if (state === "deleted") return <Redirect to={redirectUrl} />;
+  else throw new Error(`unknown delete state: ${state}`);
 }
 
 function EditSavedView(props) {
   const { config } = props;
   const { pk } = useParams();
-  const [view, setView] = useData(`${config.baseUrl}api/views/${pk}/`);
+  const url = `${config.baseUrl}api/views/${pk}/`;
+  const [view, setView] = useData(url);
   if (!view) return "";
   return (
     <div className="EditSavedView">
+      <h1>Saved View</h1>
       <form>
         <input
           type="text"
@@ -357,9 +373,10 @@ function EditSavedView(props) {
           </table>
         )}
       </form>
-      <p className="BackLink">
+      <div className="SavedViewActions">
+        <Delete apiUrl={url} redirectUrl="/" />
         <Link to="/">Back</Link>
-      </p>
+      </div>
     </div>
   );
 }
