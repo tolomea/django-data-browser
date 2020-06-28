@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { TLink, SLink } from "./Util.js";
+import { TLink, SLink } from "./Util";
 
 function Spacer(props) {
   const { spaces } = props;

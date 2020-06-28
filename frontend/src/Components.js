@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { Link, useParams, Redirect } from "react-router-dom";
-import { TLink, SLink, doDelete, useData, version } from "./Util.js";
-import { Results } from "./Results.js";
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { TLink, SLink, useData, version, Save, Delete } from "./Util";
+import { Results } from "./Results";
+import { getPartsForQuery } from "./Query";
 import "./App.css";
 
 function FilterValue(props) {
@@ -245,8 +246,8 @@ function QueryPage(props) {
     model,
     filters,
     filterErrors,
+    baseUrl,
   } = props;
-  const saveUrl = query.getUrlForSave();
   return (
     <>
       <ModelSelector {...{ query, sortedModels, model }} />
@@ -254,13 +255,13 @@ function QueryPage(props) {
       <p>
         Showing {rows.length * cols.length} results -{" "}
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
-        <a href={query.getUrlForMedia("json")}>View as JSON</a>
-        {saveUrl && (
-          <>
-            {" "}
-            - <a href={saveUrl}>Save View</a>{" "}
-          </>
-        )}
+        <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
+        <Save
+          name="View"
+          apiUrl={`${baseUrl}api/views/`}
+          data={getPartsForQuery(query.query)}
+          redirectUrl={(view) => `/views/${view.pk}.html`}
+        />
       </p>
       <div className="MainSpace">
         <div className="FieldsList">
@@ -274,35 +275,6 @@ function QueryPage(props) {
       </div>
     </>
   );
-}
-
-function Delete(props) {
-  const [state, setState] = useState("normal");
-  const { apiUrl, redirectUrl } = props;
-  if (state === "normal")
-    return (
-      <TLink
-        onClick={(event) => {
-          setState("confirm");
-        }}
-      >
-        Delete
-      </TLink>
-    );
-  else if (state === "confirm")
-    return (
-      <TLink
-        onClick={(event) => {
-          setState("deleting");
-          doDelete(apiUrl).then((response) => setState("deleted"));
-        }}
-      >
-        Are you sure?
-      </TLink>
-    );
-  else if (state === "deleting") return "Deleting";
-  else if (state === "deleted") return <Redirect to={redirectUrl} />;
-  else throw new Error(`unknown delete state: ${state}`);
 }
 
 function EditSavedView(props) {
@@ -374,7 +346,7 @@ function EditSavedView(props) {
       </form>
       <div className="SavedViewActions">
         <Delete apiUrl={url} redirectUrl="/" />
-        <Link to="/">Back</Link>
+        <Link to="/">Done</Link>
       </div>
     </div>
   );

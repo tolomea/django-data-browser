@@ -114,6 +114,7 @@ class QueryApp extends React.Component {
       <QueryPage
         query={query}
         sortedModels={this.props.config.sortedModels}
+        baseUrl={this.props.config.baseUrl}
         {...this.state}
       />
     );
