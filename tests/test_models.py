@@ -27,7 +27,7 @@ def test_public_link(view, global_request, settings):
     expected = f"http://testserver/data_browser/view/{view.public_slug}.csv"
     assert view.public_link() == expected
     settings.DATA_BROWSER_ALLOW_PUBLIC = False
-    assert view.public_link() == "Public URL's are disabled in Django settings."
+    assert view.public_link() == "Public Views are disabled in Django settings."
 
 
 def test_google_sheets_formula(view, global_request, settings):
@@ -39,5 +39,5 @@ def test_google_sheets_formula(view, global_request, settings):
     assert view.google_sheets_formula() == expected
     settings.DATA_BROWSER_ALLOW_PUBLIC = False
     assert (
-        view.google_sheets_formula() == "Public URL's are disabled in Django settings."
+        view.google_sheets_formula() == "Public Views are disabled in Django settings."
     )

@@ -50,7 +50,7 @@ class View(models.Model):
                 )
                 return global_data.request.build_absolute_uri(url)
             else:
-                return "Public URL's are disabled in Django settings."
+                return "Public Views are disabled in Django settings."
         else:
             return "N/A"
 
@@ -63,7 +63,7 @@ class View(models.Model):
                 url = global_data.request.build_absolute_uri(url)
                 return f'=importdata("{url}")'
             else:
-                return "Public URL's are disabled in Django settings."
+                return "Public Views are disabled in Django settings."
         else:
             return "N/A"
 

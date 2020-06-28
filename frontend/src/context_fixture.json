@@ -871,7 +871,7 @@
             }
         },
         "baseUrl": "/data_browser/",
-        "can_make_public": true,
+        "canMakePublic": true,
         "sortedModels": [
             "auth.Group",
             "auth.User",

@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/browser";
 import React from "react";
 import "./App.css";
-import { HomePage, QueryPage, Logo } from "./Components";
+import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";
 import { Query, getUrlForQuery, empty } from "./Query";
 import {
   BrowserRouter,
@@ -134,12 +134,12 @@ class QueryApp extends React.Component {
 }
 
 function Bob(props) {
-  const params = useParams();
+  const { model, fieldStr } = useParams();
   return (
     <QueryApp
       {...props}
-      model={params.model}
-      fieldStr={params.fieldStr || ""}
+      model={model}
+      fieldStr={fieldStr || ""}
       queryStr={useLocation().search}
     />
   );
@@ -154,6 +154,9 @@ function App(props) {
         <Switch>
           <Route path="/query/:model/:fieldStr?.html">
             <Bob {...{ config, sortedModels }} />
+          </Route>
+          <Route path="/views/:pk.html">
+            <EditSavedView {...{ config }} />
           </Route>
           <Route path="/">
             <HomePage

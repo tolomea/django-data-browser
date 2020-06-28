@@ -820,7 +820,7 @@ snapshots["test_query_html context"] = {
             "year": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
-        "can_make_public": True,
+        "canMakePublic": True,
         "sortedModels": [
             "auth.Group",
             "auth.User",
@@ -1290,7 +1290,7 @@ snapshots["test_query_html_no_perms context"] = {
             "year": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
-        "can_make_public": False,
+        "canMakePublic": False,
         "sortedModels": [],
         "types": {
             "boolean": {
@@ -2271,7 +2271,7 @@ snapshots["test_query_ctx context"] = {
             "year": {"fields": {}, "sortedFields": []},
         },
         "baseUrl": "/data_browser/",
-        "can_make_public": True,
+        "canMakePublic": True,
         "sortedModels": [
             "auth.Group",
             "auth.User",

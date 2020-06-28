@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { TLink, SLink } from "./Util.js";
+import { TLink, SLink, patch, get } from "./Util.js";
 import { Results } from "./Results.js";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function FilterValue(props) {
   const { lookup, onChange, value } = props;
@@ -278,29 +278,108 @@ function QueryPage(props) {
 }
 
 function useData(url) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
   useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((response) => {
-        setData(response);
-      });
+    get(url).then((response) => setData(response));
   }, [url]);
-  return data;
+  return [
+    data,
+    (updates) => {
+      const new_value = { ...data, ...updates };
+      setData(new_value);
+      patch(url, new_value).then((response) => setData(response));
+    },
+  ];
+}
+
+function EditSavedView(props) {
+  const { config } = props;
+  const { pk } = useParams();
+  const [view, setView] = useData(`${config.baseUrl}api/views/${pk}/`);
+  if (!view) return "";
+  return (
+    <div className="EditSavedView">
+      <form>
+        <input
+          type="text"
+          value={view.name}
+          onChange={(event) => {
+            setView({ name: event.target.value });
+          }}
+          className="SavedViewName"
+        />
+        <table>
+          <tbody>
+            <tr>
+              <th>Model:</th>
+              <td>{view.model}</td>
+            </tr>
+            <tr>
+              <th>Fields:</th>
+              <td>{view.fields}</td>
+            </tr>
+            <tr>
+              <th>Filters:</th>
+              <td>{view.query}</td>
+            </tr>
+          </tbody>
+        </table>
+        <textarea
+          value={view.description}
+          onChange={(event) => {
+            setView({ description: event.target.value });
+          }}
+        />
+        {config.canMakePublic && (
+          <table>
+            <tbody>
+              <tr>
+                <th>Is Public:</th>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={view.public}
+                    onChange={(event) => {
+                      setView({ public: event.target.checked });
+                    }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>Public link:</th>
+                <td>{view.public_link}</td>
+              </tr>
+              <tr>
+                <th>Google Sheets:</th>
+                <td>{view.google_sheets_formula}</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </form>
+      <p className="BackLink">
+        <Link to="/">Back</Link>
+      </p>
+    </div>
+  );
 }
 
 function SavedViewList(props) {
   const { baseUrl } = props;
-  const savedViews = useData(`${baseUrl}api/views/`);
+  const [savedViews] = useData(`${baseUrl}api/views/`);
+  if (!savedViews) return "";
   return (
     <div>
       <h1>Saved Views</h1>
       <div>
         {savedViews.map((view, index) => (
           <div key={index}>
-            <Link className="Link" to={view.link}>
-              {view.model} - {view.name}
-            </Link>
+            <p>
+              <Link className="Link" to={view.link}>
+                {view.model} - {view.name}
+              </Link>{" "}
+              (<Link to={`/views/${view.pk}.html`}>edit</Link>)
+            </p>
             <p>{view.description}</p>
           </div>
         ))}
@@ -330,4 +409,4 @@ function HomePage(props) {
   );
 }
 
-export { HomePage, QueryPage, Logo };
+export { HomePage, QueryPage, Logo, EditSavedView };

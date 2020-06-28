@@ -21,7 +21,6 @@ button {
   color: #333e48;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   position: relative;
 }
 
@@ -223,6 +222,43 @@ div.Index > div {
   padding: 0 2% 2% 2%;
 }
 div.Index .Link {
-  display: block;
+  display: inline-block;
   font-size: 20px;
+}
+
+/* Edit View */
+
+.EditSavedView {
+  margin: 60px auto 30px auto;
+}
+.EditSavedView form {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 15px 15px 12px;
+}
+.EditSavedView .SavedViewName {
+  font-size: 20px;
+}
+.EditSavedView textarea {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2%;
+  min-width: 500px;
+  width: 100%;
+  min-height: 100px;
+}
+.EditSavedView th {
+  padding: 2px;
+  font-weight: bold;
+  text-align: left;
+}
+.EditSavedView td {
+  padding: 2px;
+}
+.EditSavedView table {
+  padding: 5px 2px;
+}
+.EditSavedView .BackLink {
+  text-align: right;
+  width: 100%;
 }

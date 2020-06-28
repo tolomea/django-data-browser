@@ -12,7 +12,7 @@ from django.template import engines, loader
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators import csrf
 
 from . import version
 from .common import can_make_public
@@ -94,7 +94,7 @@ def _get_config(user, orm_models):
             name for name, model in orm_models.items() if model.root
         ),
         "version": version,
-        "can_make_public": can_make_public(user),
+        "canMakePublic": can_make_public(user),
     }
 
 
@@ -111,6 +111,7 @@ def query_ctx(request, *, model_name="", fields=""):
     return http.JsonResponse(ctx)
 
 
+@csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
     ctx = _get_context(request, model_name, fields)
@@ -248,7 +249,7 @@ def _get_from_js_dev_server(request):  # pragma: no cover
     return getattr(requests, method)(upstream_url, stream=True)
 
 
-@csrf_exempt
+@csrf.csrf_exempt
 def proxy_js_dev_server(request, path):  # pragma: no cover
     """
     Proxy HTTP requests to the frontend dev server in development.
