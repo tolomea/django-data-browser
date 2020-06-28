@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Redirect } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./App.css";
@@ -6,6 +6,29 @@ let controller;
 let fetchDescription;
 
 const version = document.getElementById("backend-version").textContent.trim();
+
+function CopyText(props) {
+    const { text } = props;
+    const ref = useRef(null);
+    return (
+        <>
+            <span ref={ref}>{text}</span>{" "}
+            <SLink
+                onClick={(event) => {
+                    const range = document.createRange();
+                    range.selectNodeContents(ref.current);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand("copy");
+                    window.getSelection().removeAllRanges();
+                    event.target.blur();
+                }}
+            >
+                content_copy
+            </SLink>
+        </>
+    );
+}
 
 function TLink(props) {
     const { className, onClick, children } = props;
@@ -189,4 +212,5 @@ export {
     version,
     Save,
     Delete,
+    CopyText,
 };

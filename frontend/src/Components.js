@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { TLink, SLink, useData, version, Save, Delete } from "./Util";
+import { TLink, SLink, useData, version, Save, Delete, CopyText } from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery } from "./Query";
 import "./App.css";
@@ -336,11 +336,15 @@ function EditSavedView(props) {
               </tr>
               <tr>
                 <th>Public link:</th>
-                <td>{view.public_link}</td>
+                <td>
+                  <CopyText text={view.public_link} />
+                </td>
               </tr>
               <tr>
                 <th>Google Sheets:</th>
-                <td>{view.google_sheets_formula}</td>
+                <td>
+                  <CopyText text={view.google_sheets_formula} />
+                </td>
               </tr>
             </tbody>
           </table>
