@@ -55,9 +55,8 @@ def test_query_html(admin_client, snapshot):
         "/data_browser/query/tests.Product/size-0,name+1,size_unit.html?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
-    context = json.loads(res.context["ctx"])
-    context["config"]["version"] = "redacted"
-    snapshot.assert_match(context, "context")
+    config = json.loads(res.context["config"])
+    snapshot.assert_match(config, "config")
 
 
 def test_query_query(admin_client, snapshot):
@@ -66,7 +65,6 @@ def test_query_query(admin_client, snapshot):
     )
     assert res.status_code == 200
     query = json.loads(res.content.decode("utf-8"))
-    query["version"] = "redacted"
     snapshot.assert_match(query, "query")
 
 
@@ -75,18 +73,16 @@ def test_query_html_no_perms(admin_user, admin_client, snapshot):
     admin_user.save()
     res = admin_client.get("/data_browser/query//.html?")
     assert res.status_code == 200
-    context = json.loads(res.context["ctx"])
-    context["config"]["version"] = "redacted"
-    snapshot.assert_match(context, "context")
+    config = json.loads(res.context["config"])
+    snapshot.assert_match(config, "config")
 
 
 def test_query_ctx(admin_client, snapshot):
     res = admin_client.get("/data_browser/query//.ctx?")
     assert res.status_code == 200
-    context = res.json()
-    context["config"]["version"] = "redacted"
-    snapshot.assert_match(context, "context")
-    update_fe_fixture("frontend/src/context_fixture.json", context)
+    config = res.json()
+    snapshot.assert_match(config, "config")
+    update_fe_fixture("frontend/src/context_fixture.json", config)
 
 
 @pytest.mark.usefixtures("products")
@@ -204,7 +200,6 @@ def test_query_json(admin_client, snapshot):
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
-    data["version"] = "redacted"
     snapshot.assert_match(data, "data")
 
 
@@ -215,7 +210,6 @@ def test_query_json_pivot(admin_client, snapshot):
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
-    data["version"] = "redacted"
     snapshot.assert_match(data, "data")
 
 

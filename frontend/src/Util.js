@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 let controller;
 let fetchDescription;
 
+const version = document.getElementById("backend-version").textContent.trim();
+
 function TLink(props) {
     const { className, onClick, children } = props;
     return (
@@ -35,11 +37,23 @@ function doFetch(url, options, process) {
     controller = new AbortController();
     fetchDescription = `${options.method} ${url}`;
     return fetch(url, { signal: controller.signal, ...options })
+        .then((response) => {
+            const response_version = response.headers.get("x-version");
+            if (response_version !== version) {
+                console.log(
+                    "Version mismatch, hard reload",
+                    version,
+                    response_version
+                );
+                window.location.reload(true);
+            }
+            return response;
+        })
         .then((response) => process(response))
         .catch((e) => {
             if (e.name === "AbortError") {
                 console.log("request aborted", fetchDescription);
-                return {};
+                return undefined;
             } else {
                 throw e;
             }
@@ -85,11 +99,12 @@ function useData(url) {
         data,
         (updates) => {
             setData((prev) => ({ ...prev, ...updates }));
-            doPatch(url, updates).then((response) =>
-                setData((prev) => ({ ...prev, ...response }))
+            doPatch(url, updates).then(
+                (response) =>
+                    response && setData((prev) => ({ ...prev, ...response }))
             );
         },
     ];
 }
 
-export { TLink, SLink, doPatch, doGet, doDelete, useData };
+export { TLink, SLink, doPatch, doGet, doDelete, useData, version };

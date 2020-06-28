@@ -5,14 +5,15 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-const djangoData = JSON.parse(
-    document.getElementById("django-data").textContent
+const config = JSON.parse(
+    document.getElementById("backend-config").textContent
 );
+const version = document.getElementById("backend-version").textContent.trim();
 
-if (djangoData.sentryDsn) {
+if (config.sentryDsn) {
     Sentry.init({
-        dsn: djangoData.sentryDsn,
-        release: djangoData.config.version,
+        dsn: config.sentryDsn,
+        release: version,
         attachStacktrace: true,
         maxValueLength: 10000,
     });
@@ -20,7 +21,7 @@ if (djangoData.sentryDsn) {
 
 ReactDOM.render(
     <React.StrictMode>
-        <App {...djangoData} />
+        <App {...config} />
     </React.StrictMode>,
     document.getElementById("root")
 );

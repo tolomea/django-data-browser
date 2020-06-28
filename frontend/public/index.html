@@ -47,9 +47,11 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    {# {{ ctx|json_script:"django-data" }} it's escaped in the context data #}
-    <script id="django-data" type="application/json">
-      {% autoescape off %}{{ ctx }}{% endautoescape %}
+    <script id="backend-version" type="application/json">
+      {{ version }}
+    </script>
+    <script id="backend-config" type="application/json">
+      {% autoescape off %}{{ config }}{% endautoescape %}
     </script>
 
     <div id="root"></div>

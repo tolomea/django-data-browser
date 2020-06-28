@@ -1,8 +1,5 @@
 import * as Sentry from "@sentry/browser";
 import React from "react";
-import "./App.css";
-import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";
-import { Query, getUrlForQuery, empty } from "./Query";
 import {
   BrowserRouter,
   Switch,
@@ -10,9 +7,12 @@ import {
   useParams,
   useLocation,
 } from "react-router-dom";
+import "./App.css";
+import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";
+import { Query, getUrlForQuery, empty } from "./Query";
+import { doGet } from "./Util";
 
 const assert = require("assert");
-let controller;
 
 function handleError(e) {
   if (e.name === "AbortError") {
@@ -28,7 +28,6 @@ class QueryApp extends React.Component {
     super(props);
     this.state = {
       booting: true,
-      version: props.config.version,
       model: "",
       fields: [],
       filters: [],
@@ -39,28 +38,16 @@ class QueryApp extends React.Component {
   fetchResults(state) {
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
-    if (controller) controller.abort();
-    controller = new AbortController();
-
-    return fetch(url, { signal: controller.signal })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.version !== this.state.version) {
-          console.log("Version mismatch, hard reload");
-          window.location.reload(true);
-        }
-        delete response.version;
-        return response;
-      })
-      .then((response) => {
+    return doGet(url).then((response) => {
+      response &&
         this.setState({
           body: response.body,
           cols: response.cols,
           rows: response.rows,
           filterErrors: response.filterErrors,
         });
-        return response;
-      });
+      return response;
+    });
   }
 
   componentDidMount() {
@@ -83,8 +70,8 @@ class QueryApp extends React.Component {
           getUrlForQuery(this.props.config.baseUrl, reqState, "html")
         );
         window.onpopstate = (e) => {
-          this.fetchResults(e.state).catch(handleError);
           this.setState(e.state);
+          this.fetchResults(e.state).catch(handleError);
         };
         this.fetchResults(this.state).catch(handleError);
       });
@@ -146,23 +133,20 @@ function Bob(props) {
 }
 
 function App(props) {
-  const { config, sortedModels } = props;
+  const { baseUrl, sortedModels, canMakePublic } = props;
   return (
-    <BrowserRouter basename={config.baseUrl}>
+    <BrowserRouter basename={baseUrl}>
       <div id="body">
-        <Logo version={config.version} />
+        <Logo />
         <Switch>
           <Route path="/query/:model/:fieldStr?.html">
-            <Bob {...{ config, sortedModels }} />
+            <Bob config={props} {...{ sortedModels }} />
           </Route>
           <Route path="/views/:pk.html">
-            <EditSavedView {...{ config }} />
+            <EditSavedView {...{ baseUrl, canMakePublic }} />
           </Route>
           <Route path="/">
-            <HomePage
-              sortedModels={config.sortedModels}
-              baseUrl={config.baseUrl}
-            />
+            <HomePage {...{ sortedModels, baseUrl }} />
           </Route>
         </Switch>
       </div>

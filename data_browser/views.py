@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.views.decorators import csrf
 
 from . import version
-from .common import can_make_public
+from .common import HttpResponse, JsonResponse, can_make_public
 from .models import View
 from .orm import _OPEN_IN_ADMIN, get_models, get_results
 from .query import TYPES, BoundQuery, Query
@@ -46,7 +46,6 @@ def _get_query_data(bound_query):
             for field in bound_query.fields
         ],
         "model": bound_query.model_name,
-        "version": version,
     }
 
 
@@ -70,7 +69,8 @@ def _get_model_fields(orm_model):
     return {"fields": all_fields, "sortedFields": sort_model_fields(all_fields)}
 
 
-def _get_config(user, orm_models):
+def _get_config(request):
+    orm_models = get_models(request)
     types = {
         name: {
             "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
@@ -93,42 +93,37 @@ def _get_config(user, orm_models):
         "sortedModels": sorted(
             name for name, model in orm_models.items() if model.root
         ),
-        "version": version,
-        "canMakePublic": can_make_public(user),
-    }
-
-
-def _get_context(request, model_name, fields):
-    return {
-        "config": _get_config(request.user, get_models(request)),
+        "canMakePublic": can_make_public(request.user),
         "sentryDsn": getattr(settings, "DATA_BROWSER_FE_DSN", None),
     }
 
 
 @admin_decorators.staff_member_required
 def query_ctx(request, *, model_name="", fields=""):
-    ctx = _get_context(request, model_name, fields)
-    return http.JsonResponse(ctx)
+    config = _get_config(request)
+    return JsonResponse(config)
 
 
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
-    ctx = _get_context(request, model_name, fields)
-    ctx = json.dumps(ctx)
-    ctx = ctx.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
+    config = _get_config(request)
+    config = json.dumps(config)
+    config = (
+        config.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
+    )
 
     if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
         try:
             response = _get_from_js_dev_server(request)
         except Exception as e:
-            return http.HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
+            return HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
 
         template = engines["django"].from_string(response.text)
     else:
         template = loader.get_template("data_browser/index.html")
 
-    return TemplateResponse(request, template, {"ctx": ctx})
+    return TemplateResponse(request, template, {"config": config, "version": version})
 
 
 @admin_decorators.staff_member_required
@@ -223,7 +218,7 @@ def _data_response(request, query, media, meta):
         )
 
         buffer.seek(0)
-        response = http.HttpResponse(buffer, content_type="text")
+        response = HttpResponse(buffer, content_type="text")
         response[
             "Content-Disposition"
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
@@ -232,10 +227,10 @@ def _data_response(request, query, media, meta):
         results = get_results(request, bound_query, orm_models)
         resp = _get_query_data(bound_query) if meta else {}
         resp.update(results)
-        return http.JsonResponse(resp)
+        return JsonResponse(resp)
     elif media == "query":
         resp = _get_query_data(bound_query) if meta else {}
-        return http.JsonResponse(resp)
+        return JsonResponse(resp)
     else:
         raise http.Http404(f"Bad file format {media} requested")
 

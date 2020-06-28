@@ -1,1153 +1,1150 @@
 {
-    "config": {
-        "allModelFields": {
-            "auth.Group": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    }
+    "allModelFields": {
+        "auth.Group": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
                 },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "name"
-                ]
-            },
-            "auth.User": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "date_joined": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "datetime",
-                        "prettyName": "date_joined",
-                        "type": "datetime"
-                    },
-                    "email": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "email",
-                        "type": "string"
-                    },
-                    "first_name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "first_name",
-                        "type": "string"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "is_active": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "boolean",
-                        "prettyName": "is_active",
-                        "type": "boolean"
-                    },
-                    "is_staff": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "boolean",
-                        "prettyName": "is_staff",
-                        "type": "boolean"
-                    },
-                    "is_superuser": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "boolean",
-                        "prettyName": "is_superuser",
-                        "type": "boolean"
-                    },
-                    "last_login": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "datetime",
-                        "prettyName": "last_login",
-                        "type": "datetime"
-                    },
-                    "last_name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "last_name",
-                        "type": "string"
-                    },
-                    "password": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "password",
-                        "type": "string"
-                    },
-                    "username": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "username",
-                        "type": "string"
-                    }
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
                 },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "date_joined",
-                    "email",
-                    "first_name",
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "last_login",
-                    "last_name",
-                    "password",
-                    "username"
-                ]
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
             },
-            "boolean": {
-                "fields": {
-                    "average": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "average",
-                        "type": "number"
-                    },
-                    "sum": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "sum",
-                        "type": "number"
-                    }
-                },
-                "sortedFields": [
-                    "average",
-                    "sum"
-                ]
-            },
-            "data_browser.View": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "created_time": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "datetime",
-                        "prettyName": "created_time",
-                        "type": "datetime"
-                    },
-                    "description": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "description",
-                        "type": "string"
-                    },
-                    "fields": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "fields",
-                        "type": "string"
-                    },
-                    "google_sheets_formula": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "google_sheets_formula",
-                        "type": "string"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "id",
-                        "type": "string"
-                    },
-                    "model_name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "model_name",
-                        "type": "string"
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    },
-                    "open_view": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "open_view",
-                        "type": "string"
-                    },
-                    "owner": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "auth.User",
-                        "prettyName": "owner",
-                        "type": null
-                    },
-                    "public": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "boolean",
-                        "prettyName": "public",
-                        "type": "boolean"
-                    },
-                    "public_link": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "public_link",
-                        "type": "string"
-                    },
-                    "public_slug": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "public_slug",
-                        "type": "string"
-                    },
-                    "query": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "query",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "created_time",
-                    "description",
-                    "fields",
-                    "google_sheets_formula",
-                    "model_name",
-                    "name",
-                    "open_view",
-                    "owner",
-                    "public",
-                    "public_link",
-                    "public_slug",
-                    "query"
-                ]
-            },
-            "date": {
-                "fields": {
-                    "count": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "count",
-                        "type": "number"
-                    },
-                    "day": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "day",
-                        "type": "number"
-                    },
-                    "month": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "month",
-                        "type": "month"
-                    },
-                    "quarter": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "quarter",
-                        "type": "number"
-                    },
-                    "week_day": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "week_day",
-                        "type": "weekday"
-                    },
-                    "year": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "year",
-                        "type": "year"
-                    }
-                },
-                "sortedFields": [
-                    "count",
-                    "day",
-                    "month",
-                    "quarter",
-                    "week_day",
-                    "year"
-                ]
-            },
-            "datetime": {
-                "fields": {
-                    "count": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "count",
-                        "type": "number"
-                    },
-                    "date": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "date",
-                        "type": "date"
-                    },
-                    "day": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "day",
-                        "type": "number"
-                    },
-                    "hour": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "hour",
-                        "type": "number"
-                    },
-                    "minute": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "minute",
-                        "type": "number"
-                    },
-                    "month": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "month",
-                        "type": "month"
-                    },
-                    "quarter": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "quarter",
-                        "type": "number"
-                    },
-                    "second": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "second",
-                        "type": "number"
-                    },
-                    "week_day": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "week_day",
-                        "type": "weekday"
-                    },
-                    "year": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "year",
-                        "type": "year"
-                    }
-                },
-                "sortedFields": [
-                    "count",
-                    "date",
-                    "day",
-                    "hour",
-                    "minute",
-                    "month",
-                    "quarter",
-                    "second",
-                    "week_day",
-                    "year"
-                ]
-            },
-            "html": {
-                "fields": {},
-                "sortedFields": []
-            },
-            "month": {
-                "fields": {},
-                "sortedFields": []
-            },
-            "number": {
-                "fields": {
-                    "average": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "average",
-                        "type": "number"
-                    },
-                    "count": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "count",
-                        "type": "number"
-                    },
-                    "max": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "max",
-                        "type": "number"
-                    },
-                    "min": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "min",
-                        "type": "number"
-                    },
-                    "std_dev": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "std_dev",
-                        "type": "number"
-                    },
-                    "sum": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "sum",
-                        "type": "number"
-                    },
-                    "variance": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "variance",
-                        "type": "number"
-                    }
-                },
-                "sortedFields": [
-                    "average",
-                    "count",
-                    "max",
-                    "min",
-                    "std_dev",
-                    "sum",
-                    "variance"
-                ]
-            },
-            "regex": {
-                "fields": {},
-                "sortedFields": []
-            },
-            "string": {
-                "fields": {
-                    "count": {
-                        "canPivot": false,
-                        "concrete": true,
-                        "model": null,
-                        "prettyName": "count",
-                        "type": "number"
-                    }
-                },
-                "sortedFields": [
-                    "count"
-                ]
-            },
-            "tests.Address": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "bob": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "bob",
-                        "type": "string"
-                    },
-                    "city": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "city",
-                        "type": "string"
-                    },
-                    "fred": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "fred",
-                        "type": "string"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "tom": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "tom",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "bob",
-                    "city",
-                    "fred",
-                    "tom"
-                ]
-            },
-            "tests.InAdmin": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "name"
-                ]
-            },
-            "tests.InlineAdmin": {
-                "fields": {
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "in_admin": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "tests.InAdmin",
-                        "prettyName": "in_admin",
-                        "type": null
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "in_admin",
-                    "name"
-                ]
-            },
-            "tests.Normal": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "in_admin": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "tests.InAdmin",
-                        "prettyName": "in_admin",
-                        "type": null
-                    },
-                    "inline_admin": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "tests.InlineAdmin",
-                        "prettyName": "inline_admin",
-                        "type": null
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "in_admin",
-                    "inline_admin",
-                    "name"
-                ]
-            },
-            "tests.Producer": {
-                "fields": {
-                    "address": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "tests.Address",
-                        "prettyName": "address",
-                        "type": null
-                    },
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "frank": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "frank",
-                        "type": "string"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "address",
-                    "frank",
-                    "name"
-                ]
-            },
-            "tests.Product": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "created_time": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "datetime",
-                        "prettyName": "created_time",
-                        "type": "datetime"
-                    },
-                    "default_sku": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "tests.SKU",
-                        "prettyName": "default_sku",
-                        "type": null
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "is_onsale": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "is_onsale",
-                        "type": "string"
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    },
-                    "only_in_list_view": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "only_in_list_view",
-                        "type": "string"
-                    },
-                    "onsale": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "boolean",
-                        "prettyName": "onsale",
-                        "type": "boolean"
-                    },
-                    "producer": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "tests.Producer",
-                        "prettyName": "producer",
-                        "type": null
-                    },
-                    "size": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "size",
-                        "type": "number"
-                    },
-                    "size_unit": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "size_unit",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "created_time",
-                    "default_sku",
-                    "is_onsale",
-                    "name",
-                    "only_in_list_view",
-                    "onsale",
-                    "producer",
-                    "size",
-                    "size_unit"
-                ]
-            },
-            "tests.SKU": {
-                "fields": {
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    },
-                    "product": {
-                        "canPivot": false,
-                        "concrete": false,
-                        "model": "tests.Product",
-                        "prettyName": "product",
-                        "type": null
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "name",
-                    "product"
-                ]
-            },
-            "tests.Tag": {
-                "fields": {
-                    "admin": {
-                        "canPivot": true,
-                        "concrete": false,
-                        "model": null,
-                        "prettyName": "admin",
-                        "type": "html"
-                    },
-                    "id": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "number",
-                        "prettyName": "id",
-                        "type": "number"
-                    },
-                    "name": {
-                        "canPivot": true,
-                        "concrete": true,
-                        "model": "string",
-                        "prettyName": "name",
-                        "type": "string"
-                    }
-                },
-                "sortedFields": [
-                    "id",
-                    "admin",
-                    "name"
-                ]
-            },
-            "weekday": {
-                "fields": {},
-                "sortedFields": []
-            },
-            "year": {
-                "fields": {},
-                "sortedFields": []
-            }
+            "sortedFields": [
+                "id",
+                "admin",
+                "name"
+            ]
         },
-        "baseUrl": "/data_browser/",
-        "canMakePublic": true,
-        "sortedModels": [
-            "auth.Group",
-            "auth.User",
-            "data_browser.View",
-            "tests.Address",
-            "tests.InAdmin",
-            "tests.InlineAdmin",
-            "tests.Normal",
-            "tests.Producer",
-            "tests.Product",
-            "tests.SKU",
-            "tests.Tag"
-        ],
-        "types": {
-            "boolean": {
-                "defaultLookup": "equals",
-                "defaultValue": true,
-                "lookups": {
-                    "equals": {
-                        "type": "boolean"
-                    },
-                    "is_null": {
-                        "type": "boolean"
-                    },
-                    "not_equals": {
-                        "type": "boolean"
-                    }
+        "auth.User": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals",
-                    "is_null"
-                ]
-            },
-            "date": {
-                "defaultLookup": "equals",
-                "defaultValue": "today",
-                "lookups": {
-                    "equals": {
-                        "type": "date"
-                    },
-                    "gt": {
-                        "type": "date"
-                    },
-                    "gte": {
-                        "type": "date"
-                    },
-                    "is_null": {
-                        "type": "boolean"
-                    },
-                    "lt": {
-                        "type": "date"
-                    },
-                    "lte": {
-                        "type": "date"
-                    },
-                    "not_equals": {
-                        "type": "date"
-                    }
+                "date_joined": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "datetime",
+                    "prettyName": "date_joined",
+                    "type": "datetime"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals",
-                    "gt",
-                    "gte",
-                    "lt",
-                    "lte",
-                    "is_null"
-                ]
-            },
-            "datetime": {
-                "defaultLookup": "equals",
-                "defaultValue": "now",
-                "lookups": {
-                    "equals": {
-                        "type": "datetime"
-                    },
-                    "gt": {
-                        "type": "datetime"
-                    },
-                    "gte": {
-                        "type": "datetime"
-                    },
-                    "is_null": {
-                        "type": "boolean"
-                    },
-                    "lt": {
-                        "type": "datetime"
-                    },
-                    "lte": {
-                        "type": "datetime"
-                    },
-                    "not_equals": {
-                        "type": "datetime"
-                    }
+                "email": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "email",
+                    "type": "string"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals",
-                    "gt",
-                    "gte",
-                    "lt",
-                    "lte",
-                    "is_null"
-                ]
-            },
-            "html": {
-                "defaultLookup": null,
-                "defaultValue": null,
-                "lookups": {},
-                "sortedLookups": []
-            },
-            "month": {
-                "defaultLookup": "equals",
-                "defaultValue": "January",
-                "lookups": {
-                    "equals": {
-                        "type": "month"
-                    },
-                    "not_equals": {
-                        "type": "month"
-                    }
+                "first_name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "first_name",
+                    "type": "string"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals"
-                ]
-            },
-            "number": {
-                "defaultLookup": "equals",
-                "defaultValue": 0,
-                "lookups": {
-                    "equals": {
-                        "type": "number"
-                    },
-                    "gt": {
-                        "type": "number"
-                    },
-                    "gte": {
-                        "type": "number"
-                    },
-                    "is_null": {
-                        "type": "boolean"
-                    },
-                    "lt": {
-                        "type": "number"
-                    },
-                    "lte": {
-                        "type": "number"
-                    },
-                    "not_equals": {
-                        "type": "number"
-                    }
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals",
-                    "gt",
-                    "gte",
-                    "lt",
-                    "lte",
-                    "is_null"
-                ]
-            },
-            "regex": {
-                "defaultLookup": null,
-                "defaultValue": ".*",
-                "lookups": {},
-                "sortedLookups": []
-            },
-            "string": {
-                "defaultLookup": "equals",
-                "defaultValue": "",
-                "lookups": {
-                    "contains": {
-                        "type": "string"
-                    },
-                    "ends_with": {
-                        "type": "string"
-                    },
-                    "equals": {
-                        "type": "string"
-                    },
-                    "is_null": {
-                        "type": "boolean"
-                    },
-                    "not_contains": {
-                        "type": "string"
-                    },
-                    "not_ends_with": {
-                        "type": "string"
-                    },
-                    "not_equals": {
-                        "type": "string"
-                    },
-                    "not_regex": {
-                        "type": "regex"
-                    },
-                    "not_starts_with": {
-                        "type": "string"
-                    },
-                    "regex": {
-                        "type": "regex"
-                    },
-                    "starts_with": {
-                        "type": "string"
-                    }
+                "is_active": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "boolean",
+                    "prettyName": "is_active",
+                    "type": "boolean"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "contains",
-                    "starts_with",
-                    "ends_with",
-                    "regex",
-                    "not_equals",
-                    "not_contains",
-                    "not_starts_with",
-                    "not_ends_with",
-                    "not_regex",
-                    "is_null"
-                ]
-            },
-            "weekday": {
-                "defaultLookup": "equals",
-                "defaultValue": "Monday",
-                "lookups": {
-                    "equals": {
-                        "type": "weekday"
-                    },
-                    "not_equals": {
-                        "type": "weekday"
-                    }
+                "is_staff": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "boolean",
+                    "prettyName": "is_staff",
+                    "type": "boolean"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals"
-                ]
-            },
-            "year": {
-                "defaultLookup": "equals",
-                "defaultValue": 2020,
-                "lookups": {
-                    "equals": {
-                        "type": "year"
-                    },
-                    "gt": {
-                        "type": "year"
-                    },
-                    "gte": {
-                        "type": "year"
-                    },
-                    "is_null": {
-                        "type": "boolean"
-                    },
-                    "lt": {
-                        "type": "year"
-                    },
-                    "lte": {
-                        "type": "year"
-                    },
-                    "not_equals": {
-                        "type": "year"
-                    }
+                "is_superuser": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "boolean",
+                    "prettyName": "is_superuser",
+                    "type": "boolean"
                 },
-                "sortedLookups": [
-                    "equals",
-                    "not_equals",
-                    "gt",
-                    "gte",
-                    "lt",
-                    "lte",
-                    "is_null"
-                ]
-            }
+                "last_login": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "datetime",
+                    "prettyName": "last_login",
+                    "type": "datetime"
+                },
+                "last_name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "last_name",
+                    "type": "string"
+                },
+                "password": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "password",
+                    "type": "string"
+                },
+                "username": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "username",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "date_joined",
+                "email",
+                "first_name",
+                "is_active",
+                "is_staff",
+                "is_superuser",
+                "last_login",
+                "last_name",
+                "password",
+                "username"
+            ]
         },
-        "version": "redacted"
+        "boolean": {
+            "fields": {
+                "average": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "average",
+                    "type": "number"
+                },
+                "sum": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "sum",
+                    "type": "number"
+                }
+            },
+            "sortedFields": [
+                "average",
+                "sum"
+            ]
+        },
+        "data_browser.View": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "created_time": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "datetime",
+                    "prettyName": "created_time",
+                    "type": "datetime"
+                },
+                "description": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "description",
+                    "type": "string"
+                },
+                "fields": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "fields",
+                    "type": "string"
+                },
+                "google_sheets_formula": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "google_sheets_formula",
+                    "type": "string"
+                },
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "id",
+                    "type": "string"
+                },
+                "model_name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "model_name",
+                    "type": "string"
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                },
+                "open_view": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "open_view",
+                    "type": "string"
+                },
+                "owner": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "auth.User",
+                    "prettyName": "owner",
+                    "type": null
+                },
+                "public": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "boolean",
+                    "prettyName": "public",
+                    "type": "boolean"
+                },
+                "public_link": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "public_link",
+                    "type": "string"
+                },
+                "public_slug": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "public_slug",
+                    "type": "string"
+                },
+                "query": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "query",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "created_time",
+                "description",
+                "fields",
+                "google_sheets_formula",
+                "model_name",
+                "name",
+                "open_view",
+                "owner",
+                "public",
+                "public_link",
+                "public_slug",
+                "query"
+            ]
+        },
+        "date": {
+            "fields": {
+                "count": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "day": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "day",
+                    "type": "number"
+                },
+                "month": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "month",
+                    "type": "month"
+                },
+                "quarter": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "quarter",
+                    "type": "number"
+                },
+                "week_day": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "week_day",
+                    "type": "weekday"
+                },
+                "year": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "year",
+                    "type": "year"
+                }
+            },
+            "sortedFields": [
+                "count",
+                "day",
+                "month",
+                "quarter",
+                "week_day",
+                "year"
+            ]
+        },
+        "datetime": {
+            "fields": {
+                "count": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "date": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "date",
+                    "type": "date"
+                },
+                "day": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "day",
+                    "type": "number"
+                },
+                "hour": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "hour",
+                    "type": "number"
+                },
+                "minute": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "minute",
+                    "type": "number"
+                },
+                "month": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "month",
+                    "type": "month"
+                },
+                "quarter": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "quarter",
+                    "type": "number"
+                },
+                "second": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "second",
+                    "type": "number"
+                },
+                "week_day": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "week_day",
+                    "type": "weekday"
+                },
+                "year": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "year",
+                    "type": "year"
+                }
+            },
+            "sortedFields": [
+                "count",
+                "date",
+                "day",
+                "hour",
+                "minute",
+                "month",
+                "quarter",
+                "second",
+                "week_day",
+                "year"
+            ]
+        },
+        "html": {
+            "fields": {},
+            "sortedFields": []
+        },
+        "month": {
+            "fields": {},
+            "sortedFields": []
+        },
+        "number": {
+            "fields": {
+                "average": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "average",
+                    "type": "number"
+                },
+                "count": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "max": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "max",
+                    "type": "number"
+                },
+                "min": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "min",
+                    "type": "number"
+                },
+                "std_dev": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "std_dev",
+                    "type": "number"
+                },
+                "sum": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "sum",
+                    "type": "number"
+                },
+                "variance": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "variance",
+                    "type": "number"
+                }
+            },
+            "sortedFields": [
+                "average",
+                "count",
+                "max",
+                "min",
+                "std_dev",
+                "sum",
+                "variance"
+            ]
+        },
+        "regex": {
+            "fields": {},
+            "sortedFields": []
+        },
+        "string": {
+            "fields": {
+                "count": {
+                    "canPivot": false,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                }
+            },
+            "sortedFields": [
+                "count"
+            ]
+        },
+        "tests.Address": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "bob": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "bob",
+                    "type": "string"
+                },
+                "city": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "city",
+                    "type": "string"
+                },
+                "fred": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "fred",
+                    "type": "string"
+                },
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "tom": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "tom",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "bob",
+                "city",
+                "fred",
+                "tom"
+            ]
+        },
+        "tests.InAdmin": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "name"
+            ]
+        },
+        "tests.InlineAdmin": {
+            "fields": {
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "in_admin": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "tests.InAdmin",
+                    "prettyName": "in_admin",
+                    "type": null
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "in_admin",
+                "name"
+            ]
+        },
+        "tests.Normal": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "in_admin": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "tests.InAdmin",
+                    "prettyName": "in_admin",
+                    "type": null
+                },
+                "inline_admin": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "tests.InlineAdmin",
+                    "prettyName": "inline_admin",
+                    "type": null
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "in_admin",
+                "inline_admin",
+                "name"
+            ]
+        },
+        "tests.Producer": {
+            "fields": {
+                "address": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "tests.Address",
+                    "prettyName": "address",
+                    "type": null
+                },
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "frank": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "frank",
+                    "type": "string"
+                },
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "address",
+                "frank",
+                "name"
+            ]
+        },
+        "tests.Product": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "created_time": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "datetime",
+                    "prettyName": "created_time",
+                    "type": "datetime"
+                },
+                "default_sku": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "tests.SKU",
+                    "prettyName": "default_sku",
+                    "type": null
+                },
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "is_onsale": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "is_onsale",
+                    "type": "string"
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                },
+                "only_in_list_view": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "only_in_list_view",
+                    "type": "string"
+                },
+                "onsale": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "boolean",
+                    "prettyName": "onsale",
+                    "type": "boolean"
+                },
+                "producer": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "tests.Producer",
+                    "prettyName": "producer",
+                    "type": null
+                },
+                "size": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "size",
+                    "type": "number"
+                },
+                "size_unit": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "size_unit",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "created_time",
+                "default_sku",
+                "is_onsale",
+                "name",
+                "only_in_list_view",
+                "onsale",
+                "producer",
+                "size",
+                "size_unit"
+            ]
+        },
+        "tests.SKU": {
+            "fields": {
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                },
+                "product": {
+                    "canPivot": false,
+                    "concrete": false,
+                    "model": "tests.Product",
+                    "prettyName": "product",
+                    "type": null
+                }
+            },
+            "sortedFields": [
+                "id",
+                "name",
+                "product"
+            ]
+        },
+        "tests.Tag": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "id": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "name"
+            ]
+        },
+        "weekday": {
+            "fields": {},
+            "sortedFields": []
+        },
+        "year": {
+            "fields": {},
+            "sortedFields": []
+        }
     },
-    "sentryDsn": null
+    "baseUrl": "/data_browser/",
+    "canMakePublic": true,
+    "sentryDsn": null,
+    "sortedModels": [
+        "auth.Group",
+        "auth.User",
+        "data_browser.View",
+        "tests.Address",
+        "tests.InAdmin",
+        "tests.InlineAdmin",
+        "tests.Normal",
+        "tests.Producer",
+        "tests.Product",
+        "tests.SKU",
+        "tests.Tag"
+    ],
+    "types": {
+        "boolean": {
+            "defaultLookup": "equals",
+            "defaultValue": true,
+            "lookups": {
+                "equals": {
+                    "type": "boolean"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "not_equals": {
+                    "type": "boolean"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "is_null"
+            ]
+        },
+        "date": {
+            "defaultLookup": "equals",
+            "defaultValue": "today",
+            "lookups": {
+                "equals": {
+                    "type": "date"
+                },
+                "gt": {
+                    "type": "date"
+                },
+                "gte": {
+                    "type": "date"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "lt": {
+                    "type": "date"
+                },
+                "lte": {
+                    "type": "date"
+                },
+                "not_equals": {
+                    "type": "date"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null"
+            ]
+        },
+        "datetime": {
+            "defaultLookup": "equals",
+            "defaultValue": "now",
+            "lookups": {
+                "equals": {
+                    "type": "datetime"
+                },
+                "gt": {
+                    "type": "datetime"
+                },
+                "gte": {
+                    "type": "datetime"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "lt": {
+                    "type": "datetime"
+                },
+                "lte": {
+                    "type": "datetime"
+                },
+                "not_equals": {
+                    "type": "datetime"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null"
+            ]
+        },
+        "html": {
+            "defaultLookup": null,
+            "defaultValue": null,
+            "lookups": {},
+            "sortedLookups": []
+        },
+        "month": {
+            "defaultLookup": "equals",
+            "defaultValue": "January",
+            "lookups": {
+                "equals": {
+                    "type": "month"
+                },
+                "not_equals": {
+                    "type": "month"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals"
+            ]
+        },
+        "number": {
+            "defaultLookup": "equals",
+            "defaultValue": 0,
+            "lookups": {
+                "equals": {
+                    "type": "number"
+                },
+                "gt": {
+                    "type": "number"
+                },
+                "gte": {
+                    "type": "number"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "lt": {
+                    "type": "number"
+                },
+                "lte": {
+                    "type": "number"
+                },
+                "not_equals": {
+                    "type": "number"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null"
+            ]
+        },
+        "regex": {
+            "defaultLookup": null,
+            "defaultValue": ".*",
+            "lookups": {},
+            "sortedLookups": []
+        },
+        "string": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "contains": {
+                    "type": "string"
+                },
+                "ends_with": {
+                    "type": "string"
+                },
+                "equals": {
+                    "type": "string"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "not_contains": {
+                    "type": "string"
+                },
+                "not_ends_with": {
+                    "type": "string"
+                },
+                "not_equals": {
+                    "type": "string"
+                },
+                "not_regex": {
+                    "type": "regex"
+                },
+                "not_starts_with": {
+                    "type": "string"
+                },
+                "regex": {
+                    "type": "regex"
+                },
+                "starts_with": {
+                    "type": "string"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "contains",
+                "starts_with",
+                "ends_with",
+                "regex",
+                "not_equals",
+                "not_contains",
+                "not_starts_with",
+                "not_ends_with",
+                "not_regex",
+                "is_null"
+            ]
+        },
+        "weekday": {
+            "defaultLookup": "equals",
+            "defaultValue": "Monday",
+            "lookups": {
+                "equals": {
+                    "type": "weekday"
+                },
+                "not_equals": {
+                    "type": "weekday"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals"
+            ]
+        },
+        "year": {
+            "defaultLookup": "equals",
+            "defaultValue": 2020,
+            "lookups": {
+                "equals": {
+                    "type": "year"
+                },
+                "gt": {
+                    "type": "year"
+                },
+                "gte": {
+                    "type": "year"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "lt": {
+                    "type": "year"
+                },
+                "lte": {
+                    "type": "year"
+                },
+                "not_equals": {
+                    "type": "year"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null"
+            ]
+        }
+    }
 }

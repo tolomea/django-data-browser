@@ -1,10 +1,9 @@
 import json
 
 import django.contrib.admin.views.decorators as admin_decorators
-from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 
-from .common import can_make_public
+from .common import HttpResponse, JsonResponse, can_make_public
 from .models import View, global_data
 
 
@@ -49,8 +48,7 @@ def view_list(request):
 
     if request.method == "GET":
         return JsonResponse(
-            [serialize(view) for view in get_queryset(request).order_by("name")],
-            safe=False,
+            [serialize(view) for view in get_queryset(request).order_by("name")]
         )
     elif request.method == "POST":
         view = View.objects.create(owner=request.user, **deserialize(request))

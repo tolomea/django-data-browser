@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams, Redirect } from "react-router-dom";
-import { TLink, SLink, doDelete, useData } from "./Util.js";
+import { TLink, SLink, doDelete, useData, version } from "./Util.js";
 import { Results } from "./Results.js";
 import "./App.css";
 
@@ -227,7 +227,6 @@ function ModelSelector(props) {
 }
 
 function Logo(props) {
-  const { version } = props;
   return (
     <Link to="/" className="Logo">
       <span>DDB</span>
@@ -307,9 +306,9 @@ function Delete(props) {
 }
 
 function EditSavedView(props) {
-  const { config } = props;
+  const { canMakePublic, baseUrl } = props;
   const { pk } = useParams();
-  const url = `${config.baseUrl}api/views/${pk}/`;
+  const url = `${baseUrl}api/views/${pk}/`;
   const [view, setView] = useData(url);
   if (!view) return "";
   return (
@@ -346,7 +345,7 @@ function EditSavedView(props) {
             setView({ description: event.target.value });
           }}
         />
-        {config.canMakePublic && (
+        {canMakePublic && (
           <table>
             <tbody>
               <tr>
