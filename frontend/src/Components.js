@@ -294,6 +294,7 @@ function EditSavedView(props) {
             setView({ name: event.target.value });
           }}
           className="SavedViewName"
+          placeholder="enter a name"
         />
         <table>
           <tbody>
@@ -316,6 +317,7 @@ function EditSavedView(props) {
           onChange={(event) => {
             setView({ description: event.target.value });
           }}
+          placeholder="enter a description"
         />
         {canMakePublic && (
           <table>

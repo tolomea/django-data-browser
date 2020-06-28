@@ -7,7 +7,8 @@
 select,
 input,
 th,
-button {
+button,
+textarea {
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
@@ -90,6 +91,10 @@ select {
 }
 .sLink:hover {
   text-decoration: underline;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #ccc;
 }
 
 .MainSpace {
@@ -243,7 +248,7 @@ div.Index .Link {
 .EditSavedView textarea {
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding: 2%;
+  padding: 10px;
   min-width: 500px;
   width: 100%;
   min-height: 100px;
