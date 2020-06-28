@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/browser";
 import React from "react";
 import "./App.css";
-import { HomePage, QueryPage } from "./Components";
+import { HomePage, QueryPage, Logo } from "./Components";
 import { Query, getUrlForQuery, empty } from "./Query";
 import {
   BrowserRouter,
@@ -127,7 +127,6 @@ class QueryApp extends React.Component {
       <QueryPage
         query={query}
         sortedModels={this.props.config.sortedModels}
-        version={this.props.config.version}
         {...this.state}
       />
     );
@@ -150,18 +149,20 @@ function App(props) {
   const { config, sortedModels } = props;
   return (
     <BrowserRouter basename={config.baseUrl}>
-      <Switch>
-        <Route path="/query/:model/:fieldStr?.html">
-          <Bob {...{ config, sortedModels }} />
-        </Route>
-        <Route path="/">
-          <HomePage
-            sortedModels={config.sortedModels}
-            version={config.version}
-            baseUrl={config.baseUrl}
-          />
-        </Route>
-      </Switch>
+      <div id="body">
+        <Logo version={config.version} />
+        <Switch>
+          <Route path="/query/:model/:fieldStr?.html">
+            <Bob {...{ config, sortedModels }} />
+          </Route>
+          <Route path="/">
+            <HomePage
+              sortedModels={config.sortedModels}
+              baseUrl={config.baseUrl}
+            />
+          </Route>
+        </Switch>
+      </div>
     </BrowserRouter>
   );
 }

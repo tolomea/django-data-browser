@@ -242,7 +242,6 @@ function QueryPage(props) {
     rows,
     cols,
     body,
-    version,
     sortedModels,
     model,
     filters,
@@ -250,8 +249,7 @@ function QueryPage(props) {
   } = props;
   const saveUrl = query.getUrlForSave();
   return (
-    <div id="body">
-      <Logo {...{ version }} />
+    <>
       <ModelSelector {...{ query, sortedModels, model }} />
       <Filters {...{ query, filters, filterErrors }} />
       <p>
@@ -275,7 +273,7 @@ function QueryPage(props) {
           <h2>No fields selected</h2>
         )}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -312,27 +310,24 @@ function SavedViewList(props) {
 }
 
 function HomePage(props) {
-  const { version, sortedModels, baseUrl } = props;
+  const { sortedModels, baseUrl } = props;
   return (
-    <div id="body">
-      <Logo {...{ version }} />
-      <div className="Index">
+    <div className="Index">
+      <div>
+        <h1>Models</h1>
         <div>
-          <h1>Models</h1>
-          <div>
-            {sortedModels.map((model) => (
-              <div key={model}>
-                <Link to={`/query/${model}/.html`} className="Link">
-                  {model}
-                </Link>
-              </div>
-            ))}
-          </div>
+          {sortedModels.map((model) => (
+            <div key={model}>
+              <Link to={`/query/${model}/.html`} className="Link">
+                {model}
+              </Link>
+            </div>
+          ))}
         </div>
-        <SavedViewList {...{ baseUrl }} />
       </div>
+      <SavedViewList {...{ baseUrl }} />
     </div>
   );
 }
 
-export { HomePage, QueryPage };
+export { HomePage, QueryPage, Logo };
