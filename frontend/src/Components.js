@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { TLink, SLink } from "./Util.js";
 import { Results } from "./Results.js";
@@ -279,8 +279,40 @@ function QueryPage(props) {
   );
 }
 
+function useData(url) {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((response) => {
+        setData(response);
+      });
+  }, [url]);
+  return data;
+}
+
+function SavedViewList(props) {
+  const { baseUrl } = props;
+  const savedViews = useData(`${baseUrl}api/views/`);
+  return (
+    <div>
+      <h1>Saved Views</h1>
+      <div>
+        {savedViews.map((view, index) => (
+          <div key={index}>
+            <Link className="Link" to={view.link}>
+              {view.model} - {view.name}
+            </Link>
+            <p>{view.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function HomePage(props) {
-  const { version, sortedModels, savedViews } = props;
+  const { version, sortedModels, baseUrl } = props;
   return (
     <div id="body">
       <Logo {...{ version }} />
@@ -297,19 +329,7 @@ function HomePage(props) {
             ))}
           </div>
         </div>
-        <div>
-          <h1>Saved Views</h1>
-          <div>
-            {savedViews.map((view, index) => (
-              <div key={index}>
-                <Link className="Link" to={view.link}>
-                  {view.model} - {view.name}
-                </Link>
-                <p>{view.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <SavedViewList {...{ baseUrl }} />
       </div>
     </div>
   );

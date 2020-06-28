@@ -34,6 +34,7 @@ def serialize(view):
         "query": view.query,
         "public_link": view.public_link(),
         "google_sheets_formula": view.google_sheets_formula(),
+        "link": f"/query/{view.model_name}/{view.fields}.html?{view.query}",
     }
 
 

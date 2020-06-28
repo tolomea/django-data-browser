@@ -71,6 +71,7 @@ class TestViewList:
                 "query": "name__contains=sql",
                 "public_link": "N/A",
                 "google_sheets_formula": "N/A",
+                "link": "/query/core.Product/admin.html?name__contains=sql",
             }
         ]
 
@@ -102,6 +103,7 @@ class TestViewList:
             "query": "",
             "public_link": link,
             "google_sheets_formula": f'=importdata("{link}")',
+            "link": "/query/core.Product/.html?",
         }
 
         assert view.owner == admin_user
@@ -153,6 +155,7 @@ class TestViewDetail:
             "query": "name__contains=sql",
             "public_link": "N/A",
             "google_sheets_formula": "N/A",
+            "link": "/query/core.Product/admin.html?name__contains=sql",
         }
 
     def test_get_other_owner(self, admin_client, other_view):
@@ -199,6 +202,7 @@ class TestViewDetail:
             "query": "name__contains=sql",
             "public_link": link,
             "google_sheets_formula": f'=importdata("{link}")',
+            "link": "/query/core.Product/admin.html?name__contains=sql",
         }
 
         assert view.owner == admin_user

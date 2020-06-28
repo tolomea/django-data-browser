@@ -43,7 +43,7 @@ class QueryApp extends React.Component {
     controller = new AbortController();
 
     return fetch(url, { signal: controller.signal })
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((response) => {
         if (response.version !== this.state.version) {
           console.log("Version mismatch, hard reload");
@@ -67,7 +67,7 @@ class QueryApp extends React.Component {
     const { model, fieldStr, queryStr, config } = this.props;
     const url = `${config.baseUrl}query/${model}/${fieldStr}.query${queryStr}`;
     fetch(url)
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((response) => {
         const reqState = {
           booting: false,
@@ -157,8 +157,8 @@ function App(props) {
         <Route path="/">
           <HomePage
             sortedModels={config.sortedModels}
-            savedViews={config.savedViews}
             version={config.version}
+            baseUrl={config.baseUrl}
           />
         </Route>
       </Switch>
