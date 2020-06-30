@@ -12,6 +12,7 @@ git add data_browser/fe_build data_browser/templates/data_browser/index.html
 rm -Rf dist build
 pip install --upgrade setuptools wheel twine
 python setup.py sdist bdist_wheel
+twine check dist/*
 
 #git tag -a -m "" x.y.z
 #git push --tags

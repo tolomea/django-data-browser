@@ -4,7 +4,7 @@ import setuptools
 
 from data_browser import version
 
-with open("README.md", "r") as fh:
+with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 
@@ -25,7 +25,7 @@ setuptools.setup(
         "of a Django projects DB."
     ),
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url="https://github.com/tolomea/django-data-browser",
     packages=setuptools.find_packages(exclude=["tests"]),
     classifiers=[
