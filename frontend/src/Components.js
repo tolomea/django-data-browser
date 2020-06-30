@@ -339,14 +339,14 @@ function EditSavedView(props) {
               </tr>
               <tr>
                 <th>Public link:</th>
-                <td>
-                  <CopyText text={view.public_link} />
-                </td>
+                <td>{view.public && <CopyText text={view.public_link} />}</td>
               </tr>
               <tr>
                 <th>Google Sheets:</th>
                 <td>
-                  <CopyText text={view.google_sheets_formula} />
+                  {view.public && (
+                    <CopyText text={view.google_sheets_formula} />
+                  )}
                 </td>
               </tr>
             </tbody>

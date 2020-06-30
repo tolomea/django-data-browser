@@ -234,7 +234,7 @@ div.Index .Link {
 /* Edit View */
 
 .EditSavedView {
-  margin: 40px auto 30px auto;
+  margin: 50px auto 30px auto;
 }
 .EditSavedView .SavedViewTitle {
   font-weight: bold;
@@ -273,4 +273,8 @@ div.Index .Link {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+}
+
+.CopyToClipboard {
+  font-size: 13px;
 }

@@ -13,7 +13,8 @@ function CopyText(props) {
     return (
         <>
             <span ref={ref}>{text}</span>{" "}
-            <SLink
+            <TLink
+                className="CopyToClipboard"
                 onClick={(event) => {
                     const range = document.createRange();
                     range.selectNodeContents(ref.current);
@@ -24,8 +25,8 @@ function CopyText(props) {
                     event.target.blur();
                 }}
             >
-                content_copy
-            </SLink>
+                (copy to clipboard)
+            </TLink>
         </>
     );
 }
