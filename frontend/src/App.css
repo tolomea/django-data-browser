@@ -236,6 +236,10 @@ div.Index .Link {
 .EditSavedView {
   margin: 40px auto 30px auto;
 }
+.EditSavedView .SavedViewTitle {
+  font-weight: bold;
+  font-size: 28px;
+}
 .EditSavedView form {
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -268,4 +272,5 @@ div.Index .Link {
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
 }

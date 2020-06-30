@@ -285,7 +285,10 @@ function EditSavedView(props) {
   if (!view) return "";
   return (
     <div className="EditSavedView">
-      <h1>Saved View</h1>
+      <div className="SavedViewActions">
+        <span className="SavedViewTitle">Saved View</span>
+        <Link to={view.link}>Open</Link>
+      </div>
       <form>
         <input
           type="text"
