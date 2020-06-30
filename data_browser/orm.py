@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
@@ -56,7 +57,12 @@ def _get_all_admin_fields(request):
     request.data_browser = {"calculated_fields": set()}
 
     def from_fieldsets(admin, all_):
-        obj = admin.model()  # we want the admin change field sets, not the add ones
+        auth_user_compat = getattr(settings, "DATA_BROWSER_AUTH_USER_COMPAT", True)
+        if auth_user_compat and isinstance(admin, UserAdmin):
+            obj = admin.model()  # we want the admin change field sets, not the add ones
+        else:
+            obj = None
+
         for f in flatten_fieldsets(admin.get_fieldsets(request, obj)):
             # skip calculated fields on inlines
             if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):

@@ -41,21 +41,20 @@ Because it's hosted on Heroku free tier it might take a while to respond to the 
 
 ## Settings
 
-| Name                      | Docs Section | Function                                                                                |
-| ------------------------- | ------------ | --------------------------------------------------------------------------------------- |
-| DATA_BROWSER_ALLOW_PUBLIC | Security     | Allow selected saved views to be accessed without admin login in limited circumstances. |
-| DATA_BROWSER_DEV          | Development  | Enable proxying frontend to JS dev server.                                              |
-| DATA_BROWSER_FE_DSN       | Sentry       | The DSN the frontend sentry should report to, disabled by default.                      |
+| Name                          | Default | Docs Section | Function                                                                                       |
+| ----------------------------- | ------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| DATA_BROWSER_ALLOW_PUBLIC     | False   | Security     | Allow selected saved views to be accessed without admin login in limited circumstances.        |
+| DATA_BROWSER_DEV              | False   | Development  | Enable proxying frontend to JS dev server.                                                     |
+| DATA_BROWSER_FE_DSN           | None    | Sentry       | The DSN the frontend sentry should report to, disabled by default.                             |
+| DATA_BROWSER_AUTH_USER_COMPAT | True    | Performance  | When calling `get_fieldsets` on a `UserAdmin` alwyas pass an instance of the associated model. |
 
 ## Security
 
-There are two types of Django views in the Data Browser.
+Most of the Django views in the Data Browser can only be accessed by Django "staff members". These views support general querying of the database, checked against the admin permissions of the logged in user.
 
-Queries can only be accessed by Django "staff members" and support general querying of the database (checked against the users admin permissions).
+The only exception to this is "Public Saved Views" these are views which have been saved and marked as public. They can be accessed by anyone without needing a login but they can only be used to access a query that has been saved and made public and they have long random URL's.
 
-Views can be accessed by anyone but they can only be used to access a query that has been saved and made public and they have long random URL's.
-
-You can use the admin permission `data_browser | view | Can make a saved view publically available` to restrict who can make views public. To be public the view must be marked as public and owned by someone who has the permission. Users without the permission can not mark views as public and can not edit any view that is marked public.
+You can use the admin permission `data_browser | view | Can make a saved view publically available` to restrict who can make views public. To be public the view must be marked as public and owned by someone who has the permission.
 
 Additionally the entire public views system is gated by the Django settings value `DATA_BROWSER_ALLOW_PUBLIC`.
 
@@ -129,9 +128,11 @@ if not hasattr(request, "databrowser") or "my_field" in request.databrowser[`cal
 
 ### get_fieldsets
 
-The Data Browser also calls `get_fieldsets` to find out what fields the current user can access. When it does this it always passes a newly constructed instance of the relevant model. This is necessary to work around Django's User admin messing with the fieldsets when `None` is passed.
+The Data Browser also calls `get_fieldsets` to find out what fields the current user can access.
 
 As with `get_queryset` the Data Browser will set `request.databrowser` when calling `get_fieldsets` and you can test this to detect it and make Data Browser specific customizations.
+
+The Django User Admin has code to change the fieldsets when adding a new user. To compensate for this, when calling `get_fieldsets` on a subclass of `django.contrib.auth.admin.UserAdmin` the Data Browser will pass a newly constructed instance of the relevant model. This behavior can be disabled by setting `settings.DATA_BROWSER_AUTH_USER_COMPAT` to False.
 
 ## URL Format
 
