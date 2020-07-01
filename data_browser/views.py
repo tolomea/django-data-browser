@@ -6,7 +6,6 @@ import sys
 
 import django.contrib.admin.views.decorators as admin_decorators
 from django import http
-from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.template import engines, loader
 from django.template.response import TemplateResponse
@@ -15,7 +14,7 @@ from django.utils import timezone
 from django.views.decorators import csrf
 
 from . import version
-from .common import HttpResponse, JsonResponse, can_make_public
+from .common import HttpResponse, JsonResponse, can_make_public, settings
 from .models import View
 from .orm import _OPEN_IN_ADMIN, get_models, get_results
 from .query import TYPES, BoundQuery, Query
@@ -94,7 +93,7 @@ def _get_config(request):
             name for name, model in orm_models.items() if model.root
         ),
         "canMakePublic": can_make_public(request.user),
-        "sentryDsn": getattr(settings, "DATA_BROWSER_FE_DSN", None),
+        "sentryDsn": settings.DATA_BROWSER_FE_DSN,
     }
 
 
@@ -113,7 +112,7 @@ def query_html(request, *, model_name="", fields=""):
         config.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
     )
 
-    if getattr(settings, "DATA_BROWSER_DEV", False):  # pragma: no cover
+    if settings.DATA_BROWSER_DEV:  # pragma: no cover
         try:
             response = _get_from_js_dev_server(request)
         except Exception as e:
@@ -139,7 +138,7 @@ def view(request, pk, media):
         view.owner.is_active
         and view.owner.is_staff
         and can_make_public(view.owner)
-        and getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False)
+        and settings.DATA_BROWSER_ALLOW_PUBLIC
     ):
         request.user = view.owner  # public views are run as the person who owns them
         query = view.get_query()

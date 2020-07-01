@@ -1,12 +1,11 @@
 import threading
 
-from django.conf import settings
 from django.db import models
 from django.http import QueryDict
 from django.urls import reverse
 from django.utils import crypto, timezone
 
-from .common import MAKE_PUBLIC_CODENAME
+from .common import MAKE_PUBLIC_CODENAME, settings
 
 global_data = threading.local()
 
@@ -44,7 +43,7 @@ class View(models.Model):
 
     def public_link(self):
         if self.public:
-            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
+            if settings.DATA_BROWSER_ALLOW_PUBLIC:
                 url = reverse(
                     "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
                 )
@@ -56,7 +55,7 @@ class View(models.Model):
 
     def google_sheets_formula(self):
         if self.public:
-            if getattr(settings, "DATA_BROWSER_ALLOW_PUBLIC", False):
+            if settings.DATA_BROWSER_ALLOW_PUBLIC:
                 url = reverse(
                     "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
                 )

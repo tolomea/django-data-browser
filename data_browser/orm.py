@@ -1,7 +1,6 @@
 import logging
 from collections import defaultdict
 
-from django.conf import settings
 from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
@@ -11,6 +10,7 @@ from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 
+from .common import settings
 from .orm_fields import (
     _AGGREGATES,
     _FUNC_MAP,
@@ -57,7 +57,7 @@ def _get_all_admin_fields(request):
     request.data_browser = {"calculated_fields": set()}
 
     def from_fieldsets(admin, all_):
-        auth_user_compat = getattr(settings, "DATA_BROWSER_AUTH_USER_COMPAT", True)
+        auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT
         if auth_user_compat and isinstance(admin, UserAdmin):
             obj = admin.model()  # we want the admin change field sets, not the add ones
         else:
