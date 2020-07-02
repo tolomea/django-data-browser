@@ -14,12 +14,29 @@ def deserialize(request):
 
     res = {
         f: data[f]
-        for f in ["name", "description", "public", "model_name", "fields", "query"]
+        for f in [
+            "name",
+            "description",
+            "public",
+            "model_name",
+            "fields",
+            "query",
+            "limit",
+        ]
         if f in data
     }
 
+    if "limit" in res:
+        try:
+            res["limit"] = int(res["limit"])
+        except:  # noqa: E722  input sanitization
+            res["limit"] = 1
+        if res["limit"] < 1:
+            res["limit"] = 1
+
     if not can_make_public(request.user):
         res["public"] = False
+
     return res
 
 
@@ -31,9 +48,10 @@ def serialize(view):
         "model": view.model_name,
         "fields": view.fields,
         "query": view.query,
+        "limit": view.limit,
         "public_link": view.public_link(),
         "google_sheets_formula": view.google_sheets_formula(),
-        "link": f"/query/{view.model_name}/{view.fields}.html?{view.query}",
+        "link": f"/query/{view.model_name}/{view.fields}.html?{view.query}&limit={view.limit}",
         "pk": view.pk,
     }
 

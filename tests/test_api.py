@@ -71,8 +71,9 @@ class TestViewList:
                 "query": "name__contains=sql",
                 "public_link": "N/A",
                 "google_sheets_formula": "N/A",
-                "link": "/query/core.Product/admin.html?name__contains=sql",
+                "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
                 "pk": view.pk,
+                "limit": 1000,
             }
         ]
 
@@ -104,8 +105,9 @@ class TestViewList:
             "query": "",
             "public_link": link,
             "google_sheets_formula": f'=importdata("{link}")',
-            "link": "/query/core.Product/.html?",
+            "link": "/query/core.Product/.html?&limit=1000",
             "pk": view.pk,
+            "limit": 1000,
         }
 
         assert view.owner == admin_user
@@ -157,8 +159,9 @@ class TestViewDetail:
             "query": "name__contains=sql",
             "public_link": "N/A",
             "google_sheets_formula": "N/A",
-            "link": "/query/core.Product/admin.html?name__contains=sql",
+            "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
             "pk": view.pk,
+            "limit": 1000,
         }
 
     def test_get_other_owner(self, admin_client, other_view):
@@ -205,8 +208,9 @@ class TestViewDetail:
             "query": "name__contains=sql",
             "public_link": link,
             "google_sheets_formula": f'=importdata("{link}")',
-            "link": "/query/core.Product/admin.html?name__contains=sql",
+            "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
             "pk": view.pk,
+            "limit": 1000,
         }
 
         assert view.owner == admin_user
@@ -241,3 +245,25 @@ class TestViewDetail:
         assert not resp.json()["public"]
         view.refresh_from_db()
         assert not view.public
+
+    def test_patch_text_limit(self, admin_client, limited_user, view):
+        resp = admin_client.patch(
+            f"/data_browser/api/views/{view.pk}/",
+            json.dumps({"limit": "bob"}),
+            content_type="application/json",
+        )
+        assert resp.status_code == 200
+        assert not resp.json()["public"]
+        view.refresh_from_db()
+        assert view.limit == 1
+
+    def test_patch_negative_limit(self, admin_client, limited_user, view):
+        resp = admin_client.patch(
+            f"/data_browser/api/views/{view.pk}/",
+            json.dumps({"limit": -1}),
+            content_type="application/json",
+        )
+        assert resp.status_code == 200
+        assert not resp.json()["public"]
+        view.refresh_from_db()
+        assert view.limit == 1
