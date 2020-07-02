@@ -253,7 +253,16 @@ function QueryPage(props) {
       <ModelSelector {...{ query, sortedModels, model }} />
       <Filters {...{ query, filters, filterErrors }} />
       <p>
-        Showing {rows.length * cols.length} results -{" "}
+        Limit:{" "}
+        <input
+          className="RowLimit"
+          type="number"
+          value={query.query.limit}
+          onChange={(event) => {
+            query.setLimit(event.target.value);
+          }}
+        />{" "}
+        - Showing {rows.length * cols.length} results -{" "}
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
         <Save
@@ -312,6 +321,19 @@ function EditSavedView(props) {
             <tr>
               <th>Filters:</th>
               <td>{view.query}</td>
+            </tr>
+            <tr>
+              <th>Limit:</th>
+              <td className="SavedViewLimit">
+                <input
+                  className="RowLimit"
+                  type="number"
+                  value={view.limit}
+                  onChange={(event) => {
+                    setView({ limit: event.target.value });
+                  }}
+                />
+              </td>
             </tr>
           </tbody>
         </table>

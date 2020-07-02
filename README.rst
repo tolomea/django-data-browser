@@ -150,6 +150,8 @@ Model is a Django app and model name for example ``library.Book``
 Fields are a series of comma separated fields, where each field is the path to that field from the model with the parts separated by ``__``, e.g. ``author__name``. This path structure also includes aggregates and functions e.g. ``author__birthday__month__count``. Fields can be pivoted (where appropriate) by prefixing them with ``&``. And sorted by suffixing with a direction ``+``/``-`` and a priority e.g. ``author__birthday+1``.
 
 Filters use the same ``__`` path format as fields including a lookup e.g. ``author__name__contains=Joe``.
+Since filters always have a field and a lookup they always contain at least one ``__``.
+Filters that don't contain a ``__`` are reserved, at the time of writing the only such filter is the row limit filter ``limit``.
 
 Format determines the returned data format, the currently available formats are:
 

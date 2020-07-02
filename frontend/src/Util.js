@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Redirect } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./App.css";
+const assert = require("assert");
 let controller;
 let fetchDescription;
 
@@ -62,6 +63,11 @@ function doFetch(url, options, process) {
     controller = new AbortController();
     fetchDescription = `${options.method} ${url}`;
     return fetch(url, { signal: controller.signal, ...options })
+        .then((response) => {
+            assert.ok(response.status >= 200);
+            assert.ok(response.status < 300);
+            return response;
+        })
         .then((response) => {
             const response_version = response.headers.get("x-version");
             if (response_version !== version) {

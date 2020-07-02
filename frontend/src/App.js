@@ -31,6 +31,7 @@ class QueryApp extends React.Component {
       model: "",
       fields: [],
       filters: [],
+      limit: props.config.defaultRowLimit,
       ...empty,
     };
   }
@@ -61,6 +62,7 @@ class QueryApp extends React.Component {
           model: response.model,
           fields: response.fields,
           filters: response.filters,
+          limit: response.limit,
           ...empty,
         };
         this.setState(reqState);
@@ -88,6 +90,7 @@ class QueryApp extends React.Component {
       model: newState.model,
       fields: newState.fields,
       filters: newState.filters,
+      limit: newState.limit,
       ...empty,
     };
     window.history.pushState(

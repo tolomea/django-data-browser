@@ -274,6 +274,14 @@ div.Index .Link {
   justify-content: space-between;
   align-items: flex-end;
 }
+td.SavedViewLimit {
+  padding: 0px;
+}
+
+input.RowLimit {
+  padding: 1px 3px;
+  width: 100px;
+}
 
 .CopyToClipboard {
   font-size: 13px;

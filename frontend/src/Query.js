@@ -19,13 +19,14 @@ function getPartsForQuery(query) {
     query: query.filters
       .map((f) => `${f.path.join("__")}__${f.lookup}=${f.value}`)
       .join("&"),
+    limit: query.limit,
   };
 }
 
 function getUrlForQuery(baseUrl, query, media) {
-  const parts = getPartsForQuery(query);
-  const basePath = `${baseUrl}query/${parts.model}`;
-  return `${window.location.origin}${basePath}/${parts.fields}.${media}?${parts.query}`;
+  const { model, fields, query: query_str, limit } = getPartsForQuery(query);
+  const basePath = `${baseUrl}query/${model}`;
+  return `${window.location.origin}${basePath}/${fields}.${media}?${query_str}&limit=${limit}`;
 }
 
 class Query {
@@ -157,11 +158,16 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
+  setLimit(limit) {
+    this.setQuery({ limit: limit });
+  }
+
   setModel(model) {
     this.setQuery({
       model: model,
       fields: [],
       filters: [],
+      limit: this.config.defaultRowLimit,
       ...empty,
     });
   }
