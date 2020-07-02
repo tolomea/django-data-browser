@@ -217,6 +217,7 @@ def _cols_sub_query(bound_query):
         bound_query.model_name,
         bound_query.col_fields + row_fields,
         bound_query.valid_filters,
+        bound_query.limit,
     )
 
 
@@ -226,6 +227,7 @@ def _rows_sub_query(bound_query):
         bound_query.model_name,
         bound_query.row_fields + col_fields,
         bound_query.valid_filters,
+        bound_query.limit,
     )
 
 
@@ -287,7 +289,7 @@ def _get_results(request, bound_query, orm_models):
             sort_fields.append(f"-{field.orm_bound_field.queryset_path}")
     qs = qs.order_by(*sort_fields)
 
-    return list(qs)
+    return list(qs[: bound_query.limit])
 
 
 def get_results(request, bound_query, orm_models):
