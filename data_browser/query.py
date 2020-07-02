@@ -7,6 +7,8 @@ import dateutil.parser
 from django.urls import reverse
 from django.utils import timezone
 
+from .common import settings
+
 ASC, DSC = "asc", "dsc"
 
 
@@ -45,6 +47,7 @@ class Query:
     model_name: str
     fields: Sequence[QueryField]
     filters: Sequence[QueryFilter]
+    limit: int = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
 
     @classmethod
     def from_request(cls, model_name, field_str, get_args):
@@ -69,17 +72,21 @@ class Query:
                 else:
                     fields.append(QueryField(field, pivoted, None, None))
 
+        limit = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
+
         filters = []
         for path__lookup, values in dict(get_args).items():
             for value in values:
+                if path__lookup == "limit":
+                    limit = int(value)
                 if "__" in path__lookup:
                     path, lookup = path__lookup.rsplit("__", 1)
                     filters.append(QueryFilter(path, lookup, value))
 
-        return cls(model_name, fields, filters)
+        return cls(model_name, fields, filters, limit)
 
     @property
-    def field_str(self):
+    def _field_str(self):
         field_strs = []
         for field in self.fields:
             pivot = "&" if field.pivoted else ""
@@ -89,23 +96,23 @@ class Query:
         return ",".join(field_strs)
 
     @property
-    def filter_fields(self):
+    def _filter_fields(self):
         return [
             ("__".join(filter.path + [filter.lookup]), filter.value)
             for filter in self.filters
-        ]
+        ] + [("limit", self.limit)]
 
     def get_url(self, media):
         base_url = reverse(
             "data_browser:query",
             kwargs={
                 "model_name": self.model_name,
-                "fields": self.field_str,
+                "fields": self._field_str,
                 "media": media,
             },
         )
         params = urllib.parse.urlencode(
-            self.filter_fields, quote_via=urllib.parse.quote_plus, doseq=True
+            self._filter_fields, quote_via=urllib.parse.quote_plus, doseq=True
         )
         return f"{base_url}?{params}"
 

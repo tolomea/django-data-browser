@@ -124,6 +124,13 @@ class TestQuery:
         )
         assert q == query
 
+    def test_from_request_with_limit(self, query):
+        q = Query.from_request(
+            "app.model", "fa+1,fd-0,fn", QueryDict("limit=123&bob__equals=fred")
+        )
+        query.limit = 123
+        assert q == query
+
     def test_from_request_with_related_filter(self):
         q = Query.from_request("app.model", "", QueryDict("bob__jones__equals=fred"))
         assert q == Query(
@@ -167,15 +174,17 @@ class TestQuery:
         assert q == Query("app.model", [QueryField("fn", True)], [])
 
     def test_url(self, query):
+        query.limit = 123
         assert (
             query.get_url("html")
-            == "/data_browser/query/app.model/fa+1,fd-0,fn.html?bob__equals=fred"
+            == "/data_browser/query/app.model/fa+1,fd-0,fn.html?bob__equals=fred&limit=123"
         )
 
     def test_url_no_filters(self, query):
         query.filters = []
         assert (
-            query.get_url("html") == "/data_browser/query/app.model/fa+1,fd-0,fn.html?"
+            query.get_url("html")
+            == "/data_browser/query/app.model/fa+1,fd-0,fn.html?limit=1000"
         )
 
 
