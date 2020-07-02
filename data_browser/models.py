@@ -35,6 +35,7 @@ class View(models.Model):
     model_name = models.CharField(max_length=32, blank=False)
     fields = models.TextField(blank=True)
     query = models.TextField(blank=True)
+    limit = models.IntegerField(blank=False, null=False, default=1000)
 
     def get_query(self):
         from .query import Query

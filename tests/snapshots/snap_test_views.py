@@ -199,6 +199,13 @@ snapshots["test_query_html config"] = {
                     "prettyName": "id",
                     "type": "string",
                 },
+                "limit": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": "number",
+                    "prettyName": "limit",
+                    "type": "number",
+                },
                 "model_name": {
                     "canPivot": True,
                     "concrete": True,
@@ -263,6 +270,7 @@ snapshots["test_query_html config"] = {
                 "description",
                 "fields",
                 "google_sheets_formula",
+                "limit",
                 "model_name",
                 "name",
                 "open_view",
@@ -813,6 +821,7 @@ snapshots["test_query_html config"] = {
     },
     "baseUrl": "/data_browser/",
     "canMakePublic": True,
+    "defaultRowLimit": 1000,
     "sentryDsn": None,
     "sortedModels": [
         "auth.Group",
@@ -1269,6 +1278,7 @@ snapshots["test_query_html_no_perms config"] = {
     },
     "baseUrl": "/data_browser/",
     "canMakePublic": False,
+    "defaultRowLimit": 1000,
     "sentryDsn": None,
     "sortedModels": [],
     "types": {
@@ -1623,6 +1633,13 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "id",
                     "type": "string",
                 },
+                "limit": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": "number",
+                    "prettyName": "limit",
+                    "type": "number",
+                },
                 "model_name": {
                     "canPivot": True,
                     "concrete": True,
@@ -1687,6 +1704,7 @@ snapshots["test_query_ctx config"] = {
                 "description",
                 "fields",
                 "google_sheets_formula",
+                "limit",
                 "model_name",
                 "name",
                 "open_view",
@@ -2237,6 +2255,7 @@ snapshots["test_query_ctx config"] = {
     },
     "baseUrl": "/data_browser/",
     "canMakePublic": True,
+    "defaultRowLimit": 1000,
     "sentryDsn": None,
     "sortedModels": [
         "auth.Group",

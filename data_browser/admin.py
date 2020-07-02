@@ -21,7 +21,7 @@ class ViewAdmin(admin.ModelAdmin):
                 ]
             },
         ),
-        ("Query", {"fields": ["model_name", "fields", "query"]}),
+        ("Query", {"fields": ["model_name", "fields", "query", "limit"]}),
         ("Internal", {"fields": ["id", "created_time"]}),
     ]
     list_display = ["__str__", "owner", "public"]

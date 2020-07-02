@@ -198,6 +198,13 @@
                     "prettyName": "id",
                     "type": "string"
                 },
+                "limit": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "limit",
+                    "type": "number"
+                },
                 "model_name": {
                     "canPivot": true,
                     "concrete": true,
@@ -262,6 +269,7 @@
                 "description",
                 "fields",
                 "google_sheets_formula",
+                "limit",
                 "model_name",
                 "name",
                 "open_view",
@@ -871,6 +879,7 @@
     },
     "baseUrl": "/data_browser/",
     "canMakePublic": true,
+    "defaultRowLimit": 1000,
     "sentryDsn": null,
     "sortedModels": [
         "auth.Group",

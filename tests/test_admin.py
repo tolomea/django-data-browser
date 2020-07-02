@@ -80,6 +80,7 @@ class TestAdminFieldsSuperUser:
             "id",
             "open_view",
             "public_link",
+            "limit",
         }
 
     def test_private_view_edit_everything(self, admin_user, get_admin_details, view):
@@ -98,6 +99,7 @@ class TestAdminFieldsSuperUser:
             "id",
             "open_view",
             "public_link",
+            "limit",
         }
 
     def test_public_view_edit_everything(self, admin_user, get_admin_details, view):
@@ -117,6 +119,7 @@ class TestAdminFieldsSuperUser:
             "id",
             "open_view",
             "public_link",
+            "limit",
         }
 
 
@@ -133,6 +136,7 @@ class TestAdminFieldsStaffUser:
             "created_time",
             "id",
             "open_view",
+            "limit",
         }
 
     def test_private_view_no_public_fields(self, staff_user, get_admin_details, view):
@@ -147,6 +151,7 @@ class TestAdminFieldsStaffUser:
             "created_time",
             "id",
             "open_view",
+            "limit",
         }
 
     def test_public_view_readonly(self, staff_user, get_admin_details, view):
@@ -162,4 +167,5 @@ class TestAdminFieldsStaffUser:
             "open_view",
             "owner",
             "query",
+            "limit",
         }
