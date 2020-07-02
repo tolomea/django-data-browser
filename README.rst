@@ -153,17 +153,19 @@ Filters use the same ``__`` path format as fields including a lookup e.g. ``auth
 
 Format determines the returned data format, the currently available formats are:
 
-+--------+----------------------------------------------------------------------+
-| Format | Details                                                              |
-+========+======================================================================+
-| html   | Load the interactive Javascript frontend.                            |
-+--------+----------------------------------------------------------------------+
-| csv    | Standard CSV format.                                                 |
-+--------+----------------------------------------------------------------------+
-| json   | Standard JSON format, the JS frontend uses this for all data access. |
-+--------+----------------------------------------------------------------------+
-| ctx    | See the JSON encoded config context passed to the JS on page load.   |
-+--------+----------------------------------------------------------------------+
++--------+---------------------------------------------------------------------------+
+| Format | Details                                                                   |
++========+===========================================================================+
+| html   | Load the interactive Javascript frontend.                                 |
++--------+---------------------------------------------------------------------------+
+| csv    | Standard CSV format.                                                      |
++--------+---------------------------------------------------------------------------+
+| json   | Standard JSON format, the JS frontend uses this for all data access.      |
++--------+---------------------------------------------------------------------------+
+| ctx    | See the JSON encoded config passed to the JS on page load.                |
++--------+---------------------------------------------------------------------------+
+| query  | See the parsed URL in JSON format, the JS frontend uses this to boostrap. |
++--------+---------------------------------------------------------------------------+
 
 Development
 *************************
