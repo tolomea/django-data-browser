@@ -10,7 +10,7 @@ import {
 import "./App.css";
 import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";
 import { Query, getUrlForQuery, empty } from "./Query";
-import { doGet } from "./Util";
+import { doGet, fetchInProgress } from "./Util";
 
 const assert = require("assert");
 
@@ -35,6 +35,7 @@ class QueryApp extends React.Component {
   }
 
   fetchResults(state) {
+    this.setState({ loading: true });
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
     return doGet(url).then((response) => {
@@ -44,6 +45,7 @@ class QueryApp extends React.Component {
           cols: response.cols,
           rows: response.rows,
           filterErrors: response.filterErrors,
+          loading: fetchInProgress,
         });
       return response;
     });
@@ -52,29 +54,28 @@ class QueryApp extends React.Component {
   componentDidMount() {
     const { model, fieldStr, queryStr, config } = this.props;
     const url = `${config.baseUrl}query/${model}/${fieldStr}.query${queryStr}`;
-    fetch(url)
-      .then((response) => response.json())
-      .then((response) => {
-        const reqState = {
-          booting: false,
-          model: response.model,
-          fields: response.fields,
-          filters: response.filters,
-          limit: response.limit,
-          ...empty,
-        };
-        this.setState(reqState);
-        window.history.replaceState(
-          reqState,
-          null,
-          getUrlForQuery(this.props.config.baseUrl, reqState, "html")
-        );
-        window.onpopstate = (e) => {
-          this.setState(e.state);
-          this.fetchResults(e.state).catch(handleError);
-        };
-        this.fetchResults(this.state).catch(handleError);
-      });
+    doGet(url).then((response) => {
+      const reqState = {
+        booting: false,
+        loading: true,
+        model: response.model,
+        fields: response.fields,
+        filters: response.filters,
+        limit: response.limit,
+        ...empty,
+      };
+      this.setState(reqState);
+      window.history.replaceState(
+        reqState,
+        null,
+        getUrlForQuery(this.props.config.baseUrl, reqState, "html")
+      );
+      window.onpopstate = (e) => {
+        this.setState(e.state);
+        this.fetchResults(e.state).catch(handleError);
+      };
+      this.fetchResults(this.state).catch(handleError);
+    });
   }
 
   componentWillUnmount() {

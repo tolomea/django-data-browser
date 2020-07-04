@@ -238,6 +238,15 @@ function Delete(props) {
     else throw new Error(`unknown delete state: ${state}`);
 }
 
+function Overlay(props) {
+    if (!props.message) return null;
+    return (
+        <div className="Overlay">
+            <h1>{props.message}</h1>
+        </div>
+    );
+}
+
 export {
     TLink,
     SLink,
@@ -250,4 +259,6 @@ export {
     Save,
     Delete,
     CopyText,
+    fetchInProgress,
+    Overlay,
 };

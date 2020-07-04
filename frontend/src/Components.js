@@ -247,7 +247,19 @@ function QueryPage(props) {
     filters,
     filterErrors,
     baseUrl,
+    loading,
   } = props;
+
+  let results;
+  if (query.rowFields().length || query.colFields().length)
+    results = (
+      <Results
+        {...{ query, rows, cols, body }}
+        overlay={loading && "Loading..."}
+      />
+    );
+  else results = <h2>No fields selected</h2>;
+
   return (
     <>
       <ModelSelector {...{ query, sortedModels, model }} />
@@ -276,11 +288,7 @@ function QueryPage(props) {
         <div className="FieldsList">
           <AllFields {...{ query, model }} path={[]} prettyPath={[]} />
         </div>
-        {query.rowFields().length || query.colFields().length ? (
-          <Results {...{ query, rows, cols, body }} />
-        ) : (
-          <h2>No fields selected</h2>
-        )}
+        {results}
         <div />
       </div>
     </>

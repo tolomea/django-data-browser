@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { TLink, SLink } from "./Util";
+import { TLink, SLink, Overlay } from "./Util";
 
 function Spacer(props) {
   const { spaces } = props;
@@ -79,34 +79,38 @@ function VTableHeadRow(props) {
 }
 
 function VTableBodyRow(props) {
-  const { fields, query, classNameFirst, row } = props;
+  const { fields, query, classNameFirst, className, row } = props;
   return fields.map((field, i) => (
     <DataCell
       {...{ query, field }}
       key={field.pathStr}
       value={row[field.pathStr]}
-      className={i ? "" : classNameFirst}
+      className={`${i ? "" : classNameFirst} ${className}`}
     />
   ));
 }
 
 function HTableRow(props) {
-  const { query, field, data, span } = props;
+  const { query, field, data, span, className } = props;
   return (
     <>
       <HeadCell {...{ query, field }} />
       {data.map((col, key) => (
-        <DataCell {...{ key, query, field, span }} value={col[field.pathStr]} />
+        <DataCell
+          {...{ key, query, field, span, className }}
+          value={col[field.pathStr]}
+        />
       ))}
     </>
   );
 }
 
 function Results(props) {
-  const { query, cols, rows, body } = props;
+  const { query, cols, rows, body, overlay } = props;
   return (
     <div className="Results">
-      <div>
+      <Overlay message={overlay} />
+      <div className="Scroller">
         <table>
           <thead>
             {/* pivoted data */}
@@ -118,6 +122,7 @@ function Results(props) {
                     {...{ query, field }}
                     span={query.resFields().length}
                     data={cols}
+                    className={overlay && "Fade"}
                   />
                 </tr>
               );
@@ -147,13 +152,18 @@ function Results(props) {
             {rows.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 <Spacer spaces={1 - query.rowFields().length} />
-                <VTableBodyRow {...{ query, row }} fields={query.rowFields()} />
+                <VTableBodyRow
+                  {...{ query, row }}
+                  fields={query.rowFields()}
+                  className={overlay && "Fade"}
+                />
                 {body.map((table, key) => (
                   <VTableBodyRow
                     {...{ key, query }}
                     fields={query.resFields()}
                     row={table[rowIndex]}
                     classNameFirst="LeftBorder"
+                    className={overlay && "Fade"}
                   />
                 ))}
               </tr>

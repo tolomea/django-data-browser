@@ -109,7 +109,7 @@ textarea::placeholder {
   flex: 0 1 auto;
   overflow: hidden;
 }
-.MainSpace > .Results > div {
+.MainSpace > .Results > .Scroller {
   max-width: 100%;
   max-height: 100%;
   overflow: auto;
@@ -184,7 +184,7 @@ select.Lookup {
 }
 
 /* Results */
-.Results table {
+.Results {
   position: relative;
 }
 .Results .Freeze {
@@ -194,7 +194,7 @@ select.Lookup {
 .Results th {
   background-color: #eee;
 }
-.Results > div,
+.Results .Scroller,
 .Results th,
 .Results td {
   border: 1px solid #ccc;
@@ -318,4 +318,21 @@ input.RowLimit {
 
 .CopyToClipboard {
   font-size: 13px;
+}
+
+.Overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.Fade {
+  opacity: 30%;
 }
