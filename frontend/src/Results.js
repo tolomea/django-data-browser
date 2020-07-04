@@ -105,54 +105,58 @@ function HTableRow(props) {
 function Results(props) {
   const { query, cols, rows, body } = props;
   return (
-    <table className="Results">
-      <thead>
-        {/* pivoted data */}
-        {query.colFields().map((field) => {
-          return (
-            <tr key={field.pathStr}>
-              <Spacer spaces={query.rowFields().length - 1} />
-              <HTableRow
-                {...{ query, field }}
-                span={query.resFields().length}
-                data={cols}
-              />
+    <div className="Results">
+      <div>
+        <table>
+          <thead>
+            {/* pivoted data */}
+            {query.colFields().map((field) => {
+              return (
+                <tr key={field.pathStr}>
+                  <Spacer spaces={query.rowFields().length - 1} />
+                  <HTableRow
+                    {...{ query, field }}
+                    span={query.resFields().length}
+                    data={cols}
+                  />
+                </tr>
+              );
+            })}
+
+            {/* column headers */}
+            <tr>
+              <Spacer spaces={1 - query.rowFields().length} />
+              <VTableHeadRow {...{ query }} fields={query.rowFields()} />
+              {cols.map((_, key) => (
+                <VTableHeadRow
+                  {...{ key, query }}
+                  fields={query.resFields()}
+                  classNameFirst="LeftBorder"
+                />
+              ))}
             </tr>
-          );
-        })}
+          </thead>
 
-        {/* column headers */}
-        <tr>
-          <Spacer spaces={1 - query.rowFields().length} />
-          <VTableHeadRow {...{ query }} fields={query.rowFields()} />
-          {cols.map((_, key) => (
-            <VTableHeadRow
-              {...{ key, query }}
-              fields={query.resFields()}
-              classNameFirst="LeftBorder"
-            />
-          ))}
-        </tr>
-      </thead>
-
-      {/* row headers and body */}
-      <tbody>
-        {rows.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            <Spacer spaces={1 - query.rowFields().length} />
-            <VTableBodyRow {...{ query, row }} fields={query.rowFields()} />
-            {body.map((table, key) => (
-              <VTableBodyRow
-                {...{ key, query }}
-                fields={query.resFields()}
-                row={table[rowIndex]}
-                classNameFirst="LeftBorder"
-              />
+          {/* row headers and body */}
+          <tbody>
+            {rows.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                <Spacer spaces={1 - query.rowFields().length} />
+                <VTableBodyRow {...{ query, row }} fields={query.rowFields()} />
+                {body.map((table, key) => (
+                  <VTableBodyRow
+                    {...{ key, query }}
+                    fields={query.resFields()}
+                    row={table[rowIndex]}
+                    classNameFirst="LeftBorder"
+                  />
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 

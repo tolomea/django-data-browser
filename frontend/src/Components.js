@@ -281,6 +281,7 @@ function QueryPage(props) {
         ) : (
           <h2>No fields selected</h2>
         )}
+        <div />
       </div>
     </>
   );

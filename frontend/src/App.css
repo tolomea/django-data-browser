@@ -14,22 +14,18 @@ textarea {
   font-weight: inherit;
 }
 
-#body {
+body {
   font-family: "Roboto", "Noto Sans", sans-serif;
   padding: 0;
-  margin: 10px 0 30px 0;
+  margin: 0;
   font-size: 16px;
   color: #333e48;
-  display: flex;
-  flex-direction: column;
-  position: relative;
 }
 
-#body a {
+a {
   text-decoration: none;
 }
-
-#body a:hover {
+a:hover {
   text-decoration: underline;
 }
 
@@ -37,20 +33,6 @@ h1 {
   font-size: 28px;
 }
 
-.ModelSelector {
-  margin: 0 auto;
-  text-align: center;
-  text-align-last: center;
-  border: none;
-  padding: 1px;
-  font-size: 28px;
-  color: #333e48;
-}
-.ModelSelector:hover {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 0;
-}
 p {
   margin: 5px auto;
 }
@@ -97,13 +79,58 @@ textarea::placeholder {
   color: #ccc;
 }
 
+/***************** Element specific stuff *****************/
+#body {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  padding: 10px 0 0 0;
+}
+#body > * {
+  flex: 0 0 auto;
+}
+#body > .MainSpace {
+  flex: 0 1 auto;
+  overflow-y: hidden;
+}
+
 .MainSpace {
-  margin: 0 auto;
   display: flex;
   flex-flow: row;
-  padding: 0 10px;
-  min-width: 700px;
+  padding: 0;
+  max-width: 100vh;
   justify-content: space-between;
+}
+.MainSpace > * {
+  flex: 0 0 auto;
+}
+.MainSpace > .Results {
+  margin: 10px;
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+.MainSpace > .Results > div {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+.MainSpace > .FieldsList {
+  margin: 10px 0 10px 10px;
+}
+
+.ModelSelector {
+  margin: 0 auto;
+  text-align: center;
+  text-align-last: center;
+  border: none;
+  padding: 1px;
+  font-size: 28px;
+  color: #333e48;
+}
+.ModelSelector:hover {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 0;
 }
 
 /* Filters */
@@ -134,8 +161,8 @@ select.Lookup {
 /* Fields */
 
 .FieldsList {
-  padding: 0 10px 0 0;
   margin: 0;
+  overflow-y: auto;
 }
 .FieldsList table {
   border: 1px solid #ccc;
@@ -161,7 +188,7 @@ select.Lookup {
 .Results th {
   background-color: #eee;
 }
-table.Results,
+.Results > div,
 .Results th,
 .Results td {
   border: 1px solid #ccc;
