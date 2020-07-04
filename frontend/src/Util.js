@@ -3,8 +3,8 @@ import { Redirect } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./App.css";
 const assert = require("assert");
-let controller;
-let fetchDescription;
+let fetchInProgress = false;
+let nextFetch = undefined;
 
 const version = document.getElementById("backend-version").textContent.trim();
 
@@ -58,17 +58,47 @@ function SLink(props) {
     );
 }
 
+class AbortError extends Error {
+    name = "AbortError";
+}
+
 function doFetch(url, options, process) {
-    if (controller) controller.abort();
-    controller = new AbortController();
-    fetchDescription = `${options.method} ${url}`;
-    return fetch(url, { signal: controller.signal, ...options })
+    if (fetchInProgress) {
+        if (nextFetch) {
+            nextFetch.reject(new AbortError("skipped"));
+        }
+        return new Promise((resolve, reject) => {
+            nextFetch = { resolve, reject, url, options, process };
+        });
+    }
+
+    fetchInProgress = true;
+
+    return fetch(url, options)
         .then((response) => {
+            // do we have a next fetch we need to trigger
+            const next = nextFetch;
+            nextFetch = undefined;
+            fetchInProgress = false;
+
+            if (next) {
+                doFetch(next.url, next.options, next.process).then(
+                    (res) => next.resolve(res),
+                    (err) => next.reject(err)
+                );
+                throw new AbortError("superceeded");
+            } else {
+                return response;
+            }
+        })
+        .then((response) => {
+            // check status
             assert.ok(response.status >= 200);
             assert.ok(response.status < 300);
             return response;
         })
         .then((response) => {
+            // check server version
             const response_version = response.headers.get("x-version");
             if (response_version !== version) {
                 console.log(
@@ -80,10 +110,10 @@ function doFetch(url, options, process) {
             }
             return response;
         })
-        .then((response) => process(response))
+        .then((response) => process(response)) // process data
         .catch((e) => {
+            // handle abort errors
             if (e.name === "AbortError") {
-                console.log("Request aborted", fetchDescription);
                 return undefined;
             } else {
                 throw e;

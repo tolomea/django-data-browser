@@ -15,9 +15,7 @@ import { doGet } from "./Util";
 const assert = require("assert");
 
 function handleError(e) {
-  if (e.name === "AbortError") {
-    console.log("request aborted");
-  } else {
+  if (e.name !== "AbortError") {
     console.log(e);
     Sentry.captureException(e);
   }
