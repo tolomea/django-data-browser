@@ -68,12 +68,12 @@ function DataCell(props) {
 }
 
 function VTableHeadRow(props) {
-  const { fields, query, classNameFirst } = props;
+  const { fields, query, classNameFirst, className } = props;
   return fields.map((field, i) => (
     <HeadCell
       {...{ query, field }}
       key={field.pathStr}
-      className={"HoriBorder " + (i ? "" : classNameFirst)}
+      className={`HoriBorder ${className} ` + (i ? "" : classNameFirst)}
     />
   ));
 }
@@ -126,12 +126,17 @@ function Results(props) {
             {/* column headers */}
             <tr>
               <Spacer spaces={1 - query.rowFields().length} />
-              <VTableHeadRow {...{ query }} fields={query.rowFields()} />
+              <VTableHeadRow
+                {...{ query }}
+                fields={query.rowFields()}
+                className="Freeze"
+              />
               {cols.map((_, key) => (
                 <VTableHeadRow
                   {...{ key, query }}
                   fields={query.resFields()}
                   classNameFirst="LeftBorder"
+                  className="Freeze"
                 />
               ))}
             </tr>

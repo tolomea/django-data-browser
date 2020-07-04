@@ -184,7 +184,13 @@ select.Lookup {
 }
 
 /* Results */
-
+.Results table {
+  position: relative;
+}
+.Results .Freeze {
+  position: sticky;
+  top: 2px;
+}
 .Results th {
   background-color: #eee;
 }
