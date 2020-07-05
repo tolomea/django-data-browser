@@ -248,16 +248,16 @@ function QueryPage(props) {
     filterErrors,
     baseUrl,
     loading,
+    error,
   } = props;
+
+  let overlay;
+  if (loading) overlay = "Loading...";
+  else if (error) overlay = "Error";
 
   let results;
   if (query.rowFields().length || query.colFields().length)
-    results = (
-      <Results
-        {...{ query, rows, cols, body }}
-        overlay={loading && "Loading..."}
-      />
-    );
+    results = <Results {...{ query, rows, cols, body, overlay }} />;
   else results = <h2>No fields selected</h2>;
 
   return (

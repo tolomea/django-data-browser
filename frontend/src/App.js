@@ -14,18 +14,13 @@ import { doGet, fetchInProgress } from "./Util";
 
 const assert = require("assert");
 
-function handleError(e) {
-  if (e.name !== "AbortError") {
-    console.log(e);
-    Sentry.captureException(e);
-  }
-}
-
 class QueryApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       booting: true,
+      loading: false,
+      error: undefined,
       model: "",
       fields: [],
       filters: [],
@@ -34,19 +29,26 @@ class QueryApp extends React.Component {
     };
   }
 
+  handleError(e) {
+    if (e.name !== "AbortError") {
+      this.setState({ error: true, loading: false });
+      Sentry.captureException(e);
+    }
+  }
+
   fetchResults(state) {
     this.setState({ loading: true });
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
     return doGet(url).then((response) => {
-      response &&
-        this.setState({
-          body: response.body,
-          cols: response.cols,
-          rows: response.rows,
-          filterErrors: response.filterErrors,
-          loading: fetchInProgress,
-        });
+      this.setState({
+        body: response.body,
+        cols: response.cols,
+        rows: response.rows,
+        filterErrors: response.filterErrors,
+        loading: fetchInProgress,
+        error: undefined,
+      });
       return response;
     });
   }
@@ -58,6 +60,7 @@ class QueryApp extends React.Component {
       const reqState = {
         booting: false,
         loading: true,
+        error: undefined,
         model: response.model,
         fields: response.fields,
         filters: response.filters,
@@ -72,9 +75,9 @@ class QueryApp extends React.Component {
       );
       window.onpopstate = (e) => {
         this.setState(e.state);
-        this.fetchResults(e.state).catch(handleError);
+        this.fetchResults(e.state).catch(this.handleError.bind(this));
       };
-      this.fetchResults(this.state).catch(handleError);
+      this.fetchResults(this.state).catch(this.handleError.bind(this));
     });
   }
 
@@ -102,7 +105,7 @@ class QueryApp extends React.Component {
         response = { ...response, ...empty };
         assert.deepStrictEqual(response, request);
       })
-      .catch(handleError);
+      .catch(this.handleError.bind(this));
   }
 
   render() {

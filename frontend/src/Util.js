@@ -110,15 +110,7 @@ function doFetch(url, options, process) {
             }
             return response;
         })
-        .then((response) => process(response)) // process data
-        .catch((e) => {
-            // handle abort errors
-            if (e.name === "AbortError") {
-                return undefined;
-            } else {
-                throw e;
-            }
-        });
+        .then((response) => process(response)); // process data
 }
 
 function doGet(url) {
@@ -175,10 +167,13 @@ function useData(url) {
         data,
         (updates) => {
             setData((prev) => ({ ...prev, ...updates }));
-            doPatch(url, updates).then(
-                (response) =>
-                    response && setData((prev) => ({ ...prev, ...response }))
-            );
+            doPatch(url, updates)
+                .then((response) =>
+                    setData((prev) => ({ ...prev, ...response }))
+                )
+                .catch((e) => {
+                    if (e.name !== "AbortError") throw e;
+                });
         },
     ];
 }
