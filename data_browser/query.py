@@ -52,6 +52,7 @@ class Query:
     @classmethod
     def from_request(cls, model_name, field_str, get_args):
         fields = []
+        found_fields = set()
         for field in field_str.split(","):
             field = field.strip()
             if field:
@@ -65,12 +66,15 @@ class Query:
                 # sort
                 if "+" in field:
                     path, direction, priority = parse_sort(field, "+", ASC)
-                    fields.append(QueryField(path, pivoted, direction, priority))
                 elif "-" in field:
                     path, direction, priority = parse_sort(field, "-", DSC)
-                    fields.append(QueryField(path, pivoted, direction, priority))
                 else:
-                    fields.append(QueryField(field, pivoted, None, None))
+                    path, direction, priority = field, None, None
+
+                # collect
+                if path not in found_fields:
+                    found_fields.add(path)
+                    fields.append(QueryField(path, pivoted, direction, priority))
 
         limit = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
 

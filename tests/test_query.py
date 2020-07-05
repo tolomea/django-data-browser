@@ -124,6 +124,12 @@ class TestQuery:
         )
         assert q == query
 
+    def test_from_request_duplicate_field(self, query):
+        q = Query.from_request(
+            "app.model", "fa+1,fd-0,fn,&fa-2", QueryDict("bob__equals=fred")
+        )
+        assert q == query
+
     def test_from_request_with_limit(self, query):
         q = Query.from_request(
             "app.model", "fa+1,fd-0,fn", QueryDict("limit=123&bob__equals=fred")

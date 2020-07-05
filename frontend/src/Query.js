@@ -58,7 +58,9 @@ class Query {
   }
 
   addField(path, prettyPath) {
-    const newFields = this.query.fields.slice();
+    const newFields = this.query.fields.filter(
+      (f) => f.pathStr !== path.join("__")
+    );
     newFields.push({
       path: path,
       pathStr: path.join("__"),
