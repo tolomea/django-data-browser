@@ -1,16 +1,14 @@
 import os
+from pathlib import Path
 
 import setuptools
 
 from data_browser import version
 
-with open("README.rst", "r") as fh:
-    long_description = fh.read()
-
-
+root = Path("data_browser")
 data_files = []
-for directory in "data_browser/fe_build", "data_browser/templates":
-    for (path, _, filenames) in os.walk(directory):
+for directory in ("fe_build", "templates", "web_root"):
+    for (path, _, filenames) in os.walk(root / directory):
         for filename in filenames:
             data_files.append(os.path.join("..", path, filename))
 
@@ -24,7 +22,7 @@ setuptools.setup(
         "A Django app for interactive user friendly browsing "
         "of a Django projects DB."
     ),
-    long_description=long_description,
+    long_description=Path("README.rst").read_text(),
     long_description_content_type="text/x-rst",
     url="https://github.com/tolomea/django-data-browser",
     packages=setuptools.find_packages(exclude=["tests"]),
