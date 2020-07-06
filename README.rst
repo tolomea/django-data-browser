@@ -6,7 +6,7 @@ Interactive and user friendly querying of Django project DBs.
     :alt: screenshot
     :align: center
 
-.. contents:: Contents
+.. contents::
     :depth: 1
 
 Features
