@@ -242,6 +242,7 @@ function QueryPage(props) {
     rows,
     cols,
     body,
+    length,
     sortedModels,
     model,
     filters,
@@ -274,7 +275,7 @@ function QueryPage(props) {
             query.setLimit(event.target.value);
           }}
         />{" "}
-        - Showing {rows.length * cols.length} results -{" "}
+        - Showing {length} results -{" "}
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
         <Save

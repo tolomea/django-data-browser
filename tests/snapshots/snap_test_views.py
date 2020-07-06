@@ -2554,6 +2554,7 @@ snapshots["test_query_json data"] = {
             "value": "0",
         },
     ],
+    "length": 2,
     "limit": "1000",
     "model": "tests.Product",
     "rows": [
@@ -2604,6 +2605,7 @@ snapshots["test_query_json_pivot data"] = {
     ],
     "filterErrors": [],
     "filters": [],
+    "length": 3,
     "limit": "1000",
     "model": "tests.Product",
     "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],

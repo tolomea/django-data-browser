@@ -2,6 +2,7 @@ const empty = {
   rows: [{}],
   cols: [{}],
   body: [[{}]],
+  length: 0,
   filterErrors: [],
 };
 

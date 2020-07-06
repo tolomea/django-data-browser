@@ -373,4 +373,5 @@ def get_results(request, bound_query, orm_models):
             bound_query.bound_col_fields, [dict(col) for col in col_keys]
         ),
         "body": body,
+        "length": len(res),
     }
