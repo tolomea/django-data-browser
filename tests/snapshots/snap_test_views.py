@@ -2566,7 +2566,7 @@ snapshots["test_query_json data"] = {
 snapshots["test_query_json_pivot data"] = {
     "body": [
         [{"id__count": 1.0, "size__max": 1.0}, {"id__count": 3.0, "size__max": 6.0}],
-        [{"id__count": 2.0, "size__max": 3.0}, {"id__count": None, "size__max": None}],
+        [{"id__count": 2.0, "size__max": 3.0}, None],
     ],
     "cols": [{"created_time__month": "January"}, {"created_time__month": "Feburary"}],
     "fields": [

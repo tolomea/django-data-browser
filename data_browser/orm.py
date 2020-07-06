@@ -329,15 +329,18 @@ def get_results(request, bound_query, orm_models):
     def format_table(fields, data):
         results = []
         for row in data:
-            res_row = {}
-            for field in fields:
-                value = row[field.path_str]
-                if field.model_name:
-                    admin = orm_models[field.model_name].admin
-                    obj = cache[field.model_name].get(value)
-                    value = obj, admin
-                res_row[field.path_str] = field.format(value)
-            results.append(res_row)
+            if row:
+                res_row = {}
+                for field in fields:
+                    value = row[field.path_str]
+                    if field.model_name:
+                        admin = orm_models[field.model_name].admin
+                        obj = cache[field.model_name].get(value)
+                        value = obj, admin
+                    res_row[field.path_str] = field.format(value)
+                results.append(res_row)
+            else:
+                results.append(row)
         return results
 
     def get_fields(row, fields):
@@ -358,11 +361,10 @@ def get_results(request, bound_query, orm_models):
         data[row_key][col_key] = dict(get_fields(row, bound_query.bound_data_fields))
 
     body = []
-    blank = {field.path_str: None for field in bound_query.bound_data_fields}
     for col_key in col_keys:
         table = []
         for row_key in row_keys:
-            table.append(data[row_key].get(col_key, blank))
+            table.append(data[row_key].get(col_key, None))
         body.append(format_table(bound_query.bound_data_fields, table))
 
     return {

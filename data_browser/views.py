@@ -169,7 +169,8 @@ def format_table(fields, table, spacing=0):
     return concat(
         [[" ".join(f.pretty_path) for f in fields]],
         *[
-            [[row[f.path_str] for f in fields]] + [pad(len(fields))] * spacing
+            [[(row[f.path_str] if row else "") for f in fields]]
+            + [pad(len(fields))] * spacing
             for row in table
         ],
     )

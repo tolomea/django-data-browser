@@ -22,7 +22,7 @@ def admin_link(obj):
 
 
 def flatten_table(fields, data):
-    return [[row[f.path_str] for f in fields] for row in data]
+    return [[(row[f.path_str] if row else None) for f in fields] for row in data]
 
 
 @pytest.fixture

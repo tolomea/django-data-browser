@@ -84,7 +84,7 @@ function VTableBodyRow(props) {
     <DataCell
       {...{ query, field }}
       key={field.pathStr}
-      value={row[field.pathStr]}
+      value={row ? row[field.pathStr] : ""}
       className={`${i ? "" : classNameFirst} ${className}`}
     />
   ));
