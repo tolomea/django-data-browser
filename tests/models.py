@@ -1,3 +1,5 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
 
@@ -15,6 +17,13 @@ class NotInAdmin(models.Model):
 class InlineAdmin(models.Model):
     name = models.TextField()
     in_admin = models.ForeignKey(InAdmin, on_delete=models.CASCADE)
+
+
+class GenericInlineAdmin(models.Model):
+    name = models.TextField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    in_admin = GenericForeignKey("content_type", "object_id")
 
 
 class Normal(models.Model):

@@ -5,7 +5,6 @@ from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
@@ -87,13 +86,15 @@ def _get_all_admin_fields(request):
 
             # check the inlines, these are already filtered for access
             for inline in model_admin.get_inline_instances(request):
-                if not isinstance(inline, GenericInlineModelAdmin):  # pragma: no branch
+                try:
+                    fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
+                except Exception:
+                    pass
+                else:
                     if inline.model not in model_admins:  # pragma: no branch
                         model_admins[inline.model] = inline
                     all_admin_fields[inline.model].update(from_fieldsets(inline, False))
-                    all_admin_fields[inline.model].add(
-                        _get_foreign_key(model, inline.model, inline.fk_name).name
-                    )
+                    all_admin_fields[inline.model].add(fk_field.name)
 
     # we always have id and never pk
     for fields in all_admin_fields.values():
