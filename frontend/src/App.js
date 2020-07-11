@@ -32,6 +32,7 @@ class QueryApp extends React.Component {
   handleError(e) {
     if (e.name !== "AbortError") {
       this.setState({ error: true, loading: false });
+      console.log(e);
       Sentry.captureException(e);
     }
   }
@@ -54,6 +55,12 @@ class QueryApp extends React.Component {
     });
   }
 
+  popstate(e) {
+    this.setState(e.state);
+    this.fetchResults(e.state).catch(this.handleError.bind(this));
+  }
+  popstate = this.popstate.bind(this);
+
   componentDidMount() {
     const { model, fieldStr, queryStr, config } = this.props;
     const url = `${config.baseUrl}query/${model}/${fieldStr}.query${queryStr}`;
@@ -74,16 +81,13 @@ class QueryApp extends React.Component {
         null,
         getUrlForQuery(this.props.config.baseUrl, reqState, "html")
       );
-      window.onpopstate = (e) => {
-        this.setState(e.state);
-        this.fetchResults(e.state).catch(this.handleError.bind(this));
-      };
+      window.addEventListener("popstate", this.popstate);
       this.fetchResults(this.state).catch(this.handleError.bind(this));
     });
   }
 
   componentWillUnmount() {
-    window.onpopstate = () => {};
+    window.removeEventListener("popstate", this.popstate);
   }
 
   handleQueryChange(queryChange) {
