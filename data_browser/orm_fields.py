@@ -178,6 +178,28 @@ class OrmConcreteField(OrmBaseField):
         )
 
 
+def _format_calculated(name, value):
+    obj, admin = value
+
+    if obj is None:
+        return None
+
+    if hasattr(admin, name):
+        # admin callable
+        func = getattr(admin, name)
+        try:
+            return func(obj)
+        except Exception as e:
+            return str(e)
+    else:
+        # model property or callable
+        try:
+            value = getattr(obj, name)
+            return value() if callable(value) else value
+        except Exception as e:
+            return str(e)
+
+
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name):
         super().__init__(
@@ -196,25 +218,7 @@ class OrmCalculatedField(OrmBaseField):
         )
 
     def format(self, value):
-        obj, admin = value
-
-        if obj is None:
-            return None
-
-        if hasattr(admin, self.name):
-            # admin callable
-            func = getattr(admin, self.name)
-            try:
-                return func(obj)
-            except Exception as e:
-                return str(e)
-        else:
-            # model property or callable
-            try:
-                value = getattr(obj, self.name)
-                return value() if callable(value) else value
-            except Exception as e:
-                return str(e)
+        return _format_calculated(self.name, value)
 
 
 class OrmAdminField(OrmBaseField):

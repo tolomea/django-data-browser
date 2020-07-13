@@ -105,7 +105,22 @@ def _get_all_admin_fields(request):
     return model_admins, all_admin_fields
 
 
-def _get_fields_for_model(model, model_admins, admin_fields):
+def _get_field_type(model, field_name, field):
+    if field.__class__ in _FIELD_MAP:
+        return _FIELD_MAP[field.__class__]
+
+    for django_type, field_type in _FIELD_MAP.items():
+        if isinstance(field, django_type):
+            return field_type
+
+    if settings.DEBUG:  # pragma: no cover
+        logging.getLogger(__name__).warning(
+            f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
+        )
+    return None
+
+
+def _get_fields_for_model(request, model, admin, admin_fields):
     fields = {}
 
     model_name = get_model_name(model)
@@ -130,14 +145,7 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                 model_name=model_name, name=field_name, pretty_name=field_name
             )
         else:
-            if field.__class__ in _FIELD_MAP:
-                field_type = _FIELD_MAP[field.__class__]
-            else:
-                for django_type, field_type in _FIELD_MAP.items():
-                    if isinstance(field, django_type):
-                        break
-                else:
-                    field_type = None
+            field_type = _get_field_type(model, field_name, field)
 
             if field_type:
                 fields[field_name] = OrmConcreteField(
@@ -146,13 +154,8 @@ def _get_fields_for_model(model, model_admins, admin_fields):
                     pretty_name=field_name,
                     type_=field_type,
                 )
-            else:  # pragma: no cover
-                if settings.DEBUG:
-                    logging.getLogger(__name__).warning(
-                        f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
-                    )
 
-    return OrmModel(fields=fields, admin=model_admins[model])
+    return OrmModel(fields=fields, admin=admin)
 
 
 def _get_fields_for_type(type_):
@@ -169,7 +172,9 @@ def _get_fields_for_type(type_):
 def get_models(request):
     model_admins, admin_fields = _get_all_admin_fields(request)
     models = {
-        get_model_name(model): _get_fields_for_model(model, model_admins, admin_fields)
+        get_model_name(model): _get_fields_for_model(
+            request, model, model_admins[model], admin_fields
+        )
         for model in admin_fields
     }
     types = {type_.name: _get_fields_for_type(type_) for type_ in TYPES.values()}
@@ -234,7 +239,7 @@ def _rows_sub_query(bound_query):
 
 def _get_results(request, bound_query, orm_models):
     admin = orm_models[bound_query.model_name].admin
-    qs = admin.get_queryset(request)
+    qs = admin_get_queryset(admin, request)
 
     # functions
     qs = qs.annotate(
@@ -293,9 +298,12 @@ def _get_results(request, bound_query, orm_models):
     return list(qs[: bound_query.limit])
 
 
-def get_results(request, bound_query, orm_models):
-    request.data_browser = {"calculated_fields": set()}
+def admin_get_queryset(admin, request, fields=()):
+    request.data_browser = {"calculated_fields": set(fields)}
+    return admin.get_queryset(request)
 
+
+def get_results(request, bound_query, orm_models):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": []}
 
@@ -322,8 +330,9 @@ def get_results(request, bound_query, orm_models):
     cache = {}
     for model_name, pks in to_load.items():
         admin = orm_models[model_name].admin
-        request.data_browser["calculated_fields"] = loading_for[model_name]
-        cache[model_name] = admin.get_queryset(request).in_bulk(pks)
+        cache[model_name] = admin_get_queryset(
+            admin, request, loading_for[model_name]
+        ).in_bulk(pks)
 
     # dump out the results
     def format_table(fields, data):
