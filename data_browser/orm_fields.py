@@ -128,6 +128,7 @@ class OrmBaseField:
     concrete: bool = False
     rel_name: str = None
     can_pivot: bool = False
+    admin: object = None
 
     def __post_init__(self):
         if not self.type_:
@@ -180,9 +181,7 @@ class OrmConcreteField(OrmBaseField):
         )
 
 
-def _format_calculated(name, value):
-    obj, admin = value
-
+def _format_calculated(name, admin, obj):
     if obj is None:
         return None
 
@@ -203,9 +202,9 @@ def _format_calculated(name, value):
 
 
 class OrmCalculatedField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name):
+    def __init__(self, model_name, name, pretty_name, admin):
         super().__init__(
-            model_name, name, pretty_name, type_=StringType, can_pivot=True
+            model_name, name, pretty_name, type_=StringType, can_pivot=True, admin=admin
         )
 
     def bind(self, previous):
@@ -220,7 +219,7 @@ class OrmCalculatedField(OrmBaseField):
         )
 
     def format(self, value):
-        return _format_calculated(self.name, value)
+        return _format_calculated(self.name, self.admin, value)
 
 
 class OrmAdminField(OrmBaseField):
@@ -240,9 +239,7 @@ class OrmAdminField(OrmBaseField):
             model_name=self.model_name,
         )
 
-    def format(self, value):
-        obj, admin = value
-
+    def format(self, obj):
         if obj is None:
             return None
 

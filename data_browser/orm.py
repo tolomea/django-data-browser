@@ -142,7 +142,10 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 )
         elif isinstance(field, type(None)):
             fields[field_name] = OrmCalculatedField(
-                model_name=model_name, name=field_name, pretty_name=field_name
+                model_name=model_name,
+                name=field_name,
+                pretty_name=field_name,
+                admin=admin,
             )
         else:
             field_type = _get_field_type(model, field_name, field)
@@ -343,9 +346,7 @@ def get_results(request, bound_query, orm_models):
                 for field in fields:
                     value = row[field.path_str]
                     if field.model_name:
-                        admin = orm_models[field.model_name].admin
-                        obj = cache[field.model_name].get(value)
-                        value = obj, admin
+                        value = cache[field.model_name].get(value)
                     res_row[field.path_str] = field.format(value)
                 results.append(res_row)
             else:
