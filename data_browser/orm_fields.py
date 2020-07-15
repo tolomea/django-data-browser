@@ -86,6 +86,7 @@ class OrmBoundField:
     full_path: Sequence[str]
     pretty_path: Sequence[str]
     queryset_path: str = None
+    select_path: str = None
     function_clause: Tuple[str, models.Func] = None
     aggregate_clause: Tuple[str, models.Func] = None
     filter_: bool = False
@@ -174,6 +175,7 @@ class OrmConcreteField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
+            select_path=s(full_path),
             filter_=True,
         )
 
@@ -213,7 +215,7 @@ class OrmCalculatedField(OrmBaseField):
             field=self,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(previous.full_path + ["id"]),
+            select_path=s(previous.full_path + ["id"]),
             model_name=self.model_name,
         )
 
@@ -234,7 +236,7 @@ class OrmAdminField(OrmBaseField):
             field=self,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(previous.full_path + ["id"]),
+            select_path=s(previous.full_path + ["id"]),
             model_name=self.model_name,
         )
 
@@ -264,6 +266,7 @@ class OrmAggregateField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
+            select_path=s(full_path),
             aggregate_clause=(s(full_path), agg),
             having=True,
         )
@@ -285,6 +288,7 @@ class OrmFunctionField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
+            select_path=s(full_path),
             function_clause=(s(full_path), func),
             filter_=True,
         )

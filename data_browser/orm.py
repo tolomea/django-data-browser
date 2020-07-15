@@ -250,7 +250,7 @@ def _get_results(request, bound_query, orm_models):
         )
     )
 
-    # filter normal and function fields
+    # filter normal and sql function fields (aka __date)
     for filter_ in bound_query.valid_filters:
         if filter_.orm_bound_field.filter_:
             qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
@@ -269,7 +269,7 @@ def _get_results(request, bound_query, orm_models):
 
     # group by
     qs = qs.values(
-        *[field.queryset_path for field in bound_query.bound_fields if field.group_by]
+        *[field.select_path for field in bound_query.bound_fields if field.group_by]
     ).distinct()
 
     # aggregates
@@ -324,7 +324,7 @@ def get_results(request, bound_query, orm_models):
             loading_for[field.model_name].add(field.name)
             pks = to_load[field.model_name]
             for row in res:
-                pks.add(row[field.queryset_path])
+                pks.add(row[field.select_path])
 
     # fetch all the calculated field objects
     cache = {}
@@ -353,7 +353,7 @@ def get_results(request, bound_query, orm_models):
         return results
 
     def get_fields(row, fields):
-        return tuple((field.path_str, row[field.queryset_path]) for field in fields)
+        return tuple((field.path_str, row[field.select_path]) for field in fields)
 
     col_keys = {}
     for row in cols_res:
