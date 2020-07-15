@@ -247,9 +247,9 @@ def _get_results(request, bound_query, orm_models):
     # functions
     qs = qs.annotate(
         **dict(
-            field.function_clause
+            field.annotation_clause
             for field in bound_query.bound_fields + bound_query.bound_filters
-            if field.function_clause
+            if field.annotation_clause
         )
     )
 

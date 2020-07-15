@@ -87,7 +87,7 @@ class OrmBoundField:
     pretty_path: Sequence[str]
     queryset_path: str = None
     select_path: str = None
-    function_clause: Tuple[str, models.Func] = None
+    annotation_clause: Tuple[str, models.Func] = None
     aggregate_clause: Tuple[str, models.Func] = None
     filter_: bool = False
     having: bool = False
@@ -286,6 +286,6 @@ class OrmFunctionField(OrmBaseField):
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
             select_path=s(full_path),
-            function_clause=(s(full_path), func),
+            annotation_clause=(s(full_path), func),
             filter_=True,
         )
