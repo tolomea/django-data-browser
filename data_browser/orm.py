@@ -245,13 +245,8 @@ def _get_results(request, bound_query, orm_models):
     qs = admin_get_queryset(admin, request)
 
     # functions
-    qs = qs.annotate(
-        **dict(
-            field.annotation_clause
-            for field in bound_query.bound_fields + bound_query.bound_filters
-            if field.annotation_clause
-        )
-    )
+    for field in bound_query.bound_fields + bound_query.bound_filters:
+        qs = field.annotate(request, qs)
 
     # filter normal and sql function fields (aka __date)
     for filter_ in bound_query.valid_filters:

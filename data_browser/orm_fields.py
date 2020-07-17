@@ -83,11 +83,11 @@ def get_model_name(model, sep="."):
 @dataclass
 class OrmBoundField:
     field: "OrmBaseField"
+    previous: "OrmBoundField"
     full_path: Sequence[str]
     pretty_path: Sequence[str]
     queryset_path: str = None
     select_path: str = None
-    annotation_clause: Tuple[str, models.Func] = None
     aggregate_clause: Tuple[str, models.Func] = None
     filter_: bool = False
     having: bool = False
@@ -101,8 +101,15 @@ class OrmBoundField:
     def group_by(self):
         return self.field.can_pivot
 
+    def annotate(self, request, qs):
+        return qs
+
     def __getattr__(self, name):
         return getattr(self.field, name)
+
+    @classmethod
+    def blank(cls):
+        return cls(field=None, previous=None, full_path=[], pretty_path=[])
 
 
 @dataclass
@@ -141,10 +148,11 @@ class OrmFkField(OrmBaseField):
         super().__init__(model_name, name, pretty_name, rel_name=rel_name)
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField.blank()
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
+            previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
         )
@@ -165,10 +173,11 @@ class OrmConcreteField(OrmBaseField):
         )
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField.blank()
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
+            previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
@@ -204,10 +213,11 @@ class OrmCalculatedField(OrmBaseField):
         )
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField.blank()
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
+            previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             select_path=s(previous.full_path + ["id"]),
@@ -225,10 +235,11 @@ class OrmAdminField(OrmBaseField):
         )
 
     def bind(self, previous):
-        previous = previous or OrmBoundField(None, full_path=[], pretty_path=[])
+        previous = previous or OrmBoundField.blank()
         full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
+            previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             select_path=s(previous.full_path + ["id"]),
@@ -256,12 +267,24 @@ class OrmAggregateField(OrmBaseField):
         agg = _AGG_MAP[self.aggregate](s(previous.full_path))
         return OrmBoundField(
             field=self,
+            previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
             select_path=s(full_path),
             aggregate_clause=(s(full_path), agg),
             having=True,
+        )
+
+
+class OrmBoundFunctionField(OrmBoundField):
+    def annotate(self, request, qs):
+        return qs.annotate(
+            **{
+                self.queryset_path: _FUNC_MAP[self.function][0](
+                    s(self.previous.full_path)
+                )
+            }
         )
 
 
@@ -275,13 +298,12 @@ class OrmFunctionField(OrmBaseField):
     def bind(self, previous):
         assert previous
         full_path = previous.full_path + [self.name]
-        func = _FUNC_MAP[self.function][0](s(previous.full_path))
-        return OrmBoundField(
+        return OrmBoundFunctionField(
             field=self,
+            previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
             select_path=s(full_path),
-            annotation_clause=(s(full_path), func),
             filter_=True,
         )
