@@ -98,10 +98,6 @@ class OrmBoundField:
         return s(self.full_path)
 
     @property
-    def type_(self):
-        return self.field.type_
-
-    @property
     def group_by(self):
         return self.field.can_pivot
 
