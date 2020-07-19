@@ -17,6 +17,7 @@ from .orm_fields import (
     _OPEN_IN_ADMIN,
     OrmAdminField,
     OrmAggregateField,
+    OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
     OrmFkField,
@@ -105,6 +106,34 @@ def _get_all_admin_fields(request):
     return model_admins, all_admin_fields
 
 
+def _get_calculated_field(request, field_name, model_name, model, admin):
+    field_func = getattr(admin, field_name, None)
+    annotated_name = getattr(field_func, "admin_order_field", None)
+    if annotated_name:
+        qs = admin_get_queryset(admin, request, [field_name])
+        annotation_qs = qs.query.annotations.get(annotated_name)
+        field_type = getattr(annotation_qs, "output_field", None)
+        if field_type:
+            type_ = _get_field_type(model, annotated_name, field_type)
+            if type_:
+                return OrmAnnotatedField(
+                    model_name=model_name,
+                    name=field_name,
+                    pretty_name=field_name,
+                    type_=type_,
+                    field_type=field_type,
+                    admin=admin,
+                )
+        else:
+            if settings.DEBUG:  # pragma: no cover
+                logging.getLogger(__name__).warning(
+                    f"{model.__name__}.{field_name} can't determine type of annotated field"
+                )
+    return OrmCalculatedField(
+        model_name=model_name, name=field_name, pretty_name=field_name, admin=admin
+    )
+
+
 def _get_field_type(model, field_name, field):
     if field.__class__ in _FIELD_MAP:
         return _FIELD_MAP[field.__class__]
@@ -141,11 +170,8 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     rel_name=get_model_name(field.related_model),
                 )
         elif isinstance(field, type(None)):
-            fields[field_name] = OrmCalculatedField(
-                model_name=model_name,
-                name=field_name,
-                pretty_name=field_name,
-                admin=admin,
+            fields[field_name] = _get_calculated_field(
+                request, field_name, model_name, model, admin
             )
         else:
             field_type = _get_field_type(model, field_name, field)

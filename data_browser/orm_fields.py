@@ -3,7 +3,7 @@ from typing import Sequence, Tuple
 
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
-from django.db.models import functions
+from django.db.models import OuterRef, Subquery, functions
 from django.db.models.functions import Cast
 from django.urls import reverse
 
@@ -226,6 +226,54 @@ class OrmCalculatedField(OrmBaseField):
 
     def format(self, value):
         return _format_calculated(self.name, self.admin, value)
+
+
+class OrmBoundAnnotatedField(OrmBoundField):
+    def annotate(self, request, qs):
+        from .orm import admin_get_queryset
+
+        return qs.annotate(
+            **{
+                self.queryset_path: Subquery(
+                    admin_get_queryset(self.admin, request, self.name)
+                    .filter(pk=OuterRef(self.select_path))
+                    .values(self.name)[:1],
+                    output_field=self.field_type,
+                )
+            }
+        )
+
+
+class OrmAnnotatedField(OrmBaseField):
+    def __init__(self, model_name, name, pretty_name, type_, field_type, admin):
+        super().__init__(
+            model_name,
+            name,
+            pretty_name,
+            type_=type_,
+            can_pivot=True,
+            admin=admin,
+            concrete=True,
+        )
+        self.field_type = field_type
+
+    def bind(self, previous):
+        previous = previous or OrmBoundField.blank()
+        full_path = previous.full_path + [self.name]
+        return OrmBoundAnnotatedField(
+            field=self,
+            previous=previous,
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            select_path=s(previous.full_path + ["id"]),
+            model_name=self.model_name,
+            queryset_path=f"ddb_{s(full_path)}",
+            filter_=True,
+        )
+
+    def format(self, value):
+        value = _format_calculated(self.name, self.admin, value)
+        return self.type_.format(value)
 
 
 class OrmAdminField(OrmBaseField):
