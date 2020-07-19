@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
+from django.db.models import F
 
 from . import models
 
@@ -59,8 +60,17 @@ class ProductMixin:
         "onsale",
         "image",
         "created_time",
+        "annotated",
     ]
-    readonly_fields = ["is_onsale"]
+    readonly_fields = ["is_onsale", "annotated"]
+
+    def annotated(self, obj):
+        return f"A{obj.annotated_qs}"
+
+    annotated.admin_order_field = "annotated_qs"
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(annotated_qs=F("name"))
 
 
 class ProductInline(ProductMixin, admin.TabularInline):

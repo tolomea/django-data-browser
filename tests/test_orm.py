@@ -144,6 +144,11 @@ def test_get_calculated_field_on_admin(get_product_flat):
     sortedAssert(data, [[None], ["bad"], ["bob"]])
 
 
+def test_get_annotated_field_on_admin(products, get_product_flat):
+    data = get_product_flat(2, "annotated+1,size-2", {"annotated__not_equals": ["a"]})
+    sortedAssert(data, [["Ab", 1], ["Ac", 2]])
+
+
 @pytest.mark.usefixtures("products")
 def test_get_multiple_calculated_fields_on_admins(get_product_flat):
     data = get_product_flat(3, "producer__address__bob,producer__frank", {})

@@ -237,7 +237,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
                 self.queryset_path: Subquery(
                     admin_get_queryset(self.admin, request, self.name)
                     .filter(pk=OuterRef(self.select_path))
-                    .values(self.name)[:1],
+                    .values(self.annotated_name)[:1],
                     output_field=self.field_type,
                 )
             }
@@ -245,7 +245,9 @@ class OrmBoundAnnotatedField(OrmBoundField):
 
 
 class OrmAnnotatedField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, type_, field_type, admin):
+    def __init__(
+        self, model_name, name, pretty_name, type_, field_type, admin, annotated_name
+    ):
         super().__init__(
             model_name,
             name,
@@ -256,6 +258,7 @@ class OrmAnnotatedField(OrmBaseField):
             concrete=True,
         )
         self.field_type = field_type
+        self.annotated_name = annotated_name
 
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()

@@ -723,6 +723,13 @@
                     "prettyName": "admin",
                     "type": "html"
                 },
+                "annotated": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "annotated",
+                    "type": "string"
+                },
                 "created_time": {
                     "canPivot": true,
                     "concrete": true,
@@ -797,6 +804,7 @@
             "sortedFields": [
                 "id",
                 "admin",
+                "annotated",
                 "created_time",
                 "default_sku",
                 "is_onsale",

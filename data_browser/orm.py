@@ -115,7 +115,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin):
         field_type = getattr(annotation_qs, "output_field", None)
         if field_type:
             type_ = _get_field_type(model, annotated_name, field_type)
-            if type_:
+            if type_:  # pragma: no branch
                 return OrmAnnotatedField(
                     model_name=model_name,
                     name=field_name,
@@ -123,11 +123,12 @@ def _get_calculated_field(request, field_name, model_name, model, admin):
                     type_=type_,
                     field_type=field_type,
                     admin=admin,
+                    annotated_name=annotated_name,
                 )
         else:
             if settings.DEBUG:  # pragma: no cover
                 logging.getLogger(__name__).warning(
-                    f"{model.__name__}.{field_name} can't determine type of annotated field"
+                    f"{model.__name__}.{field_name} annotated field doesn't specify 'output_field'"
                 )
     return OrmCalculatedField(
         model_name=model_name, name=field_name, pretty_name=field_name, admin=admin

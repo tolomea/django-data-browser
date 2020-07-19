@@ -679,6 +679,13 @@ snapshots["test_query_html config"] = {
                     "prettyName": "admin",
                     "type": "html",
                 },
+                "annotated": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "annotated",
+                    "type": "string",
+                },
                 "created_time": {
                     "canPivot": True,
                     "concrete": True,
@@ -753,6 +760,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": [
                 "id",
                 "admin",
+                "annotated",
                 "created_time",
                 "default_sku",
                 "is_onsale",
@@ -2114,6 +2122,13 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "admin",
                     "type": "html",
                 },
+                "annotated": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "annotated",
+                    "type": "string",
+                },
                 "created_time": {
                     "canPivot": True,
                     "concrete": True,
@@ -2188,6 +2203,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": [
                 "id",
                 "admin",
+                "annotated",
                 "created_time",
                 "default_sku",
                 "is_onsale",
