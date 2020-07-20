@@ -517,6 +517,13 @@
                     "prettyName": "admin",
                     "type": "html"
                 },
+                "andrew": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "andrew",
+                    "type": "string"
+                },
                 "bob": {
                     "canPivot": true,
                     "concrete": false,
@@ -556,6 +563,7 @@
             "sortedFields": [
                 "id",
                 "admin",
+                "andrew",
                 "bob",
                 "city",
                 "fred",

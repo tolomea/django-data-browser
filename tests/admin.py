@@ -38,13 +38,17 @@ class Tag(admin.ModelAdmin):
 
 
 @admin.register(models.Address)
-class Address(admin.ModelAdmin):
-    fields = ["pk", "city", "bob", "fred", "tom"]
+class Address(AdminMixin, admin.ModelAdmin):
+    fields = ["pk", "city", "bob", "fred", "tom", "andrew"]
     readonly_fields = ["bob", "fred", "tom"]
 
     def bob(self, obj):
-        assert obj.street != "bad", obj.street
+        assert obj.street != "bad", "err"
         return "bob"
+
+    @annotation
+    def andrew(self, request, qs):
+        return qs.annotate(andrew=F("street"))
 
 
 class ProductMixin:

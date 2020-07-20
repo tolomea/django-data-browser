@@ -5,7 +5,7 @@ class AdminMixin:
     def get_queryset(self, request):
         qs = super().get_queryset(request)
 
-        for descriptor in getattr(self, "_DDB_annotations", {}).values():
+        for descriptor in self._DDB_annotations().values():
             qs = descriptor.get_queryset(self, request, qs)
 
             annotation = qs.query.annotations.get(descriptor.name)
@@ -23,6 +23,16 @@ class AdminMixin:
             descriptor.boolean = isinstance(field_type, BooleanField)
         return qs
 
+    def get_readonly_fields(self, request, obj=None):  # pragma: no cover
+        res = super().get_readonly_fields(request, obj)
+        return list(res) + list(self._DDB_annotations())
+
+    @classmethod
+    def _DDB_annotations(cls):
+        if not hasattr(cls, "_DDB_annotations_real"):
+            cls._DDB_annotations_real = {}
+        return cls._DDB_annotations_real
+
 
 class AnnotationDescriptor:
     def __init__(self, get_queryset):
@@ -36,9 +46,7 @@ class AnnotationDescriptor:
             raise Exception(
                 "Django Data Browser 'annotation' decorator used without 'AdminMixin'"
             )
-        if not hasattr(owner, "_DDB_annotations"):  # pragma: no branch
-            owner._DDB_annotations = {}
-        owner._DDB_annotations[name] = self
+        owner._DDB_annotations()[name] = self
 
     def __get__(self, instance, owner=None):
         return self

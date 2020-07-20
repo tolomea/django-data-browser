@@ -141,18 +141,27 @@ def test_get_admin_link(get_product_flat, products):
 @pytest.mark.usefixtures("products")
 def test_get_calculated_field_on_admin(get_product_flat):
     data = get_product_flat(2, "producer__address__bob", {})
-    sortedAssert(data, [[None], ["bad"], ["bob"]])
+    sortedAssert(data, [[None], ["err"], ["bob"]])
 
 
-def test_get_annotated_field_on_admin(products, get_product_flat):
+def test_get_annotated_field_at_base(products, get_product_flat):
     data = get_product_flat(1, "annotated+1,size-2", {"annotated__not_equals": ["a"]})
     assert data == [["b", 1], ["c", 2]]
+
+
+def test_get_annotated_field_down_tree(products, get_product_flat):
+    data = get_product_flat(
+        1,
+        "producer__address__andrew+1,size-2",
+        {"producer__address__andrew__not_equals": ["bad"]},
+    )
+    assert data == [["good", 1]]
 
 
 @pytest.mark.usefixtures("products")
 def test_get_multiple_calculated_fields_on_admins(get_product_flat):
     data = get_product_flat(3, "producer__address__bob,producer__frank", {})
-    sortedAssert(data, [[None, "frank"], ["bad", "frank"], ["bob", "frank"]])
+    sortedAssert(data, [[None, "frank"], ["err", "frank"], ["bob", "frank"]])
 
 
 @pytest.mark.usefixtures("products")

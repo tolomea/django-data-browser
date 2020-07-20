@@ -500,6 +500,13 @@ snapshots["test_query_html config"] = {
                     "prettyName": "admin",
                     "type": "html",
                 },
+                "andrew": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "andrew",
+                    "type": "string",
+                },
                 "bob": {
                     "canPivot": True,
                     "concrete": False,
@@ -536,7 +543,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["id", "admin", "bob", "city", "fred", "tom"],
+            "sortedFields": ["id", "admin", "andrew", "bob", "city", "fred", "tom"],
         },
         "tests.InAdmin": {
             "fields": {
@@ -1943,6 +1950,13 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "admin",
                     "type": "html",
                 },
+                "andrew": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "andrew",
+                    "type": "string",
+                },
                 "bob": {
                     "canPivot": True,
                     "concrete": False,
@@ -1979,7 +1993,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["id", "admin", "bob", "city", "fred", "tom"],
+            "sortedFields": ["id", "admin", "andrew", "bob", "city", "fred", "tom"],
         },
         "tests.InAdmin": {
             "fields": {
