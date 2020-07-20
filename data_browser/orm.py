@@ -275,12 +275,13 @@ def _rows_sub_query(bound_query):
 
 
 def _get_results(request, bound_query, orm_models):
-    admin = orm_models[bound_query.model_name].admin
-    qs = admin_get_queryset(admin, request)
-
-    # sql functions and qs annotations
     all_fields = {f.queryset_path: f for f in bound_query.bound_fields}
     all_fields.update({f.queryset_path: f for f in bound_query.bound_filters})
+
+    admin = orm_models[bound_query.model_name].admin
+    qs = admin_get_queryset(admin, request, {f.split("__")[0] for f in all_fields})
+
+    # sql functions and qs annotations
     for field in all_fields.values():
         qs = field.annotate(request, qs)
 

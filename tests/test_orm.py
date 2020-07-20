@@ -149,7 +149,7 @@ def test_get_annotated_field_at_base(products, get_product_flat, mocker):
     mock = mocker.patch("data_browser.orm.admin_get_queryset", wraps=admin_get_queryset)
     data = get_product_flat(1, "annotated+1,size-2", {"annotated__not_equals": ["a"]})
     assert data == [["b", 1], ["c", 2]]
-    assert len(mock.call_args_list) == 2
+    assert len(mock.call_args_list) == 1
 
 
 def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
