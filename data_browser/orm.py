@@ -10,6 +10,7 @@ from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 
 from .common import settings
+from .helpers import AnnotationDescriptor
 from .orm_fields import (
     _AGGREGATES,
     _FUNC_MAP,
@@ -107,8 +108,6 @@ def _get_all_admin_fields(request):
 
 
 def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
-    from .admin import AnnotationDescriptor
-
     field_func = getattr(admin, field_name, None)
     if isinstance(field_func, AnnotationDescriptor):
         admin_order_field = field_func.admin_order_field

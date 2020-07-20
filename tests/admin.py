@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db.models import F
 
-from data_browser.admin import AdminMixin, annotation
+from data_browser.helpers import AdminMixin, annotation
 
 from . import models
 
