@@ -374,7 +374,7 @@ def get_results(request, bound_query, orm_models):
             if row:
                 res_row = {}
                 for field in fields:
-                    value = row[field.path_str]
+                    value = row[field.queryset_path]
                     if field.model_name:
                         value = cache[field.model_name].get(value)
                     res_row[field.path_str] = field.format(value)
@@ -384,7 +384,9 @@ def get_results(request, bound_query, orm_models):
         return results
 
     def get_fields(row, fields):
-        return tuple((field.path_str, row[field.queryset_path]) for field in fields)
+        return tuple(
+            (field.queryset_path, row[field.queryset_path]) for field in fields
+        )
 
     col_keys = {}
     for row in cols_res:
