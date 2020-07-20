@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
+from django.db.models import BooleanField
 from django.utils.html import format_html
 
 from . import models
@@ -9,8 +10,23 @@ from .common import can_make_public
 class AdminMixin:
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        for annotation in getattr(self, "_DDB_annotations", {}).values():
-            qs = annotation.get_queryset(self, qs)
+
+        for descriptor in getattr(self, "_DDB_annotations", {}).values():
+            qs = descriptor.get_queryset(self, request, qs)
+
+            annotation = qs.query.annotations.get(descriptor.name)
+            if not annotation:  # pragma: no cover
+                raise Exception(
+                    f"Can't find annotation '{descriptor.name}' for {self}.{descriptor.name}"
+                )
+
+            field_type = getattr(annotation, "output_field", None)
+            if not field_type:  # pragma: no cover
+                raise Exception(
+                    f"Annotation '{descriptor.name}' for {self}.{descriptor.name} doesn't specify 'output_field'"
+                )
+
+            descriptor.boolean = isinstance(field_type, BooleanField)
         return qs
 
 
@@ -19,6 +35,7 @@ class AnnotationDescriptor:
         self.get_queryset = get_queryset
 
     def __set_name__(self, owner, name):
+        self.name = name
         self.__name__ = name
         self.admin_order_field = name
         if not issubclass(owner, AdminMixin):  # pragma: no cover
@@ -33,7 +50,7 @@ class AnnotationDescriptor:
         return self
 
     def __call__(self, obj):  # pragma: no cover
-        return getattr(obj, self.admin_order_field)
+        return getattr(obj, self.name)
 
 
 annotation = AnnotationDescriptor
