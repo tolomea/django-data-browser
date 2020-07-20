@@ -15,9 +15,11 @@ class AdminMixin:
 
 
 class AnnotationDescriptor:
-    def __init__(self, annotated_field_name, get_queryset):
+    def __init__(self, annotated_field_name, get_queryset, short_description):
         self.admin_order_field = annotated_field_name
         self.get_queryset = get_queryset
+        if short_description:
+            self.short_description = short_description
 
     def __set_name__(self, owner, name):
         self.__name__ = name
@@ -36,14 +38,14 @@ class AnnotationDescriptor:
         return getattr(obj, self.admin_order_field)
 
 
-def annotation(annotated_field_name):
+def annotation(annotated_field_name, short_description=None):
     if callable(annotated_field_name):  # pragma: no cover
         raise TypeError(
             "annotation() missing 1 required positional argument: 'annotated_field_name'"
         )
 
     def decorator(func):
-        return AnnotationDescriptor(annotated_field_name, func)
+        return AnnotationDescriptor(annotated_field_name, func, short_description)
 
     return decorator
 
