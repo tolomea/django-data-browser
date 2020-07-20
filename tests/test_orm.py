@@ -6,6 +6,7 @@ from django.contrib.auth.models import Permission, User
 from django.utils import timezone
 
 from data_browser import orm, orm_fields
+from data_browser.orm import admin_get_queryset
 from data_browser.query import BoundQuery, Query
 
 from . import models
@@ -144,18 +145,22 @@ def test_get_calculated_field_on_admin(get_product_flat):
     sortedAssert(data, [[None], ["err"], ["bob"]])
 
 
-def test_get_annotated_field_at_base(products, get_product_flat):
+def test_get_annotated_field_at_base(products, get_product_flat, mocker):
+    mock = mocker.patch("data_browser.orm.admin_get_queryset", wraps=admin_get_queryset)
     data = get_product_flat(1, "annotated+1,size-2", {"annotated__not_equals": ["a"]})
     assert data == [["b", 1], ["c", 2]]
+    assert len(mock.call_args_list) == 2
 
 
-def test_get_annotated_field_down_tree(products, get_product_flat):
+def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
+    mock = mocker.patch("data_browser.orm.admin_get_queryset", wraps=admin_get_queryset)
     data = get_product_flat(
         1,
         "producer__address__andrew+1,size-2",
         {"producer__address__andrew__not_equals": ["bad"]},
     )
     assert data == [["good", 1]]
+    assert len(mock.call_args_list) == 2
 
 
 @pytest.mark.usefixtures("products")
