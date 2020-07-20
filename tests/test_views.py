@@ -15,14 +15,6 @@ def dump(val):
     print(json.dumps(val, indent=4, sort_keys=True))
 
 
-class ANY:  # pragma: no cover
-    def __init__(self, type):
-        self.type = type
-
-    def __eq__(self, other):
-        return isinstance(other, self.type)
-
-
 @pytest.fixture
 def products(db):
     address = models.Address.objects.create(city="london")

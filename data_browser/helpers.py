@@ -40,7 +40,7 @@ class AdminMixin:
             descriptor.boolean = isinstance(field_type, BooleanField)
         return qs
 
-    def get_readonly_fields(self, request, obj=None):  # pragma: no cover
+    def get_readonly_fields(self, request, obj=None):
         res = super().get_readonly_fields(request, obj)
         return list(res) + list(self._DDB_annotations())
 
@@ -68,7 +68,7 @@ class AnnotationDescriptor:
     def __get__(self, instance, owner=None):
         return self
 
-    def __call__(self, obj):  # pragma: no cover
+    def __call__(self, obj):
         return getattr(obj, self.name)
 
 

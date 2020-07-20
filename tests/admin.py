@@ -25,7 +25,7 @@ class InAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Normal)
-class Normal(admin.ModelAdmin):
+class NormalAdmin(admin.ModelAdmin):
     fields = ["name", "in_admin", "not_in_admin", "inline_admin"]
 
 
@@ -33,14 +33,14 @@ class Normal(admin.ModelAdmin):
 
 
 @admin.register(models.Tag)
-class Tag(admin.ModelAdmin):
+class TagAdmin(admin.ModelAdmin):
     fields = ["name"]
 
 
 @admin.register(models.Address)
-class Address(AdminMixin, admin.ModelAdmin):
+class AddressAdmin(AdminMixin, admin.ModelAdmin):
     fields = ["pk", "city", "bob", "fred", "tom", "andrew"]
-    readonly_fields = ["bob", "fred", "tom"]
+    readonly_fields = ["pk", "bob", "fred", "tom"]
 
     def bob(self, obj):
         assert obj.street != "bad", "err"
@@ -67,7 +67,7 @@ class ProductMixin:
         "image",
         "created_time",
     ]
-    readonly_fields = ["is_onsale"]
+    readonly_fields = ["id", "is_onsale"]
 
 
 class ProductInline(ProductMixin, admin.TabularInline):
@@ -75,7 +75,7 @@ class ProductInline(ProductMixin, admin.TabularInline):
 
 
 @admin.register(models.Producer)
-class Producer(admin.ModelAdmin):
+class ProducerAdmin(admin.ModelAdmin):
     fields = ["name", "address", "frank"]
     readonly_fields = ["frank"]
     inlines = [ProductInline]
@@ -94,7 +94,7 @@ class SKUInline(admin.TabularInline):
 
 
 @admin.register(models.Product)
-class Product(AdminMixin, ProductMixin, admin.ModelAdmin):
+class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
     list_display = ["only_in_list_view", "annotated"]
 

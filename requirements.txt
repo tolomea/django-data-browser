@@ -1,6 +1,7 @@
 Django
 pytest
 pytest-django
+pytest-mock
 python-dateutil
 requests
 snapshottest

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 
-class ANY:  # pragma: no cover
+class ANY:
     def __init__(self, type):
         self.type = type
 
@@ -10,7 +10,7 @@ class ANY:  # pragma: no cover
         return isinstance(other, self.type)
 
 
-class KEYS:  # pragma: no cover
+class KEYS:
     def __init__(self, *keys):
         self.keys = set(keys)
 
