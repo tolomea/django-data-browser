@@ -6,8 +6,51 @@ from . import models
 from .common import can_make_public
 
 
+class AdminMixin:
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        for annotation in getattr(self, "_DDB_annotations", {}).values():
+            qs = annotation.get_queryset(self, request, qs)
+        return qs
+
+
+class AnnotationDescriptor:
+    def __init__(self, annotated_field_name, get_queryset, boolean):
+        self.admin_order_field = annotated_field_name
+        self.get_queryset = get_queryset
+        self.boolean = boolean
+
+    def __set_name__(self, owner, name):
+        self.__name__ = name
+        if not issubclass(owner, AdminMixin):  # pragma: no cover
+            raise Exception(
+                "Django Data Browser 'annotation' decorator used without 'AdminMixin'"
+            )
+        if not hasattr(owner, "_DDB_annotations"):  # pragma: no branch
+            owner._DDB_annotations = {}
+        owner._DDB_annotations[name] = self
+
+    def __get__(self, instance, owner=None):
+        return self
+
+    def __call__(self, obj):  # pragma: no cover
+        return getattr(obj, self.admin_order_field)
+
+
+def annotation(annotated_field_name, *, boolean=False):
+    if callable(annotated_field_name):  # pragma: no cover
+        raise TypeError(
+            "annotation() missing 1 required positional argument: 'annotated_field_name'"
+        )
+
+    def decorator(func):
+        return AnnotationDescriptor(annotated_field_name, func, boolean)
+
+    return decorator
+
+
 @admin.register(models.View)
-class ViewAdmin(admin.ModelAdmin):
+class ViewAdmin(AdminMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {"fields": ["name", "owner", "open_view", "description"]}),
         (

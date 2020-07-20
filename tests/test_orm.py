@@ -145,13 +145,8 @@ def test_get_calculated_field_on_admin(get_product_flat):
 
 
 def test_get_annotated_field_on_admin(products, get_product_flat):
-    data = get_product_flat(2, "annotated+1,size-2", {"annotated__not_equals": ["a"]})
-    assert data == [["Ab", 1], ["Ac", 2]]
-
-
-def test_get_derived_field_on_admin(products, get_product_flat):
-    data = get_product_flat(2, "derived+1,size-2", {"derived__not_equals": ["a"]})
-    assert data == [["Db", 1], ["Dc", 2]]
+    data = get_product_flat(1, "annotated+1,size-2", {"annotated__not_equals": ["a"]})
+    assert data == [["b", 1], ["c", 2]]
 
 
 @pytest.mark.usefixtures("products")

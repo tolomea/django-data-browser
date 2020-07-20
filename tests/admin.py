@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db.models import F
 
+from data_browser.admin import AdminMixin, annotation
+
 from . import models
 
 # admin for perm testing
@@ -60,23 +62,8 @@ class ProductMixin:
         "onsale",
         "image",
         "created_time",
-        "annotated",
-        "derived",
     ]
-    readonly_fields = ["is_onsale", "annotated", "derived"]
-
-    def derived(self, obj):
-        return f"D{obj.name}"
-
-    derived.admin_order_field = "name"
-
-    def annotated(self, obj):
-        return f"A{obj.annotated_qs}"
-
-    annotated.admin_order_field = "annotated_qs"
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).annotate(annotated_qs=F("name"))
+    readonly_fields = ["is_onsale"]
 
 
 class ProductInline(ProductMixin, admin.TabularInline):
@@ -103,6 +90,10 @@ class SKUInline(admin.TabularInline):
 
 
 @admin.register(models.Product)
-class Product(ProductMixin, admin.ModelAdmin):
+class Product(AdminMixin, ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
-    list_display = ["only_in_list_view"]
+    list_display = ["only_in_list_view", "annotated"]
+
+    @annotation("annotated_qs")
+    def annotated(self, request, qs):
+        return qs.annotate(annotated_qs=F("name"))

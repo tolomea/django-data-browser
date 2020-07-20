@@ -700,13 +700,6 @@ snapshots["test_query_html config"] = {
                     "prettyName": "default_sku",
                     "type": None,
                 },
-                "derived": {
-                    "canPivot": True,
-                    "concrete": True,
-                    "model": None,
-                    "prettyName": "derived",
-                    "type": "string",
-                },
                 "id": {
                     "canPivot": True,
                     "concrete": True,
@@ -770,7 +763,6 @@ snapshots["test_query_html config"] = {
                 "annotated",
                 "created_time",
                 "default_sku",
-                "derived",
                 "is_onsale",
                 "name",
                 "only_in_list_view",
@@ -2151,13 +2143,6 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "default_sku",
                     "type": None,
                 },
-                "derived": {
-                    "canPivot": True,
-                    "concrete": True,
-                    "model": None,
-                    "prettyName": "derived",
-                    "type": "string",
-                },
                 "id": {
                     "canPivot": True,
                     "concrete": True,
@@ -2221,7 +2206,6 @@ snapshots["test_query_ctx config"] = {
                 "annotated",
                 "created_time",
                 "default_sku",
-                "derived",
                 "is_onsale",
                 "name",
                 "only_in_list_view",

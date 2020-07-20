@@ -20,7 +20,6 @@ from .orm_fields import (
     OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
-    OrmDerivedField,
     OrmFkField,
     OrmFunctionField,
     OrmModel,
@@ -108,50 +107,40 @@ def _get_all_admin_fields(request):
 
 
 def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
+    from .admin import AnnotationDescriptor
+
     field_func = getattr(admin, field_name, None)
-    admin_order_field = getattr(field_func, "admin_order_field", None)
-    if admin_order_field:
+    if isinstance(field_func, AnnotationDescriptor):
+        admin_order_field = field_func.admin_order_field
         qs = admin_get_queryset(admin, request, [field_name])
+
         annotation = qs.query.annotations.get(admin_order_field)
-        if annotation:
-            field_type = getattr(annotation, "output_field", None)
-            if field_type:
-                type_ = _get_field_type(model, admin_order_field, field_type)
-                if type_:  # pragma: no branch
-                    return OrmAnnotatedField(
-                        model_name=model_name,
-                        name=field_name,
-                        pretty_name=field_name,
-                        type_=type_,
-                        field_type=field_type,
-                        admin=admin,
-                        admin_order_field=admin_order_field,
-                    )
-            else:  # pragma: no cover
-                if settings.DEBUG:
-                    logging.getLogger(__name__).warning(
-                        f"DDB {model.__name__}.{field_name} annotated field doesn't specify 'output_field'"
-                    )
-        else:
-            field = model_fields.get(admin_order_field)
-            if field:
-                type_ = _get_field_type(model, admin_order_field, field)
-                if type_:  # pragma: no branch
-                    return OrmDerivedField(
-                        model_name=model_name,
-                        name=field_name,
-                        pretty_name=field_name,
-                        type_=type_,
-                        admin=admin,
-                        admin_order_field=admin_order_field,
-                    )
-            else:  # pragma: no cover
-                logging.getLogger(__name__).warning(
-                    f"DDB {model.__name__}.{field_name} can't resolve admin_order_field"
-                )
-    return OrmCalculatedField(
-        model_name=model_name, name=field_name, pretty_name=field_name, admin=admin
-    )
+        if not annotation:  # pragma: no cover
+            raise Exception(
+                "Can't find annotation '{admin_order_field}' for {admin}.{field_name}"
+            )
+
+        field_type = getattr(annotation, "output_field", None)
+        if not field_type:  # pragma: no cover
+            raise Exception(
+                "Annotation '{admin_order_field}' for {admin}.{field_name} doesn't specify 'output_field'"
+            )
+
+        type_ = _get_field_type(model, admin_order_field, field_type)
+        if type_:  # pragma: no branch
+            return OrmAnnotatedField(
+                model_name=model_name,
+                name=field_name,
+                pretty_name=field_name,
+                type_=type_,
+                field_type=field_type,
+                admin=admin,
+                admin_order_field=admin_order_field,
+            )
+    else:
+        return OrmCalculatedField(
+            model_name=model_name, name=field_name, pretty_name=field_name, admin=admin
+        )
 
 
 def _get_field_type(model, field_name, field):

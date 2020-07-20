@@ -206,12 +206,7 @@ def _format_calculated(name, admin, obj):
             return str(e)
 
 
-class _CalculatedMixin:
-    def format(self, value):
-        return _format_calculated(self.name, self.admin, value)
-
-
-class OrmCalculatedField(_CalculatedMixin, OrmBaseField):
+class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, admin):
         super().__init__(
             model_name, name, pretty_name, type_=StringType, can_pivot=True, admin=admin
@@ -229,6 +224,9 @@ class OrmCalculatedField(_CalculatedMixin, OrmBaseField):
             model_name=self.model_name,
         )
 
+    def format(self, value):
+        return _format_calculated(self.name, self.admin, value)
+
 
 class OrmBoundAnnotatedField(OrmBoundField):
     def annotate(self, request, qs):
@@ -237,8 +235,8 @@ class OrmBoundAnnotatedField(OrmBoundField):
         return qs.annotate(
             **{
                 self.queryset_path: Subquery(
-                    admin_get_queryset(self.admin, request, self.name)
-                    .filter(pk=OuterRef(self.select_path))
+                    admin_get_queryset(self.admin, request, [self.name])
+                    .filter(pk=OuterRef(s(self.previous.full_path + ["id"])))
                     .values(self.admin_order_field)[:1],
                     output_field=self.field_type,
                 )
@@ -246,7 +244,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
         )
 
 
-class OrmAnnotatedField(_CalculatedMixin, OrmBaseField):
+class OrmAnnotatedField(OrmBaseField):
     def __init__(
         self, model_name, name, pretty_name, type_, field_type, admin, admin_order_field
     ):
@@ -270,37 +268,8 @@ class OrmAnnotatedField(_CalculatedMixin, OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            select_path=s(previous.full_path + ["id"]),
-            model_name=self.model_name,
+            select_path=f"ddb_{s(full_path)}",
             queryset_path=f"ddb_{s(full_path)}",
-            filter_=True,
-        )
-
-
-class OrmDerivedField(_CalculatedMixin, OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, type_, admin, admin_order_field):
-        super().__init__(
-            model_name,
-            name,
-            pretty_name,
-            type_=type_,
-            can_pivot=True,
-            admin=admin,
-            concrete=True,
-        )
-        self.admin_order_field = admin_order_field
-
-    def bind(self, previous):
-        previous = previous or OrmBoundField.blank()
-        full_path = previous.full_path + [self.name]
-        return OrmBoundField(
-            field=self,
-            previous=previous,
-            full_path=full_path,
-            pretty_path=previous.pretty_path + [self.pretty_name],
-            select_path=s(previous.full_path + ["id"]),
-            model_name=self.model_name,
-            queryset_path=s(previous.full_path + [self.admin_order_field]),
             filter_=True,
         )
 
