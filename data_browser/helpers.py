@@ -1,11 +1,28 @@
 from django.db.models import BooleanField
 
 
+class Everything:
+    def __contains__(self, item):
+        return True
+
+
 class AdminMixin:
+    def get_fields_for_request(self, request):
+        if hasattr(request, "data_browser"):
+            return request.data_browser["calculated_fields"]
+        elif request.resolver_match.func.__name__ == "changelist_view":
+            return set(self.get_list_display(request))
+        else:
+            return Everything()
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
+        fields = self.get_fields_for_request(request)
 
-        for descriptor in self._DDB_annotations().values():
+        for name, descriptor in self._DDB_annotations().items():
+            if name not in fields:
+                continue
+
             qs = descriptor.get_queryset(self, request, qs)
 
             annotation = qs.query.annotations.get(descriptor.name)

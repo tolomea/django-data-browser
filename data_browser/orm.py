@@ -60,7 +60,7 @@ def _get_all_admin_fields(request):
     def from_fieldsets(admin, all_):
         auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT
         if auth_user_compat and isinstance(admin, UserAdmin):
-            obj = admin.model()  # we want the admin change field sets, not the add ones
+            obj = admin.model()  # get the change fieldsets, not the add ones
         else:
             obj = None
 
@@ -116,13 +116,13 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
         annotation = qs.query.annotations.get(admin_order_field)
         if not annotation:  # pragma: no cover
             raise Exception(
-                "Can't find annotation '{admin_order_field}' for {admin}.{field_name}"
+                f"Can't find annotation '{admin_order_field}' for {admin}.{field_name}"
             )
 
         field_type = getattr(annotation, "output_field", None)
         if not field_type:  # pragma: no cover
             raise Exception(
-                "Annotation '{admin_order_field}' for {admin}.{field_name} doesn't specify 'output_field'"
+                f"Annotation '{admin_order_field}' for {admin}.{field_name} doesn't specify 'output_field'"
             )
 
         type_ = _get_field_type(model, admin_order_field, field_type)
