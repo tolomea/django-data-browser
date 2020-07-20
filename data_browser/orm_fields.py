@@ -184,26 +184,6 @@ class OrmConcreteField(OrmBaseField):
         )
 
 
-def _format_calculated(name, admin, obj):
-    if obj is None:
-        return None
-
-    if hasattr(admin, name):
-        # admin callable
-        func = getattr(admin, name)
-        try:
-            return func(obj)
-        except Exception as e:
-            return str(e)
-    else:
-        # model property or callable
-        try:
-            value = getattr(obj, name)
-            return value() if callable(value) else value
-        except Exception as e:
-            return str(e)
-
-
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, admin):
         super().__init__(
@@ -222,8 +202,24 @@ class OrmCalculatedField(OrmBaseField):
             model_name=self.model_name,
         )
 
-    def format(self, value):
-        return _format_calculated(self.name, self.admin, value)
+    def format(self, obj):
+        if obj is None:
+            return None
+
+        if hasattr(self.admin, self.name):
+            # admin callable
+            func = getattr(self.admin, self.name)
+            try:
+                return func(obj)
+            except Exception as e:
+                return str(e)
+        else:
+            # model property or callable
+            try:
+                value = getattr(obj, self.name)
+                return value() if callable(value) else value
+            except Exception as e:
+                return str(e)
 
 
 class OrmBoundAnnotatedField(OrmBoundField):
