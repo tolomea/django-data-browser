@@ -94,6 +94,6 @@ class Product(AdminMixin, ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
     list_display = ["only_in_list_view", "annotated"]
 
-    @annotation("annotated_qs")
-    def annotated(self, request, qs):
-        return qs.annotate(annotated_qs=F("name"))
+    @annotation
+    def annotated(self, qs):
+        return qs.annotate(annotated=F("name"))

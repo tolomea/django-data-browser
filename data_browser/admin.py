@@ -10,19 +10,17 @@ class AdminMixin:
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         for annotation in getattr(self, "_DDB_annotations", {}).values():
-            qs = annotation.get_queryset(self, request, qs)
+            qs = annotation.get_queryset(self, qs)
         return qs
 
 
 class AnnotationDescriptor:
-    def __init__(self, annotated_field_name, get_queryset, short_description):
-        self.admin_order_field = annotated_field_name
+    def __init__(self, get_queryset):
         self.get_queryset = get_queryset
-        if short_description:
-            self.short_description = short_description
 
     def __set_name__(self, owner, name):
         self.__name__ = name
+        self.admin_order_field = name
         if not issubclass(owner, AdminMixin):  # pragma: no cover
             raise Exception(
                 "Django Data Browser 'annotation' decorator used without 'AdminMixin'"
@@ -38,16 +36,7 @@ class AnnotationDescriptor:
         return getattr(obj, self.admin_order_field)
 
 
-def annotation(annotated_field_name, short_description=None):
-    if callable(annotated_field_name):  # pragma: no cover
-        raise TypeError(
-            "annotation() missing 1 required positional argument: 'annotated_field_name'"
-        )
-
-    def decorator(func):
-        return AnnotationDescriptor(annotated_field_name, func, short_description)
-
-    return decorator
+annotation = AnnotationDescriptor
 
 
 @admin.register(models.View)
