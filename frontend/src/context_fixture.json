@@ -744,6 +744,13 @@
                     "prettyName": "default_sku",
                     "type": null
                 },
+                "derived": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "derived",
+                    "type": "string"
+                },
                 "id": {
                     "canPivot": true,
                     "concrete": true,
@@ -807,6 +814,7 @@
                 "annotated",
                 "created_time",
                 "default_sku",
+                "derived",
                 "is_onsale",
                 "name",
                 "only_in_list_view",

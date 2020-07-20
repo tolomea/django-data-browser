@@ -61,8 +61,14 @@ class ProductMixin:
         "image",
         "created_time",
         "annotated",
+        "derived",
     ]
-    readonly_fields = ["is_onsale", "annotated"]
+    readonly_fields = ["is_onsale", "annotated", "derived"]
+
+    def derived(self, obj):
+        return f"D{obj.name}"
+
+    derived.admin_order_field = "name"
 
     def annotated(self, obj):
         return f"A{obj.annotated_qs}"

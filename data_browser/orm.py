@@ -20,6 +20,7 @@ from .orm_fields import (
     OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
+    OrmDerivedField,
     OrmFkField,
     OrmFunctionField,
     OrmModel,
@@ -106,29 +107,47 @@ def _get_all_admin_fields(request):
     return model_admins, all_admin_fields
 
 
-def _get_calculated_field(request, field_name, model_name, model, admin):
+def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
     field_func = getattr(admin, field_name, None)
-    annotated_name = getattr(field_func, "admin_order_field", None)
-    if annotated_name:
+    admin_order_field = getattr(field_func, "admin_order_field", None)
+    if admin_order_field:
         qs = admin_get_queryset(admin, request, [field_name])
-        annotation_qs = qs.query.annotations.get(annotated_name)
-        field_type = getattr(annotation_qs, "output_field", None)
-        if field_type:
-            type_ = _get_field_type(model, annotated_name, field_type)
-            if type_:  # pragma: no branch
-                return OrmAnnotatedField(
-                    model_name=model_name,
-                    name=field_name,
-                    pretty_name=field_name,
-                    type_=type_,
-                    field_type=field_type,
-                    admin=admin,
-                    annotated_name=annotated_name,
-                )
+        annotation = qs.query.annotations.get(admin_order_field)
+        if annotation:
+            field_type = getattr(annotation, "output_field", None)
+            if field_type:
+                type_ = _get_field_type(model, admin_order_field, field_type)
+                if type_:  # pragma: no branch
+                    return OrmAnnotatedField(
+                        model_name=model_name,
+                        name=field_name,
+                        pretty_name=field_name,
+                        type_=type_,
+                        field_type=field_type,
+                        admin=admin,
+                        admin_order_field=admin_order_field,
+                    )
+            else:  # pragma: no cover
+                if settings.DEBUG:
+                    logging.getLogger(__name__).warning(
+                        f"DDB {model.__name__}.{field_name} annotated field doesn't specify 'output_field'"
+                    )
         else:
-            if settings.DEBUG:  # pragma: no cover
+            field = model_fields.get(admin_order_field)
+            if field:
+                type_ = _get_field_type(model, admin_order_field, field)
+                if type_:  # pragma: no branch
+                    return OrmDerivedField(
+                        model_name=model_name,
+                        name=field_name,
+                        pretty_name=field_name,
+                        type_=type_,
+                        admin=admin,
+                        admin_order_field=admin_order_field,
+                    )
+            else:  # pragma: no cover
                 logging.getLogger(__name__).warning(
-                    f"{model.__name__}.{field_name} annotated field doesn't specify 'output_field'"
+                    f"DDB {model.__name__}.{field_name} can't resolve admin_order_field"
                 )
     return OrmCalculatedField(
         model_name=model_name, name=field_name, pretty_name=field_name, admin=admin
@@ -145,7 +164,7 @@ def _get_field_type(model, field_name, field):
 
     if settings.DEBUG:  # pragma: no cover
         logging.getLogger(__name__).warning(
-            f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
+            f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
         )
     return None
 
@@ -172,7 +191,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 )
         elif isinstance(field, type(None)):
             fields[field_name] = _get_calculated_field(
-                request, field_name, model_name, model, admin
+                request, field_name, model_name, model, admin, model_fields
             )
         else:
             field_type = _get_field_type(model, field_name, field)
