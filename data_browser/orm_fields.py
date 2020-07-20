@@ -87,7 +87,6 @@ class OrmBoundField:
     full_path: Sequence[str]
     pretty_path: Sequence[str]
     queryset_path: str = None
-    select_path: str = None
     aggregate_clause: Tuple[str, models.Func] = None
     filter_: bool = False
     having: bool = False
@@ -181,7 +180,6 @@ class OrmConcreteField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
-            select_path=s(full_path),
             filter_=True,
         )
 
@@ -220,7 +218,7 @@ class OrmCalculatedField(OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            select_path=s(previous.full_path + ["id"]),
+            queryset_path=s(previous.full_path + ["id"]),
             model_name=self.model_name,
         )
 
@@ -268,7 +266,6 @@ class OrmAnnotatedField(OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            select_path=f"ddb_{s(full_path)}",
             queryset_path=f"ddb_{s(full_path)}",
             filter_=True,
         )
@@ -288,7 +285,7 @@ class OrmAdminField(OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            select_path=s(previous.full_path + ["id"]),
+            queryset_path=s(previous.full_path + ["id"]),
             model_name=self.model_name,
         )
 
@@ -317,7 +314,6 @@ class OrmAggregateField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
-            select_path=s(full_path),
             aggregate_clause=(s(full_path), agg),
             having=True,
         )
@@ -350,6 +346,5 @@ class OrmFunctionField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
-            select_path=s(full_path),
             filter_=True,
         )
