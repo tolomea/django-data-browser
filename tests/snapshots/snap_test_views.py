@@ -1054,7 +1054,7 @@ snapshots["test_query_query query"] = {
             "value": "0",
         },
     ],
-    "limit": "1000",
+    "limit": 1000,
     "model": "tests.Product",
 }
 
@@ -2585,7 +2585,7 @@ snapshots["test_query_json data"] = {
         },
     ],
     "length": 2,
-    "limit": "1000",
+    "limit": 1000,
     "model": "tests.Product",
     "rows": [
         {"name": "a", "size": 1.0, "size_unit": "g"},
@@ -2636,7 +2636,7 @@ snapshots["test_query_json_pivot data"] = {
     "filterErrors": [],
     "filters": [],
     "length": 3,
-    "limit": "1000",
+    "limit": 1000,
     "model": "tests.Product",
     "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],
 }
