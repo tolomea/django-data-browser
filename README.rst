@@ -19,27 +19,27 @@ Because it's hosted on Heroku free tier it might take a while to respond to the 
 
 The Django project is a small e-commerce site selling microservices.
 
-Source: https://github.com/tolomea/data-browser-demo
+Source: https://github.com/tolomea/data-browser-demo.
 
-Admin: https://data-browser-demo.herokuapp.com/admin/
+Admin: https://data-browser-demo.herokuapp.com/admin/.
 
 
 Features
 *************************
 
-* Zero config, if it's in the admin it's in the browser
-* Select fields (including calculated fields), aggregate, filter, sort and pivot
-* Automatically follow OneToOneFields and ForeignKeys
-* Respects per user admin permissions
-* Share views simply by sharing URLs
-* Save views and optionally make them available to services like Google sheets
-* Download views as CSV or JSON
+* Zero config, if it's in the admin it's in the browser.
+* Select fields (including calculated fields), aggregate, filter, sort and pivot.
+* Automatically follow OneToOneFields and ForeignKeys.
+* Respects per user admin permissions.
+* Share views simply by sharing URLs.
+* Save views and optionally make them available to services like Google sheets.
+* Download views as CSV or JSON.
 
 
 Installation
 *************************
 
-1. Run ``pip install django-data-browser``
+1. Run ``pip install django-data-browser``.
 2. Add ``"data_browser"`` to installed_apps.
 3. Add ``path("data-browser/", include("data_browser.urls"))`` to your urls.
 4. Run ``python manage.py migrate``.
@@ -54,7 +54,7 @@ Settings
 +================================+=========+==================+====================================================================================================+
 | DATA_BROWSER_ALLOW_PUBLIC      | False   | `Security`_      | Allow selected saved views to be accessed without admin login in limited circumstances.            |
 +--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
-| DATA_BROWSER_AUTH_USER_COMPAT  | True    | `Performance`_   | When calling ``get_fieldsets`` on a ``UserAdmin`` alwyas pass an instance of the associated model. |
+| DATA_BROWSER_AUTH_USER_COMPAT  | True    | `Performance`_   | When calling ``get_fieldsets`` on a ``UserAdmin`` always pass an instance of the associated model. |
 +--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
 | DATA_BROWSER_DEFAULT_ROW_LIMIT | 1000    |                  | The default value for the row limit selector in the UI.                                            |
 +--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
@@ -89,7 +89,43 @@ The frontend code has builtin Sentry support, it is **disabled by default**. To 
 Calculated and Annotated fields
 ********************************
 
+Calculated
+########################################
 
+Calculated fields are fields on the ModelAdmin whose value comes from a function on the ModelAdmin or a function or property on the Model itself, as described at the bottom of the `Django admin list display docs <https://docs.djangoproject.com/en/3.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display>`_.
+
+Being arbitrary Python code calculated fields are opaque to the Data Browser. It can fetch their values but can't sort or filter etc on them. For pivoting they are treated as equivalent to the pk on the same model.
+
+Annotated
+########################################
+
+The Data Browser has additional support for annotated fields. Normally you would expose these as calculated fields. The module ``data_browser.helpers`` contains helpers which will make exposing annotated fields simpler, more performant and expose them to the Data Browser so it can do arbitrary manipulation with them.
+
+Exposing an a annotated field in this way requires two changes.
+
+1. Mix ``data_browser.helpers.AdminMixin`` into your ModelAdmin.
+2. Add a function decorated with ``data_browser.helpers.annotation`` that takes and updates a queryset.
+
+.. code-block:: python
+
+    from data_browser.helpers import AdminMixin, annotation
+
+    @admin.register(MyModel)
+    class MyAdmin(AdminMixin, ModelAdmin):
+        fields = ["my_field"]
+
+        @annotation
+        def my_field(self, request, qs):
+            return qs.annotate(my_field=Cast(..., output_field=IntegerField()))
+
+
+It is important that the decorated annotation function name and the annotated queryset field name match.
+
+It is necessary for the top level of the annotation to have ``output_field`` set so the Data Browser can tell what type of data it will produce.
+
+The helpers will automatically deal with the ``admin_order_field`` and ``boolean`` properties and ``readonly_fields``, reducing the boiler plate involved in using annotations in the admin.
+
+Additionally the annotation will only be applied to the list view when it's mentioned in ``list_display`` this allows you to use annotations extensively on your detail views without hurting the performance of your list views.
 
 
 Performance
@@ -100,7 +136,9 @@ get_queryset
 
 The Data Browser does it's fetching in two stages.
 
-First it does a single DB query to get the majority of the data. To construct the queryset for this it will call get_queryset on the ModelAdmin of the current Model. It uses ``.values()`` to fetch only the data it needs from the database and it will inline all referenced models to ensure it doesn't do multiple queries. At this stage annotated fields on related models are attached with subquery annotations, the data_browser will call get_queryset on the relevant ModelAdmins in order to generate these subquery annotations.
+First it does a single DB query to get the majority of the data. To construct the queryset for this it will call get_queryset on the ModelAdmin of the current Model. It uses ``.values()`` to fetch only the data it needs from the database and it will inline all referenced models to ensure it doesn't do multiple queries.
+
+At this stage annotated fields on related models are attached with subquery annotations, the data_browser will call get_queryset on the relevant ModelAdmins in order to generate these subquery annotations.
 
 Secondly for any calculated fields it will then fetch the complete objects that are needed for those calculated fields. To construct the querysets for these it will call get_queryset on their associated ModelAdmins. These calls are aggregated so it will only make one per model.
 
@@ -116,13 +154,11 @@ Where the ``author.age`` is actually a property on the Author Model and ``author
 
 .. code-block:: python
 
-   BookAdmin.get_queryset().annotate(
+    BookAdmin.get_queryset().annotate(
         author__number_of_books=Subquery(
-            Subquery(
-                AuthorAdmin.get_queryset()
-                .filter(pk=OuterRef("author__id"))
-                .values("number_of_books")[:1]
-            )
+            AuthorAdmin.get_queryset()
+            .filter(pk=OuterRef("author__id"))
+            .values("number_of_books")[:1]
         )
     ).values(
         "name",
@@ -144,13 +180,13 @@ When the Data Browser calls the admin ``get_queryset`` functions it will put som
 
 This is particularly useful if you want to route the Data Browser to a DB replica.
 
-The context also includes a ``fields`` member that lists all the fields it plans to access. You can use this to do conditional prefetching or annotating to support those fields like this:
+The context also includes a ``fields`` member that lists all the fields the Data Browser plans to access. You can use this to do conditional prefetching or annotating to support those fields like this:
 
 .. code-block:: python
 
     if (
         not hasattr(request, "databrowser")
-        or "my_field" in request.databrowser["fields"]
+        or "my_field" in request.data_browser["fields"]
     ):
         # do prefetching and annotating associated with my_field
 
@@ -161,9 +197,9 @@ get_fieldsets
 
 The Data Browser also calls ``get_fieldsets`` to find out what fields the current user can access.
 
-As with ``get_queryset`` the Data Browser will set ``request.databrowser`` when calling ``get_fieldsets`` and you can test this to detect it and make Data Browser specific customizations.
+As with ``get_queryset`` the Data Browser will set ``request.data_browser`` when calling ``get_fieldsets`` and you can test this to detect it and make Data Browser specific customizations.
 
-The Django User Admin has code to change the fieldsets when adding a new user. To compensate for this, when calling ``get_fieldsets`` on a subclass of ``django.contrib.auth.admin.UserAdmin`` the Data Browser will pass a newly constructed instance of the relevant model. This behavior can be disabled by setting ``settings.DATA_BROWSER_AUTH_USER_COMPAT`` to False.
+The Django User Admin has code to change the fieldsets when adding a new user. To compensate for this, when calling ``get_fieldsets`` on a subclass of ``django.contrib.auth.admin.UserAdmin`` the Data Browser will pass a newly constructed instance of the relevant model. This behavior can be disabled by setting ``settings.DATA_BROWSER_AUTH_USER_COMPAT`` to ``False``.
 
 
 Version numbers
@@ -181,9 +217,9 @@ Patch and Minor versions should never contain breaking changes and should always
 
 * The query URL format.
 * The json, csv etc data formats.
-* ``request.databrowser``.
-* Invalidates saved views.
-* Changes the URL's of public saved views.
+* ``request.data_browser``.
+* Existing saved views.
+* The URL's of public saved views.
 
 
 Release History

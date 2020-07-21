@@ -31,19 +31,19 @@ Filters that don't contain a ``__`` are reserved, at the time of writing the onl
 
 Format determines the returned data format, the currently available formats are:
 
-+--------+---------------------------------------------------------------------------+
-| Format | Details                                                                   |
-+========+===========================================================================+
-| html   | Load the interactive Javascript frontend.                                 |
-+--------+---------------------------------------------------------------------------+
-| csv    | Standard CSV format.                                                      |
-+--------+---------------------------------------------------------------------------+
-| json   | Standard JSON format, the JS frontend uses this for all data access.      |
-+--------+---------------------------------------------------------------------------+
-| ctx    | See the JSON encoded config passed to the JS on page load.                |
-+--------+---------------------------------------------------------------------------+
-| query  | See the parsed URL in JSON format, the JS frontend uses this to boostrap. |
-+--------+---------------------------------------------------------------------------+
++--------+----------------------------------------------------------------------------+
+| Format | Details                                                                    |
++========+============================================================================+
+| html   | Load the interactive JavaScript frontend.                                  |
++--------+----------------------------------------------------------------------------+
+| csv    | Standard CSV format.                                                       |
++--------+----------------------------------------------------------------------------+
+| json   | Standard JSON format, the JS frontend uses this for all data access.       |
++--------+----------------------------------------------------------------------------+
+| ctx    | See the JSON encoded config passed to the JS on page load.                 |
++--------+----------------------------------------------------------------------------+
+| query  | See the parsed URL in JSON format, the JS frontend uses this to bootstrap. |
++--------+----------------------------------------------------------------------------+
 
 
 Development
@@ -51,14 +51,14 @@ Development
 
 The easiest way to develop this is against your existing client project.
 
-The compiled Javascript is checked into the repo, so if only want to mess with the Python then it's sufficient to:
+The compiled JavaScript is checked into the repo, so if only want to mess with the Python then it's sufficient to:
 
 1. Install the Data Browser in editable mode ``pip install -e <directory to your git clone>``.
 
-If you want to modify the Javascript then you also need to:
+If you want to modify the JavaScript then you also need to:
 
 2. Enable proxying to the JS dev server by adding ``DATA_BROWSER_DEV = True`` to your settings.
-3. Run the Javascript dev server with ``WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start``.
+3. Run the JavaScript dev server with ``WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start``.
    The ``WDS_SOCKET_PORT`` is so the proxied JS can find it's dev server.
    The ``PUBLIC_URL`` tells the JS dev server what path to serve from and should be the same as the URL you have mounted the Data Browser on in your urls file.
 
@@ -68,7 +68,7 @@ There is also pre-commit config for lint etc to enable this run ``pip install pr
 
 To build the JS, move the files around appropriately and recreate the wheels run ``build.sh``.
 
-During development it can be useful to look at the ``.ctx`` and ``.json`` views. The ``.ctx`` view will show you the initial context being passed to the Javascript on page load. The ``.json`` view is the actual API request the Javascript uses to fetch query results.
+During development it can be useful to look at the ``.ctx`` and ``.json`` views. The ``.ctx`` view will show you the initial context being passed to the JavaScript on page load. The ``.json`` view is the actual API request the JavaScript uses to fetch query results.
 
 
 Structure
@@ -105,11 +105,11 @@ Terminology
 +------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
 | model path       | Like field path for the model the field is on.                                                                                             |
 +------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
-| model            | In Python the actual model class, in Javascript the model name as above.                                                                   |
+| model            | In Python the actual model class, in JavaScript the model name as above.                                                                   |
 +------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
 | pretty...        | User friendly field, and path values                                                                                                       |
 +------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
-| query            | The information that changes with the query being done, in the Javascript this also includes the results.                                  |
+| query            | The information that changes with the query being done, in the JavaScript this also includes the results.                                  |
 +------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
 | type             | A data type, like string or number                                                                                                         |
 +------------------+--------------------------------------------------------------------------------------------------------------------------------------------+
