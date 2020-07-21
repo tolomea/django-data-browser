@@ -9,7 +9,7 @@ class Everything:
 class AdminMixin:
     def get_fields_for_request(self, request):
         if hasattr(request, "data_browser"):
-            return request.data_browser["calculated_fields"]
+            return request.data_browser["fields"]
         elif request.resolver_match.func.__name__ == "changelist_view":
             return set(self.get_list_display(request))
         else:

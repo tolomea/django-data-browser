@@ -55,7 +55,7 @@ _FIELD_MAP = {
 
 
 def _get_all_admin_fields(request):
-    request.data_browser = {"calculated_fields": set()}
+    request.data_browser = {"calculated_fields": set(), "fields": set()}
 
     def from_fieldsets(admin, all_):
         auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT
@@ -334,7 +334,7 @@ def _get_results(request, bound_query, orm_models):
 
 
 def admin_get_queryset(admin, request, fields=()):
-    request.data_browser = {"calculated_fields": set(fields)}
+    request.data_browser = {"calculated_fields": set(fields), "fields": set(fields)}
     return admin.get_queryset(request)
 
 

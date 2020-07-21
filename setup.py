@@ -20,7 +20,7 @@ setuptools.setup(
     author_email="gordon.wrigley@gmail.com",
     description=(
         "A Django app for interactive user friendly browsing "
-        "of a Django projects DB."
+        "of a Django project DBs."
     ),
     long_description=Path("README.rst").read_text(),
     long_description_content_type="text/x-rst",
