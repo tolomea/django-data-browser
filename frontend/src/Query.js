@@ -162,7 +162,8 @@ class Query {
   }
 
   setLimit(limit) {
-    this.setQuery({ limit: limit });
+    limit = Number(limit);
+    this.setQuery({ limit: limit > 0 ? limit : 1 });
   }
 
   setModel(model) {

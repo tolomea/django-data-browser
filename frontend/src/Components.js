@@ -274,6 +274,7 @@ function QueryPage(props) {
           onChange={(event) => {
             query.setLimit(event.target.value);
           }}
+          min="1"
         />{" "}
         - Showing {length} results -{" "}
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}

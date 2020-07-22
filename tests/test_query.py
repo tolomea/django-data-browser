@@ -137,6 +137,20 @@ class TestQuery:
         query.limit = 123
         assert q == query
 
+    def test_from_request_with_bad_limit(self, query):
+        q = Query.from_request(
+            "app.model", "fa+1,fd-0,fn", QueryDict("limit=bob&bob__equals=fred")
+        )
+        query.limit = 1000
+        assert q == query
+
+    def test_from_request_with_low_limit(self, query):
+        q = Query.from_request(
+            "app.model", "fa+1,fd-0,fn", QueryDict("limit=0&bob__equals=fred")
+        )
+        query.limit = 1
+        assert q == query
+
     def test_from_request_with_related_filter(self):
         q = Query.from_request("app.model", "", QueryDict("bob__jones__equals=fred"))
         assert q == Query(

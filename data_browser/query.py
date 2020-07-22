@@ -82,7 +82,10 @@ class Query:
         for path__lookup, values in dict(get_args).items():
             for value in values:
                 if path__lookup == "limit":
-                    limit = int(value)
+                    try:
+                        limit = max(1, int(value))
+                    except:  # noqa: E722  input sanitization
+                        pass
                 if "__" in path__lookup:
                     path, lookup = path__lookup.rsplit("__", 1)
                     filters.append(QueryFilter(path, lookup, value))
