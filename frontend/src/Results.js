@@ -148,22 +148,17 @@ function Results(props) {
           </thead>
 
           {/* row headers and body */}
-          <tbody>
+          <tbody className={overlay && "Fade"}>
             {rows.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 <Spacer spaces={1 - query.rowFields().length} />
-                <VTableBodyRow
-                  {...{ query, row }}
-                  fields={query.rowFields()}
-                  className={overlay && "Fade"}
-                />
+                <VTableBodyRow {...{ query, row }} fields={query.rowFields()} />
                 {body.map((table, key) => (
                   <VTableBodyRow
                     {...{ key, query }}
                     fields={query.resFields()}
                     row={table[rowIndex]}
                     classNameFirst="LeftBorder"
-                    className={overlay && "Fade"}
                   />
                 ))}
               </tr>
