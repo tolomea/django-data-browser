@@ -49,9 +49,8 @@ function HeadCell(props) {
   );
 }
 
-function DataCell(props) {
-  const { query, field, className, span, value } = props;
-  let modelField = query.getField(field.path);
+const DataCell = React.memo((props) => {
+  const { modelField, className, span, value } = props;
   let formattedValue;
   if (value === undefined) {
     formattedValue = "";
@@ -65,7 +64,7 @@ function DataCell(props) {
       {formattedValue}
     </td>
   );
-}
+});
 
 function VTableHeadRow(props) {
   const { fields, query, classNameFirst, className } = props;
@@ -82,10 +81,10 @@ function VTableBodyRow(props) {
   const { fields, query, classNameFirst, className, row } = props;
   return fields.map((field, i) => (
     <DataCell
-      {...{ query, field }}
       key={field.pathStr}
       value={row ? row[field.pathStr] : ""}
       className={`${i ? "" : classNameFirst} ${className}`}
+      modelField={query.getField(field.path)}
     />
   ));
 }
@@ -97,8 +96,9 @@ function HTableRow(props) {
       <HeadCell {...{ query, field }} />
       {data.map((col, key) => (
         <DataCell
-          {...{ key, query, field, span, className }}
+          {...{ key, span, className }}
           value={col[field.pathStr]}
+          modelField={query.getField(field.path)}
         />
       ))}
     </>
