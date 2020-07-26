@@ -62,6 +62,7 @@ def _get_model_fields(orm_model):
             "concrete": orm_field.concrete,
             "canPivot": orm_field.can_pivot,
             "prettyName": orm_field.pretty_name,
+            "choices": orm_field.choices,
         }
         for name, orm_field in orm_model.fields.items()
     }

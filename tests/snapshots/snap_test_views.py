@@ -12,6 +12,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -19,6 +20,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -26,6 +28,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -38,6 +41,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -45,6 +49,7 @@ snapshots["test_query_html config"] = {
                 },
                 "date_joined": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "date_joined",
@@ -52,6 +57,7 @@ snapshots["test_query_html config"] = {
                 },
                 "email": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "email",
@@ -59,6 +65,7 @@ snapshots["test_query_html config"] = {
                 },
                 "first_name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "first_name",
@@ -66,6 +73,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -73,6 +81,7 @@ snapshots["test_query_html config"] = {
                 },
                 "is_active": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "is_active",
@@ -80,6 +89,7 @@ snapshots["test_query_html config"] = {
                 },
                 "is_staff": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "is_staff",
@@ -87,6 +97,7 @@ snapshots["test_query_html config"] = {
                 },
                 "is_superuser": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "is_superuser",
@@ -94,6 +105,7 @@ snapshots["test_query_html config"] = {
                 },
                 "last_login": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "last_login",
@@ -101,6 +113,7 @@ snapshots["test_query_html config"] = {
                 },
                 "last_name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "last_name",
@@ -108,6 +121,7 @@ snapshots["test_query_html config"] = {
                 },
                 "password": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "password",
@@ -115,6 +129,7 @@ snapshots["test_query_html config"] = {
                 },
                 "username": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "username",
@@ -140,6 +155,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "average": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "average",
@@ -147,6 +163,7 @@ snapshots["test_query_html config"] = {
                 },
                 "sum": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "sum",
@@ -160,6 +177,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -167,6 +185,7 @@ snapshots["test_query_html config"] = {
                 },
                 "created_time": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "created_time",
@@ -174,6 +193,7 @@ snapshots["test_query_html config"] = {
                 },
                 "description": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "description",
@@ -181,6 +201,7 @@ snapshots["test_query_html config"] = {
                 },
                 "fields": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "fields",
@@ -188,6 +209,7 @@ snapshots["test_query_html config"] = {
                 },
                 "google_sheets_formula": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "google_sheets_formula",
@@ -195,6 +217,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "id",
@@ -202,6 +225,7 @@ snapshots["test_query_html config"] = {
                 },
                 "limit": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "limit",
@@ -209,6 +233,7 @@ snapshots["test_query_html config"] = {
                 },
                 "model_name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "model_name",
@@ -216,6 +241,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -223,6 +249,7 @@ snapshots["test_query_html config"] = {
                 },
                 "open_view": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "open_view",
@@ -230,6 +257,7 @@ snapshots["test_query_html config"] = {
                 },
                 "owner": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "auth.User",
                     "prettyName": "owner",
@@ -237,6 +265,7 @@ snapshots["test_query_html config"] = {
                 },
                 "public": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "public",
@@ -244,6 +273,7 @@ snapshots["test_query_html config"] = {
                 },
                 "public_link": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "public_link",
@@ -251,6 +281,7 @@ snapshots["test_query_html config"] = {
                 },
                 "public_slug": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "public_slug",
@@ -258,6 +289,7 @@ snapshots["test_query_html config"] = {
                 },
                 "query": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "query",
@@ -286,6 +318,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -293,6 +326,7 @@ snapshots["test_query_html config"] = {
                 },
                 "day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "day",
@@ -300,6 +334,7 @@ snapshots["test_query_html config"] = {
                 },
                 "month": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "month",
@@ -307,6 +342,7 @@ snapshots["test_query_html config"] = {
                 },
                 "quarter": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "quarter",
@@ -314,6 +350,7 @@ snapshots["test_query_html config"] = {
                 },
                 "week_day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "week_day",
@@ -321,6 +358,7 @@ snapshots["test_query_html config"] = {
                 },
                 "year": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "year",
@@ -333,6 +371,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -340,6 +379,7 @@ snapshots["test_query_html config"] = {
                 },
                 "date": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "date",
@@ -347,6 +387,7 @@ snapshots["test_query_html config"] = {
                 },
                 "day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "day",
@@ -354,6 +395,7 @@ snapshots["test_query_html config"] = {
                 },
                 "hour": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "hour",
@@ -361,6 +403,7 @@ snapshots["test_query_html config"] = {
                 },
                 "minute": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "minute",
@@ -368,6 +411,7 @@ snapshots["test_query_html config"] = {
                 },
                 "month": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "month",
@@ -375,6 +419,7 @@ snapshots["test_query_html config"] = {
                 },
                 "quarter": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "quarter",
@@ -382,6 +427,7 @@ snapshots["test_query_html config"] = {
                 },
                 "second": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "second",
@@ -389,6 +435,7 @@ snapshots["test_query_html config"] = {
                 },
                 "week_day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "week_day",
@@ -396,6 +443,7 @@ snapshots["test_query_html config"] = {
                 },
                 "year": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "year",
@@ -421,6 +469,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "average": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "average",
@@ -428,6 +477,7 @@ snapshots["test_query_html config"] = {
                 },
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -435,6 +485,7 @@ snapshots["test_query_html config"] = {
                 },
                 "max": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "max",
@@ -442,6 +493,7 @@ snapshots["test_query_html config"] = {
                 },
                 "min": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "min",
@@ -449,6 +501,7 @@ snapshots["test_query_html config"] = {
                 },
                 "std_dev": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "std_dev",
@@ -456,6 +509,7 @@ snapshots["test_query_html config"] = {
                 },
                 "sum": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "sum",
@@ -463,6 +517,7 @@ snapshots["test_query_html config"] = {
                 },
                 "variance": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "variance",
@@ -484,6 +539,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -496,6 +552,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -503,6 +560,7 @@ snapshots["test_query_html config"] = {
                 },
                 "andrew": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "andrew",
@@ -510,6 +568,7 @@ snapshots["test_query_html config"] = {
                 },
                 "bob": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "bob",
@@ -517,6 +576,7 @@ snapshots["test_query_html config"] = {
                 },
                 "city": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "city",
@@ -524,6 +584,7 @@ snapshots["test_query_html config"] = {
                 },
                 "fred": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "fred",
@@ -531,6 +592,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -538,6 +600,7 @@ snapshots["test_query_html config"] = {
                 },
                 "tom": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "tom",
@@ -550,6 +613,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -557,6 +621,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -564,6 +629,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -576,6 +642,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -583,6 +650,7 @@ snapshots["test_query_html config"] = {
                 },
                 "in_admin": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.InAdmin",
                     "prettyName": "in_admin",
@@ -590,6 +658,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -602,6 +671,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -609,6 +679,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -616,6 +687,7 @@ snapshots["test_query_html config"] = {
                 },
                 "in_admin": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.InAdmin",
                     "prettyName": "in_admin",
@@ -623,6 +695,7 @@ snapshots["test_query_html config"] = {
                 },
                 "inline_admin": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.InlineAdmin",
                     "prettyName": "inline_admin",
@@ -630,6 +703,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -642,6 +716,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "address": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.Address",
                     "prettyName": "address",
@@ -649,6 +724,7 @@ snapshots["test_query_html config"] = {
                 },
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -656,6 +732,7 @@ snapshots["test_query_html config"] = {
                 },
                 "frank": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "frank",
@@ -663,6 +740,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -670,6 +748,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -682,6 +761,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -689,6 +769,7 @@ snapshots["test_query_html config"] = {
                 },
                 "annotated": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "annotated",
@@ -696,6 +777,7 @@ snapshots["test_query_html config"] = {
                 },
                 "created_time": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "created_time",
@@ -703,6 +785,7 @@ snapshots["test_query_html config"] = {
                 },
                 "default_sku": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.SKU",
                     "prettyName": "default_sku",
@@ -710,6 +793,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -717,6 +801,7 @@ snapshots["test_query_html config"] = {
                 },
                 "is_onsale": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "is_onsale",
@@ -724,6 +809,7 @@ snapshots["test_query_html config"] = {
                 },
                 "make_a_choice": {
                     "canPivot": True,
+                    "choices": [["a", "A"], ["b", "B"]],
                     "concrete": True,
                     "model": None,
                     "prettyName": "make_a_choice",
@@ -731,6 +817,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -738,6 +825,7 @@ snapshots["test_query_html config"] = {
                 },
                 "only_in_list_view": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "only_in_list_view",
@@ -745,6 +833,7 @@ snapshots["test_query_html config"] = {
                 },
                 "onsale": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "onsale",
@@ -752,6 +841,7 @@ snapshots["test_query_html config"] = {
                 },
                 "producer": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.Producer",
                     "prettyName": "producer",
@@ -759,6 +849,7 @@ snapshots["test_query_html config"] = {
                 },
                 "size": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "size",
@@ -766,6 +857,7 @@ snapshots["test_query_html config"] = {
                 },
                 "size_unit": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "size_unit",
@@ -792,6 +884,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -799,6 +892,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -806,6 +900,7 @@ snapshots["test_query_html config"] = {
                 },
                 "product": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.Product",
                     "prettyName": "product",
@@ -818,6 +913,7 @@ snapshots["test_query_html config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -825,6 +921,7 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -832,6 +929,7 @@ snapshots["test_query_html config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -1103,6 +1201,7 @@ snapshots["test_query_html_no_perms config"] = {
             "fields": {
                 "average": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "average",
@@ -1110,6 +1209,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "sum": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "sum",
@@ -1123,6 +1223,7 @@ snapshots["test_query_html_no_perms config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -1130,6 +1231,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "day",
@@ -1137,6 +1239,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "month": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "month",
@@ -1144,6 +1247,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "quarter": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "quarter",
@@ -1151,6 +1255,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "week_day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "week_day",
@@ -1158,6 +1263,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "year": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "year",
@@ -1170,6 +1276,7 @@ snapshots["test_query_html_no_perms config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -1177,6 +1284,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "date": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "date",
@@ -1184,6 +1292,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "day",
@@ -1191,6 +1300,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "hour": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "hour",
@@ -1198,6 +1308,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "minute": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "minute",
@@ -1205,6 +1316,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "month": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "month",
@@ -1212,6 +1324,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "quarter": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "quarter",
@@ -1219,6 +1332,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "second": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "second",
@@ -1226,6 +1340,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "week_day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "week_day",
@@ -1233,6 +1348,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "year": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "year",
@@ -1258,6 +1374,7 @@ snapshots["test_query_html_no_perms config"] = {
             "fields": {
                 "average": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "average",
@@ -1265,6 +1382,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -1272,6 +1390,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "max": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "max",
@@ -1279,6 +1398,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "min": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "min",
@@ -1286,6 +1406,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "std_dev": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "std_dev",
@@ -1293,6 +1414,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "sum": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "sum",
@@ -1300,6 +1422,7 @@ snapshots["test_query_html_no_perms config"] = {
                 },
                 "variance": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "variance",
@@ -1321,6 +1444,7 @@ snapshots["test_query_html_no_perms config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -1532,6 +1656,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -1539,6 +1664,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -1546,6 +1672,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -1558,6 +1685,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -1565,6 +1693,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "date_joined": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "date_joined",
@@ -1572,6 +1701,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "email": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "email",
@@ -1579,6 +1709,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "first_name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "first_name",
@@ -1586,6 +1717,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -1593,6 +1725,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "is_active": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "is_active",
@@ -1600,6 +1733,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "is_staff": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "is_staff",
@@ -1607,6 +1741,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "is_superuser": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "is_superuser",
@@ -1614,6 +1749,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "last_login": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "last_login",
@@ -1621,6 +1757,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "last_name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "last_name",
@@ -1628,6 +1765,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "password": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "password",
@@ -1635,6 +1773,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "username": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "username",
@@ -1660,6 +1799,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "average": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "average",
@@ -1667,6 +1807,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "sum": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "sum",
@@ -1680,6 +1821,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -1687,6 +1829,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "created_time": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "created_time",
@@ -1694,6 +1837,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "description": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "description",
@@ -1701,6 +1845,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "fields": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "fields",
@@ -1708,6 +1853,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "google_sheets_formula": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "google_sheets_formula",
@@ -1715,6 +1861,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "id",
@@ -1722,6 +1869,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "limit": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "limit",
@@ -1729,6 +1877,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "model_name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "model_name",
@@ -1736,6 +1885,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -1743,6 +1893,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "open_view": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "open_view",
@@ -1750,6 +1901,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "owner": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "auth.User",
                     "prettyName": "owner",
@@ -1757,6 +1909,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "public": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "public",
@@ -1764,6 +1917,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "public_link": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "public_link",
@@ -1771,6 +1925,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "public_slug": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "public_slug",
@@ -1778,6 +1933,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "query": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "query",
@@ -1806,6 +1962,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -1813,6 +1970,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "day",
@@ -1820,6 +1978,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "month": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "month",
@@ -1827,6 +1986,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "quarter": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "quarter",
@@ -1834,6 +1994,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "week_day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "week_day",
@@ -1841,6 +2002,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "year": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "year",
@@ -1853,6 +2015,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -1860,6 +2023,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "date": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "date",
@@ -1867,6 +2031,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "day",
@@ -1874,6 +2039,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "hour": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "hour",
@@ -1881,6 +2047,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "minute": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "minute",
@@ -1888,6 +2055,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "month": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "month",
@@ -1895,6 +2063,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "quarter": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "quarter",
@@ -1902,6 +2071,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "second": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "second",
@@ -1909,6 +2079,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "week_day": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "week_day",
@@ -1916,6 +2087,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "year": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "year",
@@ -1941,6 +2113,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "average": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "average",
@@ -1948,6 +2121,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -1955,6 +2129,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "max": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "max",
@@ -1962,6 +2137,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "min": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "min",
@@ -1969,6 +2145,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "std_dev": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "std_dev",
@@ -1976,6 +2153,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "sum": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "sum",
@@ -1983,6 +2161,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "variance": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "variance",
@@ -2004,6 +2183,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "count": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "count",
@@ -2016,6 +2196,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -2023,6 +2204,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "andrew": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "andrew",
@@ -2030,6 +2212,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "bob": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "bob",
@@ -2037,6 +2220,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "city": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "city",
@@ -2044,6 +2228,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "fred": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "fred",
@@ -2051,6 +2236,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2058,6 +2244,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "tom": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "tom",
@@ -2070,6 +2257,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -2077,6 +2265,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2084,6 +2273,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -2096,6 +2286,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2103,6 +2294,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "in_admin": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.InAdmin",
                     "prettyName": "in_admin",
@@ -2110,6 +2302,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -2122,6 +2315,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -2129,6 +2323,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2136,6 +2331,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "in_admin": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.InAdmin",
                     "prettyName": "in_admin",
@@ -2143,6 +2339,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "inline_admin": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.InlineAdmin",
                     "prettyName": "inline_admin",
@@ -2150,6 +2347,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -2162,6 +2360,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "address": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.Address",
                     "prettyName": "address",
@@ -2169,6 +2368,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -2176,6 +2376,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "frank": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "frank",
@@ -2183,6 +2384,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2190,6 +2392,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -2202,6 +2405,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -2209,6 +2413,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "annotated": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": None,
                     "prettyName": "annotated",
@@ -2216,6 +2421,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "created_time": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "datetime",
                     "prettyName": "created_time",
@@ -2223,6 +2429,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "default_sku": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.SKU",
                     "prettyName": "default_sku",
@@ -2230,6 +2437,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2237,6 +2445,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "is_onsale": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "is_onsale",
@@ -2244,6 +2453,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "make_a_choice": {
                     "canPivot": True,
+                    "choices": [["a", "A"], ["b", "B"]],
                     "concrete": True,
                     "model": None,
                     "prettyName": "make_a_choice",
@@ -2251,6 +2461,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -2258,6 +2469,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "only_in_list_view": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "only_in_list_view",
@@ -2265,6 +2477,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "onsale": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "boolean",
                     "prettyName": "onsale",
@@ -2272,6 +2485,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "producer": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.Producer",
                     "prettyName": "producer",
@@ -2279,6 +2493,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "size": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "size",
@@ -2286,6 +2501,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "size_unit": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "size_unit",
@@ -2312,6 +2528,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2319,6 +2536,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
@@ -2326,6 +2544,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "product": {
                     "canPivot": False,
+                    "choices": [],
                     "concrete": False,
                     "model": "tests.Product",
                     "prettyName": "product",
@@ -2338,6 +2557,7 @@ snapshots["test_query_ctx config"] = {
             "fields": {
                 "admin": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": False,
                     "model": None,
                     "prettyName": "admin",
@@ -2345,6 +2565,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "number",
                     "prettyName": "id",
@@ -2352,6 +2573,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "name": {
                     "canPivot": True,
+                    "choices": [],
                     "concrete": True,
                     "model": "string",
                     "prettyName": "name",
