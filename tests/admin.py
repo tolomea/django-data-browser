@@ -64,6 +64,7 @@ class ProductMixin:
         "model_not_in_admin",
         "onsale",
         "image",
+        "fake",
         "created_time",
         "number_choice",
         "string_choice",

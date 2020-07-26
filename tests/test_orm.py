@@ -139,6 +139,14 @@ def test_get_admin_link(get_product_flat, products):
     )
 
 
+def test_get_file_link(get_product_flat):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(name="a", producer=producer)
+    models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
+    data = get_product_flat(1, "name,image", {})
+    sortedAssert(data, [["a", None], ["b", '<a href="bob.jpg">bob.jpg</a>']])
+
+
 @pytest.mark.usefixtures("products")
 def test_get_calculated_field_on_admin(get_product_flat):
     data = get_product_flat(2, "producer__address__bob", {})

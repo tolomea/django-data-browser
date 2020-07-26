@@ -1,5 +1,32 @@
+from django import forms
 from django.db import models
 from django.utils import timezone
+
+
+class FakeField(models.Field):  # pragma: no cover
+    description = "Text"
+
+    def get_internal_type(self):
+        return "TextField"
+
+    def to_python(self, value):
+        if isinstance(value, str) or value is None:
+            return value
+        return str(value)
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        return self.to_python(value)
+
+    def formfield(self, **kwargs):
+        return super().formfield(
+            **{
+                "max_length": self.max_length,
+                **({} if self.choices else {"widget": forms.Textarea}),
+                **kwargs,
+            }
+        )
+
 
 # models for perm testing
 
@@ -66,6 +93,7 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag)
     onsale = models.BooleanField(null=True)
     image = models.FileField()
+    fake = FakeField()
     created_time = models.DateTimeField(default=timezone.now)
     only_in_list_view = models.TextField()
 

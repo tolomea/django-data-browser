@@ -851,6 +851,14 @@
                     "prettyName": "id",
                     "type": "number"
                 },
+                "image": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "image",
+                    "type": "html"
+                },
                 "is_onsale": {
                     "canPivot": true,
                     "choices": [],
@@ -948,6 +956,7 @@
                 "annotated",
                 "created_time",
                 "default_sku",
+                "image",
                 "is_onsale",
                 "name",
                 "number_choice",
@@ -1145,10 +1154,56 @@
             ]
         },
         "html": {
-            "defaultLookup": null,
-            "defaultValue": null,
-            "lookups": {},
-            "sortedLookups": []
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "contains": {
+                    "type": "string"
+                },
+                "ends_with": {
+                    "type": "string"
+                },
+                "equals": {
+                    "type": "string"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "not_contains": {
+                    "type": "string"
+                },
+                "not_ends_with": {
+                    "type": "string"
+                },
+                "not_equals": {
+                    "type": "string"
+                },
+                "not_regex": {
+                    "type": "regex"
+                },
+                "not_starts_with": {
+                    "type": "string"
+                },
+                "regex": {
+                    "type": "regex"
+                },
+                "starts_with": {
+                    "type": "string"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "contains",
+                "starts_with",
+                "ends_with",
+                "regex",
+                "not_equals",
+                "not_contains",
+                "not_starts_with",
+                "not_ends_with",
+                "not_regex",
+                "is_null"
+            ]
         },
         "month": {
             "defaultLookup": "equals",

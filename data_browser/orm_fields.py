@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import OuterRef, Subquery, functions
 from django.db.models.functions import Cast
 from django.urls import reverse
+from django.utils.html import format_html
 
 from .query import (
     BaseType,
@@ -313,6 +314,18 @@ class OrmAdminField(OrmBaseField):
         url_name = f"admin:{model_name}_change".lower()
         url = reverse(url_name, args=[obj.pk])
         return f'<a href="{url}">{obj}</a>'
+
+
+class OrmFileField(OrmConcreteField):
+    def __init__(self, model_name, name, pretty_name, url_func):
+        super().__init__(model_name, name, pretty_name, type_=HTMLType)
+        self.url_func = url_func
+
+    def format(self, value):
+        if not value:
+            return None
+
+        return format_html('<a href="{}">{}</a>', self.url_func(value), value)
 
 
 class OrmAggregateField(OrmBaseField):

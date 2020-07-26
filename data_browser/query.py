@@ -376,7 +376,7 @@ class MonthType(BaseType):
         raise Exception("not a month")
 
 
-class HTMLType(BaseType):
+class HTMLType(StringType):
     pass
 
 

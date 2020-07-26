@@ -21,6 +21,7 @@ from .orm_fields import (
     OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
+    OrmFileField,
     OrmFkField,
     OrmFunctionField,
     OrmModel,
@@ -187,6 +188,13 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     pretty_name=field_name,
                     rel_name=get_model_name(field.related_model),
                 )
+        elif isinstance(field, models.FileField):
+            fields[field_name] = OrmFileField(
+                model_name=model_name,
+                name=field_name,
+                pretty_name=field_name,
+                url_func=field.storage.url,
+            )
         elif isinstance(field, type(None)):
             fields[field_name] = _get_calculated_field(
                 request, field_name, model_name, model, admin, model_fields
