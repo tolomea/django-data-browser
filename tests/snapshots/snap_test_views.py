@@ -155,6 +155,7 @@ snapshots["test_query_html config"] = {
             },
             "sortedFields": ["average", "sum"],
         },
+        "choice": {"fields": {}, "sortedFields": []},
         "data_browser.View": {
             "fields": {
                 "admin": {
@@ -862,6 +863,36 @@ snapshots["test_query_html config"] = {
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
         },
+        "choice": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "contains": {"type": "string"},
+                "ends_with": {"type": "string"},
+                "equals": {"type": "choice"},
+                "is_null": {"type": "boolean"},
+                "not_contains": {"type": "string"},
+                "not_ends_with": {"type": "string"},
+                "not_equals": {"type": "choice"},
+                "not_regex": {"type": "regex"},
+                "not_starts_with": {"type": "string"},
+                "regex": {"type": "regex"},
+                "starts_with": {"type": "string"},
+            },
+            "sortedLookups": [
+                "equals",
+                "contains",
+                "starts_with",
+                "ends_with",
+                "regex",
+                "not_equals",
+                "not_contains",
+                "not_starts_with",
+                "not_ends_with",
+                "not_regex",
+                "is_null",
+            ],
+        },
         "date": {
             "defaultLookup": "equals",
             "defaultValue": "today",
@@ -1079,6 +1110,7 @@ snapshots["test_query_html_no_perms config"] = {
             },
             "sortedFields": ["average", "sum"],
         },
+        "choice": {"fields": {}, "sortedFields": []},
         "date": {
             "fields": {
                 "count": {
@@ -1307,6 +1339,36 @@ snapshots["test_query_html_no_perms config"] = {
                 "not_equals": {"type": "boolean"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "choice": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "contains": {"type": "string"},
+                "ends_with": {"type": "string"},
+                "equals": {"type": "choice"},
+                "is_null": {"type": "boolean"},
+                "not_contains": {"type": "string"},
+                "not_ends_with": {"type": "string"},
+                "not_equals": {"type": "choice"},
+                "not_regex": {"type": "regex"},
+                "not_starts_with": {"type": "string"},
+                "regex": {"type": "regex"},
+                "starts_with": {"type": "string"},
+            },
+            "sortedLookups": [
+                "equals",
+                "contains",
+                "starts_with",
+                "ends_with",
+                "regex",
+                "not_equals",
+                "not_contains",
+                "not_starts_with",
+                "not_ends_with",
+                "not_regex",
+                "is_null",
+            ],
         },
         "date": {
             "defaultLookup": "equals",
@@ -1605,6 +1667,7 @@ snapshots["test_query_ctx config"] = {
             },
             "sortedFields": ["average", "sum"],
         },
+        "choice": {"fields": {}, "sortedFields": []},
         "data_browser.View": {
             "fields": {
                 "admin": {
@@ -2311,6 +2374,36 @@ snapshots["test_query_ctx config"] = {
                 "not_equals": {"type": "boolean"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "choice": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "contains": {"type": "string"},
+                "ends_with": {"type": "string"},
+                "equals": {"type": "choice"},
+                "is_null": {"type": "boolean"},
+                "not_contains": {"type": "string"},
+                "not_ends_with": {"type": "string"},
+                "not_equals": {"type": "choice"},
+                "not_regex": {"type": "regex"},
+                "not_starts_with": {"type": "string"},
+                "regex": {"type": "regex"},
+                "starts_with": {"type": "string"},
+            },
+            "sortedLookups": [
+                "equals",
+                "contains",
+                "starts_with",
+                "ends_with",
+                "regex",
+                "not_equals",
+                "not_contains",
+                "not_starts_with",
+                "not_ends_with",
+                "not_regex",
+                "is_null",
+            ],
         },
         "date": {
             "defaultLookup": "equals",

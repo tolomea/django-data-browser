@@ -184,6 +184,23 @@ class StringType(BaseType):
     }
 
 
+class ChoiceType(BaseType):
+    default_value = ""  # todo
+    lookups = {
+        "equals": "choice",
+        "contains": "string",
+        "starts_with": "string",
+        "ends_with": "string",
+        "regex": "regex",
+        "not_equals": "choice",
+        "not_contains": "string",
+        "not_starts_with": "string",
+        "not_ends_with": "string",
+        "not_regex": "regex",
+        "is_null": "boolean",
+    }
+
+
 class RegexType(BaseType):
     default_value = ".*"
 
