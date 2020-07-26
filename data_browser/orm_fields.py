@@ -140,7 +140,7 @@ class OrmBaseField:
             assert self.type_
 
     def format(self, value):
-        return self.type_.format(value)
+        return self.type_.format(value, self.choices)
 
 
 class OrmFkField(OrmBaseField):

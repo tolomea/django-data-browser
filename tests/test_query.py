@@ -10,6 +10,7 @@ from data_browser.query import (
     DSC,
     BooleanType,
     BoundQuery,
+    ChoiceType,
     DateTimeType,
     DateType,
     MonthType,
@@ -411,3 +412,8 @@ class TestBooleanType:
 
     def test_default_lookup(self):
         assert BooleanType.default_lookup == "equals"
+
+
+class TestChoiceType:
+    def test_format(self):
+        assert ChoiceType.format("b", [("a", "A"), ("b", "B"), ("c", "C")]) == "B"

@@ -147,7 +147,8 @@ class BaseType(metaclass=TypeMeta):
         assert False
 
     @staticmethod
-    def format(value):
+    def format(value, choices=None):
+        assert not choices
         return value
 
     @staticmethod
@@ -200,6 +201,11 @@ class ChoiceType(BaseType):
         "is_null": "boolean",
     }
 
+    @staticmethod
+    def format(value, choices=None):
+        assert choices
+        return dict(choices)[value]
+
 
 class RegexType(BaseType):
     default_value = ".*"
@@ -231,7 +237,8 @@ class NumberType(BaseType):
     }
 
     @staticmethod
-    def format(value):
+    def format(value, choices=None):
+        assert not choices
         return float(value) if value is not None else None
 
     @staticmethod
@@ -278,7 +285,8 @@ class DateTimeType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value))
 
     @staticmethod
-    def format(value):
+    def format(value, choices=None):
+        assert not choices
         return str(timezone.make_naive(value)) if value else None
 
 
@@ -301,7 +309,8 @@ class DateType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value)).date()
 
     @staticmethod
-    def format(value):
+    def format(value, choices=None):
+        assert not choices
         return str(value) if value else None
 
 
@@ -320,7 +329,8 @@ class WeekDayType(BaseType):
     ]
 
     @classmethod
-    def format(cls, value):
+    def format(cls, value, choices=None):
+        assert not choices
         return cls._days[value - 1] if value else None
 
     @classmethod
@@ -351,7 +361,8 @@ class MonthType(BaseType):
     ]
 
     @classmethod
-    def format(cls, value):
+    def format(cls, value, choices=None):
+        assert not choices
         return cls._months[value - 1] if value else None
 
     @classmethod
