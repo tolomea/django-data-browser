@@ -185,26 +185,21 @@ class StringType(BaseType):
     }
 
 
-class ChoiceType(BaseType):
-    default_value = ""  # todo
-    lookups = {
-        "equals": "choice",
-        "contains": "string",
-        "starts_with": "string",
-        "ends_with": "string",
-        "regex": "regex",
-        "not_equals": "choice",
-        "not_contains": "string",
-        "not_starts_with": "string",
-        "not_ends_with": "string",
-        "not_regex": "regex",
-        "is_null": "boolean",
-    }
+class ChoiceTypeMixin:
+    default_value = None
 
     @staticmethod
     def format(value, choices=None):
         assert choices
         return dict(choices)[value]
+
+
+class StringChoiceType(ChoiceTypeMixin, StringType):
+    lookups = {
+        **StringType.lookups,
+        "equals": "stringchoice",
+        "not_equals": "stringchoice",
+    }
 
 
 class RegexType(BaseType):
@@ -244,6 +239,14 @@ class NumberType(BaseType):
     @staticmethod
     def _parse(value):
         return float(value)
+
+
+class NumberChoiceType(ChoiceTypeMixin, NumberType):
+    lookups = {
+        **NumberType.lookups,
+        "equals": "numberchoice",
+        "not_equals": "numberchoice",
+    }
 
 
 class YearType(NumberType):

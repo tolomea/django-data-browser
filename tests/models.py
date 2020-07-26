@@ -76,7 +76,8 @@ class Product(models.Model):
     model_not_in_admin = models.ForeignKey(
         NotInAdmin, null=True, on_delete=models.CASCADE
     )
-    make_a_choice = models.CharField(max_length=8, choices=[("a", "A"), ("b", "B")])
+    string_choice = models.CharField(max_length=8, choices=[("a", "A"), ("b", "B")])
+    number_choice = models.IntegerField(choices=[(1, "A"), (2, "B")], default=1)
 
     def is_onsale(self):
         return False

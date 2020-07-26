@@ -32,10 +32,11 @@ from .query import (
     TYPES,
     BooleanType,
     BoundQuery,
-    ChoiceType,
     DateTimeType,
     DateType,
+    NumberChoiceType,
     NumberType,
+    StringChoiceType,
     StringType,
 )
 
@@ -159,7 +160,9 @@ def _get_field_type(model, field_name, field):
                 )
             return None, None
     if res is StringType and field.choices:
-        return ChoiceType, field.choices
+        return StringChoiceType, field.choices
+    elif res is NumberType and field.choices:
+        return NumberChoiceType, field.choices
     else:
         return res, None
 

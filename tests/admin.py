@@ -66,7 +66,8 @@ class ProductMixin:
         "onsale",
         "image",
         "created_time",
-        "make_a_choice",
+        "number_choice",
+        "string_choice",
     ]
     readonly_fields = ["id", "is_onsale"]
 

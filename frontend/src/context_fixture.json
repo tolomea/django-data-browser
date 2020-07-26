@@ -171,10 +171,6 @@
                 "sum"
             ]
         },
-        "choice": {
-            "fields": {},
-            "sortedFields": []
-        },
         "data_browser.View": {
             "fields": {
                 "admin": {
@@ -549,6 +545,10 @@
                 "variance"
             ]
         },
+        "numberchoice": {
+            "fields": {},
+            "sortedFields": []
+        },
         "regex": {
             "fields": {},
             "sortedFields": []
@@ -567,6 +567,10 @@
             "sortedFields": [
                 "count"
             ]
+        },
+        "stringchoice": {
+            "fields": {},
+            "sortedFields": []
         },
         "tests.Address": {
             "fields": {
@@ -855,23 +859,6 @@
                     "prettyName": "is_onsale",
                     "type": "string"
                 },
-                "make_a_choice": {
-                    "canPivot": true,
-                    "choices": [
-                        [
-                            "a",
-                            "A"
-                        ],
-                        [
-                            "b",
-                            "B"
-                        ]
-                    ],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "make_a_choice",
-                    "type": "choice"
-                },
                 "name": {
                     "canPivot": true,
                     "choices": [],
@@ -879,6 +866,23 @@
                     "model": "string",
                     "prettyName": "name",
                     "type": "string"
+                },
+                "number_choice": {
+                    "canPivot": true,
+                    "choices": [
+                        [
+                            1,
+                            "A"
+                        ],
+                        [
+                            2,
+                            "B"
+                        ]
+                    ],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "number_choice",
+                    "type": "numberchoice"
                 },
                 "only_in_list_view": {
                     "canPivot": true,
@@ -919,6 +923,23 @@
                     "model": "string",
                     "prettyName": "size_unit",
                     "type": "string"
+                },
+                "string_choice": {
+                    "canPivot": true,
+                    "choices": [
+                        [
+                            "a",
+                            "A"
+                        ],
+                        [
+                            "b",
+                            "B"
+                        ]
+                    ],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "string_choice",
+                    "type": "stringchoice"
                 }
             },
             "sortedFields": [
@@ -928,13 +949,14 @@
                 "created_time",
                 "default_sku",
                 "is_onsale",
-                "make_a_choice",
                 "name",
+                "number_choice",
                 "only_in_list_view",
                 "onsale",
                 "producer",
                 "size",
-                "size_unit"
+                "size_unit",
+                "string_choice"
             ]
         },
         "tests.SKU": {
@@ -1047,58 +1069,6 @@
             "sortedLookups": [
                 "equals",
                 "not_equals",
-                "is_null"
-            ]
-        },
-        "choice": {
-            "defaultLookup": "equals",
-            "defaultValue": "",
-            "lookups": {
-                "contains": {
-                    "type": "string"
-                },
-                "ends_with": {
-                    "type": "string"
-                },
-                "equals": {
-                    "type": "choice"
-                },
-                "is_null": {
-                    "type": "boolean"
-                },
-                "not_contains": {
-                    "type": "string"
-                },
-                "not_ends_with": {
-                    "type": "string"
-                },
-                "not_equals": {
-                    "type": "choice"
-                },
-                "not_regex": {
-                    "type": "regex"
-                },
-                "not_starts_with": {
-                    "type": "string"
-                },
-                "regex": {
-                    "type": "regex"
-                },
-                "starts_with": {
-                    "type": "string"
-                }
-            },
-            "sortedLookups": [
-                "equals",
-                "contains",
-                "starts_with",
-                "ends_with",
-                "regex",
-                "not_equals",
-                "not_contains",
-                "not_starts_with",
-                "not_ends_with",
-                "not_regex",
                 "is_null"
             ]
         },
@@ -1232,6 +1202,42 @@
                 "is_null"
             ]
         },
+        "numberchoice": {
+            "defaultLookup": "equals",
+            "defaultValue": null,
+            "lookups": {
+                "equals": {
+                    "type": "numberchoice"
+                },
+                "gt": {
+                    "type": "number"
+                },
+                "gte": {
+                    "type": "number"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "lt": {
+                    "type": "number"
+                },
+                "lte": {
+                    "type": "number"
+                },
+                "not_equals": {
+                    "type": "numberchoice"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null"
+            ]
+        },
         "regex": {
             "defaultLookup": null,
             "defaultValue": ".*",
@@ -1262,6 +1268,58 @@
                 },
                 "not_equals": {
                     "type": "string"
+                },
+                "not_regex": {
+                    "type": "regex"
+                },
+                "not_starts_with": {
+                    "type": "string"
+                },
+                "regex": {
+                    "type": "regex"
+                },
+                "starts_with": {
+                    "type": "string"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "contains",
+                "starts_with",
+                "ends_with",
+                "regex",
+                "not_equals",
+                "not_contains",
+                "not_starts_with",
+                "not_ends_with",
+                "not_regex",
+                "is_null"
+            ]
+        },
+        "stringchoice": {
+            "defaultLookup": "equals",
+            "defaultValue": null,
+            "lookups": {
+                "contains": {
+                    "type": "string"
+                },
+                "ends_with": {
+                    "type": "string"
+                },
+                "equals": {
+                    "type": "stringchoice"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "not_contains": {
+                    "type": "string"
+                },
+                "not_ends_with": {
+                    "type": "string"
+                },
+                "not_equals": {
+                    "type": "stringchoice"
                 },
                 "not_regex": {
                     "type": "regex"

@@ -10,14 +10,15 @@ from data_browser.query import (
     DSC,
     BooleanType,
     BoundQuery,
-    ChoiceType,
     DateTimeType,
     DateType,
     MonthType,
+    NumberChoiceType,
     NumberType,
     Query,
     QueryField,
     QueryFilter,
+    StringChoiceType,
     StringType,
     WeekDayType,
     YearType,
@@ -414,6 +415,11 @@ class TestBooleanType:
         assert BooleanType.default_lookup == "equals"
 
 
-class TestChoiceType:
+class TestStringChoiceType:
     def test_format(self):
-        assert ChoiceType.format("b", [("a", "A"), ("b", "B"), ("c", "C")]) == "B"
+        assert StringChoiceType.format("b", [("a", "A"), ("b", "B"), ("c", "C")]) == "B"
+
+
+class TestNumberChoiceType:
+    def test_format(self):
+        assert NumberChoiceType.format(2, [(1, "A"), (2, "B"), (3, "C")]) == "B"

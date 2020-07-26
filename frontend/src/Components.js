@@ -60,7 +60,7 @@ function FilterValue(props) {
         step="0"
       />
     );
-  else if (lookup.type === "choice")
+  else if (lookup.type === "numberchoice" || lookup.type === "stringchoice")
     return (
       <select {...{ onChange, value }} className="FilterValue">
         {field.choices.map(([option, label]) => (
