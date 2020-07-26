@@ -131,6 +131,7 @@ class OrmBaseField:
     rel_name: str = None
     can_pivot: bool = False
     admin: object = None
+    choices: Sequence[Tuple[str, str]] = ()
 
     def __post_init__(self):
         if not self.type_:
@@ -158,7 +159,7 @@ class OrmFkField(OrmBaseField):
 
 
 class OrmConcreteField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, type_):
+    def __init__(self, model_name, name, pretty_name, type_, choices=None):
         super().__init__(
             model_name,
             name,
@@ -169,6 +170,7 @@ class OrmConcreteField(OrmBaseField):
                 type_.name if type_ in _AGGREGATES or type_ in _FUNCTIONS else None
             ),
             can_pivot=True,
+            choices=choices or (),
         )
 
     def bind(self, previous):
@@ -240,7 +242,15 @@ class OrmBoundAnnotatedField(OrmBoundField):
 
 class OrmAnnotatedField(OrmBaseField):
     def __init__(
-        self, model_name, name, pretty_name, type_, field_type, admin, admin_order_field
+        self,
+        model_name,
+        name,
+        pretty_name,
+        type_,
+        field_type,
+        admin,
+        admin_order_field,
+        choices=None,
     ):
         super().__init__(
             model_name,
@@ -250,6 +260,7 @@ class OrmAnnotatedField(OrmBaseField):
             can_pivot=True,
             admin=admin,
             concrete=True,
+            choices=choices or (),
         )
         self.field_type = field_type
         self.admin_order_field = admin_order_field

@@ -770,6 +770,13 @@
                     "prettyName": "is_onsale",
                     "type": "string"
                 },
+                "make_a_choice": {
+                    "canPivot": true,
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "make_a_choice",
+                    "type": "choice"
+                },
                 "name": {
                     "canPivot": true,
                     "concrete": true,
@@ -820,6 +827,7 @@
                 "created_time",
                 "default_sku",
                 "is_onsale",
+                "make_a_choice",
                 "name",
                 "only_in_list_view",
                 "onsale",

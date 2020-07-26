@@ -32,13 +32,14 @@ from .query import (
     TYPES,
     BooleanType,
     BoundQuery,
+    ChoiceType,
     DateTimeType,
     DateType,
     NumberType,
     StringType,
 )
 
-_FIELD_MAP = {
+_FIELD_TYPE_MAP = {
     models.BooleanField: BooleanType,
     models.NullBooleanField: BooleanType,
     models.CharField: StringType,
@@ -125,7 +126,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 f"Annotation '{admin_order_field}' for {admin}.{field_name} doesn't specify 'output_field'"
             )
 
-        type_ = _get_field_type(model, admin_order_field, field_type)
+        type_, choices = _get_field_type(model, admin_order_field, field_type)
         if type_:  # pragma: no branch
             return OrmAnnotatedField(
                 model_name=model_name,
@@ -135,6 +136,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 field_type=field_type,
                 admin=admin,
                 admin_order_field=admin_order_field,
+                choices=choices,
             )
     else:
         return OrmCalculatedField(
@@ -143,18 +145,23 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
 
 
 def _get_field_type(model, field_name, field):
-    if field.__class__ in _FIELD_MAP:
-        return _FIELD_MAP[field.__class__]
-
-    for django_type, field_type in _FIELD_MAP.items():
-        if isinstance(field, django_type):
-            return field_type
-
-    if settings.DEBUG:  # pragma: no cover
-        logging.getLogger(__name__).warning(
-            f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
-        )
-    return None
+    if field.__class__ in _FIELD_TYPE_MAP:
+        res = _FIELD_TYPE_MAP[field.__class__]
+    else:
+        for django_type, field_type in _FIELD_TYPE_MAP.items():
+            if isinstance(field, django_type):
+                res = field_type
+                break
+        else:
+            if settings.DEBUG:  # pragma: no cover
+                logging.getLogger(__name__).warning(
+                    f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
+                )
+            return None, None
+    if res is StringType and field.choices:
+        return ChoiceType, field.choices
+    else:
+        return res, None
 
 
 def _get_fields_for_model(request, model, admin, admin_fields):
@@ -182,7 +189,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 request, field_name, model_name, model, admin, model_fields
             )
         else:
-            field_type = _get_field_type(model, field_name, field)
+            field_type, choices = _get_field_type(model, field_name, field)
 
             if field_type:
                 fields[field_name] = OrmConcreteField(
@@ -190,6 +197,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     name=field_name,
                     pretty_name=field_name,
                     type_=field_type,
+                    choices=choices,
                 )
 
     return OrmModel(fields=fields, admin=admin)

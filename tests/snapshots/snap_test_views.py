@@ -722,6 +722,13 @@ snapshots["test_query_html config"] = {
                     "prettyName": "is_onsale",
                     "type": "string",
                 },
+                "make_a_choice": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "make_a_choice",
+                    "type": "choice",
+                },
                 "name": {
                     "canPivot": True,
                     "concrete": True,
@@ -772,6 +779,7 @@ snapshots["test_query_html config"] = {
                 "created_time",
                 "default_sku",
                 "is_onsale",
+                "make_a_choice",
                 "name",
                 "only_in_list_view",
                 "onsale",
@@ -2234,6 +2242,13 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "is_onsale",
                     "type": "string",
                 },
+                "make_a_choice": {
+                    "canPivot": True,
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "make_a_choice",
+                    "type": "choice",
+                },
                 "name": {
                     "canPivot": True,
                     "concrete": True,
@@ -2284,6 +2299,7 @@ snapshots["test_query_ctx config"] = {
                 "created_time",
                 "default_sku",
                 "is_onsale",
+                "make_a_choice",
                 "name",
                 "only_in_list_view",
                 "onsale",
