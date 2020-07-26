@@ -54,8 +54,10 @@ class Query {
     return this.config.allModelFields[model];
   }
 
-  getDefaultLookupValue(type, lookup) {
-    return String(this.config.types[type.lookups[lookup].type].defaultValue);
+  getDefaultLookupValue(field, type, lookup) {
+    const lookup_type = type.lookups[lookup].type;
+    if (lookup_type === "choice") return String(field.choices[0][0]);
+    else return String(this.config.types[lookup_type].defaultValue);
   }
 
   addField(path, prettyPath) {
@@ -126,14 +128,15 @@ class Query {
   }
 
   addFilter(path, prettyPath) {
-    const type = this.getType(this.getField(path));
+    const field = this.getField(path);
+    const type = this.getType(field);
     const newFilters = this.query.filters.slice();
     newFilters.push({
       path: path,
       pathStr: path.join("__"),
       prettyPath: prettyPath,
       lookup: type.defaultLookup,
-      value: this.getDefaultLookupValue(type, type.defaultLookup),
+      value: this.getDefaultLookupValue(field, type, type.defaultLookup),
     });
     this.setQuery({ filters: newFilters });
   }
@@ -153,9 +156,10 @@ class Query {
   setFilterLookup(index, lookup) {
     const newFilters = this.query.filters.slice();
     const filter = newFilters[index];
-    const type = this.getType(this.getField(newFilters[index].path));
+    const field = this.getField(newFilters[index].path);
+    const type = this.getType(field);
     if (type.lookups[filter.lookup].type !== type.lookups[lookup].type) {
-      filter.value = this.getDefaultLookupValue(type, lookup);
+      filter.value = this.getDefaultLookupValue(field, type, lookup);
     }
     filter.lookup = lookup;
     this.setQuery({ filters: newFilters });

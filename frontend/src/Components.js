@@ -6,7 +6,7 @@ import { getPartsForQuery } from "./Query";
 import "./App.css";
 
 function FilterValue(props) {
-  const { lookup, onChange, value } = props;
+  const { lookup, onChange, value, field } = props;
   if (props.lookup.type === "boolean")
     return (
       <select {...{ onChange, value }} className="FilterValue">
@@ -60,6 +60,14 @@ function FilterValue(props) {
         step="0"
       />
     );
+  else if (lookup.type === "choice")
+    return (
+      <select {...{ onChange, value }} className="FilterValue">
+        {field.choices.map(([option, label]) => (
+          <option value={option}>{label}</option>
+        ))}
+      </select>
+    );
   else
     return (
       <input {...{ onChange, value }} className="FilterValue" type="text" />
@@ -77,7 +85,8 @@ class Filter extends React.Component {
       value,
       errorMessage,
     } = this.props;
-    const type = query.getType(query.getField(path));
+    const field = query.getField(path);
+    const type = query.getType(field);
     return (
       <tr>
         <td>
@@ -102,7 +111,7 @@ class Filter extends React.Component {
         <td>=</td>
         <td>
           <FilterValue
-            {...{ value }}
+            {...{ value, field }}
             onChange={(e) => query.setFilterValue(index, e.target.value)}
             lookup={type.lookups[lookup]}
           />
