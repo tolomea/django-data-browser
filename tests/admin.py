@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db.models import F
 
 from data_browser.helpers import AdminMixin, annotation
@@ -14,14 +13,14 @@ class InlineAdminInline(admin.TabularInline):
     fields = ["name"]
 
 
-class GenericInlineAdminInline(GenericInlineModelAdmin):
-    model = models.GenericInlineAdmin
+# class GenericInlineAdminInline(GenericInlineModelAdmin):
+#    model = models.GenericInlineAdmin
 
 
 @admin.register(models.InAdmin)
 class InAdmin(admin.ModelAdmin):
     fields = ["name"]
-    inlines = [InlineAdminInline, GenericInlineAdminInline]
+    inlines = [InlineAdminInline]  # GenericInlineAdminInline]
 
 
 @admin.register(models.Normal)

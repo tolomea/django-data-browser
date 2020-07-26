@@ -92,8 +92,8 @@ def _get_all_admin_fields(request):
             for inline in model_admin.get_inline_instances(request):
                 try:
                     fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
-                except Exception:
-                    pass
+                except Exception:  # pragma: no cover
+                    pass  # ignore things like GenericInlineModelAdmin
                 else:
                     if inline.model not in model_admins:  # pragma: no branch
                         model_admins[inline.model] = inline

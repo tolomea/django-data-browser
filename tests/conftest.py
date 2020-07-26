@@ -1,3 +1,4 @@
+import dj_database_url
 from django.conf import settings
 
 settings.configure(
@@ -11,7 +12,9 @@ settings.configure(
         "data_browser",
     ],
     DATABASES={
-        "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "db.sqlite3"}
+        "default": dj_database_url.config(
+            conn_max_age=600, default="sqlite:///db.sqlite3"
+        )
     },
     ROOT_URLCONF="tests.urls",
     MIDDLEWARE=[

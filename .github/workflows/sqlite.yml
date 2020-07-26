@@ -1,4 +1,4 @@
-name: data_browser_tox
+name: data_browser_sqlite
 
 on: [push]
 

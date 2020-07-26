@@ -3,6 +3,7 @@ pytest
 pytest-django
 pytest-mock
 python-dateutil
+dj-database-url
 requests
 snapshottest
 dataclasses; python_version<"3.7"
