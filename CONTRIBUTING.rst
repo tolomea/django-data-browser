@@ -70,6 +70,11 @@ To build the JS, move the files around appropriately and recreate the wheels run
 
 During development it can be useful to look at the ``.ctx`` and ``.json`` views. The ``.ctx`` view will show you the initial context being passed to the JavaScript on page load. The ``.json`` view is the actual API request the JavaScript uses to fetch query results.
 
+Test model migrations
+########################################
+
+If you need to update the test model migrations delete the whole migration directory and run tests with the default sqlite config, this will generate new migrations.
+
 
 Structure
 ########################################
