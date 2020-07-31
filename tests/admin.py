@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db.models import F
 
-from data_browser.helpers import AdminMixin, annotation
+from data_browser.helpers import AdminMixin, annotation, ddb_hide
 
 from . import models
 
@@ -69,8 +69,13 @@ class ProductMixin:
         "created_time",
         "number_choice",
         "string_choice",
+        "hidden",
     ]
-    readonly_fields = ["id", "is_onsale"]
+    readonly_fields = ["id", "is_onsale", "hidden"]
+
+    @ddb_hide
+    def hidden(self, obj):
+        return obj
 
 
 class ProductInline(ProductMixin, admin.TabularInline):

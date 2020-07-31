@@ -141,9 +141,15 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 choices=choices,
             )
     else:
-        return OrmCalculatedField(
-            model_name=model_name, name=field_name, pretty_name=field_name, admin=admin
-        )
+        if not getattr(getattr(admin, field_name, None), "ddb_hide", False):
+            return OrmCalculatedField(
+                model_name=model_name,
+                name=field_name,
+                pretty_name=field_name,
+                admin=admin,
+            )
+        else:
+            return None
 
 
 def _get_field_type(model, field_name, field):
@@ -196,9 +202,11 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 url_func=field.storage.url,
             )
         elif isinstance(field, type(None)):
-            fields[field_name] = _get_calculated_field(
+            orm_field = _get_calculated_field(
                 request, field_name, model_name, model, admin, model_fields
             )
+            if orm_field:
+                fields[field_name] = orm_field
         else:
             field_type, choices = _get_field_type(model, field_name, field)
 

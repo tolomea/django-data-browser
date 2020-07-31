@@ -72,4 +72,9 @@ class AnnotationDescriptor:
         return getattr(obj, self.name)
 
 
+def ddb_hide(func):
+    func.ddb_hide = True
+    return func
+
+
 annotation = AnnotationDescriptor

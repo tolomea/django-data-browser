@@ -96,6 +96,14 @@ Calculated fields are fields on the ModelAdmin whose value comes from a function
 
 Being arbitrary Python code calculated fields are opaque to the Data Browser. It can fetch their values but can't sort or filter etc on them. For pivoting they are treated as equivalent to the pk on the same model.
 
+Additionally calculated fields can be hidden from the Data Browser by applying the ``data_browser.helpers.ddb_hide`` decorator.
+
+.. code-block:: python
+
+    @ddb_hide
+    def my_calculated_field(self, obj):
+        return ...
+
 Annotated
 ########################################
 
