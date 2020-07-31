@@ -31,7 +31,7 @@ else:
 
 urlpatterns = [
     # queries
-    path(f"{QUERY_PATH}.html", query_html),
+    path(f"{QUERY_PATH}.html", query_html, name="query_html"),
     path(f"{QUERY_PATH}.ctx", query_ctx),
     path(f"{QUERY_PATH}.<media>", query, name="query"),
     # views

@@ -1,4 +1,5 @@
 from django.db.models import BooleanField
+from django.urls import reverse
 
 
 class Everything:
@@ -49,6 +50,14 @@ class AdminMixin:
         if not hasattr(cls, "_DDB_annotations_real"):
             cls._DDB_annotations_real = {}
         return cls._DDB_annotations_real
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["ddb_url"] = reverse(
+            "data_browser:query_html",
+            args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
+        )
+        return super().changelist_view(request, extra_context)
 
 
 class AnnotationDescriptor:

@@ -86,6 +86,27 @@ The frontend code has builtin Sentry support, it is **disabled by default**. To 
     DATA_BROWSER_FE_DSN = "https://af64f22b81994a0e93b82a32add8cb2b@o390136.ingest.sentry.io/5231151"
 
 
+Linking to the Data Browser
+****************************
+
+The home page URL of the Data Browser is given by ``reverse("data_browser:home")``.
+
+Additionally if you are using ``data_browser.helpers.AdminMixin`` then in Admin list views the URL of the Data Browser page for the same model is available as the template context variable ``ddb_url``.
+
+One convenient way of utilizing this is to create the file ``templates/admin/change_list_object_tools.html`` and populate it with:
+
+.. code-block:: html
+
+    {% extends "admin/change_list_object_tools.html" %}
+    {% block object-tools-items %}
+        {{ block.super }}
+        {% if ddb_url %}
+            <li><a href="{{ ddb_url }}" class="viewlink">Data Browser</a></li>
+        {% endif %}
+    {% endblock %}
+
+This will place a "Data Browser" button on the list view of every admin that inherits from the mixin.
+
 Calculated and Annotated fields
 ********************************
 
