@@ -267,25 +267,17 @@ class OrmAnnotatedField(OrmBaseField):
         self.admin_order_field = admin_order_field
 
     def bind(self, previous):
-        if previous:
-            full_path = previous.full_path + [self.name]
-            return OrmBoundAnnotatedField(
-                field=self,
-                previous=previous,
-                full_path=full_path,
-                pretty_path=previous.pretty_path + [self.pretty_name],
-                queryset_path=f"ddb_{s(full_path)}",
-                filter_=True,
-            )
-        else:
-            return OrmBoundField(
-                field=self,
-                previous=OrmBoundField.blank(),
-                full_path=[self.name],
-                pretty_path=[self.pretty_name],
-                queryset_path=self.name,
-                filter_=True,
-            )
+        previous = previous or OrmBoundField.blank()
+
+        full_path = previous.full_path + [self.name]
+        return OrmBoundAnnotatedField(
+            field=self,
+            previous=previous,
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            queryset_path=f"ddb_{s(full_path)}",
+            filter_=True,
+        )
 
 
 class OrmAdminField(OrmBaseField):

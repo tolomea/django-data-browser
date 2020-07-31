@@ -191,7 +191,7 @@ class ChoiceTypeMixin:
     @staticmethod
     def format(value, choices=None):
         assert choices
-        return dict(choices)[value]
+        return dict(choices)[value] if value is not None else None
 
 
 class StringChoiceType(ChoiceTypeMixin, StringType):
