@@ -47,7 +47,7 @@ from .query import (
 
 try:
     from django.contrib.postgres.fields import ArrayField
-except:  # noqa: E722 optional feature
+except:  # noqa: E722 optional feature  pragma: no cover
     ArrayField = None.__class__
 
 
