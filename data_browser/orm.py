@@ -6,7 +6,6 @@ from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
@@ -45,6 +44,12 @@ from .query import (
     StringType,
     UnknownType,
 )
+
+try:
+    from django.contrib.postgres.fields import ArrayField
+except:  # noqa: E722 optional feature
+    ArrayField = None.__class__
+
 
 _STRING_FIELDS = (
     models.CharField,
