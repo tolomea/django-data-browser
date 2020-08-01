@@ -35,7 +35,12 @@ def products(db):
     producer = models.Producer.objects.create(name="Bob", address=address)
     res.append(
         models.Product.objects.create(
-            created_time=now, name="a", size=1, size_unit="g", producer=producer
+            created_time=now,
+            name="a",
+            size=1,
+            size_unit="g",
+            producer=producer,
+            fake="phoney",
         )
     )
 
@@ -125,6 +130,12 @@ def get_product_pivot(req, orm_models, django_assert_num_queries):
 def test_get_results_all(get_product_flat):
     data = get_product_flat(1, "size-0,name+1,size_unit", {})
     assert data == [[2, "c", "g"], [1, "a", "g"], [1, "b", "g"]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_results_unknown_field(get_product_flat):
+    data = get_product_flat(1, "name+!,fake", {})
+    assert data == [["a", "phoney"], ["b", "{}"], ["c", "{}"]]
 
 
 def test_get_admin_link(get_product_flat, products):

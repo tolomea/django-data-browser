@@ -12,13 +12,16 @@ class FakeField(models.Field):  # pragma: no cover
         return "TextField"
 
     def to_python(self, value):
-        if isinstance(value, str) or value is None:
-            return value
-        return str(value)
+        return value
 
     def get_prep_value(self, value):
         value = super().get_prep_value(value)
         return self.to_python(value)
+
+    def from_db_value(self, value, expression, connection):
+        if value:
+            return value
+        return {}
 
     def formfield(self, **kwargs):
         return super().formfield(

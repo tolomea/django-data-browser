@@ -1,3 +1,4 @@
+import json
 import logging
 from collections import defaultdict
 
@@ -42,6 +43,7 @@ from .query import (
     StringArrayType,
     StringChoiceType,
     StringType,
+    UnknownType,
 )
 
 _STRING_FIELDS = (
@@ -182,7 +184,7 @@ def _get_field_type(model, field_name, field):
                 logging.getLogger(__name__).warning(
                     f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
                 )
-            return None, None
+            return UnknownType, None
 
     # Choice fields have different lookups
     if res is StringType and field.choices:
@@ -228,15 +230,13 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 fields[field_name] = orm_field
         else:
             field_type, choices = _get_field_type(model, field_name, field)
-
-            if field_type:
-                fields[field_name] = OrmConcreteField(
-                    model_name=model_name,
-                    name=field_name,
-                    pretty_name=field_name,
-                    type_=field_type,
-                    choices=choices,
-                )
+            fields[field_name] = OrmConcreteField(
+                model_name=model_name,
+                name=field_name,
+                pretty_name=field_name,
+                type_=field_type,
+                choices=choices,
+            )
 
     return OrmModel(fields=fields, admin=admin)
 
@@ -444,6 +444,10 @@ def get_results(request, bound_query, orm_models):
             v = row[field.queryset_path]
             if isinstance(v, list):  # pragma: postgress
                 v = tuple(v)
+            try:
+                hash(v)
+            except TypeError:
+                v = json.dumps(v)
             res.append((field.queryset_path, v))
         return tuple(res)
 
