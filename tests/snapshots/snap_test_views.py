@@ -548,6 +548,7 @@ snapshots["test_query_html config"] = {
             },
             "sortedFields": ["count"],
         },
+        "stringarray": {"fields": {}, "sortedFields": []},
         "stringchoice": {"fields": {}, "sortedFields": []},
         "tests.Address": {
             "fields": {
@@ -1148,6 +1149,24 @@ snapshots["test_query_html config"] = {
                 "is_null",
             ],
         },
+        "stringarray": {
+            "defaultLookup": "contains",
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "stringchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "stringchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
+        },
         "stringchoice": {
             "defaultLookup": "equals",
             "defaultValue": None,
@@ -1518,6 +1537,7 @@ snapshots["test_query_html_no_perms config"] = {
             },
             "sortedFields": ["count"],
         },
+        "stringarray": {"fields": {}, "sortedFields": []},
         "stringchoice": {"fields": {}, "sortedFields": []},
         "weekday": {"fields": {}, "sortedFields": []},
         "year": {"fields": {}, "sortedFields": []},
@@ -1695,6 +1715,24 @@ snapshots["test_query_html_no_perms config"] = {
                 "not_starts_with",
                 "not_ends_with",
                 "not_regex",
+                "is_null",
+            ],
+        },
+        "stringarray": {
+            "defaultLookup": "contains",
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "stringchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "stringchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null",
             ],
         },
@@ -2304,6 +2342,7 @@ snapshots["test_query_ctx config"] = {
             },
             "sortedFields": ["count"],
         },
+        "stringarray": {"fields": {}, "sortedFields": []},
         "stringchoice": {"fields": {}, "sortedFields": []},
         "tests.Address": {
             "fields": {
@@ -2901,6 +2940,24 @@ snapshots["test_query_ctx config"] = {
                 "not_starts_with",
                 "not_ends_with",
                 "not_regex",
+                "is_null",
+            ],
+        },
+        "stringarray": {
+            "defaultLookup": "contains",
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "stringchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "stringchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null",
             ],
         },

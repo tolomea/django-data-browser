@@ -5,6 +5,7 @@ from django.contrib.admin import site
 from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
@@ -37,23 +38,27 @@ from .query import (
     DateType,
     NumberChoiceType,
     NumberType,
+    StringArrayType,
     StringChoiceType,
     StringType,
 )
 
+_STRING_FIELDS = (
+    models.CharField,
+    models.TextField,
+    models.GenericIPAddressField,
+    models.UUIDField,
+)
 _FIELD_TYPE_MAP = {
     models.BooleanField: BooleanType,
     models.NullBooleanField: BooleanType,
-    models.CharField: StringType,
-    models.TextField: StringType,
-    models.GenericIPAddressField: StringType,
-    models.UUIDField: StringType,
     models.DateTimeField: DateTimeType,
     models.DateField: DateType,
     models.DecimalField: NumberType,
     models.FloatField: NumberType,
     models.IntegerField: NumberType,
     models.AutoField: NumberType,
+    **{f: StringType for f in _STRING_FIELDS},
 }
 
 
@@ -153,7 +158,11 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
 
 
 def _get_field_type(model, field_name, field):
-    if field.__class__ in _FIELD_TYPE_MAP:
+    if isinstance(field, ArrayField) and isinstance(
+        field.base_field, _STRING_FIELDS
+    ):  # pragma: postgress
+        return StringArrayType, field.base_field.choices
+    elif field.__class__ in _FIELD_TYPE_MAP:
         res = _FIELD_TYPE_MAP[field.__class__]
     else:
         for django_type, field_type in _FIELD_TYPE_MAP.items():
@@ -166,6 +175,8 @@ def _get_field_type(model, field_name, field):
                     f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
                 )
             return None, None
+
+    # Choice fields have different lookups
     if res is StringType and field.choices:
         return StringChoiceType, field.choices
     elif res is NumberType and field.choices:
@@ -247,22 +258,26 @@ def get_models(request):
 
 
 def _get_django_lookup(field_type, lookup):
-    if field_type == StringType and lookup == "equals":
-        return "iexact"
-    else:
-        lookup = {
-            "equals": "exact",
+    if field_type in [StringType, StringChoiceType]:
+        return {
+            "equals": "iexact",
             "regex": "iregex",
             "contains": "icontains",
             "starts_with": "istartswith",
             "ends_with": "iendswith",
             "is_null": "isnull",
+        }[lookup]
+    else:
+        return {
+            "equals": "exact",
+            "is_null": "isnull",
             "gt": "gt",
             "gte": "gte",
             "lt": "lt",
             "lte": "lte",
+            "contains": "contains",
+            "length": "len",
         }[lookup]
-        return lookup
 
 
 def _filter(qs, filter_, filter_str):
@@ -275,10 +290,13 @@ def _filter(qs, filter_, filter_str):
 
     lookup = _get_django_lookup(filter_.orm_bound_field.type_, lookup)
     filter_str = f"{filter_str}__{lookup}"
+    filter_value = filter_.parsed
+    if lookup == "contains":  # pragma: postgress
+        filter_value = [filter_value]
     if negation:
-        return qs.exclude(**{filter_str: filter_.parsed})
+        return qs.exclude(**{filter_str: filter_value})
     else:
-        return qs.filter(**{filter_str: filter_.parsed})
+        return qs.filter(**{filter_str: filter_value})
 
 
 def _cols_sub_query(bound_query):
@@ -413,9 +431,13 @@ def get_results(request, bound_query, orm_models):
         return results
 
     def get_fields(row, fields):
-        return tuple(
-            (field.queryset_path, row[field.queryset_path]) for field in fields
-        )
+        res = []
+        for field in fields:
+            v = row[field.queryset_path]
+            if isinstance(v, list):  # pragma: postgress
+                v = tuple(v)
+            res.append((field.queryset_path, v))
+        return tuple(res)
 
     col_keys = {}
     for row in cols_res:

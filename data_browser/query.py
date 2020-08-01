@@ -194,12 +194,29 @@ class ChoiceTypeMixin:
         return dict(choices)[value] if value is not None else None
 
 
-class StringChoiceType(ChoiceTypeMixin, StringType):
+class StringChoiceType(ChoiceTypeMixin, BaseType):
     lookups = {
         **StringType.lookups,
         "equals": "stringchoice",
         "not_equals": "stringchoice",
     }
+
+
+class StringArrayType(BaseType):
+    default_value = None
+    lookups = {
+        "contains": "stringchoice",
+        "length": "number",
+        "not_contains": "stringchoice",
+        "not_length": "number",
+        "is_null": "boolean",
+    }
+
+    @staticmethod
+    def format(value, choices=None):  # pragma: postgress
+        if choices:
+            value = [dict(choices)[v] if v is not None else None for v in value]
+        return ", ".join(value)
 
 
 class RegexType(BaseType):
@@ -241,7 +258,7 @@ class NumberType(BaseType):
         return float(value)
 
 
-class NumberChoiceType(ChoiceTypeMixin, NumberType):
+class NumberChoiceType(ChoiceTypeMixin, BaseType):
     lookups = {
         **NumberType.lookups,
         "equals": "numberchoice",

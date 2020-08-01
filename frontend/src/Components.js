@@ -51,7 +51,22 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (lookup.type === "number" || lookup.type === "year")
+  else if (
+    field.choices.length &&
+    (lookup.type === "numberchoice" || lookup.type === "stringchoice")
+  )
+    return (
+      <select {...{ onChange, value }} className="FilterValue">
+        {field.choices.map(([option, label]) => (
+          <option value={option}>{label}</option>
+        ))}
+      </select>
+    );
+  else if (
+    lookup.type === "number" ||
+    lookup.type === "numberchoice" ||
+    lookup.type === "year"
+  )
     return (
       <input
         {...{ onChange, value }}
@@ -59,14 +74,6 @@ function FilterValue(props) {
         type="number"
         step="0"
       />
-    );
-  else if (lookup.type === "numberchoice" || lookup.type === "stringchoice")
-    return (
-      <select {...{ onChange, value }} className="FilterValue">
-        {field.choices.map(([option, label]) => (
-          <option value={option}>{label}</option>
-        ))}
-      </select>
     );
   else
     return (

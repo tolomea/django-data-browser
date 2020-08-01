@@ -568,6 +568,10 @@
                 "count"
             ]
         },
+        "stringarray": {
+            "fields": {},
+            "sortedFields": []
+        },
         "stringchoice": {
             "fields": {},
             "sortedFields": []
@@ -1348,6 +1352,34 @@
                 "not_starts_with",
                 "not_ends_with",
                 "not_regex",
+                "is_null"
+            ]
+        },
+        "stringarray": {
+            "defaultLookup": "contains",
+            "defaultValue": null,
+            "lookups": {
+                "contains": {
+                    "type": "stringchoice"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "length": {
+                    "type": "number"
+                },
+                "not_contains": {
+                    "type": "stringchoice"
+                },
+                "not_length": {
+                    "type": "number"
+                }
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null"
             ]
         },
