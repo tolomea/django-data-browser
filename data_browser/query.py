@@ -202,8 +202,17 @@ class StringChoiceType(ChoiceTypeMixin, BaseType):
     }
 
 
-class StringArrayType(BaseType):
+class ArrayTypeMixin:
     default_value = None
+
+    @staticmethod
+    def format(value, choices=None):  # pragma: postgress
+        if choices:
+            value = [dict(choices)[v] if v is not None else None for v in value]
+        return ", ".join(str(v) for v in value)
+
+
+class StringArrayType(ArrayTypeMixin, BaseType):
     lookups = {
         "contains": "stringchoice",
         "length": "number",
@@ -211,12 +220,6 @@ class StringArrayType(BaseType):
         "not_length": "number",
         "is_null": "boolean",
     }
-
-    @staticmethod
-    def format(value, choices=None):  # pragma: postgress
-        if choices:
-            value = [dict(choices)[v] if v is not None else None for v in value]
-        return ", ".join(value)
 
 
 class RegexType(BaseType):
@@ -263,6 +266,16 @@ class NumberChoiceType(ChoiceTypeMixin, BaseType):
         **NumberType.lookups,
         "equals": "numberchoice",
         "not_equals": "numberchoice",
+    }
+
+
+class NumberArrayType(ArrayTypeMixin, BaseType):
+    lookups = {
+        "contains": "numberchoice",
+        "length": "number",
+        "not_contains": "numberchoice",
+        "not_length": "number",
+        "is_null": "boolean",
     }
 
 

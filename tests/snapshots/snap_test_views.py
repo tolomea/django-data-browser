@@ -533,6 +533,7 @@ snapshots["test_query_html config"] = {
                 "variance",
             ],
         },
+        "numberarray": {"fields": {}, "sortedFields": []},
         "numberchoice": {"fields": {}, "sortedFields": []},
         "regex": {"fields": {}, "sortedFields": []},
         "string": {
@@ -1091,6 +1092,24 @@ snapshots["test_query_html config"] = {
                 "is_null",
             ],
         },
+        "numberarray": {
+            "defaultLookup": "contains",
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "numberchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "numberchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
+        },
         "numberchoice": {
             "defaultLookup": "equals",
             "defaultValue": None,
@@ -1522,6 +1541,7 @@ snapshots["test_query_html_no_perms config"] = {
                 "variance",
             ],
         },
+        "numberarray": {"fields": {}, "sortedFields": []},
         "numberchoice": {"fields": {}, "sortedFields": []},
         "regex": {"fields": {}, "sortedFields": []},
         "string": {
@@ -1657,6 +1677,24 @@ snapshots["test_query_html_no_perms config"] = {
                 "gte",
                 "lt",
                 "lte",
+                "is_null",
+            ],
+        },
+        "numberarray": {
+            "defaultLookup": "contains",
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "numberchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "numberchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null",
             ],
         },
@@ -2327,6 +2365,7 @@ snapshots["test_query_ctx config"] = {
                 "variance",
             ],
         },
+        "numberarray": {"fields": {}, "sortedFields": []},
         "numberchoice": {"fields": {}, "sortedFields": []},
         "regex": {"fields": {}, "sortedFields": []},
         "string": {
@@ -2882,6 +2921,24 @@ snapshots["test_query_ctx config"] = {
                 "gte",
                 "lt",
                 "lte",
+                "is_null",
+            ],
+        },
+        "numberarray": {
+            "defaultLookup": "contains",
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "numberchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "numberchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null",
             ],
         },

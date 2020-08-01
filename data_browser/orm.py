@@ -36,6 +36,7 @@ from .query import (
     BoundQuery,
     DateTimeType,
     DateType,
+    NumberArrayType,
     NumberChoiceType,
     NumberType,
     StringArrayType,
@@ -49,16 +50,19 @@ _STRING_FIELDS = (
     models.GenericIPAddressField,
     models.UUIDField,
 )
+_NUMBER_FIELDS = (
+    models.DecimalField,
+    models.FloatField,
+    models.IntegerField,
+    models.AutoField,
+)
 _FIELD_TYPE_MAP = {
     models.BooleanField: BooleanType,
     models.NullBooleanField: BooleanType,
     models.DateTimeField: DateTimeType,
     models.DateField: DateType,
-    models.DecimalField: NumberType,
-    models.FloatField: NumberType,
-    models.IntegerField: NumberType,
-    models.AutoField: NumberType,
     **{f: StringType for f in _STRING_FIELDS},
+    **{f: NumberType for f in _NUMBER_FIELDS},
 }
 
 
@@ -162,6 +166,10 @@ def _get_field_type(model, field_name, field):
         field.base_field, _STRING_FIELDS
     ):  # pragma: postgress
         return StringArrayType, field.base_field.choices
+    elif isinstance(field, ArrayField) and isinstance(
+        field.base_field, _NUMBER_FIELDS
+    ):  # pragma: postgress
+        return NumberArrayType, field.base_field.choices
     elif field.__class__ in _FIELD_TYPE_MAP:
         res = _FIELD_TYPE_MAP[field.__class__]
     else:

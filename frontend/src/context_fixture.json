@@ -545,6 +545,10 @@
                 "variance"
             ]
         },
+        "numberarray": {
+            "fields": {},
+            "sortedFields": []
+        },
         "numberchoice": {
             "fields": {},
             "sortedFields": []
@@ -1258,6 +1262,34 @@
                 "gte",
                 "lt",
                 "lte",
+                "is_null"
+            ]
+        },
+        "numberarray": {
+            "defaultLookup": "contains",
+            "defaultValue": null,
+            "lookups": {
+                "contains": {
+                    "type": "numberchoice"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "length": {
+                    "type": "number"
+                },
+                "not_contains": {
+                    "type": "numberchoice"
+                },
+                "not_length": {
+                    "type": "number"
+                }
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null"
             ]
         },
