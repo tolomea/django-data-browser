@@ -155,7 +155,7 @@ def test_get_file_link(get_product_flat):
     models.Product.objects.create(name="a", producer=producer)
     models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
     data = get_product_flat(1, "name,image", {})
-    sortedAssert(data, [["a", None], ["b", '<a href="bob.jpg">bob.jpg</a>']])
+    sortedAssert(data, [["a", None], ["b", '<a href="/media/bob.jpg">bob.jpg</a>']])
 
 
 @pytest.mark.usefixtures("products")
