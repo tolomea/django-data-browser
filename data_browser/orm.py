@@ -48,15 +48,15 @@ from .query import (
 
 try:
     from django.contrib.postgres.fields import ArrayField
-except:  # noqa: E722 optional feature  pragma: no cover
+except ModuleNotFoundError:  # pragma: postgres
     ArrayField = None.__class__
 
 try:
     from django.fields import JSONField
-except:  # noqa: E722 optional feature  pragma: no cover
+except ImportError:  # pragma: json field
     try:
         from django.contrib.postgres.fields import JSONField
-    except:  # noqa: E722 optional feature
+    except ModuleNotFoundError:  # pragma: postgres
         JSONField = None.__class__
 
 
@@ -180,13 +180,13 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
 def _get_field_type(model, field_name, field):
     if isinstance(field, ArrayField) and isinstance(
         field.base_field, _STRING_FIELDS
-    ):  # pragma: postgress
+    ):  # pragma: postgres
         return StringArrayType, field.base_field.choices
     elif isinstance(field, ArrayField) and isinstance(
         field.base_field, _NUMBER_FIELDS
-    ):  # pragma: postgress
+    ):  # pragma: postgres
         return NumberArrayType, field.base_field.choices
-    elif isinstance(field, JSONField):  # pragma: postgress / py 3.1
+    elif isinstance(field, JSONField):  # pragma: json field
         return JSONType, None
     elif field.__class__ in _FIELD_TYPE_MAP:
         res = _FIELD_TYPE_MAP[field.__class__]
@@ -327,7 +327,7 @@ def _filter(qs, filter_, filter_str):
         filter_.orm_bound_field.type_, lookup, filter_value
     )
     filter_str = f"{filter_str}__{lookup}"
-    if lookup == "contains":  # pragma: postgress
+    if lookup == "contains":  # pragma: postgres
         filter_value = [filter_value]
     if negation:
         return qs.exclude(**{filter_str: filter_value})
@@ -470,7 +470,7 @@ def get_results(request, bound_query, orm_models):
         res = []
         for field in fields:
             v = row[field.queryset_path]
-            if isinstance(v, list):  # pragma: postgress
+            if isinstance(v, list):  # pragma: postgres
                 v = tuple(v)
             try:
                 hash(v)

@@ -207,7 +207,7 @@ class ArrayTypeMixin:
     default_value = None
 
     @staticmethod
-    def format(value, choices=None):  # pragma: postgress
+    def format(value, choices=None):  # pragma: postgres
         if choices:
             value = [dict(choices)[v] if v is not None else None for v in value]
         return ", ".join(str(v) for v in value)
