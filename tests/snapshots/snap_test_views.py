@@ -464,6 +464,7 @@ snapshots["test_query_html config"] = {
         },
         "html": {"fields": {}, "sortedFields": []},
         "json": {"fields": {}, "sortedFields": []},
+        "jsonfield": {"fields": {}, "sortedFields": []},
         "month": {"fields": {}, "sortedFields": []},
         "number": {
             "fields": {
@@ -1079,11 +1080,25 @@ snapshots["test_query_html config"] = {
             "defaultLookup": "is_null",
             "defaultValue": None,
             "lookups": {
+                "field_equals": {"type": "jsonfield"},
                 "has_key": {"type": "string"},
                 "is_null": {"type": "boolean"},
+                "not_field_equals": {"type": "jsonfield"},
                 "not_has_key": {"type": "string"},
             },
-            "sortedLookups": ["is_null", "has_key", "not_has_key"],
+            "sortedLookups": [
+                "is_null",
+                "has_key",
+                "field_equals",
+                "not_has_key",
+                "not_field_equals",
+            ],
+        },
+        "jsonfield": {
+            "defaultLookup": None,
+            "defaultValue": "|",
+            "lookups": {},
+            "sortedLookups": [],
         },
         "month": {
             "defaultLookup": "equals",
@@ -1499,6 +1514,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "html": {"fields": {}, "sortedFields": []},
         "json": {"fields": {}, "sortedFields": []},
+        "jsonfield": {"fields": {}, "sortedFields": []},
         "month": {"fields": {}, "sortedFields": []},
         "number": {
             "fields": {
@@ -1685,11 +1701,25 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultLookup": "is_null",
             "defaultValue": None,
             "lookups": {
+                "field_equals": {"type": "jsonfield"},
                 "has_key": {"type": "string"},
                 "is_null": {"type": "boolean"},
+                "not_field_equals": {"type": "jsonfield"},
                 "not_has_key": {"type": "string"},
             },
-            "sortedLookups": ["is_null", "has_key", "not_has_key"],
+            "sortedLookups": [
+                "is_null",
+                "has_key",
+                "field_equals",
+                "not_has_key",
+                "not_field_equals",
+            ],
+        },
+        "jsonfield": {
+            "defaultLookup": None,
+            "defaultValue": "|",
+            "lookups": {},
+            "sortedLookups": [],
         },
         "month": {
             "defaultLookup": "equals",
@@ -2341,6 +2371,7 @@ snapshots["test_query_ctx config"] = {
         },
         "html": {"fields": {}, "sortedFields": []},
         "json": {"fields": {}, "sortedFields": []},
+        "jsonfield": {"fields": {}, "sortedFields": []},
         "month": {"fields": {}, "sortedFields": []},
         "number": {
             "fields": {
@@ -2956,11 +2987,25 @@ snapshots["test_query_ctx config"] = {
             "defaultLookup": "is_null",
             "defaultValue": None,
             "lookups": {
+                "field_equals": {"type": "jsonfield"},
                 "has_key": {"type": "string"},
                 "is_null": {"type": "boolean"},
+                "not_field_equals": {"type": "jsonfield"},
                 "not_has_key": {"type": "string"},
             },
-            "sortedLookups": ["is_null", "has_key", "not_has_key"],
+            "sortedLookups": [
+                "is_null",
+                "has_key",
+                "field_equals",
+                "not_has_key",
+                "not_field_equals",
+            ],
+        },
+        "jsonfield": {
+            "defaultLookup": None,
+            "defaultValue": "|",
+            "lookups": {},
+            "sortedLookups": [],
         },
         "month": {
             "defaultLookup": "equals",

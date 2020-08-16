@@ -1,3 +1,4 @@
+import json
 import urllib
 from dataclasses import dataclass
 from functools import lru_cache
@@ -434,8 +435,34 @@ class UnknownType(BaseType):
     lookups = {"is_null": "boolean"}
 
 
+class JSONFieldType(BaseType):
+    default_value = "|"
+
+    @staticmethod
+    def _parse(value):  # pragma: json field
+        value = value.strip()
+        if "|" not in value:
+            raise ValueError("Missing seperator '|'")
+        field, value = value.split("|", 1)
+        if not field:
+            raise ValueError("Invalid field name")
+        if value.startswith("{") or value.startswith("["):
+            raise ValueError("Not a JSON primitive")
+        try:
+            value = json.loads(value)
+        except json.JSONDecodeError:
+            raise ValueError("Not a JSON primitive")
+        return [field, value]
+
+
 class JSONType(BaseType):
-    lookups = {"is_null": "boolean", "has_key": "string", "not_has_key": "string"}
+    lookups = {
+        "is_null": "boolean",
+        "has_key": "string",
+        "field_equals": "jsonfield",
+        "not_has_key": "string",
+        "not_field_equals": "jsonfield",
+    }
 
 
 def all_subclasses(cls):

@@ -281,28 +281,37 @@ def get_models(request):
     return {**models, **types}
 
 
-def _get_django_lookup(field_type, lookup):
-    if field_type in [StringType, StringChoiceType]:
-        return {
-            "equals": "iexact",
-            "regex": "iregex",
-            "contains": "icontains",
-            "starts_with": "istartswith",
-            "ends_with": "iendswith",
-            "is_null": "isnull",
-        }[lookup]
+def _get_django_lookup(field_type, lookup, filter_value):
+    if lookup == "field_equals":  # pragma: json field
+        lookup, filter_value = filter_value
+        return lookup, filter_value
+    elif field_type in [StringType, StringChoiceType]:
+        return (
+            {
+                "equals": "iexact",
+                "regex": "iregex",
+                "contains": "icontains",
+                "starts_with": "istartswith",
+                "ends_with": "iendswith",
+                "is_null": "isnull",
+            }[lookup],
+            filter_value,
+        )
     else:
-        return {
-            "equals": "exact",
-            "is_null": "isnull",
-            "gt": "gt",
-            "gte": "gte",
-            "lt": "lt",
-            "lte": "lte",
-            "contains": "contains",
-            "length": "len",
-            "has_key": "has_key",
-        }[lookup]
+        return (
+            {
+                "equals": "exact",
+                "is_null": "isnull",
+                "gt": "gt",
+                "gte": "gte",
+                "lt": "lt",
+                "lte": "lte",
+                "contains": "contains",
+                "length": "len",
+                "has_key": "has_key",
+            }[lookup],
+            filter_value,
+        )
 
 
 def _filter(qs, filter_, filter_str):
@@ -313,9 +322,11 @@ def _filter(qs, filter_, filter_str):
         negation = True
         lookup = lookup[4:]
 
-    lookup = _get_django_lookup(filter_.orm_bound_field.type_, lookup)
-    filter_str = f"{filter_str}__{lookup}"
     filter_value = filter_.parsed
+    lookup, filter_value = _get_django_lookup(
+        filter_.orm_bound_field.type_, lookup, filter_value
+    )
+    filter_str = f"{filter_str}__{lookup}"
     if lookup == "contains":  # pragma: postgress
         filter_value = [filter_value]
     if negation:

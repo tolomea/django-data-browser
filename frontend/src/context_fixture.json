@@ -476,6 +476,10 @@
             "fields": {},
             "sortedFields": []
         },
+        "jsonfield": {
+            "fields": {},
+            "sortedFields": []
+        },
         "month": {
             "fields": {},
             "sortedFields": []
@@ -1234,11 +1238,17 @@
             "defaultLookup": "is_null",
             "defaultValue": null,
             "lookups": {
+                "field_equals": {
+                    "type": "jsonfield"
+                },
                 "has_key": {
                     "type": "string"
                 },
                 "is_null": {
                     "type": "boolean"
+                },
+                "not_field_equals": {
+                    "type": "jsonfield"
                 },
                 "not_has_key": {
                     "type": "string"
@@ -1247,8 +1257,16 @@
             "sortedLookups": [
                 "is_null",
                 "has_key",
-                "not_has_key"
+                "field_equals",
+                "not_has_key",
+                "not_field_equals"
             ]
+        },
+        "jsonfield": {
+            "defaultLookup": null,
+            "defaultValue": "|",
+            "lookups": {},
+            "sortedLookups": []
         },
         "month": {
             "defaultLookup": "equals",
