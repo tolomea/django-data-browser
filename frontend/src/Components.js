@@ -7,16 +7,17 @@ import "./App.css";
 
 function FilterValue(props) {
   const { lookup, onChange, value, field } = props;
+  const onChangeEvent = (e) => onChange(e.target.value);
   if (props.lookup.type === "boolean")
     return (
-      <select {...{ onChange, value }} className="FilterValue">
+      <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         <option value={true}>true</option>
         <option value={false}>false</option>
       </select>
     );
   else if (lookup.type === "weekday")
     return (
-      <select {...{ onChange, value }} className="FilterValue">
+      <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         {[
           "Sunday",
           "Monday",
@@ -32,7 +33,7 @@ function FilterValue(props) {
     );
   else if (lookup.type === "month")
     return (
-      <select {...{ onChange, value }} className="FilterValue">
+      <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         {[
           "January",
           "Febuary",
@@ -56,7 +57,7 @@ function FilterValue(props) {
     (lookup.type === "numberchoice" || lookup.type === "stringchoice")
   )
     return (
-      <select {...{ onChange, value }} className="FilterValue">
+      <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         {field.choices.map(([option, label]) => (
           <option value={option}>{label}</option>
         ))}
@@ -69,15 +70,39 @@ function FilterValue(props) {
   )
     return (
       <input
-        {...{ onChange, value }}
+        {...{ value }}
+        onChange={onChangeEvent}
         className="FilterValue"
         type="number"
         step="0"
       />
     );
-  else
+  else if (lookup.type === "jsonfield") {
+    const parts = value.split(/\|(.*)/);
     return (
-      <input {...{ onChange, value }} className="FilterValue" type="text" />
+      <>
+        <input
+          value={parts[0]}
+          onChange={(e) => onChange(`${e.target.value}|${parts[1]}`)}
+          className="FilterValue Half"
+          type="text"
+        />
+        <input
+          value={parts[1]}
+          onChange={(e) => onChange(`${parts[0]}|${e.target.value}`)}
+          className="FilterValue Half"
+          type="text"
+        />
+      </>
+    );
+  } else
+    return (
+      <input
+        {...{ value }}
+        onChange={onChangeEvent}
+        className="FilterValue"
+        type="text"
+      />
     );
 }
 
@@ -119,10 +144,10 @@ class Filter extends React.Component {
         <td>
           <FilterValue
             {...{ value, field }}
-            onChange={(e) => query.setFilterValue(index, e.target.value)}
+            onChange={(val) => query.setFilterValue(index, val)}
             lookup={type.lookups[lookup]}
           />
-          {errorMessage && <p>{errorMessage}</p>}
+          {errorMessage && <p className="Error">{errorMessage}</p>}
         </td>
       </tr>
     );

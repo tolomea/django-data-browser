@@ -148,6 +148,9 @@ select.FilterValue,
 input.FilterValue {
   width: 100%;
 }
+.FilterValue.Half {
+  width: 50%;
+}
 select.Lookup {
   width: 100%;
 }
@@ -334,4 +337,8 @@ input.RowLimit {
 
 .Fade {
   opacity: 0.3;
+}
+
+.Error {
+  color: red;
 }
