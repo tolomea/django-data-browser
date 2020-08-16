@@ -150,7 +150,7 @@ Exposing an a annotated field in this way requires two changes.
 
 It is important that the decorated annotation function name and the annotated queryset field name match.
 
-It is necessary for the top level of the annotation to have ``output_field`` set so the Data Browser can tell what type of data it will produce.
+Sometimes it is necessary for the top level of the annotation to have ``output_field`` set so the Data Browser can tell what type of data it will produce. When this is necessary you will get an error to that effect.
 
 The helpers will automatically deal with the ``admin_order_field`` and ``boolean`` properties and ``readonly_fields``, reducing the boiler plate involved in using annotations in the admin.
 
