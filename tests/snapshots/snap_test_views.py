@@ -463,6 +463,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "html": {"fields": {}, "sortedFields": []},
+        "json": {"fields": {}, "sortedFields": []},
         "month": {"fields": {}, "sortedFields": []},
         "number": {
             "fields": {
@@ -1074,6 +1075,16 @@ snapshots["test_query_html config"] = {
                 "is_null",
             ],
         },
+        "json": {
+            "defaultLookup": "is_null",
+            "defaultValue": None,
+            "lookups": {
+                "has_key": {"type": "string"},
+                "is_null": {"type": "boolean"},
+                "not_has_key": {"type": "string"},
+            },
+            "sortedLookups": ["is_null", "has_key", "not_has_key"],
+        },
         "month": {
             "defaultLookup": "equals",
             "defaultValue": "January",
@@ -1487,6 +1498,7 @@ snapshots["test_query_html_no_perms config"] = {
             ],
         },
         "html": {"fields": {}, "sortedFields": []},
+        "json": {"fields": {}, "sortedFields": []},
         "month": {"fields": {}, "sortedFields": []},
         "number": {
             "fields": {
@@ -1668,6 +1680,16 @@ snapshots["test_query_html_no_perms config"] = {
                 "not_regex",
                 "is_null",
             ],
+        },
+        "json": {
+            "defaultLookup": "is_null",
+            "defaultValue": None,
+            "lookups": {
+                "has_key": {"type": "string"},
+                "is_null": {"type": "boolean"},
+                "not_has_key": {"type": "string"},
+            },
+            "sortedLookups": ["is_null", "has_key", "not_has_key"],
         },
         "month": {
             "defaultLookup": "equals",
@@ -2318,6 +2340,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "html": {"fields": {}, "sortedFields": []},
+        "json": {"fields": {}, "sortedFields": []},
         "month": {"fields": {}, "sortedFields": []},
         "number": {
             "fields": {
@@ -2928,6 +2951,16 @@ snapshots["test_query_ctx config"] = {
                 "not_regex",
                 "is_null",
             ],
+        },
+        "json": {
+            "defaultLookup": "is_null",
+            "defaultValue": None,
+            "lookups": {
+                "has_key": {"type": "string"},
+                "is_null": {"type": "boolean"},
+                "not_has_key": {"type": "string"},
+            },
+            "sortedLookups": ["is_null", "has_key", "not_has_key"],
         },
         "month": {
             "defaultLookup": "equals",

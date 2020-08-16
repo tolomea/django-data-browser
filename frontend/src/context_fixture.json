@@ -472,6 +472,10 @@
             "fields": {},
             "sortedFields": []
         },
+        "json": {
+            "fields": {},
+            "sortedFields": []
+        },
         "month": {
             "fields": {},
             "sortedFields": []
@@ -1224,6 +1228,26 @@
                 "not_ends_with",
                 "not_regex",
                 "is_null"
+            ]
+        },
+        "json": {
+            "defaultLookup": "is_null",
+            "defaultValue": null,
+            "lookups": {
+                "has_key": {
+                    "type": "string"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "not_has_key": {
+                    "type": "string"
+                }
+            },
+            "sortedLookups": [
+                "is_null",
+                "has_key",
+                "not_has_key"
             ]
         },
         "month": {

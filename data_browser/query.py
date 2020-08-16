@@ -434,6 +434,10 @@ class UnknownType(BaseType):
     lookups = {"is_null": "boolean"}
 
 
+class JSONType(BaseType):
+    lookups = {"is_null": "boolean", "has_key": "string", "not_has_key": "string"}
+
+
 def all_subclasses(cls):
     res = set()
     queue = {cls}

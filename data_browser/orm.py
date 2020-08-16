@@ -36,6 +36,7 @@ from .query import (
     BoundQuery,
     DateTimeType,
     DateType,
+    JSONType,
     NumberArrayType,
     NumberChoiceType,
     NumberType,
@@ -49,6 +50,14 @@ try:
     from django.contrib.postgres.fields import ArrayField
 except:  # noqa: E722 optional feature  pragma: no cover
     ArrayField = None.__class__
+
+try:
+    from django.fields import JSONField
+except:  # noqa: E722 optional feature  pragma: no cover
+    try:
+        from django.contrib.postgres.fields import JSONField
+    except:  # noqa: E722 optional feature
+        JSONField = None.__class__
 
 
 _STRING_FIELDS = (
@@ -177,6 +186,8 @@ def _get_field_type(model, field_name, field):
         field.base_field, _NUMBER_FIELDS
     ):  # pragma: postgress
         return NumberArrayType, field.base_field.choices
+    elif isinstance(field, JSONField):  # pragma: postgress / py 3.1
+        return JSONType, None
     elif field.__class__ in _FIELD_TYPE_MAP:
         res = _FIELD_TYPE_MAP[field.__class__]
     else:
@@ -290,6 +301,7 @@ def _get_django_lookup(field_type, lookup):
             "lte": "lte",
             "contains": "contains",
             "length": "len",
+            "has_key": "has_key",
         }[lookup]
 
 
