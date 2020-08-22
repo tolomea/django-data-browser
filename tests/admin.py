@@ -81,12 +81,15 @@ class ProductMixin:
         "created_time",
         "number_choice",
         "string_choice",
-        "hidden",
+        "hidden_calculated",
+        "extra_inline",
+        "extra_model",
+        "stealth_annotation",
     ]
-    readonly_fields = ["id", "is_onsale", "hidden"]
+    readonly_fields = ["id", "is_onsale", "hidden_calculated"]
 
     @ddb_hide
-    def hidden(self, obj):
+    def hidden_calculated(self, obj):
         return obj
 
 
@@ -121,3 +124,7 @@ class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
     @annotation
     def annotated(self, request, qs):
         return qs.annotate(annotated=F("name"))
+
+    @annotation
+    def stealth_annotation(self, request, qs):
+        return qs.annotate(stealth_annotation=F("name"))

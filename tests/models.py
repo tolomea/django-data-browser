@@ -107,6 +107,10 @@ class Product(models.Model):
     fake = FakeField()
     created_time = models.DateTimeField(default=timezone.now)
     only_in_list_view = models.TextField()
+    hidden_inline = models.TextField()
+    hidden_model = models.TextField()
+    extra_inline = models.TextField()
+    extra_model = models.TextField()
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)
