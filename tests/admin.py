@@ -82,9 +82,8 @@ class ProductMixin:
         "number_choice",
         "string_choice",
         "hidden_calculated",
-        "extra_inline",
-        "extra_model",
-        "stealth_annotation",
+        "hidden_inline",
+        "hidden_model",
     ]
     readonly_fields = ["id", "is_onsale", "hidden_calculated"]
 
@@ -95,6 +94,8 @@ class ProductMixin:
 
 class ProductInline(ProductMixin, admin.TabularInline):
     model = models.Product
+    ddb_hide_fields = ["hidden_inline"]
+    ddb_extra_fields = ["extra_inline"]
 
 
 @admin.register(models.Producer)
@@ -120,6 +121,8 @@ class SKUInline(admin.TabularInline):
 class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
     list_display = ["only_in_list_view", "annotated"]
+    ddb_hide_fields = ["hidden_model"]
+    ddb_extra_fields = ["extra_model"]
 
     @annotation
     def annotated(self, request, qs):

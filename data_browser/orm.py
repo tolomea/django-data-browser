@@ -11,7 +11,7 @@ from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 
 from .common import settings
-from .helpers import AnnotationDescriptor
+from .helpers import AdminMixin, AnnotationDescriptor
 from .orm_fields import (
     _AGGREGATES,
     _FUNC_MAP,
@@ -108,13 +108,18 @@ def _get_all_admin_fields(request):
             return False  # pragma: no cover  Django < 2.1
 
     all_admin_fields = defaultdict(set)
+    hidden_fields = defaultdict(set)
     model_admins = {}
     for model, model_admin in site._registry.items():
         model_admins[model] = model_admin
         if visible(model_admin, request):
             all_admin_fields[model].update(from_fieldsets(model_admin, True))
             all_admin_fields[model].update(model_admin.get_list_display(request))
+            all_admin_fields[model].update(getattr(model_admin, "ddb_extra_fields", []))
             all_admin_fields[model].add(_OPEN_IN_ADMIN)
+            if isinstance(model_admin, AdminMixin):
+                all_admin_fields[model].update(model_admin._ddb_annotations())
+            hidden_fields[model].update(getattr(model_admin, "ddb_hide_fields", []))
 
             # check the inlines, these are already filtered for access
             for inline in model_admin.get_inline_instances(request):
@@ -129,13 +134,24 @@ def _get_all_admin_fields(request):
                         all_admin_fields[inline.model].update(
                             from_fieldsets(inline, False)
                         )
+                        all_admin_fields[inline.model].update(
+                            getattr(inline, "ddb_extra_fields", [])
+                        )
                         all_admin_fields[inline.model].add(fk_field.name)
+                        hidden_fields[inline.model].update(
+                            getattr(inline, "ddb_hide_fields", [])
+                        )
 
     # we always have id and never pk
     for fields in all_admin_fields.values():
         fields.add("id")
         fields.discard("pk")
         fields.discard("__str__")
+
+    # throw away the hidden ones
+    for model, fields in hidden_fields.items():
+        for f in fields:
+            all_admin_fields[model].discard(f)
 
     return model_admins, all_admin_fields
 

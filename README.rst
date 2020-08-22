@@ -119,7 +119,12 @@ However if necessary this can be tweaked using the following class level propert
 | Name             | Format              | Purpose                                                                                                    |
 +==================+=====================+============================================================================================================+
 | ddb_ignore       | Boolean             | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model. |
+| ddb_hide_fields  | List of field names | Explicitly hide the specified fields.                                                                      |
+| ddb_extra_fields | List of field names | Add additional fields that are not mentioned in fields, fieldsets or list_display.                         |
 +------------------+---------------------+------------------------------------------------------------------------------------------------------------+
+
+Additionally, per the below sections, calculated fields can be hidden with the ``data_browser.helpers.ddb_hide`` decorator and annotated fields are always visible unless explicitly hidden.
+
 
 Calculated and Annotated fields
 ********************************
@@ -169,6 +174,8 @@ Sometimes it is necessary for the top level of the annotation to have ``output_f
 The helpers will automatically deal with the ``admin_order_field`` and ``boolean`` properties and ``readonly_fields``, reducing the boiler plate involved in using annotations in the admin.
 
 Additionally the annotation will only be applied to the list view when it's mentioned in ``list_display`` this allows you to use annotations extensively on your detail views without hurting the performance of your list views.
+
+And finally even if not mentioned in fields, fieldsets or list_display, the annotation will still be visible in the data browser unless it is explicitly mentioned in ddb_hide_fields.
 
 
 Performance

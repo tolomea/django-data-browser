@@ -20,7 +20,7 @@ class AdminMixin:
         qs = super().get_queryset(request)
         fields = self.get_fields_for_request(request)
 
-        for name, descriptor in self._DDB_annotations().items():
+        for name, descriptor in self._ddb_annotations().items():
             if name not in fields:
                 continue
 
@@ -43,13 +43,13 @@ class AdminMixin:
 
     def get_readonly_fields(self, request, obj=None):
         res = super().get_readonly_fields(request, obj)
-        return list(res) + list(self._DDB_annotations())
+        return list(res) + list(self._ddb_annotations())
 
     @classmethod
-    def _DDB_annotations(cls):
-        if not hasattr(cls, "_DDB_annotations_real"):
-            cls._DDB_annotations_real = {}
-        return cls._DDB_annotations_real
+    def _ddb_annotations(cls):
+        if not hasattr(cls, "_ddb_annotations_real"):
+            cls._ddb_annotations_real = {}
+        return cls._ddb_annotations_real
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -72,7 +72,7 @@ class AnnotationDescriptor:
             raise Exception(
                 "Django Data Browser 'annotation' decorator used without 'AdminMixin'"
             )
-        owner._DDB_annotations()[name] = self
+        owner._ddb_annotations()[name] = self
 
     def __get__(self, instance, owner=None):
         return self
