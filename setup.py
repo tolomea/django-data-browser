@@ -25,7 +25,7 @@ setuptools.setup(
     long_description=Path("README.rst").read_text(),
     long_description_content_type="text/x-rst",
     url="https://github.com/tolomea/django-data-browser",
-    packages=setuptools.find_packages(exclude=["tests"]),
+    packages=setuptools.find_packages(exclude=["tests*"]),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
