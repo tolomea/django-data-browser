@@ -1,3 +1,5 @@
+import logging
+
 from django import http
 
 from . import version
@@ -21,6 +23,11 @@ def HttpResponse(*args, **kwargs):
     res["X-Version"] = version
     res["Access-Control-Expose-Headers"] = "X-Version"
     return res
+
+
+def debug_log(msg):  # pragma: no cover
+    if settings.DEBUG:
+        logging.getLogger(__name__).warning(str(msg))
 
 
 class Settings:

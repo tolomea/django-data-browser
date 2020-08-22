@@ -1,5 +1,4 @@
 import json
-import logging
 from collections import defaultdict
 
 from django.contrib.admin import site
@@ -10,7 +9,7 @@ from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 
-from .common import settings
+from .common import debug_log, settings
 from .helpers import AdminMixin, AnnotationDescriptor
 from .orm_fields import (
     _AGGREGATES,
@@ -92,10 +91,15 @@ def _get_all_admin_fields(request):
         else:
             obj = None
 
-        for f in flatten_fieldsets(admin.get_fieldsets(request, obj)):
-            # skip calculated fields on inlines
-            if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
-                yield f
+        try:
+            fields = admin.get_fieldsets(request, obj)
+        except Exception as e:  # pragma: no cover
+            debug_log(e)  # ignore things like HaystackResultsAdmin
+        else:
+            for f in flatten_fieldsets(fields):
+                # skip calculated fields on inlines
+                if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
+                    yield f
 
     def visible(model_admin, request):
         if getattr(model_admin, "ddb_ignore", False):
@@ -126,8 +130,8 @@ def _get_all_admin_fields(request):
                 if visible(inline, request):
                     try:
                         fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
-                    except Exception:
-                        pass  # ignore things like GenericInlineModelAdmin
+                    except Exception as e:
+                        debug_log(e)  # ignore things like GenericInlineModelAdmin
                     else:
                         if inline.model not in model_admins:  # pragma: no branch
                             model_admins[inline.model] = inline
@@ -217,10 +221,9 @@ def _get_field_type(model, field_name, field):
                 res = field_type
                 break
         else:
-            if settings.DEBUG:  # pragma: no cover
-                logging.getLogger(__name__).warning(
-                    f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
-                )
+            debug_log(
+                f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
+            )
             return UnknownType, None
 
     # Choice fields have different lookups
