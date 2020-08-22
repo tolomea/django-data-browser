@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class FakeField(models.Field):  # pragma: no cover
@@ -107,7 +108,9 @@ class Product(models.Model):
     model_not_in_admin = models.ForeignKey(
         NotInAdmin, null=True, on_delete=models.CASCADE
     )
-    string_choice = models.CharField(max_length=8, choices=[("a", "A"), ("b", "B")])
+    string_choice = models.CharField(
+        max_length=8, choices=[("a", _("A")), ("b", _("B"))]
+    )
     number_choice = models.IntegerField(choices=[(1, "A"), (2, "B")], default=1)
 
     def is_onsale(self):

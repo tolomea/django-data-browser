@@ -41,4 +41,5 @@ settings.configure(
     STATIC_URL="/static/",
     MEDIA_URL="/media/",
     DATA_BROWSER_ALLOW_PUBLIC=True,
+    USE_I18N=True,
 )

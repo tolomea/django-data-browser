@@ -6,6 +6,7 @@ import sys
 
 import django.contrib.admin.views.decorators as admin_decorators
 from django import http
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404
 from django.template import engines, loader
 from django.template.response import TemplateResponse
@@ -110,7 +111,7 @@ def query_ctx(request, *, model_name="", fields=""):
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
     config = _get_config(request)
-    config = json.dumps(config)
+    config = json.dumps(config, cls=DjangoJSONEncoder)
     config = (
         config.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
     )
