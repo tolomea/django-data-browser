@@ -98,6 +98,8 @@ def _get_all_admin_fields(request):
                 yield f
 
     def visible(model_admin, request):
+        if getattr(model_admin, "ddb_ignore", False):
+            return False
         if model_admin.has_change_permission(request):
             return True
         if hasattr(model_admin, "has_view_permission"):
@@ -116,15 +118,18 @@ def _get_all_admin_fields(request):
 
             # check the inlines, these are already filtered for access
             for inline in model_admin.get_inline_instances(request):
-                try:
-                    fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
-                except Exception:
-                    pass  # ignore things like GenericInlineModelAdmin
-                else:
-                    if inline.model not in model_admins:  # pragma: no branch
-                        model_admins[inline.model] = inline
-                    all_admin_fields[inline.model].update(from_fieldsets(inline, False))
-                    all_admin_fields[inline.model].add(fk_field.name)
+                if visible(inline, request):
+                    try:
+                        fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
+                    except Exception:
+                        pass  # ignore things like GenericInlineModelAdmin
+                    else:
+                        if inline.model not in model_admins:  # pragma: no branch
+                            model_admins[inline.model] = inline
+                        all_admin_fields[inline.model].update(
+                            from_fieldsets(inline, False)
+                        )
+                        all_admin_fields[inline.model].add(fk_field.name)
 
     # we always have id and never pk
     for fields in all_admin_fields.values():

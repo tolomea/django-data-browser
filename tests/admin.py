@@ -18,10 +18,22 @@ class GenericInlineAdminInline(GenericInlineModelAdmin):
     model = models.GenericInlineAdmin
 
 
+class IgnoredAdminInline(admin.TabularInline):
+    model = models.Ignored
+    fields = ["name"]
+    ddb_ignore = True
+
+
+@admin.register(models.Ignored)
+class IgnoredAdmin(admin.ModelAdmin):
+    fields = ["name", "in_admin"]
+    ddb_ignore = True
+
+
 @admin.register(models.InAdmin)
 class InAdmin(admin.ModelAdmin):
     fields = ["name"]
-    inlines = [InlineAdminInline, GenericInlineAdminInline]
+    inlines = [InlineAdminInline, GenericInlineAdminInline, IgnoredAdminInline]
 
 
 @admin.register(models.Normal)

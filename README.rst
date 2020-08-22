@@ -107,6 +107,20 @@ One convenient way of utilizing this is to create the file ``templates/admin/cha
 
 This will place a "Data Browser" button on the list view of every admin that inherits from the mixin.
 
+
+
+Specifying models and fields
+********************************
+
+By default the Data Browser has access to all models and fields that the current user can see anywhere in the Admin site.
+However if necessary this can be tweaked using the following class level properties on ModelAdmins and Inlines.
+
++------------------+---------------------+------------------------------------------------------------------------------------------------------------+
+| Name             | Format              | Purpose                                                                                                    |
++==================+=====================+============================================================================================================+
+| ddb_ignore       | Boolean             | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model. |
++------------------+---------------------+------------------------------------------------------------------------------------------------------------+
+
 Calculated and Annotated fields
 ********************************
 
