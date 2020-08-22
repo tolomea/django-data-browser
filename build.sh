@@ -10,7 +10,9 @@ cp frontend/build/index.html data_browser/templates/data_browser/index.html
 git add data_browser/fe_build data_browser/templates/data_browser/index.html
 
 rm -Rf dist build
-pip install --upgrade setuptools wheel twine
+python -m pip install -U pip
+python -m pip install --upgrade setuptools wheel twine check-manifest
+check-manifest -v
 python setup.py sdist bdist_wheel
 twine check dist/*
 

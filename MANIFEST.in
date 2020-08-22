@@ -1,0 +1,24 @@
+include *.png
+include *.rst
+include *.sh
+include *.svg
+include *.txt
+include *.yaml
+include *.cfg
+include *.ini
+include .coveragerc
+include .flake8
+include LICENSE
+
+recursive-include tests *.py
+
+include frontend/package.json
+include frontend/package-lock.json
+include frontend/README.md
+recursive-include frontend/src *.css
+recursive-include frontend/src *.html
+recursive-include frontend/src *.js
+recursive-include frontend/src *.json
+recursive-include frontend/src *.md
+recursive-include frontend/src *.svg
+recursive-include frontend/public *.html
