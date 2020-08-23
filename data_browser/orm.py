@@ -360,22 +360,28 @@ def _filter(qs, filter_, filter_str):
 
 
 def _cols_sub_query(bound_query):
-    row_fields = [f.unsorted() for f in bound_query.row_fields]
+    filters = [
+        filter_
+        for filter_ in bound_query.valid_filters
+        if filter_.orm_bound_field.filter_
+    ]
+
     return BoundQuery(
-        bound_query.model_name,
-        bound_query.col_fields + row_fields,
-        bound_query.valid_filters,
-        bound_query.limit,
+        bound_query.model_name, bound_query.col_fields, filters, bound_query.limit
     )
 
 
 def _rows_sub_query(bound_query):
-    col_fields = [f.unsorted() for f in bound_query.col_fields]
+    filters = [
+        filter_
+        for filter_ in bound_query.valid_filters
+        if filter_.orm_bound_field.filter_
+    ]
     data_fields = [f for f in bound_query.data_fields if f.direction]
     return BoundQuery(
         bound_query.model_name,
-        bound_query.row_fields + data_fields + col_fields,
-        bound_query.valid_filters,
+        bound_query.row_fields + data_fields,
+        filters,
         bound_query.limit,
     )
 
@@ -504,19 +510,27 @@ def get_results(request, bound_query, orm_models):
             res.append((field.queryset_path, v))
         return tuple(res)
 
-    col_keys = {}
-    for row in cols_res:
-        col_keys[get_fields(row, bound_query.bound_col_fields)] = None
-
-    row_keys = {}
-    for row in rows_res:
-        row_keys[get_fields(row, bound_query.bound_row_fields)] = None
-
     data = defaultdict(dict)
+    all_row_keys = set()
+    all_col_keys = set()
     for row in res:
         row_key = get_fields(row, bound_query.bound_row_fields)
         col_key = get_fields(row, bound_query.bound_col_fields)
         data[row_key][col_key] = dict(get_fields(row, bound_query.bound_data_fields))
+        all_row_keys.add(row_key)
+        all_col_keys.add(col_key)
+
+    col_keys = {}  # abuse dict to preserve order while removing duplicates
+    for row in cols_res:
+        key = get_fields(row, bound_query.bound_col_fields)
+        if key in all_col_keys:
+            col_keys[key] = None
+
+    row_keys = {}  # abuse dict to preserve order while removing duplicates
+    for row in rows_res:
+        key = get_fields(row, bound_query.bound_row_fields)
+        if key in all_row_keys:
+            row_keys[key] = None
 
     body = []
     for col_key in col_keys:

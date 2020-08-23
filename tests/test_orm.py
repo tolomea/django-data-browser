@@ -468,13 +468,14 @@ def test_pivot_sorting_body(get_product_pivot):
         datetime(2021, 1, 1),
         datetime(2021, 2, 1),
         datetime(2021, 2, 2),
+        datetime(2021, 2, 3),
         datetime(2022, 1, 1),
         datetime(2022, 1, 2),
         datetime(2022, 1, 3),
+        datetime(2022, 1, 4),
         datetime(2022, 2, 1),
         datetime(2022, 2, 2),
         datetime(2022, 2, 3),
-        datetime(2022, 2, 4),
     ]
     for dt in datetimes:
         models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
@@ -483,7 +484,7 @@ def test_pivot_sorting_body(get_product_pivot):
         3, "&created_time__year,created_time__month,id__count+1", {}
     )
     assert data == {
-        "body": [[[1], [2]], [[3], [4]]],
+        "body": [[[1], [3]], [[4], [3]]],
         "rows": [["January"], ["Feburary"]],
         "cols": [[2021], [2022]],
     }
@@ -492,7 +493,7 @@ def test_pivot_sorting_body(get_product_pivot):
         3, "&created_time__year,created_time__month,id__count-1", {}
     )
     assert data == {
-        "body": [[[2], [1]], [[4], [3]]],
+        "body": [[[3], [1]], [[3], [4]]],
         "rows": [["Feburary"], ["January"]],
         "cols": [[2021], [2022]],
     }
