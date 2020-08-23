@@ -225,6 +225,11 @@ class TestBoundQuery:
         bound_query = BoundQuery.bind(query, orm_models)
         assert [f.path for f in bound_query.fields] == []
 
+    def test_bad_field_lookup(self, orm_models):
+        query = Query("app.model", [QueryField("fa__count__bob")], [])
+        bound_query = BoundQuery.bind(query, orm_models)
+        assert [f.path for f in bound_query.fields] == []
+
     def test_bad_fk(self, orm_models):
         query = Query("app.model", [QueryField("yata__yata")], [])
         bound_query = BoundQuery.bind(query, orm_models)

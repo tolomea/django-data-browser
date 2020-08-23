@@ -547,6 +547,8 @@ class BoundQuery:
             model_name = query.model_name
             orm_bound_field = None
             for part in parts:
+                if model_name is None:
+                    return None
                 orm_field = orm_models[model_name].fields.get(part)
                 if orm_field is None:
                     return None
