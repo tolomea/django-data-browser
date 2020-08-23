@@ -307,17 +307,19 @@ function QueryPage(props) {
       <ModelSelector {...{ query, sortedModels, model }} />
       <Filters {...{ query, filters, filterErrors }} />
       <p>
-        Limit:{" "}
-        <input
-          className="RowLimit"
-          type="number"
-          value={query.query.limit}
-          onChange={(event) => {
-            query.setLimit(event.target.value);
-          }}
-          min="1"
-        />{" "}
-        - Showing {length} results -{" "}
+        <span className={length >= query.query.limit ? "Error" : ""}>
+          Limit:{" "}
+          <input
+            className="RowLimit"
+            type="number"
+            value={query.query.limit}
+            onChange={(event) => {
+              query.setLimit(event.target.value);
+            }}
+            min="1"
+          />{" "}
+          - Showing {length} results -{" "}
+        </span>
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
         <Save
