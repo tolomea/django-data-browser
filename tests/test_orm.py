@@ -481,7 +481,7 @@ def test_pivot_sorting_body(get_product_pivot):
         models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
 
     data = get_product_pivot(
-        3, "&created_time__year,created_time__month,id__count+1", {}
+        3, "&created_time__year+1,created_time__month+3,id__count+2", {}
     )
     assert data == {
         "body": [[[1], [3]], [[4], [3]]],
@@ -490,7 +490,7 @@ def test_pivot_sorting_body(get_product_pivot):
     }
 
     data = get_product_pivot(
-        3, "&created_time__year,created_time__month,id__count-1", {}
+        3, "&created_time__year+1,created_time__month+3,id__count-2", {}
     )
     assert data == {
         "body": [[[3], [1]], [[3], [4]]],
