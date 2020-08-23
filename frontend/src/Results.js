@@ -79,14 +79,21 @@ function VTableHeadRow(props) {
 
 function VTableBodyRow(props) {
   const { fields, query, classNameFirst, className, row } = props;
-  return fields.map((field, i) => (
-    <DataCell
-      key={field.pathStr}
-      value={row ? row[field.pathStr] : ""}
-      className={`${i ? "" : classNameFirst} ${className}`}
-      modelField={query.getField(field.path)}
-    />
-  ));
+  return fields.map((field, i) => {
+    if (row)
+      return (
+        <DataCell
+          key={field.pathStr}
+          value={row[field.pathStr]}
+          className={`${i ? "" : classNameFirst} ${className}`}
+          modelField={query.getField(field.path)}
+        />
+      );
+    else
+      return (
+        <td key={field.pathStr} class={`${i ? "" : classNameFirst} Empty`}></td>
+      );
+  });
 }
 
 function HTableRow(props) {

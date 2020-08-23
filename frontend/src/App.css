@@ -214,6 +214,9 @@ select.Lookup {
 .Results td.time {
   text-align: right;
 }
+.Results td.Empty {
+  border: none;
+}
 .Results td.HoriBorder,
 .Results th.HoriBorder {
   border-top: 2px solid black;
@@ -222,9 +225,6 @@ select.Lookup {
 .Results td.LeftBorder,
 .Results th.LeftBorder {
   border-left: 2px solid black;
-}
-.Results td.Empty {
-  border: none;
 }
 .Results th {
   text-align: center;
