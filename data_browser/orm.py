@@ -371,9 +371,10 @@ def _cols_sub_query(bound_query):
 
 def _rows_sub_query(bound_query):
     col_fields = [f.unsorted() for f in bound_query.col_fields]
+    data_fields = [f for f in bound_query.data_fields if f.direction]
     return BoundQuery(
         bound_query.model_name,
-        bound_query.row_fields + col_fields,
+        bound_query.row_fields + data_fields + col_fields,
         bound_query.valid_filters,
         bound_query.limit,
     )

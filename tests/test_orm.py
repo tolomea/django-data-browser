@@ -427,7 +427,7 @@ def test_get_pivot_all(get_product_pivot):
     }
 
 
-def test_pivot_sorting(get_product_pivot):
+def test_pivot_sorting_with_empty_cell(get_product_pivot):
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
@@ -461,6 +461,43 @@ def test_pivot_sorting(get_product_pivot):
     }
 
 
+def test_pivot_sorting_body(get_product_pivot):
+    address = models.Address.objects.create(city="london", street="bad")
+    producer = models.Producer.objects.create(name="Bob", address=address)
+    datetimes = [
+        datetime(2021, 1, 1),
+        datetime(2021, 2, 1),
+        datetime(2021, 2, 2),
+        datetime(2022, 1, 1),
+        datetime(2022, 1, 2),
+        datetime(2022, 1, 3),
+        datetime(2022, 2, 1),
+        datetime(2022, 2, 2),
+        datetime(2022, 2, 3),
+        datetime(2022, 2, 4),
+    ]
+    for dt in datetimes:
+        models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
+
+    data = get_product_pivot(
+        3, "&created_time__year,created_time__month,id__count+1", {}
+    )
+    assert data == {
+        "body": [[[1], [2]], [[3], [4]]],
+        "rows": [["January"], ["Feburary"]],
+        "cols": [[2021], [2022]],
+    }
+
+    data = get_product_pivot(
+        3, "&created_time__year,created_time__month,id__count-1", {}
+    )
+    assert data == {
+        "body": [[[2], [1]], [[4], [3]]],
+        "rows": [["Feburary"], ["January"]],
+        "cols": [[2021], [2022]],
+    }
+
+
 @pytest.mark.usefixtures("pivot_products")
 def test_pivot_having(get_product_pivot):
     data = get_product_pivot(
@@ -474,6 +511,7 @@ def test_pivot_having(get_product_pivot):
 jan = "January"
 feb = "Feburary"
 testdata = [
+    # drcb, has_data, row_field, col_field, body_fields
     ("----", [], [], []),
     ("---b", [[0, None]], [[]], [[[]]]),
     ("--c-", [], [], []),
@@ -497,13 +535,15 @@ testdata = [
 @pytest.mark.parametrize("key,rows,cols,body", testdata)
 def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
     fields = []
-    if "r" in key:
+    filters = {}
+    if "r" in key:  # unpivoted field
         fields.append("created_time__year+0")
-    if "c" in key:
+    if "c" in key:  # pivoted field
         fields.append("&created_time__month+1")
-    if "b" in key:
+    if "b" in key:  # fields in the body
         fields.extend(["size__count", "size__max"])
-    filters = {} if "d" in key else {"id__equals": ["123"]}
+    if "d" not in key:  # actually has data
+        filters["id__equals"] = ["123"]
 
     queries = 0 if key.endswith("---") else 1
     if "r" in key and "c" in key:
