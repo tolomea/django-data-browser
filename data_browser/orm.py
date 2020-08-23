@@ -202,17 +202,21 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
             return None
 
 
+def _fmt_choices(choices):
+    return [(value, str(label)) for value, label in choices]
+
+
 def _get_field_type(model, field_name, field):
     if isinstance(field, ArrayField) and isinstance(
         field.base_field, _STRING_FIELDS
     ):  # pragma: postgres
-        return StringArrayType, field.base_field.choices
+        return StringArrayType, _fmt_choices(field.base_field.choices)
     elif isinstance(field, ArrayField) and isinstance(
         field.base_field, _NUMBER_FIELDS
     ):  # pragma: postgres
-        return NumberArrayType, field.base_field.choices
+        return NumberArrayType, _fmt_choices(field.base_field.choices)
     elif isinstance(field, JSONField):  # pragma: json field
-        return JSONType, None
+        res = JSONType
     elif field.__class__ in _FIELD_TYPE_MAP:
         res = _FIELD_TYPE_MAP[field.__class__]
     else:
@@ -224,13 +228,13 @@ def _get_field_type(model, field_name, field):
             debug_log(
                 f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
             )
-            return UnknownType, None
+            res = UnknownType
 
     # Choice fields have different lookups
     if res is StringType and field.choices:
-        return StringChoiceType, field.choices
+        return StringChoiceType, _fmt_choices(field.choices)
     elif res is NumberType and field.choices:
-        return NumberChoiceType, field.choices
+        return NumberChoiceType, _fmt_choices(field.choices)
     else:
         return res, None
 

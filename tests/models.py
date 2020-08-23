@@ -1,9 +1,21 @@
+from dataclasses import dataclass
+
 from django import forms
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
+from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
+
+
+@deconstructible
+@dataclass
+class Word:
+    name: str
+
+    def __str__(self):
+        return self.name
 
 
 class FakeField(models.Field):  # pragma: no cover
@@ -118,9 +130,11 @@ class Product(models.Model):
         NotInAdmin, null=True, on_delete=models.CASCADE
     )
     string_choice = models.CharField(
-        max_length=8, choices=[("a", _("A")), ("b", _("B"))]
+        max_length=8, choices=[("a", _("A")), ("b", Word("B"))]
     )
-    number_choice = models.IntegerField(choices=[(1, "A"), (2, "B")], default=1)
+    number_choice = models.IntegerField(
+        choices=[(1, _("A")), (2, Word("B"))], default=1
+    )
 
     def is_onsale(self):
         return False
