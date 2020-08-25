@@ -158,24 +158,32 @@ def test_get_file_link(get_product_flat):
     sortedAssert(data, [["a", None], ["b", '<a href="/media/bob.jpg">bob.jpg</a>']])
 
 
-@pytest.fixture
-def break_storage(monkeypatch):
-    from django.core.files.storage import FileSystemStorage
+def test_bad_storage(monkeypatch, req):
+    # break storage
+    from django.core.files.storage import FileSystemStorage, default_storage
+    from django.utils.functional import empty
 
     def boom(*args, **kwargs):
         assert False
 
     monkeypatch.setattr(FileSystemStorage, "__init__", boom)
+    default_storage._wrapped = empty
 
+    # copy what the fixture does
+    orm_models = orm.get_models(req)
 
-@pytest.mark.usefixtures("break_storage")
-def test_bad_storage(break_storage, get_product_flat):
+    def get_product_flat(*args, **kwargs):
+        query = Query.from_request("tests.Product", *args)
+        bound_query = BoundQuery.bind(query, orm_models)
+        data = orm.get_results(req, bound_query, orm_models)
+        return flatten_table(bound_query.fields, data["rows"])
+
     # some storage backends will hard fail if their underlying storage isn't
     # setup right https://github.com/tolomea/django-data-browser/issues/11
     producer = models.Producer.objects.create()
     models.Product.objects.create(name="a", producer=producer)
     models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
-    data = get_product_flat(1, "name,image", {})
+    data = get_product_flat("name,image", {})
     sortedAssert(data, [["a", None], ["b", "assert False"]])
 
 
