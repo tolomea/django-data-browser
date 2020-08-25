@@ -91,17 +91,19 @@ def _get_all_admin_fields(request):
         else:
             obj = None
 
-        try:
-            fields = admin.get_fieldsets(request, obj)
-        except Exception as e:  # pragma: no cover
-            debug_log(e)  # ignore things like HaystackResultsAdmin
-        else:
-            for f in flatten_fieldsets(fields):
-                # skip calculated fields on inlines
-                if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
-                    yield f
+        fields = admin.get_fieldsets(request, obj)
+        for f in flatten_fieldsets(fields):
+            # skip calculated fields on inlines
+            if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
+                yield f
 
     def visible(model_admin, request):
+        attrs = ["get_fieldsets", "model", "get_queryset"]
+        if not all(hasattr(model_admin, a) for a in attrs):
+            debug_log(
+                f"{type(model_admin)} instance does not look like a ModelAdmin or InlineModelAdmin"
+            )
+            return False
         if getattr(model_admin, "ddb_ignore", False):
             return False
         if model_admin.has_change_permission(request):

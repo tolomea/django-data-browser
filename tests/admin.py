@@ -24,6 +24,15 @@ class IgnoredAdminInline(admin.TabularInline):
     ddb_ignore = True
 
 
+class NotAnAdminInline(admin.TabularInline):
+    model = models.Ignored
+    fields = ["name"]
+
+    @property
+    def get_queryset(self):
+        raise AttributeError
+
+
 @admin.register(models.Ignored)
 class IgnoredAdmin(admin.ModelAdmin):
     fields = ["name", "in_admin"]
@@ -33,7 +42,12 @@ class IgnoredAdmin(admin.ModelAdmin):
 @admin.register(models.InAdmin)
 class InAdmin(admin.ModelAdmin):
     fields = ["name"]
-    inlines = [InlineAdminInline, GenericInlineAdminInline, IgnoredAdminInline]
+    inlines = [
+        InlineAdminInline,
+        GenericInlineAdminInline,
+        IgnoredAdminInline,
+        NotAnAdminInline,
+    ]
 
 
 @admin.register(models.Normal)
