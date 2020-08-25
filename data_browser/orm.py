@@ -266,7 +266,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 model_name=model_name,
                 name=field_name,
                 pretty_name=field_name,
-                url_func=field.storage.url,
+                django_field=field,
             )
         elif isinstance(field, type(None)):
             orm_field = _get_calculated_field(

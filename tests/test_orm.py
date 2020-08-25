@@ -158,6 +158,27 @@ def test_get_file_link(get_product_flat):
     sortedAssert(data, [["a", None], ["b", '<a href="/media/bob.jpg">bob.jpg</a>']])
 
 
+@pytest.fixture
+def break_storage(monkeypatch):
+    from django.core.files.storage import FileSystemStorage
+
+    def boom(*args, **kwargs):
+        assert False
+
+    monkeypatch.setattr(FileSystemStorage, "__init__", boom)
+
+
+@pytest.mark.usefixtures("break_storage")
+def test_bad_storage(break_storage, get_product_flat):
+    # some storage backends will hard fail if their underlying storage isn't
+    # setup right https://github.com/tolomea/django-data-browser/issues/11
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(name="a", producer=producer)
+    models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
+    data = get_product_flat(1, "name,image", {})
+    sortedAssert(data, [["a", None], ["b", "assert False"]])
+
+
 @pytest.mark.usefixtures("products")
 def test_get_calculated_field_on_admin(get_product_flat):
     data = get_product_flat(2, "producer__address__bob", {})

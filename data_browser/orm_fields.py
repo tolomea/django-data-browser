@@ -309,15 +309,21 @@ class OrmAdminField(OrmBaseField):
 
 
 class OrmFileField(OrmConcreteField):
-    def __init__(self, model_name, name, pretty_name, url_func):
+    def __init__(self, model_name, name, pretty_name, django_field):
         super().__init__(model_name, name, pretty_name, type_=HTMLType)
-        self.url_func = url_func
+        self.django_field = django_field
 
     def format(self, value):
         if not value:
             return None
-
-        return format_html('<a href="{}">{}</a>', self.url_func(value), value)
+        try:
+            # some storage backends will hard fail if their underlying storage isn't
+            # setup right https://github.com/tolomea/django-data-browser/issues/11
+            return format_html(
+                '<a href="{}">{}</a>', self.django_field.storage.url(value), value
+            )
+        except Exception as e:
+            return str(e)
 
 
 class OrmAggregateField(OrmBaseField):
