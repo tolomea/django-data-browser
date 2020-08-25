@@ -27,7 +27,7 @@ def HttpResponse(*args, **kwargs):
 
 def debug_log(msg):  # pragma: no cover
     if settings.DEBUG:
-        logging.getLogger(__name__).warning(str(msg))
+        logging.getLogger(__name__).warning(f"DDB: {msg}")
 
 
 class Settings:

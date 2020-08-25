@@ -226,7 +226,7 @@ def _get_field_type(model, field_name, field):
                 break
         else:
             debug_log(
-                f"DDB {model.__name__}.{field_name} unsupported type {type(field).__name__}"
+                f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
             )
             res = UnknownType
 
