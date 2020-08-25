@@ -6,7 +6,7 @@ from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
-from django.db.models.fields.reverse_related import ForeignObjectRel
+from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
 from django.forms.models import _get_foreign_key
 
 from .common import debug_log, settings
@@ -251,9 +251,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
         field = model_fields.get(field_name)
         if field_name == _OPEN_IN_ADMIN:
             fields[_OPEN_IN_ADMIN] = OrmAdminField(model_name=model_name)
-        elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
-            pass  # TODO 2many support
-        elif isinstance(field, models.ForeignKey):
+        elif isinstance(field, (models.ForeignKey, OneToOneRel)):
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(
                     model_name=model_name,
@@ -261,6 +259,8 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     pretty_name=field_name,
                     rel_name=get_model_name(field.related_model),
                 )
+        elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
+            pass  # TODO 2many support
         elif isinstance(field, models.FileField):
             fields[field_name] = OrmFileField(
                 model_name=model_name,

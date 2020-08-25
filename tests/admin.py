@@ -65,8 +65,8 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(models.Address)
 class AddressAdmin(AdminMixin, admin.ModelAdmin):
-    fields = ["pk", "city", "bob", "fred", "tom", "andrew"]
-    readonly_fields = ["pk", "bob", "fred", "tom"]
+    fields = ["pk", "city", "bob", "fred", "tom", "andrew", "producer"]
+    readonly_fields = ["pk", "bob", "fred", "tom", "producer"]
 
     def bob(self, obj):
         assert obj.street != "bad", "err"

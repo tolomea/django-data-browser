@@ -638,6 +638,14 @@
                     "prettyName": "id",
                     "type": "number"
                 },
+                "producer": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "tests.Producer",
+                    "prettyName": "producer",
+                    "type": null
+                },
                 "tom": {
                     "canPivot": true,
                     "choices": [],
@@ -654,6 +662,7 @@
                 "bob",
                 "city",
                 "fred",
+                "producer",
                 "tom"
             ]
         },

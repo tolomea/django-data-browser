@@ -399,6 +399,13 @@ def test_get_results_basic_flat(get_product_flat):
 
 
 @pytest.mark.usefixtures("products")
+def test_get_results_one_to_one(get_product_flat):
+    # just a query
+    data = get_product_flat(1, "name+0,producer__address__producer__address__city", {})
+    assert data == [["a", "london"], ["b", "london"], ["c", None]]
+
+
+@pytest.mark.usefixtures("products")
 def test_get_results_calculated_causes_query(get_product_flat):
     # query products, fetch objects for calculated
     data = get_product_flat(2, "name+0,is_onsale,producer__address__city", {})

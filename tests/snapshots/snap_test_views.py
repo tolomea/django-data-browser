@@ -603,6 +603,14 @@ snapshots["test_query_html config"] = {
                     "prettyName": "id",
                     "type": "number",
                 },
+                "producer": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": False,
+                    "model": "tests.Producer",
+                    "prettyName": "producer",
+                    "type": None,
+                },
                 "tom": {
                     "canPivot": True,
                     "choices": [],
@@ -612,7 +620,16 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["id", "admin", "andrew", "bob", "city", "fred", "tom"],
+            "sortedFields": [
+                "id",
+                "admin",
+                "andrew",
+                "bob",
+                "city",
+                "fred",
+                "producer",
+                "tom",
+            ],
         },
         "tests.InAdmin": {
             "fields": {
@@ -2537,6 +2554,14 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "id",
                     "type": "number",
                 },
+                "producer": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": False,
+                    "model": "tests.Producer",
+                    "prettyName": "producer",
+                    "type": None,
+                },
                 "tom": {
                     "canPivot": True,
                     "choices": [],
@@ -2546,7 +2571,16 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["id", "admin", "andrew", "bob", "city", "fred", "tom"],
+            "sortedFields": [
+                "id",
+                "admin",
+                "andrew",
+                "bob",
+                "city",
+                "fred",
+                "producer",
+                "tom",
+            ],
         },
         "tests.InAdmin": {
             "fields": {

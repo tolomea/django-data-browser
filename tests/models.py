@@ -103,7 +103,7 @@ class Address(models.Model):
 
 
 class Producer(models.Model):
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True)
     name = models.TextField()
 
 
