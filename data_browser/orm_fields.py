@@ -24,7 +24,7 @@ from .types import (
 OPEN_IN_ADMIN = "admin"
 
 
-_AGG_MAP = {
+_AGGREGATES = {
     "average": lambda x: models.Avg(Cast(x, output_field=models.IntegerField())),
     "count": lambda x: models.Count(x, distinct=True),
     "max": models.Max,
@@ -35,8 +35,7 @@ _AGG_MAP = {
 }
 
 
-_AGGREGATES = {
-    # NTS beware that Sum(type) -> type
+_TYPE_AGGREGATES = {
     StringType: ["count"],
     NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
     DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
@@ -45,7 +44,7 @@ _AGGREGATES = {
 }
 
 
-_FUNC_MAP = {
+_FUNCTIONS = {
     "year": (functions.ExtractYear, YearType),
     "quarter": (functions.ExtractQuarter, NumberType),
     "month": (functions.ExtractMonth, MonthType),
@@ -57,7 +56,7 @@ _FUNC_MAP = {
     "date": (functions.TruncDate, DateType),
 }
 
-_FUNCTIONS = {
+_TYPE_FUNCTIONS = {
     DateTimeType: [
         "year",
         "quarter",
@@ -83,11 +82,11 @@ def get_model_name(model, sep="."):
 
 def get_fields_for_type(type_):
     aggregates = {
-        a: OrmAggregateField(type_.name, a) for a in _AGGREGATES.get(type_, [])
+        a: OrmAggregateField(type_.name, a) for a in _TYPE_AGGREGATES.get(type_, [])
     }
     functions = {
-        f: OrmFunctionField(type_.name, f, _FUNC_MAP[f][1])
-        for f in _FUNCTIONS.get(type_, [])
+        f: OrmFunctionField(type_.name, f, _FUNCTIONS[f][1])
+        for f in _TYPE_FUNCTIONS.get(type_, [])
     }
     return OrmModel({**aggregates, **functions})
 
@@ -179,7 +178,9 @@ class OrmConcreteField(OrmBaseField):
             concrete=True,
             type_=type_,
             rel_name=(
-                type_.name if type_ in _AGGREGATES or type_ in _FUNCTIONS else None
+                type_.name
+                if type_ in _TYPE_AGGREGATES or type_ in _TYPE_FUNCTIONS
+                else None
             ),
             can_pivot=True,
             choices=choices or (),
@@ -345,7 +346,7 @@ class OrmAggregateField(OrmBaseField):
     def bind(self, previous):
         assert previous
         full_path = previous.full_path + [self.name]
-        agg = _AGG_MAP[self.aggregate](s(previous.full_path))
+        agg = _AGGREGATES[self.aggregate](s(previous.full_path))
         return OrmBoundField(
             field=self,
             previous=previous,
@@ -361,7 +362,7 @@ class OrmBoundFunctionField(OrmBoundField):
     def annotate(self, request, qs):
         return qs.annotate(
             **{
-                self.queryset_path: _FUNC_MAP[self.function][0](
+                self.queryset_path: _FUNCTIONS[self.function][0](
                     s(self.previous.full_path)
                 )
             }
