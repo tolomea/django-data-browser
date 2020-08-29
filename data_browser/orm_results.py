@@ -2,10 +2,12 @@ import json
 from collections import defaultdict
 
 from .orm_admin import admin_get_queryset
-from .query import ASC, DSC, BoundQuery, StringChoiceType, StringType
+from .query import ASC, DSC, BoundQuery
 
 
 def _get_django_lookup(field_type, lookup, filter_value):
+    from .types import StringChoiceType, StringType
+
     if lookup == "field_equals":  # pragma: json field
         lookup, filter_value = filter_value
         return lookup, filter_value

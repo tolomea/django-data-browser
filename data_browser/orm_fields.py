@@ -8,7 +8,7 @@ from django.db.models.functions import Cast
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .query import (
+from .types import (
     BaseType,
     BooleanType,
     DateTimeType,

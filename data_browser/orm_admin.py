@@ -26,7 +26,7 @@ from .orm_fields import (
     OrmModel,
     get_model_name,
 )
-from .query import (
+from .types import (
     TYPES,
     BooleanType,
     DateTimeType,

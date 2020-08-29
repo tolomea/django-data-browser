@@ -20,7 +20,8 @@ from .models import View
 from .orm_admin import get_models
 from .orm_fields import _OPEN_IN_ADMIN
 from .orm_results import get_results
-from .query import TYPES, BoundQuery, Query
+from .query import BoundQuery, Query
+from .types import TYPES
 
 
 def _get_query_data(bound_query):

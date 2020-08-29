@@ -30,6 +30,17 @@ def debug_log(msg):  # pragma: no cover
         logging.getLogger(__name__).warning(f"DDB: {msg}")
 
 
+def all_subclasses(cls):
+    res = set()
+    queue = {cls}
+    while queue:
+        cls = queue.pop()
+        subs = set(cls.__subclasses__())
+        queue.update(subs - res)
+        res.update(subs)
+    return res
+
+
 class Settings:
     _defaults = {
         "DATA_BROWSER_ALLOW_PUBLIC": False,
