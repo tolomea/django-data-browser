@@ -4,7 +4,8 @@ import pytest
 from django.http import QueryDict
 from django.utils import timezone
 
-from data_browser import orm, orm_fields
+from data_browser import orm_fields
+from data_browser.orm_admin import _get_fields_for_type
 from data_browser.query import (
     ASC,
     DSC,
@@ -43,8 +44,8 @@ def query():
 @pytest.fixture
 def orm_models():
     return {
-        "string": orm._get_fields_for_type(StringType),
-        "number": orm._get_fields_for_type(NumberType),
+        "string": _get_fields_for_type(StringType),
+        "number": _get_fields_for_type(NumberType),
         "app.model": orm_fields.OrmModel(
             fields={
                 "fa": orm_fields.OrmConcreteField(

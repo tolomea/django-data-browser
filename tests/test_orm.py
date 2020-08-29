@@ -5,8 +5,9 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
 
-from data_browser import orm, orm_fields
-from data_browser.orm import admin_get_queryset
+from data_browser import orm_fields
+from data_browser.orm_admin import get_models
+from data_browser.orm_results import admin_get_queryset, get_results
 from data_browser.query import BoundQuery, Query
 
 from . import models
@@ -93,7 +94,7 @@ def req(rf, admin_user):
 
 @pytest.fixture
 def orm_models(req):
-    return orm.get_models(req)
+    return get_models(req)
 
 
 @pytest.fixture
@@ -102,7 +103,7 @@ def get_product_flat(req, orm_models, django_assert_num_queries):
         query = Query.from_request("tests.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
-            data = orm.get_results(req, bound_query, orm_models)
+            data = get_results(req, bound_query, orm_models)
             return flatten_table(bound_query.fields, data["rows"])
 
     return helper
@@ -114,7 +115,7 @@ def get_product_pivot(req, orm_models, django_assert_num_queries):
         query = Query.from_request("tests.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
-            data = orm.get_results(req, bound_query, orm_models)
+            data = get_results(req, bound_query, orm_models)
             return {
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),
@@ -170,12 +171,12 @@ def test_bad_storage(monkeypatch, req):
     default_storage._wrapped = empty
 
     # copy what the fixture does
-    orm_models = orm.get_models(req)
+    orm_models = get_models(req)
 
     def get_product_flat(*args, **kwargs):
         query = Query.from_request("tests.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
-        data = orm.get_results(req, bound_query, orm_models)
+        data = get_results(req, bound_query, orm_models)
         return flatten_table(bound_query.fields, data["rows"])
 
     # some storage backends will hard fail if their underlying storage isn't
@@ -194,14 +195,18 @@ def test_get_calculated_field_on_admin(get_product_flat):
 
 
 def test_get_annotated_field_at_base(products, get_product_flat, mocker):
-    mock = mocker.patch("data_browser.orm.admin_get_queryset", wraps=admin_get_queryset)
+    mock = mocker.patch(
+        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+    )
     data = get_product_flat(1, "annotated+1,size-2", {"annotated__not_equals": ["a"]})
     assert data == [["b", 1], ["c", 2]]
     assert len(mock.call_args_list) == 2
 
 
 def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
-    mock = mocker.patch("data_browser.orm.admin_get_queryset", wraps=admin_get_queryset)
+    mock = mocker.patch(
+        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+    )
     data = get_product_flat(
         1,
         "producer__address__andrew+1,size-2",
@@ -613,7 +618,7 @@ class TestPermissions:
 
         request = rf.get("/")
         request.user = user
-        return orm.get_models(request)
+        return get_models(request)
 
     def test_all_perms(self, rf, admin_user):
         orm_models = self.get_fields_with_perms(
