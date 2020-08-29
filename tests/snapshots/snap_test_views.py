@@ -161,6 +161,14 @@ snapshots["test_query_html config"] = {
                     "prettyName": "average",
                     "type": "number",
                 },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
                 "sum": {
                     "canPivot": False,
                     "choices": [],
@@ -170,7 +178,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
             },
-            "sortedFields": ["average", "sum"],
+            "sortedFields": ["average", "is_null", "sum"],
         },
         "data_browser.View": {
             "fields": {
@@ -331,6 +339,14 @@ snapshots["test_query_html config"] = {
                     "prettyName": "day",
                     "type": "number",
                 },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
                 "month": {
                     "canPivot": True,
                     "choices": [],
@@ -364,7 +380,15 @@ snapshots["test_query_html config"] = {
                     "type": "year",
                 },
             },
-            "sortedFields": ["count", "day", "month", "quarter", "week_day", "year"],
+            "sortedFields": [
+                "count",
+                "day",
+                "is_null",
+                "month",
+                "quarter",
+                "week_day",
+                "year",
+            ],
         },
         "datetime": {
             "fields": {
@@ -399,6 +423,14 @@ snapshots["test_query_html config"] = {
                     "model": None,
                     "prettyName": "hour",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 },
                 "minute": {
                     "canPivot": True,
@@ -454,6 +486,7 @@ snapshots["test_query_html config"] = {
                 "date",
                 "day",
                 "hour",
+                "is_null",
                 "minute",
                 "month",
                 "quarter",
@@ -462,10 +495,58 @@ snapshots["test_query_html config"] = {
                 "year",
             ],
         },
-        "html": {"fields": {}, "sortedFields": []},
-        "json": {"fields": {}, "sortedFields": []},
-        "jsonfield": {"fields": {}, "sortedFields": []},
-        "month": {"fields": {}, "sortedFields": []},
+        "html": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "json": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "jsonfield": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "month": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "number": {
             "fields": {
                 "average": {
@@ -483,6 +564,14 @@ snapshots["test_query_html config"] = {
                     "model": None,
                     "prettyName": "count",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 },
                 "max": {
                     "canPivot": False,
@@ -528,6 +617,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": [
                 "average",
                 "count",
+                "is_null",
                 "max",
                 "min",
                 "std_dev",
@@ -535,9 +625,45 @@ snapshots["test_query_html config"] = {
                 "variance",
             ],
         },
-        "numberarray": {"fields": {}, "sortedFields": []},
-        "numberchoice": {"fields": {}, "sortedFields": []},
-        "regex": {"fields": {}, "sortedFields": []},
+        "numberarray": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "numberchoice": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "regex": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "string": {
             "fields": {
                 "count": {
@@ -547,12 +673,44 @@ snapshots["test_query_html config"] = {
                     "model": None,
                     "prettyName": "count",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
+        "stringarray": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 }
             },
-            "sortedFields": ["count"],
+            "sortedFields": ["is_null"],
         },
-        "stringarray": {"fields": {}, "sortedFields": []},
-        "stringchoice": {"fields": {}, "sortedFields": []},
+        "stringchoice": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "tests.Address": {
             "fields": {
                 "admin": {
@@ -833,7 +991,7 @@ snapshots["test_query_html config"] = {
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
-                    "model": None,
+                    "model": "unknown",
                     "prettyName": "fake",
                     "type": "unknown",
                 },
@@ -849,7 +1007,7 @@ snapshots["test_query_html config"] = {
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
-                    "model": None,
+                    "model": "html",
                     "prettyName": "image",
                     "type": "html",
                 },
@@ -873,7 +1031,7 @@ snapshots["test_query_html config"] = {
                     "canPivot": True,
                     "choices": [[1, "A"], [2, "B"]],
                     "concrete": True,
-                    "model": None,
+                    "model": "numberchoice",
                     "prettyName": "number_choice",
                     "type": "numberchoice",
                 },
@@ -929,7 +1087,7 @@ snapshots["test_query_html config"] = {
                     "canPivot": True,
                     "choices": [["a", "A"], ["b", "B"]],
                     "concrete": True,
-                    "model": None,
+                    "model": "stringchoice",
                     "prettyName": "string_choice",
                     "type": "stringchoice",
                 },
@@ -1014,9 +1172,45 @@ snapshots["test_query_html config"] = {
             },
             "sortedFields": ["id", "admin", "name"],
         },
-        "unknown": {"fields": {}, "sortedFields": []},
-        "weekday": {"fields": {}, "sortedFields": []},
-        "year": {"fields": {}, "sortedFields": []},
+        "unknown": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "weekday": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "year": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
     },
     "baseUrl": "/data_browser/",
     "canMakePublic": True,
@@ -1396,6 +1590,14 @@ snapshots["test_query_html_no_perms config"] = {
                     "prettyName": "average",
                     "type": "number",
                 },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
                 "sum": {
                     "canPivot": False,
                     "choices": [],
@@ -1405,7 +1607,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
             },
-            "sortedFields": ["average", "sum"],
+            "sortedFields": ["average", "is_null", "sum"],
         },
         "date": {
             "fields": {
@@ -1424,6 +1626,14 @@ snapshots["test_query_html_no_perms config"] = {
                     "model": None,
                     "prettyName": "day",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 },
                 "month": {
                     "canPivot": True,
@@ -1458,7 +1668,15 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "year",
                 },
             },
-            "sortedFields": ["count", "day", "month", "quarter", "week_day", "year"],
+            "sortedFields": [
+                "count",
+                "day",
+                "is_null",
+                "month",
+                "quarter",
+                "week_day",
+                "year",
+            ],
         },
         "datetime": {
             "fields": {
@@ -1493,6 +1711,14 @@ snapshots["test_query_html_no_perms config"] = {
                     "model": None,
                     "prettyName": "hour",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 },
                 "minute": {
                     "canPivot": True,
@@ -1548,6 +1774,7 @@ snapshots["test_query_html_no_perms config"] = {
                 "date",
                 "day",
                 "hour",
+                "is_null",
                 "minute",
                 "month",
                 "quarter",
@@ -1556,10 +1783,58 @@ snapshots["test_query_html_no_perms config"] = {
                 "year",
             ],
         },
-        "html": {"fields": {}, "sortedFields": []},
-        "json": {"fields": {}, "sortedFields": []},
-        "jsonfield": {"fields": {}, "sortedFields": []},
-        "month": {"fields": {}, "sortedFields": []},
+        "html": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "json": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "jsonfield": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "month": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "number": {
             "fields": {
                 "average": {
@@ -1577,6 +1852,14 @@ snapshots["test_query_html_no_perms config"] = {
                     "model": None,
                     "prettyName": "count",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 },
                 "max": {
                     "canPivot": False,
@@ -1622,6 +1905,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": [
                 "average",
                 "count",
+                "is_null",
                 "max",
                 "min",
                 "std_dev",
@@ -1629,9 +1913,45 @@ snapshots["test_query_html_no_perms config"] = {
                 "variance",
             ],
         },
-        "numberarray": {"fields": {}, "sortedFields": []},
-        "numberchoice": {"fields": {}, "sortedFields": []},
-        "regex": {"fields": {}, "sortedFields": []},
+        "numberarray": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "numberchoice": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "regex": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "string": {
             "fields": {
                 "count": {
@@ -1641,15 +1961,83 @@ snapshots["test_query_html_no_perms config"] = {
                     "model": None,
                     "prettyName": "count",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
+        "stringarray": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 }
             },
-            "sortedFields": ["count"],
+            "sortedFields": ["is_null"],
         },
-        "stringarray": {"fields": {}, "sortedFields": []},
-        "stringchoice": {"fields": {}, "sortedFields": []},
-        "unknown": {"fields": {}, "sortedFields": []},
-        "weekday": {"fields": {}, "sortedFields": []},
-        "year": {"fields": {}, "sortedFields": []},
+        "stringchoice": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "unknown": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "weekday": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "year": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
     },
     "baseUrl": "/data_browser/",
     "canMakePublic": False,
@@ -2112,6 +2500,14 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "average",
                     "type": "number",
                 },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
                 "sum": {
                     "canPivot": False,
                     "choices": [],
@@ -2121,7 +2517,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
             },
-            "sortedFields": ["average", "sum"],
+            "sortedFields": ["average", "is_null", "sum"],
         },
         "data_browser.View": {
             "fields": {
@@ -2282,6 +2678,14 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "day",
                     "type": "number",
                 },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
                 "month": {
                     "canPivot": True,
                     "choices": [],
@@ -2315,7 +2719,15 @@ snapshots["test_query_ctx config"] = {
                     "type": "year",
                 },
             },
-            "sortedFields": ["count", "day", "month", "quarter", "week_day", "year"],
+            "sortedFields": [
+                "count",
+                "day",
+                "is_null",
+                "month",
+                "quarter",
+                "week_day",
+                "year",
+            ],
         },
         "datetime": {
             "fields": {
@@ -2350,6 +2762,14 @@ snapshots["test_query_ctx config"] = {
                     "model": None,
                     "prettyName": "hour",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 },
                 "minute": {
                     "canPivot": True,
@@ -2405,6 +2825,7 @@ snapshots["test_query_ctx config"] = {
                 "date",
                 "day",
                 "hour",
+                "is_null",
                 "minute",
                 "month",
                 "quarter",
@@ -2413,10 +2834,58 @@ snapshots["test_query_ctx config"] = {
                 "year",
             ],
         },
-        "html": {"fields": {}, "sortedFields": []},
-        "json": {"fields": {}, "sortedFields": []},
-        "jsonfield": {"fields": {}, "sortedFields": []},
-        "month": {"fields": {}, "sortedFields": []},
+        "html": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "json": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "jsonfield": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "month": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "number": {
             "fields": {
                 "average": {
@@ -2434,6 +2903,14 @@ snapshots["test_query_ctx config"] = {
                     "model": None,
                     "prettyName": "count",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 },
                 "max": {
                     "canPivot": False,
@@ -2479,6 +2956,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": [
                 "average",
                 "count",
+                "is_null",
                 "max",
                 "min",
                 "std_dev",
@@ -2486,9 +2964,45 @@ snapshots["test_query_ctx config"] = {
                 "variance",
             ],
         },
-        "numberarray": {"fields": {}, "sortedFields": []},
-        "numberchoice": {"fields": {}, "sortedFields": []},
-        "regex": {"fields": {}, "sortedFields": []},
+        "numberarray": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "numberchoice": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "regex": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "string": {
             "fields": {
                 "count": {
@@ -2498,12 +3012,44 @@ snapshots["test_query_ctx config"] = {
                     "model": None,
                     "prettyName": "count",
                     "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
+        "stringarray": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
                 }
             },
-            "sortedFields": ["count"],
+            "sortedFields": ["is_null"],
         },
-        "stringarray": {"fields": {}, "sortedFields": []},
-        "stringchoice": {"fields": {}, "sortedFields": []},
+        "stringchoice": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
         "tests.Address": {
             "fields": {
                 "admin": {
@@ -2784,7 +3330,7 @@ snapshots["test_query_ctx config"] = {
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
-                    "model": None,
+                    "model": "unknown",
                     "prettyName": "fake",
                     "type": "unknown",
                 },
@@ -2800,7 +3346,7 @@ snapshots["test_query_ctx config"] = {
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
-                    "model": None,
+                    "model": "html",
                     "prettyName": "image",
                     "type": "html",
                 },
@@ -2824,7 +3370,7 @@ snapshots["test_query_ctx config"] = {
                     "canPivot": True,
                     "choices": [[1, "A"], [2, "B"]],
                     "concrete": True,
-                    "model": None,
+                    "model": "numberchoice",
                     "prettyName": "number_choice",
                     "type": "numberchoice",
                 },
@@ -2880,7 +3426,7 @@ snapshots["test_query_ctx config"] = {
                     "canPivot": True,
                     "choices": [["a", "A"], ["b", "B"]],
                     "concrete": True,
-                    "model": None,
+                    "model": "stringchoice",
                     "prettyName": "string_choice",
                     "type": "stringchoice",
                 },
@@ -2965,9 +3511,45 @@ snapshots["test_query_ctx config"] = {
             },
             "sortedFields": ["id", "admin", "name"],
         },
-        "unknown": {"fields": {}, "sortedFields": []},
-        "weekday": {"fields": {}, "sortedFields": []},
-        "year": {"fields": {}, "sortedFields": []},
+        "unknown": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "weekday": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
+        "year": {
+            "fields": {
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "boolean",
+                }
+            },
+            "sortedFields": ["is_null"],
+        },
     },
     "baseUrl": "/data_browser/",
     "canMakePublic": True,

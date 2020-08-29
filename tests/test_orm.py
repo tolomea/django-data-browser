@@ -241,6 +241,12 @@ def test_get_time_function(get_product_flat):
 
 
 @pytest.mark.usefixtures("products")
+def test_get_is_null_function(get_product_flat):
+    data = get_product_flat(1, "name+0,producer__address__city__is_null", {})
+    assert data == [["a", False], ["b", False], ["c", True]]
+
+
+@pytest.mark.usefixtures("products")
 def test_get_aggregate(get_product_flat):
     data = get_product_flat(1, "size_unit,id__count", {})
     assert data == [["g", 3]]

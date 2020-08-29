@@ -3,7 +3,15 @@ from typing import Sequence, Tuple
 
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
-from django.db.models import OuterRef, Subquery, functions
+from django.db.models import (
+    BooleanField,
+    ExpressionWrapper,
+    IntegerField,
+    OuterRef,
+    Q,
+    Subquery,
+    functions,
+)
 from django.db.models.functions import Cast
 from django.urls import reverse
 from django.utils.html import format_html
@@ -25,12 +33,13 @@ OPEN_IN_ADMIN = "admin"
 
 
 _AGGREGATES = {
-    "average": lambda x: models.Avg(Cast(x, output_field=models.IntegerField())),
+    # these all have result type number
+    "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
     "count": lambda x: models.Count(x, distinct=True),
     "max": models.Max,
     "min": models.Min,
     "std_dev": models.StdDev,
-    "sum": lambda x: models.Sum(Cast(x, output_field=models.IntegerField())),
+    "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
     "variance": models.Variance,
 }
 
@@ -44,6 +53,10 @@ _TYPE_AGGREGATES = {
 }
 
 
+def IsNull(field_name):
+    return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
+
+
 _FUNCTIONS = {
     "year": (functions.ExtractYear, YearType),
     "quarter": (functions.ExtractQuarter, NumberType),
@@ -54,6 +67,7 @@ _FUNCTIONS = {
     "minute": (functions.ExtractMinute, NumberType),
     "second": (functions.ExtractSecond, NumberType),
     "date": (functions.TruncDate, DateType),
+    "is_null": (IsNull, BooleanType),
 }
 
 _TYPE_FUNCTIONS = {
@@ -69,6 +83,7 @@ _TYPE_FUNCTIONS = {
         "date",
     ],
     DateType: ["year", "quarter", "month", "day", "week_day"],
+    None: ["is_null"],  # all fields
 }
 
 
@@ -86,7 +101,7 @@ def get_fields_for_type(type_):
     }
     functions = {
         f: OrmFunctionField(type_.name, f, _FUNCTIONS[f][1])
-        for f in _TYPE_FUNCTIONS.get(type_, [])
+        for f in _TYPE_FUNCTIONS[None] + _TYPE_FUNCTIONS.get(type_, [])
     }
     return OrmModel({**aggregates, **functions})
 
@@ -177,11 +192,7 @@ class OrmConcreteField(OrmBaseField):
             pretty_name,
             concrete=True,
             type_=type_,
-            rel_name=(
-                type_.name
-                if type_ in _TYPE_AGGREGATES or type_ in _TYPE_FUNCTIONS
-                else None
-            ),
+            rel_name=type_.name,
             can_pivot=True,
             choices=choices or (),
         )
@@ -360,13 +371,8 @@ class OrmAggregateField(OrmBaseField):
 
 class OrmBoundFunctionField(OrmBoundField):
     def annotate(self, request, qs):
-        return qs.annotate(
-            **{
-                self.queryset_path: _FUNCTIONS[self.function][0](
-                    s(self.previous.full_path)
-                )
-            }
-        )
+        func = _FUNCTIONS[self.function][0](s(self.previous.full_path))
+        return qs.annotate(**{self.queryset_path: func})
 
 
 class OrmFunctionField(OrmBaseField):
