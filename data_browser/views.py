@@ -54,9 +54,8 @@ def _get_query_data(bound_query):
 
 def _get_model_fields(orm_model):
     def sort_model_fields(fields):
-        fields = sorted(fields)
         front = {"id": 1, _OPEN_IN_ADMIN: 2}
-        return sorted(fields, key=lambda x: front.get(x, sys.maxsize))
+        return sorted(fields, key=lambda f: (front.get(f, sys.maxsize), f))
 
     all_fields = {
         name: {
