@@ -21,7 +21,7 @@ from .types import (
     YearType,
 )
 
-_OPEN_IN_ADMIN = "admin"
+OPEN_IN_ADMIN = "admin"
 
 
 _AGG_MAP = {
@@ -79,6 +79,17 @@ def s(path):
 
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
+
+
+def get_fields_for_type(type_):
+    aggregates = {
+        a: OrmAggregateField(type_.name, a) for a in _AGGREGATES.get(type_, [])
+    }
+    functions = {
+        f: OrmFunctionField(type_.name, f, _FUNC_MAP[f][1])
+        for f in _FUNCTIONS.get(type_, [])
+    }
+    return OrmModel({**aggregates, **functions})
 
 
 @dataclass
@@ -283,7 +294,7 @@ class OrmAnnotatedField(OrmBaseField):
 class OrmAdminField(OrmBaseField):
     def __init__(self, model_name):
         super().__init__(
-            model_name, _OPEN_IN_ADMIN, _OPEN_IN_ADMIN, type_=HTMLType, can_pivot=True
+            model_name, OPEN_IN_ADMIN, OPEN_IN_ADMIN, type_=HTMLType, can_pivot=True
         )
 
     def bind(self, previous):

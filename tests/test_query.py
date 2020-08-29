@@ -5,7 +5,7 @@ from django.http import QueryDict
 from django.utils import timezone
 
 from data_browser import orm_fields
-from data_browser.orm_admin import _get_fields_for_type
+from data_browser.orm_admin import get_fields_for_type
 from data_browser.query import ASC, DSC, BoundQuery, Query, QueryField, QueryFilter
 from data_browser.types import (
     BooleanType,
@@ -39,8 +39,8 @@ def query():
 @pytest.fixture
 def orm_models():
     return {
-        "string": _get_fields_for_type(StringType),
-        "number": _get_fields_for_type(NumberType),
+        "string": get_fields_for_type(StringType),
+        "number": get_fields_for_type(NumberType),
         "app.model": orm_fields.OrmModel(
             fields={
                 "fa": orm_fields.OrmConcreteField(

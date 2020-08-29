@@ -11,19 +11,15 @@ from django.forms.models import _get_foreign_key
 from .common import debug_log, settings
 from .helpers import AdminMixin, AnnotationDescriptor
 from .orm_fields import (
-    _AGGREGATES,
-    _FUNC_MAP,
-    _FUNCTIONS,
-    _OPEN_IN_ADMIN,
+    OPEN_IN_ADMIN,
     OrmAdminField,
-    OrmAggregateField,
     OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
     OrmFileField,
     OrmFkField,
-    OrmFunctionField,
     OrmModel,
+    get_fields_for_type,
     get_model_name,
 )
 from .types import (
@@ -123,7 +119,7 @@ def _get_all_admin_fields(request):
             all_admin_fields[model].update(from_fieldsets(model_admin, True))
             all_admin_fields[model].update(model_admin.get_list_display(request))
             all_admin_fields[model].update(getattr(model_admin, "ddb_extra_fields", []))
-            all_admin_fields[model].add(_OPEN_IN_ADMIN)
+            all_admin_fields[model].add(OPEN_IN_ADMIN)
             if isinstance(model_admin, AdminMixin):
                 all_admin_fields[model].update(model_admin._ddb_annotations())
             hidden_fields[model].update(getattr(model_admin, "ddb_hide_fields", []))
@@ -250,8 +246,8 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
-        if field_name == _OPEN_IN_ADMIN:
-            fields[_OPEN_IN_ADMIN] = OrmAdminField(model_name=model_name)
+        if field_name == OPEN_IN_ADMIN:
+            fields[OPEN_IN_ADMIN] = OrmAdminField(model_name=model_name)
         elif isinstance(field, (models.ForeignKey, OneToOneRel)):
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(
@@ -288,17 +284,6 @@ def _get_fields_for_model(request, model, admin, admin_fields):
     return OrmModel(fields=fields, admin=admin)
 
 
-def _get_fields_for_type(type_):
-    aggregates = {
-        a: OrmAggregateField(type_.name, a) for a in _AGGREGATES.get(type_, [])
-    }
-    functions = {
-        f: OrmFunctionField(type_.name, f, _FUNC_MAP[f][1])
-        for f in _FUNCTIONS.get(type_, [])
-    }
-    return OrmModel({**aggregates, **functions})
-
-
 def get_models(request):
     model_admins, admin_fields = _get_all_admin_fields(request)
     models = {
@@ -307,6 +292,6 @@ def get_models(request):
         )
         for model in admin_fields
     }
-    types = {type_.name: _get_fields_for_type(type_) for type_ in TYPES.values()}
+    types = {type_.name: get_fields_for_type(type_) for type_ in TYPES.values()}
 
     return {**models, **types}
