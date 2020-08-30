@@ -238,6 +238,23 @@ def _get_field_type(model, field_name, field):
         return res, None
 
 
+def _make_json_sub_module(model_name, field_types):  # pragma: json field
+    TYPE_MAP = {"string": StringType, "number": NumberType, "boolean": BooleanType}
+
+    fields = dict(get_fields_for_type(JSONType))
+    for field_name, type_name in field_types.items():
+        type_ = TYPE_MAP[type_name]
+        fields[field_name] = OrmConcreteField(
+            model_name=model_name,
+            name=field_name,
+            pretty_name=field_name,
+            type_=type_,
+            rel_name=type_.name,
+        )
+
+    return OrmModel(fields)
+
+
 def _get_fields_for_model(request, model, admin, admin_fields):
     fields = {}
     orm_models = {}
@@ -276,6 +293,14 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             field_type, choices = _get_field_type(model, field_name, field)
 
             rel_name = field_type.name
+            if field_type is JSONType:  # pragma: json field
+                json_fields = getattr(admin, "ddb_json_fields", {}).get(field_name)
+                if json_fields:
+                    rel_name = f"{model_name}__{field_name}"
+                    orm_models[rel_name] = _make_json_sub_module(
+                        model_name, json_fields
+                    )
+
             fields[field_name] = OrmConcreteField(
                 model_name=model_name,
                 name=field_name,
@@ -284,7 +309,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 rel_name=rel_name,
                 choices=choices,
             )
-    orm_models[get_model_name(model)] = OrmModel(fields=fields, admin=admin)
+    orm_models[model_name] = OrmModel(fields=fields, admin=admin)
     return orm_models
 
 
