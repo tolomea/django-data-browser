@@ -240,6 +240,7 @@ def _get_field_type(model, field_name, field):
 
 def _get_fields_for_model(request, model, admin, admin_fields):
     fields = {}
+    orm_models = {}
 
     model_name = get_model_name(model)
     model_fields = {f.name: f for f in model._meta.get_fields()}
@@ -280,18 +281,17 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 type_=field_type,
                 choices=choices,
             )
-
-    return OrmModel(fields=fields, admin=admin)
+    orm_models[get_model_name(model)] = OrmModel(fields=fields, admin=admin)
+    return orm_models
 
 
 def get_models(request):
     model_admins, admin_fields = _get_all_admin_fields(request)
-    models = {
-        get_model_name(model): _get_fields_for_model(
-            request, model, model_admins[model], admin_fields
+    models = {}
+    for model in admin_fields:
+        models.update(
+            _get_fields_for_model(request, model, model_admins[model], admin_fields)
         )
-        for model in admin_fields
-    }
     types = {type_.name: get_fields_for_type(type_) for type_ in TYPES.values()}
 
     return {**models, **types}
