@@ -31,48 +31,12 @@ from .types import (
 
 OPEN_IN_ADMIN = "admin"
 
-
-_AGGREGATES = {
-    # these all have result type number
-    "average": models.Avg,
-    "count": lambda x: models.Count(x, distinct=True),
-    "max": models.Max,
-    "min": models.Min,
-    "std_dev": models.StdDev,
-    "sum": models.Sum,
-    "variance": models.Variance,
-}
-
-_BOOL_AGGREGATES = {
-    "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
-    "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
-}
-
-
 _TYPE_AGGREGATES = {
     StringType: ["count"],
     NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
     DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
     DateType: ["count"],  # average, min and max might be nice here but sqlite
     BooleanType: ["average", "sum"],
-}
-
-
-def IsNull(field_name):
-    return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
-
-
-_FUNCTIONS = {
-    "year": (functions.ExtractYear, YearType),
-    "quarter": (functions.ExtractQuarter, NumberType),
-    "month": (functions.ExtractMonth, MonthType),
-    "day": (functions.ExtractDay, NumberType),
-    "week_day": (functions.ExtractWeekDay, WeekDayType),
-    "hour": (functions.ExtractHour, NumberType),
-    "minute": (functions.ExtractMinute, NumberType),
-    "second": (functions.ExtractSecond, NumberType),
-    "date": (functions.TruncDate, DateType),
-    "is_null": (IsNull, BooleanType),
 }
 
 _TYPE_FUNCTIONS = {
@@ -92,6 +56,79 @@ _TYPE_FUNCTIONS = {
 }
 
 
+def _get_django_aggregate(field_type, name):
+    if field_type == BooleanType:
+        return {
+            "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
+            "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
+        }[name]
+    else:
+        return {
+            # these all have result type number
+            "average": models.Avg,
+            "count": lambda x: models.Count(x, distinct=True),
+            "max": models.Max,
+            "min": models.Min,
+            "std_dev": models.StdDev,
+            "sum": models.Sum,
+            "variance": models.Variance,
+        }[name]
+
+
+def _get_django_lookup(field_type, lookup, filter_value):
+    from .types import StringChoiceType, StringType
+
+    if lookup == "field_equals":  # pragma: json field
+        lookup, filter_value = filter_value
+        return lookup, filter_value
+    elif field_type in [StringType, StringChoiceType]:
+        return (
+            {
+                "equals": "iexact",
+                "regex": "iregex",
+                "contains": "icontains",
+                "starts_with": "istartswith",
+                "ends_with": "iendswith",
+                "is_null": "isnull",
+            }[lookup],
+            filter_value,
+        )
+    else:
+        return (
+            {
+                "equals": "exact",
+                "is_null": "isnull",
+                "gt": "gt",
+                "gte": "gte",
+                "lt": "lt",
+                "lte": "lte",
+                "contains": "contains",
+                "length": "len",
+                "has_key": "has_key",
+            }[lookup],
+            filter_value,
+        )
+
+
+def IsNull(field_name):
+    return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
+
+
+def _get_django_function(name):
+    return {
+        "year": (functions.ExtractYear, YearType),
+        "quarter": (functions.ExtractQuarter, NumberType),
+        "month": (functions.ExtractMonth, MonthType),
+        "day": (functions.ExtractDay, NumberType),
+        "week_day": (functions.ExtractWeekDay, WeekDayType),
+        "hour": (functions.ExtractHour, NumberType),
+        "minute": (functions.ExtractMinute, NumberType),
+        "second": (functions.ExtractSecond, NumberType),
+        "date": (functions.TruncDate, DateType),
+        "is_null": (IsNull, BooleanType),
+    }[name]
+
+
 def s(path):
     return "__".join(path)
 
@@ -105,7 +142,7 @@ def get_fields_for_type(type_):
         a: OrmAggregateField(type_.name, a) for a in _TYPE_AGGREGATES.get(type_, [])
     }
     functions = {
-        f: OrmFunctionField(type_.name, f, _FUNCTIONS[f][1])
+        f: OrmFunctionField(type_.name, f, _get_django_function(f)[1])
         for f in _TYPE_FUNCTIONS[None] + _TYPE_FUNCTIONS.get(type_, [])
     }
     return OrmModel({**aggregates, **functions})
@@ -357,29 +394,25 @@ class OrmFileField(OrmConcreteField):
 class OrmAggregateField(OrmBaseField):
     def __init__(self, model_name, name):
         super().__init__(model_name, name, name, type_=NumberType, concrete=True)
-        self.aggregate = name
 
     def bind(self, previous):
         assert previous
         full_path = previous.full_path + [self.name]
-        if previous.type_ is BooleanType:
-            agg = _BOOL_AGGREGATES[self.aggregate](s(previous.full_path))
-        else:
-            agg = _AGGREGATES[self.aggregate](s(previous.full_path))
+        agg_func = _get_django_aggregate(previous.type_, self.name)
         return OrmBoundField(
             field=self,
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
-            aggregate_clause=(s(full_path), agg),
+            aggregate_clause=(s(full_path), agg_func(s(previous.full_path))),
             having=True,
         )
 
 
 class OrmBoundFunctionField(OrmBoundField):
     def annotate(self, request, qs):
-        func = _FUNCTIONS[self.function][0](s(self.previous.full_path))
+        func = _get_django_function(self.name)[0](s(self.previous.full_path))
         return qs.annotate(**{self.queryset_path: func})
 
 
@@ -388,7 +421,6 @@ class OrmFunctionField(OrmBaseField):
         super().__init__(
             model_name, name, name, type_=type_, concrete=True, can_pivot=True
         )
-        self.function = name
 
     def bind(self, previous):
         assert previous

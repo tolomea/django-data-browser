@@ -2,42 +2,8 @@ import json
 from collections import defaultdict
 
 from .orm_admin import admin_get_queryset
+from .orm_fields import _get_django_lookup
 from .query import ASC, DSC, BoundQuery
-
-
-def _get_django_lookup(field_type, lookup, filter_value):
-    from .types import StringChoiceType, StringType
-
-    if lookup == "field_equals":  # pragma: json field
-        lookup, filter_value = filter_value
-        return lookup, filter_value
-    elif field_type in [StringType, StringChoiceType]:
-        return (
-            {
-                "equals": "iexact",
-                "regex": "iregex",
-                "contains": "icontains",
-                "starts_with": "istartswith",
-                "ends_with": "iendswith",
-                "is_null": "isnull",
-            }[lookup],
-            filter_value,
-        )
-    else:
-        return (
-            {
-                "equals": "exact",
-                "is_null": "isnull",
-                "gt": "gt",
-                "gte": "gte",
-                "lt": "lt",
-                "lte": "lte",
-                "contains": "contains",
-                "length": "len",
-                "has_key": "has_key",
-            }[lookup],
-            filter_value,
-        )
 
 
 def _filter(qs, filter_, filter_str):
