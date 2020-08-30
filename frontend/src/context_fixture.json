@@ -996,6 +996,14 @@
                     "prettyName": "annotated",
                     "type": "string"
                 },
+                "boat": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "boat",
+                    "type": "number"
+                },
                 "created_time": {
                     "canPivot": true,
                     "choices": [],
@@ -1155,6 +1163,7 @@
                 "id",
                 "admin",
                 "annotated",
+                "boat",
                 "created_time",
                 "default_sku",
                 "extra_inline",

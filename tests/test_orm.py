@@ -42,6 +42,7 @@ def products(db):
             size_unit="g",
             producer=producer,
             fake="phoney",
+            boat=2.2,
         )
     )
 
@@ -56,7 +57,12 @@ def products(db):
     producer = models.Producer.objects.create(name="Bob", address=None)
     res.append(
         models.Product.objects.create(
-            created_time=now, name="c", size=2, size_unit="g", producer=producer
+            created_time=now,
+            name="c",
+            size=2,
+            size_unit="g",
+            producer=producer,
+            boat=2.4,
         )
     )
 
@@ -232,6 +238,18 @@ def test_get_calculated_field(get_product_flat):
 def test_get_property(get_product_flat):
     data = get_product_flat(2, "producer__address__tom", {})
     sortedAssert(data, [[None], ["bad"], ["tom"]])
+
+
+@pytest.mark.usefixtures("products")
+def test_get_float_average(get_product_flat):
+    data = get_product_flat(1, "boat__average", {})
+    sortedAssert(data, [[2.3]])
+
+
+@pytest.mark.usefixtures("products")
+def test_get_float_sum(get_product_flat):
+    data = get_product_flat(1, "boat__sum", {})
+    sortedAssert(data, [[4.6]])
 
 
 @pytest.mark.usefixtures("products")
@@ -591,7 +609,7 @@ def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
     if "b" in key:  # fields in the body
         fields.extend(["size__count", "size__max"])
     if "d" not in key:  # actually has data
-        filters["id__equals"] = ["123"]
+        filters["id__equals"] = ["-1"]
 
     queries = 0 if key.endswith("---") else 1
     if "r" in key and "c" in key:

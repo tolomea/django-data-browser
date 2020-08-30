@@ -34,13 +34,18 @@ OPEN_IN_ADMIN = "admin"
 
 _AGGREGATES = {
     # these all have result type number
-    "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
+    "average": models.Avg,
     "count": lambda x: models.Count(x, distinct=True),
     "max": models.Max,
     "min": models.Min,
     "std_dev": models.StdDev,
-    "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
+    "sum": models.Sum,
     "variance": models.Variance,
+}
+
+_BOOL_AGGREGATES = {
+    "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
+    "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
 }
 
 
@@ -357,7 +362,10 @@ class OrmAggregateField(OrmBaseField):
     def bind(self, previous):
         assert previous
         full_path = previous.full_path + [self.name]
-        agg = _AGGREGATES[self.aggregate](s(previous.full_path))
+        if previous.type_ is BooleanType:
+            agg = _BOOL_AGGREGATES[self.aggregate](s(previous.full_path))
+        else:
+            agg = _AGGREGATES[self.aggregate](s(previous.full_path))
         return OrmBoundField(
             field=self,
             previous=previous,
