@@ -295,6 +295,8 @@ def get_models(request):
         models.update(
             _get_fields_for_model(request, model, model_admins[model], admin_fields)
         )
-    types = {type_.name: get_fields_for_type(type_) for type_ in TYPES.values()}
+    types = {
+        type_.name: OrmModel(get_fields_for_type(type_)) for type_ in TYPES.values()
+    }
 
     return {**models, **types}

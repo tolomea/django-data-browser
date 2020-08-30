@@ -145,7 +145,7 @@ def get_fields_for_type(type_):
         f: OrmFunctionField(type_.name, f, _get_django_function(f)[1])
         for f in _TYPE_FUNCTIONS[None] + _TYPE_FUNCTIONS.get(type_, [])
     }
-    return OrmModel({**aggregates, **functions})
+    return {**aggregates, **functions}
 
 
 @dataclass
