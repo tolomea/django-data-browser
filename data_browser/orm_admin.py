@@ -274,11 +274,14 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 fields[field_name] = orm_field
         else:
             field_type, choices = _get_field_type(model, field_name, field)
+
+            rel_name = field_type.name
             fields[field_name] = OrmConcreteField(
                 model_name=model_name,
                 name=field_name,
                 pretty_name=field_name,
                 type_=field_type,
+                rel_name=rel_name,
                 choices=choices,
             )
     orm_models[get_model_name(model)] = OrmModel(fields=fields, admin=admin)

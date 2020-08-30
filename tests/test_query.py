@@ -48,12 +48,14 @@ def orm_models():
                     name="fa",
                     pretty_name="fa",
                     type_=StringType,
+                    rel_name=StringType.name,
                 ),
                 "fd": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="fd",
                     pretty_name="fd",
                     type_=StringType,
+                    rel_name=StringType.name,
                 ),
                 "fn": orm_fields.OrmCalculatedField(
                     model_name="app.model", name="fn", pretty_name="fn", admin=None
@@ -63,12 +65,14 @@ def orm_models():
                     name="bob",
                     pretty_name="bob",
                     type_=StringType,
+                    rel_name=StringType.name,
                 ),
                 "num": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="num",
                     pretty_name="num",
                     type_=NumberType,
+                    rel_name=NumberType.name,
                 ),
                 "tom": orm_fields.OrmFkField(
                     model_name="app.model",
@@ -86,6 +90,7 @@ def orm_models():
                     name="jones",
                     pretty_name="jones",
                     type_=StringType,
+                    rel_name=StringType.name,
                 ),
                 "michael": orm_fields.OrmFkField(
                     model_name="app.Tom",
@@ -103,6 +108,7 @@ def orm_models():
                     name="bolton",
                     pretty_name="bolton",
                     type_=StringType,
+                    rel_name=StringType.name,
                 )
             },
             admin=True,

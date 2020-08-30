@@ -227,14 +227,14 @@ class OrmFkField(OrmBaseField):
 
 
 class OrmConcreteField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, type_, choices=None):
+    def __init__(self, model_name, name, pretty_name, type_, rel_name, choices=None):
         super().__init__(
             model_name,
             name,
             pretty_name,
             concrete=True,
             type_=type_,
-            rel_name=type_.name,
+            rel_name=rel_name,
             can_pivot=True,
             choices=choices or (),
         )
@@ -375,7 +375,9 @@ class OrmAdminField(OrmBaseField):
 
 class OrmFileField(OrmConcreteField):
     def __init__(self, model_name, name, pretty_name, django_field):
-        super().__init__(model_name, name, pretty_name, type_=HTMLType)
+        super().__init__(
+            model_name, name, pretty_name, type_=HTMLType, rel_name=HTMLType.name
+        )
         self.django_field = django_field
 
     def format(self, value):
