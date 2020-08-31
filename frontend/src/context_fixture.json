@@ -180,6 +180,522 @@
                 "sum"
             ]
         },
+        "core.Address": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "andrew": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "andrew",
+                    "type": "string"
+                },
+                "bob": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "bob",
+                    "type": "string"
+                },
+                "city": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "city",
+                    "type": "string"
+                },
+                "fred": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "fred",
+                    "type": "string"
+                },
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "producer": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.Producer",
+                    "prettyName": "producer",
+                    "type": null
+                },
+                "tom": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "tom",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "andrew",
+                "bob",
+                "city",
+                "fred",
+                "producer",
+                "tom"
+            ]
+        },
+        "core.InAdmin": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "name"
+            ]
+        },
+        "core.InlineAdmin": {
+            "fields": {
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "in_admin": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.InAdmin",
+                    "prettyName": "in_admin",
+                    "type": null
+                },
+                "name": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "in_admin",
+                "name"
+            ]
+        },
+        "core.Normal": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "in_admin": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.InAdmin",
+                    "prettyName": "in_admin",
+                    "type": null
+                },
+                "inline_admin": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.InlineAdmin",
+                    "prettyName": "inline_admin",
+                    "type": null
+                },
+                "name": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "in_admin",
+                "inline_admin",
+                "name"
+            ]
+        },
+        "core.Producer": {
+            "fields": {
+                "address": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.Address",
+                    "prettyName": "address",
+                    "type": null
+                },
+                "admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "frank": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "frank",
+                    "type": "string"
+                },
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "address",
+                "frank",
+                "name"
+            ]
+        },
+        "core.Product": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "annotated": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "annotated",
+                    "type": "string"
+                },
+                "boat": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "boat",
+                    "type": "number"
+                },
+                "created_time": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "datetime",
+                    "prettyName": "created_time",
+                    "type": "datetime"
+                },
+                "default_sku": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.SKU",
+                    "prettyName": "default_sku",
+                    "type": null
+                },
+                "extra_inline": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "extra_inline",
+                    "type": "string"
+                },
+                "extra_model": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "extra_model",
+                    "type": "string"
+                },
+                "fake": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "unknown",
+                    "prettyName": "fake",
+                    "type": "unknown"
+                },
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "image": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "html",
+                    "prettyName": "image",
+                    "type": "html"
+                },
+                "is_onsale": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "is_onsale",
+                    "type": "string"
+                },
+                "name": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                },
+                "number_choice": {
+                    "canPivot": true,
+                    "choices": [
+                        [
+                            1,
+                            "A"
+                        ],
+                        [
+                            2,
+                            "B"
+                        ]
+                    ],
+                    "concrete": true,
+                    "model": "numberchoice",
+                    "prettyName": "number_choice",
+                    "type": "numberchoice"
+                },
+                "only_in_list_view": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "only_in_list_view",
+                    "type": "string"
+                },
+                "onsale": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "boolean",
+                    "prettyName": "onsale",
+                    "type": "boolean"
+                },
+                "producer": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.Producer",
+                    "prettyName": "producer",
+                    "type": null
+                },
+                "size": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "size",
+                    "type": "number"
+                },
+                "size_unit": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "size_unit",
+                    "type": "string"
+                },
+                "stealth_annotation": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "stealth_annotation",
+                    "type": "string"
+                },
+                "string_choice": {
+                    "canPivot": true,
+                    "choices": [
+                        [
+                            "a",
+                            "A"
+                        ],
+                        [
+                            "b",
+                            "B"
+                        ]
+                    ],
+                    "concrete": true,
+                    "model": "stringchoice",
+                    "prettyName": "string_choice",
+                    "type": "stringchoice"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "annotated",
+                "boat",
+                "created_time",
+                "default_sku",
+                "extra_inline",
+                "extra_model",
+                "fake",
+                "image",
+                "is_onsale",
+                "name",
+                "number_choice",
+                "only_in_list_view",
+                "onsale",
+                "producer",
+                "size",
+                "size_unit",
+                "stealth_annotation",
+                "string_choice"
+            ]
+        },
+        "core.SKU": {
+            "fields": {
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                },
+                "product": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "model": "core.Product",
+                    "prettyName": "product",
+                    "type": null
+                }
+            },
+            "sortedFields": [
+                "id",
+                "name",
+                "product"
+            ]
+        },
+        "core.Tag": {
+            "fields": {
+                "admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "admin",
+                    "type": "html"
+                },
+                "id": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number"
+                },
+                "name": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "name",
+                    "type": "string"
+                }
+            },
+            "sortedFields": [
+                "id",
+                "admin",
+                "name"
+            ]
+        },
         "data_browser.View": {
             "fields": {
                 "admin": {
@@ -732,522 +1248,6 @@
                 "is_null"
             ]
         },
-        "tests.Address": {
-            "fields": {
-                "admin": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "admin",
-                    "type": "html"
-                },
-                "andrew": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "andrew",
-                    "type": "string"
-                },
-                "bob": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "bob",
-                    "type": "string"
-                },
-                "city": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "city",
-                    "type": "string"
-                },
-                "fred": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "fred",
-                    "type": "string"
-                },
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "producer": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.Producer",
-                    "prettyName": "producer",
-                    "type": null
-                },
-                "tom": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "tom",
-                    "type": "string"
-                }
-            },
-            "sortedFields": [
-                "id",
-                "admin",
-                "andrew",
-                "bob",
-                "city",
-                "fred",
-                "producer",
-                "tom"
-            ]
-        },
-        "tests.InAdmin": {
-            "fields": {
-                "admin": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "admin",
-                    "type": "html"
-                },
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "name": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "name",
-                    "type": "string"
-                }
-            },
-            "sortedFields": [
-                "id",
-                "admin",
-                "name"
-            ]
-        },
-        "tests.InlineAdmin": {
-            "fields": {
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "in_admin": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.InAdmin",
-                    "prettyName": "in_admin",
-                    "type": null
-                },
-                "name": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "name",
-                    "type": "string"
-                }
-            },
-            "sortedFields": [
-                "id",
-                "in_admin",
-                "name"
-            ]
-        },
-        "tests.Normal": {
-            "fields": {
-                "admin": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "admin",
-                    "type": "html"
-                },
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "in_admin": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.InAdmin",
-                    "prettyName": "in_admin",
-                    "type": null
-                },
-                "inline_admin": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.InlineAdmin",
-                    "prettyName": "inline_admin",
-                    "type": null
-                },
-                "name": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "name",
-                    "type": "string"
-                }
-            },
-            "sortedFields": [
-                "id",
-                "admin",
-                "in_admin",
-                "inline_admin",
-                "name"
-            ]
-        },
-        "tests.Producer": {
-            "fields": {
-                "address": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.Address",
-                    "prettyName": "address",
-                    "type": null
-                },
-                "admin": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "admin",
-                    "type": "html"
-                },
-                "frank": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "frank",
-                    "type": "string"
-                },
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "name": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "name",
-                    "type": "string"
-                }
-            },
-            "sortedFields": [
-                "id",
-                "admin",
-                "address",
-                "frank",
-                "name"
-            ]
-        },
-        "tests.Product": {
-            "fields": {
-                "admin": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "admin",
-                    "type": "html"
-                },
-                "annotated": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "annotated",
-                    "type": "string"
-                },
-                "boat": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "boat",
-                    "type": "number"
-                },
-                "created_time": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "datetime",
-                    "prettyName": "created_time",
-                    "type": "datetime"
-                },
-                "default_sku": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.SKU",
-                    "prettyName": "default_sku",
-                    "type": null
-                },
-                "extra_inline": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "extra_inline",
-                    "type": "string"
-                },
-                "extra_model": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "extra_model",
-                    "type": "string"
-                },
-                "fake": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "unknown",
-                    "prettyName": "fake",
-                    "type": "unknown"
-                },
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "image": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "html",
-                    "prettyName": "image",
-                    "type": "html"
-                },
-                "is_onsale": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "is_onsale",
-                    "type": "string"
-                },
-                "name": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "name",
-                    "type": "string"
-                },
-                "number_choice": {
-                    "canPivot": true,
-                    "choices": [
-                        [
-                            1,
-                            "A"
-                        ],
-                        [
-                            2,
-                            "B"
-                        ]
-                    ],
-                    "concrete": true,
-                    "model": "numberchoice",
-                    "prettyName": "number_choice",
-                    "type": "numberchoice"
-                },
-                "only_in_list_view": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "only_in_list_view",
-                    "type": "string"
-                },
-                "onsale": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "boolean",
-                    "prettyName": "onsale",
-                    "type": "boolean"
-                },
-                "producer": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.Producer",
-                    "prettyName": "producer",
-                    "type": null
-                },
-                "size": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "size",
-                    "type": "number"
-                },
-                "size_unit": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "size_unit",
-                    "type": "string"
-                },
-                "stealth_annotation": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "stealth_annotation",
-                    "type": "string"
-                },
-                "string_choice": {
-                    "canPivot": true,
-                    "choices": [
-                        [
-                            "a",
-                            "A"
-                        ],
-                        [
-                            "b",
-                            "B"
-                        ]
-                    ],
-                    "concrete": true,
-                    "model": "stringchoice",
-                    "prettyName": "string_choice",
-                    "type": "stringchoice"
-                }
-            },
-            "sortedFields": [
-                "id",
-                "admin",
-                "annotated",
-                "boat",
-                "created_time",
-                "default_sku",
-                "extra_inline",
-                "extra_model",
-                "fake",
-                "image",
-                "is_onsale",
-                "name",
-                "number_choice",
-                "only_in_list_view",
-                "onsale",
-                "producer",
-                "size",
-                "size_unit",
-                "stealth_annotation",
-                "string_choice"
-            ]
-        },
-        "tests.SKU": {
-            "fields": {
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "name": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "name",
-                    "type": "string"
-                },
-                "product": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": false,
-                    "model": "tests.Product",
-                    "prettyName": "product",
-                    "type": null
-                }
-            },
-            "sortedFields": [
-                "id",
-                "name",
-                "product"
-            ]
-        },
-        "tests.Tag": {
-            "fields": {
-                "admin": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": false,
-                    "model": null,
-                    "prettyName": "admin",
-                    "type": "html"
-                },
-                "id": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "number",
-                    "prettyName": "id",
-                    "type": "number"
-                },
-                "name": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": "string",
-                    "prettyName": "name",
-                    "type": "string"
-                }
-            },
-            "sortedFields": [
-                "id",
-                "admin",
-                "name"
-            ]
-        },
         "unknown": {
             "fields": {
                 "is_null": {
@@ -1301,15 +1301,15 @@
     "sortedModels": [
         "auth.Group",
         "auth.User",
-        "data_browser.View",
-        "tests.Address",
-        "tests.InAdmin",
-        "tests.InlineAdmin",
-        "tests.Normal",
-        "tests.Producer",
-        "tests.Product",
-        "tests.SKU",
-        "tests.Tag"
+        "core.Address",
+        "core.InAdmin",
+        "core.InlineAdmin",
+        "core.Normal",
+        "core.Producer",
+        "core.Product",
+        "core.SKU",
+        "core.Tag",
+        "data_browser.View"
     ],
     "types": {
         "boolean": {

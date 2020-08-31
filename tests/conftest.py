@@ -1,16 +1,18 @@
 import dj_database_url
 from django.conf import settings
 
+INSTALLED_APPS = [
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.staticfiles",
+    "django.contrib.admin",
+    "tests.core",
+    "data_browser",
+]
+
 settings.configure(
-    INSTALLED_APPS=[
-        "django.contrib.auth",
-        "django.contrib.contenttypes",
-        "django.contrib.sessions",
-        "django.contrib.staticfiles",
-        "django.contrib.admin",
-        "tests",
-        "data_browser",
-    ],
+    INSTALLED_APPS=INSTALLED_APPS,
     DATABASES={
         "default": dj_database_url.config(
             conn_max_age=600, default="sqlite:///db.sqlite3"
