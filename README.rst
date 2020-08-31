@@ -225,7 +225,7 @@ Where the ``author.age`` is actually a property on the Author Model and ``author
 
 Where the ``pks`` passed to in_bulk in the second query came from ``author__id`` in the first.
 
-When the Data Browser calls the admin ``get_queryset`` functions it will put some context in ``request.data_browser``. This means you can test to see if the Data Browser is making the call as follows:
+When the Data Browser calls the admin ``get_queryset`` functions it will put some context in ``request.data_browser``. This allows you to test to see if the Data Browser is making the call as follows:
 
 .. code-block:: python
 

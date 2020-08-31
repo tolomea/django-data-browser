@@ -10,7 +10,7 @@ from data_browser.orm_admin import get_models
 from data_browser.orm_results import admin_get_queryset, get_results
 from data_browser.query import BoundQuery, Query
 
-from . import models
+from .core import models
 from .util import ANY, KEYS
 
 
@@ -20,7 +20,7 @@ def sortedAssert(a, b):
 
 def admin_link(obj):
     model = obj.__class__.__name__.lower()
-    return f'<a href="/admin/tests/{model}/{obj.pk}/change/">{obj}</a>'
+    return f'<a href="/admin/core/{model}/{obj.pk}/change/">{obj}</a>'
 
 
 def flatten_table(fields, data):
@@ -106,7 +106,7 @@ def orm_models(req):
 @pytest.fixture
 def get_product_flat(req, orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
-        query = Query.from_request("tests.Product", *args)
+        query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
             data = get_results(req, bound_query, orm_models)
@@ -118,7 +118,7 @@ def get_product_flat(req, orm_models, django_assert_num_queries):
 @pytest.fixture
 def get_product_pivot(req, orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
-        query = Query.from_request("tests.Product", *args)
+        query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
             data = get_results(req, bound_query, orm_models)
@@ -180,7 +180,7 @@ def test_bad_storage(monkeypatch, req):
     orm_models = get_models(req)
 
     def get_product_flat(*args, **kwargs):
-        query = Query.from_request("tests.Product", *args)
+        query = Query.from_request("core.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
         data = get_results(req, bound_query, orm_models)
         return flatten_table(bound_query.fields, data["rows"])
@@ -624,14 +624,14 @@ def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
 def test_get_fields(orm_models):
 
     # remap pk to id
-    assert "pk" not in orm_models["tests.Product"].fields
-    assert "id" in orm_models["tests.Product"].fields
+    assert "pk" not in orm_models["core.Product"].fields
+    assert "id" in orm_models["core.Product"].fields
 
     # no many to many fields
-    assert "tags" not in orm_models["tests.Product"].fields
+    assert "tags" not in orm_models["core.Product"].fields
 
     # no admin on inlines
-    assert "admin" not in orm_models["tests.InlineAdmin"].fields
+    assert "admin" not in orm_models["core.InlineAdmin"].fields
 
 
 class TestPermissions:
@@ -649,14 +649,14 @@ class TestPermissions:
             rf, ["normal", "notinadmin", "inadmin", "inlineadmin"]
         )
 
-        assert "tests.NotInAdmin" not in orm_models
-        assert orm_models["tests.InAdmin"] == orm_fields.OrmModel(
+        assert "core.NotInAdmin" not in orm_models
+        assert orm_models["core.InAdmin"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
-        assert orm_models["tests.InlineAdmin"] == orm_fields.OrmModel(
+        assert orm_models["core.InlineAdmin"] == orm_fields.OrmModel(
             fields=KEYS("id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
-        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
+        assert orm_models["core.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin", "inline_admin"),
             admin=ANY(BaseModelAdmin),
         )
@@ -665,10 +665,10 @@ class TestPermissions:
     def test_no_perms(self, rf):
         orm_models = self.get_fields_with_perms(rf, ["normal"])
 
-        assert "tests.NotInAdmin" not in orm_models
-        assert "tests.InAdmin" not in orm_models
-        assert "tests.InlineAdmin" not in orm_models
-        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
+        assert "core.NotInAdmin" not in orm_models
+        assert "core.InAdmin" not in orm_models
+        assert "core.InlineAdmin" not in orm_models
+        assert orm_models["core.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
@@ -676,10 +676,10 @@ class TestPermissions:
     def test_inline_perms(self, rf):
         orm_models = self.get_fields_with_perms(rf, ["normal", "inlineadmin"])
 
-        assert "tests.NotInAdmin" not in orm_models
-        assert "tests.InAdmin" not in orm_models
-        assert "tests.InlineAdmin" not in orm_models
-        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
+        assert "core.NotInAdmin" not in orm_models
+        assert "core.InAdmin" not in orm_models
+        assert "core.InlineAdmin" not in orm_models
+        assert orm_models["core.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
@@ -687,11 +687,11 @@ class TestPermissions:
     def test_admin_perms(self, rf):
         orm_models = self.get_fields_with_perms(rf, ["normal", "inadmin"])
 
-        assert "tests.NotInAdmin" not in orm_models
-        assert orm_models["tests.InAdmin"] == orm_fields.OrmModel(
+        assert "core.NotInAdmin" not in orm_models
+        assert orm_models["core.InAdmin"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
-        assert "tests.InlineAdmin" not in orm_models
-        assert orm_models["tests.Normal"] == orm_fields.OrmModel(
+        assert "core.InlineAdmin" not in orm_models
+        assert orm_models["core.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )

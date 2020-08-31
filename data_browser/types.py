@@ -321,7 +321,7 @@ class JSONFieldType(BaseType):
     default_value = "|"
 
     @staticmethod
-    def _parse(value):  # pragma: json field
+    def _parse(value):
         value = value.strip()
         if "|" not in value:
             raise ValueError("Missing seperator '|'")
