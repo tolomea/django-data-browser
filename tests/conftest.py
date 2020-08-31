@@ -1,4 +1,5 @@
 import dj_database_url
+import pytest
 from django.conf import settings
 
 INSTALLED_APPS = [
@@ -10,6 +11,8 @@ INSTALLED_APPS = [
     "tests.core",
     "data_browser",
 ]
+
+INSTALLED_APPS.append("tests.json")
 
 settings.configure(
     INSTALLED_APPS=INSTALLED_APPS,
@@ -45,3 +48,10 @@ settings.configure(
     DATA_BROWSER_ALLOW_PUBLIC=True,
     USE_I18N=True,
 )
+
+
+@pytest.fixture
+def req(rf, admin_user):
+    req = rf.get("/")
+    req.user = admin_user
+    return req

@@ -8,4 +8,4 @@ exclude_lines =
 	assert
 	pragma: no cover
 	pragma: postgres
-	pragma: json field
+	pragma: django < 3.1

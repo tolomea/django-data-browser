@@ -120,7 +120,7 @@ def test_query_csv(admin_client):
         "/data_browser/query/core.Product/size-0,name+1,size_unit.csv?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
-    print(res.content.decode("utf-8"))
+    dump(res.content.decode("utf-8"))
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
     dump(rows)
     assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
@@ -132,7 +132,7 @@ def test_query_csv_pivoted(admin_client):
         "/data_browser/query/core.Product/created_time__year+0,&created_time__month+1,id__count,size__max.csv?"
     )
     assert res.status_code == 200
-    print(res.content.decode("utf-8"))
+    dump(res.content.decode("utf-8"))
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
     dump(rows)
     assert rows == [
@@ -179,7 +179,7 @@ def test_query_csv_pivot_permutations(admin_client, key, snapshot):
         f"/data_browser/query/core.Product/{','.join(fields)}.csv?{filters}"
     )
     assert res.status_code == 200
-    print(res.content.decode("utf-8"))
+    dump(res.content.decode("utf-8"))
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
     dump(rows)
     snapshot.assert_match(rows, "key")
@@ -229,7 +229,7 @@ def test_view_csv(admin_client, settings):
     view.save()
     res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 200
-    print(res.content.decode("utf-8"))
+    dump(res.content.decode("utf-8"))
     rows = list(csv.reader(res.content.decode("utf-8").splitlines()))
     dump(rows)
     assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]

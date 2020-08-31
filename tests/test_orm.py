@@ -106,7 +106,7 @@ def orm_models(req):
 @pytest.fixture
 def get_product_flat(req, orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
-        query = Query.from_request("core.Product", *args)
+        query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
             data = get_results(req, bound_query, orm_models)
@@ -118,7 +118,7 @@ def get_product_flat(req, orm_models, django_assert_num_queries):
 @pytest.fixture
 def get_product_pivot(req, orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
-        query = Query.from_request("core.Product", *args)
+        query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
             data = get_results(req, bound_query, orm_models)
