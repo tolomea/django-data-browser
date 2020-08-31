@@ -115,15 +115,17 @@ Specifying models and fields
 By default the Data Browser has access to all models and fields that the current user can see anywhere in the Admin site.
 However if necessary this can be tweaked using the following class level properties on ModelAdmins and Inlines.
 
-+------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| Name             | Format              | Purpose                                                                                                    |
-+==================+=====================+============================================================================================================+
-| ddb_ignore       | Boolean             | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model. |
-+------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| ddb_hide_fields  | List of field names | Explicitly hide the specified fields.                                                                      |
-+------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| ddb_extra_fields | List of field names | Add additional fields that are not mentioned in fields, fieldsets or list_display.                         |
-+------------------+---------------------+------------------------------------------------------------------------------------------------------------+
++------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| Name             | Format                                    | Purpose                                                                                                     |
++==================+===========================================+=============================================================================================================+
+| ddb_ignore       | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.  |
++------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| ddb_hide_fields  | ``[field_name]``                          | Explicitly hide the specified fields.                                                                       |
++------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| ddb_extra_fields | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                          |
++------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| ddb_json_fields  | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean". |
++------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
 Additionally, per the below sections, calculated fields can be hidden with the ``data_browser.helpers.ddb_hide`` decorator and annotated fields are always visible unless explicitly hidden.
 
@@ -177,7 +179,7 @@ The helpers will automatically deal with the ``admin_order_field`` and ``boolean
 
 Additionally the annotation will only be applied to the list view when it's mentioned in ``list_display`` this allows you to use annotations extensively on your detail views without hurting the performance of your list views.
 
-And finally even if not mentioned in fields, fieldsets or list_display, the annotation will still be visible in the data browser unless it is explicitly mentioned in ``ddb_hide_fields``.
+And finally even if not mentioned in fields, fieldsets or list_display, the annotation will still be visible in the Data Browser unless it is explicitly mentioned in ``ddb_hide_fields``.
 
 
 Performance
@@ -223,7 +225,7 @@ Where the ``author.age`` is actually a property on the Author Model and ``author
 
 Where the ``pks`` passed to in_bulk in the second query came from ``author__id`` in the first.
 
-When the Data Browser calls the admin ``get_queryset`` functions it will put some context in ``request.data_browser``. This means you can test to see if the Data Browser is making the call as follows:
+When the Data Browser calls the admin ``get_queryset`` functions it will put some context in ``request.data_browser``. This allows you to test to see if the Data Browser is making the call as follows:
 
 .. code-block:: python
 
@@ -268,8 +270,8 @@ Major versions are for major features, significant changes to existing functiona
 Patch and Minor versions should never contain breaking changes and should always be backward compatible. A breaking change is a change that makes backward incompatible changes to one or more of the following:
 
 * The query URL format.
-* The json, csv etc data formats.
-* ``request.data_browser``.
+* The json, csv etc data formats, this does not include the Data Browsers internal API's, only the data export formats.
+* The format of the ``request.data_browser`` passed to ``get_fieldsets`` and ``get_queryset``.
 * Existing saved views.
 * The URL's of public saved views.
 
