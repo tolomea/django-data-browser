@@ -1,6 +1,16 @@
 import dj_database_url
+import django
 import pytest
 from django.conf import settings
+
+DATABASE_CONFIG = dj_database_url.config(
+    conn_max_age=600, default="sqlite:///db.sqlite3"
+)
+
+if DATABASE_CONFIG["ENGINE"] == "django.db.backends.postgresql":  # pragma: postgres
+    JSON_FIELD_SUPPORT = django.VERSION > (2, 1)
+else:
+    JSON_FIELD_SUPPORT = django.VERSION > (3, 1)
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -12,15 +22,12 @@ INSTALLED_APPS = [
     "data_browser",
 ]
 
-INSTALLED_APPS.append("tests.json")
+if JSON_FIELD_SUPPORT:  # pragma: no branch
+    INSTALLED_APPS.append("tests.json")
 
 settings.configure(
     INSTALLED_APPS=INSTALLED_APPS,
-    DATABASES={
-        "default": dj_database_url.config(
-            conn_max_age=600, default="sqlite:///db.sqlite3"
-        )
-    },
+    DATABASES={"default": DATABASE_CONFIG},
     ROOT_URLCONF="tests.urls",
     MIDDLEWARE=[
         "django.middleware.security.SecurityMiddleware",

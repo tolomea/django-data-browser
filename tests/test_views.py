@@ -173,7 +173,7 @@ def test_query_csv_pivot_permutations(admin_client, key, snapshot):
         fields.append("&created_time__month+1")
     if "b" in key:
         fields.extend(["id__count", "size__max"])
-    filters = "" if "d" in key else "id__equals=123"
+    filters = "" if "d" in key else "id__equals=-1"
 
     res = admin_client.get(
         f"/data_browser/query/core.Product/{','.join(fields)}.csv?{filters}"

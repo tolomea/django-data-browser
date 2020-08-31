@@ -5,9 +5,15 @@ from data_browser.orm_admin import get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
-from .json.models import JsonModel
+from .conftest import JSON_FIELD_SUPPORT
 
 """ Howto enable SQLite JSON support https://code.djangoproject.com/wiki/JSON1Extension """
+
+
+if JSON_FIELD_SUPPORT:
+    from .json.models import JsonModel
+else:  # pragma: no cover
+    pytestmark = pytest.mark.skip("Needs JSONField support")
 
 
 class JsonAdmin(admin.ModelAdmin):
