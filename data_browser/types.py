@@ -150,7 +150,9 @@ class NumberType(BaseType):
     @staticmethod
     def get_format_hints(name, data):
         # we add . here so there is always at least one .
-        nums = [row[name] for row in data if row]
+        nums = [
+            row[name] for row in data if row and row[name] and abs(row[name] > 0.0001)
+        ]
         return {
             "decimalPlaces": get_optimal_decimal_places(nums),
             "significantFigures": 3,

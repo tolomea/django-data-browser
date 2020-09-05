@@ -291,6 +291,7 @@ function QueryPage(props) {
     baseUrl,
     loading,
     error,
+    formatHints,
   } = props;
 
   let overlay;
@@ -299,7 +300,9 @@ function QueryPage(props) {
 
   let results;
   if (query.rowFields().length || query.colFields().length)
-    results = <Results {...{ query, rows, cols, body, overlay }} />;
+    results = (
+      <Results {...{ query, rows, cols, body, overlay, formatHints }} />
+    );
   else results = <h2>No fields selected</h2>;
 
   return (

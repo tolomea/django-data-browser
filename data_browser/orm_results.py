@@ -203,8 +203,12 @@ def get_results(request, bound_query, orm_models):
             table.append(data[row_key].get(col_key, None))
         body_data.append(format_table(bound_query.bound_data_fields, table))
 
-    row_data = [dict(row) for row in row_keys]
-    col_data = [dict(col) for col in col_keys]
+    row_data = format_table(
+        bound_query.bound_row_fields, [dict(row) for row in row_keys]
+    )
+    col_data = format_table(
+        bound_query.bound_col_fields, [dict(col) for col in col_keys]
+    )
 
     format_hints = {}
     for fields, data in [
@@ -217,8 +221,8 @@ def get_results(request, bound_query, orm_models):
         )
 
     return {
-        "rows": format_table(bound_query.bound_row_fields, row_data),
-        "cols": format_table(bound_query.bound_col_fields, col_data),
+        "rows": row_data,
+        "cols": col_data,
         "body": body_data,
         "length": len(res),
         "formatHints": format_hints,

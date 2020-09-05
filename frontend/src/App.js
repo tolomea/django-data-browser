@@ -47,6 +47,7 @@ class QueryApp extends React.Component {
         cols: response.cols,
         rows: response.rows,
         length: response.length,
+        formatHints: response.formatHints,
         filterErrors: response.filterErrors,
         loading: fetchInProgress,
         error: undefined,

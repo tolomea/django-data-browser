@@ -50,12 +50,27 @@ function HeadCell(props) {
 }
 
 const DataCell = React.memo((props) => {
-  const { modelField, className, span, value } = props;
+  const { modelField, className, span, value, formatHint } = props;
   let formattedValue;
   if (value === undefined) {
     formattedValue = "";
+  } else if (value === null) {
+    formattedValue = null;
   } else if (modelField.type === "html" && value) {
     formattedValue = <div dangerouslySetInnerHTML={{ __html: value }} />;
+  } else if (modelField.type === "number") {
+    if (
+      value > formatHint.highCutOff ||
+      value < -formatHint.highCutOff ||
+      (value < formatHint.lowCutOff && value > -formatHint.lowCutOff)
+    ) {
+      formattedValue = value.toExponential(formatHint.significantFigures - 1);
+    } else {
+      formattedValue = value.toFixed(formatHint.decimalPlaces);
+      var parts = value.toFixed(formatHint.decimalPlaces).toString().split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      formattedValue = parts.join(".");
+    }
   } else {
     formattedValue = String(value);
   }
@@ -78,7 +93,7 @@ function VTableHeadRow(props) {
 }
 
 function VTableBodyRow(props) {
-  const { fields, query, classNameFirst, className, row } = props;
+  const { fields, query, classNameFirst, className, row, formatHints } = props;
   return fields.map((field, i) => {
     if (row)
       return (
@@ -87,6 +102,7 @@ function VTableBodyRow(props) {
           value={row[field.pathStr]}
           className={`${i ? "" : classNameFirst} ${className}`}
           modelField={query.getField(field.path)}
+          formatHint={formatHints[field.pathStr]}
         />
       );
     else
@@ -97,7 +113,7 @@ function VTableBodyRow(props) {
 }
 
 function HTableRow(props) {
-  const { query, field, data, span, className } = props;
+  const { query, field, data, span, className, formatHints } = props;
   return (
     <>
       <HeadCell {...{ query, field }} />
@@ -106,6 +122,7 @@ function HTableRow(props) {
           {...{ key, span, className }}
           value={col[field.pathStr]}
           modelField={query.getField(field.path)}
+          formatHint={formatHints[field.pathStr]}
         />
       ))}
     </>
@@ -113,7 +130,7 @@ function HTableRow(props) {
 }
 
 function Results(props) {
-  const { query, cols, rows, body, overlay } = props;
+  const { query, cols, rows, body, overlay, formatHints } = props;
   return (
     <div className="Results">
       <Overlay message={overlay} />
@@ -126,7 +143,7 @@ function Results(props) {
                 <tr key={field.pathStr}>
                   <Spacer spaces={query.rowFields().length - 1} />
                   <HTableRow
-                    {...{ query, field }}
+                    {...{ query, field, formatHints }}
                     span={query.resFields().length}
                     data={cols}
                     className={overlay && "Fade"}
@@ -159,10 +176,13 @@ function Results(props) {
             {rows.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 <Spacer spaces={1 - query.rowFields().length} />
-                <VTableBodyRow {...{ query, row }} fields={query.rowFields()} />
+                <VTableBodyRow
+                  {...{ query, row, formatHints }}
+                  fields={query.rowFields()}
+                />
                 {body.map((table, key) => (
                   <VTableBodyRow
-                    {...{ key, query }}
+                    {...{ key, query, formatHints }}
                     fields={query.resFields()}
                     row={table[rowIndex]}
                     classNameFirst="LeftBorder"
