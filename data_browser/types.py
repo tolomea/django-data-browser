@@ -152,10 +152,10 @@ class NumberType(BaseType):
         # we add . here so there is always at least one .
         nums = [row[name] for row in data if row]
         return {
-            "decimal_places": get_optimal_decimal_places(nums),
-            "significant_figures": 3,
-            "low_cut_off": 0.0001,
-            "high_cut_off": 1e10,
+            "decimalPlaces": get_optimal_decimal_places(nums),
+            "significantFigures": 3,
+            "lowCutOff": 0.0001,
+            "highCutOff": 1e10,
         }
 
 

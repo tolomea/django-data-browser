@@ -221,5 +221,5 @@ def get_results(request, bound_query, orm_models):
         "cols": format_table(bound_query.bound_col_fields, col_data),
         "body": body_data,
         "length": len(res),
-        "format_hints": format_hints,
+        "formatHints": format_hints,
     }
