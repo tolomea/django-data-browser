@@ -1,3 +1,5 @@
+from django.contrib import admin
+
 from .core.admin import AddressAdmin, ProductAdmin
 from .core.models import Address, Producer, Product
 
@@ -40,3 +42,25 @@ class TestAnnotationOptimization:
         )
         assert admin_client.get(f"/admin/core/address/").status_code == 200
         get_queryset.assert_not_called()
+
+    def test_request_factory_compability_list(self, rf, admin_user, mocker):
+        request = rf.get("/")
+        request.user = admin_user
+        get_queryset = mocker.patch(
+            "tests.core.admin.AddressAdmin.andrew.get_queryset",
+            wraps=AddressAdmin.andrew.get_queryset,
+        )
+        resp = AddressAdmin(Address, admin.site).changelist_view(request)
+        assert resp.status_code == 200
+        get_queryset.assert_called_once()
+
+    def test_request_factory_compability(self, rf, admin_user, mocker):
+        request = rf.get("/")
+        request.user = admin_user
+        get_queryset = mocker.patch(
+            "tests.core.admin.AddressAdmin.andrew.get_queryset",
+            wraps=AddressAdmin.andrew.get_queryset,
+        )
+        resp = AddressAdmin(Address, admin.site).changelist_view(request)
+        assert resp.status_code == 200
+        get_queryset.assert_called_once()
