@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pytest
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 import data_browser.models
 
@@ -29,12 +30,12 @@ def pivot_products(db):
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
-        datetime(2020, 1, 1),
-        datetime(2020, 2, 1),
-        datetime(2020, 2, 2),
-        datetime(2021, 1, 1),
-        datetime(2021, 1, 2),
-        datetime(2021, 1, 3),
+        datetime(2020, 1, 1, tzinfo=timezone.utc),
+        datetime(2020, 2, 1, tzinfo=timezone.utc),
+        datetime(2020, 2, 2, tzinfo=timezone.utc),
+        datetime(2021, 1, 1, tzinfo=timezone.utc),
+        datetime(2021, 1, 2, tzinfo=timezone.utc),
+        datetime(2021, 1, 3, tzinfo=timezone.utc),
     ]
     for i, dt in enumerate(datetimes):
         models.Product.objects.create(

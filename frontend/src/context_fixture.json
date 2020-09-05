@@ -863,6 +863,22 @@
                     "prettyName": "is_null",
                     "type": "boolean"
                 },
+                "iso_week": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "iso_week",
+                    "type": "number"
+                },
+                "iso_year": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "iso_year",
+                    "type": "year"
+                },
                 "month": {
                     "canPivot": true,
                     "choices": [],
@@ -900,6 +916,8 @@
                 "count",
                 "day",
                 "is_null",
+                "iso_week",
+                "iso_year",
                 "month",
                 "quarter",
                 "week_day",
@@ -947,6 +965,22 @@
                     "model": null,
                     "prettyName": "is_null",
                     "type": "boolean"
+                },
+                "iso_week": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "iso_week",
+                    "type": "number"
+                },
+                "iso_year": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "iso_year",
+                    "type": "year"
                 },
                 "minute": {
                     "canPivot": true,
@@ -1003,6 +1037,8 @@
                 "day",
                 "hour",
                 "is_null",
+                "iso_week",
+                "iso_year",
                 "minute",
                 "month",
                 "quarter",

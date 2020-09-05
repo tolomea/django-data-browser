@@ -358,7 +358,7 @@ class TestDateTimeType:
 
     def test_format(self):
         assert (
-            DateTimeType.format(timezone.make_aware(datetime(2020, 5, 19, 8, 42, 16)))
+            DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16, tzinfo=timezone.utc))
             == "2020-05-19 08:42:16"
         )
 

@@ -39,19 +39,19 @@ _TYPE_AGGREGATES = {
     BooleanType: ["average", "sum"],
 }
 
+
+_DATE_FUNCTIONS = [
+    "year",
+    "iso_year",
+    "quarter",
+    "month",
+    "iso_week",
+    "day",
+    "week_day",
+]
 _TYPE_FUNCTIONS = {
-    DateTimeType: [
-        "year",
-        "quarter",
-        "month",
-        "day",
-        "week_day",
-        "hour",
-        "minute",
-        "second",
-        "date",
-    ],
-    DateType: ["year", "quarter", "month", "day", "week_day"],
+    DateType: _DATE_FUNCTIONS,
+    DateTimeType: _DATE_FUNCTIONS + ["hour", "minute", "second", "date"],
     None: ["is_null"],  # all fields
 }
 
@@ -117,8 +117,10 @@ def IsNull(field_name):
 def _get_django_function(name):
     return {
         "year": (functions.ExtractYear, YearType),
+        "iso_year": (functions.ExtractIsoYear, YearType),
         "quarter": (functions.ExtractQuarter, NumberType),
         "month": (functions.ExtractMonth, MonthType),
+        "iso_week": (functions.ExtractWeek, NumberType),
         "day": (functions.ExtractDay, NumberType),
         "week_day": (functions.ExtractWeekDay, WeekDayType),
         "hour": (functions.ExtractHour, NumberType),

@@ -74,16 +74,16 @@ def pivot_products(db):
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
-        datetime(2020, 1, 1),
-        datetime(2020, 2, 1),
-        datetime(2020, 2, 2),
-        datetime(2021, 1, 1),
-        datetime(2021, 1, 2),
-        datetime(2021, 1, 3),
-        datetime(2021, 2, 1),
-        datetime(2021, 2, 2),
-        datetime(2021, 2, 3),
-        datetime(2021, 2, 4),
+        datetime(2020, 1, 1, tzinfo=timezone.utc),
+        datetime(2020, 2, 1, tzinfo=timezone.utc),
+        datetime(2020, 2, 2, tzinfo=timezone.utc),
+        datetime(2021, 1, 1, tzinfo=timezone.utc),
+        datetime(2021, 1, 2, tzinfo=timezone.utc),
+        datetime(2021, 1, 3, tzinfo=timezone.utc),
+        datetime(2021, 2, 1, tzinfo=timezone.utc),
+        datetime(2021, 2, 2, tzinfo=timezone.utc),
+        datetime(2021, 2, 3, tzinfo=timezone.utc),
+        datetime(2021, 2, 4, tzinfo=timezone.utc),
     ]
     for i, dt in enumerate(datetimes):
         models.Product.objects.create(
@@ -497,12 +497,12 @@ def test_pivot_sorting_with_empty_cell(get_product_pivot):
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
         # 2021, 1, 1 is notably missing
-        datetime(2021, 2, 1),
-        datetime(2022, 1, 1),
-        datetime(2022, 1, 2),
-        datetime(2022, 2, 1),
-        datetime(2022, 2, 2),
-        datetime(2022, 2, 3),
+        datetime(2021, 2, 1, tzinfo=timezone.utc),
+        datetime(2022, 1, 1, tzinfo=timezone.utc),
+        datetime(2022, 1, 2, tzinfo=timezone.utc),
+        datetime(2022, 2, 1, tzinfo=timezone.utc),
+        datetime(2022, 2, 2, tzinfo=timezone.utc),
+        datetime(2022, 2, 3, tzinfo=timezone.utc),
     ]
     for dt in datetimes:
         models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
@@ -530,17 +530,17 @@ def test_pivot_sorting_body(get_product_pivot):
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
-        datetime(2021, 1, 1),
-        datetime(2021, 2, 1),
-        datetime(2021, 2, 2),
-        datetime(2021, 2, 3),
-        datetime(2022, 1, 1),
-        datetime(2022, 1, 2),
-        datetime(2022, 1, 3),
-        datetime(2022, 1, 4),
-        datetime(2022, 2, 1),
-        datetime(2022, 2, 2),
-        datetime(2022, 2, 3),
+        datetime(2021, 1, 1, tzinfo=timezone.utc),
+        datetime(2021, 2, 1, tzinfo=timezone.utc),
+        datetime(2021, 2, 2, tzinfo=timezone.utc),
+        datetime(2021, 2, 3, tzinfo=timezone.utc),
+        datetime(2022, 1, 1, tzinfo=timezone.utc),
+        datetime(2022, 1, 2, tzinfo=timezone.utc),
+        datetime(2022, 1, 3, tzinfo=timezone.utc),
+        datetime(2022, 1, 4, tzinfo=timezone.utc),
+        datetime(2022, 2, 1, tzinfo=timezone.utc),
+        datetime(2022, 2, 2, tzinfo=timezone.utc),
+        datetime(2022, 2, 3, tzinfo=timezone.utc),
     ]
     for dt in datetimes:
         models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
@@ -695,3 +695,32 @@ class TestPermissions:
         assert orm_models["core.Normal"] == orm_fields.OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup,value",
+    [
+        ("", "2020-01-02 03:04:05.000006"),
+        ("year", 2020),
+        ("iso_year", 2020),
+        ("quarter", 1),
+        ("month", "January"),
+        ("iso_week", 1),
+        ("day", 2),
+        ("week_day", "Thursday"),
+        ("hour", 3),
+        ("minute", 4),
+        ("second", 5),
+        ("date", "2020-01-02"),
+    ],
+)
+def test_all_datetime_functions(get_product_flat, lookup, value):
+    models.Product.objects.create(
+        producer=models.Producer.objects.create(),
+        created_time=datetime(2020, 1, 2, 3, 4, 5, 6, tzinfo=timezone.utc),
+    )
+
+    fields = f"created_time__{lookup}" if lookup else "created_time"
+    data = get_product_flat(1, fields, {})
+    assert data == [[value]]

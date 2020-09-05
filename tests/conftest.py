@@ -54,6 +54,8 @@ settings.configure(
     MEDIA_URL="/media/",
     DATA_BROWSER_ALLOW_PUBLIC=True,
     USE_I18N=True,
+    USE_TZ=True,
+    TIME_ZONE="UTC",
 )
 
 
