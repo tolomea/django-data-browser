@@ -4,7 +4,7 @@ from functools import lru_cache
 import dateutil.parser
 from django.utils import timezone
 
-from .common import all_subclasses
+from .common import all_subclasses, get_optimal_decimal_places
 
 
 class TypeMeta(type):
@@ -49,6 +49,10 @@ class BaseType(metaclass=TypeMeta):
             except Exception as e:
                 err_message = str(e) if str(e) else repr(e)
                 return None, err_message
+
+    @staticmethod
+    def get_format_hints(name, data):
+        return {}
 
 
 class StringType(BaseType):
@@ -142,6 +146,17 @@ class NumberType(BaseType):
     @staticmethod
     def _parse(value):
         return float(value)
+
+    @staticmethod
+    def get_format_hints(name, data):
+        # we add . here so there is always at least one .
+        nums = [row[name] for row in data if row]
+        return {
+            "decimal_places": get_optimal_decimal_places(nums),
+            "significant_figures": 3,
+            "low_cut_off": 0.0001,
+            "high_cut_off": 1e10,
+        }
 
 
 class NumberChoiceType(ChoiceTypeMixin, BaseType):

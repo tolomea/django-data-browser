@@ -276,6 +276,16 @@ def test_view_json(admin_client):
         "cols": [{}],
         "body": [[{}, {}]],
         "length": 2,
+        "format_hints": {
+            "name": {},
+            "size": {
+                "decimal_places": 0,
+                "significant_figures": 3,
+                "low_cut_off": 0.0001,
+                "high_cut_off": 1e10,
+            },
+            "size_unit": {},
+        },
     }
 
     view.owner = User.objects.create(is_staff=True)

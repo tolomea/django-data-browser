@@ -1,3 +1,4 @@
+import itertools
 import json
 from collections import defaultdict
 
@@ -195,20 +196,30 @@ def get_results(request, bound_query, orm_models):
         if key in all_row_keys:
             row_keys[key] = None
 
-    body = []
+    body_data = []
     for col_key in col_keys:
         table = []
         for row_key in row_keys:
             table.append(data[row_key].get(col_key, None))
-        body.append(format_table(bound_query.bound_data_fields, table))
+        body_data.append(format_table(bound_query.bound_data_fields, table))
+
+    row_data = [dict(row) for row in row_keys]
+    col_data = [dict(col) for col in col_keys]
+
+    format_hints = {}
+    for fields, data in [
+        (bound_query.bound_row_fields, row_data),
+        (bound_query.bound_col_fields, col_data),
+        (bound_query.bound_data_fields, itertools.chain.from_iterable(body_data)),
+    ]:
+        format_hints.update(
+            {field.path_str: field.get_format_hints(data) for field in fields}
+        )
 
     return {
-        "rows": format_table(
-            bound_query.bound_row_fields, [dict(row) for row in row_keys]
-        ),
-        "cols": format_table(
-            bound_query.bound_col_fields, [dict(col) for col in col_keys]
-        ),
-        "body": body,
+        "rows": format_table(bound_query.bound_row_fields, row_data),
+        "cols": format_table(bound_query.bound_col_fields, col_data),
+        "body": body_data,
         "length": len(res),
+        "format_hints": format_hints,
     }

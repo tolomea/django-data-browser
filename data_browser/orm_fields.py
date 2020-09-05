@@ -184,6 +184,9 @@ class OrmBoundField:
     def blank(cls):
         return cls(field=None, previous=None, full_path=[], pretty_path=[])
 
+    def get_format_hints(self, data):
+        return self.type_.get_format_hints(self.path_str, data)
+
 
 @dataclass
 class OrmModel:

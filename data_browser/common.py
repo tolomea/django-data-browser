@@ -1,4 +1,5 @@
 import logging
+import math
 
 from django import http
 
@@ -39,6 +40,35 @@ def all_subclasses(cls):
         queue.update(subs - res)
         res.update(subs)
     return res
+
+
+def get_optimal_decimal_places(nums, sf=3, max_dp=6):
+    actual_dps = set()
+    filtered = set()
+    for num in nums:
+        if num:
+            s = str(num)
+            print(s)
+            filtered.add(num)
+            if "e-" in s:
+                actual_dps.add(float("inf"))
+            elif "." in s:
+                actual_dps.add(len(s.split(".")[1]))
+            else:
+                actual_dps.add(0)
+
+    if not filtered:
+        return 0
+
+    max_actual_dp = max(actual_dps)
+    if max_actual_dp <= 2:
+        return max_actual_dp
+
+    min_value = min(filtered)
+    min_magnitude = math.floor(math.log(min_value, 10))
+    dp_for_sf = sf - min_magnitude - 1
+
+    return max(0, min(dp_for_sf, max_actual_dp, max_dp))
 
 
 class Settings:
