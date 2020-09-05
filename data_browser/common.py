@@ -47,7 +47,7 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
     filtered = set()
     for num in nums:
         if num:
-            s = str(num)
+            s = f"{num:g}"
             filtered.add(num)
             if "e-" in s:
                 actual_dps.add(float("inf"))

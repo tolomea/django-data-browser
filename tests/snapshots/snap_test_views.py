@@ -4297,7 +4297,7 @@ snapshots["test_query_json_pivot data"] = {
             "significantFigures": 3,
         },
         "id__count": {
-            "decimalPlaces": 1,
+            "decimalPlaces": 0,
             "highCutOff": 10000000000.0,
             "lowCutOff": 0.0001,
             "significantFigures": 3,

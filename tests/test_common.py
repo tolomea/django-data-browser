@@ -28,6 +28,9 @@ from data_browser.common import get_optimal_decimal_places
         ([13.37, 0.12345], 3),
         ([13.37, 0.00001], 6),
         ([0.12345, 0.00001], 6),
+        ([1.0], 0),
+        ([None], 0),
+        ([0], 0),
     ],
 )
 def test_optimal_decimal_places(numbers, decimal_places):
