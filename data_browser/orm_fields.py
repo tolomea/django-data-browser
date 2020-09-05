@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Sequence, Tuple
 
+import django
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
 from django.db.models import (
@@ -40,15 +41,9 @@ _TYPE_AGGREGATES = {
 }
 
 
-_DATE_FUNCTIONS = [
-    "year",
-    "iso_year",
-    "quarter",
-    "month",
-    "iso_week",
-    "day",
-    "week_day",
-]
+_DATE_FUNCTIONS = ["year", "quarter", "month", "day", "week_day"]
+if django.VERSION >= (2, 2):  # pragma: no branch
+    _DATE_FUNCTIONS += ["iso_year", "iso_week"]
 _TYPE_FUNCTIONS = {
     DateType: _DATE_FUNCTIONS,
     DateTimeType: _DATE_FUNCTIONS + ["hour", "minute", "second", "date"],
@@ -115,12 +110,10 @@ def IsNull(field_name):
 
 
 def _get_django_function(name):
-    return {
+    mapping = {
         "year": (functions.ExtractYear, YearType),
-        "iso_year": (functions.ExtractIsoYear, YearType),
         "quarter": (functions.ExtractQuarter, NumberType),
         "month": (functions.ExtractMonth, MonthType),
-        "iso_week": (functions.ExtractWeek, NumberType),
         "day": (functions.ExtractDay, NumberType),
         "week_day": (functions.ExtractWeekDay, WeekDayType),
         "hour": (functions.ExtractHour, NumberType),
@@ -128,7 +121,15 @@ def _get_django_function(name):
         "second": (functions.ExtractSecond, NumberType),
         "date": (functions.TruncDate, DateType),
         "is_null": (IsNull, BooleanType),
-    }[name]
+    }
+    if django.VERSION >= (2, 2):  # pragma: no branch
+        mapping.update(
+            {
+                "iso_year": (functions.ExtractIsoYear, YearType),
+                "iso_week": (functions.ExtractWeek, NumberType),
+            }
+        )
+    return mapping[name]
 
 
 def s(path):

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import django
 import pytest
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
@@ -703,10 +704,8 @@ class TestPermissions:
     [
         ("", "2020-01-02 03:04:05.000006"),
         ("year", 2020),
-        ("iso_year", 2020),
         ("quarter", 1),
         ("month", "January"),
-        ("iso_week", 1),
         ("day", 2),
         ("week_day", "Thursday"),
         ("hour", 3),
@@ -716,6 +715,20 @@ class TestPermissions:
     ],
 )
 def test_all_datetime_functions(get_product_flat, lookup, value):
+    models.Product.objects.create(
+        producer=models.Producer.objects.create(),
+        created_time=datetime(2020, 1, 2, 3, 4, 5, 6, tzinfo=timezone.utc),
+    )
+
+    fields = f"created_time__{lookup}" if lookup else "created_time"
+    data = get_product_flat(1, fields, {})
+    assert data == [[value]]
+
+
+@pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
+@pytest.mark.django_db
+@pytest.mark.parametrize("lookup,value", [("iso_year", 2020), ("iso_week", 1)])
+def test_all_datetime_functions_2_2(get_product_flat, lookup, value):
     models.Product.objects.create(
         producer=models.Producer.objects.create(),
         created_time=datetime(2020, 1, 2, 3, 4, 5, 6, tzinfo=timezone.utc),
