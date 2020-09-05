@@ -887,6 +887,14 @@
                     "prettyName": "month",
                     "type": "month"
                 },
+                "month_start": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "month_start",
+                    "type": "date"
+                },
                 "quarter": {
                     "canPivot": true,
                     "choices": [],
@@ -902,6 +910,14 @@
                     "model": null,
                     "prettyName": "week_day",
                     "type": "weekday"
+                },
+                "week_start": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "week_start",
+                    "type": "date"
                 },
                 "year": {
                     "canPivot": true,
@@ -919,8 +935,10 @@
                 "iso_week",
                 "iso_year",
                 "month",
+                "month_start",
                 "quarter",
                 "week_day",
+                "week_start",
                 "year"
             ]
         },
@@ -998,6 +1016,14 @@
                     "prettyName": "month",
                     "type": "month"
                 },
+                "month_start": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "month_start",
+                    "type": "date"
+                },
                 "quarter": {
                     "canPivot": true,
                     "choices": [],
@@ -1022,6 +1048,14 @@
                     "prettyName": "week_day",
                     "type": "weekday"
                 },
+                "week_start": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "week_start",
+                    "type": "date"
+                },
                 "year": {
                     "canPivot": true,
                     "choices": [],
@@ -1041,9 +1075,11 @@
                 "iso_year",
                 "minute",
                 "month",
+                "month_start",
                 "quarter",
                 "second",
                 "week_day",
+                "week_start",
                 "year"
             ]
         },

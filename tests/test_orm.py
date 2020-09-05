@@ -706,6 +706,7 @@ class TestPermissions:
         ("year", 2020),
         ("quarter", 1),
         ("month", "January"),
+        ("month_start", "2020-01-01"),
         ("day", 2),
         ("week_day", "Thursday"),
         ("hour", 3),
@@ -727,7 +728,9 @@ def test_all_datetime_functions(get_product_flat, lookup, value):
 
 @pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
 @pytest.mark.django_db
-@pytest.mark.parametrize("lookup,value", [("iso_year", 2020), ("iso_week", 1)])
+@pytest.mark.parametrize(
+    "lookup,value", [("iso_year", 2020), ("iso_week", 1), ("week_start", "2019-12-30")]
+)
 def test_all_datetime_functions_2_2(get_product_flat, lookup, value):
     models.Product.objects.create(
         producer=models.Producer.objects.create(),
