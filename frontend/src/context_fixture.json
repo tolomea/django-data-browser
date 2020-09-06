@@ -163,7 +163,7 @@
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "sum": {
                     "canPivot": false,
@@ -861,7 +861,7 @@
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "iso_week": {
                     "canPivot": true,
@@ -982,7 +982,7 @@
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "iso_week": {
                     "canPivot": true,
@@ -1085,61 +1085,121 @@
         },
         "html": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
+                "is_null"
+            ]
+        },
+        "isnull": {
+            "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "is_null": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "is_null",
+                    "type": "isnull"
+                }
+            },
+            "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "json": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "jsonfield": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "month": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
@@ -1167,7 +1227,7 @@
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "max": {
                     "canPivot": false,
@@ -1223,46 +1283,73 @@
         },
         "numberarray": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "numberchoice": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "regex": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
@@ -1282,7 +1369,7 @@
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
@@ -1292,76 +1379,130 @@
         },
         "stringarray": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "stringchoice": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "unknown": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "weekday": {
             "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "count",
                 "is_null"
             ]
         },
         "year": {
             "fields": {
+                "average": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "average",
+                    "type": "number"
+                },
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
                     "model": null,
                     "prettyName": "is_null",
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedFields": [
+                "average",
+                "count",
                 "is_null"
             ]
         }
@@ -1526,6 +1667,18 @@
                 "not_ends_with",
                 "not_regex",
                 "is_null"
+            ]
+        },
+        "isnull": {
+            "defaultLookup": "equals",
+            "defaultValue": true,
+            "lookups": {
+                "equals": {
+                    "type": "boolean"
+                }
+            },
+            "sortedLookups": [
+                "equals"
             ]
         },
         "json": {

@@ -325,6 +325,16 @@ class BooleanType(BaseType):
             raise ValueError("Expected 'true' or 'false'")
 
 
+class IsNullType(BooleanType):
+    default_value = True
+    lookups = {"equals": "boolean"}
+
+    @staticmethod
+    def format(value, choices=None):
+        assert not choices
+        return "IsNull" if value else "NotNull"
+
+
 class UnknownType(BaseType):
     @staticmethod
     def format(value, choices=None):

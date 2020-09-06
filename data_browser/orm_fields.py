@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass
 from typing import Sequence, Tuple
 
@@ -24,8 +25,10 @@ from .types import (
     DateTimeType,
     DateType,
     HTMLType,
+    IsNullType,
     MonthType,
     NumberType,
+    StringChoiceType,
     StringType,
     WeekDayType,
     YearType,
@@ -33,23 +36,38 @@ from .types import (
 
 OPEN_IN_ADMIN = "admin"
 
-_TYPE_AGGREGATES = {
-    StringType: ["count"],
-    NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
-    DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
-    DateType: ["count"],  # average, min and max might be nice here but sqlite
-    BooleanType: ["average", "sum"],
-}
+_TYPE_AGGREGATES = defaultdict(
+    lambda: ["count"],
+    {
+        StringType: ["count"],
+        StringChoiceType: ["count"],
+        NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
+        DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
+        DateType: ["count"],  # average, min and max might be nice here but sqlite
+        BooleanType: ["average", "sum"],
+        YearType: ["count", "average"],
+    },
+)
 
 
-_DATE_FUNCTIONS = ["year", "quarter", "month", "day", "week_day", "month_start"]
+_DATE_FUNCTIONS = [
+    "is_null",
+    "year",
+    "quarter",
+    "month",
+    "day",
+    "week_day",
+    "month_start",
+]
 if django.VERSION >= (2, 2):  # pragma: no branch
     _DATE_FUNCTIONS += ["iso_year", "iso_week", "week_start"]
-_TYPE_FUNCTIONS = {
-    DateType: _DATE_FUNCTIONS,
-    DateTimeType: _DATE_FUNCTIONS + ["hour", "minute", "second", "date"],
-    None: ["is_null"],  # all fields
-}
+_TYPE_FUNCTIONS = defaultdict(
+    lambda: ["is_null"],
+    {
+        DateType: _DATE_FUNCTIONS,
+        DateTimeType: _DATE_FUNCTIONS + ["hour", "minute", "second", "date"],
+    },
+)
 
 
 def _get_django_aggregate(field_type, name):
@@ -122,7 +140,7 @@ def _get_django_function(name):
         "minute": (functions.ExtractMinute, NumberType),
         "second": (functions.ExtractSecond, NumberType),
         "date": (functions.TruncDate, DateType),
-        "is_null": (IsNull, BooleanType),
+        "is_null": (IsNull, IsNullType),
     }
     if django.VERSION >= (2, 2):  # pragma: no branch
         mapping.update(
@@ -144,12 +162,10 @@ def get_model_name(model, sep="."):
 
 
 def get_fields_for_type(type_):
-    aggregates = {
-        a: OrmAggregateField(type_.name, a) for a in _TYPE_AGGREGATES.get(type_, [])
-    }
+    aggregates = {a: OrmAggregateField(type_.name, a) for a in _TYPE_AGGREGATES[type_]}
     functions = {
         f: OrmFunctionField(type_.name, f, _get_django_function(f)[1])
-        for f in _TYPE_FUNCTIONS[None] + _TYPE_FUNCTIONS.get(type_, [])
+        for f in _TYPE_FUNCTIONS[type_]
     }
     return {**aggregates, **functions}
 
