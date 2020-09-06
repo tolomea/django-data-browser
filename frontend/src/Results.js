@@ -62,7 +62,7 @@ const DataCell = React.memo((props) => {
     if (
       value > formatHint.highCutOff ||
       value < -formatHint.highCutOff ||
-      (value < formatHint.lowCutOff && value > -formatHint.lowCutOff)
+      (value && value < formatHint.lowCutOff && value > -formatHint.lowCutOff)
     ) {
       formattedValue = value.toExponential(formatHint.significantFigures - 1);
     } else {
