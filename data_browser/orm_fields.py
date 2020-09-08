@@ -73,6 +73,16 @@ _TYPE_FUNCTIONS = defaultdict(
 )
 
 
+class _CastDuration(Cast):
+    def __init__(self, expression):
+        super().__init__(expression, output_field=DurationField())
+
+    def as_mysql(self, compiler, connection, **extra_context):  # pragma: mysql
+        # https://github.com/django/django/pull/13398
+        template = "%(function)s(%(expressions)s AS signed integer)"
+        return self.as_sql(compiler, connection, template=template, **extra_context)
+
+
 def _get_django_aggregate(field_type, name):
     if field_type == BooleanType:
         return {
@@ -80,9 +90,10 @@ def _get_django_aggregate(field_type, name):
             "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
         }[name]
     if field_type == DurationType and name in ["average", "sum"]:
+
         return {
-            "average": lambda x: models.Avg(Cast(x, output_field=DurationField())),
-            "sum": lambda x: models.Sum(Cast(x, output_field=DurationField())),
+            "average": lambda x: models.Avg(_CastDuration(x)),
+            "sum": lambda x: models.Sum(_CastDuration(x)),
         }[name]
     else:
         return {
