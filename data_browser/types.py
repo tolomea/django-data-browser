@@ -2,8 +2,7 @@ import json
 from functools import lru_cache
 
 import dateutil.parser
-from django.utils import timezone, dateparse
-from datetime import timedelta
+from django.utils import dateparse, timezone
 
 from .common import all_subclasses, get_optimal_decimal_places
 
@@ -199,28 +198,30 @@ class YearType(NumberType):
             raise Exception("Years must be > 1")
         return res
 
+
 class DurationType(BaseType):
-    default_value = "timedelta"
+    default_value = ""
     lookups = {
-        "equals": "timedelta",
-        "not_equals": "timedelta",
-        "gt": "timedelta",
-        "gte": "timedelta",
-        "lt": "timedelta",
-        "lte": "timedelta",
+        "equals": "duration",
+        "not_equals": "duration",
+        "gt": "duration",
+        "gte": "duration",
+        "lt": "duration",
+        "lte": "duration",
         "is_null": "boolean",
     }
 
     @staticmethod
     def _parse(value):
-        if value.lower().strip() == "now":
-            return timedelta()
-        return dateparse.parse_duration(value)
+        res = dateparse.parse_duration(value)
+        assert res is not None, "Duration value should be 'DD HH:MM:SS'"
+        return res
 
     @staticmethod
     def format(value, choices=None):
         assert not choices
         return str(value) if value else None
+
 
 class DateTimeType(BaseType):
     default_value = "now"
@@ -244,7 +245,9 @@ class DateTimeType(BaseType):
     def format(value, choices=None):
         assert not choices
         if value:
-            return str(value) if timezone.is_naive(value) else str(timezone.make_naive(value))
+            if not timezone.is_naive(value):
+                value = timezone.make_naive(value)
+            return str(value)
         return None
 
 
