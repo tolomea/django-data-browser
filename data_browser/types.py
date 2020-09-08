@@ -243,7 +243,9 @@ class DateTimeType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
-        return str(timezone.make_naive(value)) if value else None
+        if value:
+            return str(value) if timezone.is_naive(value) else str(timezone.make_naive(value))
+        return None
 
 
 class DateType(BaseType):
