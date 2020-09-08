@@ -1,6 +1,6 @@
 name: data_browser_sqlite
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
