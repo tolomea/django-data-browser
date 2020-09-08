@@ -44,7 +44,7 @@ except ModuleNotFoundError:  # pragma: postgres
     ArrayField = None.__class__
 
 try:
-    from django.fields import JSONField
+    from django.db.models import JSONField
 except ImportError:  # pragma: django < 3.1
     try:
         from django.contrib.postgres.fields import JSONField
