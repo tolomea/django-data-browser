@@ -1037,6 +1037,35 @@ snapshots["test_query_html config"] = {
                 "year",
             ],
         },
+        "duration": {
+            "fields": {
+                "average": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "average",
+                    "type": "duration",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+                "sum": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "sum",
+                    "type": "duration",
+                },
+            },
+            "sortedFields": ["average", "is_null", "sum"],
+        },
         "html": {
             "fields": {
                 "count": {
@@ -1479,6 +1508,28 @@ snapshots["test_query_html config"] = {
                 "lt": {"type": "datetime"},
                 "lte": {"type": "datetime"},
                 "not_equals": {"type": "datetime"},
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null",
+            ],
+        },
+        "duration": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {"type": "duration"},
+                "gt": {"type": "duration"},
+                "gte": {"type": "duration"},
+                "is_null": {"type": "boolean"},
+                "lt": {"type": "duration"},
+                "lte": {"type": "duration"},
+                "not_equals": {"type": "duration"},
             },
             "sortedLookups": [
                 "equals",
@@ -2067,6 +2118,35 @@ snapshots["test_query_html_no_perms config"] = {
                 "year",
             ],
         },
+        "duration": {
+            "fields": {
+                "average": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "average",
+                    "type": "duration",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+                "sum": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "sum",
+                    "type": "duration",
+                },
+            },
+            "sortedFields": ["average", "is_null", "sum"],
+        },
         "html": {
             "fields": {
                 "count": {
@@ -2497,6 +2577,28 @@ snapshots["test_query_html_no_perms config"] = {
                 "lt": {"type": "datetime"},
                 "lte": {"type": "datetime"},
                 "not_equals": {"type": "datetime"},
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null",
+            ],
+        },
+        "duration": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {"type": "duration"},
+                "gt": {"type": "duration"},
+                "gte": {"type": "duration"},
+                "is_null": {"type": "boolean"},
+                "lt": {"type": "duration"},
+                "lte": {"type": "duration"},
+                "not_equals": {"type": "duration"},
             },
             "sortedLookups": [
                 "equals",
@@ -3791,6 +3893,35 @@ snapshots["test_query_ctx config"] = {
                 "year",
             ],
         },
+        "duration": {
+            "fields": {
+                "average": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "average",
+                    "type": "duration",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+                "sum": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "sum",
+                    "type": "duration",
+                },
+            },
+            "sortedFields": ["average", "is_null", "sum"],
+        },
         "html": {
             "fields": {
                 "count": {
@@ -4233,6 +4364,28 @@ snapshots["test_query_ctx config"] = {
                 "lt": {"type": "datetime"},
                 "lte": {"type": "datetime"},
                 "not_equals": {"type": "datetime"},
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null",
+            ],
+        },
+        "duration": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {"type": "duration"},
+                "gt": {"type": "duration"},
+                "gte": {"type": "duration"},
+                "is_null": {"type": "boolean"},
+                "lt": {"type": "duration"},
+                "lte": {"type": "duration"},
+                "not_equals": {"type": "duration"},
             },
             "sortedLookups": [
                 "equals",
