@@ -13,7 +13,12 @@ class TypeMeta(type):
 
     @property
     def default_lookup(cls):
-        return list(cls.lookups)[0] if cls.lookups else None
+        lookups = cls.lookups
+        return list(lookups)[0] if lookups else None
+
+    @property
+    def lookups(cls):
+        return {name: type_.name for name, type_ in cls._lookups().items()}
 
     @property
     def name(cls):
@@ -24,10 +29,13 @@ class TypeMeta(type):
 
 class BaseType(metaclass=TypeMeta):
     default_value = None
-    lookups = {}
 
     def __init__(self):
         assert False
+
+    @staticmethod
+    def _lookups():
+        return {}
 
     @staticmethod
     def format(value, choices=None):
@@ -40,10 +48,11 @@ class BaseType(metaclass=TypeMeta):
 
     @classmethod
     def parse(cls, lookup, value):
-        if lookup not in cls.lookups:
-            return None, f"Bad lookup '{lookup}' expected {cls.lookups}"
+        lookups = cls.lookups
+        if lookup not in lookups:
+            return None, f"Bad lookup '{lookup}' expected {lookups}"
         else:
-            type_ = TYPES[cls.lookups[lookup]]
+            type_ = TYPES[lookups[lookup]]
             try:
                 return type_._parse(value), None
             except Exception as e:
@@ -57,19 +66,22 @@ class BaseType(metaclass=TypeMeta):
 
 class StringType(BaseType):
     default_value = ""
-    lookups = {
-        "equals": "string",
-        "contains": "string",
-        "starts_with": "string",
-        "ends_with": "string",
-        "regex": "regex",
-        "not_equals": "string",
-        "not_contains": "string",
-        "not_starts_with": "string",
-        "not_ends_with": "string",
-        "not_regex": "regex",
-        "is_null": "boolean",
-    }
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": StringType,
+            "contains": StringType,
+            "starts_with": StringType,
+            "ends_with": StringType,
+            "regex": RegexType,
+            "not_equals": StringType,
+            "not_contains": StringType,
+            "not_starts_with": StringType,
+            "not_ends_with": StringType,
+            "not_regex": RegexType,
+            "is_null": BooleanType,
+        }
 
 
 class ChoiceTypeMixin:
@@ -82,11 +94,13 @@ class ChoiceTypeMixin:
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):
-    lookups = {
-        **StringType.lookups,
-        "equals": "stringchoice",
-        "not_equals": "stringchoice",
-    }
+    @staticmethod
+    def _lookups():
+        return {
+            **StringType._lookups(),
+            "equals": StringChoiceType,
+            "not_equals": StringChoiceType,
+        }
 
 
 class ArrayTypeMixin:
@@ -100,13 +114,15 @@ class ArrayTypeMixin:
 
 
 class StringArrayType(ArrayTypeMixin, BaseType):
-    lookups = {
-        "contains": "stringchoice",
-        "length": "number",
-        "not_contains": "stringchoice",
-        "not_length": "number",
-        "is_null": "boolean",
-    }
+    @staticmethod
+    def _lookups():
+        return {
+            "contains": StringChoiceType,
+            "length": NumberType,
+            "not_contains": StringChoiceType,
+            "not_length": NumberType,
+            "is_null": BooleanType,
+        }
 
 
 class RegexType(BaseType):
@@ -128,15 +144,18 @@ class RegexType(BaseType):
 
 class NumberType(BaseType):
     default_value = 0
-    lookups = {
-        "equals": "number",
-        "not_equals": "number",
-        "gt": "number",
-        "gte": "number",
-        "lt": "number",
-        "lte": "number",
-        "is_null": "boolean",
-    }
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": NumberType,
+            "not_equals": NumberType,
+            "gt": NumberType,
+            "gte": NumberType,
+            "lt": NumberType,
+            "lte": NumberType,
+            "is_null": BooleanType,
+        }
 
     @staticmethod
     def format(value, choices=None):
@@ -162,34 +181,41 @@ class NumberType(BaseType):
 
 
 class NumberChoiceType(ChoiceTypeMixin, BaseType):
-    lookups = {
-        **NumberType.lookups,
-        "equals": "numberchoice",
-        "not_equals": "numberchoice",
-    }
+    @staticmethod
+    def _lookups():
+        return {
+            **NumberType._lookups(),
+            "equals": NumberChoiceType,
+            "not_equals": NumberChoiceType,
+        }
 
 
 class NumberArrayType(ArrayTypeMixin, BaseType):
-    lookups = {
-        "contains": "numberchoice",
-        "length": "number",
-        "not_contains": "numberchoice",
-        "not_length": "number",
-        "is_null": "boolean",
-    }
+    @staticmethod
+    def _lookups():
+        return {
+            "contains": NumberChoiceType,
+            "length": NumberType,
+            "not_contains": NumberChoiceType,
+            "not_length": NumberType,
+            "is_null": BooleanType,
+        }
 
 
 class YearType(NumberType):
     default_value = timezone.now().year
-    lookups = {
-        "equals": "year",
-        "not_equals": "year",
-        "gt": "year",
-        "gte": "year",
-        "lt": "year",
-        "lte": "year",
-        "is_null": "boolean",
-    }
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": YearType,
+            "not_equals": YearType,
+            "gt": YearType,
+            "gte": YearType,
+            "lt": YearType,
+            "lte": YearType,
+            "is_null": BooleanType,
+        }
 
     @staticmethod
     def _parse(value):
@@ -201,15 +227,18 @@ class YearType(NumberType):
 
 class DurationType(BaseType):
     default_value = ""
-    lookups = {
-        "equals": "duration",
-        "not_equals": "duration",
-        "gt": "duration",
-        "gte": "duration",
-        "lt": "duration",
-        "lte": "duration",
-        "is_null": "boolean",
-    }
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": DurationType,
+            "not_equals": DurationType,
+            "gt": DurationType,
+            "gte": DurationType,
+            "lt": DurationType,
+            "lte": DurationType,
+            "is_null": BooleanType,
+        }
 
     @staticmethod
     def _parse(value):
@@ -228,15 +257,18 @@ class DurationType(BaseType):
 
 class DateTimeType(BaseType):
     default_value = "now"
-    lookups = {
-        "equals": "datetime",
-        "not_equals": "datetime",
-        "gt": "datetime",
-        "gte": "datetime",
-        "lt": "datetime",
-        "lte": "datetime",
-        "is_null": "boolean",
-    }
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": DateTimeType,
+            "not_equals": DateTimeType,
+            "gt": DateTimeType,
+            "gte": DateTimeType,
+            "lt": DateTimeType,
+            "lte": DateTimeType,
+            "is_null": BooleanType,
+        }
 
     @staticmethod
     def _parse(value):
@@ -256,15 +288,18 @@ class DateTimeType(BaseType):
 
 class DateType(BaseType):
     default_value = "today"
-    lookups = {
-        "equals": "date",
-        "not_equals": "date",
-        "gt": "date",
-        "gte": "date",
-        "lt": "date",
-        "lte": "date",
-        "is_null": "boolean",
-    }
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": DateType,
+            "not_equals": DateType,
+            "gt": DateType,
+            "gte": DateType,
+            "lt": DateType,
+            "lte": DateType,
+            "is_null": BooleanType,
+        }
 
     @staticmethod
     def _parse(value):
@@ -280,7 +315,10 @@ class DateType(BaseType):
 
 class WeekDayType(BaseType):
     default_value = "Monday"
-    lookups = {"equals": "weekday", "not_equals": "weekday"}
+
+    @staticmethod
+    def _lookups():
+        return {"equals": WeekDayType, "not_equals": WeekDayType}
 
     _days = [
         "Sunday",
@@ -307,7 +345,10 @@ class WeekDayType(BaseType):
 
 class MonthType(BaseType):
     default_value = "January"
-    lookups = {"equals": "month", "not_equals": "month"}
+
+    @staticmethod
+    def _lookups():
+        return {"equals": MonthType, "not_equals": MonthType}
 
     _months = [
         "January",
@@ -343,7 +384,14 @@ class HTMLType(StringType):
 
 class BooleanType(BaseType):
     default_value = True
-    lookups = {"equals": "boolean", "not_equals": "boolean", "is_null": "boolean"}
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": BooleanType,
+            "not_equals": BooleanType,
+            "is_null": BooleanType,
+        }
 
     @staticmethod
     def _parse(value):
@@ -358,7 +406,10 @@ class BooleanType(BaseType):
 
 class IsNullType(BooleanType):
     default_value = True
-    lookups = {"equals": "boolean"}
+
+    @staticmethod
+    def _lookups():
+        return {"equals": BooleanType}
 
     @staticmethod
     def format(value, choices=None):
@@ -372,7 +423,9 @@ class UnknownType(BaseType):
         assert not choices
         return str(value)
 
-    lookups = {"is_null": "boolean"}
+    @staticmethod
+    def _lookups():
+        return {"is_null": BooleanType}
 
 
 class JSONFieldType(BaseType):
@@ -396,13 +449,15 @@ class JSONFieldType(BaseType):
 
 
 class JSONType(BaseType):
-    lookups = {
-        "is_null": "boolean",
-        "has_key": "string",
-        "field_equals": "jsonfield",
-        "not_has_key": "string",
-        "not_field_equals": "jsonfield",
-    }
+    @staticmethod
+    def _lookups():
+        return {
+            "is_null": BooleanType,
+            "has_key": StringType,
+            "field_equals": JSONFieldType,
+            "not_has_key": StringType,
+            "not_field_equals": JSONFieldType,
+        }
 
 
 TYPES = {cls.name: cls for cls in all_subclasses(BaseType)}
