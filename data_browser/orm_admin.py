@@ -25,6 +25,7 @@ from .orm_fields import (
 from .types import (
     TYPES,
     BooleanType,
+    DurationType,
     DateTimeType,
     DateType,
     JSONType,
@@ -65,6 +66,7 @@ _NUMBER_FIELDS = (
 )
 _FIELD_TYPE_MAP = {
     models.BooleanField: BooleanType,
+    models.DurationField: DurationType,
     models.NullBooleanField: BooleanType,
     models.DateTimeField: DateTimeType,
     models.DateField: DateType,

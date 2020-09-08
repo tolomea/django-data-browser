@@ -2,7 +2,8 @@ import json
 from functools import lru_cache
 
 import dateutil.parser
-from django.utils import timezone
+from django.utils import timezone, dateparse
+from datetime import timedelta
 
 from .common import all_subclasses, get_optimal_decimal_places
 
@@ -198,6 +199,28 @@ class YearType(NumberType):
             raise Exception("Years must be > 1")
         return res
 
+class DurationType(BaseType):
+    default_value = "timedelta"
+    lookups = {
+        "equals": "timedelta",
+        "not_equals": "timedelta",
+        "gt": "timedelta",
+        "gte": "timedelta",
+        "lt": "timedelta",
+        "lte": "timedelta",
+        "is_null": "boolean",
+    }
+
+    @staticmethod
+    def _parse(value):
+        if value.lower().strip() == "now":
+            return timedelta()
+        return dateparse.parse_duration(value)
+
+    @staticmethod
+    def format(value, choices=None):
+        assert not choices
+        return str(value) if value else None
 
 class DateTimeType(BaseType):
     default_value = "now"
