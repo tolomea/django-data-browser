@@ -468,6 +468,14 @@
                     "prettyName": "default_sku",
                     "type": null
                 },
+                "duration": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "duration",
+                    "prettyName": "duration",
+                    "type": "duration"
+                },
                 "extra_inline": {
                     "canPivot": true,
                     "choices": [],
@@ -614,6 +622,7 @@
                 "boat",
                 "created_time",
                 "default_sku",
+                "duration",
                 "extra_inline",
                 "extra_model",
                 "fake",
@@ -1093,6 +1102,14 @@
                     "prettyName": "average",
                     "type": "duration"
                 },
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
                 "is_null": {
                     "canPivot": true,
                     "choices": [],
@@ -1100,6 +1117,22 @@
                     "model": null,
                     "prettyName": "is_null",
                     "type": "isnull"
+                },
+                "max": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "max",
+                    "type": "duration"
+                },
+                "min": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "min",
+                    "type": "duration"
                 },
                 "sum": {
                     "canPivot": false,
@@ -1112,7 +1145,10 @@
             },
             "sortedFields": [
                 "average",
+                "count",
                 "is_null",
+                "max",
+                "min",
                 "sum"
             ]
         },

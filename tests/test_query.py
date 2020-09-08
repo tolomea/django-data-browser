@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import pytest
 from django.http import QueryDict
@@ -11,6 +11,7 @@ from data_browser.types import (
     BooleanType,
     DateTimeType,
     DateType,
+    DurationType,
     MonthType,
     NumberChoiceType,
     NumberType,
@@ -361,6 +362,32 @@ class TestDateTimeType:
             DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16, tzinfo=timezone.utc))
             == "2020-05-19 08:42:16"
         )
+        assert (
+            DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16))
+            == "2020-05-19 08:42:16"
+        )
+        assert DateTimeType.format(None) is None
+
+
+class TestDurationType:
+    def test_validate(self):
+        assert DurationType.parse("gt", "5 days") == (timedelta(days=5), None)
+        assert DurationType.parse("gt", "5 5:5") == (
+            timedelta(days=5, hours=5, minutes=5),
+            None,
+        )
+        assert DurationType.parse("gt", "5 dayss") == (None, ANY(str))
+        assert DurationType.parse("pontains", "5 days") == (None, ANY(str))
+        assert DurationType.parse("is_null", "True") == (True, None)
+        assert DurationType.parse("is_null", "hello") == (None, ANY(str))
+
+    def test_default_lookup(self):
+        assert DurationType.default_lookup == "equals"
+
+    def test_format(self):
+        assert DurationType.format(timedelta(days=5, minutes=6)) == "5 days, 0:06:00"
+        assert DurationType.format(timedelta(minutes=6)) == "0:06:00"
+        assert DurationType.format(None) is None
 
 
 class TestDateType:

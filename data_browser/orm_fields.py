@@ -8,8 +8,8 @@ from django.db import models
 from django.db.models import (
     BooleanField,
     DateField,
-    ExpressionWrapper,
     DurationField,
+    ExpressionWrapper,
     IntegerField,
     OuterRef,
     Q,
@@ -46,7 +46,7 @@ _TYPE_AGGREGATES = defaultdict(
         NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
         DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
         DateType: ["count"],  # average, min and max might be nice here but sqlite
-        DurationType: ["average", "sum"],
+        DurationType: ["count", "average", "sum", "max", "min"],
         BooleanType: ["average", "sum"],
         YearType: ["count", "average"],
     },
@@ -79,7 +79,7 @@ def _get_django_aggregate(field_type, name):
             "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
             "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
         }[name]
-    if field_type == DurationType:
+    if field_type == DurationType and name in ["average", "sum"]:
         return {
             "average": lambda x: models.Avg(Cast(x, output_field=DurationField())),
             "sum": lambda x: models.Sum(Cast(x, output_field=DurationField())),
@@ -171,9 +171,17 @@ def get_model_name(model, sep="."):
 
 def get_fields_for_type(type_):
     if type_ == DurationType:
-        aggregates = {a: OrmAggregateDurationField(type_.name, a) for a in _TYPE_AGGREGATES[type_]}
+        aggregates = {
+            a: OrmAggregateField(
+                type_.name, a, NumberType if a == "count" else DurationType
+            )
+            for a in _TYPE_AGGREGATES[type_]
+        }
     else:
-        aggregates = {a: OrmAggregateField(type_.name, a) for a in _TYPE_AGGREGATES[type_]}
+        aggregates = {
+            a: OrmAggregateField(type_.name, a, NumberType)
+            for a in _TYPE_AGGREGATES[type_]
+        }
     functions = {
         f: OrmFunctionField(type_.name, f, _get_django_function(f)[1])
         for f in _TYPE_FUNCTIONS[type_]
@@ -430,7 +438,7 @@ class OrmFileField(OrmConcreteField):
 
 
 class OrmAggregateField(OrmBaseField):
-    def __init__(self, model_name, name, type_=NumberType):
+    def __init__(self, model_name, name, type_):
         super().__init__(model_name, name, name, type_=type_, concrete=True)
 
     def bind(self, previous):
@@ -447,9 +455,6 @@ class OrmAggregateField(OrmBaseField):
             having=True,
         )
 
-class OrmAggregateDurationField(OrmAggregateField):
-    def __init__(self, model_name, name):
-        super().__init__(model_name, name, type_=DurationType)
 
 class OrmBoundFunctionField(OrmBoundField):
     def annotate(self, request, qs):

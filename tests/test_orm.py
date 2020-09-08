@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import django
 import pytest
@@ -739,4 +739,26 @@ def test_all_datetime_functions_2_2(get_product_flat, lookup, value):
 
     fields = f"created_time__{lookup}" if lookup else "created_time"
     data = get_product_flat(1, fields, {})
+    assert data == [[value]]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "aggregation,value",
+    [
+        ("sum", "8:00:00"),
+        ("average", "2:00:00"),
+        ("count", 3),
+        ("min", "1:00:00"),
+        ("max", "3:00:00"),
+    ],
+)
+def test_duration_aggregations(get_product_flat, aggregation, value):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(producer=producer, duration=timedelta(hours=1))
+    models.Product.objects.create(producer=producer, duration=timedelta(hours=2))
+    models.Product.objects.create(producer=producer, duration=timedelta(hours=2))
+    models.Product.objects.create(producer=producer, duration=timedelta(hours=3))
+
+    data = get_product_flat(1, f"duration__{aggregation}", {})
     assert data == [[value]]

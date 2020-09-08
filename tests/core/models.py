@@ -124,6 +124,7 @@ class Product(models.Model):
     extra_inline = models.TextField()
     extra_model = models.TextField()
     boat = models.FloatField(null=True)
+    duration = models.DurationField(null=True)
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)

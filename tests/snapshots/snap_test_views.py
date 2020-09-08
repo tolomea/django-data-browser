@@ -448,6 +448,14 @@ snapshots["test_query_html config"] = {
                     "prettyName": "default_sku",
                     "type": None,
                 },
+                "duration": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": "duration",
+                    "prettyName": "duration",
+                    "type": "duration",
+                },
                 "extra_inline": {
                     "canPivot": True,
                     "choices": [],
@@ -576,6 +584,7 @@ snapshots["test_query_html config"] = {
                 "boat",
                 "created_time",
                 "default_sku",
+                "duration",
                 "extra_inline",
                 "extra_model",
                 "fake",
@@ -1047,6 +1056,14 @@ snapshots["test_query_html config"] = {
                     "prettyName": "average",
                     "type": "duration",
                 },
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
                 "is_null": {
                     "canPivot": True,
                     "choices": [],
@@ -1054,6 +1071,22 @@ snapshots["test_query_html config"] = {
                     "model": None,
                     "prettyName": "is_null",
                     "type": "isnull",
+                },
+                "max": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "max",
+                    "type": "duration",
+                },
+                "min": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "min",
+                    "type": "duration",
                 },
                 "sum": {
                     "canPivot": False,
@@ -1064,7 +1097,7 @@ snapshots["test_query_html config"] = {
                     "type": "duration",
                 },
             },
-            "sortedFields": ["average", "is_null", "sum"],
+            "sortedFields": ["average", "count", "is_null", "max", "min", "sum"],
         },
         "html": {
             "fields": {
@@ -2128,6 +2161,14 @@ snapshots["test_query_html_no_perms config"] = {
                     "prettyName": "average",
                     "type": "duration",
                 },
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
                 "is_null": {
                     "canPivot": True,
                     "choices": [],
@@ -2135,6 +2176,22 @@ snapshots["test_query_html_no_perms config"] = {
                     "model": None,
                     "prettyName": "is_null",
                     "type": "isnull",
+                },
+                "max": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "max",
+                    "type": "duration",
+                },
+                "min": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "min",
+                    "type": "duration",
                 },
                 "sum": {
                     "canPivot": False,
@@ -2145,7 +2202,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "duration",
                 },
             },
-            "sortedFields": ["average", "is_null", "sum"],
+            "sortedFields": ["average", "count", "is_null", "max", "min", "sum"],
         },
         "html": {
             "fields": {
@@ -3304,6 +3361,14 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "default_sku",
                     "type": None,
                 },
+                "duration": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": "duration",
+                    "prettyName": "duration",
+                    "type": "duration",
+                },
                 "extra_inline": {
                     "canPivot": True,
                     "choices": [],
@@ -3432,6 +3497,7 @@ snapshots["test_query_ctx config"] = {
                 "boat",
                 "created_time",
                 "default_sku",
+                "duration",
                 "extra_inline",
                 "extra_model",
                 "fake",
@@ -3903,6 +3969,14 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "average",
                     "type": "duration",
                 },
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
                 "is_null": {
                     "canPivot": True,
                     "choices": [],
@@ -3910,6 +3984,22 @@ snapshots["test_query_ctx config"] = {
                     "model": None,
                     "prettyName": "is_null",
                     "type": "isnull",
+                },
+                "max": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "max",
+                    "type": "duration",
+                },
+                "min": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "min",
+                    "type": "duration",
                 },
                 "sum": {
                     "canPivot": False,
@@ -3920,7 +4010,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "duration",
                 },
             },
-            "sortedFields": ["average", "is_null", "sum"],
+            "sortedFields": ["average", "count", "is_null", "max", "min", "sum"],
         },
         "html": {
             "fields": {

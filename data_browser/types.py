@@ -213,6 +213,9 @@ class DurationType(BaseType):
 
     @staticmethod
     def _parse(value):
+        if value.count(":") == 1:
+            value += ":0"
+
         res = dateparse.parse_duration(value)
         assert res is not None, "Duration value should be 'DD HH:MM:SS'"
         return res

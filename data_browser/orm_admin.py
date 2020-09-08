@@ -25,9 +25,9 @@ from .orm_fields import (
 from .types import (
     TYPES,
     BooleanType,
-    DurationType,
     DateTimeType,
     DateType,
+    DurationType,
     JSONType,
     NumberArrayType,
     NumberChoiceType,
