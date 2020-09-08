@@ -99,6 +99,7 @@ class ProductMixin:
         "hidden_inline",
         "hidden_model",
         "boat",
+        "duration",
     ]
     readonly_fields = ["id", "is_onsale", "hidden_calculated"]
 

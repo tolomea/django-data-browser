@@ -27,6 +27,7 @@ from .types import (
     BooleanType,
     DateTimeType,
     DateType,
+    DurationType,
     JSONType,
     NumberArrayType,
     NumberChoiceType,
@@ -43,7 +44,7 @@ except ModuleNotFoundError:  # pragma: postgres
     ArrayField = None.__class__
 
 try:
-    from django.fields import JSONField
+    from django.db.models import JSONField
 except ImportError:  # pragma: django < 3.1
     try:
         from django.contrib.postgres.fields import JSONField
@@ -65,6 +66,7 @@ _NUMBER_FIELDS = (
 )
 _FIELD_TYPE_MAP = {
     models.BooleanField: BooleanType,
+    models.DurationField: DurationType,
     models.NullBooleanField: BooleanType,
     models.DateTimeField: DateTimeType,
     models.DateField: DateType,

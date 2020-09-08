@@ -2,7 +2,7 @@ import json
 from functools import lru_cache
 
 import dateutil.parser
-from django.utils import timezone
+from django.utils import dateparse, timezone
 
 from .common import all_subclasses, get_optimal_decimal_places
 
@@ -199,6 +199,33 @@ class YearType(NumberType):
         return res
 
 
+class DurationType(BaseType):
+    default_value = ""
+    lookups = {
+        "equals": "duration",
+        "not_equals": "duration",
+        "gt": "duration",
+        "gte": "duration",
+        "lt": "duration",
+        "lte": "duration",
+        "is_null": "boolean",
+    }
+
+    @staticmethod
+    def _parse(value):
+        if value.count(":") == 1:
+            value += ":0"
+
+        res = dateparse.parse_duration(value)
+        assert res is not None, "Duration value should be 'DD HH:MM:SS'"
+        return res
+
+    @staticmethod
+    def format(value, choices=None):
+        assert not choices
+        return str(value) if value else None
+
+
 class DateTimeType(BaseType):
     default_value = "now"
     lookups = {
@@ -220,7 +247,11 @@ class DateTimeType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
-        return str(timezone.make_naive(value)) if value else None
+        if value:
+            if not timezone.is_naive(value):
+                value = timezone.make_naive(value)
+            return str(value)
+        return None
 
 
 class DateType(BaseType):

@@ -468,6 +468,14 @@
                     "prettyName": "default_sku",
                     "type": null
                 },
+                "duration": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "duration",
+                    "prettyName": "duration",
+                    "type": "duration"
+                },
                 "extra_inline": {
                     "canPivot": true,
                     "choices": [],
@@ -614,6 +622,7 @@
                 "boat",
                 "created_time",
                 "default_sku",
+                "duration",
                 "extra_inline",
                 "extra_model",
                 "fake",
@@ -1081,6 +1090,66 @@
                 "week_day",
                 "week_start",
                 "year"
+            ]
+        },
+        "duration": {
+            "fields": {
+                "average": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "average",
+                    "type": "duration"
+                },
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "is_null": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "is_null",
+                    "type": "isnull"
+                },
+                "max": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "max",
+                    "type": "duration"
+                },
+                "min": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "min",
+                    "type": "duration"
+                },
+                "sum": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "sum",
+                    "type": "duration"
+                }
+            },
+            "sortedFields": [
+                "average",
+                "count",
+                "is_null",
+                "max",
+                "min",
+                "sum"
             ]
         },
         "html": {
@@ -1605,6 +1674,42 @@
                 },
                 "not_equals": {
                     "type": "datetime"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "is_null"
+            ]
+        },
+        "duration": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {
+                    "type": "duration"
+                },
+                "gt": {
+                    "type": "duration"
+                },
+                "gte": {
+                    "type": "duration"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "lt": {
+                    "type": "duration"
+                },
+                "lte": {
+                    "type": "duration"
+                },
+                "not_equals": {
+                    "type": "duration"
                 }
             },
             "sortedLookups": [
