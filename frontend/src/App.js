@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/browser";
 import React from "react";
+import { sortBy } from "lodash";
 import {
   BrowserRouter,
   Switch,
@@ -108,8 +109,11 @@ class QueryApp extends React.Component {
     );
     this.fetchResults(newState)
       .then((response) => {
-        response = { ...response, ...empty };
-        assert.deepStrictEqual(response, request);
+        const res = { ...response, ...empty };
+        res.filters = sortBy(res.filters, ["pathStr"]);
+        const req = { ...request };
+        req.filters = sortBy(req.filters, ["pathStr"]);
+        assert.deepStrictEqual(res, req);
       })
       .catch(this.handleError.bind(this));
   }
