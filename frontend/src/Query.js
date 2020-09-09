@@ -62,16 +62,21 @@ class Query {
     else return String(this.config.types[lookup_type].defaultValue);
   }
 
-  addField(path, prettyPath) {
+  addField(path, prettyPath, sort) {
     const newFields = this.query.fields.filter(
       (f) => f.pathStr !== path.join("__")
     );
+    const priorities = newFields
+      .map((f) => f.priority)
+      .filter((f) => f !== null);
+    const newPriority = priorities.length ? Math.max(...priorities) + 1 : 0;
+    console.log("a", priorities, newPriority);
     newFields.push({
       path: path,
       pathStr: path.join("__"),
       prettyPath: prettyPath,
-      sort: null,
-      priority: null,
+      sort: sort,
+      priority: sort ? newPriority : null,
       pivoted: false,
     });
     this.setQuery({ fields: newFields });

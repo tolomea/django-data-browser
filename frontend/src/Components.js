@@ -123,7 +123,9 @@ class Filter extends React.Component {
       <tr>
         <td>
           <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
-          <TLink onClick={() => query.addField(path, prettyPath)}>
+          <TLink
+            onClick={() => query.addField(path, prettyPath, type.defaultSort)}
+          >
             {prettyPath.join(" ")}
           </TLink>{" "}
         </td>
@@ -208,7 +210,11 @@ class Field extends React.Component {
           </td>
           <td>
             {modelField.type ? (
-              <TLink onClick={() => query.addField(path, prettyPath)}>
+              <TLink
+                onClick={() =>
+                  query.addField(path, prettyPath, type.defaultSort)
+                }
+              >
                 {modelField.prettyName}
               </TLink>
             ) : (
