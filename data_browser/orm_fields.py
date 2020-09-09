@@ -39,16 +39,34 @@ from .types import (
 OPEN_IN_ADMIN = "admin"
 
 _TYPE_AGGREGATES = defaultdict(
-    lambda: ["count"],
+    lambda: [("count", NumberType)],
     {
-        StringType: ["count"],
-        StringChoiceType: ["count"],
-        NumberType: ["average", "count", "max", "min", "std_dev", "sum", "variance"],
-        DateTimeType: ["count"],  # average, min and max might be nice here but sqlite
-        DateType: ["count"],  # average, min and max might be nice here but sqlite
-        DurationType: ["count", "average", "sum", "max", "min"],
-        BooleanType: ["average", "sum"],
-        YearType: ["count", "average"],
+        StringType: [("count", NumberType)],
+        StringChoiceType: [("count", NumberType)],
+        NumberType: [
+            ("average", NumberType),
+            ("count", NumberType),
+            ("max", NumberType),
+            ("min", NumberType),
+            ("std_dev", NumberType),
+            ("sum", NumberType),
+            ("variance", NumberType),
+        ],
+        DateTimeType: [  # average, min and max might be nice here but sqlite
+            ("count", NumberType)
+        ],
+        DateType: [  # average, min and max might be nice here but sqlite
+            ("count", NumberType)
+        ],
+        DurationType: [
+            ("count", NumberType),
+            ("average", DurationType),
+            ("sum", DurationType),
+            ("max", DurationType),
+            ("min", DurationType),
+        ],
+        BooleanType: [("average", NumberType), ("sum", NumberType)],
+        YearType: [("count", NumberType), ("average", NumberType)],  # todo min and max
     },
 )
 
@@ -64,6 +82,8 @@ _DATE_FUNCTIONS = [
 ]
 if django.VERSION >= (2, 2):  # pragma: no branch
     _DATE_FUNCTIONS += ["iso_year", "iso_week", "week_start"]
+
+
 _TYPE_FUNCTIONS = defaultdict(
     lambda: ["is_null"],
     {
@@ -90,7 +110,6 @@ def _get_django_aggregate(field_type, name):
             "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
         }[name]
     if field_type == DurationType and name in ["average", "sum"]:
-
         return {
             "average": lambda x: models.Avg(_CastDuration(x)),
             "sum": lambda x: models.Sum(_CastDuration(x)),
@@ -181,21 +200,13 @@ def get_model_name(model, sep="."):
 
 
 def get_fields_for_type(type_):
-    if type_ == DurationType:
-        aggregates = {
-            a: OrmAggregateField(
-                type_.name, a, NumberType if a == "count" else DurationType
-            )
-            for a in _TYPE_AGGREGATES[type_]
-        }
-    else:
-        aggregates = {
-            a: OrmAggregateField(type_.name, a, NumberType)
-            for a in _TYPE_AGGREGATES[type_]
-        }
+    aggregates = {
+        aggregate: OrmAggregateField(type_.name, aggregate, res_type)
+        for aggregate, res_type in _TYPE_AGGREGATES[type_]
+    }
     functions = {
-        f: OrmFunctionField(type_.name, f, _get_django_function(f)[1])
-        for f in _TYPE_FUNCTIONS[type_]
+        func: OrmFunctionField(type_.name, func, _get_django_function(func)[1])
+        for func in _TYPE_FUNCTIONS[type_]
     }
     return {**aggregates, **functions}
 
