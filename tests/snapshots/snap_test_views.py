@@ -1500,6 +1500,7 @@ snapshots["test_query_html config"] = {
     "types": {
         "boolean": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": True,
             "lookups": {
                 "equals": {"type": "boolean"},
@@ -1510,6 +1511,7 @@ snapshots["test_query_html config"] = {
         },
         "date": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "today",
             "lookups": {
                 "equals": {"type": "date"},
@@ -1532,6 +1534,7 @@ snapshots["test_query_html config"] = {
         },
         "datetime": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "now",
             "lookups": {
                 "equals": {"type": "datetime"},
@@ -1554,6 +1557,7 @@ snapshots["test_query_html config"] = {
         },
         "duration": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "equals": {"type": "duration"},
@@ -1576,6 +1580,7 @@ snapshots["test_query_html config"] = {
         },
         "html": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "contains": {"type": "string"},
@@ -1606,12 +1611,14 @@ snapshots["test_query_html config"] = {
         },
         "isnull": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": True,
             "lookups": {"equals": {"type": "boolean"}},
             "sortedLookups": ["equals"],
         },
         "json": {
             "defaultLookup": "is_null",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "field_equals": {"type": "jsonfield"},
@@ -1630,18 +1637,21 @@ snapshots["test_query_html config"] = {
         },
         "jsonfield": {
             "defaultLookup": None,
+            "defaultSort": None,
             "defaultValue": "|",
             "lookups": {},
             "sortedLookups": [],
         },
         "month": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "January",
             "lookups": {"equals": {"type": "month"}, "not_equals": {"type": "month"}},
             "sortedLookups": ["equals", "not_equals"],
         },
         "number": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": 0,
             "lookups": {
                 "equals": {"type": "number"},
@@ -1664,6 +1674,7 @@ snapshots["test_query_html config"] = {
         },
         "numberarray": {
             "defaultLookup": "contains",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "numberchoice"},
@@ -1682,6 +1693,7 @@ snapshots["test_query_html config"] = {
         },
         "numberchoice": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "equals": {"type": "numberchoice"},
@@ -1704,12 +1716,14 @@ snapshots["test_query_html config"] = {
         },
         "regex": {
             "defaultLookup": None,
+            "defaultSort": None,
             "defaultValue": ".*",
             "lookups": {},
             "sortedLookups": [],
         },
         "string": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "contains": {"type": "string"},
@@ -1740,6 +1754,7 @@ snapshots["test_query_html config"] = {
         },
         "stringarray": {
             "defaultLookup": "contains",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "stringchoice"},
@@ -1758,6 +1773,7 @@ snapshots["test_query_html config"] = {
         },
         "stringchoice": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "string"},
@@ -1788,12 +1804,14 @@ snapshots["test_query_html config"] = {
         },
         "unknown": {
             "defaultLookup": "is_null",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {"is_null": {"type": "boolean"}},
             "sortedLookups": ["is_null"],
         },
         "weekday": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "Monday",
             "lookups": {
                 "equals": {"type": "weekday"},
@@ -1803,6 +1821,7 @@ snapshots["test_query_html config"] = {
         },
         "year": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": 2020,
             "lookups": {
                 "equals": {"type": "year"},
@@ -2593,6 +2612,7 @@ snapshots["test_query_html_no_perms config"] = {
     "types": {
         "boolean": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": True,
             "lookups": {
                 "equals": {"type": "boolean"},
@@ -2603,6 +2623,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "date": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "today",
             "lookups": {
                 "equals": {"type": "date"},
@@ -2625,6 +2646,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "datetime": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "now",
             "lookups": {
                 "equals": {"type": "datetime"},
@@ -2647,6 +2669,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "duration": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "equals": {"type": "duration"},
@@ -2669,6 +2692,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "html": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "contains": {"type": "string"},
@@ -2699,12 +2723,14 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "isnull": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": True,
             "lookups": {"equals": {"type": "boolean"}},
             "sortedLookups": ["equals"],
         },
         "json": {
             "defaultLookup": "is_null",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "field_equals": {"type": "jsonfield"},
@@ -2723,18 +2749,21 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "jsonfield": {
             "defaultLookup": None,
+            "defaultSort": None,
             "defaultValue": "|",
             "lookups": {},
             "sortedLookups": [],
         },
         "month": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "January",
             "lookups": {"equals": {"type": "month"}, "not_equals": {"type": "month"}},
             "sortedLookups": ["equals", "not_equals"],
         },
         "number": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": 0,
             "lookups": {
                 "equals": {"type": "number"},
@@ -2757,6 +2786,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "numberarray": {
             "defaultLookup": "contains",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "numberchoice"},
@@ -2775,6 +2805,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "numberchoice": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "equals": {"type": "numberchoice"},
@@ -2797,12 +2828,14 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "regex": {
             "defaultLookup": None,
+            "defaultSort": None,
             "defaultValue": ".*",
             "lookups": {},
             "sortedLookups": [],
         },
         "string": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "contains": {"type": "string"},
@@ -2833,6 +2866,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "stringarray": {
             "defaultLookup": "contains",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "stringchoice"},
@@ -2851,6 +2885,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "stringchoice": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "string"},
@@ -2881,12 +2916,14 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "unknown": {
             "defaultLookup": "is_null",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {"is_null": {"type": "boolean"}},
             "sortedLookups": ["is_null"],
         },
         "weekday": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "Monday",
             "lookups": {
                 "equals": {"type": "weekday"},
@@ -2896,6 +2933,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "year": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": 2020,
             "lookups": {
                 "equals": {"type": "year"},
@@ -4413,6 +4451,7 @@ snapshots["test_query_ctx config"] = {
     "types": {
         "boolean": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": True,
             "lookups": {
                 "equals": {"type": "boolean"},
@@ -4423,6 +4462,7 @@ snapshots["test_query_ctx config"] = {
         },
         "date": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "today",
             "lookups": {
                 "equals": {"type": "date"},
@@ -4445,6 +4485,7 @@ snapshots["test_query_ctx config"] = {
         },
         "datetime": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "now",
             "lookups": {
                 "equals": {"type": "datetime"},
@@ -4467,6 +4508,7 @@ snapshots["test_query_ctx config"] = {
         },
         "duration": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "equals": {"type": "duration"},
@@ -4489,6 +4531,7 @@ snapshots["test_query_ctx config"] = {
         },
         "html": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "contains": {"type": "string"},
@@ -4519,12 +4562,14 @@ snapshots["test_query_ctx config"] = {
         },
         "isnull": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": True,
             "lookups": {"equals": {"type": "boolean"}},
             "sortedLookups": ["equals"],
         },
         "json": {
             "defaultLookup": "is_null",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "field_equals": {"type": "jsonfield"},
@@ -4543,18 +4588,21 @@ snapshots["test_query_ctx config"] = {
         },
         "jsonfield": {
             "defaultLookup": None,
+            "defaultSort": None,
             "defaultValue": "|",
             "lookups": {},
             "sortedLookups": [],
         },
         "month": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "January",
             "lookups": {"equals": {"type": "month"}, "not_equals": {"type": "month"}},
             "sortedLookups": ["equals", "not_equals"],
         },
         "number": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": 0,
             "lookups": {
                 "equals": {"type": "number"},
@@ -4577,6 +4625,7 @@ snapshots["test_query_ctx config"] = {
         },
         "numberarray": {
             "defaultLookup": "contains",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "numberchoice"},
@@ -4595,6 +4644,7 @@ snapshots["test_query_ctx config"] = {
         },
         "numberchoice": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "equals": {"type": "numberchoice"},
@@ -4617,12 +4667,14 @@ snapshots["test_query_ctx config"] = {
         },
         "regex": {
             "defaultLookup": None,
+            "defaultSort": None,
             "defaultValue": ".*",
             "lookups": {},
             "sortedLookups": [],
         },
         "string": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": "",
             "lookups": {
                 "contains": {"type": "string"},
@@ -4653,6 +4705,7 @@ snapshots["test_query_ctx config"] = {
         },
         "stringarray": {
             "defaultLookup": "contains",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "stringchoice"},
@@ -4671,6 +4724,7 @@ snapshots["test_query_ctx config"] = {
         },
         "stringchoice": {
             "defaultLookup": "equals",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {
                 "contains": {"type": "string"},
@@ -4701,12 +4755,14 @@ snapshots["test_query_ctx config"] = {
         },
         "unknown": {
             "defaultLookup": "is_null",
+            "defaultSort": None,
             "defaultValue": None,
             "lookups": {"is_null": {"type": "boolean"}},
             "sortedLookups": ["is_null"],
         },
         "weekday": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "Monday",
             "lookups": {
                 "equals": {"type": "weekday"},
@@ -4716,6 +4772,7 @@ snapshots["test_query_ctx config"] = {
         },
         "year": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": 2020,
             "lookups": {
                 "equals": {"type": "year"},

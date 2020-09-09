@@ -81,6 +81,7 @@ def _get_config(request):
             "sortedLookups": list(type_.lookups),
             "defaultLookup": type_.default_lookup,
             "defaultValue": type_.default_value,
+            "defaultSort": type_.default_sort,
         }
         for name, type_ in TYPES.items()
     }

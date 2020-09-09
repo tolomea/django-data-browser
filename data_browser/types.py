@@ -31,6 +31,7 @@ class TypeMeta(type):
 
 class BaseType(metaclass=TypeMeta):
     default_value = None
+    default_sort = None
 
     def __init__(self):
         assert False
@@ -206,6 +207,7 @@ class NumberArrayType(ArrayTypeMixin, BaseType):
 
 class YearType(NumberType):
     default_value = timezone.now().year
+    default_sort = ASC
 
     @staticmethod
     def _lookups():
@@ -259,6 +261,7 @@ class DurationType(BaseType):
 
 class DateTimeType(BaseType):
     default_value = "now"
+    default_sort = ASC
 
     @staticmethod
     def _lookups():
@@ -290,6 +293,7 @@ class DateTimeType(BaseType):
 
 class DateType(BaseType):
     default_value = "today"
+    default_sort = ASC
 
     @staticmethod
     def _lookups():
@@ -317,6 +321,7 @@ class DateType(BaseType):
 
 class WeekDayType(BaseType):
     default_value = "Monday"
+    default_sort = ASC
 
     @staticmethod
     def _lookups():
@@ -347,6 +352,7 @@ class WeekDayType(BaseType):
 
 class MonthType(BaseType):
     default_value = "January"
+    default_sort = ASC
 
     @staticmethod
     def _lookups():

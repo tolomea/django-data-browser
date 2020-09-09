@@ -1596,6 +1596,7 @@
     "types": {
         "boolean": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": true,
             "lookups": {
                 "equals": {
@@ -1616,6 +1617,7 @@
         },
         "date": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "today",
             "lookups": {
                 "equals": {
@@ -1652,6 +1654,7 @@
         },
         "datetime": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "now",
             "lookups": {
                 "equals": {
@@ -1688,6 +1691,7 @@
         },
         "duration": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": "",
             "lookups": {
                 "equals": {
@@ -1724,6 +1728,7 @@
         },
         "html": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": "",
             "lookups": {
                 "contains": {
@@ -1776,6 +1781,7 @@
         },
         "isnull": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": true,
             "lookups": {
                 "equals": {
@@ -1788,6 +1794,7 @@
         },
         "json": {
             "defaultLookup": "is_null",
+            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "field_equals": {
@@ -1816,12 +1823,14 @@
         },
         "jsonfield": {
             "defaultLookup": null,
+            "defaultSort": null,
             "defaultValue": "|",
             "lookups": {},
             "sortedLookups": []
         },
         "month": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "January",
             "lookups": {
                 "equals": {
@@ -1838,6 +1847,7 @@
         },
         "number": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": 0,
             "lookups": {
                 "equals": {
@@ -1874,6 +1884,7 @@
         },
         "numberarray": {
             "defaultLookup": "contains",
+            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
@@ -1902,6 +1913,7 @@
         },
         "numberchoice": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "equals": {
@@ -1938,12 +1950,14 @@
         },
         "regex": {
             "defaultLookup": null,
+            "defaultSort": null,
             "defaultValue": ".*",
             "lookups": {},
             "sortedLookups": []
         },
         "string": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": "",
             "lookups": {
                 "contains": {
@@ -1996,6 +2010,7 @@
         },
         "stringarray": {
             "defaultLookup": "contains",
+            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
@@ -2024,6 +2039,7 @@
         },
         "stringchoice": {
             "defaultLookup": "equals",
+            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
@@ -2076,6 +2092,7 @@
         },
         "unknown": {
             "defaultLookup": "is_null",
+            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "is_null": {
@@ -2088,6 +2105,7 @@
         },
         "weekday": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": "Monday",
             "lookups": {
                 "equals": {
@@ -2104,6 +2122,7 @@
         },
         "year": {
             "defaultLookup": "equals",
+            "defaultSort": "asc",
             "defaultValue": 2020,
             "lookups": {
                 "equals": {
