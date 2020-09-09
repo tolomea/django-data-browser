@@ -6,8 +6,10 @@ from django.utils import timezone
 
 from data_browser import orm_fields
 from data_browser.orm_admin import OrmModel, get_fields_for_type
-from data_browser.query import ASC, DSC, BoundQuery, Query, QueryField, QueryFilter
+from data_browser.query import BoundQuery, Query, QueryField, QueryFilter
 from data_browser.types import (
+    ASC,
+    DSC,
     BooleanType,
     DateTimeType,
     DateType,

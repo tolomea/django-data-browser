@@ -4,7 +4,8 @@ from collections import defaultdict
 
 from .orm_admin import admin_get_queryset
 from .orm_fields import _get_django_lookup
-from .query import ASC, DSC, BoundQuery
+from .query import BoundQuery
+from .types import ASC, DSC
 
 
 def _filter(qs, filter_, filter_str):

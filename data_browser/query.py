@@ -5,8 +5,7 @@ from typing import Any, Optional, Sequence
 from django.urls import reverse
 
 from .common import settings
-
-ASC, DSC = "asc", "dsc"
+from .types import ASC, DSC
 
 
 @dataclass

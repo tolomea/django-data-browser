@@ -6,6 +6,8 @@ from django.utils import dateparse, timezone
 
 from .common import all_subclasses, get_optimal_decimal_places
 
+ASC, DSC = "asc", "dsc"
+
 
 class TypeMeta(type):
     def __repr__(cls):
