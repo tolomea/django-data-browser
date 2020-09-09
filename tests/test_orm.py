@@ -746,6 +746,36 @@ def test_all_datetime_functions_2_2(get_product_flat, lookup, value):
 @pytest.mark.parametrize(
     "aggregation,value",
     [
+        ("count", 3),
+        # these would be nice but sqlite
+        # ("average", ""),
+        # ("min", ""),
+        # ("max", ""),
+    ],
+)
+def test_datetime_aggregations(get_product_flat, aggregation, value):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(
+        producer=producer, created_time=datetime(2020, 1, 1, tzinfo=timezone.utc)
+    )
+    models.Product.objects.create(
+        producer=producer, created_time=datetime(2020, 1, 2, tzinfo=timezone.utc)
+    )
+    models.Product.objects.create(
+        producer=producer, created_time=datetime(2020, 1, 2, tzinfo=timezone.utc)
+    )
+    models.Product.objects.create(
+        producer=producer, created_time=datetime(2020, 1, 3, tzinfo=timezone.utc)
+    )
+
+    data = get_product_flat(1, f"created_time__{aggregation}", {})
+    assert data == [[value]]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "aggregation,value",
+    [
         ("sum", "8:00:00"),
         ("average", "2:00:00"),
         ("count", 3),
