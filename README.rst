@@ -283,10 +283,11 @@ Release History
 | Version   | Date           | Summary                                                                         |
 +===========+================+=================================================================================+
 | 2.2.12    | 2020-09-09     | | DurationField support.                                                        |
+|           |                | | Sort newly added date (etc) fields by default.                                |
 |           |                | | Fix JSONField support when psycopg2 is not installed.                         |
 |           |                | | Fix bug with number formatting and pivoted data.                              |
-|           |                | | Sort newly added date (etc) fields by default.                                |
 |           |                | | Fix error with multiple non adjacent filters on the same field.               |
+|           |                | | Fix error error with naive DateTimeFields.                                    |
 +-----------+----------------+---------------------------------------------------------------------------------+
 | 2.2.11    | 2020-08-31     | Minor enhancements and some small fixes.                                        |
 +-----------+----------------+---------------------------------------------------------------------------------+
