@@ -460,6 +460,14 @@
                     "prettyName": "created_time",
                     "type": "datetime"
                 },
+                "date": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "date",
+                    "prettyName": "date",
+                    "type": "date"
+                },
                 "default_sku": {
                     "canPivot": false,
                     "choices": [],
@@ -621,6 +629,7 @@
                 "annotated",
                 "boat",
                 "created_time",
+                "date",
                 "default_sku",
                 "duration",
                 "extra_inline",
@@ -888,6 +897,22 @@
                     "prettyName": "iso_year",
                     "type": "year"
                 },
+                "max": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "max",
+                    "type": "date"
+                },
+                "min": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "min",
+                    "type": "date"
+                },
                 "month": {
                     "canPivot": true,
                     "choices": [],
@@ -943,6 +968,8 @@
                 "is_null",
                 "iso_week",
                 "iso_year",
+                "max",
+                "min",
                 "month",
                 "month_start",
                 "quarter",
@@ -1008,6 +1035,22 @@
                     "model": null,
                     "prettyName": "iso_year",
                     "type": "year"
+                },
+                "max": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "max",
+                    "type": "datetime"
+                },
+                "min": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "min",
+                    "type": "datetime"
                 },
                 "minute": {
                     "canPivot": true,
@@ -1082,6 +1125,8 @@
                 "is_null",
                 "iso_week",
                 "iso_year",
+                "max",
+                "min",
                 "minute",
                 "month",
                 "month_start",

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 import django
 import pytest
@@ -745,13 +745,7 @@ def test_all_datetime_functions_2_2(get_product_flat, lookup, value):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "aggregation,value",
-    [
-        ("count", 3),
-        # these would be nice but sqlite
-        # ("average", ""),
-        # ("min", ""),
-        # ("max", ""),
-    ],
+    [("count", 3), ("min", "2020-01-01 00:00:00"), ("max", "2020-01-03 00:00:00")],
 )
 def test_datetime_aggregations(get_product_flat, aggregation, value):
     producer = models.Producer.objects.create()
@@ -769,6 +763,21 @@ def test_datetime_aggregations(get_product_flat, aggregation, value):
     )
 
     data = get_product_flat(1, f"created_time__{aggregation}", {})
+    assert data == [[value]]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "aggregation,value", [("count", 3), ("min", "2020-01-01"), ("max", "2020-01-03")]
+)
+def test_date_aggregations(get_product_flat, aggregation, value):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(producer=producer, date=date(2020, 1, 1))
+    models.Product.objects.create(producer=producer, date=date(2020, 1, 2))
+    models.Product.objects.create(producer=producer, date=date(2020, 1, 2))
+    models.Product.objects.create(producer=producer, date=date(2020, 1, 3))
+
+    data = get_product_flat(1, f"date__{aggregation}", {})
     assert data == [[value]]
 
 

@@ -52,12 +52,12 @@ _TYPE_AGGREGATES = defaultdict(
             ("sum", NumberType),
             ("variance", NumberType),
         ],
-        DateTimeType: [  # average, min and max might be nice here but sqlite
-            ("count", NumberType)
+        DateTimeType: [
+            ("count", NumberType),
+            ("max", DateTimeType),
+            ("min", DateTimeType),
         ],
-        DateType: [  # average, min and max might be nice here but sqlite
-            ("count", NumberType)
-        ],
+        DateType: [("count", NumberType), ("max", DateType), ("min", DateType)],
         DurationType: [
             ("count", NumberType),
             ("average", DurationType),

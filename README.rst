@@ -282,7 +282,8 @@ Release History
 +-----------+----------------+---------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                         |
 +===========+================+=================================================================================+
-|           |                | Add .sql format to show raw SQL query.                                          |
+|           |                | | Add .sql format to show raw SQL query.                                        |
+|           |                | | Min and max for date and datetime fields.                                     |
 +-----------+----------------+---------------------------------------------------------------------------------+
 | 2.2.12    | 2020-09-09     | | DurationField support.                                                        |
 |           |                | | Sort newly added date (etc) fields by default.                                |
