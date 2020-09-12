@@ -5,6 +5,7 @@ import json
 import sys
 
 import django.contrib.admin.views.decorators as admin_decorators
+import sqlparse
 from django import http
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404
@@ -19,7 +20,7 @@ from .common import HttpResponse, JsonResponse, can_make_public, settings
 from .models import View
 from .orm_admin import get_models
 from .orm_fields import OPEN_IN_ADMIN
-from .orm_results import get_results
+from .orm_results import get_result_queryset, get_results
 from .query import BoundQuery, Query
 from .types import TYPES
 
@@ -135,7 +136,7 @@ def query_html(request, *, model_name="", fields=""):
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
     query = Query.from_request(model_name, fields, request.GET)
-    return _data_response(request, query, media, meta=True)
+    return _data_response(request, query, media, privilaged=True)
 
 
 def view(request, pk, media):
@@ -149,7 +150,7 @@ def view(request, pk, media):
     ):
         request.user = view.owner  # public views are run as the person who owns them
         query = view.get_query()
-        return _data_response(request, query, media, meta=False)
+        return _data_response(request, query, media, privilaged=False)
     else:
         raise http.Http404("No View matches the given query.")
 
@@ -185,7 +186,7 @@ def pad_table(x, table):
     return [pad(x) + row for row in table]
 
 
-def _data_response(request, query, media, meta):
+def _data_response(request, query, media, privilaged=False):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
@@ -225,19 +226,25 @@ def _data_response(request, query, media, meta):
         )
 
         buffer.seek(0)
-        response = HttpResponse(buffer, content_type="text")
+        response = HttpResponse(buffer, content_type="text/csv")
         response[
             "Content-Disposition"
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
         return response
     elif media == "json":
         results = get_results(request, bound_query, orm_models)
-        resp = _get_query_data(bound_query) if meta else {}
+        resp = _get_query_data(bound_query) if privilaged else {}
         resp.update(results)
         return JsonResponse(resp)
-    elif media == "query":
-        resp = _get_query_data(bound_query) if meta else {}
+    elif privilaged and media == "query":
+        resp = _get_query_data(bound_query)
         return JsonResponse(resp)
+    elif privilaged and media == "sql":
+        query_set = get_result_queryset(request, bound_query, orm_models)
+        return HttpResponse(
+            sqlparse.format(str(query_set.query), reindent=True, keyword_case="upper"),
+            content_type="text/plain",
+        )
     else:
         raise http.Http404(f"Bad file format {media} requested")
 

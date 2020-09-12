@@ -37,5 +37,6 @@ setuptools.setup(
         "Django>=2.0",
         "python-dateutil",
         'dataclasses; python_version<"3.7"',
+        "sqlparse",
     ],
 )

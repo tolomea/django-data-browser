@@ -63,6 +63,15 @@ def test_query_query(admin_client, snapshot):
     snapshot.assert_match(query, "query")
 
 
+def test_query_sql(admin_client):
+    # we're not going to check the result as it varies based on database
+    # it's sufficient that it doesn't blow up
+    res = admin_client.get(
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.sql?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+
+
 @pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
 def test_query_html_no_perms(admin_user, admin_client, snapshot):
     admin_user.is_superuser = False

@@ -31,19 +31,22 @@ Filters that don't contain a ``__`` are reserved, at the time of writing the onl
 
 Format determines the returned data format, the currently available formats are:
 
-+--------+----------------------------------------------------------------------------+
-| Format | Details                                                                    |
-+========+============================================================================+
-| html   | Load the interactive JavaScript frontend.                                  |
-+--------+----------------------------------------------------------------------------+
-| csv    | Standard CSV format.                                                       |
-+--------+----------------------------------------------------------------------------+
-| json   | Standard JSON format, the JS frontend uses this for all data access.       |
-+--------+----------------------------------------------------------------------------+
-| ctx    | See the JSON encoded config passed to the JS on page load.                 |
-+--------+----------------------------------------------------------------------------+
-| query  | See the parsed URL in JSON format, the JS frontend uses this to bootstrap. |
-+--------+----------------------------------------------------------------------------+
++--------+--------------------------------------------------------------------------------------------------+
+| Format | Details                                                                                          |
++========+==================================================================================================+
+| html   | Load the interactive JavaScript frontend.                                                        |
++--------+--------------------------------------------------------------------------------------------------+
+| csv    | Standard CSV format.                                                                             |
++--------+--------------------------------------------------------------------------------------------------+
+| json   | Standard JSON format, the JS frontend uses this for all data access.                             |
++--------+--------------------------------------------------------------------------------------------------+
+| ctx    | See the JSON encoded config passed to the JS on page load.                                       |
++--------+--------------------------------------------------------------------------------------------------+
+| query  | See the parsed URL in JSON format, the JS frontend uses this to bootstrap.                       |
++--------+--------------------------------------------------------------------------------------------------+
+| sql    | | See the raw SQL query that Django will perform.                                                |
+|        | | This shows the primary query, pages with pivoted or calculated data may do additional queries. |
++--------+--------------------------------------------------------------------------------------------------+
 
 
 Development

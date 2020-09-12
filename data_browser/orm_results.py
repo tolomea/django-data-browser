@@ -56,7 +56,7 @@ def _rows_sub_query(bound_query):
     )
 
 
-def _get_results(request, bound_query, orm_models):
+def get_result_queryset(request, bound_query, orm_models):
     all_fields = {f.queryset_path: f for f in bound_query.bound_fields}
     all_fields.update({f.queryset_path: f for f in bound_query.bound_filters})
 
@@ -112,7 +112,7 @@ def _get_results(request, bound_query, orm_models):
             sort_fields.append(f"-{field.orm_bound_field.queryset_path}")
     qs = qs.order_by(*sort_fields)
 
-    return list(qs[: bound_query.limit])
+    return qs[: bound_query.limit]
 
 
 def get_results(request, bound_query, orm_models):
@@ -120,11 +120,15 @@ def get_results(request, bound_query, orm_models):
         return {"rows": [], "cols": [], "body": []}
 
     if bound_query.bound_col_fields and bound_query.bound_row_fields:
-        res = _get_results(request, bound_query, orm_models)
-        rows_res = _get_results(request, _rows_sub_query(bound_query), orm_models)
-        cols_res = _get_results(request, _cols_sub_query(bound_query), orm_models)
+        res = list(get_result_queryset(request, bound_query, orm_models))
+        rows_res = list(
+            get_result_queryset(request, _rows_sub_query(bound_query), orm_models)
+        )
+        cols_res = list(
+            get_result_queryset(request, _cols_sub_query(bound_query), orm_models)
+        )
     else:
-        res = _get_results(request, bound_query, orm_models)
+        res = list(get_result_queryset(request, bound_query, orm_models))
         rows_res = res
         cols_res = res
 
