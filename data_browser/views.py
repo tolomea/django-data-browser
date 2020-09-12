@@ -71,7 +71,11 @@ def _get_model_fields(orm_model):
         for name, orm_field in orm_model.fields.items()
     }
 
-    return {"fields": all_fields, "sortedFields": sort_model_fields(all_fields)}
+    return {
+        "fields": all_fields,
+        "sortedFields": sort_model_fields(all_fields),
+        "defaultFilters": orm_model.default_filters,
+    }
 
 
 def _get_config(request):

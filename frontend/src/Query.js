@@ -177,16 +177,6 @@ class Query {
     this.setQuery({ limit: limit > 0 ? limit : 1 });
   }
 
-  setModel(model) {
-    this.setQuery({
-      model: model,
-      fields: [],
-      filters: [],
-      limit: this.config.defaultRowLimit,
-      ...empty,
-    });
-  }
-
   getUrlForMedia(media) {
     return getUrlForQuery(this.config.baseUrl, this.query, media);
   }

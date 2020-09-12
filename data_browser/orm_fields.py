@@ -254,6 +254,10 @@ class OrmModel:
     def root(self):
         return bool(self.admin)
 
+    @property
+    def default_filters(self):
+        return getattr(self.admin, "ddb_default_filters", "")
+
 
 @dataclass
 class OrmBaseField:

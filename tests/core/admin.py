@@ -103,6 +103,7 @@ class ProductMixin:
         "date",
     ]
     readonly_fields = ["id", "is_onsale", "hidden_calculated"]
+    ddb_default_filters = "default=filter&filter=default"
 
     @ddb_hide
     def hidden_calculated(self, obj):

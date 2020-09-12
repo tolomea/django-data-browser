@@ -115,17 +115,19 @@ Specifying models and fields
 By default the Data Browser has access to all models and fields that the current user can see anywhere in the Admin site.
 However if necessary this can be tweaked using the following class level properties on ModelAdmins and Inlines.
 
-+------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| Name             | Format                                    | Purpose                                                                                                     |
-+==================+===========================================+=============================================================================================================+
-| ddb_ignore       | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.  |
-+------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ddb_hide_fields  | ``[field_name]``                          | Explicitly hide the specified fields.                                                                       |
-+------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ddb_extra_fields | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                          |
-+------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ddb_json_fields  | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean". |
-+------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
++---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| Name                | Format                                    | Purpose                                                                                                     |
++=====================+===========================================+=============================================================================================================+
+| ddb_ignore          | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.  |
++---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| ddb_hide_fields     | ``[field_name]``                          | Explicitly hide the specified fields.                                                                       |
++---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| ddb_extra_fields    | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                          |
++---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| ddb_json_fields     | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean". |
++---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| ddb_default_filters | ``str``                                   | Default filters to be added when opening this model. Just the URL string after the ``?`` e.g. ``id=test``.  |
++---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
 Additionally, per the below sections, calculated fields can be hidden with the ``data_browser.helpers.ddb_hide`` decorator and annotated fields are always visible unless explicitly hidden.
 
@@ -284,6 +286,7 @@ Release History
 +===========+================+=================================================================================+
 |           |                | | Add .sql format to show raw SQL query.                                        |
 |           |                | | Min and max for date and datetime fields.                                     |
+|           |                | | Add ddb_default_filters.                                                      |
 +-----------+----------------+---------------------------------------------------------------------------------+
 | 2.2.12    | 2020-09-09     | | DurationField support.                                                        |
 |           |                | | Sort newly added date (etc) fields by default.                                |

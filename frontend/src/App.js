@@ -129,6 +129,7 @@ class QueryApp extends React.Component {
       <QueryPage
         query={query}
         sortedModels={this.props.config.sortedModels}
+        allModelFields={this.props.config.allModelFields}
         baseUrl={this.props.config.baseUrl}
         {...this.state}
       />
@@ -149,7 +150,7 @@ function Bob(props) {
 }
 
 function App(props) {
-  const { baseUrl, sortedModels, canMakePublic } = props;
+  const { baseUrl, sortedModels, allModelFields, canMakePublic } = props;
   return (
     <BrowserRouter basename={baseUrl}>
       <Logo />
@@ -162,7 +163,7 @@ function App(props) {
             <EditSavedView {...{ baseUrl, canMakePublic }} />
           </Route>
           <Route path="/">
-            <HomePage {...{ sortedModels, baseUrl }} />
+            <HomePage {...{ sortedModels, allModelFields, baseUrl }} />
           </Route>
         </Switch>
       </div>
