@@ -49,9 +49,10 @@ def serialize(view):
         "fields": view.fields,
         "query": view.query,
         "limit": view.limit,
-        "public_link": view.public_link(),
-        "google_sheets_formula": view.google_sheets_formula(),
+        "publicLink": view.public_link(),
+        "googleSheetsFormula": view.google_sheets_formula(),
         "link": f"/query/{view.model_name}/{view.fields}.html?{view.query}&limit={view.limit}",
+        "createdTime": f"{view.created_time:%Y-%m-%d %H:%M:%S}",
         "pk": view.pk,
     }
 
@@ -66,7 +67,10 @@ def view_list(request):
 
     if request.method == "GET":
         return JsonResponse(
-            [serialize(view) for view in get_queryset(request).order_by("name")]
+            [
+                serialize(view)
+                for view in get_queryset(request).order_by("name", "created_time")
+            ]
         )
     elif request.method == "POST":
         view = View.objects.create(owner=request.user, **deserialize(request))

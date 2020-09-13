@@ -6,6 +6,8 @@ from django.contrib.auth.models import Permission, User
 from data_browser.common import MAKE_PUBLIC_CODENAME
 from data_browser.models import View
 
+from .util import ANY
+
 
 @pytest.fixture
 def view(admin_user):
@@ -69,9 +71,10 @@ class TestViewList:
                 "model": "core.Product",
                 "fields": "admin",
                 "query": "name__contains=sql",
-                "public_link": "N/A",
-                "google_sheets_formula": "N/A",
+                "publicLink": "N/A",
+                "googleSheetsFormula": "N/A",
                 "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
+                "createdTime": ANY(str),
                 "pk": view.pk,
                 "limit": 1000,
             }
@@ -103,9 +106,10 @@ class TestViewList:
             "model": "core.Product",
             "fields": "",
             "query": "",
-            "public_link": link,
-            "google_sheets_formula": f'=importdata("{link}")',
+            "publicLink": link,
+            "googleSheetsFormula": f'=importdata("{link}")',
             "link": "/query/core.Product/.html?&limit=1000",
+            "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 1000,
         }
@@ -157,9 +161,10 @@ class TestViewDetail:
             "model": "core.Product",
             "fields": "admin",
             "query": "name__contains=sql",
-            "public_link": "N/A",
-            "google_sheets_formula": "N/A",
+            "publicLink": "N/A",
+            "googleSheetsFormula": "N/A",
             "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
+            "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 1000,
         }
@@ -206,9 +211,10 @@ class TestViewDetail:
             "model": "core.Product",
             "fields": "admin",
             "query": "name__contains=sql",
-            "public_link": link,
-            "google_sheets_formula": f'=importdata("{link}")',
+            "publicLink": link,
+            "googleSheetsFormula": f'=importdata("{link}")',
             "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
+            "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 1000,
         }

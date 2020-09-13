@@ -389,11 +389,11 @@ function EditSavedView(props) {
             </tr>
             <tr>
               <th>Fields:</th>
-              <td>{view.fields}</td>
+              <td>{view.fields.replace(/,/g, "\u200b,")}</td>
             </tr>
             <tr>
               <th>Filters:</th>
-              <td>{view.query}</td>
+              <td>{view.query.replace(/&/g, "\u200b&")}</td>
             </tr>
             <tr>
               <th>Limit:</th>
@@ -407,6 +407,10 @@ function EditSavedView(props) {
                   }}
                 />
               </td>
+            </tr>
+            <tr>
+              <th>Created Time:</th>
+              <td>{view.createdTime}</td>
             </tr>
           </tbody>
         </table>
@@ -434,14 +438,12 @@ function EditSavedView(props) {
               </tr>
               <tr>
                 <th>Public link:</th>
-                <td>{view.public && <CopyText text={view.public_link} />}</td>
+                <td>{view.public && <CopyText text={view.publicLink} />}</td>
               </tr>
               <tr>
                 <th>Google Sheets:</th>
                 <td>
-                  {view.public && (
-                    <CopyText text={view.google_sheets_formula} />
-                  )}
+                  {view.public && <CopyText text={view.googleSheetsFormula} />}
                 </td>
               </tr>
             </tbody>
@@ -468,7 +470,7 @@ function SavedViewList(props) {
           <div key={index}>
             <p>
               <Link className="Link" to={view.link}>
-                {view.model} - {view.name}
+                {view.name} - {view.model}
               </Link>{" "}
               (<Link to={`/views/${view.pk}.html`}>edit</Link>)
             </p>
