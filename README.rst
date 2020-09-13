@@ -284,7 +284,7 @@ Release History
 +-----------+----------------+---------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                         |
 +===========+================+=================================================================================+
-|           |                | | Add .sql format to show raw SQL query.                                        |
+| 2.2.13    | 2020-09-13     | | Add .sql format to show raw SQL query.                                        |
 |           |                | | Min and max for date and datetime fields.                                     |
 |           |                | | Add ddb_default_filters.                                                      |
 |           |                | | Integrated cProfile support via ``.profile`` and ``.pstats``.                 |
