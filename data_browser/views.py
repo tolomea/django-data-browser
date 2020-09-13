@@ -1,7 +1,10 @@
+import cProfile
 import csv
 import io
 import itertools
 import json
+import marshal
+import pstats
 import sys
 
 import django.contrib.admin.views.decorators as admin_decorators
@@ -139,8 +142,13 @@ def query_html(request, *, model_name="", fields=""):
 
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
+    profiler = None
+    if media in {"profile", "pstats"}:
+        profiler = cProfile.Profile()
+        profiler.enable()
+
     query = Query.from_request(model_name, fields, request.GET)
-    return _data_response(request, query, media, privilaged=True)
+    return _data_response(request, query, media, privilaged=True, profiler=profiler)
 
 
 def view(request, pk, media):
@@ -190,13 +198,41 @@ def pad_table(x, table):
     return [pad(x) + row for row in table]
 
 
-def _data_response(request, query, media, privilaged=False):
+def _data_response(request, query, media, privilaged=False, profiler=None):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)
 
-    if media == "csv":
+    if profiler:
+        # get the results
+        results = get_results(request, bound_query, orm_models)
+        resp = _get_query_data(bound_query) if privilaged else {}
+        resp.update(results)
+
+        # and throw them away and stop profiling
+        del resp
+        profiler.disable()
+
+        if media == "profile":
+            buffer = io.StringIO()
+            stats = pstats.Stats(profiler, stream=buffer)
+            stats.sort_stats("cumulative").print_stats(50)
+            stats.sort_stats("time").print_stats(50)
+            buffer.seek(0)
+            return HttpResponse(buffer, content_type="text/plain")
+        elif media == "pstats":
+            buffer = io.BytesIO()
+            marshal.dump(pstats.Stats(profiler).stats, buffer)
+            buffer.seek(0)
+            response = HttpResponse(buffer, content_type="application/octet-stream")
+            response[
+                "Content-Disposition"
+            ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.pstats"
+            return response
+        else:
+            assert False
+    elif media == "csv":
         results = get_results(request, bound_query, orm_models)
         buffer = io.StringIO()
         writer = csv.writer(buffer)

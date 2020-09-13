@@ -63,11 +63,11 @@ def test_query_query(admin_client, snapshot):
     snapshot.assert_match(query, "query")
 
 
-def test_query_sql(admin_client):
-    # we're not going to check the result as it varies based on database
-    # it's sufficient that it doesn't blow up
+@pytest.mark.parametrize("format", ["sql", "profile", "pstats"])
+def test_query_misc_formats(admin_client, format):
+    # we're not going to check the result as they vary it's sufficient that it doesn't blow up
     res = admin_client.get(
-        "/data_browser/query/core.Product/size-0,name+1,size_unit.sql?size__lt=2&id__gt=0"
+        f"/data_browser/query/core.Product/size-0,name+1,size_unit.{format}?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
 
