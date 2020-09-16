@@ -1,8 +1,10 @@
+import datetime
 import json
 from functools import lru_cache
 
 import dateutil.parser
 from django.utils import dateparse, timezone
+from django.utils.formats import date_format
 
 from .common import all_subclasses, get_optimal_decimal_places
 
@@ -316,7 +318,14 @@ class DateType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
-        return str(value) if value else None
+        # todo: custom format
+        if value is not None:
+            format = 'd.m.Y'
+            if isinstance(value, datetime.datetime) and timezone.is_aware(value):
+                value = timezone.localtime(value)
+            return date_format(value, format)
+        return None
+        # return str(value) if value else None
 
 
 class WeekDayType(BaseType):

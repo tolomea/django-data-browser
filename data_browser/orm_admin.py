@@ -112,12 +112,17 @@ def _get_all_admin_fields(request):
         else:
             return False  # pragma: no cover  Django < 2.1
 
+    # todo: monkey patching
+    method_visible = visible
+    if settings.DATA_BROWSER_CUSTOM_MODEL_VISIBLE_METHOD:
+        method_visible = settings.DATA_BROWSER_CUSTOM_MODEL_VISIBLE_METHOD
+
     all_admin_fields = defaultdict(set)
     hidden_fields = defaultdict(set)
     model_admins = {}
     for model, model_admin in site._registry.items():
         model_admins[model] = model_admin
-        if visible(model_admin, request):
+        if method_visible(model_admin, request):
             all_admin_fields[model].update(from_fieldsets(model_admin, True))
             all_admin_fields[model].update(model_admin.get_list_display(request))
             all_admin_fields[model].update(getattr(model_admin, "ddb_extra_fields", []))
@@ -128,7 +133,7 @@ def _get_all_admin_fields(request):
 
             # check the inlines, these are already filtered for access
             for inline in model_admin.get_inline_instances(request):
-                if visible(inline, request):
+                if method_visible(inline, request):
                     try:
                         fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
                     except Exception as e:
@@ -266,6 +271,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
+        verbose_name = field.verbose_name if field else None
         if field_name == OPEN_IN_ADMIN:
             fields[OPEN_IN_ADMIN] = OrmAdminField(model_name=model_name)
         elif isinstance(field, (models.ForeignKey, OneToOneRel)):
@@ -273,7 +279,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 fields[field_name] = OrmFkField(
                     model_name=model_name,
                     name=field_name,
-                    pretty_name=field_name,
+                    pretty_name=verbose_name or field_name,
                     rel_name=get_model_name(field.related_model),
                 )
         elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
@@ -282,7 +288,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             fields[field_name] = OrmFileField(
                 model_name=model_name,
                 name=field_name,
-                pretty_name=field_name,
+                pretty_name=verbose_name or field_name,
                 django_field=field,
             )
         elif isinstance(field, type(None)):
@@ -306,7 +312,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             fields[field_name] = OrmConcreteField(
                 model_name=model_name,
                 name=field_name,
-                pretty_name=field_name,
+                pretty_name=verbose_name or field_name,
                 type_=field_type,
                 rel_name=rel_name,
                 choices=choices,
