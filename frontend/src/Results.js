@@ -19,6 +19,8 @@ function HeadCell(props) {
   return (
     <th {...{ className }}>
       <SLink onClick={() => query.removeField(field)}>close</SLink>
+      <SLink onClick={() => query.moveField(field, true)}>chevron_left</SLink>
+      <SLink onClick={() => query.moveField(field, false)}>chevron_right</SLink>
       {modelField.canPivot && (
         <>
           <SLink onClick={() => query.togglePivot(field)}>

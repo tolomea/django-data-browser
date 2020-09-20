@@ -62,6 +62,10 @@ class Query {
     else return String(this.config.types[lookup_type].defaultValue);
   }
 
+  _getFieldIndex(field, fields) {
+    return fields.findIndex((f) => f.pathStr === field.pathStr);
+  }
+
   addField(path, prettyPath, sort) {
     const newFields = this.query.fields.filter(
       (f) => f.pathStr !== path.join("__")
@@ -91,10 +95,19 @@ class Query {
     );
   }
 
+  moveField(field, left) {
+    const index = this._getFieldIndex(field, this.query.fields);
+    const newIndex = index + (left ? -1 : 1);
+    if (newIndex >= 0) {
+      let newFields = this.query.fields.slice();
+      newFields.splice(index, 1);
+      newFields.splice(newIndex, 0, field);
+      this.setQuery({ fields: newFields }, false);
+    }
+  }
+
   toggleSort(field) {
-    const index = this.query.fields.findIndex(
-      (f) => f.pathStr === field.pathStr
-    );
+    const index = this._getFieldIndex(field, this.query.fields);
     const newSort = { asc: "dsc", dsc: null, null: "asc" }[field.sort];
     let newFields = this.query.fields.slice();
 
@@ -127,9 +140,7 @@ class Query {
   }
 
   togglePivot(field) {
-    const index = this.query.fields.findIndex(
-      (f) => f.pathStr === field.pathStr
-    );
+    const index = this._getFieldIndex(field, this.query.fields);
     let newFields = this.query.fields.slice();
     newFields[index].pivoted = !newFields[index].pivoted;
     this.setQuery({
