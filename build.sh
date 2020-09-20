@@ -16,10 +16,11 @@ check-manifest -v
 python setup.py sdist bdist_wheel
 twine check dist/*
 
+version=$(python -c "import data_browser; print(data_browser.version)")
 set +x
 echo SUCCESS
 echo
-echo git commit
-echo git tag -a -m \"\" x.y.z
-echo git push --tags
+echo git commit -m $version
+echo git tag -a -m $version $version
+echo git push --follow-tags
 echo python -m twine upload -u __token__ dist/*
