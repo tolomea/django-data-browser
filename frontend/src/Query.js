@@ -70,7 +70,6 @@ class Query {
       .map((f) => f.priority)
       .filter((f) => f !== null);
     const newPriority = priorities.length ? Math.max(...priorities) + 1 : 0;
-    console.log("a", priorities, newPriority);
     newFields.push({
       path: path,
       pathStr: path.join("__"),
@@ -83,9 +82,13 @@ class Query {
   }
 
   removeField(field) {
-    this.setQuery({
-      fields: this.query.fields.filter((f) => f.pathStr !== field.pathStr),
-    });
+    const modelField = this.getField(field.path);
+    this.setQuery(
+      {
+        fields: this.query.fields.filter((f) => f.pathStr !== field.pathStr),
+      },
+      modelField.canPivot
+    );
   }
 
   toggleSort(field) {

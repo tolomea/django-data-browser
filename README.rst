@@ -277,6 +277,8 @@ Patch and Minor versions should never contain breaking changes and should always
 * Existing saved views.
 * The URL's of public saved views.
 
+For alpha and beta releases absolutely anything may change / break.
+
 
 Release History
 *************************
@@ -284,7 +286,8 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
-|           |                | Saved view style tweaks.                                                         |
+|           |                | | Saved view style tweaks.                                                       |
+|           |                | | Only reload on field delete when it might change the results.                  |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.13    | 2020-09-13     | | Add .sql format to show raw SQL query.                                         |
 |           |                | | Min and max for date and datetime fields.                                      |

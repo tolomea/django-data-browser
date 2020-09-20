@@ -92,8 +92,10 @@ class QueryApp extends React.Component {
     window.removeEventListener("popstate", this.popstate);
   }
 
-  handleQueryChange(queryChange) {
+  handleQueryChange(queryChange, reload = true) {
     this.setState(queryChange);
+    if (!reload) return;
+
     const newState = { ...this.state, ...queryChange };
     const request = {
       model: newState.model,
