@@ -96,13 +96,29 @@ class Query {
   }
 
   moveField(field, left) {
-    const index = this._getFieldIndex(field, this.query.fields);
+    const modelField = this.getField(field.path);
+
+    // get the fields in their sections
+    const colFields = this.colFields();
+    const rowFields = this.rowFields();
+    const resFields = this.resFields();
+
+    // pick the section our field is in
+    let fields = null;
+    if (field.pivoted) fields = colFields;
+    else if (modelField.canPivot) fields = rowFields;
+    else fields = resFields;
+
+    // work out it's old and new index
+    const index = this._getFieldIndex(field, fields);
     const newIndex = index + (left ? -1 : 1);
-    if (newIndex >= 0) {
-      let newFields = this.query.fields.slice();
-      newFields.splice(index, 1);
-      newFields.splice(newIndex, 0, field);
-      this.setQuery({ fields: newFields }, false);
+
+    // if anything changed then update our section and then
+    // rebuild all the fields from the sections
+    if (0 <= newIndex && newIndex < fields.length) {
+      fields.splice(index, 1);
+      fields.splice(newIndex, 0, field);
+      this.setQuery({ fields: rowFields.concat(colFields, resFields) }, false);
     }
   }
 
