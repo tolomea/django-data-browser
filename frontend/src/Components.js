@@ -286,7 +286,7 @@ function ModelSelector(props) {
 function Logo(props) {
   return (
     <Link to="/" className="Logo">
-      <span>DDB</span>
+      <span>Конструктор запросов</span>
       <span className="Version">v{version}</span>
     </Link>
   );
