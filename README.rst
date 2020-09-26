@@ -306,7 +306,7 @@ Release History
 |           |                | | Fix JSONField support when psycopg2 is not installed.                          |
 |           |                | | Fix bug with number formatting and pivoted data.                               |
 |           |                | | Fix error with multiple non adjacent filters on the same field.                |
-|           |                | | Fix error error with naive DateTimeFields.                                     |
+|           |                | | Fix error with naive DateTimeFields.                                           |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.11    | 2020-08-31     | Minor enhancements and some small fixes.                                         |
 +-----------+----------------+----------------------------------------------------------------------------------+
