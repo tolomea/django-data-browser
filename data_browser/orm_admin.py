@@ -7,6 +7,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
 from django.forms.models import _get_foreign_key
+from django.utils.text import slugify
 
 from .common import debug_log, settings
 from .helpers import AdminMixin, AnnotationDescriptor
@@ -162,7 +163,14 @@ def _get_all_admin_fields(request):
 
 
 def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
-    field_func = getattr(admin, field_name, None)
+    if isinstance(field_name, str):
+        field_func = getattr(admin, field_name, None)
+    else:
+        field_func = field_name
+        field_name = getattr(
+            field_func, "short_description", slugify(str(field_func.__name__))
+        )
+
     if isinstance(field_func, AnnotationDescriptor):
         qs = admin_get_queryset(admin, request, [field_name])
 
@@ -179,26 +187,31 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
             )
 
         type_, choices = _get_field_type(model, field_name, field_type)
-        if type_:  # pragma: no branch
-            return OrmAnnotatedField(
-                model_name=model_name,
-                name=field_name,
-                pretty_name=field_name,
-                type_=type_,
-                field_type=field_type,
-                admin=admin,
-                choices=choices,
-            )
+        return OrmAnnotatedField(
+            model_name=model_name,
+            name=field_name,
+            pretty_name=field_name,
+            type_=type_,
+            field_type=field_type,
+            admin=admin,
+            choices=choices,
+        )
     else:
-        if not getattr(getattr(admin, field_name, None), "ddb_hide", False):
-            return OrmCalculatedField(
-                model_name=model_name,
-                name=field_name,
-                pretty_name=field_name,
-                admin=admin,
-            )
-        else:
+        if getattr(field_func, "ddb_hide", False):
             return None
+
+        if field_func is None:
+
+            def field_func(obj):
+                value = getattr(obj, field_name)
+                return value() if callable(value) else value
+
+        return OrmCalculatedField(
+            model_name=model_name,
+            name=field_name,
+            pretty_name=field_name,
+            func=field_func,
+        )
 
 
 def _fmt_choices(choices):
@@ -288,7 +301,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 request, field_name, model_name, model, admin, model_fields
             )
             if orm_field:
-                fields[field_name] = orm_field
+                fields[orm_field.name] = orm_field
         else:
             field_type, choices = _get_field_type(model, field_name, field)
 

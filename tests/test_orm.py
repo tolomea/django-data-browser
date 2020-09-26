@@ -196,6 +196,12 @@ def test_bad_storage(monkeypatch, req):
 
 
 @pytest.mark.usefixtures("products")
+def test_get_callable(get_product_flat):
+    data = get_product_flat(2, "name,funky,lambda", {})
+    sortedAssert(data, [["a", "fa", "la"], ["b", "fb", "lb"], ["c", "fc", "lc"]])
+
+
+@pytest.mark.usefixtures("products")
 def test_get_calculated_field_on_admin(get_product_flat):
     data = get_product_flat(2, "producer__address__bob", {})
     sortedAssert(data, [[None], ["err"], ["bob"]])

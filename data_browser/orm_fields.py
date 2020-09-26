@@ -268,7 +268,6 @@ class OrmBaseField:
     concrete: bool = False
     rel_name: str = None
     can_pivot: bool = False
-    admin: object = None
     choices: Sequence[Tuple[str, str]] = ()
 
     def __post_init__(self):
@@ -323,10 +322,11 @@ class OrmConcreteField(OrmBaseField):
 
 
 class OrmCalculatedField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, admin):
+    def __init__(self, model_name, name, pretty_name, func):
         super().__init__(
-            model_name, name, pretty_name, type_=StringType, can_pivot=True, admin=admin
+            model_name, name, pretty_name, type_=StringType, can_pivot=True
         )
+        self.func = func
 
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()
@@ -344,20 +344,10 @@ class OrmCalculatedField(OrmBaseField):
         if obj is None:
             return None
 
-        if hasattr(self.admin, self.name):
-            # admin callable
-            func = getattr(self.admin, self.name)
-            try:
-                return func(obj)
-            except Exception as e:
-                return str(e)
-        else:
-            # model property or callable
-            try:
-                value = getattr(obj, self.name)
-                return value() if callable(value) else value
-            except Exception as e:
-                return str(e)
+        try:
+            return self.func(obj)
+        except Exception as e:
+            return str(e)
 
 
 class OrmBoundAnnotatedField(OrmBoundField):
@@ -386,11 +376,11 @@ class OrmAnnotatedField(OrmBaseField):
             pretty_name,
             type_=type_,
             can_pivot=True,
-            admin=admin,
             concrete=True,
             choices=choices or (),
         )
         self.field_type = field_type
+        self.admin = admin
 
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()

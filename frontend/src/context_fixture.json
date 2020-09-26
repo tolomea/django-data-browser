@@ -517,6 +517,14 @@
                     "prettyName": "fake",
                     "type": "unknown"
                 },
+                "funky": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "funky",
+                    "type": "string"
+                },
                 "id": {
                     "canPivot": true,
                     "choices": [],
@@ -539,6 +547,14 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "is_onsale",
+                    "type": "string"
+                },
+                "lambda": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "lambda",
                     "type": "string"
                 },
                 "name": {
@@ -644,8 +660,10 @@
                 "extra_inline",
                 "extra_model",
                 "fake",
+                "funky",
                 "image",
                 "is_onsale",
+                "lambda",
                 "name",
                 "number_choice",
                 "only_in_list_view",

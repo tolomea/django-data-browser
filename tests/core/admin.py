@@ -135,10 +135,17 @@ class SKUInline(admin.TabularInline):
         return "bob"
 
 
+def func(obj):
+    return f"f{obj.name}"
+
+
+func.short_description = "funky"
+
+
 @admin.register(models.Product)
 class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
-    list_display = ["only_in_list_view", "annotated"]
+    list_display = ["only_in_list_view", "annotated", func, lambda o: f"l{o.name}"]
     ddb_hide_fields = ["hidden_model"]
     ddb_extra_fields = ["extra_model"]
 

@@ -61,7 +61,7 @@ def orm_models():
                     rel_name=StringType.name,
                 ),
                 "fn": orm_fields.OrmCalculatedField(
-                    model_name="app.model", name="fn", pretty_name="fn", admin=None
+                    model_name="app.model", name="fn", pretty_name="fn", func=None
                 ),
                 "bob": orm_fields.OrmConcreteField(
                     model_name="app.model",
