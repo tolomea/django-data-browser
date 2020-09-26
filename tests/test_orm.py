@@ -330,13 +330,13 @@ def test_filter_aggregate_no_fields_filter_different(get_product_flat):
 @pytest.mark.usefixtures("products")
 def test_get_aggregate_and_calculated_field(get_product_flat):
     data = get_product_flat(2, "is_onsale,id__count", {})
-    sortedAssert(data, [[False, 1], [False, 1], [False, 1]])
+    sortedAssert(data, [["False", 1], ["False", 1], ["False", 1]])
 
 
 @pytest.mark.usefixtures("products")
 def test_get_time_aggregate_and_calculated_field(get_product_flat):
     data = get_product_flat(2, "is_onsale,created_time__count", {})
-    sortedAssert(data, [[False, 1], [False, 1], [False, 1]])
+    sortedAssert(data, [["False", 1], ["False", 1], ["False", 1]])
 
 
 @pytest.mark.usefixtures("products")
@@ -369,7 +369,7 @@ def test_get_results_pks(get_product_flat):
 def test_get_results_calculated_field(get_product_flat):
     # query + prefetch producer
     data = get_product_flat(2, "name+0,producer__name,is_onsale", {})
-    assert data == [["a", "Bob", False], ["b", "Bob", False], ["c", "Bob", False]]
+    assert data == [["a", "Bob", "False"], ["b", "Bob", "False"], ["c", "Bob", "False"]]
 
 
 @pytest.mark.usefixtures("products")
@@ -451,7 +451,11 @@ def test_get_results_one_to_one(get_product_flat):
 def test_get_results_calculated_causes_query(get_product_flat):
     # query products, fetch objects for calculated
     data = get_product_flat(2, "name+0,is_onsale,producer__address__city", {})
-    assert data == [["a", False, "london"], ["b", False, "london"], ["c", False, None]]
+    assert data == [
+        ["a", "False", "london"],
+        ["b", "False", "london"],
+        ["c", "False", None],
+    ]
 
 
 def test_get_results_admin_causes_query(get_product_flat, products):

@@ -108,14 +108,14 @@ def test_query_json_bad_fields(admin_client):
             "size": 1,
             "name": "a",
             "size_unit": "g",
-            "is_onsale": False,
+            "is_onsale": "False",
             "producer__name": "Bob",
         },
         {
             "size": 1,
             "name": "b",
             "size_unit": "g",
-            "is_onsale": False,
+            "is_onsale": "False",
             "producer__name": "Bob",
         },
     ]

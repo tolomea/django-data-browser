@@ -208,7 +208,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "bob",
-                    "type": "string"
+                    "type": "html"
                 },
                 "city": {
                     "canPivot": true,
@@ -224,7 +224,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "fred",
-                    "type": "string"
+                    "type": "html"
                 },
                 "id": {
                     "canPivot": true,
@@ -248,7 +248,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "tom",
-                    "type": "string"
+                    "type": "html"
                 }
             },
             "sortedFields": [
@@ -407,7 +407,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "frank",
-                    "type": "string"
+                    "type": "html"
                 },
                 "id": {
                     "canPivot": true,
@@ -531,7 +531,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "funky",
-                    "type": "string"
+                    "type": "html"
                 },
                 "id": {
                     "canPivot": true,
@@ -555,7 +555,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "is_onsale",
-                    "type": "string"
+                    "type": "html"
                 },
                 "lambda": {
                     "canPivot": true,
@@ -563,7 +563,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "lambda",
-                    "type": "string"
+                    "type": "html"
                 },
                 "name": {
                     "canPivot": true,
@@ -793,7 +793,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "google_sheets_formula",
-                    "type": "string"
+                    "type": "html"
                 },
                 "id": {
                     "canPivot": true,
@@ -833,7 +833,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "open_view",
-                    "type": "string"
+                    "type": "html"
                 },
                 "owner": {
                     "canPivot": false,
@@ -857,7 +857,7 @@
                     "concrete": false,
                     "model": null,
                     "prettyName": "public_link",
-                    "type": "string"
+                    "type": "html"
                 },
                 "public_slug": {
                     "canPivot": true,

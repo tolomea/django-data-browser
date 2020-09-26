@@ -208,7 +208,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "bob",
-                    "type": "string",
+                    "type": "html",
                 },
                 "city": {
                     "canPivot": True,
@@ -224,7 +224,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "fred",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -248,7 +248,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "tom",
-                    "type": "string",
+                    "type": "html",
                 },
             },
             "sortedFields": [
@@ -393,7 +393,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "frank",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -511,7 +511,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "funky",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -535,7 +535,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "is_onsale",
-                    "type": "string",
+                    "type": "html",
                 },
                 "lambda": {
                     "canPivot": True,
@@ -543,7 +543,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "lambda",
-                    "type": "string",
+                    "type": "html",
                 },
                 "name": {
                     "canPivot": True,
@@ -747,7 +747,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "google_sheets_formula",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -787,7 +787,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "open_view",
-                    "type": "string",
+                    "type": "html",
                 },
                 "owner": {
                     "canPivot": False,
@@ -811,7 +811,7 @@ snapshots["test_query_html config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "public_link",
-                    "type": "string",
+                    "type": "html",
                 },
                 "public_slug": {
                     "canPivot": True,
@@ -3316,7 +3316,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "bob",
-                    "type": "string",
+                    "type": "html",
                 },
                 "city": {
                     "canPivot": True,
@@ -3332,7 +3332,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "fred",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -3356,7 +3356,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "tom",
-                    "type": "string",
+                    "type": "html",
                 },
             },
             "sortedFields": [
@@ -3501,7 +3501,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "frank",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -3619,7 +3619,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "funky",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -3643,7 +3643,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "is_onsale",
-                    "type": "string",
+                    "type": "html",
                 },
                 "lambda": {
                     "canPivot": True,
@@ -3651,7 +3651,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "lambda",
-                    "type": "string",
+                    "type": "html",
                 },
                 "name": {
                     "canPivot": True,
@@ -3855,7 +3855,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "google_sheets_formula",
-                    "type": "string",
+                    "type": "html",
                 },
                 "id": {
                     "canPivot": True,
@@ -3895,7 +3895,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "open_view",
-                    "type": "string",
+                    "type": "html",
                 },
                 "owner": {
                     "canPivot": False,
@@ -3919,7 +3919,7 @@ snapshots["test_query_ctx config"] = {
                     "concrete": False,
                     "model": None,
                     "prettyName": "public_link",
-                    "type": "string",
+                    "type": "html",
                 },
                 "public_slug": {
                     "canPivot": True,

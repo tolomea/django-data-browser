@@ -291,6 +291,7 @@ Release History
 |           |                | | Add ``data_browser.helpers.attributes``.                                       |
 |           |                | | Render safestrings returned by calculated fields as HTML.                      |
 |           |                | | Respect the ``boolean`` attribute on calculated fields.                        |
+|           |                | | Aside from declared booleans, calculated fields now always format as strings.  |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.14    | 2020-09-20     | | Saved view style tweaks.                                                       |
 |           |                | | Only reload on field delete when it might change the results.                  |
