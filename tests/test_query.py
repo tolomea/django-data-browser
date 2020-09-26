@@ -368,7 +368,6 @@ class TestDateTimeType:
             DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16))
             == "2020-05-19 08:42:16"
         )
-        assert DateTimeType.format(None) is None
 
 
 class TestDurationType:
@@ -389,7 +388,6 @@ class TestDurationType:
     def test_format(self):
         assert DurationType.format(timedelta(days=5, minutes=6)) == "5 days, 0:06:00"
         assert DurationType.format(timedelta(minutes=6)) == "0:06:00"
-        assert DurationType.format(None) is None
 
 
 class TestDateType:
@@ -416,7 +414,6 @@ class TestWeekDayType:
         assert WeekDayType.parse("gt", "Monday") == (None, ANY(str))
 
     def test_format(self):
-        assert WeekDayType.format(None) is None
         assert WeekDayType.format(1) == "Sunday"
         assert WeekDayType.format(7) == "Saturday"
 
@@ -432,7 +429,6 @@ class TestMonthType:
         assert MonthType.parse("gt", "January") == (None, ANY(str))
 
     def test_format(self):
-        assert MonthType.format(None) is None
         assert MonthType.format(1) == "January"
         assert MonthType.format(12) == "December"
 

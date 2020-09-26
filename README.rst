@@ -300,6 +300,7 @@ Release History
 |           |                | | Handle callables in ModelAdmin.list_display.                                   |
 |           |                | | Add ``data_browser.helpers.attributes``.                                       |
 |           |                | | Allow calculated fields to return HTML, see the ``ddb_html`` attribute.        |
+|           |                | | Respect the ``boolean`` attribute on calculated fields.                        |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.14    | 2020-09-20     | | Saved view style tweaks.                                                       |
 |           |                | | Only reload on field delete when it might change the results.                  |

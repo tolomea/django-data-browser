@@ -93,7 +93,7 @@ class ChoiceTypeMixin:
     @staticmethod
     def format(value, choices=None):
         assert choices
-        return dict(choices)[value] if value is not None else None
+        return dict(choices)[value]
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):
@@ -163,7 +163,7 @@ class NumberType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
-        return float(value) if value is not None else None
+        return float(value)
 
     @staticmethod
     def _parse(value):
@@ -256,7 +256,7 @@ class DurationType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
-        return str(value) if value else None
+        return str(value)
 
 
 class DateTimeType(BaseType):
@@ -284,11 +284,9 @@ class DateTimeType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
-        if value:
-            if not timezone.is_naive(value):
-                value = timezone.make_naive(value)
-            return str(value)
-        return None
+        if not timezone.is_naive(value):
+            value = timezone.make_naive(value)
+        return str(value)
 
 
 class DateType(BaseType):
@@ -316,7 +314,7 @@ class DateType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
-        return str(value) if value else None
+        return str(value)
 
 
 class WeekDayType(BaseType):
@@ -340,7 +338,7 @@ class WeekDayType(BaseType):
     @classmethod
     def format(cls, value, choices=None):
         assert not choices
-        return cls._days[value - 1] if value else None
+        return cls._days[value - 1]
 
     @classmethod
     def _parse(cls, value):
@@ -376,7 +374,7 @@ class MonthType(BaseType):
     @classmethod
     def format(cls, value, choices=None):
         assert not choices
-        return cls._months[value - 1] if value else None
+        return cls._months[value - 1]
 
     @classmethod
     def _parse(cls, value):
@@ -410,6 +408,11 @@ class BooleanType(BaseType):
             return False
         else:
             raise ValueError("Expected 'true' or 'false'")
+
+    @classmethod
+    def format(cls, value, choices=None):
+        assert not choices
+        return bool(value)
 
 
 class IsNullType(BooleanType):

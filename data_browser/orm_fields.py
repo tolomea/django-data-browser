@@ -274,6 +274,9 @@ class OrmBaseField:
             assert self.type_
 
     def format(self, value):
+        if value is None:
+            return None
+
         return self.type_.format(value, self.choices)
 
 
@@ -320,7 +323,13 @@ class OrmConcreteField(OrmBaseField):
 
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, func):
-        type_ = HTMLType if getattr(func, "ddb_html", False) else StringType
+        if getattr(func, "ddb_html", False):
+            type_ = HTMLType
+        elif getattr(func, "boolean", False):
+            type_ = BooleanType
+        else:
+            type_ = StringType
+
         super().__init__(model_name, name, pretty_name, type_=type_, can_pivot=True)
         self.func = func
 
@@ -341,9 +350,11 @@ class OrmCalculatedField(OrmBaseField):
             return None
 
         try:
-            return self.func(obj)
+            value = self.func(obj)
         except Exception as e:
             return str(e)
+
+        return super().format(value)
 
 
 class OrmBoundAnnotatedField(OrmBoundField):
@@ -402,6 +413,7 @@ class OrmFileField(OrmConcreteField):
     def format(self, value):
         if not value:
             return None
+
         try:
             # some storage backends will hard fail if their underlying storage isn't
             # setup right https://github.com/tolomea/django-data-browser/issues/11

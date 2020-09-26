@@ -207,6 +207,12 @@ def test_get_calculated_field_on_admin(get_product_flat):
     sortedAssert(data, [[None], ["err"], ["bob"]])
 
 
+@pytest.mark.usefixtures("products")
+def test_get_calculated_boolean_field_on_admin(get_product_flat):
+    data = get_product_flat(2, "calculated_boolean", {})
+    sortedAssert(data, [[True], [True], [True]])
+
+
 def test_get_annotated_field_at_base(products, get_product_flat, mocker):
     mock = mocker.patch(
         "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset

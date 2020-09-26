@@ -143,7 +143,13 @@ def func(obj):
 @admin.register(models.Product)
 class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
     inlines = [SKUInline]
-    list_display = ["only_in_list_view", "annotated", func, lambda o: f"l{o.name}"]
+    list_display = [
+        "only_in_list_view",
+        "annotated",
+        func,
+        lambda o: f"l{o.name}",
+        "calculated_boolean",
+    ]
     ddb_hide_fields = ["hidden_model"]
     ddb_extra_fields = ["extra_model"]
 
@@ -154,3 +160,7 @@ class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
     @annotation
     def stealth_annotation(self, request, qs):
         return qs.annotate(stealth_annotation=F("name"))
+
+    @attributes(boolean=True)
+    def calculated_boolean(self, obj):
+        return obj.size
