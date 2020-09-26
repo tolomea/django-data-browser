@@ -164,22 +164,21 @@ def _get_all_admin_fields(request):
 def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
     field_func = getattr(admin, field_name, None)
     if isinstance(field_func, AnnotationDescriptor):
-        admin_order_field = field_func.admin_order_field
         qs = admin_get_queryset(admin, request, [field_name])
 
-        annotation = qs.query.annotations.get(admin_order_field)
+        annotation = qs.query.annotations.get(field_name)
         if not annotation:  # pragma: no cover
             raise Exception(
-                f"Can't find annotation '{admin_order_field}' for {admin}.{field_name}"
+                f"Can't find annotation '{field_name}' for {admin}.{field_name}"
             )
 
         field_type = getattr(annotation, "output_field", None)
         if not field_type:  # pragma: no cover
             raise Exception(
-                f"Annotation '{admin_order_field}' for {admin}.{field_name} doesn't specify 'output_field'"
+                f"Annotation '{field_name}' for {admin}.{field_name} doesn't specify 'output_field'"
             )
 
-        type_, choices = _get_field_type(model, admin_order_field, field_type)
+        type_, choices = _get_field_type(model, field_name, field_type)
         if type_:  # pragma: no branch
             return OrmAnnotatedField(
                 model_name=model_name,
@@ -188,7 +187,6 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 type_=type_,
                 field_type=field_type,
                 admin=admin,
-                admin_order_field=admin_order_field,
                 choices=choices,
             )
     else:
