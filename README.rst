@@ -150,16 +150,6 @@ Additionally calculated fields can be hidden from the Data Browser by setting th
     def my_calculated_field(self, obj):
         return ...
 
-Finally if you want to return HTML from a calculated field and have the Data Browser render it as such then you need to set the attribute ``ddb_html`` to ``True``. As above the ``data_browser.helpers.attributes`` decorator can make this a little tidier.
-
-.. code-block:: python
-
-    @attributes(short_description="Open page, ddb_html=True)
-    def open(obj):
-        if obj is None:
-            return None
-        return format_html('<a href="{}">{}</a>', obj.get_absolute_url(), obj)
-
 
 Annotated
 ########################################
@@ -299,7 +289,7 @@ Release History
 +===========+================+==================================================================================+
 |           |                | | Handle callables in ModelAdmin.list_display.                                   |
 |           |                | | Add ``data_browser.helpers.attributes``.                                       |
-|           |                | | Allow calculated fields to return HTML, see the ``ddb_html`` attribute.        |
+|           |                | | Render safestrings returned by calculated fields as HTML.                      |
 |           |                | | Respect the ``boolean`` attribute on calculated fields.                        |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.14    | 2020-09-20     | | Saved view style tweaks.                                                       |

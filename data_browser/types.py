@@ -2,7 +2,7 @@ import json
 from functools import lru_cache
 
 import dateutil.parser
-from django.utils import dateparse, timezone
+from django.utils import dateparse, html, timezone
 
 from .common import all_subclasses, get_optimal_decimal_places
 
@@ -385,7 +385,9 @@ class MonthType(BaseType):
 
 
 class HTMLType(StringType):
-    pass
+    @classmethod
+    def format(cls, value, choices=None):
+        return html.conditional_escape(value)
 
 
 class BooleanType(BaseType):

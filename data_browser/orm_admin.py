@@ -78,7 +78,7 @@ _FIELD_TYPE_MAP = {
 }
 
 
-@attributes(short_description=OPEN_IN_ADMIN, ddb_html=True)
+@attributes(short_description=OPEN_IN_ADMIN)
 def open_in_admin(obj):
     if obj is None:  # pragma: no cover
         return None

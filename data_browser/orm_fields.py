@@ -323,12 +323,10 @@ class OrmConcreteField(OrmBaseField):
 
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, func):
-        if getattr(func, "ddb_html", False):
-            type_ = HTMLType
-        elif getattr(func, "boolean", False):
+        if getattr(func, "boolean", False):
             type_ = BooleanType
         else:
-            type_ = StringType
+            type_ = HTMLType
 
         super().__init__(model_name, name, pretty_name, type_=type_, can_pivot=True)
         self.func = func
