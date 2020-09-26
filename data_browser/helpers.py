@@ -2,6 +2,15 @@ from django.db.models import BooleanField
 from django.urls import reverse
 
 
+def attributes(**kwargs):
+    def inner(func):
+        for k, v in kwargs.items():
+            setattr(func, k, v)
+        return func
+
+    return inner
+
+
 class Everything:
     def __contains__(self, item):
         return True
@@ -86,6 +95,7 @@ class AnnotationDescriptor:
         return getattr(obj, self.name)
 
 
+# deprecated in favor of @attributes(ddb_hide=True)
 def ddb_hide(func):
     func.ddb_hide = True
     return func

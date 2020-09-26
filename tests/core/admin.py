@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db.models import F
 
-from data_browser.helpers import AdminMixin, annotation, ddb_hide
+from data_browser.helpers import AdminMixin, annotation, attributes, ddb_hide
 
 from . import models
 
@@ -135,11 +135,9 @@ class SKUInline(admin.TabularInline):
         return "bob"
 
 
+@attributes(short_description="funky")
 def func(obj):
     return f"f{obj.name}"
-
-
-func.short_description = "funky"
 
 
 @admin.register(models.Product)

@@ -129,7 +129,7 @@ However if necessary this can be tweaked using the following class level propert
 | ddb_default_filters | ``str``                                   | Default filters to be added when opening this model. Just the URL string after the ``?`` e.g. ``id=test``.  |
 +---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
-Additionally, per the below sections, calculated fields can be hidden with the ``data_browser.helpers.ddb_hide`` decorator and annotated fields are always visible unless explicitly hidden.
+Additionally, per the below sections, calculated fields can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
 
 Calculated and Annotated fields
@@ -142,11 +142,11 @@ Calculated fields are fields on the ModelAdmin whose value comes from a function
 
 Being arbitrary Python code calculated fields are opaque to the Data Browser. It can fetch their values but can't sort or filter etc on them. For pivoting they are treated as equivalent to the pk on the same model.
 
-Additionally calculated fields can be hidden from the Data Browser by applying the ``data_browser.helpers.ddb_hide`` decorator.
+Additionally calculated fields can be hidden from the Data Browser by setting the attribute ``ddb_hide`` to ``True``. The ``data_browser.helpers.attributes`` decorator can make this a little tidier.
 
 .. code-block:: python
 
-    @ddb_hide
+    @attributes(ddb_hide=True)
     def my_calculated_field(self, obj):
         return ...
 
@@ -286,7 +286,8 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
-|           |                | Handle callables in ModelAdmin.list_display.                                     |
+|           |                | | Handle callables in ModelAdmin.list_display.                                   |
+|           |                | | Add ``data_browser.helpers.attributes``.                                       |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.14    | 2020-09-20     | | Saved view style tweaks.                                                       |
 |           |                | | Only reload on field delete when it might change the results.                  |
