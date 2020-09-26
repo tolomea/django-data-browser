@@ -7,13 +7,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
 from django.forms.models import _get_foreign_key
+from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.text import slugify
 
 from .common import debug_log, settings
-from .helpers import AdminMixin, AnnotationDescriptor
+from .helpers import AdminMixin, AnnotationDescriptor, attributes
 from .orm_fields import (
-    OPEN_IN_ADMIN,
-    OrmAdminField,
     OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
@@ -53,6 +53,8 @@ except ImportError:  # pragma: django < 3.1
         JSONField = None.__class__
 
 
+OPEN_IN_ADMIN = "admin"
+
 _STRING_FIELDS = (
     models.CharField,
     models.TextField,
@@ -74,6 +76,17 @@ _FIELD_TYPE_MAP = {
     **{f: StringType for f in _STRING_FIELDS},
     **{f: NumberType for f in _NUMBER_FIELDS},
 }
+
+
+@attributes(short_description=OPEN_IN_ADMIN, ddb_html=True)
+def open_in_admin(obj):
+    if obj is None:  # pragma: no cover
+        return None
+
+    model_name = get_model_name(obj.__class__, "_")
+    url_name = f"admin:{model_name}_change".lower()
+    url = reverse(url_name, args=[obj.pk])
+    return format_html('<a href="{}">{}</a>', url, obj)
 
 
 def admin_get_queryset(admin, request, fields=()):
@@ -122,7 +135,7 @@ def _get_all_admin_fields(request):
             all_admin_fields[model].update(from_fieldsets(model_admin, True))
             all_admin_fields[model].update(model_admin.get_list_display(request))
             all_admin_fields[model].update(getattr(model_admin, "ddb_extra_fields", []))
-            all_admin_fields[model].add(OPEN_IN_ADMIN)
+            all_admin_fields[model].add(open_in_admin)
             if isinstance(model_admin, AdminMixin):
                 all_admin_fields[model].update(model_admin._ddb_annotations())
             hidden_fields[model].update(getattr(model_admin, "ddb_hide_fields", []))
@@ -277,9 +290,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
-        if field_name == OPEN_IN_ADMIN:
-            fields[OPEN_IN_ADMIN] = OrmAdminField(model_name=model_name)
-        elif isinstance(field, (models.ForeignKey, OneToOneRel)):
+        if isinstance(field, (models.ForeignKey, OneToOneRel)):
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(
                     model_name=model_name,

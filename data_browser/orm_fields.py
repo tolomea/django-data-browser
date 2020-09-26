@@ -17,7 +17,6 @@ from django.db.models import (
     functions,
 )
 from django.db.models.functions import Cast
-from django.urls import reverse
 from django.utils.html import format_html
 
 from .types import (
@@ -35,8 +34,6 @@ from .types import (
     WeekDayType,
     YearType,
 )
-
-OPEN_IN_ADMIN = "admin"
 
 _TYPE_AGGREGATES = defaultdict(
     lambda: [("count", NumberType)],
@@ -323,9 +320,8 @@ class OrmConcreteField(OrmBaseField):
 
 class OrmCalculatedField(OrmBaseField):
     def __init__(self, model_name, name, pretty_name, func):
-        super().__init__(
-            model_name, name, pretty_name, type_=StringType, can_pivot=True
-        )
+        type_ = HTMLType if getattr(func, "ddb_html", False) else StringType
+        super().__init__(model_name, name, pretty_name, type_=type_, can_pivot=True)
         self.func = func
 
     def bind(self, previous):
@@ -394,34 +390,6 @@ class OrmAnnotatedField(OrmBaseField):
             queryset_path=f"ddb_{s(full_path)}",
             filter_=True,
         )
-
-
-class OrmAdminField(OrmBaseField):
-    def __init__(self, model_name):
-        super().__init__(
-            model_name, OPEN_IN_ADMIN, OPEN_IN_ADMIN, type_=HTMLType, can_pivot=True
-        )
-
-    def bind(self, previous):
-        previous = previous or OrmBoundField.blank()
-        full_path = previous.full_path + [self.name]
-        return OrmBoundField(
-            field=self,
-            previous=previous,
-            full_path=full_path,
-            pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(previous.full_path + ["id"]),
-            model_name=self.model_name,
-        )
-
-    def format(self, obj):
-        if obj is None:
-            return None
-
-        model_name = get_model_name(obj.__class__, "_")
-        url_name = f"admin:{model_name}_change".lower()
-        url = reverse(url_name, args=[obj.pk])
-        return f'<a href="{url}">{obj}</a>'
 
 
 class OrmFileField(OrmConcreteField):

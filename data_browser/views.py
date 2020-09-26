@@ -21,8 +21,7 @@ from django.views.decorators import csrf
 from . import version
 from .common import HttpResponse, JsonResponse, can_make_public, settings
 from .models import View
-from .orm_admin import get_models
-from .orm_fields import OPEN_IN_ADMIN
+from .orm_admin import OPEN_IN_ADMIN, get_models
 from .orm_results import get_result_queryset, get_results
 from .query import BoundQuery, Query
 from .types import TYPES
