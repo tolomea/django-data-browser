@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { TLink, SLink, useData, version, Save, Delete, CopyText } from "./Util";
 import { Results } from "./Results";
@@ -106,54 +106,44 @@ function FilterValue(props) {
     );
 }
 
-class Filter extends React.Component {
-  render() {
-    const {
-      path,
-      prettyPath,
-      index,
-      lookup,
-      query,
-      value,
-      errorMessage,
-    } = this.props;
-    const field = query.getField(path);
-    const type = query.getType(field);
-    return (
-      <tr>
-        <td>
-          <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
-          <TLink
-            onClick={() => query.addField(path, prettyPath, type.defaultSort)}
-          >
-            {prettyPath.join(" ")}
-          </TLink>{" "}
-        </td>
-        <td>
-          <select
-            className="Lookup"
-            value={lookup}
-            onChange={(e) => query.setFilterLookup(index, e.target.value)}
-          >
-            {type.sortedLookups.map((lookupName) => (
-              <option key={lookupName} value={lookupName}>
-                {lookupName.replace(/_/g, " ")}
-              </option>
-            ))}
-          </select>
-        </td>
-        <td>=</td>
-        <td>
-          <FilterValue
-            {...{ value, field }}
-            onChange={(val) => query.setFilterValue(index, val)}
-            lookup={type.lookups[lookup]}
-          />
-          {errorMessage && <p className="Error">{errorMessage}</p>}
-        </td>
-      </tr>
-    );
-  }
+function Filter(props) {
+  const { path, prettyPath, index, lookup, query, value, errorMessage } = props;
+  const field = query.getField(path);
+  const type = query.getType(field);
+  return (
+    <tr>
+      <td>
+        <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
+        <TLink
+          onClick={() => query.addField(path, prettyPath, type.defaultSort)}
+        >
+          {prettyPath.join(" ")}
+        </TLink>{" "}
+      </td>
+      <td>
+        <select
+          className="Lookup"
+          value={lookup}
+          onChange={(e) => query.setFilterLookup(index, e.target.value)}
+        >
+          {type.sortedLookups.map((lookupName) => (
+            <option key={lookupName} value={lookupName}>
+              {lookupName.replace(/_/g, " ")}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td>=</td>
+      <td>
+        <FilterValue
+          {...{ value, field }}
+          onChange={(val) => query.setFilterValue(index, val)}
+          lookup={type.lookups[lookup]}
+        />
+        {errorMessage && <p className="Error">{errorMessage}</p>}
+      </td>
+    </tr>
+  );
 }
 
 function Filters(props) {
@@ -176,66 +166,55 @@ function Filters(props) {
   );
 }
 
-class Field extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { toggled: false };
-  }
-
-  toggle() {
-    this.setState((state) => ({
-      toggled: !state.toggled,
-    }));
-  }
-
-  render() {
-    const { query, path, prettyPath, modelField } = this.props;
-    const type = query.getType(modelField);
-    return (
-      <>
+function Field(props) {
+  const { query, path, prettyPath, modelField } = props;
+  const type = query.getType(modelField);
+  const [toggled, setToggled] = useState(false);
+  return (
+    <>
+      <tr>
+        <td>
+          {modelField.concrete && type.defaultLookup && (
+            <SLink onClick={() => query.addFilter(path, prettyPath)}>
+              filter_alt
+            </SLink>
+          )}
+        </td>
+        <td>
+          {modelField.model && (
+            <SLink
+              className="ToggleLink"
+              onClick={() => setToggled((toggled) => !toggled)}
+            >
+              {toggled ? "remove" : "add"}
+            </SLink>
+          )}
+        </td>
+        <td>
+          {modelField.type ? (
+            <TLink
+              onClick={() => query.addField(path, prettyPath, type.defaultSort)}
+            >
+              {modelField.prettyName}
+            </TLink>
+          ) : (
+            modelField.prettyName
+          )}
+        </td>
+      </tr>
+      {toggled && (
         <tr>
-          <td>
-            {modelField.concrete && type.defaultLookup && (
-              <SLink onClick={() => query.addFilter(path, prettyPath)}>
-                filter_alt
-              </SLink>
-            )}
-          </td>
-          <td>
-            {modelField.model && (
-              <SLink className="ToggleLink" onClick={this.toggle.bind(this)}>
-                {this.state.toggled ? "remove" : "add"}
-              </SLink>
-            )}
-          </td>
-          <td>
-            {modelField.type ? (
-              <TLink
-                onClick={() =>
-                  query.addField(path, prettyPath, type.defaultSort)
-                }
-              >
-                {modelField.prettyName}
-              </TLink>
-            ) : (
-              modelField.prettyName
-            )}
+          <td></td>
+          <td colSpan="2">
+            <AllFields
+              {...{ query, path, prettyPath }}
+              model={modelField.model}
+            />
           </td>
         </tr>
-        {this.state.toggled && (
-          <tr>
-            <td></td>
-            <td colSpan="2">
-              <AllFields
-                {...{ query, path, prettyPath }}
-                model={modelField.model}
-              />
-            </td>
-          </tr>
-        )}
-      </>
-    );
-  }
+      )}
+    </>
+  );
 }
 
 function AllFields(props) {
