@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/browser";
-import React from "react";
+import React, { useState } from "react";
 import { sortBy } from "lodash";
 import {
   BrowserRouter,
@@ -19,9 +19,6 @@ class QueryApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      booting: true,
-      loading: false,
-      error: undefined,
       model: "",
       fields: [],
       filters: [],
@@ -32,14 +29,15 @@ class QueryApp extends React.Component {
 
   handleError(e) {
     if (e.name !== "AbortError") {
-      this.setState({ error: true, loading: false });
+      this.props.setError(true);
+      this.props.setLoading(false);
       console.log(e);
       Sentry.captureException(e);
     }
   }
 
   fetchResults(state) {
-    this.setState({ loading: true });
+    this.props.setLoading(true);
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
     return doGet(url).then((response) => {
@@ -50,9 +48,9 @@ class QueryApp extends React.Component {
         length: response.length,
         formatHints: response.formatHints,
         filterErrors: response.filterErrors,
-        loading: fetchInProgress,
-        error: undefined,
       });
+      this.props.setLoading(fetchInProgress);
+      this.props.setError(undefined);
       return response;
     });
   }
@@ -68,9 +66,6 @@ class QueryApp extends React.Component {
     const url = `${config.baseUrl}query/${model}/${fieldStr}.query${queryStr}`;
     doGet(url).then((response) => {
       const reqState = {
-        booting: false,
-        loading: true,
-        error: undefined,
         model: response.model,
         fields: response.fields,
         filters: response.filters,
@@ -78,6 +73,9 @@ class QueryApp extends React.Component {
         ...empty,
       };
       this.setState(reqState);
+      this.props.setBooting(false);
+      this.props.setLoading(true);
+      this.props.setError(undefined);
       window.history.replaceState(
         reqState,
         null,
@@ -121,7 +119,7 @@ class QueryApp extends React.Component {
   }
 
   render() {
-    if (this.state.booting) return "";
+    if (this.props.booting) return "";
     const query = new Query(
       this.props.config,
       this.state,
@@ -129,6 +127,8 @@ class QueryApp extends React.Component {
     );
     return (
       <QueryPage
+        loading={this.props.loading}
+        error={this.props.error}
         query={query}
         sortedModels={this.props.config.sortedModels}
         allModelFields={this.props.config.allModelFields}
@@ -141,10 +141,21 @@ class QueryApp extends React.Component {
 
 function Bob(props) {
   const { model, fieldStr } = useParams();
+  const [booting, setBooting] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(undefined);
   return (
     <QueryApp
-      {...props}
-      model={model}
+      {...{
+        model,
+        booting,
+        setBooting,
+        loading,
+        setLoading,
+        error,
+        setError,
+        ...props,
+      }}
       fieldStr={fieldStr || ""}
       queryStr={useLocation().search}
     />
