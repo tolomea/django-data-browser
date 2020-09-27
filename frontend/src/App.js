@@ -20,14 +20,6 @@ const LOADING = "Loading...";
 const ERROR = "Error";
 
 class QueryApp extends React.Component {
-  handleError(e) {
-    if (e.name !== "AbortError") {
-      this.props.setStatus(ERROR);
-      console.log(e);
-      Sentry.captureException(e);
-    }
-  }
-
   fetchResults(state) {
     this.props.setStatus(LOADING);
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
@@ -49,7 +41,7 @@ class QueryApp extends React.Component {
 
   popstate(e) {
     this.props.setQuery(e.state);
-    this.fetchResults(e.state).catch(this.handleError.bind(this));
+    this.fetchResults(e.state).catch(this.props.handleError.bind(this));
   }
   popstate = this.popstate.bind(this);
 
@@ -72,7 +64,7 @@ class QueryApp extends React.Component {
         getUrlForQuery(this.props.config.baseUrl, reqState, "html")
       );
       window.addEventListener("popstate", this.popstate);
-      this.fetchResults(this.props.query).catch(this.handleError.bind(this));
+      this.fetchResults(this.props.query).catch(this.props.handleError);
     });
   }
 
@@ -80,41 +72,41 @@ class QueryApp extends React.Component {
     window.removeEventListener("popstate", this.popstate);
   }
 
-  handleQueryChange(queryChange, reload = true) {
-    const newState = { ...this.props.query, ...queryChange };
-
-    this.props.setQuery(newState);
-    if (!reload) return;
-
-    const request = {
-      model: newState.model,
-      fields: newState.fields,
-      filters: newState.filters,
-      limit: newState.limit,
-      ...empty,
-    };
-    window.history.pushState(
-      request,
-      null,
-      getUrlForQuery(this.props.config.baseUrl, newState, "html")
-    );
-    this.fetchResults(newState)
-      .then((response) => {
-        const res = { ...response, ...empty };
-        res.filters = sortBy(res.filters, ["pathStr"]);
-        const req = { ...request };
-        req.filters = sortBy(req.filters, ["pathStr"]);
-        assert.deepStrictEqual(res, req);
-      })
-      .catch(this.handleError.bind(this));
-  }
-
   render() {
+    const handleQueryChange = (queryChange, reload = true) => {
+      const newState = { ...this.props.query, ...queryChange };
+
+      this.props.setQuery(newState);
+      if (!reload) return;
+
+      const request = {
+        model: newState.model,
+        fields: newState.fields,
+        filters: newState.filters,
+        limit: newState.limit,
+        ...empty,
+      };
+      window.history.pushState(
+        request,
+        null,
+        getUrlForQuery(this.props.config.baseUrl, newState, "html")
+      );
+      this.fetchResults(newState)
+        .then((response) => {
+          const res = { ...response, ...empty };
+          res.filters = sortBy(res.filters, ["pathStr"]);
+          const req = { ...request };
+          req.filters = sortBy(req.filters, ["pathStr"]);
+          assert.deepStrictEqual(res, req);
+        })
+        .catch(this.props.handleError);
+    };
+
     if (this.props.status === BOOTING) return "";
     const query = new Query(
       this.props.config,
       this.props.query,
-      this.handleQueryChange.bind(this)
+      handleQueryChange
     );
     return (
       <QueryPage
@@ -139,6 +131,14 @@ function Bob(props) {
     limit: props.config.defaultRowLimit,
     ...empty,
   });
+  const handleError = (e) => {
+    if (e.name !== "AbortError") {
+      setStatus(ERROR);
+      console.log(e);
+      Sentry.captureException(e);
+    }
+  };
+
   return (
     <QueryApp
       {...{
@@ -147,6 +147,7 @@ function Bob(props) {
         setStatus,
         query,
         setQuery,
+        handleError,
         ...props,
       }}
       fieldStr={fieldStr || ""}
