@@ -19,58 +19,7 @@ const BOOTING = "Booting...";
 const LOADING = "Loading...";
 const ERROR = "Error";
 
-class QueryApp extends React.Component {
-  render() {
-    const handleQueryChange = (queryChange, reload = true) => {
-      const newState = { ...this.props.query, ...queryChange };
-
-      this.props.setQuery(newState);
-      if (!reload) return;
-
-      const request = {
-        model: newState.model,
-        fields: newState.fields,
-        filters: newState.filters,
-        limit: newState.limit,
-        ...empty,
-      };
-      window.history.pushState(
-        request,
-        null,
-        getUrlForQuery(this.props.config.baseUrl, newState, "html")
-      );
-      this.props
-        .fetchResults(newState)
-        .then((response) => {
-          const res = { ...response, ...empty };
-          res.filters = sortBy(res.filters, ["pathStr"]);
-          const req = { ...request };
-          req.filters = sortBy(req.filters, ["pathStr"]);
-          assert.deepStrictEqual(res, req);
-        })
-        .catch(this.props.handleError);
-    };
-
-    if (this.props.status === BOOTING) return "";
-    const query = new Query(
-      this.props.config,
-      this.props.query,
-      handleQueryChange
-    );
-    return (
-      <QueryPage
-        overlay={this.props.status}
-        query={query}
-        sortedModels={this.props.config.sortedModels}
-        allModelFields={this.props.config.allModelFields}
-        baseUrl={this.props.config.baseUrl}
-        {...this.props.query}
-      />
-    );
-  }
-}
-
-function Bob(props) {
+function QueryApp(props) {
   const { config } = props;
   const { model, fieldStr } = useParams();
   const [status, setStatus] = useState(BOOTING);
@@ -145,20 +94,45 @@ function Bob(props) {
     // eslint-disable-next-line
   }, []);
 
+  const handleQueryChange = (queryChange, reload = true) => {
+    const newState = { ...query, ...queryChange };
+
+    setQuery(newState);
+    if (!reload) return;
+
+    const request = {
+      model: newState.model,
+      fields: newState.fields,
+      filters: newState.filters,
+      limit: newState.limit,
+      ...empty,
+    };
+    window.history.pushState(
+      request,
+      null,
+      getUrlForQuery(config.baseUrl, newState, "html")
+    );
+    fetchResults(newState)
+      .then((response) => {
+        const res = { ...response, ...empty };
+        res.filters = sortBy(res.filters, ["pathStr"]);
+        const req = { ...request };
+        req.filters = sortBy(req.filters, ["pathStr"]);
+        assert.deepStrictEqual(res, req);
+      })
+      .catch(handleError);
+  };
+
+  if (status === BOOTING) return "";
+  const queryObj = new Query(config, query, handleQueryChange);
   return (
-    <QueryApp
-      {...{
-        model,
-        status,
-        setStatus,
-        query,
-        setQuery,
-        handleError,
-        fetchResults,
-        queryStr,
-        fieldStr,
-        ...props,
-      }}
+    <QueryPage
+      overlay={status}
+      query={queryObj}
+      sortedModels={config.sortedModels}
+      allModelFields={config.allModelFields}
+      baseUrl={config.baseUrl}
+      {...query}
     />
   );
 }
@@ -171,7 +145,7 @@ function App(props) {
       <div id="body">
         <Switch>
           <Route path="/query/:model/:fieldStr?.html">
-            <Bob config={props} {...{ sortedModels }} />
+            <QueryApp config={props} />
           </Route>
           <Route path="/views/:pk.html">
             <EditSavedView {...{ baseUrl, canMakePublic }} />
