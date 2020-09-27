@@ -16,17 +16,6 @@ import { doGet, fetchInProgress } from "./Util";
 const assert = require("assert");
 
 class QueryApp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      model: "",
-      fields: [],
-      filters: [],
-      limit: props.config.defaultRowLimit,
-      ...empty,
-    };
-  }
-
   handleError(e) {
     if (e.name !== "AbortError") {
       this.props.setError(true);
@@ -41,7 +30,8 @@ class QueryApp extends React.Component {
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
     return doGet(url).then((response) => {
-      this.setState({
+      this.props.setQuery({
+        ...this.props.query,
         body: response.body,
         cols: response.cols,
         rows: response.rows,
@@ -56,7 +46,7 @@ class QueryApp extends React.Component {
   }
 
   popstate(e) {
-    this.setState(e.state);
+    this.props.setQuery(e.state);
     this.fetchResults(e.state).catch(this.handleError.bind(this));
   }
   popstate = this.popstate.bind(this);
@@ -72,7 +62,7 @@ class QueryApp extends React.Component {
         limit: response.limit,
         ...empty,
       };
-      this.setState(reqState);
+      this.props.setQuery(reqState);
       this.props.setBooting(false);
       this.props.setLoading(true);
       this.props.setError(undefined);
@@ -82,7 +72,7 @@ class QueryApp extends React.Component {
         getUrlForQuery(this.props.config.baseUrl, reqState, "html")
       );
       window.addEventListener("popstate", this.popstate);
-      this.fetchResults(this.state).catch(this.handleError.bind(this));
+      this.fetchResults(this.props.query).catch(this.handleError.bind(this));
     });
   }
 
@@ -91,10 +81,11 @@ class QueryApp extends React.Component {
   }
 
   handleQueryChange(queryChange, reload = true) {
-    this.setState(queryChange);
+    const newState = { ...this.props.query, ...queryChange };
+
+    this.props.setQuery(newState);
     if (!reload) return;
 
-    const newState = { ...this.state, ...queryChange };
     const request = {
       model: newState.model,
       fields: newState.fields,
@@ -122,7 +113,7 @@ class QueryApp extends React.Component {
     if (this.props.booting) return "";
     const query = new Query(
       this.props.config,
-      this.state,
+      this.props.query,
       this.handleQueryChange.bind(this)
     );
     return (
@@ -133,7 +124,7 @@ class QueryApp extends React.Component {
         sortedModels={this.props.config.sortedModels}
         allModelFields={this.props.config.allModelFields}
         baseUrl={this.props.config.baseUrl}
-        {...this.state}
+        {...this.props.query}
       />
     );
   }
@@ -144,6 +135,13 @@ function Bob(props) {
   const [booting, setBooting] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(undefined);
+  const [query, setQuery] = useState({
+    model: "",
+    fields: [],
+    filters: [],
+    limit: props.config.defaultRowLimit,
+    ...empty,
+  });
   return (
     <QueryApp
       {...{
@@ -154,6 +152,8 @@ function Bob(props) {
         setLoading,
         error,
         setError,
+        query,
+        setQuery,
         ...props,
       }}
       fieldStr={fieldStr || ""}
