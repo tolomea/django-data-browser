@@ -20,28 +20,9 @@ const LOADING = "Loading...";
 const ERROR = "Error";
 
 class QueryApp extends React.Component {
-  fetchResults(state) {
-    this.props.setStatus(LOADING);
-    const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
-
-    return doGet(url).then((response) => {
-      this.props.setQuery({
-        ...this.props.query,
-        body: response.body,
-        cols: response.cols,
-        rows: response.rows,
-        length: response.length,
-        formatHints: response.formatHints,
-        filterErrors: response.filterErrors,
-      });
-      this.props.setStatus(fetchInProgress ? LOADING : undefined);
-      return response;
-    });
-  }
-
   popstate(e) {
     this.props.setQuery(e.state);
-    this.fetchResults(e.state).catch(this.props.handleError.bind(this));
+    this.props.fetchResults(e.state).catch(this.props.handleError.bind(this));
   }
   popstate = this.popstate.bind(this);
 
@@ -64,7 +45,7 @@ class QueryApp extends React.Component {
         getUrlForQuery(this.props.config.baseUrl, reqState, "html")
       );
       window.addEventListener("popstate", this.popstate);
-      this.fetchResults(this.props.query).catch(this.props.handleError);
+      this.props.fetchResults(this.props.query).catch(this.props.handleError);
     });
   }
 
@@ -91,7 +72,8 @@ class QueryApp extends React.Component {
         null,
         getUrlForQuery(this.props.config.baseUrl, newState, "html")
       );
-      this.fetchResults(newState)
+      this.props
+        .fetchResults(newState)
         .then((response) => {
           const res = { ...response, ...empty };
           res.filters = sortBy(res.filters, ["pathStr"]);
@@ -122,21 +104,42 @@ class QueryApp extends React.Component {
 }
 
 function Bob(props) {
+  const { config } = props;
   const { model, fieldStr } = useParams();
   const [status, setStatus] = useState(BOOTING);
   const [query, setQuery] = useState({
     model: "",
     fields: [],
     filters: [],
-    limit: props.config.defaultRowLimit,
+    limit: config.defaultRowLimit,
     ...empty,
   });
+
   const handleError = (e) => {
     if (e.name !== "AbortError") {
       setStatus(ERROR);
       console.log(e);
       Sentry.captureException(e);
     }
+  };
+
+  const fetchResults = (state) => {
+    setStatus(LOADING);
+    const url = getUrlForQuery(config.baseUrl, state, "json");
+
+    return doGet(url).then((response) => {
+      setQuery((query) => ({
+        ...query,
+        body: response.body,
+        cols: response.cols,
+        rows: response.rows,
+        length: response.length,
+        formatHints: response.formatHints,
+        filterErrors: response.filterErrors,
+      }));
+      setStatus(fetchInProgress ? LOADING : undefined);
+      return response;
+    });
   };
 
   return (
@@ -148,6 +151,7 @@ function Bob(props) {
         query,
         setQuery,
         handleError,
+        fetchResults,
         ...props,
       }}
       fieldStr={fieldStr || ""}
