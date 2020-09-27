@@ -284,14 +284,9 @@ function QueryPage(props) {
     filters,
     filterErrors,
     baseUrl,
-    loading,
-    error,
+    overlay,
     formatHints,
   } = props;
-
-  let overlay;
-  if (loading) overlay = "Loading...";
-  else if (error) overlay = "Error";
 
   let results;
   if (query.rowFields().length || query.colFields().length)

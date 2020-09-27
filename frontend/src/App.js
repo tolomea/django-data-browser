@@ -15,18 +15,21 @@ import { doGet, fetchInProgress } from "./Util";
 
 const assert = require("assert");
 
+const BOOTING = "Booting...";
+const LOADING = "Loading...";
+const ERROR = "Error";
+
 class QueryApp extends React.Component {
   handleError(e) {
     if (e.name !== "AbortError") {
-      this.props.setError(true);
-      this.props.setLoading(false);
+      this.props.setStatus(ERROR);
       console.log(e);
       Sentry.captureException(e);
     }
   }
 
   fetchResults(state) {
-    this.props.setLoading(true);
+    this.props.setStatus(LOADING);
     const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
 
     return doGet(url).then((response) => {
@@ -39,8 +42,7 @@ class QueryApp extends React.Component {
         formatHints: response.formatHints,
         filterErrors: response.filterErrors,
       });
-      this.props.setLoading(fetchInProgress);
-      this.props.setError(undefined);
+      this.props.setStatus(fetchInProgress ? LOADING : undefined);
       return response;
     });
   }
@@ -63,9 +65,7 @@ class QueryApp extends React.Component {
         ...empty,
       };
       this.props.setQuery(reqState);
-      this.props.setBooting(false);
-      this.props.setLoading(true);
-      this.props.setError(undefined);
+      this.props.setStatus(LOADING);
       window.history.replaceState(
         reqState,
         null,
@@ -110,7 +110,7 @@ class QueryApp extends React.Component {
   }
 
   render() {
-    if (this.props.booting) return "";
+    if (this.props.status === BOOTING) return "";
     const query = new Query(
       this.props.config,
       this.props.query,
@@ -118,8 +118,7 @@ class QueryApp extends React.Component {
     );
     return (
       <QueryPage
-        loading={this.props.loading}
-        error={this.props.error}
+        overlay={this.props.status}
         query={query}
         sortedModels={this.props.config.sortedModels}
         allModelFields={this.props.config.allModelFields}
@@ -132,9 +131,7 @@ class QueryApp extends React.Component {
 
 function Bob(props) {
   const { model, fieldStr } = useParams();
-  const [booting, setBooting] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(undefined);
+  const [status, setStatus] = useState(BOOTING);
   const [query, setQuery] = useState({
     model: "",
     fields: [],
@@ -146,12 +143,8 @@ function Bob(props) {
     <QueryApp
       {...{
         model,
-        booting,
-        setBooting,
-        loading,
-        setLoading,
-        error,
-        setError,
+        status,
+        setStatus,
         query,
         setQuery,
         ...props,
