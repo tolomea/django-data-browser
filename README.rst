@@ -287,7 +287,7 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
-|           |                | | Handle callables in ModelAdmin.list_display.                                   |
+| 2.2.15    | 2020-09-27     | | Handle callables in ModelAdmin.list_display.                                   |
 |           |                | | Add ``data_browser.helpers.attributes``.                                       |
 |           |                | | Deprecated ``@ddb_hide`` in favor of ``@attributes(ddb_hide=True)``.           |
 |           |                | | Render safestrings returned by calculated fields as HTML.                      |
