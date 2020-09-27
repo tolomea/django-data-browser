@@ -289,6 +289,7 @@ Release History
 +===========+================+==================================================================================+
 |           |                | | Handle callables in ModelAdmin.list_display.                                   |
 |           |                | | Add ``data_browser.helpers.attributes``.                                       |
+|           |                | | Deprecated ``@ddb_hide`` in favor of ``@attributes(ddb_hide=True)``.           |
 |           |                | | Render safestrings returned by calculated fields as HTML.                      |
 |           |                | | Respect the ``boolean`` attribute on calculated fields.                        |
 |           |                | | Aside from declared booleans, calculated fields now always format as strings.  |

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.db.models import F
 
-from data_browser.helpers import AdminMixin, annotation, attributes, ddb_hide
+from data_browser.helpers import AdminMixin, annotation, attributes
 
 from . import models
 
@@ -105,7 +105,7 @@ class ProductMixin:
     readonly_fields = ["id", "is_onsale", "hidden_calculated"]
     ddb_default_filters = "default=filter&filter=default"
 
-    @ddb_hide
+    @attributes(ddb_hide=True)
     def hidden_calculated(self, obj):
         return obj
 
