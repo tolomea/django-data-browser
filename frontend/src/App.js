@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/browser";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { sortBy } from "lodash";
 import {
   BrowserRouter,
@@ -20,39 +20,6 @@ const LOADING = "Loading...";
 const ERROR = "Error";
 
 class QueryApp extends React.Component {
-  popstate(e) {
-    this.props.setQuery(e.state);
-    this.props.fetchResults(e.state).catch(this.props.handleError.bind(this));
-  }
-  popstate = this.popstate.bind(this);
-
-  componentDidMount() {
-    const { model, fieldStr, queryStr, config } = this.props;
-    const url = `${config.baseUrl}query/${model}/${fieldStr}.query${queryStr}`;
-    doGet(url).then((response) => {
-      const reqState = {
-        model: response.model,
-        fields: response.fields,
-        filters: response.filters,
-        limit: response.limit,
-        ...empty,
-      };
-      this.props.setQuery(reqState);
-      this.props.setStatus(LOADING);
-      window.history.replaceState(
-        reqState,
-        null,
-        getUrlForQuery(this.props.config.baseUrl, reqState, "html")
-      );
-      window.addEventListener("popstate", this.popstate);
-      this.props.fetchResults(this.props.query).catch(this.props.handleError);
-    });
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("popstate", this.popstate);
-  }
-
   render() {
     const handleQueryChange = (queryChange, reload = true) => {
       const newState = { ...this.props.query, ...queryChange };
@@ -114,6 +81,7 @@ function Bob(props) {
     limit: config.defaultRowLimit,
     ...empty,
   });
+  const queryStr = useLocation().search;
 
   const handleError = (e) => {
     if (e.name !== "AbortError") {
@@ -142,6 +110,41 @@ function Bob(props) {
     });
   };
 
+  useEffect(() => {
+    const popstate = (e) => {
+      setQuery(e.state);
+      fetchResults(e.state).catch(handleError);
+    };
+
+    const url = `${config.baseUrl}query/${model}/${
+      fieldStr || ""
+    }.query${queryStr}`;
+
+    doGet(url).then((response) => {
+      const reqState = {
+        model: response.model,
+        fields: response.fields,
+        filters: response.filters,
+        limit: response.limit,
+        ...empty,
+      };
+      setQuery(reqState);
+      setStatus(LOADING);
+      window.history.replaceState(
+        reqState,
+        null,
+        getUrlForQuery(config.baseUrl, reqState, "html")
+      );
+      window.addEventListener("popstate", popstate);
+      fetchResults(reqState).catch(handleError);
+    });
+
+    return () => {
+      window.removeEventListener("popstate", popstate);
+    };
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <QueryApp
       {...{
@@ -152,10 +155,10 @@ function Bob(props) {
         setQuery,
         handleError,
         fetchResults,
+        queryStr,
+        fieldStr,
         ...props,
       }}
-      fieldStr={fieldStr || ""}
-      queryStr={useLocation().search}
     />
   );
 }
