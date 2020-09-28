@@ -98,7 +98,6 @@ function QueryApp(props) {
     const newState = { ...query, ...queryChange };
 
     setQuery(newState);
-    if (!reload) return;
 
     const request = {
       model: newState.model,
@@ -112,6 +111,9 @@ function QueryApp(props) {
       null,
       getUrlForQuery(config.baseUrl, newState, "html")
     );
+
+    if (!reload) return;
+
     fetchResults(newState)
       .then((response) => {
         const res = { ...response, ...empty };

@@ -287,8 +287,13 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
-|           |                | | Handle callables in ModelAdmin.list_display.                                   |
+| 2.2.16    | 2020-09-28     | | Fix being unable to reorder aggregates when there is no pivot.                 |
+|           |                | | Fix back button sometimes not remembering column reorderings.                  |
+|           |                | | Fix reordering columns while a long reload is in progress causes an error.     |
++-----------+----------------+----------------------------------------------------------------------------------+
+| 2.2.15    | 2020-09-27     | | Handle callables in ModelAdmin.list_display.                                   |
 |           |                | | Add ``data_browser.helpers.attributes``.                                       |
+|           |                | | Deprecated ``@ddb_hide`` in favor of ``@attributes(ddb_hide=True)``.           |
 |           |                | | Render safestrings returned by calculated fields as HTML.                      |
 |           |                | | Respect the ``boolean`` attribute on calculated fields.                        |
 |           |                | | Aside from declared booleans, calculated fields now always format as strings.  |

@@ -1,3 +1,5 @@
+import logging
+
 from django.db.models import BooleanField
 from django.urls import reverse
 
@@ -95,8 +97,10 @@ class AnnotationDescriptor:
         return getattr(obj, self.name)
 
 
-# deprecated in favor of @attributes(ddb_hide=True)
-def ddb_hide(func):
+def ddb_hide(func):  # pragma: no cover
+    logging.getLogger(__name__).warning(
+        "ddb_hide is deprecated in favor of @attributes(ddb_hide=True)"
+    )
     func.ddb_hide = True
     return func
 
