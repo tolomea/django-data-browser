@@ -94,7 +94,6 @@ class QueryApp extends React.Component {
 
   handleQueryChange(queryChange, reload = true) {
     this.setState(queryChange);
-    if (!reload) return;
 
     const newState = { ...this.state, ...queryChange };
     const request = {
@@ -109,6 +108,9 @@ class QueryApp extends React.Component {
       null,
       getUrlForQuery(this.props.config.baseUrl, newState, "html")
     );
+
+    if (!reload) return;
+
     this.fetchResults(newState)
       .then((response) => {
         const res = { ...response, ...empty };

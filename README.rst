@@ -288,6 +288,7 @@ Release History
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
 |           |                | | Fix being unable to reorder aggregates when there is no pivot.                 |
+|           |                | | Fix back button sometimes not remembering column reorderings.                  |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.15    | 2020-09-27     | | Handle callables in ModelAdmin.list_display.                                   |
 |           |                | | Add ``data_browser.helpers.attributes``.                                       |
