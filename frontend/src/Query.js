@@ -99,9 +99,9 @@ class Query {
     const modelField = this.getField(field.path);
 
     // get the fields in their sections
-    const colFields = this.colFields();
-    const rowFields = this.rowFields();
-    const resFields = this.resFields();
+    const colFields = this.colFields().slice();
+    const rowFields = this.rowFields().slice();
+    const resFields = this.resFields().slice();
 
     // pick the section our field is in
     let fields = null;
@@ -118,7 +118,10 @@ class Query {
     if (0 <= newIndex && newIndex < fields.length) {
       fields.splice(index, 1);
       fields.splice(newIndex, 0, field);
-      this.setQuery({ fields: rowFields.concat(colFields, resFields) }, false);
+      this.setQuery(
+        { fields: [].concat(rowFields, colFields, resFields) },
+        false
+      );
     }
   }
 
