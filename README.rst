@@ -287,6 +287,8 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
+|           |                | | Fix error when choices field has an unexpected value.                          |
++-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.16    | 2020-09-28     | | Fix being unable to reorder aggregates when there is no pivot.                 |
 |           |                | | Fix back button sometimes not remembering column reorderings.                  |
 |           |                | | Fix reordering columns while a long reload is in progress causes an error.     |

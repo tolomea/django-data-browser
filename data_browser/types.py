@@ -93,7 +93,7 @@ class ChoiceTypeMixin:
     @staticmethod
     def format(value, choices=None):
         assert choices
-        return dict(choices)[value]
+        return dict(choices).get(value, value)
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):

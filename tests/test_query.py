@@ -451,7 +451,13 @@ class TestStringChoiceType:
     def test_format(self):
         assert StringChoiceType.format("b", [("a", "A"), ("b", "B"), ("c", "C")]) == "B"
 
+    def test_bad_value(self):
+        assert StringChoiceType.format("x", [("a", "A"), ("b", "B"), ("c", "C")]) == "x"
+
 
 class TestNumberChoiceType:
     def test_format(self):
         assert NumberChoiceType.format(2, [(1, "A"), (2, "B"), (3, "C")]) == "B"
+
+    def test_bad_value(self):
+        assert NumberChoiceType.format(6, [(1, "A"), (2, "B"), (3, "C")]) == 6
