@@ -187,10 +187,14 @@ def _get_data_and_all_keys(bound_query, res):
 
 def _get_keys(res, fields, all_keys):
     keys = {}  # abuse dict to preserve order while removing duplicates
-    for row in res:
-        key = _get_fields(row, fields)
-        if key in all_keys:
-            keys[key] = None
+    if fields:
+        for row in res:
+            key = _get_fields(row, fields)
+            if key in all_keys:
+                keys[key] = None
+    else:
+        if res:
+            keys[()] = None
     return keys
 
 

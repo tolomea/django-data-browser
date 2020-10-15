@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Any, Optional, Sequence
 
 from django.urls import reverse
+from django.utils.functional import cached_property
 
 from .common import settings
 from .types import ASC, DSC
@@ -121,15 +122,15 @@ class Query:
 
 
 class BoundFieldMixin:
-    @property
+    @cached_property
     def path(self):
         return self.orm_bound_field.full_path
 
-    @property
+    @cached_property
     def pretty_path(self):
         return self.orm_bound_field.pretty_path
 
-    @property
+    @cached_property
     def path_str(self):
         return self.orm_bound_field.path_str
 
@@ -212,19 +213,19 @@ class BoundQuery:
 
         return cls(model_name, fields, filters, query.limit)
 
-    @property
+    @cached_property
     def sort_fields(self):
         return sorted((f for f in self.fields if f.direction), key=lambda f: f.priority)
 
-    @property
+    @cached_property
     def valid_filters(self):
         return [f for f in self.filters if f.is_valid]
 
-    @property
+    @cached_property
     def col_fields(self):
         return [f for f in self.fields if f.pivoted]
 
-    @property
+    @cached_property
     def row_fields(self):
         if self.col_fields:
             return [
@@ -233,29 +234,29 @@ class BoundQuery:
         else:
             return self.fields
 
-    @property
+    @cached_property
     def data_fields(self):
         if self.col_fields:
             return [f for f in self.fields if not f.orm_bound_field.can_pivot]
         else:
             return []
 
-    @property
+    @cached_property
     def bound_fields(self):
         return _orm_fields(self.fields)
 
-    @property
+    @cached_property
     def bound_filters(self):
         return _orm_fields(self.valid_filters)
 
-    @property
+    @cached_property
     def bound_col_fields(self):
         return _orm_fields(self.col_fields)
 
-    @property
+    @cached_property
     def bound_row_fields(self):
         return _orm_fields(self.row_fields)
 
-    @property
+    @cached_property
     def bound_data_fields(self):
         return _orm_fields(self.data_fields)
