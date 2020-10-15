@@ -115,23 +115,11 @@ def get_result_queryset(request, bound_query, orm_models):
     return qs[: bound_query.limit]
 
 
-def get_results(request, bound_query, orm_models):
-    if not bound_query.fields:
-        return {"rows": [], "cols": [], "body": []}
+def _get_result_list(request, bound_query, orm_models):
+    return list(get_result_queryset(request, bound_query, orm_models))
 
-    if bound_query.bound_col_fields and bound_query.bound_row_fields:
-        res = list(get_result_queryset(request, bound_query, orm_models))
-        rows_res = list(
-            get_result_queryset(request, _rows_sub_query(bound_query), orm_models)
-        )
-        cols_res = list(
-            get_result_queryset(request, _cols_sub_query(bound_query), orm_models)
-        )
-    else:
-        res = list(get_result_queryset(request, bound_query, orm_models))
-        rows_res = res
-        cols_res = res
 
+def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
     # gather up all the objects to fetch for calculated fields
     to_load = defaultdict(set)
     loading_for = defaultdict(set)
@@ -143,76 +131,106 @@ def get_results(request, bound_query, orm_models):
                 pks.add(row[field.queryset_path])
 
     # fetch all the calculated field objects
-    cache = {}
+    objs = {}
     for model_name, pks in to_load.items():
         admin = orm_models[model_name].admin
-        cache[model_name] = admin_get_queryset(
+        objs[model_name] = admin_get_queryset(
             admin, request, loading_for[model_name]
         ).in_bulk(pks)
 
-    # dump out the results
-    def format_table(fields, data):
-        results = []
-        for row in data:
-            if row:
-                res_row = {}
-                for field in fields:
-                    value = row[field.queryset_path]
-                    if field.model_name:
-                        value = cache[field.model_name].get(value)
-                    res_row[field.path_str] = field.format(value)
-                results.append(res_row)
-            else:
-                results.append(row)
-        return results
+    return objs
 
-    def get_fields(row, fields):
-        res = []
-        for field in fields:
-            v = row[field.queryset_path]
-            if isinstance(v, list):  # pragma: postgres
-                v = tuple(v)
-            try:
-                hash(v)
-            except TypeError:
-                v = json.dumps(v)
-            res.append((field.queryset_path, v))
-        return tuple(res)
 
+# dump out the results
+def _format_table(fields, data, objs):
+    results = []
+    for row in data:
+        if row:
+            res_row = {}
+            for field in fields:
+                value = row[field.queryset_path]
+                if field.model_name:
+                    value = objs[field.model_name].get(value)
+                res_row[field.path_str] = field.format(value)
+            results.append(res_row)
+        else:
+            results.append(row)
+    return results
+
+
+def _get_fields(row, fields):
+    res = []
+    for field in fields:
+        v = row[field.queryset_path]
+        if isinstance(v, list):  # pragma: postgres
+            v = tuple(v)
+        try:
+            hash(v)
+        except TypeError:
+            v = json.dumps(v)
+        res.append((field.queryset_path, v))
+    return tuple(res)
+
+
+def _get_data_and_all_keys(bound_query, res):
     data = defaultdict(dict)
     all_row_keys = set()
     all_col_keys = set()
     for row in res:
-        row_key = get_fields(row, bound_query.bound_row_fields)
-        col_key = get_fields(row, bound_query.bound_col_fields)
-        data[row_key][col_key] = dict(get_fields(row, bound_query.bound_data_fields))
+        row_key = _get_fields(row, bound_query.bound_row_fields)
+        col_key = _get_fields(row, bound_query.bound_col_fields)
+        data[row_key][col_key] = dict(_get_fields(row, bound_query.bound_data_fields))
         all_row_keys.add(row_key)
         all_col_keys.add(col_key)
+    return data, all_row_keys, all_col_keys
 
-    col_keys = {}  # abuse dict to preserve order while removing duplicates
-    for row in cols_res:
-        key = get_fields(row, bound_query.bound_col_fields)
-        if key in all_col_keys:
-            col_keys[key] = None
 
-    row_keys = {}  # abuse dict to preserve order while removing duplicates
-    for row in rows_res:
-        key = get_fields(row, bound_query.bound_row_fields)
-        if key in all_row_keys:
-            row_keys[key] = None
+def _get_keys(res, fields, all_keys):
+    keys = {}  # abuse dict to preserve order while removing duplicates
+    for row in res:
+        key = _get_fields(row, fields)
+        if key in all_keys:
+            keys[key] = None
+    return keys
 
+
+def _format_grid(data, col_keys, row_keys, fields, objs):
     body_data = []
     for col_key in col_keys:
         table = []
         for row_key in row_keys:
             table.append(data[row_key].get(col_key, None))
-        body_data.append(format_table(bound_query.bound_data_fields, table))
+        body_data.append(_format_table(fields, table, objs))
+    return body_data
 
-    row_data = format_table(
-        bound_query.bound_row_fields, [dict(row) for row in row_keys]
+
+def get_results(request, bound_query, orm_models):
+    if not bound_query.fields:
+        return {"rows": [], "cols": [], "body": []}
+
+    res = _get_result_list(request, bound_query, orm_models)
+    if bound_query.bound_col_fields and bound_query.bound_row_fields:
+        rows_res = _get_result_list(request, _rows_sub_query(bound_query), orm_models)
+        cols_res = _get_result_list(request, _cols_sub_query(bound_query), orm_models)
+    else:
+        rows_res = res
+        cols_res = res
+
+    objs = _get_objs_for_calculated_fields(request, bound_query, orm_models, res)
+
+    data, all_row_keys, all_col_keys = _get_data_and_all_keys(bound_query, res)
+
+    col_keys = _get_keys(cols_res, bound_query.bound_col_fields, all_col_keys)
+    row_keys = _get_keys(rows_res, bound_query.bound_row_fields, all_row_keys)
+
+    body_data = _format_grid(
+        data, col_keys, row_keys, bound_query.bound_data_fields, objs
     )
-    col_data = format_table(
-        bound_query.bound_col_fields, [dict(col) for col in col_keys]
+    row_data = _format_table(
+        bound_query.bound_row_fields, [dict(row) for row in row_keys], objs
+    )
+    col_data = _format_table(
+        bound_query.bound_col_fields, [dict(col) for col in col_keys], objs
     )
 
     format_hints = {}
