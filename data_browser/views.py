@@ -171,15 +171,15 @@ def pad(x):
 
 
 def concat(*lists):
-    return list(itertools.chain.from_iterable(lists))
+    return itertools.chain.from_iterable(lists)
 
 
 def flip_table(table):
-    return [list(x) for x in zip(*table)]
+    return (list(x) for x in zip(*table))
 
 
 def join_tables(*tables):
-    return [concat(*ts) for ts in zip(*tables)]
+    return (list(concat(*ts)) for ts in zip(*tables))
 
 
 def format_table(fields, table, spacing=0):
@@ -194,7 +194,13 @@ def format_table(fields, table, spacing=0):
 
 
 def pad_table(x, table):
-    return [pad(x) + row for row in table]
+    p = pad(x)
+    return (p + row for row in table)
+
+
+class Echo:
+    def write(self, value):
+        return value
 
 
 def _data_response(request, query, media, privilaged=False, profiler=None):
@@ -233,12 +239,10 @@ def _data_response(request, query, media, privilaged=False, profiler=None):
             assert False
     elif media == "csv":
         results = get_results(request, bound_query, orm_models)
-        buffer = io.StringIO()
-        writer = csv.writer(buffer)
 
-        # the pivoted column headers
-        writer.writerows(
-            pad_table(
+        def csv_rows():
+            # the pivoted column headers
+            yield from pad_table(
                 len(bound_query.row_fields) - 1,
                 flip_table(
                     format_table(
@@ -248,11 +252,9 @@ def _data_response(request, query, media, privilaged=False, profiler=None):
                     )
                 ),
             )
-        )
 
-        # the row headers and data area
-        writer.writerows(
-            pad_table(
+            # the row headers and data area
+            yield from pad_table(
                 1 - len(bound_query.row_fields),
                 join_tables(
                     format_table(bound_query.row_fields, results["rows"]),
@@ -262,10 +264,11 @@ def _data_response(request, query, media, privilaged=False, profiler=None):
                     ),
                 ),
             )
-        )
 
-        buffer.seek(0)
-        response = HttpResponse(buffer, content_type="text/csv")
+        writer = csv.writer(Echo())
+        response = http.StreamingHttpResponse(
+            (writer.writerow(row) for row in csv_rows()), content_type="text/csv"
+        )
         response[
             "Content-Disposition"
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
