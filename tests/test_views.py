@@ -63,7 +63,7 @@ def test_query_query(admin_client, snapshot):
     snapshot.assert_match(query, "query")
 
 
-@pytest.mark.parametrize("format", ["sql", "profile", "pstats"])
+@pytest.mark.parametrize("format", ["sql", "profile", "pstats", "profile_sql"])
 def test_query_misc_formats(admin_client, format):
     # we're not going to check the result as they vary it's sufficient that it doesn't blow up
     res = admin_client.get(

@@ -142,7 +142,7 @@ def query_html(request, *, model_name="", fields=""):
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
     profiler = None
-    if media in {"profile", "pstats"}:
+    if media.startswith("profile") or media.startswith("pstats"):
         profiler = cProfile.Profile()
         profiler.enable()
 
@@ -204,29 +204,27 @@ class Echo:
 
 
 def _data_response(request, query, media, privilaged=False, profiler=None):
-    orm_models = get_models(request)
-    if query.model_name not in orm_models:
-        raise http.Http404(f"{query.model_name} does not exist")
-    bound_query = BoundQuery.bind(query, orm_models)
+    if profiler and privilaged:
+        if "_" in media:
+            prof_media, media = media.split("_")
+        else:
+            prof_media = media
+            media = "json"
 
-    if profiler:
-        # get the results
-        results = get_results(request, bound_query, orm_models)
-        resp = _get_query_data(bound_query) if privilaged else {}
-        resp.update(results)
+        # get the actual results
+        _data_response(request, query, media, privilaged=privilaged).getvalue()
 
-        # and throw them away and stop profiling
-        del resp
+        # stop profiling
         profiler.disable()
 
-        if media == "profile":
+        if prof_media == "profile":
             buffer = io.StringIO()
             stats = pstats.Stats(profiler, stream=buffer)
             stats.sort_stats("cumulative").print_stats(50)
             stats.sort_stats("time").print_stats(50)
             buffer.seek(0)
             return HttpResponse(buffer, content_type="text/plain")
-        elif media == "pstats":
+        elif prof_media == "pstats":
             buffer = io.BytesIO()
             marshal.dump(pstats.Stats(profiler).stats, buffer)
             buffer.seek(0)
@@ -237,7 +235,13 @@ def _data_response(request, query, media, privilaged=False, profiler=None):
             return response
         else:
             assert False
-    elif media == "csv":
+
+    orm_models = get_models(request)
+    if query.model_name not in orm_models:
+        raise http.Http404(f"{query.model_name} does not exist")
+    bound_query = BoundQuery.bind(query, orm_models)
+
+    if media == "csv":
         results = get_results(request, bound_query, orm_models)
 
         def csv_rows():
