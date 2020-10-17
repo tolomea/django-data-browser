@@ -143,19 +143,19 @@ def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
 
 # dump out the results
 def _format_table(fields, data, objs):
-    results = []
-    for row in data:
-        if row:
-            res_row = {}
-            for field in fields:
-                value = row[field.queryset_path]
-                if field.model_name:
-                    value = objs[field.model_name].get(value)
-                res_row[field.path_str] = field.format(value)
-            results.append(res_row)
-        else:
-            results.append(row)
-    return results
+    namespace = {"objs": objs, "data": data}
+
+    field_lines = []
+    for i, field in enumerate(fields):
+        namespace[f"format_{i}"] = field.format
+        value = f"row[{field.queryset_path!r}]"
+        if field.model_name:
+            value = f"objs[{field.model_name!r}].get({value})"
+        field_lines.append(f"{field.path_str!r}: format_{i}({value}),")
+
+    code = ["[None if row is None else {", *field_lines, "} for row in data]"]
+
+    return eval("\n".join(code), namespace)
 
 
 def _get_fields(row, fields):
