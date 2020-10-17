@@ -146,8 +146,12 @@ def query(request, *, model_name, fields="", media):
         profiler = cProfile.Profile()
         profiler.enable()
 
-    query = Query.from_request(model_name, fields, request.GET)
-    return _data_response(request, query, media, privilaged=True, profiler=profiler)
+    try:
+        query = Query.from_request(model_name, fields, request.GET)
+        return _data_response(request, query, media, privilaged=True, profiler=profiler)
+    finally:
+        if profiler:
+            profiler.disable()
 
 
 def view(request, pk, media):
