@@ -288,8 +288,9 @@ Release History
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
 |           |                | | Support for profiling CSV etc output. See CONTRIBUTING.rst                     |
+|           |                | | Performance improvements for large result sets.                                |
 +-----------+----------------+----------------------------------------------------------------------------------+
-| 2.2.17    |                | | Performance improvements for large result sets.                                |
+| 2.2.17    | 2020-10-15     | | Performance improvements for large result sets.                                |
 |           |                | | Fix error when choices field has an unexpected value.                          |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.16    | 2020-09-28     | | Fix being unable to reorder aggregates when there is no pivot.                 |

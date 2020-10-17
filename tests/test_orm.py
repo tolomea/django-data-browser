@@ -594,7 +594,8 @@ def test_pivot_having(get_product_pivot):
 jan = "January"
 feb = "Feburary"
 testdata = [
-    # drcb, has_data, row_field, col_field, body_fields
+    # drcb, rows, cols, body
+    # drcb = has_data, row_field, col_field, body_fields
     ("----", [], [], []),
     ("---b", [[0, None]], [[]], [[[]]]),
     ("--c-", [], [], []),

@@ -213,7 +213,9 @@ def get_results(request, bound_query, orm_models):
         return {"rows": [], "cols": [], "body": []}
 
     res = _get_result_list(request, bound_query, orm_models)
+
     if bound_query.bound_col_fields and bound_query.bound_row_fields:
+        # need to fetch rows and col titles seperately to get correct sort
         rows_res = _get_result_list(request, _rows_sub_query(bound_query), orm_models)
         cols_res = _get_result_list(request, _cols_sub_query(bound_query), orm_models)
     else:
@@ -222,35 +224,58 @@ def get_results(request, bound_query, orm_models):
 
     objs = _get_objs_for_calculated_fields(request, bound_query, orm_models, res)
 
-    data, all_row_keys, all_col_keys = _get_data_and_all_keys(bound_query, res)
+    if bound_query.bound_col_fields or bound_query.bound_data_fields:
+        data, all_row_keys, all_col_keys = _get_data_and_all_keys(bound_query, res)
 
-    col_keys = _get_keys(cols_res, bound_query.bound_col_fields, all_col_keys)
-    row_keys = _get_keys(rows_res, bound_query.bound_row_fields, all_row_keys)
+        col_keys = _get_keys(cols_res, bound_query.bound_col_fields, all_col_keys)
+        row_keys = _get_keys(rows_res, bound_query.bound_row_fields, all_row_keys)
 
-    body_data = _format_grid(
-        data, col_keys, row_keys, bound_query.bound_data_fields, objs
-    )
-    row_data = _format_table(
-        bound_query.bound_row_fields, [dict(row) for row in row_keys], objs
-    )
-    col_data = _format_table(
-        bound_query.bound_col_fields, [dict(col) for col in col_keys], objs
-    )
-
-    format_hints = {}
-    for fields, data in [
-        (bound_query.bound_row_fields, row_data),
-        (bound_query.bound_col_fields, col_data),
-        (bound_query.bound_data_fields, list(itertools.chain.from_iterable(body_data))),
-    ]:
-        format_hints.update(
-            {field.path_str: field.get_format_hints(data) for field in fields}
+        body_data = _format_grid(
+            data, col_keys, row_keys, bound_query.bound_data_fields, objs
+        )
+        row_data = _format_table(
+            bound_query.bound_row_fields, [dict(row) for row in row_keys], objs
+        )
+        col_data = _format_table(
+            bound_query.bound_col_fields, [dict(col) for col in col_keys], objs
         )
 
-    return {
-        "rows": row_data,
-        "cols": col_data,
-        "body": body_data,
-        "length": len(res),
-        "formatHints": format_hints,
-    }
+        format_hints = {}
+        for fields, data in [
+            (bound_query.bound_row_fields, row_data),
+            (bound_query.bound_col_fields, col_data),
+            (
+                bound_query.bound_data_fields,
+                list(itertools.chain.from_iterable(body_data)),
+            ),
+        ]:
+            format_hints.update(
+                {field.path_str: field.get_format_hints(data) for field in fields}
+            )
+
+        return {
+            "rows": row_data,
+            "cols": col_data,
+            "body": body_data,
+            "length": len(res),
+            "formatHints": format_hints,
+        }
+    else:
+        row_data = _format_table(
+            bound_query.bound_row_fields,
+            [dict(_get_fields(row, bound_query.bound_row_fields)) for row in res],
+            objs,
+        )
+
+        format_hints = {
+            field.path_str: field.get_format_hints(row_data)
+            for field in bound_query.bound_row_fields
+        }
+
+        return {
+            "rows": row_data,
+            "cols": [{}] if res else [],
+            "body": [[{}] * len(res)] if res else [],
+            "length": len(res),
+            "formatHints": format_hints,
+        }
