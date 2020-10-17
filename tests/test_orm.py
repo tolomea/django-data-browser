@@ -110,7 +110,7 @@ def get_product_flat(req, orm_models, django_assert_num_queries):
         query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
-            data = get_results(req, bound_query, orm_models)
+            data = get_results(req, bound_query, orm_models, False)
             return flatten_table(bound_query.fields, data["rows"])
 
     return helper
@@ -122,7 +122,7 @@ def get_product_pivot(req, orm_models, django_assert_num_queries):
         query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
-            data = get_results(req, bound_query, orm_models)
+            data = get_results(req, bound_query, orm_models, False)
             return {
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),
@@ -183,7 +183,7 @@ def test_bad_storage(monkeypatch, req):
     def get_product_flat(*args, **kwargs):
         query = Query.from_request("core.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(req, bound_query, orm_models)
+        data = get_results(req, bound_query, orm_models, False)
         return flatten_table(bound_query.fields, data["rows"])
 
     # some storage backends will hard fail if their underlying storage isn't

@@ -32,7 +32,7 @@ def get_results_flat(req):
             orm_models = get_models(req)
             query = Query.from_request("json.JsonModel", fields, query)
             bound_query = BoundQuery.bind(query, orm_models)
-            data = get_results(req, bound_query, orm_models)
+            data = get_results(req, bound_query, orm_models, False)
         finally:
             admin.site.unregister(JsonModel)
         return data["rows"]

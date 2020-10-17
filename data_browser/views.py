@@ -244,7 +244,7 @@ def _data_response(request, query, media, privilaged=False):
     bound_query = BoundQuery.bind(query, orm_models)
 
     if media == "csv":
-        results = get_results(request, bound_query, orm_models)
+        results = get_results(request, bound_query, orm_models, False)
 
         def csv_rows():
             # the pivoted column headers
@@ -280,7 +280,7 @@ def _data_response(request, query, media, privilaged=False):
         ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
         return response
     elif media == "json":
-        results = get_results(request, bound_query, orm_models)
+        results = get_results(request, bound_query, orm_models, True)
         resp = _get_query_data(bound_query) if privilaged else {}
         resp.update(results)
         return JsonResponse(resp)

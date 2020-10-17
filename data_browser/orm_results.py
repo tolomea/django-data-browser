@@ -208,7 +208,7 @@ def _format_grid(data, col_keys, row_keys, fields, objs):
     return body_data
 
 
-def get_results(request, bound_query, orm_models):
+def get_results(request, bound_query, orm_models, with_format_hints):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": []}
 
@@ -267,10 +267,13 @@ def get_results(request, bound_query, orm_models):
             objs,
         )
 
-        format_hints = {
-            field.path_str: field.get_format_hints(row_data)
-            for field in bound_query.bound_row_fields
-        }
+        if with_format_hints:
+            format_hints = {
+                field.path_str: field.get_format_hints(row_data)
+                for field in bound_query.bound_row_fields
+            }
+        else:
+            format_hints = None
 
         return {
             "rows": row_data,
