@@ -42,13 +42,9 @@ class BaseType(metaclass=TypeMeta):
         return {}
 
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert not choices
         return lambda value: value
-
-    @classmethod
-    def format(cls, value, choices=None):
-        return cls.get_formatter(choices)(value)
 
     @staticmethod
     def _parse(value):
@@ -96,7 +92,7 @@ class ChoiceTypeMixin:
     default_value = None
 
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert choices
         choices = dict(choices)
         choices[None] = None
@@ -117,7 +113,7 @@ class ArrayTypeMixin:
     default_value = None
 
     @staticmethod
-    def get_formatter(choices=None):  # pragma: postgres
+    def get_formatter(choices):  # pragma: postgres
         if choices:
             choices = dict(choices)
             choices[None] = None
@@ -174,7 +170,7 @@ class NumberType(BaseType):
         }
 
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else float(value)
 
@@ -267,7 +263,7 @@ class DurationType(BaseType):
         return res
 
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else str(value)
 
@@ -295,7 +291,7 @@ class DateTimeType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value))
 
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert not choices
         if settings.USE_TZ:
             return (
@@ -328,7 +324,7 @@ class DateType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value)).date()
 
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else str(value)
 
@@ -442,14 +438,14 @@ class IsNullType(BooleanType):
         return {"equals": BooleanType}
 
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else "IsNull" if value else "NotNull"
 
 
 class UnknownType(BaseType):
     @staticmethod
-    def get_formatter(choices=None):
+    def get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else str(value)
 

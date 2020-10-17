@@ -316,8 +316,8 @@ class TestStringType:
         assert StringType.default_lookup == "equals"
 
     def test_format(self):
-        assert StringType.format("bob") == "bob"
-        assert StringType.format(None) is None
+        assert StringType.get_formatter(None)("bob") == "bob"
+        assert StringType.get_formatter(None)(None) is None
 
 
 class TestNumberType:
@@ -332,8 +332,8 @@ class TestNumberType:
         assert NumberType.default_lookup == "equals"
 
     def test_format(self):
-        assert NumberType.format(6) == 6
-        assert NumberType.format(None) is None
+        assert NumberType.get_formatter(None)(6) == 6
+        assert NumberType.get_formatter(None)(None) is None
 
 
 class TestYearType:
@@ -349,8 +349,8 @@ class TestYearType:
         assert YearType.default_lookup == "equals"
 
     def test_format(self):
-        assert YearType.format(6) == 6
-        assert YearType.format(None) is None
+        assert YearType.get_formatter(None)(6) == 6
+        assert YearType.get_formatter(None)(None) is None
 
 
 class TestDateTimeType:
@@ -368,18 +368,20 @@ class TestDateTimeType:
     def test_aware_format(self, settings):
         settings.USE_TZ = True
         assert (
-            DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16, tzinfo=timezone.utc))
+            DateTimeType.get_formatter(None)(
+                datetime(2020, 5, 19, 8, 42, 16, tzinfo=timezone.utc)
+            )
             == "2020-05-19 08:42:16"
         )
-        assert DateTimeType.format(None) is None
+        assert DateTimeType.get_formatter(None)(None) is None
 
     def test_naive_format(self, settings):
         settings.USE_TZ = False
         assert (
-            DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16))
+            DateTimeType.get_formatter(None)(datetime(2020, 5, 19, 8, 42, 16))
             == "2020-05-19 08:42:16"
         )
-        assert DateTimeType.format(None) is None
+        assert DateTimeType.get_formatter(None)(None) is None
 
 
 class TestDurationType:
@@ -398,9 +400,12 @@ class TestDurationType:
         assert DurationType.default_lookup == "equals"
 
     def test_format(self):
-        assert DurationType.format(timedelta(days=5, minutes=6)) == "5 days, 0:06:00"
-        assert DurationType.format(timedelta(minutes=6)) == "0:06:00"
-        assert DurationType.format(None) is None
+        assert (
+            DurationType.get_formatter(None)(timedelta(days=5, minutes=6))
+            == "5 days, 0:06:00"
+        )
+        assert DurationType.get_formatter(None)(timedelta(minutes=6)) == "0:06:00"
+        assert DurationType.get_formatter(None)(None) is None
 
 
 class TestDateType:
@@ -416,8 +421,8 @@ class TestDateType:
         assert DateType.default_lookup == "equals"
 
     def test_format(self):
-        assert DateType.format(date(2020, 5, 19)) == "2020-05-19"
-        assert DateType.format(None) is None
+        assert DateType.get_formatter(None)(date(2020, 5, 19)) == "2020-05-19"
+        assert DateType.get_formatter(None)(None) is None
 
 
 class TestWeekDayType:
@@ -428,9 +433,9 @@ class TestWeekDayType:
         assert WeekDayType.parse("gt", "Monday") == (None, ANY(str))
 
     def test_format(self):
-        assert WeekDayType.format(1) == "Sunday"
-        assert WeekDayType.format(7) == "Saturday"
-        assert WeekDayType.format(None) is None
+        assert WeekDayType.get_formatter(None)(1) == "Sunday"
+        assert WeekDayType.get_formatter(None)(7) == "Saturday"
+        assert WeekDayType.get_formatter(None)(None) is None
 
     def test_default_lookup(self):
         assert WeekDayType.default_lookup == "equals"
@@ -444,9 +449,9 @@ class TestMonthType:
         assert MonthType.parse("gt", "January") == (None, ANY(str))
 
     def test_format(self):
-        assert MonthType.format(1) == "January"
-        assert MonthType.format(12) == "December"
-        assert MonthType.format(None) is None
+        assert MonthType.get_formatter(None)(1) == "January"
+        assert MonthType.get_formatter(None)(12) == "December"
+        assert MonthType.get_formatter(None)(None) is None
 
     def test_default_lookup(self):
         assert MonthType.default_lookup == "equals"
@@ -460,7 +465,7 @@ class TestBooleanType:
         assert BooleanType.parse("pontains", "True") == (None, ANY(str))
 
     def test_format(self):
-        assert BooleanType.format(None) is None
+        assert BooleanType.get_formatter(None)(None) is None
 
     def test_default_lookup(self):
         assert BooleanType.default_lookup == "equals"
@@ -468,36 +473,45 @@ class TestBooleanType:
 
 class TestStringChoiceType:
     def test_format(self):
-        assert StringChoiceType.format("b", [("a", "A"), ("b", "B"), ("c", "C")]) == "B"
         assert (
-            StringChoiceType.format(None, [("a", "A"), ("b", "B"), ("c", "C")]) is None
+            StringChoiceType.get_formatter([("a", "A"), ("b", "B"), ("c", "C")])("b")
+            == "B"
+        )
+        assert (
+            StringChoiceType.get_formatter([("a", "A"), ("b", "B"), ("c", "C")])(None)
+            is None
         )
 
     def test_bad_value(self):
-        assert StringChoiceType.format("x", [("a", "A"), ("b", "B"), ("c", "C")]) == "x"
+        assert (
+            StringChoiceType.get_formatter([("a", "A"), ("b", "B"), ("c", "C")])("x")
+            == "x"
+        )
 
 
 class TestNumberChoiceType:
     def test_format(self):
-        assert NumberChoiceType.format(2, [(1, "A"), (2, "B"), (3, "C")]) == "B"
-        assert NumberChoiceType.format(None, [(1, "A"), (2, "B"), (3, "C")]) is None
+        assert NumberChoiceType.get_formatter([(1, "A"), (2, "B"), (3, "C")])(2) == "B"
+        assert (
+            NumberChoiceType.get_formatter([(1, "A"), (2, "B"), (3, "C")])(None) is None
+        )
 
     def test_bad_value(self):
-        assert NumberChoiceType.format(6, [(1, "A"), (2, "B"), (3, "C")]) == 6
+        assert NumberChoiceType.get_formatter([(1, "A"), (2, "B"), (3, "C")])(6) == 6
 
 
 class TestHTMLType:
     def test_format(self):
-        assert HTMLType.format(None) is None
+        assert HTMLType.get_formatter(None)(None) is None
 
 
 class TestIsNullType:
     def test_format(self):
-        assert IsNullType.format(True) == "IsNull"
-        assert IsNullType.format(False) == "NotNull"
-        assert IsNullType.format(None) is None
+        assert IsNullType.get_formatter(None)(True) == "IsNull"
+        assert IsNullType.get_formatter(None)(False) == "NotNull"
+        assert IsNullType.get_formatter(None)(None) is None
 
 
 class TestUnknownType:
     def test_format(self):
-        assert UnknownType.format(None) is None
+        assert UnknownType.get_formatter(None)(None) is None
