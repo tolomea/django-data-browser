@@ -273,8 +273,8 @@ class OrmBaseField:
         if self.concrete or self.can_pivot:
             assert self.type_
 
-    def format(self, value):
-        return self.type_.format(value, self.choices)
+    def get_formatter(self):
+        return self.type_.get_formatter(self.choices)
 
 
 class OrmFkField(OrmBaseField):
@@ -340,16 +340,21 @@ class OrmCalculatedField(OrmBaseField):
             model_name=self.model_name,
         )
 
-    def format(self, obj):
-        if obj is None:
-            return None
+    def get_formatter(self):
+        base_formatter = super().get_formatter()
 
-        try:
-            value = self.func(obj)
-        except Exception as e:
-            return str(e)
+        def format(obj):
+            if obj is None:
+                return None
 
-        return super().format(value)
+            try:
+                value = self.func(obj)
+            except Exception as e:
+                return str(e)
+
+            return base_formatter(value)
+
+        return format
 
 
 class OrmBoundAnnotatedField(OrmBoundField):
@@ -405,18 +410,21 @@ class OrmFileField(OrmConcreteField):
         )
         self.django_field = django_field
 
-    def format(self, value):
-        if not value:
-            return None
+    def get_formatter(self):
+        def format(value):
+            if not value:
+                return None
 
-        try:
-            # some storage backends will hard fail if their underlying storage isn't
-            # setup right https://github.com/tolomea/django-data-browser/issues/11
-            return format_html(
-                '<a href="{}">{}</a>', self.django_field.storage.url(value), value
-            )
-        except Exception as e:
-            return str(e)
+            try:
+                # some storage backends will hard fail if their underlying storage isn't
+                # setup right https://github.com/tolomea/django-data-browser/issues/11
+                return format_html(
+                    '<a href="{}">{}</a>', self.django_field.storage.url(value), value
+                )
+            except Exception as e:
+                return str(e)
+
+        return format
 
 
 class OrmAggregateField(OrmBaseField):

@@ -2,6 +2,7 @@ import json
 from functools import lru_cache
 
 import dateutil.parser
+from django.conf import settings
 from django.utils import dateparse, html, timezone
 
 from .common import all_subclasses, get_optimal_decimal_places
@@ -296,11 +297,12 @@ class DateTimeType(BaseType):
     @staticmethod
     def get_formatter(choices=None):
         assert not choices
-        return (
-            lambda value: None
-            if value is None
-            else str(value if timezone.is_naive(value) else timezone.make_naive(value))
-        )
+        if settings.USE_TZ:
+            return (
+                lambda value: None if value is None else str(timezone.make_naive(value))
+            )
+        else:
+            return lambda value: None if value is None else str(value)
 
 
 class DateType(BaseType):

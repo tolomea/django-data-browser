@@ -147,7 +147,7 @@ def _format_table(fields, data, objs):
 
     field_lines = []
     for i, field in enumerate(fields):
-        namespace[f"format_{i}"] = field.format
+        namespace[f"format_{i}"] = field.get_formatter()
         value = f"row[{field.queryset_path!r}]"
         if field.model_name:
             value = f"objs[{field.model_name!r}].get({value})"

@@ -365,11 +365,16 @@ class TestDateTimeType:
     def test_default_lookup(self):
         assert DateTimeType.default_lookup == "equals"
 
-    def test_format(self):
+    def test_aware_format(self, settings):
+        settings.USE_TZ = True
         assert (
             DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16, tzinfo=timezone.utc))
             == "2020-05-19 08:42:16"
         )
+        assert DateTimeType.format(None) is None
+
+    def test_naive_format(self, settings):
+        settings.USE_TZ = False
         assert (
             DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16))
             == "2020-05-19 08:42:16"
