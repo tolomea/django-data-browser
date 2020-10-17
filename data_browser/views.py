@@ -153,7 +153,8 @@ def query(request, *, model_name, fields="", media):
                 media = "json"
 
             query = Query.from_request(model_name, fields, request.GET)
-            _data_response(request, query, media, privilaged=True).getvalue()
+            for x in _data_response(request, query, media, privilaged=True):
+                pass
 
             profiler.disable()
 
