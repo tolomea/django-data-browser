@@ -93,7 +93,9 @@ class ChoiceTypeMixin:
     @staticmethod
     def format(value, choices=None):
         assert choices
-        return dict(choices).get(value, value)
+        choices = dict(choices)
+        choices[None] = None
+        return choices.get(value, value)
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):
@@ -111,6 +113,9 @@ class ArrayTypeMixin:
 
     @staticmethod
     def format(value, choices=None):  # pragma: postgres
+        if value is None:
+            return None
+
         if choices:
             value = [dict(choices)[v] if v is not None else None for v in value]
         return ", ".join(str(v) for v in value)
@@ -163,6 +168,10 @@ class NumberType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return float(value)
 
     @staticmethod
@@ -256,6 +265,10 @@ class DurationType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return str(value)
 
 
@@ -284,6 +297,10 @@ class DateTimeType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         if not timezone.is_naive(value):
             value = timezone.make_naive(value)
         return str(value)
@@ -314,6 +331,10 @@ class DateType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return str(value)
 
 
@@ -338,6 +359,10 @@ class WeekDayType(BaseType):
     @classmethod
     def format(cls, value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return cls._days[value - 1]
 
     @classmethod
@@ -374,6 +399,10 @@ class MonthType(BaseType):
     @classmethod
     def format(cls, value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return cls._months[value - 1]
 
     @classmethod
@@ -387,6 +416,11 @@ class MonthType(BaseType):
 class HTMLType(StringType):
     @classmethod
     def format(cls, value, choices=None):
+        assert not choices
+
+        if value is None:
+            return None
+
         return html.conditional_escape(value)
 
 
@@ -414,6 +448,10 @@ class BooleanType(BaseType):
     @classmethod
     def format(cls, value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return bool(value)
 
 
@@ -427,6 +465,10 @@ class IsNullType(BooleanType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return "IsNull" if value else "NotNull"
 
 
@@ -434,6 +476,10 @@ class UnknownType(BaseType):
     @staticmethod
     def format(value, choices=None):
         assert not choices
+
+        if value is None:
+            return None
+
         return str(value)
 
     @staticmethod

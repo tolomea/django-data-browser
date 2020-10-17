@@ -274,9 +274,6 @@ class OrmBaseField:
             assert self.type_
 
     def format(self, value):
-        if value is None:
-            return None
-
         return self.type_.format(value, self.choices)
 
 

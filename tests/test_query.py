@@ -14,11 +14,14 @@ from data_browser.types import (
     DateTimeType,
     DateType,
     DurationType,
+    HTMLType,
+    IsNullType,
     MonthType,
     NumberChoiceType,
     NumberType,
     StringChoiceType,
     StringType,
+    UnknownType,
     WeekDayType,
     YearType,
 )
@@ -314,6 +317,7 @@ class TestStringType:
 
     def test_format(self):
         assert StringType.format("bob") == "bob"
+        assert StringType.format(None) is None
 
 
 class TestNumberType:
@@ -329,6 +333,7 @@ class TestNumberType:
 
     def test_format(self):
         assert NumberType.format(6) == 6
+        assert NumberType.format(None) is None
 
 
 class TestYearType:
@@ -345,6 +350,7 @@ class TestYearType:
 
     def test_format(self):
         assert YearType.format(6) == 6
+        assert YearType.format(None) is None
 
 
 class TestDateTimeType:
@@ -368,6 +374,7 @@ class TestDateTimeType:
             DateTimeType.format(datetime(2020, 5, 19, 8, 42, 16))
             == "2020-05-19 08:42:16"
         )
+        assert DateTimeType.format(None) is None
 
 
 class TestDurationType:
@@ -388,6 +395,7 @@ class TestDurationType:
     def test_format(self):
         assert DurationType.format(timedelta(days=5, minutes=6)) == "5 days, 0:06:00"
         assert DurationType.format(timedelta(minutes=6)) == "0:06:00"
+        assert DurationType.format(None) is None
 
 
 class TestDateType:
@@ -404,6 +412,7 @@ class TestDateType:
 
     def test_format(self):
         assert DateType.format(date(2020, 5, 19)) == "2020-05-19"
+        assert DateType.format(None) is None
 
 
 class TestWeekDayType:
@@ -416,6 +425,7 @@ class TestWeekDayType:
     def test_format(self):
         assert WeekDayType.format(1) == "Sunday"
         assert WeekDayType.format(7) == "Saturday"
+        assert WeekDayType.format(None) is None
 
     def test_default_lookup(self):
         assert WeekDayType.default_lookup == "equals"
@@ -431,6 +441,7 @@ class TestMonthType:
     def test_format(self):
         assert MonthType.format(1) == "January"
         assert MonthType.format(12) == "December"
+        assert MonthType.format(None) is None
 
     def test_default_lookup(self):
         assert MonthType.default_lookup == "equals"
@@ -443,6 +454,9 @@ class TestBooleanType:
         assert BooleanType.parse("equals", "hello") == (None, ANY(str))
         assert BooleanType.parse("pontains", "True") == (None, ANY(str))
 
+    def test_format(self):
+        assert BooleanType.format(None) is None
+
     def test_default_lookup(self):
         assert BooleanType.default_lookup == "equals"
 
@@ -450,6 +464,9 @@ class TestBooleanType:
 class TestStringChoiceType:
     def test_format(self):
         assert StringChoiceType.format("b", [("a", "A"), ("b", "B"), ("c", "C")]) == "B"
+        assert (
+            StringChoiceType.format(None, [("a", "A"), ("b", "B"), ("c", "C")]) is None
+        )
 
     def test_bad_value(self):
         assert StringChoiceType.format("x", [("a", "A"), ("b", "B"), ("c", "C")]) == "x"
@@ -458,6 +475,24 @@ class TestStringChoiceType:
 class TestNumberChoiceType:
     def test_format(self):
         assert NumberChoiceType.format(2, [(1, "A"), (2, "B"), (3, "C")]) == "B"
+        assert NumberChoiceType.format(None, [(1, "A"), (2, "B"), (3, "C")]) is None
 
     def test_bad_value(self):
         assert NumberChoiceType.format(6, [(1, "A"), (2, "B"), (3, "C")]) == 6
+
+
+class TestHTMLType:
+    def test_format(self):
+        assert HTMLType.format(None) is None
+
+
+class TestIsNullType:
+    def test_format(self):
+        assert IsNullType.format(True) == "IsNull"
+        assert IsNullType.format(False) == "NotNull"
+        assert IsNullType.format(None) is None
+
+
+class TestUnknownType:
+    def test_format(self):
+        assert UnknownType.format(None) is None
