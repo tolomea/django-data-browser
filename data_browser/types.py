@@ -41,9 +41,13 @@ class BaseType(metaclass=TypeMeta):
         return {}
 
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert not choices
-        return value
+        return lambda value: value
+
+    @classmethod
+    def format(cls, value, choices=None):
+        return cls.get_formatter(choices)(value)
 
     @staticmethod
     def _parse(value):
@@ -91,11 +95,11 @@ class ChoiceTypeMixin:
     default_value = None
 
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert choices
         choices = dict(choices)
         choices[None] = None
-        return choices.get(value, value)
+        return lambda value: choices.get(value, value)
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):
@@ -112,13 +116,16 @@ class ArrayTypeMixin:
     default_value = None
 
     @staticmethod
-    def format(value, choices=None):  # pragma: postgres
-        if value is None:
-            return None
-
+    def get_formatter(choices=None):  # pragma: postgres
         if choices:
-            value = [dict(choices)[v] if v is not None else None for v in value]
-        return ", ".join(str(v) for v in value)
+            choices = dict(choices)
+            choices[None] = None
+            return (
+                lambda value: None
+                if value is None
+                else ", ".join(str(choices.get(v, v)) for v in value)
+            )
+        return lambda value: None if value is None else ", ".join(str(v) for v in value)
 
 
 class StringArrayType(ArrayTypeMixin, BaseType):
@@ -166,13 +173,9 @@ class NumberType(BaseType):
         }
 
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return float(value)
+        return lambda value: None if value is None else float(value)
 
     @staticmethod
     def _parse(value):
@@ -263,13 +266,9 @@ class DurationType(BaseType):
         return res
 
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return str(value)
+        return lambda value: None if value is None else str(value)
 
 
 class DateTimeType(BaseType):
@@ -295,15 +294,13 @@ class DateTimeType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value))
 
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        if not timezone.is_naive(value):
-            value = timezone.make_naive(value)
-        return str(value)
+        return (
+            lambda value: None
+            if value is None
+            else str(value if timezone.is_naive(value) else timezone.make_naive(value))
+        )
 
 
 class DateType(BaseType):
@@ -329,13 +326,9 @@ class DateType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value)).date()
 
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return str(value)
+        return lambda value: None if value is None else str(value)
 
 
 class WeekDayType(BaseType):
@@ -357,13 +350,9 @@ class WeekDayType(BaseType):
     ]
 
     @classmethod
-    def format(cls, value, choices=None):
+    def get_formatter(cls, value, choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return cls._days[value - 1]
+        return lambda value: None if value is None else cls._days[value - 1]
 
     @classmethod
     def _parse(cls, value):
@@ -397,13 +386,9 @@ class MonthType(BaseType):
     ]
 
     @classmethod
-    def format(cls, value, choices=None):
+    def get_formatter(cls, value, choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return cls._months[value - 1]
+        return lambda value: None if value is None else cls._months[value - 1]
 
     @classmethod
     def _parse(cls, value):
@@ -414,14 +399,10 @@ class MonthType(BaseType):
 
 
 class HTMLType(StringType):
-    @classmethod
-    def format(cls, value, choices=None):
+    @staticmethod
+    def get_formatter(value, choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return html.conditional_escape(value)
+        return lambda value: None if value is None else html.conditional_escape(value)
 
 
 class BooleanType(BaseType):
@@ -445,14 +426,10 @@ class BooleanType(BaseType):
         else:
             raise ValueError("Expected 'true' or 'false'")
 
-    @classmethod
-    def format(cls, value, choices=None):
+    @staticmethod
+    def get_formatter(value, choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return bool(value)
+        return lambda value: None if value is None else bool(value)
 
 
 class IsNullType(BooleanType):
@@ -463,24 +440,16 @@ class IsNullType(BooleanType):
         return {"equals": BooleanType}
 
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return "IsNull" if value else "NotNull"
+        return lambda value: None if value is None else "IsNull" if value else "NotNull"
 
 
 class UnknownType(BaseType):
     @staticmethod
-    def format(value, choices=None):
+    def get_formatter(choices=None):
         assert not choices
-
-        if value is None:
-            return None
-
-        return str(value)
+        return lambda value: None if value is None else str(value)
 
     @staticmethod
     def _lookups():
