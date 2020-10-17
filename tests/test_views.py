@@ -72,6 +72,16 @@ def test_query_misc_formats(admin_client, format):
     assert res.status_code == 200
 
 
+@pytest.mark.parametrize(
+    "format", ["bad", "profile_bad", "pstats_bad", "profilesql", "pstatsbad"]
+)
+def test_query_bad_formats(admin_client, format):
+    res = admin_client.get(
+        f"/data_browser/query/core.Product/size-0,name+1,size_unit.{format}?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 404
+
+
 @pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
 def test_query_html_no_perms(admin_user, admin_client, snapshot):
     admin_user.is_superuser = False

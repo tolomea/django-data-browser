@@ -141,17 +141,46 @@ def query_html(request, *, model_name="", fields=""):
 
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
-    profiler = None
     if media.startswith("profile") or media.startswith("pstats"):
         profiler = cProfile.Profile()
-        profiler.enable()
+        try:
+            profiler.enable()
 
-    try:
-        query = Query.from_request(model_name, fields, request.GET)
-        return _data_response(request, query, media, privilaged=True, profiler=profiler)
-    finally:
-        if profiler:
+            if "_" in media:
+                prof_media, media = media.split("_")
+            else:
+                prof_media = media
+                media = "json"
+
+            query = Query.from_request(model_name, fields, request.GET)
+            _data_response(request, query, media, privilaged=True).getvalue()
+
             profiler.disable()
+
+            if prof_media == "profile":
+                buffer = io.StringIO()
+                stats = pstats.Stats(profiler, stream=buffer)
+                stats.sort_stats("cumulative").print_stats(50)
+                stats.sort_stats("time").print_stats(50)
+                buffer.seek(0)
+                return HttpResponse(buffer, content_type="text/plain")
+            elif prof_media == "pstats":
+                buffer = io.BytesIO()
+                marshal.dump(pstats.Stats(profiler).stats, buffer)
+                buffer.seek(0)
+                response = HttpResponse(buffer, content_type="application/octet-stream")
+                response[
+                    "Content-Disposition"
+                ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.pstats"
+                return response
+            else:
+                raise http.Http404(f"Bad file format {prof_media} requested")
+        finally:
+            if profiler:  # pragma: no branch
+                profiler.disable()
+    else:
+        query = Query.from_request(model_name, fields, request.GET)
+        return _data_response(request, query, media, privilaged=True)
 
 
 def view(request, pk, media):
@@ -207,39 +236,7 @@ class Echo:
         return value
 
 
-def _data_response(request, query, media, privilaged=False, profiler=None):
-    if profiler and privilaged:
-        if "_" in media:
-            prof_media, media = media.split("_")
-        else:
-            prof_media = media
-            media = "json"
-
-        # get the actual results
-        _data_response(request, query, media, privilaged=privilaged).getvalue()
-
-        # stop profiling
-        profiler.disable()
-
-        if prof_media == "profile":
-            buffer = io.StringIO()
-            stats = pstats.Stats(profiler, stream=buffer)
-            stats.sort_stats("cumulative").print_stats(50)
-            stats.sort_stats("time").print_stats(50)
-            buffer.seek(0)
-            return HttpResponse(buffer, content_type="text/plain")
-        elif prof_media == "pstats":
-            buffer = io.BytesIO()
-            marshal.dump(pstats.Stats(profiler).stats, buffer)
-            buffer.seek(0)
-            response = HttpResponse(buffer, content_type="application/octet-stream")
-            response[
-                "Content-Disposition"
-            ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.pstats"
-            return response
-        else:
-            assert False
-
+def _data_response(request, query, media, privilaged=False):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
