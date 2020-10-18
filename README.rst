@@ -115,19 +115,19 @@ Specifying models and fields
 By default the Data Browser has access to all models and fields that the current user can see anywhere in the Admin site.
 However if necessary this can be tweaked using the following class level properties on ModelAdmins and Inlines.
 
-+---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| Name                | Format                                    | Purpose                                                                                                     |
-+=====================+===========================================+=============================================================================================================+
-| ddb_ignore          | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.  |
-+---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ddb_hide_fields     | ``[field_name]``                          | Explicitly hide the specified fields.                                                                       |
-+---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ddb_extra_fields    | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                          |
-+---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ddb_json_fields     | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean". |
-+---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ddb_default_filters | ``str``                                   | Default filters to be added when opening this model. Just the URL string after the ``?`` e.g. ``id=test``.  |
-+---------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
++---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
+| Name                | Format                                    | Purpose                                                                                                                                      |
++=====================+===========================================+==============================================================================================================================================+
+| ddb_ignore          | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.                                   |
++---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
+| ddb_hide_fields     | ``[field_name]``                          | Explicitly hide the specified fields.                                                                                                        |
++---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
+| ddb_extra_fields    | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                                                           |
++---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
+| ddb_json_fields     | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean".                                  |
++---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
+| ddb_default_filters | ``[(path, lookup, value)]``               | Default filters to be added when opening this model. E.G. to add ``client__name__equals=Test`` use ``[(`client__name`, `equals`, `Test`)]``. |
++---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
 
 Additionally, per the below sections, calculated fields can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
@@ -287,6 +287,7 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
+|           |                | | Change ddb_default_filters format.                                             |
 |           |                | | Remove path and prettyPath from fields and filters on JSON responses.          |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.18    | 2020-10-18     | | Support for profiling CSV etc output. See CONTRIBUTING.rst                     |

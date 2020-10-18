@@ -23,7 +23,7 @@ from .common import HttpResponse, JsonResponse, can_make_public, settings
 from .models import View
 from .orm_admin import OPEN_IN_ADMIN, get_models
 from .orm_results import get_result_queryset, get_results
-from .query import BoundQuery, Query
+from .query import BoundQuery, Query, QueryFilter
 from .types import TYPES
 
 
@@ -52,7 +52,9 @@ def _get_query_data(bound_query):
     }
 
 
-def _get_model_fields(orm_model):
+def _get_model_fields(model_name, orm_models):
+    orm_model = orm_models[model_name]
+
     def sort_model_fields(fields):
         front = {"id": 1, OPEN_IN_ADMIN: 2}
         return sorted(fields, key=lambda f: (front.get(f, sys.maxsize), f))
@@ -69,10 +71,20 @@ def _get_model_fields(orm_model):
         for name, orm_field in orm_model.fields.items()
     }
 
+    q = Query(model_name, [], [QueryFilter(*f) for f in orm_model.default_filters])
+    bq = BoundQuery.bind(q, orm_models)
+
     return {
         "fields": all_fields,
         "sortedFields": sort_model_fields(all_fields),
-        "defaultFilters": orm_model.default_filters,
+        "defaultFilters": [
+            {
+                "pathStr": filter_.path_str,
+                "lookup": filter_.lookup,
+                "value": filter_.value,
+            }
+            for filter_ in bq.filters
+        ],
     }
 
 
@@ -90,8 +102,8 @@ def _get_config(request):
     }
 
     all_model_fields = {
-        model_name: _get_model_fields(orm_model)
-        for model_name, orm_model in orm_models.items()
+        model_name: _get_model_fields(model_name, orm_models)
+        for model_name in orm_models
     }
 
     return {

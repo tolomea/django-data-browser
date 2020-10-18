@@ -132,7 +132,6 @@ function QueryApp(props) {
       overlay={status}
       query={queryObj}
       sortedModels={config.sortedModels}
-      allModelFields={config.allModelFields}
       baseUrl={config.baseUrl}
       {...query}
     />
@@ -140,7 +139,7 @@ function QueryApp(props) {
 }
 
 function App(props) {
-  const { baseUrl, sortedModels, allModelFields, canMakePublic } = props;
+  const { baseUrl, canMakePublic } = props;
   return (
     <BrowserRouter basename={baseUrl}>
       <Logo />
@@ -153,7 +152,7 @@ function App(props) {
             <EditSavedView {...{ baseUrl, canMakePublic }} />
           </Route>
           <Route path="/">
-            <HomePage {...{ sortedModels, allModelFields, baseUrl }} />
+            <HomePage {...props} />
           </Route>
         </Switch>
       </div>

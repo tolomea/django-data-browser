@@ -1,4 +1,6 @@
+import json
 import logging
+from urllib.parse import urlencode
 
 from django.db.models import BooleanField
 from django.urls import reverse
@@ -71,8 +73,17 @@ class AdminMixin:
             "data_browser:query_html",
             args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
         )
-        args = getattr(self, "ddb_default_filters", "")
-        extra_context["ddb_url"] = f"{url}?{args}"
+        args = getattr(self, "ddb_default_filters", [])
+        params = urlencode(
+            [
+                (
+                    f"{field}__{lookup}",
+                    value if isinstance(value, str) else json.dumps(value),
+                )
+                for field, lookup, value in args
+            ]
+        )
+        extra_context["ddb_url"] = f"{url}?{params}"
         return super().changelist_view(request, extra_context)
 
 

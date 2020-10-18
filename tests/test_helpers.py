@@ -4,7 +4,7 @@ from .core.admin import AddressAdmin, ProductAdmin
 from .core.models import Address, Producer, Product
 
 
-class TestAnnotationOptimization:
+class TestAdminMixin:
     def test_annotation_loaded_on_detail(self, admin_client, mocker):
         get_queryset = mocker.patch(
             "tests.core.admin.AddressAdmin.andrew.get_queryset",
@@ -54,13 +54,24 @@ class TestAnnotationOptimization:
         assert resp.status_code == 200
         get_queryset.assert_called_once()
 
-    def test_request_factory_compability(self, rf, admin_user, mocker):
+    def test_request_factory_compability_detail(self, rf, admin_user, mocker):
+        address = Address.objects.create()
         request = rf.get("/")
         request.user = admin_user
         get_queryset = mocker.patch(
             "tests.core.admin.AddressAdmin.andrew.get_queryset",
             wraps=AddressAdmin.andrew.get_queryset,
         )
-        resp = AddressAdmin(Address, admin.site).changelist_view(request)
+        resp = AddressAdmin(Address, admin.site).changeform_view(
+            request, str(address.pk)
+        )
         assert resp.status_code == 200
         get_queryset.assert_called_once()
+
+    def test_ddb_url(self, admin_client):
+        resp = admin_client.get(f"/admin/core/product/")
+        assert resp.status_code == 200
+        assert (
+            resp.context["ddb_url"]
+            == "/data_browser/query/core.Product/.html?a_field__a_lookup=a_value&name__not_equals=not+a+thing&a_field__a_lookup=true"
+        )

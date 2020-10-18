@@ -9,7 +9,7 @@ snapshots = Snapshot()
 snapshots["test_query_html config"] = {
     "allModelFields": {
         "auth.Group": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -39,7 +39,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["id", "admin", "name"],
         },
         "auth.User": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -154,7 +154,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "boolean": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -184,7 +184,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["average", "is_null", "sum"],
         },
         "core.Address": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -263,7 +263,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "core.InAdmin": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -293,7 +293,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["id", "admin", "name"],
         },
         "core.InlineAdmin": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "id": {
                     "canPivot": True,
@@ -323,7 +323,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["id", "in_admin", "name"],
         },
         "core.Normal": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -369,7 +369,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["id", "admin", "in_admin", "inline_admin", "name"],
         },
         "core.Producer": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "address": {
                     "canPivot": False,
@@ -415,7 +415,9 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["id", "admin", "address", "frank", "name"],
         },
         "core.Product": {
-            "defaultFilters": "default=filter&filter=default",
+            "defaultFilters": [
+                {"lookup": "not_equals", "pathStr": "name", "value": "not a thing"}
+            ],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -647,7 +649,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "core.SKU": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "id": {
                     "canPivot": True,
@@ -677,7 +679,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["id", "name", "product"],
         },
         "core.Tag": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -707,7 +709,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["id", "admin", "name"],
         },
         "data_browser.View": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -849,7 +851,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "date": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -973,7 +975,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "datetime": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1133,7 +1135,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "duration": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -1187,7 +1189,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["average", "count", "is_null", "max", "min", "sum"],
         },
         "html": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1209,7 +1211,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "isnull": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1231,7 +1233,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "json": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1253,7 +1255,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "jsonfield": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1275,7 +1277,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "month": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1297,7 +1299,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "number": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -1376,7 +1378,7 @@ snapshots["test_query_html config"] = {
             ],
         },
         "numberarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1398,7 +1400,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "numberchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1420,7 +1422,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "regex": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1442,7 +1444,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "string": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1464,7 +1466,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1486,7 +1488,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1508,7 +1510,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "unknown": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1530,7 +1532,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "weekday": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -1552,7 +1554,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "year": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -1965,7 +1967,7 @@ snapshots["test_query_query query"] = {
 snapshots["test_query_html_no_perms config"] = {
     "allModelFields": {
         "boolean": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -1995,7 +1997,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["average", "is_null", "sum"],
         },
         "date": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2119,7 +2121,7 @@ snapshots["test_query_html_no_perms config"] = {
             ],
         },
         "datetime": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2279,7 +2281,7 @@ snapshots["test_query_html_no_perms config"] = {
             ],
         },
         "duration": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -2333,7 +2335,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["average", "count", "is_null", "max", "min", "sum"],
         },
         "html": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2355,7 +2357,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "isnull": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2377,7 +2379,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "json": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2399,7 +2401,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "jsonfield": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2421,7 +2423,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "month": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2443,7 +2445,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "number": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -2522,7 +2524,7 @@ snapshots["test_query_html_no_perms config"] = {
             ],
         },
         "numberarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2544,7 +2546,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "numberchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2566,7 +2568,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "regex": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2588,7 +2590,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "string": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2610,7 +2612,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2632,7 +2634,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2654,7 +2656,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "unknown": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2676,7 +2678,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "weekday": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -2698,7 +2700,7 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "year": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -3084,7 +3086,7 @@ snapshots["test_query_html_no_perms config"] = {
 snapshots["test_query_ctx config"] = {
     "allModelFields": {
         "auth.Group": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3114,7 +3116,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["id", "admin", "name"],
         },
         "auth.User": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3229,7 +3231,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "boolean": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -3259,7 +3261,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["average", "is_null", "sum"],
         },
         "core.Address": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3338,7 +3340,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "core.InAdmin": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3368,7 +3370,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["id", "admin", "name"],
         },
         "core.InlineAdmin": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "id": {
                     "canPivot": True,
@@ -3398,7 +3400,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["id", "in_admin", "name"],
         },
         "core.Normal": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3444,7 +3446,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["id", "admin", "in_admin", "inline_admin", "name"],
         },
         "core.Producer": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "address": {
                     "canPivot": False,
@@ -3490,7 +3492,9 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["id", "admin", "address", "frank", "name"],
         },
         "core.Product": {
-            "defaultFilters": "default=filter&filter=default",
+            "defaultFilters": [
+                {"lookup": "not_equals", "pathStr": "name", "value": "not a thing"}
+            ],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3722,7 +3726,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "core.SKU": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "id": {
                     "canPivot": True,
@@ -3752,7 +3756,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["id", "name", "product"],
         },
         "core.Tag": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3782,7 +3786,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["id", "admin", "name"],
         },
         "data_browser.View": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": True,
@@ -3924,7 +3928,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "date": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4048,7 +4052,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "datetime": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4208,7 +4212,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "duration": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -4262,7 +4266,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["average", "count", "is_null", "max", "min", "sum"],
         },
         "html": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4284,7 +4288,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "isnull": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4306,7 +4310,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "json": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4328,7 +4332,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "jsonfield": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4350,7 +4354,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "month": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4372,7 +4376,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "number": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,
@@ -4451,7 +4455,7 @@ snapshots["test_query_ctx config"] = {
             ],
         },
         "numberarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4473,7 +4477,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "numberchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4495,7 +4499,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "regex": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4517,7 +4521,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "string": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4539,7 +4543,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4561,7 +4565,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4583,7 +4587,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "unknown": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4605,7 +4609,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "weekday": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": False,
@@ -4627,7 +4631,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "year": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": False,

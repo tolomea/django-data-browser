@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Sequence, Tuple
@@ -253,7 +254,12 @@ class OrmModel:
 
     @property
     def default_filters(self):
-        return getattr(self.admin, "ddb_default_filters", "")
+        ddb_default_filters = getattr(self.admin, "ddb_default_filters", [])
+        assert isinstance(ddb_default_filters, list)
+        return [
+            (f, l, v if isinstance(v, str) else json.dumps(v))
+            for (f, l, v) in ddb_default_filters
+        ]
 
 
 @dataclass

@@ -1,7 +1,7 @@
 {
     "allModelFields": {
         "auth.Group": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -35,7 +35,7 @@
             ]
         },
         "auth.User": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -150,7 +150,7 @@
             ]
         },
         "boolean": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": false,
@@ -184,7 +184,7 @@
             ]
         },
         "core.Address": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -263,7 +263,7 @@
             ]
         },
         "core.InAdmin": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -297,7 +297,7 @@
             ]
         },
         "core.InlineAdmin": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "id": {
                     "canPivot": true,
@@ -331,7 +331,7 @@
             ]
         },
         "core.Normal": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -383,7 +383,7 @@
             ]
         },
         "core.Producer": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "address": {
                     "canPivot": false,
@@ -435,7 +435,13 @@
             ]
         },
         "core.Product": {
-            "defaultFilters": "default=filter&filter=default",
+            "defaultFilters": [
+                {
+                    "lookup": "not_equals",
+                    "pathStr": "name",
+                    "value": "not a thing"
+                }
+            ],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -685,7 +691,7 @@
             ]
         },
         "core.SKU": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "id": {
                     "canPivot": true,
@@ -719,7 +725,7 @@
             ]
         },
         "core.Tag": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -753,7 +759,7 @@
             ]
         },
         "data_browser.View": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "admin": {
                     "canPivot": true,
@@ -895,7 +901,7 @@
             ]
         },
         "date": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1019,7 +1025,7 @@
             ]
         },
         "datetime": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1179,7 +1185,7 @@
             ]
         },
         "duration": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": false,
@@ -1240,7 +1246,7 @@
             ]
         },
         "html": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1265,7 +1271,7 @@
             ]
         },
         "isnull": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1290,7 +1296,7 @@
             ]
         },
         "json": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1315,7 +1321,7 @@
             ]
         },
         "jsonfield": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1340,7 +1346,7 @@
             ]
         },
         "month": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1365,7 +1371,7 @@
             ]
         },
         "number": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": false,
@@ -1444,7 +1450,7 @@
             ]
         },
         "numberarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1469,7 +1475,7 @@
             ]
         },
         "numberchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1494,7 +1500,7 @@
             ]
         },
         "regex": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1519,7 +1525,7 @@
             ]
         },
         "string": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1544,7 +1550,7 @@
             ]
         },
         "stringarray": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1569,7 +1575,7 @@
             ]
         },
         "stringchoice": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1594,7 +1600,7 @@
             ]
         },
         "unknown": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1619,7 +1625,7 @@
             ]
         },
         "weekday": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "count": {
                     "canPivot": false,
@@ -1644,7 +1650,7 @@
             ]
         },
         "year": {
-            "defaultFilters": "",
+            "defaultFilters": [],
             "fields": {
                 "average": {
                     "canPivot": false,

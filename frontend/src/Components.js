@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { TLink, SLink, useData, version, Save, Delete, CopyText } from "./Util";
 import { Results } from "./Results";
-import { getPartsForQuery } from "./Query";
+import { getPartsForQuery, getRelUrlForQuery } from "./Query";
 import "./App.css";
 
 function FilterValue(props) {
@@ -234,19 +234,11 @@ function AllFields(props) {
 }
 
 function ModelSelector(props) {
-  const { sortedModels, allModelFields, model } = props;
-  const history = useHistory();
+  const { query, sortedModels, model } = props;
   return (
     <select
       className="ModelSelector"
-      onChange={(e) => {
-        history.push(
-          `/query/${e.target.value}/.html?${
-            allModelFields[e.target.value].defaultFilters
-          }`
-        );
-        window.location.reload(true);
-      }}
+      onChange={(e) => query.setModel(e.target.value)}
       value={model}
     >
       {sortedModels.map((model) => (
@@ -273,7 +265,6 @@ function QueryPage(props) {
     body,
     length,
     sortedModels,
-    allModelFields,
     model,
     filters,
     filterErrors,
@@ -291,7 +282,7 @@ function QueryPage(props) {
 
   return (
     <>
-      <ModelSelector {...{ query, sortedModels, allModelFields, model }} />
+      <ModelSelector {...{ query, sortedModels, model }} />
       <Filters {...{ query, filters, filterErrors }} />
       <p>
         <span className={length >= query.query.limit ? "Error" : ""}>
@@ -451,7 +442,7 @@ function SavedViewList(props) {
 }
 
 function HomePage(props) {
-  const { sortedModels, allModelFields, baseUrl } = props;
+  const { sortedModels, baseUrl, defaultRowLimit, allModelFields } = props;
   return (
     <div className="Index">
       <div>
@@ -460,7 +451,15 @@ function HomePage(props) {
           {sortedModels.map((model) => (
             <div key={model}>
               <Link
-                to={`/query/${model}/.html?${allModelFields[model].defaultFilters}`}
+                to={getRelUrlForQuery(
+                  {
+                    model: model,
+                    fields: [],
+                    filters: allModelFields[model].defaultFilters,
+                    limit: defaultRowLimit,
+                  },
+                  "html"
+                )}
                 className="Link"
               >
                 {model}

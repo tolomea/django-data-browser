@@ -25,10 +25,14 @@ function getPartsForQuery(query) {
   };
 }
 
-function getUrlForQuery(baseUrl, query, media) {
+function getRelUrlForQuery(query, media) {
   const { model, fields, query: query_str, limit } = getPartsForQuery(query);
-  const basePath = `${baseUrl}query/${model}`;
-  return `${window.location.origin}${basePath}/${fields}.${media}?${query_str}&limit=${limit}`;
+  return `query/${model}/${fields}.${media}?${query_str}&limit=${limit}`;
+}
+
+function getUrlForQuery(baseUrl, query, media) {
+  const relUrl = getRelUrlForQuery(query, media);
+  return `${window.location.origin}${baseUrl}${relUrl}`;
 }
 
 class Query {
@@ -204,6 +208,16 @@ class Query {
     this.setQuery({ limit: limit > 0 ? limit : 1 });
   }
 
+  setModel(model) {
+    this.setQuery({
+      model: model,
+      fields: [],
+      filters: this.config.allModelFields[model].defaultFilters,
+      limit: this.config.defaultRowLimit,
+      ...empty,
+    });
+  }
+
   getUrlForMedia(media) {
     return getUrlForQuery(this.config.baseUrl, this.query, media);
   }
@@ -233,4 +247,4 @@ class Query {
   }
 }
 
-export { Query, getPartsForQuery, getUrlForQuery, empty };
+export { Query, getPartsForQuery, getRelUrlForQuery, getUrlForQuery, empty };

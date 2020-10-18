@@ -109,7 +109,10 @@ function VTableBodyRow(props) {
       );
     else
       return (
-        <td key={field.pathStr} class={`${i ? "" : classNameFirst} Empty`}></td>
+        <td
+          key={field.pathStr}
+          className={`${i ? "" : classNameFirst} Empty`}
+        ></td>
       );
   });
 }
