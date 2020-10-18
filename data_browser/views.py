@@ -142,15 +142,15 @@ def query_html(request, *, model_name="", fields=""):
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
     if media.startswith("profile") or media.startswith("pstats"):
+        if "_" in media:
+            prof_media, media = media.split("_")
+        else:
+            prof_media = media
+            media = "json"
+
         profiler = cProfile.Profile()
         try:
             profiler.enable()
-
-            if "_" in media:
-                prof_media, media = media.split("_")
-            else:
-                prof_media = media
-                media = "json"
 
             query = Query.from_request(model_name, fields, request.GET)
             for x in _data_response(request, query, media, privilaged=True):
