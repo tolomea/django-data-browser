@@ -365,6 +365,7 @@ class TestDateTimeType:
     def test_default_lookup(self):
         assert DateTimeType.default_lookup == "equals"
 
+    @pytest.mark.django_db
     def test_aware_format(self, settings):
         settings.USE_TZ = True
         assert (
@@ -375,6 +376,7 @@ class TestDateTimeType:
         )
         assert DateTimeType.get_formatter(None)(None) is None
 
+    @pytest.mark.django_db
     def test_naive_format(self, settings):
         settings.USE_TZ = False
         assert (
