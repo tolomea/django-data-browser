@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/browser";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { sortBy } from "lodash";
 import {
   BrowserRouter,
@@ -15,87 +15,90 @@ import { doGet, fetchInProgress } from "./Util";
 
 const assert = require("assert");
 
-class QueryApp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      booting: true,
-      loading: false,
-      error: undefined,
-      model: "",
-      fields: [],
-      filters: [],
-      limit: props.config.defaultRowLimit,
-      ...empty,
-    };
-  }
+const BOOTING = "Booting...";
+const LOADING = "Loading...";
+const ERROR = "Error";
 
-  handleError(e) {
+function QueryApp(props) {
+  const { config } = props;
+  const { model, fieldStr } = useParams();
+  const [status, setStatus] = useState(BOOTING);
+  const [query, setQuery] = useState({
+    model: "",
+    fields: [],
+    filters: [],
+    limit: config.defaultRowLimit,
+    ...empty,
+  });
+  const queryStr = useLocation().search;
+
+  const handleError = (e) => {
     if (e.name !== "AbortError") {
-      this.setState({ error: true, loading: false });
+      setStatus(ERROR);
       console.log(e);
       Sentry.captureException(e);
     }
-  }
+  };
 
-  fetchResults(state) {
-    this.setState({ loading: true });
-    const url = getUrlForQuery(this.props.config.baseUrl, state, "json");
+  const fetchResults = (state) => {
+    setStatus(LOADING);
+    const url = getUrlForQuery(config.baseUrl, state, "json");
 
     return doGet(url).then((response) => {
-      this.setState({
+      setQuery((query) => ({
+        ...query,
         body: response.body,
         cols: response.cols,
         rows: response.rows,
         length: response.length,
         formatHints: response.formatHints,
         filterErrors: response.filterErrors,
-        loading: fetchInProgress,
-        error: undefined,
-      });
+      }));
+      setStatus(fetchInProgress ? LOADING : undefined);
       return response;
     });
-  }
+  };
 
-  popstate(e) {
-    this.setState(e.state);
-    this.fetchResults(e.state).catch(this.handleError.bind(this));
-  }
-  popstate = this.popstate.bind(this);
+  useEffect(() => {
+    const popstate = (e) => {
+      setQuery(e.state);
+      fetchResults(e.state).catch(handleError);
+    };
 
-  componentDidMount() {
-    const { model, fieldStr, queryStr, config } = this.props;
-    const url = `${config.baseUrl}query/${model}/${fieldStr}.query${queryStr}`;
+    const url = `${config.baseUrl}query/${model}/${
+      fieldStr || ""
+    }.query${queryStr}`;
+
     doGet(url).then((response) => {
       const reqState = {
-        booting: false,
-        loading: true,
-        error: undefined,
         model: response.model,
         fields: response.fields,
         filters: response.filters,
         limit: response.limit,
         ...empty,
       };
-      this.setState(reqState);
+      setQuery(reqState);
+      setStatus(LOADING);
       window.history.replaceState(
         reqState,
         null,
-        getUrlForQuery(this.props.config.baseUrl, reqState, "html")
+        getUrlForQuery(config.baseUrl, reqState, "html")
       );
-      window.addEventListener("popstate", this.popstate);
-      this.fetchResults(this.state).catch(this.handleError.bind(this));
+      window.addEventListener("popstate", popstate);
+      fetchResults(reqState).catch(handleError);
     });
-  }
 
-  componentWillUnmount() {
-    window.removeEventListener("popstate", this.popstate);
-  }
+    return () => {
+      window.removeEventListener("popstate", popstate);
+    };
+    // eslint-disable-next-line
+  }, []);
 
-  handleQueryChange(queryChange, reload = true) {
-    this.setState(queryChange);
+  const handleQueryChange = (queryChange, reload = true) => {
+    const newState = { ...query, ...queryChange };
 
-    const newState = { ...this.state, ...queryChange };
+    setQuery(newState);
+
     const request = {
       model: newState.model,
       fields: newState.fields,
@@ -106,12 +109,12 @@ class QueryApp extends React.Component {
     window.history.pushState(
       request,
       null,
-      getUrlForQuery(this.props.config.baseUrl, newState, "html")
+      getUrlForQuery(config.baseUrl, newState, "html")
     );
 
     if (!reload) return;
 
-    this.fetchResults(newState)
+    fetchResults(newState)
       .then((response) => {
         const res = { ...response, ...empty };
         res.filters = sortBy(res.filters, ["pathStr"]);
@@ -119,36 +122,19 @@ class QueryApp extends React.Component {
         req.filters = sortBy(req.filters, ["pathStr"]);
         assert.deepStrictEqual(res, req);
       })
-      .catch(this.handleError.bind(this));
-  }
+      .catch(handleError);
+  };
 
-  render() {
-    if (this.state.booting) return "";
-    const query = new Query(
-      this.props.config,
-      this.state,
-      this.handleQueryChange.bind(this)
-    );
-    return (
-      <QueryPage
-        query={query}
-        sortedModels={this.props.config.sortedModels}
-        allModelFields={this.props.config.allModelFields}
-        baseUrl={this.props.config.baseUrl}
-        {...this.state}
-      />
-    );
-  }
-}
-
-function Bob(props) {
-  const { model, fieldStr } = useParams();
+  if (status === BOOTING) return "";
+  const queryObj = new Query(config, query, handleQueryChange);
   return (
-    <QueryApp
-      {...props}
-      model={model}
-      fieldStr={fieldStr || ""}
-      queryStr={useLocation().search}
+    <QueryPage
+      overlay={status}
+      query={queryObj}
+      sortedModels={config.sortedModels}
+      allModelFields={config.allModelFields}
+      baseUrl={config.baseUrl}
+      {...query}
     />
   );
 }
@@ -161,7 +147,7 @@ function App(props) {
       <div id="body">
         <Switch>
           <Route path="/query/:model/:fieldStr?.html">
-            <Bob config={props} {...{ sortedModels }} />
+            <QueryApp config={props} />
           </Route>
           <Route path="/views/:pk.html">
             <EditSavedView {...{ baseUrl, canMakePublic }} />

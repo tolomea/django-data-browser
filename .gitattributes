@@ -1,0 +1,4 @@
+data_browser/fe_build/** linguist-generated=true
+data_browser/fe_build/** -diff -merge
+data_browser/templates/data_browser/index.html linguist-generated=true
+data_browser/templates/data_browser/index.html -diff -merge

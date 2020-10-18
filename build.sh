@@ -9,7 +9,8 @@ version=$(python -c "import data_browser; print(data_browser.version)")
 set +x
 echo SUCCESS
 echo
-echo git commit -m $version
-echo git tag -a -m $version $version
-echo git push --follow-tags
-echo python -m twine upload -u __token__ dist/*
+echo "To release run the following:"
+echo "    git commit -m $version"
+echo "    git tag -a -m $version $version"
+echo "    git push --follow-tags"
+echo "    python -m twine upload -u __token__ dist/*"
