@@ -287,7 +287,7 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
-|           |                | | Support for profiling CSV etc output. See CONTRIBUTING.rst                     |
+| 2.2.18    | 2020-10-18     | | Support for profiling CSV etc output. See CONTRIBUTING.rst                     |
 |           |                | | Performance improvements for large result sets.                                |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.17    | 2020-10-15     | | Performance improvements for large result sets.                                |
