@@ -14,12 +14,12 @@ function getPartsForQuery(query) {
       .map(
         (f) =>
           (f.pivoted ? "&" : "") +
-          f.path.join("__") +
+          f.pathStr +
           { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
       )
       .join(","),
     query: query.filters
-      .map((f) => `${f.path.join("__")}__${f.lookup}=${f.value}`)
+      .map((f) => `${f.pathStr}__${f.lookup}=${f.value}`)
       .join("&"),
     limit: query.limit,
   };
@@ -38,13 +38,13 @@ class Query {
     this.setQuery = setQuery;
   }
 
-  getField(path) {
-    const field = path.slice(-1);
+  getField(pathStr) {
+    const path = pathStr.split("__");
     let model = this.query.model;
     for (const field of path.slice(0, -1)) {
       model = this.config.allModelFields[model].fields[field].model;
     }
-    return this.config.allModelFields[model].fields[field];
+    return this.config.allModelFields[model].fields[path.slice(-1)];
   }
 
   getType(field) {
@@ -66,18 +66,14 @@ class Query {
     return fields.findIndex((f) => f.pathStr === field.pathStr);
   }
 
-  addField(path, prettyPath, sort) {
-    const newFields = this.query.fields.filter(
-      (f) => f.pathStr !== path.join("__")
-    );
+  addField(pathStr, sort) {
+    const newFields = this.query.fields.filter((f) => f.pathStr !== pathStr);
     const priorities = newFields
       .map((f) => f.priority)
       .filter((f) => f !== null);
     const newPriority = priorities.length ? Math.max(...priorities) + 1 : 0;
     newFields.push({
-      path: path,
-      pathStr: path.join("__"),
-      prettyPath: prettyPath,
+      pathStr: pathStr,
       sort: sort,
       priority: sort ? newPriority : null,
       pivoted: false,
@@ -86,7 +82,7 @@ class Query {
   }
 
   removeField(field) {
-    const modelField = this.getField(field.path);
+    const modelField = this.getField(field.pathStr);
     this.setQuery(
       {
         fields: this.query.fields.filter((f) => f.pathStr !== field.pathStr),
@@ -96,7 +92,7 @@ class Query {
   }
 
   moveField(field, left) {
-    const modelField = this.getField(field.path);
+    const modelField = this.getField(field.pathStr);
 
     // get the fields in their sections
     const colFields = this.colFields().slice();
@@ -167,14 +163,12 @@ class Query {
     });
   }
 
-  addFilter(path, prettyPath) {
-    const field = this.getField(path);
+  addFilter(pathStr) {
+    const field = this.getField(pathStr);
     const type = this.getType(field);
     const newFilters = this.query.filters.slice();
     newFilters.push({
-      path: path,
-      pathStr: path.join("__"),
-      prettyPath: prettyPath,
+      pathStr: pathStr,
       lookup: type.defaultLookup,
       value: this.getDefaultLookupValue(field, type, type.defaultLookup),
     });
@@ -196,7 +190,7 @@ class Query {
   setFilterLookup(index, lookup) {
     const newFilters = this.query.filters.slice();
     const filter = newFilters[index];
-    const field = this.getField(newFilters[index].path);
+    const field = this.getField(newFilters[index].pathStr);
     const type = this.getType(field);
     if (type.lookups[filter.lookup].type !== type.lookups[lookup].type) {
       filter.value = this.getDefaultLookupValue(field, type, lookup);
@@ -221,7 +215,7 @@ class Query {
   rowFields() {
     if (this.colFields().length) {
       return this.query.fields.filter(
-        (f) => !f.pivoted && this.getField(f.path).canPivot
+        (f) => !f.pivoted && this.getField(f.pathStr).canPivot
       );
     } else {
       return this.query.fields;
@@ -230,7 +224,9 @@ class Query {
 
   resFields() {
     if (this.colFields().length) {
-      return this.query.fields.filter((f) => !this.getField(f.path).canPivot);
+      return this.query.fields.filter(
+        (f) => !this.getField(f.pathStr).canPivot
+      );
     } else {
       return [];
     }

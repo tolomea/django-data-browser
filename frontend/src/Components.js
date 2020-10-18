@@ -107,17 +107,15 @@ function FilterValue(props) {
 }
 
 function Filter(props) {
-  const { path, prettyPath, index, lookup, query, value, errorMessage } = props;
-  const field = query.getField(path);
+  const { pathStr, index, lookup, query, value, errorMessage } = props;
+  const field = query.getField(pathStr);
   const type = query.getType(field);
   return (
     <tr>
       <td>
         <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
-        <TLink
-          onClick={() => query.addField(path, prettyPath, type.defaultSort)}
-        >
-          {prettyPath.join(" ")}
+        <TLink onClick={() => query.addField(pathStr, type.defaultSort)}>
+          {pathStr} {/* TODO should be pretty path */}
         </TLink>{" "}
       </td>
       <td>
@@ -167,7 +165,7 @@ function Filters(props) {
 }
 
 function Field(props) {
-  const { query, path, prettyPath, modelField } = props;
+  const { query, path, modelField } = props;
   const type = query.getType(modelField);
   const [toggled, setToggled] = useState(false);
   return (
@@ -175,7 +173,7 @@ function Field(props) {
       <tr>
         <td>
           {modelField.concrete && type.defaultLookup && (
-            <SLink onClick={() => query.addFilter(path, prettyPath)}>
+            <SLink onClick={() => query.addFilter(path.join("__"))}>
               filter_alt
             </SLink>
           )}
@@ -193,7 +191,7 @@ function Field(props) {
         <td>
           {modelField.type ? (
             <TLink
-              onClick={() => query.addField(path, prettyPath, type.defaultSort)}
+              onClick={() => query.addField(path.join("__"), type.defaultSort)}
             >
               {modelField.prettyName}
             </TLink>
@@ -206,10 +204,7 @@ function Field(props) {
         <tr>
           <td></td>
           <td colSpan="2">
-            <AllFields
-              {...{ query, path, prettyPath }}
-              model={modelField.model}
-            />
+            <AllFields {...{ query, path }} model={modelField.model} />
           </td>
         </tr>
       )}
@@ -218,7 +213,7 @@ function Field(props) {
 }
 
 function AllFields(props) {
-  const { query, model, path, prettyPath } = props;
+  const { query, model, path } = props;
   const modelFields = query.getModelFields(model);
   return (
     <table>
@@ -230,7 +225,6 @@ function AllFields(props) {
               key={fieldName}
               {...{ query, modelField }}
               path={path.concat([fieldName])}
-              prettyPath={prettyPath.concat([modelField.prettyName])}
             />
           );
         })}
@@ -324,7 +318,7 @@ function QueryPage(props) {
       </p>
       <div className="MainSpace">
         <div className="FieldsList">
-          <AllFields {...{ query, model }} path={[]} prettyPath={[]} />
+          <AllFields {...{ query, model }} path={[]} />
         </div>
         {results}
         <div />

@@ -14,7 +14,7 @@ function Spacer(props) {
 
 function HeadCell(props) {
   const { query, field, className } = props;
-  const modelField = query.getField(field.path);
+  const modelField = query.getField(field.pathStr);
   const type = query.getType(modelField);
   return (
     <th {...{ className }}>
@@ -30,11 +30,11 @@ function HeadCell(props) {
       )}
       {modelField.concrete && type.defaultLookup ? (
         <>
-          <SLink onClick={() => query.addFilter(field.path, field.prettyPath)}>
+          <SLink onClick={() => query.addFilter(field.pathStr)}>
             filter_alt
           </SLink>{" "}
           <TLink onClick={() => query.toggleSort(field)}>
-            {field.prettyPath.join(" ")}
+            {field.pathStr} {/* TODO should be pretty path */}
             {
               {
                 dsc: `↑${field.priority}`,
@@ -45,7 +45,7 @@ function HeadCell(props) {
           </TLink>
         </>
       ) : (
-        " " + field.prettyPath.join(" ")
+        " " + field.pathStr /* TODO should be pretty path */
       )}
     </th>
   );
@@ -103,7 +103,7 @@ function VTableBodyRow(props) {
           key={field.pathStr}
           value={row[field.pathStr]}
           className={`${i ? "" : classNameFirst} ${className}`}
-          modelField={query.getField(field.path)}
+          modelField={query.getField(field.pathStr)}
           formatHint={formatHints[field.pathStr]}
         />
       );
@@ -123,7 +123,7 @@ function HTableRow(props) {
         <DataCell
           {...{ key, span, className }}
           value={col[field.pathStr]}
-          modelField={query.getField(field.path)}
+          modelField={query.getField(field.pathStr)}
           formatHint={formatHints[field.pathStr]}
         />
       ))}
