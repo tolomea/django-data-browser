@@ -287,7 +287,7 @@ Release History
 +-----------+----------------+----------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                          |
 +===========+================+==================================================================================+
-|           |                | | Support for annotations on inlines.                                            |
+| 2.2.19    | 2020-10-19     | Support for annotations on inlines.                                              |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.18    | 2020-10-18     | | Support for profiling CSV etc output. See CONTRIBUTING.rst                     |
 |           |                | | Performance improvements for large result sets.                                |
