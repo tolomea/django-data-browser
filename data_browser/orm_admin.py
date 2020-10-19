@@ -136,8 +136,6 @@ def _get_all_admin_fields(request):
             all_admin_fields[model].update(model_admin.get_list_display(request))
             all_admin_fields[model].update(getattr(model_admin, "ddb_extra_fields", []))
             all_admin_fields[model].add(open_in_admin)
-            if isinstance(model_admin, AdminMixin):
-                all_admin_fields[model].update(model_admin._ddb_annotations())
             hidden_fields[model].update(getattr(model_admin, "ddb_hide_fields", []))
 
             # check the inlines, these are already filtered for access
@@ -160,6 +158,10 @@ def _get_all_admin_fields(request):
                         hidden_fields[inline.model].update(
                             getattr(inline, "ddb_hide_fields", [])
                         )
+
+    for model, model_admin in model_admins.items():
+        if isinstance(model_admin, AdminMixin):
+            all_admin_fields[model].update(model_admin._ddb_annotations())
 
     # we always have id and never pk
     for fields in all_admin_fields.values():
