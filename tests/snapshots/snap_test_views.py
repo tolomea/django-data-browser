@@ -2027,6 +2027,72 @@ snapshots["test_query_html_no_perms config"] = {
             },
             "sortedFields": ["average", "is_null", "sum"],
         },
+        "core.Address": {
+            "defaultFilters": "",
+            "fields": {
+                "andrew": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "andrew",
+                    "type": "string",
+                },
+                "id": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number",
+                },
+            },
+            "sortedFields": ["id", "andrew"],
+        },
+        "core.Product": {
+            "defaultFilters": "default=filter&filter=default",
+            "fields": {
+                "annotated": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "annotated",
+                    "type": "string",
+                },
+                "id": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": "number",
+                    "prettyName": "id",
+                    "type": "number",
+                },
+                "stealth_annotation": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "stealth_annotation",
+                    "type": "string",
+                },
+            },
+            "sortedFields": ["id", "annotated", "stealth_annotation"],
+        },
+        "data_browser.View": {
+            "defaultFilters": "",
+            "fields": {
+                "id": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": "string",
+                    "prettyName": "id",
+                    "type": "string",
+                }
+            },
+            "sortedFields": ["id"],
+        },
         "date": {
             "defaultFilters": "",
             "fields": {
@@ -2765,7 +2831,7 @@ snapshots["test_query_html_no_perms config"] = {
     "canMakePublic": False,
     "defaultRowLimit": 1000,
     "sentryDsn": None,
-    "sortedModels": [],
+    "sortedModels": ["core.Address", "core.Product", "data_browser.View"],
     "types": {
         "boolean": {
             "defaultLookup": "equals",
