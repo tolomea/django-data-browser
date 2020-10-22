@@ -7,10 +7,10 @@ DATABASE_CONFIG = dj_database_url.config(
     conn_max_age=600, default="sqlite:///db.sqlite3"
 )
 
-if DATABASE_CONFIG["ENGINE"] == "django.db.backends.postgresql":  # pragma: postgres
-    JSON_FIELD_SUPPORT = django.VERSION > (2, 1)
-else:
-    JSON_FIELD_SUPPORT = django.VERSION > (3, 1)
+if "postgresql" in DATABASE_CONFIG["ENGINE"]:  # pragma: postgres
+    JSON_FIELD_SUPPORT = django.VERSION >= (2, 1)
+else:  # pragma: not postgres
+    JSON_FIELD_SUPPORT = django.VERSION >= (3, 1)
 
 INSTALLED_APPS = [
     "django.contrib.auth",
