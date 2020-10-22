@@ -1,5 +1,5 @@
-from django.contrib.postgres.fields import ArrayField
-from django.db import models
+from django.contrib.postgres.fields import ArrayField  # pragma: postgres
+from django.db import models  # pragma: postgres
 
 
 class ArrayModel(models.Model):  # pragma: postgres

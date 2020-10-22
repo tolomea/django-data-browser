@@ -230,7 +230,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
 
 
 def _fmt_choices(choices):
-    return [(value, str(label)) for value, label in choices]
+    return [(value, str(label)) for value, label in choices or []]
 
 
 def _get_field_type(model, field_name, field):
