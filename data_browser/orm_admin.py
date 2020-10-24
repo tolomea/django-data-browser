@@ -31,9 +31,11 @@ from .types import (
     DurationType,
     JSONType,
     NumberArrayType,
+    NumberChoiceArrayType,
     NumberChoiceType,
     NumberType,
     StringArrayType,
+    StringChoiceArrayType,
     StringChoiceType,
     StringType,
     UnknownType,
@@ -237,11 +239,28 @@ def _get_field_type(model, field_name, field):
     if isinstance(field, ArrayField) and isinstance(
         field.base_field, _STRING_FIELDS
     ):  # pragma: postgres
-        return StringArrayType, _fmt_choices(field.base_field.choices)
+        base_field, choices = _get_field_type(model, field_name, field.base_field)
+        array_types = {
+            StringType: StringArrayType,
+            NumberType: NumberArrayType,
+            StringChoiceType: StringChoiceArrayType,
+            NumberChoiceType: NumberChoiceArrayType,
+        }
+        if base_field in array_types:
+            return array_types[base_field], choices
+        else:
+            debug_log(
+                f"{model.__name__}.{field_name} unsupported subarray type {type(field.base_field).__name__}"
+            )
+            return UnknownType, None
+
     elif isinstance(field, ArrayField) and isinstance(
         field.base_field, _NUMBER_FIELDS
     ):  # pragma: postgres
-        return NumberArrayType, _fmt_choices(field.base_field.choices)
+        if field.base_field.choices:
+            return NumberChoiceArrayType, _fmt_choices(field.base_field.choices)
+        else:
+            return NumberArrayType, None
     elif isinstance(field, JSONField):
         res = JSONType
     elif field.__class__ in _FIELD_TYPE_MAP:

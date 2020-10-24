@@ -1487,6 +1487,31 @@
                 "is_null"
             ]
         },
+        "numberchoicearray": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "is_null": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "is_null",
+                    "type": "isnull"
+                }
+            },
+            "sortedFields": [
+                "count",
+                "is_null"
+            ]
+        },
         "regex": {
             "defaultFilters": [],
             "fields": {
@@ -1563,6 +1588,31 @@
             ]
         },
         "stringchoice": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "is_null": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "is_null",
+                    "type": "isnull"
+                }
+            },
+            "sortedFields": [
+                "count",
+                "is_null"
+            ]
+        },
+        "stringchoicearray": {
             "defaultFilters": [],
             "fields": {
                 "count": {
@@ -1984,7 +2034,7 @@
             "defaultValue": null,
             "lookups": {
                 "contains": {
-                    "type": "numberchoice"
+                    "type": "number"
                 },
                 "is_null": {
                     "type": "boolean"
@@ -1993,7 +2043,7 @@
                     "type": "number"
                 },
                 "not_contains": {
-                    "type": "numberchoice"
+                    "type": "number"
                 },
                 "not_length": {
                     "type": "number"
@@ -2025,6 +2075,35 @@
             "sortedLookups": [
                 "equals",
                 "not_equals",
+                "is_null"
+            ]
+        },
+        "numberchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": null,
+            "defaultValue": null,
+            "lookups": {
+                "contains": {
+                    "type": "numberchoice"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "length": {
+                    "type": "number"
+                },
+                "not_contains": {
+                    "type": "numberchoice"
+                },
+                "not_length": {
+                    "type": "number"
+                }
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null"
             ]
         },
@@ -2094,7 +2173,7 @@
             "defaultValue": null,
             "lookups": {
                 "contains": {
-                    "type": "stringchoice"
+                    "type": "string"
                 },
                 "is_null": {
                     "type": "boolean"
@@ -2103,7 +2182,7 @@
                     "type": "number"
                 },
                 "not_contains": {
-                    "type": "stringchoice"
+                    "type": "string"
                 },
                 "not_length": {
                     "type": "number"
@@ -2135,6 +2214,35 @@
             "sortedLookups": [
                 "equals",
                 "not_equals",
+                "is_null"
+            ]
+        },
+        "stringchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": null,
+            "defaultValue": null,
+            "lookups": {
+                "contains": {
+                    "type": "stringchoice"
+                },
+                "is_null": {
+                    "type": "boolean"
+                },
+                "length": {
+                    "type": "number"
+                },
+                "not_contains": {
+                    "type": "stringchoice"
+                },
+                "not_length": {
+                    "type": "number"
+                }
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
                 "is_null"
             ]
         },

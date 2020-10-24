@@ -126,12 +126,12 @@ def _get_django_aggregate(field_type, name):
 
 
 def _get_django_lookup(field_type, lookup, filter_value):
-    from .types import StringChoiceType, StringType
+    from .types import StringType
 
     if lookup == "field_equals":
         lookup, filter_value = filter_value
         return lookup, filter_value
-    elif field_type in [StringType, StringChoiceType]:
+    elif field_type == StringType:
         return (
             {
                 "equals": "iexact",

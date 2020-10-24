@@ -1421,6 +1421,28 @@ snapshots["test_query_html config"] = {
             },
             "sortedFields": ["count", "is_null"],
         },
+        "numberchoicearray": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
         "regex": {
             "defaultFilters": [],
             "fields": {
@@ -1488,6 +1510,28 @@ snapshots["test_query_html config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringchoice": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
+        "stringchoicearray": {
             "defaultFilters": [],
             "fields": {
                 "count": {
@@ -1781,10 +1825,10 @@ snapshots["test_query_html config"] = {
             "defaultSort": None,
             "defaultValue": None,
             "lookups": {
-                "contains": {"type": "numberchoice"},
+                "contains": {"type": "number"},
                 "is_null": {"type": "boolean"},
                 "length": {"type": "number"},
-                "not_contains": {"type": "numberchoice"},
+                "not_contains": {"type": "number"},
                 "not_length": {"type": "number"},
             },
             "sortedLookups": [
@@ -1805,6 +1849,25 @@ snapshots["test_query_html config"] = {
                 "not_equals": {"type": "stringchoice"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "numberchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": None,
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "numberchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "numberchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
         },
         "regex": {
             "defaultLookup": None,
@@ -1849,10 +1912,10 @@ snapshots["test_query_html config"] = {
             "defaultSort": None,
             "defaultValue": None,
             "lookups": {
-                "contains": {"type": "stringchoice"},
+                "contains": {"type": "string"},
                 "is_null": {"type": "boolean"},
                 "length": {"type": "number"},
-                "not_contains": {"type": "stringchoice"},
+                "not_contains": {"type": "string"},
                 "not_length": {"type": "number"},
             },
             "sortedLookups": [
@@ -1873,6 +1936,25 @@ snapshots["test_query_html config"] = {
                 "not_equals": {"type": "stringchoice"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "stringchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": None,
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "stringchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "stringchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
         },
         "unknown": {
             "defaultLookup": "is_null",
@@ -2601,6 +2683,28 @@ snapshots["test_query_html_no_perms config"] = {
             },
             "sortedFields": ["count", "is_null"],
         },
+        "numberchoicearray": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
         "regex": {
             "defaultFilters": [],
             "fields": {
@@ -2668,6 +2772,28 @@ snapshots["test_query_html_no_perms config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringchoice": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
+        "stringchoicearray": {
             "defaultFilters": [],
             "fields": {
                 "count": {
@@ -2949,10 +3075,10 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultSort": None,
             "defaultValue": None,
             "lookups": {
-                "contains": {"type": "numberchoice"},
+                "contains": {"type": "number"},
                 "is_null": {"type": "boolean"},
                 "length": {"type": "number"},
-                "not_contains": {"type": "numberchoice"},
+                "not_contains": {"type": "number"},
                 "not_length": {"type": "number"},
             },
             "sortedLookups": [
@@ -2973,6 +3099,25 @@ snapshots["test_query_html_no_perms config"] = {
                 "not_equals": {"type": "stringchoice"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "numberchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": None,
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "numberchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "numberchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
         },
         "regex": {
             "defaultLookup": None,
@@ -3017,10 +3162,10 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultSort": None,
             "defaultValue": None,
             "lookups": {
-                "contains": {"type": "stringchoice"},
+                "contains": {"type": "string"},
                 "is_null": {"type": "boolean"},
                 "length": {"type": "number"},
-                "not_contains": {"type": "stringchoice"},
+                "not_contains": {"type": "string"},
                 "not_length": {"type": "number"},
             },
             "sortedLookups": [
@@ -3041,6 +3186,25 @@ snapshots["test_query_html_no_perms config"] = {
                 "not_equals": {"type": "stringchoice"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "stringchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": None,
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "stringchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "stringchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
         },
         "unknown": {
             "defaultLookup": "is_null",
@@ -4500,6 +4664,28 @@ snapshots["test_query_ctx config"] = {
             },
             "sortedFields": ["count", "is_null"],
         },
+        "numberchoicearray": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
         "regex": {
             "defaultFilters": [],
             "fields": {
@@ -4567,6 +4753,28 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": ["count", "is_null"],
         },
         "stringchoice": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "count",
+                    "type": "number",
+                },
+                "is_null": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "model": None,
+                    "prettyName": "is_null",
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
+        "stringchoicearray": {
             "defaultFilters": [],
             "fields": {
                 "count": {
@@ -4860,10 +5068,10 @@ snapshots["test_query_ctx config"] = {
             "defaultSort": None,
             "defaultValue": None,
             "lookups": {
-                "contains": {"type": "numberchoice"},
+                "contains": {"type": "number"},
                 "is_null": {"type": "boolean"},
                 "length": {"type": "number"},
-                "not_contains": {"type": "numberchoice"},
+                "not_contains": {"type": "number"},
                 "not_length": {"type": "number"},
             },
             "sortedLookups": [
@@ -4884,6 +5092,25 @@ snapshots["test_query_ctx config"] = {
                 "not_equals": {"type": "stringchoice"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "numberchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": None,
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "numberchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "numberchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
         },
         "regex": {
             "defaultLookup": None,
@@ -4928,10 +5155,10 @@ snapshots["test_query_ctx config"] = {
             "defaultSort": None,
             "defaultValue": None,
             "lookups": {
-                "contains": {"type": "stringchoice"},
+                "contains": {"type": "string"},
                 "is_null": {"type": "boolean"},
                 "length": {"type": "number"},
-                "not_contains": {"type": "stringchoice"},
+                "not_contains": {"type": "string"},
                 "not_length": {"type": "number"},
             },
             "sortedLookups": [
@@ -4952,6 +5179,25 @@ snapshots["test_query_ctx config"] = {
                 "not_equals": {"type": "stringchoice"},
             },
             "sortedLookups": ["equals", "not_equals", "is_null"],
+        },
+        "stringchoicearray": {
+            "defaultLookup": "contains",
+            "defaultSort": None,
+            "defaultValue": None,
+            "lookups": {
+                "contains": {"type": "stringchoice"},
+                "is_null": {"type": "boolean"},
+                "length": {"type": "number"},
+                "not_contains": {"type": "stringchoice"},
+                "not_length": {"type": "number"},
+            },
+            "sortedLookups": [
+                "contains",
+                "length",
+                "not_contains",
+                "not_length",
+                "is_null",
+            ],
         },
         "unknown": {
             "defaultLookup": "is_null",

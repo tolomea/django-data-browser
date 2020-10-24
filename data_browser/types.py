@@ -89,84 +89,6 @@ class StringType(BaseType):
         }
 
 
-class ChoiceTypeMixin:
-    default_value = None
-
-    @staticmethod
-    def get_formatter(choices):
-        assert choices
-        choices = dict(choices)
-        choices[None] = None
-        return lambda value: choices.get(value, value)
-
-    @staticmethod
-    def _parse(value, choices):
-        choices = {v: k for k, v in choices}
-        return choices[value]
-
-    @staticmethod
-    def _lookups():
-        return {
-            "equals": StringChoiceType,
-            "not_equals": StringChoiceType,
-            "is_null": BooleanType,
-        }
-
-
-class StringChoiceType(ChoiceTypeMixin, BaseType):
-    pass
-
-
-class NumberChoiceType(ChoiceTypeMixin, BaseType):
-    pass
-
-
-class ArrayTypeMixin:
-    default_value = None
-
-    @staticmethod
-    def get_formatter(choices):  # pragma: postgres
-        if choices:
-            choices = dict(choices)
-            choices[None] = None
-            return (
-                lambda value: None
-                if value is None
-                else ", ".join(str(choices.get(v, v)) for v in value)
-            )
-        return lambda value: None if value is None else ", ".join(str(v) for v in value)
-
-
-class StringArrayType(ArrayTypeMixin, BaseType):
-    @staticmethod
-    def _lookups():
-        return {
-            "contains": StringChoiceType,
-            "length": NumberType,
-            "not_contains": StringChoiceType,
-            "not_length": NumberType,
-            "is_null": BooleanType,
-        }
-
-
-class RegexType(BaseType):
-    default_value = ".*"
-
-    @staticmethod
-    @lru_cache(maxsize=None)
-    def _parse(value, choices):
-        assert not choices
-        from django.contrib.contenttypes.models import ContentType
-        from django.db.transaction import atomic
-
-        # this is dirty
-        # we need to check if the regex is going to cause a db exception
-        # and not kill any in progress transaction as we check
-        with atomic():
-            list(ContentType.objects.filter(model__regex=value))
-        return value
-
-
 class NumberType(BaseType):
     default_value = 0
 
@@ -206,16 +128,22 @@ class NumberType(BaseType):
         }
 
 
-class NumberArrayType(ArrayTypeMixin, BaseType):
+class RegexType(BaseType):
+    default_value = ".*"
+
     @staticmethod
-    def _lookups():
-        return {
-            "contains": NumberChoiceType,
-            "length": NumberType,
-            "not_contains": NumberChoiceType,
-            "not_length": NumberType,
-            "is_null": BooleanType,
-        }
+    @lru_cache(maxsize=None)
+    def _parse(value, choices):
+        assert not choices
+        from django.contrib.contenttypes.models import ContentType
+        from django.db.transaction import atomic
+
+        # this is dirty
+        # we need to check if the regex is going to cause a db exception
+        # and not kill any in progress transaction as we check
+        with atomic():
+            list(ContentType.objects.filter(model__regex=value))
+        return value
 
 
 class YearType(NumberType):
@@ -496,6 +424,80 @@ class JSONType(BaseType):
             "not_has_key": StringType,
             "not_field_equals": JSONFieldType,
         }
+
+
+class ChoiceTypeMixin:
+    default_value = None
+
+    @staticmethod
+    def get_formatter(choices):
+        assert choices
+        choices = dict(choices)
+        choices[None] = None
+        return lambda value: choices.get(value, value)
+
+    @staticmethod
+    def _parse(value, choices):
+        choices = {v: k for k, v in choices}
+        return choices[value]
+
+    @staticmethod
+    def _lookups():
+        return {
+            "equals": StringChoiceType,
+            "not_equals": StringChoiceType,
+            "is_null": BooleanType,
+        }
+
+
+class StringChoiceType(ChoiceTypeMixin, BaseType):
+    pass
+
+
+class NumberChoiceType(ChoiceTypeMixin, BaseType):
+    pass
+
+
+class ArrayTypeMixin:
+    default_value = None
+
+    @staticmethod
+    def get_formatter(choices):  # pragma: postgres
+        if choices:
+            choices = dict(choices)
+            choices[None] = None
+            return (
+                lambda value: None
+                if value is None
+                else ", ".join(str(choices.get(v, v)) for v in value)
+            )
+        return lambda value: None if value is None else ", ".join(str(v) for v in value)
+
+    @classmethod
+    def _lookups(cls):
+        return {
+            "contains": cls.base_type,
+            "length": NumberType,
+            "not_contains": cls.base_type,
+            "not_length": NumberType,
+            "is_null": BooleanType,
+        }
+
+
+class StringArrayType(ArrayTypeMixin, BaseType):
+    base_type = StringType
+
+
+class NumberArrayType(ArrayTypeMixin, BaseType):
+    base_type = NumberType
+
+
+class StringChoiceArrayType(ArrayTypeMixin, BaseType):
+    base_type = StringChoiceType
+
+
+class NumberChoiceArrayType(ArrayTypeMixin, BaseType):
+    base_type = NumberChoiceType
 
 
 TYPES = {cls.name: cls for cls in all_subclasses(BaseType)}

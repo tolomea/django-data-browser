@@ -7,8 +7,11 @@ class ArrayModel(models.Model):  # pragma: postgres
     int_array_field = ArrayField(null=True, base_field=models.IntegerField())
     char_choice_array_field = ArrayField(
         null=True,
-        base_field=models.CharField(max_length=32, choices=[("a", "A"), ("b", "B")]),
+        base_field=models.CharField(
+            max_length=32, choices=[("a", "A"), ("b", "B"), ("c", "C")]
+        ),
     )
     int_choice_array_field = ArrayField(
-        null=True, base_field=models.IntegerField(choices=[(1, "A"), (2, "B")])
+        null=True,
+        base_field=models.IntegerField(choices=[(1, "A"), (2, "B"), (3, "C")]),
     )
