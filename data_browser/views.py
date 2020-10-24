@@ -66,7 +66,7 @@ def _get_model_fields(model_name, orm_models):
             "concrete": orm_field.concrete,
             "canPivot": orm_field.can_pivot,
             "prettyName": orm_field.pretty_name,
-            "choices": orm_field.choices,
+            "choices": [v for k, v in orm_field.choices],
         }
         for name, orm_field in orm_model.fields.items()
     }

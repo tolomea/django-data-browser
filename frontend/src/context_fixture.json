@@ -582,14 +582,8 @@
                 "number_choice": {
                     "canPivot": true,
                     "choices": [
-                        [
-                            1,
-                            "A"
-                        ],
-                        [
-                            2,
-                            "B"
-                        ]
+                        "A",
+                        "B"
                     ],
                     "concrete": true,
                     "model": "numberchoice",
@@ -647,14 +641,8 @@
                 "string_choice": {
                     "canPivot": true,
                     "choices": [
-                        [
-                            "a",
-                            "A"
-                        ],
-                        [
-                            "b",
-                            "B"
-                        ]
+                        "A",
+                        "B"
                     ],
                     "concrete": true,
                     "model": "stringchoice",

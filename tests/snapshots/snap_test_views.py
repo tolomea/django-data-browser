@@ -557,7 +557,7 @@ snapshots["test_query_html config"] = {
                 },
                 "number_choice": {
                     "canPivot": True,
-                    "choices": [[1, "A"], [2, "B"]],
+                    "choices": ["A", "B"],
                     "concrete": True,
                     "model": "numberchoice",
                     "prettyName": "number_choice",
@@ -613,7 +613,7 @@ snapshots["test_query_html config"] = {
                 },
                 "string_choice": {
                     "canPivot": True,
-                    "choices": [["a", "A"], ["b", "B"]],
+                    "choices": ["A", "B"],
                     "concrete": True,
                     "model": "stringchoice",
                     "prettyName": "string_choice",
@@ -3636,7 +3636,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "number_choice": {
                     "canPivot": True,
-                    "choices": [[1, "A"], [2, "B"]],
+                    "choices": ["A", "B"],
                     "concrete": True,
                     "model": "numberchoice",
                     "prettyName": "number_choice",
@@ -3692,7 +3692,7 @@ snapshots["test_query_ctx config"] = {
                 },
                 "string_choice": {
                     "canPivot": True,
-                    "choices": [["a", "A"], ["b", "B"]],
+                    "choices": ["A", "B"],
                     "concrete": True,
                     "model": "stringchoice",
                     "prettyName": "string_choice",
