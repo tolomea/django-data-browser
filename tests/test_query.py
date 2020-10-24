@@ -55,6 +55,7 @@ def orm_models():
                     pretty_name="fa",
                     type_=StringType,
                     rel_name=StringType.name,
+                    choices=None,
                 ),
                 "fd": orm_fields.OrmConcreteField(
                     model_name="app.model",
@@ -62,6 +63,7 @@ def orm_models():
                     pretty_name="fd",
                     type_=StringType,
                     rel_name=StringType.name,
+                    choices=None,
                 ),
                 "fn": orm_fields.OrmCalculatedField(
                     model_name="app.model", name="fn", pretty_name="fn", func=None
@@ -72,6 +74,7 @@ def orm_models():
                     pretty_name="bob",
                     type_=StringType,
                     rel_name=StringType.name,
+                    choices=None,
                 ),
                 "num": orm_fields.OrmConcreteField(
                     model_name="app.model",
@@ -79,6 +82,7 @@ def orm_models():
                     pretty_name="num",
                     type_=NumberType,
                     rel_name=NumberType.name,
+                    choices=None,
                 ),
                 "tom": orm_fields.OrmFkField(
                     model_name="app.model",
@@ -97,6 +101,7 @@ def orm_models():
                     pretty_name="jones",
                     type_=StringType,
                     rel_name=StringType.name,
+                    choices=None,
                 ),
                 "michael": orm_fields.OrmFkField(
                     model_name="app.Tom",
@@ -115,6 +120,7 @@ def orm_models():
                     pretty_name="bolton",
                     type_=StringType,
                     rel_name=StringType.name,
+                    choices=None,
                 )
             },
             admin=True,
@@ -307,10 +313,10 @@ class TestType:
 class TestStringType:
     @pytest.mark.django_db
     def test_validate(self):
-        assert StringType.parse("contains", "hello") == ("hello", None)
-        assert StringType.parse("pontains", "hello") == (None, ANY(str))
-        assert StringType.parse("regex", ".*") == (".*", None)
-        assert StringType.parse("regex", "\\") == (None, ANY(str))
+        assert StringType.parse("contains", "hello", None) == ("hello", None)
+        assert StringType.parse("pontains", "hello", None) == (None, ANY(str))
+        assert StringType.parse("regex", ".*", None) == (".*", None)
+        assert StringType.parse("regex", "\\", None) == (None, ANY(str))
 
     def test_default_lookup(self):
         assert StringType.default_lookup == "equals"
@@ -322,11 +328,11 @@ class TestStringType:
 
 class TestNumberType:
     def test_validate(self):
-        assert NumberType.parse("gt", "6.1") == (6.1, None)
-        assert NumberType.parse("pontains", "6.1") == (None, ANY(str))
-        assert NumberType.parse("gt", "hello") == (None, ANY(str))
-        assert NumberType.parse("is_null", "True") == (True, None)
-        assert NumberType.parse("is_null", "hello") == (None, ANY(str))
+        assert NumberType.parse("gt", "6.1", None) == (6.1, None)
+        assert NumberType.parse("pontains", "6.1", None) == (None, ANY(str))
+        assert NumberType.parse("gt", "hello", None) == (None, ANY(str))
+        assert NumberType.parse("is_null", "True", None) == (True, None)
+        assert NumberType.parse("is_null", "hello", None) == (None, ANY(str))
 
     def test_default_lookup(self):
         assert NumberType.default_lookup == "equals"
@@ -338,12 +344,12 @@ class TestNumberType:
 
 class TestYearType:
     def test_validate(self):
-        assert YearType.parse("gt", "6") == (6, None)
-        assert YearType.parse("pontains", "6.1") == (None, ANY(str))
-        assert YearType.parse("gt", "hello") == (None, ANY(str))
-        assert YearType.parse("is_null", "True") == (True, None)
-        assert YearType.parse("is_null", "hello") == (None, ANY(str))
-        assert YearType.parse("equals", "0") == (None, ANY(str))
+        assert YearType.parse("gt", "6", None) == (6, None)
+        assert YearType.parse("pontains", "6.1", None) == (None, ANY(str))
+        assert YearType.parse("gt", "hello", None) == (None, ANY(str))
+        assert YearType.parse("is_null", "True", None) == (True, None)
+        assert YearType.parse("is_null", "hello", None) == (None, ANY(str))
+        assert YearType.parse("equals", "0", None) == (None, ANY(str))
 
     def test_default_lookup(self):
         assert YearType.default_lookup == "equals"
@@ -355,12 +361,18 @@ class TestYearType:
 
 class TestDateTimeType:
     def test_validate(self):
-        assert DateTimeType.parse("gt", "2018-03-20T22:31:23") == (ANY(datetime), None)
-        assert DateTimeType.parse("gt", "hello") == (None, ANY(str))
-        assert DateTimeType.parse("pontains", "2018-03-20T22:31:23") == (None, ANY(str))
-        assert DateTimeType.parse("is_null", "True") == (True, None)
-        assert DateTimeType.parse("is_null", "hello") == (None, ANY(str))
-        assert DateTimeType.parse("gt", "now") == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "2018-03-20T22:31:23", None) == (
+            ANY(datetime),
+            None,
+        )
+        assert DateTimeType.parse("gt", "hello", None) == (None, ANY(str))
+        assert DateTimeType.parse("pontains", "2018-03-20T22:31:23", None) == (
+            None,
+            ANY(str),
+        )
+        assert DateTimeType.parse("is_null", "True", None) == (True, None)
+        assert DateTimeType.parse("is_null", "hello", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "now", None) == (ANY(datetime), None)
 
     def test_default_lookup(self):
         assert DateTimeType.default_lookup == "equals"
@@ -388,15 +400,15 @@ class TestDateTimeType:
 
 class TestDurationType:
     def test_validate(self):
-        assert DurationType.parse("gt", "5 days") == (timedelta(days=5), None)
-        assert DurationType.parse("gt", "5 5:5") == (
+        assert DurationType.parse("gt", "5 days", None) == (timedelta(days=5), None)
+        assert DurationType.parse("gt", "5 5:5", None) == (
             timedelta(days=5, hours=5, minutes=5),
             None,
         )
-        assert DurationType.parse("gt", "5 dayss") == (None, ANY(str))
-        assert DurationType.parse("pontains", "5 days") == (None, ANY(str))
-        assert DurationType.parse("is_null", "True") == (True, None)
-        assert DurationType.parse("is_null", "hello") == (None, ANY(str))
+        assert DurationType.parse("gt", "5 dayss", None) == (None, ANY(str))
+        assert DurationType.parse("pontains", "5 days", None) == (None, ANY(str))
+        assert DurationType.parse("is_null", "True", None) == (True, None)
+        assert DurationType.parse("is_null", "hello", None) == (None, ANY(str))
 
     def test_default_lookup(self):
         assert DurationType.default_lookup == "equals"
@@ -412,12 +424,15 @@ class TestDurationType:
 
 class TestDateType:
     def test_validate(self):
-        assert DateType.parse("gt", "2018-03-20T22:31:23") == (ANY(date), None)
-        assert DateType.parse("gt", "hello") == (None, ANY(str))
-        assert DateType.parse("pontains", "2018-03-20T22:31:23") == (None, ANY(str))
-        assert DateType.parse("is_null", "True") == (True, None)
-        assert DateType.parse("is_null", "hello") == (None, ANY(str))
-        assert DateType.parse("gt", "today") == (ANY(date), None)
+        assert DateType.parse("gt", "2018-03-20T22:31:23", None) == (ANY(date), None)
+        assert DateType.parse("gt", "hello", None) == (None, ANY(str))
+        assert DateType.parse("pontains", "2018-03-20T22:31:23", None) == (
+            None,
+            ANY(str),
+        )
+        assert DateType.parse("is_null", "True", None) == (True, None)
+        assert DateType.parse("is_null", "hello", None) == (None, ANY(str))
+        assert DateType.parse("gt", "today", None) == (ANY(date), None)
 
     def test_default_lookup(self):
         assert DateType.default_lookup == "equals"
@@ -429,10 +444,10 @@ class TestDateType:
 
 class TestWeekDayType:
     def test_validate(self):
-        assert WeekDayType.parse("equals", "Sunday") == (1, None)
-        assert WeekDayType.parse("equals", "Saturday") == (7, None)
-        assert WeekDayType.parse("equals", "Bob") == (None, ANY(str))
-        assert WeekDayType.parse("gt", "Monday") == (None, ANY(str))
+        assert WeekDayType.parse("equals", "Sunday", None) == (1, None)
+        assert WeekDayType.parse("equals", "Saturday", None) == (7, None)
+        assert WeekDayType.parse("equals", "Bob", None) == (None, ANY(str))
+        assert WeekDayType.parse("gt", "Monday", None) == (None, ANY(str))
 
     def test_format(self):
         assert WeekDayType.get_formatter(None)(1) == "Sunday"
@@ -445,10 +460,10 @@ class TestWeekDayType:
 
 class TestMonthType:
     def test_validate(self):
-        assert MonthType.parse("equals", "January") == (1, None)
-        assert MonthType.parse("equals", "December") == (12, None)
-        assert MonthType.parse("equals", "Bob") == (None, ANY(str))
-        assert MonthType.parse("gt", "January") == (None, ANY(str))
+        assert MonthType.parse("equals", "January", None) == (1, None)
+        assert MonthType.parse("equals", "December", None) == (12, None)
+        assert MonthType.parse("equals", "Bob", None) == (None, ANY(str))
+        assert MonthType.parse("gt", "January", None) == (None, ANY(str))
 
     def test_format(self):
         assert MonthType.get_formatter(None)(1) == "January"
@@ -461,10 +476,10 @@ class TestMonthType:
 
 class TestBooleanType:
     def test_validate(self):
-        assert BooleanType.parse("equals", "True") == (True, None)
-        assert BooleanType.parse("equals", "False") == (False, None)
-        assert BooleanType.parse("equals", "hello") == (None, ANY(str))
-        assert BooleanType.parse("pontains", "True") == (None, ANY(str))
+        assert BooleanType.parse("equals", "True", None) == (True, None)
+        assert BooleanType.parse("equals", "False", None) == (False, None)
+        assert BooleanType.parse("equals", "hello", None) == (None, ANY(str))
+        assert BooleanType.parse("pontains", "True", None) == (None, ANY(str))
 
     def test_format(self):
         assert BooleanType.get_formatter(None)(None) is None

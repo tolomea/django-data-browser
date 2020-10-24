@@ -297,6 +297,7 @@ def _make_json_sub_module(model_name, field_types):
             pretty_name=field_name,
             type_=type_,
             rel_name=type_.name,
+            choices=None,
         )
 
     return OrmModel(fields)

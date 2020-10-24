@@ -299,7 +299,7 @@ class OrmFkField(OrmBaseField):
 
 
 class OrmConcreteField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, type_, rel_name, choices=None):
+    def __init__(self, model_name, name, pretty_name, type_, rel_name, choices):
         super().__init__(
             model_name,
             name,
@@ -381,7 +381,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
 
 class OrmAnnotatedField(OrmBaseField):
     def __init__(
-        self, model_name, name, pretty_name, type_, field_type, admin, choices=None
+        self, model_name, name, pretty_name, type_, field_type, admin, choices
     ):
         super().__init__(
             model_name,
@@ -412,7 +412,12 @@ class OrmAnnotatedField(OrmBaseField):
 class OrmFileField(OrmConcreteField):
     def __init__(self, model_name, name, pretty_name, django_field):
         super().__init__(
-            model_name, name, pretty_name, type_=HTMLType, rel_name=HTMLType.name
+            model_name,
+            name,
+            pretty_name,
+            type_=HTMLType,
+            rel_name=HTMLType.name,
+            choices=None,
         )
         self.django_field = django_field
 

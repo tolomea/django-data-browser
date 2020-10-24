@@ -57,7 +57,7 @@ class BaseType(metaclass=TypeMeta):
         return value
 
     @classmethod
-    def parse(cls, lookup, value, choices=None):
+    def parse(cls, lookup, value, choices):
         lookups = cls.lookups
         if lookup not in lookups:
             return None, f"Bad lookup '{lookup}' expected {lookups}"
@@ -289,7 +289,7 @@ class WeekDayType(BaseType):
     ]
 
     @classmethod
-    def _get_formatter(cls, value, choices=None):
+    def _get_formatter(cls, choices):
         assert not choices
         return lambda value: None if value is None else cls._days[value - 1]
 
@@ -326,7 +326,7 @@ class MonthType(BaseType):
     ]
 
     @classmethod
-    def _get_formatter(cls, value, choices=None):
+    def _get_formatter(cls, choices):
         assert not choices
         return lambda value: None if value is None else cls._months[value - 1]
 
@@ -341,7 +341,7 @@ class MonthType(BaseType):
 
 class HTMLType(StringType):
     @staticmethod
-    def _get_formatter(value, choices=None):
+    def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else html.conditional_escape(value)
 
@@ -369,7 +369,7 @@ class BooleanType(BaseType):
             raise ValueError("Expected 'true' or 'false'")
 
     @staticmethod
-    def _get_formatter(value, choices=None):
+    def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else bool(value)
 
