@@ -52,14 +52,11 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (
-    field.choices.length &&
-    (lookup.type === "numberchoice" || lookup.type === "stringchoice")
-  )
+  else if (lookup.type === "numberchoice" || lookup.type === "stringchoice")
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
-        {field.choices.map(([option, label]) => (
-          <option value={option}>{label}</option>
+        {field.choices.map((option) => (
+          <option value={option}>{option}</option>
         ))}
       </select>
     );
