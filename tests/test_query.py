@@ -474,32 +474,33 @@ class TestBooleanType:
 
 
 class TestStringChoiceType:
+    choices = [("a", "A"), ("b", "B"), ("c", "C")]
+
     def test_format(self):
-        assert (
-            StringChoiceType.get_formatter([("a", "A"), ("b", "B"), ("c", "C")])("b")
-            == "B"
-        )
-        assert (
-            StringChoiceType.get_formatter([("a", "A"), ("b", "B"), ("c", "C")])(None)
-            is None
-        )
+        assert StringChoiceType.get_formatter(self.choices)("b") == "B"
+        assert StringChoiceType.get_formatter(self.choices)(None) is None
 
     def test_bad_value(self):
-        assert (
-            StringChoiceType.get_formatter([("a", "A"), ("b", "B"), ("c", "C")])("x")
-            == "x"
-        )
+        assert StringChoiceType.get_formatter(self.choices)("x") == "x"
+
+    def test_validate(self):
+        assert NumberChoiceType.parse("equals", "B", self.choices) == ("b", None)
+        assert NumberChoiceType.parse("equals", "X", self.choices) == (None, ANY(str))
 
 
 class TestNumberChoiceType:
+    choices = [(1, "A"), (2, "B"), (3, "C")]
+
     def test_format(self):
-        assert NumberChoiceType.get_formatter([(1, "A"), (2, "B"), (3, "C")])(2) == "B"
-        assert (
-            NumberChoiceType.get_formatter([(1, "A"), (2, "B"), (3, "C")])(None) is None
-        )
+        assert NumberChoiceType.get_formatter(self.choices)(2) == "B"
+        assert NumberChoiceType.get_formatter(self.choices)(None) is None
 
     def test_bad_value(self):
-        assert NumberChoiceType.get_formatter([(1, "A"), (2, "B"), (3, "C")])(6) == 6
+        assert NumberChoiceType.get_formatter(self.choices)(6) == 6
+
+    def test_validate(self):
+        assert NumberChoiceType.parse("equals", "B", self.choices) == (2, None)
+        assert NumberChoiceType.parse("equals", "X", self.choices) == (None, ANY(str))
 
 
 class TestHTMLType:

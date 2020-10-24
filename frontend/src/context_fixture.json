@@ -2025,34 +2025,18 @@
             "defaultValue": null,
             "lookups": {
                 "equals": {
-                    "type": "numberchoice"
-                },
-                "gt": {
-                    "type": "number"
-                },
-                "gte": {
-                    "type": "number"
+                    "type": "stringchoice"
                 },
                 "is_null": {
                     "type": "boolean"
                 },
-                "lt": {
-                    "type": "number"
-                },
-                "lte": {
-                    "type": "number"
-                },
                 "not_equals": {
-                    "type": "numberchoice"
+                    "type": "stringchoice"
                 }
             },
             "sortedLookups": [
                 "equals",
                 "not_equals",
-                "gt",
-                "gte",
-                "lt",
-                "lte",
                 "is_null"
             ]
         },
@@ -2150,51 +2134,19 @@
             "defaultSort": null,
             "defaultValue": null,
             "lookups": {
-                "contains": {
-                    "type": "string"
-                },
-                "ends_with": {
-                    "type": "string"
-                },
                 "equals": {
                     "type": "stringchoice"
                 },
                 "is_null": {
                     "type": "boolean"
                 },
-                "not_contains": {
-                    "type": "string"
-                },
-                "not_ends_with": {
-                    "type": "string"
-                },
                 "not_equals": {
                     "type": "stringchoice"
-                },
-                "not_regex": {
-                    "type": "regex"
-                },
-                "not_starts_with": {
-                    "type": "string"
-                },
-                "regex": {
-                    "type": "regex"
-                },
-                "starts_with": {
-                    "type": "string"
                 }
             },
             "sortedLookups": [
                 "equals",
-                "contains",
-                "starts_with",
-                "ends_with",
-                "regex",
                 "not_equals",
-                "not_contains",
-                "not_starts_with",
-                "not_ends_with",
-                "not_regex",
                 "is_null"
             ]
         },

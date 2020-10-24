@@ -147,7 +147,7 @@ class BoundFilter(BoundFieldMixin):
 
     def __post_init__(self):
         self.parsed, self.err_message = self.orm_bound_field.type_.parse(
-            self.lookup, self.value
+            self.lookup, self.value, self.orm_bound_field.choices
         )
         self.is_valid = not self.err_message
 

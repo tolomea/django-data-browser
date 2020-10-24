@@ -47,18 +47,19 @@ class BaseType(metaclass=TypeMeta):
         return lambda value: value
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         return value
 
     @classmethod
-    def parse(cls, lookup, value):
+    def parse(cls, lookup, value, choices=None):
         lookups = cls.lookups
         if lookup not in lookups:
             return None, f"Bad lookup '{lookup}' expected {lookups}"
         else:
             type_ = TYPES[lookups[lookup]]
             try:
-                return type_._parse(value), None
+                return type_._parse(value, choices), None
             except Exception as e:
                 err_message = str(e) if str(e) else repr(e)
                 return None, err_message
@@ -98,15 +99,26 @@ class ChoiceTypeMixin:
         choices[None] = None
         return lambda value: choices.get(value, value)
 
+    @staticmethod
+    def _parse(value, choices):
+        choices = {v: k for k, v in choices}
+        return choices[value]
 
-class StringChoiceType(ChoiceTypeMixin, BaseType):
     @staticmethod
     def _lookups():
         return {
-            **StringType._lookups(),
             "equals": StringChoiceType,
             "not_equals": StringChoiceType,
+            "is_null": BooleanType,
         }
+
+
+class StringChoiceType(ChoiceTypeMixin, BaseType):
+    pass
+
+
+class NumberChoiceType(ChoiceTypeMixin, BaseType):
+    pass
 
 
 class ArrayTypeMixin:
@@ -142,7 +154,8 @@ class RegexType(BaseType):
 
     @staticmethod
     @lru_cache(maxsize=None)
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         from django.contrib.contenttypes.models import ContentType
         from django.db.transaction import atomic
 
@@ -175,7 +188,8 @@ class NumberType(BaseType):
         return lambda value: None if value is None else float(value)
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         return float(value)
 
     @staticmethod
@@ -189,16 +203,6 @@ class NumberType(BaseType):
             "significantFigures": 3,
             "lowCutOff": 0.0001,
             "highCutOff": 1e10,
-        }
-
-
-class NumberChoiceType(ChoiceTypeMixin, BaseType):
-    @staticmethod
-    def _lookups():
-        return {
-            **NumberType._lookups(),
-            "equals": NumberChoiceType,
-            "not_equals": NumberChoiceType,
         }
 
 
@@ -231,7 +235,8 @@ class YearType(NumberType):
         }
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         res = int(value)
         if res <= 1:
             raise Exception("Years must be > 1")
@@ -254,7 +259,8 @@ class DurationType(BaseType):
         }
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         if value.count(":") == 1:
             value += ":0"
 
@@ -285,7 +291,8 @@ class DateTimeType(BaseType):
         }
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         if value.lower().strip() == "now":
             return timezone.now()
         return timezone.make_aware(dateutil.parser.parse(value))
@@ -318,7 +325,8 @@ class DateType(BaseType):
         }
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         if value.lower().strip() == "today":
             return timezone.now().date()
         return timezone.make_aware(dateutil.parser.parse(value)).date()
@@ -353,7 +361,8 @@ class WeekDayType(BaseType):
         return lambda value: None if value is None else cls._days[value - 1]
 
     @classmethod
-    def _parse(cls, value):
+    def _parse(cls, value, choices):
+        assert not choices
         for i, v in enumerate(cls._days):
             if v.lower()[:3] == value.lower()[:3]:
                 return i + 1
@@ -389,7 +398,8 @@ class MonthType(BaseType):
         return lambda value: None if value is None else cls._months[value - 1]
 
     @classmethod
-    def _parse(cls, value):
+    def _parse(cls, value, choices):
+        assert not choices
         for i, v in enumerate(cls._months):
             if v.lower()[:3] == value.lower()[:3]:
                 return i + 1
@@ -415,7 +425,8 @@ class BooleanType(BaseType):
         }
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         value = value.lower()
         if value == "true":
             return True
@@ -458,7 +469,8 @@ class JSONFieldType(BaseType):
     default_value = "|"
 
     @staticmethod
-    def _parse(value):
+    def _parse(value, choices):
+        assert not choices
         value = value.strip()
         if "|" not in value:
             raise ValueError("Missing seperator '|'")
