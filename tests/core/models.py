@@ -112,7 +112,9 @@ class Product(models.Model):
     producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
     size = models.IntegerField(default=0)
     size_unit = models.TextField()
-    default_sku = models.ForeignKey("SKU", null=True, on_delete=models.CASCADE)
+    default_sku = models.ForeignKey(
+        "SKU", null=True, on_delete=models.CASCADE, related_name="products"
+    )
     tags = models.ManyToManyField(Tag)
     onsale = models.BooleanField(null=True)
     image = models.FileField()

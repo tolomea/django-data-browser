@@ -290,6 +290,10 @@ Release History
 |           |                | | Change ddb_default_filters format.                                             |
 |           |                | | Remove path and prettyPath from fields and filters on JSON responses.          |
 +-----------+----------------+----------------------------------------------------------------------------------+
+| 2.2.20    | 2020-10-22     | Fix bug with ArrayField on Django>=3.0                                           |
++-----------+----------------+----------------------------------------------------------------------------------+
+| 2.2.19    | 2020-10-19     | Support for annotations on inlines.                                              |
++-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.18    | 2020-10-18     | | Support for profiling CSV etc output. See CONTRIBUTING.rst                     |
 |           |                | | Performance improvements for large result sets.                                |
 +-----------+----------------+----------------------------------------------------------------------------------+
