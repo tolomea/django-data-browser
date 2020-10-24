@@ -1741,6 +1741,7 @@
     ],
     "types": {
         "boolean": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": true,
@@ -1762,6 +1763,7 @@
             ]
         },
         "date": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": "asc",
             "defaultValue": "today",
@@ -1799,6 +1801,7 @@
             ]
         },
         "datetime": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": "asc",
             "defaultValue": "now",
@@ -1836,6 +1839,7 @@
             ]
         },
         "duration": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": "",
@@ -1873,6 +1877,7 @@
             ]
         },
         "html": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": "",
@@ -1926,12 +1931,16 @@
             ]
         },
         "isnull": {
+            "choices": [
+                "IsNull",
+                "NotNull"
+            ],
             "defaultLookup": "equals",
             "defaultSort": null,
-            "defaultValue": true,
+            "defaultValue": "IsNull",
             "lookups": {
                 "equals": {
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedLookups": [
@@ -1939,6 +1948,7 @@
             ]
         },
         "json": {
+            "choices": [],
             "defaultLookup": "is_null",
             "defaultSort": null,
             "defaultValue": null,
@@ -1968,6 +1978,7 @@
             ]
         },
         "jsonfield": {
+            "choices": [],
             "defaultLookup": null,
             "defaultSort": null,
             "defaultValue": "|",
@@ -1975,6 +1986,7 @@
             "sortedLookups": []
         },
         "month": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": "asc",
             "defaultValue": "January",
@@ -1992,6 +2004,7 @@
             ]
         },
         "number": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": 0,
@@ -2029,6 +2042,7 @@
             ]
         },
         "numberarray": {
+            "choices": [],
             "defaultLookup": "contains",
             "defaultSort": null,
             "defaultValue": null,
@@ -2058,6 +2072,7 @@
             ]
         },
         "numberchoice": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": null,
@@ -2079,6 +2094,7 @@
             ]
         },
         "numberchoicearray": {
+            "choices": [],
             "defaultLookup": "contains",
             "defaultSort": null,
             "defaultValue": null,
@@ -2108,6 +2124,7 @@
             ]
         },
         "regex": {
+            "choices": [],
             "defaultLookup": null,
             "defaultSort": null,
             "defaultValue": ".*",
@@ -2115,6 +2132,7 @@
             "sortedLookups": []
         },
         "string": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": "",
@@ -2168,6 +2186,7 @@
             ]
         },
         "stringarray": {
+            "choices": [],
             "defaultLookup": "contains",
             "defaultSort": null,
             "defaultValue": null,
@@ -2197,6 +2216,7 @@
             ]
         },
         "stringchoice": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": null,
@@ -2218,6 +2238,7 @@
             ]
         },
         "stringchoicearray": {
+            "choices": [],
             "defaultLookup": "contains",
             "defaultSort": null,
             "defaultValue": null,
@@ -2247,6 +2268,7 @@
             ]
         },
         "unknown": {
+            "choices": [],
             "defaultLookup": "is_null",
             "defaultSort": null,
             "defaultValue": null,
@@ -2260,6 +2282,7 @@
             ]
         },
         "weekday": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": "asc",
             "defaultValue": "Monday",
@@ -2277,6 +2300,7 @@
             ]
         },
         "year": {
+            "choices": [],
             "defaultLookup": "equals",
             "defaultSort": "asc",
             "defaultValue": 2020,

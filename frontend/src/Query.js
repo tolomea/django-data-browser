@@ -61,8 +61,7 @@ class Query {
 
   getDefaultLookupValue(field, type, lookup) {
     const lookup_type = type.lookups[lookup].type;
-    if (lookup_type === "numberchoice" || lookup_type === "stringchoice")
-      return String(field.choices[0][0]);
+    if (lookup_type.endsWith("choice")) return String(field.choices[0]);
     else return String(this.config.types[lookup_type].defaultValue);
   }
 

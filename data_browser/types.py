@@ -33,6 +33,7 @@ class TypeMeta(type):
 class BaseType(metaclass=TypeMeta):
     default_value = None
     default_sort = None
+    choices = ()
 
     def __init__(self):
         assert False
@@ -42,9 +43,13 @@ class BaseType(metaclass=TypeMeta):
         return {}
 
     @staticmethod
-    def get_formatter(choices):
+    def _get_formatter(choices):
         assert not choices
         return lambda value: value
+
+    @classmethod
+    def get_formatter(cls, choices):
+        return cls._get_formatter(choices)
 
     @staticmethod
     def _parse(value, choices):
@@ -105,7 +110,7 @@ class NumberType(BaseType):
         }
 
     @staticmethod
-    def get_formatter(choices):
+    def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else float(value)
 
@@ -197,7 +202,7 @@ class DurationType(BaseType):
         return res
 
     @staticmethod
-    def get_formatter(choices):
+    def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else str(value)
 
@@ -226,7 +231,7 @@ class DateTimeType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value))
 
     @staticmethod
-    def get_formatter(choices):
+    def _get_formatter(choices):
         assert not choices
         if settings.USE_TZ:
             return (
@@ -260,7 +265,7 @@ class DateType(BaseType):
         return timezone.make_aware(dateutil.parser.parse(value)).date()
 
     @staticmethod
-    def get_formatter(choices):
+    def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else str(value)
 
@@ -284,7 +289,7 @@ class WeekDayType(BaseType):
     ]
 
     @classmethod
-    def get_formatter(cls, value, choices=None):
+    def _get_formatter(cls, value, choices=None):
         assert not choices
         return lambda value: None if value is None else cls._days[value - 1]
 
@@ -321,7 +326,7 @@ class MonthType(BaseType):
     ]
 
     @classmethod
-    def get_formatter(cls, value, choices=None):
+    def _get_formatter(cls, value, choices=None):
         assert not choices
         return lambda value: None if value is None else cls._months[value - 1]
 
@@ -336,7 +341,7 @@ class MonthType(BaseType):
 
 class HTMLType(StringType):
     @staticmethod
-    def get_formatter(value, choices=None):
+    def _get_formatter(value, choices=None):
         assert not choices
         return lambda value: None if value is None else html.conditional_escape(value)
 
@@ -364,27 +369,14 @@ class BooleanType(BaseType):
             raise ValueError("Expected 'true' or 'false'")
 
     @staticmethod
-    def get_formatter(value, choices=None):
+    def _get_formatter(value, choices=None):
         assert not choices
         return lambda value: None if value is None else bool(value)
 
 
-class IsNullType(BooleanType):
-    default_value = True
-
-    @staticmethod
-    def _lookups():
-        return {"equals": BooleanType}
-
-    @staticmethod
-    def get_formatter(choices):
-        assert not choices
-        return lambda value: None if value is None else "IsNull" if value else "NotNull"
-
-
 class UnknownType(BaseType):
     @staticmethod
-    def get_formatter(choices):
+    def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else str(value)
 
@@ -429,15 +421,22 @@ class JSONType(BaseType):
 class ChoiceTypeMixin:
     default_value = None
 
-    @staticmethod
-    def get_formatter(choices):
+    @classmethod
+    def _get_formatter(cls, choices):
+        if cls.choices:
+            choices = cls.choices
+
         assert choices
         choices = dict(choices)
         choices[None] = None
         return lambda value: choices.get(value, value)
 
-    @staticmethod
-    def _parse(value, choices):
+    @classmethod
+    def _parse(cls, value, choices):
+        if cls.choices:
+            choices = cls.choices
+
+        assert choices
         choices = {v: k for k, v in choices}
         return choices[value]
 
@@ -458,11 +457,20 @@ class NumberChoiceType(ChoiceTypeMixin, BaseType):
     pass
 
 
+class IsNullType(ChoiceTypeMixin, BaseType):
+    choices = [(True, "IsNull"), (False, "NotNull")]
+    default_value = choices[0][1]
+
+    @staticmethod
+    def _lookups():
+        return {"equals": IsNullType}
+
+
 class ArrayTypeMixin:
     default_value = None
 
     @staticmethod
-    def get_formatter(choices):  # pragma: postgres
+    def _get_formatter(choices):  # pragma: postgres
         if choices:
             choices = dict(choices)
             choices[None] = None

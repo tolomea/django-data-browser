@@ -510,9 +510,16 @@ class TestHTMLType:
 
 class TestIsNullType:
     def test_format(self):
-        assert IsNullType.get_formatter(None)(True) == "IsNull"
-        assert IsNullType.get_formatter(None)(False) == "NotNull"
-        assert IsNullType.get_formatter(None)(None) is None
+        assert IsNullType.get_formatter(IsNullType.choices)(True) == "IsNull"
+        assert IsNullType.get_formatter(IsNullType.choices)(False) == "NotNull"
+        assert IsNullType.get_formatter(IsNullType.choices)(None) is None
+
+    def test_validate(self):
+        assert IsNullType.parse("equals", "IsNull", IsNullType.choices) == (True, None)
+        assert IsNullType.parse("equals", "NotNull", IsNullType.choices) == (
+            False,
+            None,
+        )
 
 
 class TestUnknownType:

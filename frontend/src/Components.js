@@ -6,7 +6,7 @@ import { getPartsForQuery, getRelUrlForQuery } from "./Query";
 import "./App.css";
 
 function FilterValue(props) {
-  const { lookup, onChange, value, field } = props;
+  const { lookup, lookupType, onChange, value, field } = props;
   const onChangeEvent = (e) => onChange(e.target.value);
   if (props.lookup.type === "boolean")
     return (
@@ -52,7 +52,15 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (lookup.type === "numberchoice" || lookup.type === "stringchoice")
+  else if (lookupType.choices.length)
+    return (
+      <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
+        {lookupType.choices.map((option) => (
+          <option value={option}>{option}</option>
+        ))}
+      </select>
+    );
+  else if (lookup.type.endsWith("choice"))
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         {field.choices.map((option) => (
@@ -134,6 +142,7 @@ function Filter(props) {
           {...{ value, field }}
           onChange={(val) => query.setFilterValue(index, val)}
           lookup={type.lookups[lookup]}
+          lookupType={query.getType(type.lookups[lookup])}
         />
         {errorMessage && <p className="Error">{errorMessage}</p>}
       </td>
