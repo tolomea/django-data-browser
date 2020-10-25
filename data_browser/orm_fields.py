@@ -206,7 +206,13 @@ def get_fields_for_type(type_):
         func: OrmFunctionField(type_.name, func, _get_django_function(func)[1])
         for func in _TYPE_FUNCTIONS[type_]
     }
-    return {**aggregates, **functions}
+    others = {}
+    if type_.raw_type:
+        others["raw"] = OrmRawField(
+            type_.name, "raw", "raw", type_.raw_type, type_.raw_type.name, None
+        )
+
+    return {**aggregates, **functions, **others}
 
 
 @dataclass
@@ -320,6 +326,19 @@ class OrmConcreteField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=s(full_path),
+            filter_=True,
+        )
+
+
+class OrmRawField(OrmConcreteField):
+    def bind(self, previous):
+        full_path = previous.full_path + [self.name]
+        return OrmBoundField(
+            field=self,
+            previous=previous,
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            queryset_path=s(full_path[:-1]),
             filter_=True,
         )
 

@@ -290,6 +290,7 @@ Release History
 |           |                | | Change ddb_default_filters format.                                             |
 |           |                | | Remove path and prettyPath from fields and filters on JSON responses.          |
 |           |                | | Choice and isnull fields use human readable values in filters.                 |
+|           |                | | Choice fields have a raw sub field for accessing the underlying values.        |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.20    | 2020-10-22     | Fix bug with ArrayField on Django>=3.0                                           |
 +-----------+----------------+----------------------------------------------------------------------------------+

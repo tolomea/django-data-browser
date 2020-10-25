@@ -34,6 +34,7 @@ class BaseType(metaclass=TypeMeta):
     default_value = None
     default_sort = None
     choices = ()
+    raw_type = None
 
     def __init__(self):
         assert False
@@ -446,11 +447,11 @@ class ChoiceTypeMixin:
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):
-    pass
+    raw_type = StringType
 
 
 class NumberChoiceType(ChoiceTypeMixin, BaseType):
-    pass
+    raw_type = NumberType
 
 
 class IsNullType(ChoiceTypeMixin, BaseType):
@@ -480,28 +481,28 @@ class ArrayTypeMixin:
     @classmethod
     def _lookups(cls):
         return {
-            "contains": cls.base_type,
+            "contains": cls.element_type,
             "length": NumberType,
-            "not_contains": cls.base_type,
+            "not_contains": cls.element_type,
             "not_length": NumberType,
             "is_null": IsNullType,
         }
 
 
 class StringArrayType(ArrayTypeMixin, BaseType):
-    base_type = StringType
+    element_type = StringType
 
 
 class NumberArrayType(ArrayTypeMixin, BaseType):
-    base_type = NumberType
+    element_type = NumberType
 
 
 class StringChoiceArrayType(ArrayTypeMixin, BaseType):
-    base_type = StringChoiceType
+    element_type = StringChoiceType
 
 
 class NumberChoiceArrayType(ArrayTypeMixin, BaseType):
-    base_type = NumberChoiceType
+    element_type = NumberChoiceType
 
 
 TYPES = {cls.name: cls for cls in all_subclasses(BaseType)}

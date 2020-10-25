@@ -814,3 +814,31 @@ def test_duration_aggregations(get_product_flat, aggregation, value):
 
     data = get_product_flat(1, f"duration__{aggregation}", {})
     assert data == [[value]]
+
+
+def test_string_choice_field(get_product_flat):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(producer=producer, string_choice="a")
+    models.Product.objects.create(producer=producer, string_choice="b")
+
+    data = get_product_flat(1, f"string_choice", {"string_choice__equals": ["A"]})
+    assert data == [["A"]]
+
+    data = get_product_flat(
+        1, f"string_choice__raw", {"string_choice__raw__equals": ["a"]}
+    )
+    assert data == [["a"]]
+
+
+def test_number_choice_field(get_product_flat):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(producer=producer, number_choice=1)
+    models.Product.objects.create(producer=producer, number_choice=2)
+
+    data = get_product_flat(1, f"number_choice", {"number_choice__equals": ["A"]})
+    assert data == [["A"]]
+
+    data = get_product_flat(
+        1, f"number_choice__raw", {"number_choice__raw__equals": [1]}
+    )
+    assert data == [[1]]

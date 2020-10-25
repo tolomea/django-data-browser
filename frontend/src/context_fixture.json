@@ -1480,11 +1480,20 @@
                     "model": null,
                     "prettyName": "is_null",
                     "type": "isnull"
+                },
+                "raw": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "number",
+                    "prettyName": "raw",
+                    "type": "number"
                 }
             },
             "sortedFields": [
                 "count",
-                "is_null"
+                "is_null",
+                "raw"
             ]
         },
         "numberchoicearray": {
@@ -1605,11 +1614,20 @@
                     "model": null,
                     "prettyName": "is_null",
                     "type": "isnull"
+                },
+                "raw": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "string",
+                    "prettyName": "raw",
+                    "type": "string"
                 }
             },
             "sortedFields": [
                 "count",
-                "is_null"
+                "is_null",
+                "raw"
             ]
         },
         "stringchoicearray": {
