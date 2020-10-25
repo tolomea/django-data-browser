@@ -16,7 +16,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -24,7 +24,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -32,7 +32,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -46,7 +46,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "date_joined": {
@@ -54,7 +54,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "date_joined",
+                    "prettyName": "Date joined",
                     "type": "datetime",
                 },
                 "email": {
@@ -62,7 +62,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "email",
+                    "prettyName": "Email address",
                     "type": "string",
                 },
                 "first_name": {
@@ -70,7 +70,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "first_name",
+                    "prettyName": "First name",
                     "type": "string",
                 },
                 "id": {
@@ -78,7 +78,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "is_active": {
@@ -86,7 +86,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "is_active",
+                    "prettyName": "Active",
                     "type": "boolean",
                 },
                 "is_staff": {
@@ -94,7 +94,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "is_staff",
+                    "prettyName": "Staff status",
                     "type": "boolean",
                 },
                 "is_superuser": {
@@ -102,7 +102,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "is_superuser",
+                    "prettyName": "Superuser status",
                     "type": "boolean",
                 },
                 "last_login": {
@@ -110,7 +110,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "last_login",
+                    "prettyName": "Last login",
                     "type": "datetime",
                 },
                 "last_name": {
@@ -118,7 +118,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "last_name",
+                    "prettyName": "Last name",
                     "type": "string",
                 },
                 "password": {
@@ -126,7 +126,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "password",
+                    "prettyName": "Password",
                     "type": "string",
                 },
                 "username": {
@@ -134,7 +134,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "username",
+                    "prettyName": "Username",
                     "type": "string",
                 },
             },
@@ -169,7 +169,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "sum": {
@@ -191,7 +191,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "andrew": {
@@ -199,7 +199,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "andrew",
+                    "prettyName": "Andrew",
                     "type": "string",
                 },
                 "bob": {
@@ -207,7 +207,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "bob",
+                    "prettyName": "Bob",
                     "type": "html",
                 },
                 "city": {
@@ -215,7 +215,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "city",
+                    "prettyName": "City",
                     "type": "string",
                 },
                 "fred": {
@@ -223,7 +223,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "fred",
+                    "prettyName": "Fred",
                     "type": "html",
                 },
                 "id": {
@@ -231,7 +231,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "producer": {
@@ -239,7 +239,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Producer",
-                    "prettyName": "producer",
+                    "prettyName": "Producer",
                     "type": None,
                 },
                 "tom": {
@@ -247,7 +247,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "tom",
+                    "prettyName": "Tom",
                     "type": "html",
                 },
             },
@@ -270,7 +270,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -278,7 +278,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -286,7 +286,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -300,7 +300,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "in_admin": {
@@ -308,7 +308,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.InAdmin",
-                    "prettyName": "in_admin",
+                    "prettyName": "In admin",
                     "type": None,
                 },
                 "name": {
@@ -316,7 +316,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -330,7 +330,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -338,7 +338,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "in_admin": {
@@ -346,7 +346,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.InAdmin",
-                    "prettyName": "in_admin",
+                    "prettyName": "In admin",
                     "type": None,
                 },
                 "inline_admin": {
@@ -354,7 +354,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.InlineAdmin",
-                    "prettyName": "inline_admin",
+                    "prettyName": "Inline admin",
                     "type": None,
                 },
                 "name": {
@@ -362,7 +362,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -376,7 +376,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Address",
-                    "prettyName": "address",
+                    "prettyName": "Address",
                     "type": None,
                 },
                 "admin": {
@@ -384,7 +384,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "frank": {
@@ -392,7 +392,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "frank",
+                    "prettyName": "Frank",
                     "type": "html",
                 },
                 "id": {
@@ -400,7 +400,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -408,7 +408,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -424,7 +424,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "annotated": {
@@ -432,7 +432,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "annotated",
+                    "prettyName": "Annotated",
                     "type": "string",
                 },
                 "boat": {
@@ -440,7 +440,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "boat",
+                    "prettyName": "Boat",
                     "type": "number",
                 },
                 "calculated_boolean": {
@@ -448,7 +448,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "calculated_boolean",
+                    "prettyName": "Calculated boolean",
                     "type": "boolean",
                 },
                 "created_time": {
@@ -456,7 +456,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "created_time",
+                    "prettyName": "Created time",
                     "type": "datetime",
                 },
                 "date": {
@@ -464,7 +464,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "date",
-                    "prettyName": "date",
+                    "prettyName": "Date",
                     "type": "date",
                 },
                 "default_sku": {
@@ -472,7 +472,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.SKU",
-                    "prettyName": "default_sku",
+                    "prettyName": "Default sku",
                     "type": None,
                 },
                 "duration": {
@@ -480,7 +480,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "duration",
-                    "prettyName": "duration",
+                    "prettyName": "Duration",
                     "type": "duration",
                 },
                 "extra_inline": {
@@ -488,7 +488,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "extra_inline",
+                    "prettyName": "Extra inline",
                     "type": "string",
                 },
                 "extra_model": {
@@ -496,7 +496,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "extra_model",
+                    "prettyName": "Extra model",
                     "type": "string",
                 },
                 "fake": {
@@ -504,7 +504,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "unknown",
-                    "prettyName": "fake",
+                    "prettyName": "Fake",
                     "type": "unknown",
                 },
                 "funky": {
@@ -512,7 +512,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "funky",
+                    "prettyName": "Funky",
                     "type": "html",
                 },
                 "id": {
@@ -520,7 +520,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "image": {
@@ -528,7 +528,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "html",
-                    "prettyName": "image",
+                    "prettyName": "Image",
                     "type": "html",
                 },
                 "is_onsale": {
@@ -536,7 +536,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "is_onsale",
+                    "prettyName": "Is onsale",
                     "type": "html",
                 },
                 "lambda": {
@@ -544,7 +544,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "lambda",
+                    "prettyName": "Lambda",
                     "type": "html",
                 },
                 "name": {
@@ -552,7 +552,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
                 "number_choice": {
@@ -560,7 +560,7 @@ snapshots["test_query_html config"] = {
                     "choices": ["A", "B"],
                     "concrete": True,
                     "model": "numberchoice",
-                    "prettyName": "number_choice",
+                    "prettyName": "Number choice",
                     "type": "numberchoice",
                 },
                 "only_in_list_view": {
@@ -568,7 +568,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "only_in_list_view",
+                    "prettyName": "Only in list view",
                     "type": "string",
                 },
                 "onsale": {
@@ -576,7 +576,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "onsale",
+                    "prettyName": "Onsale",
                     "type": "boolean",
                 },
                 "producer": {
@@ -584,7 +584,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Producer",
-                    "prettyName": "producer",
+                    "prettyName": "Producer",
                     "type": None,
                 },
                 "size": {
@@ -592,7 +592,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "size",
+                    "prettyName": "Size",
                     "type": "number",
                 },
                 "size_unit": {
@@ -600,7 +600,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "size_unit",
+                    "prettyName": "Size unit",
                     "type": "string",
                 },
                 "stealth_annotation": {
@@ -608,7 +608,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "stealth_annotation",
+                    "prettyName": "Stealth annotation",
                     "type": "string",
                 },
                 "string_choice": {
@@ -616,7 +616,7 @@ snapshots["test_query_html config"] = {
                     "choices": ["A", "B"],
                     "concrete": True,
                     "model": "stringchoice",
-                    "prettyName": "string_choice",
+                    "prettyName": "String choice",
                     "type": "stringchoice",
                 },
             },
@@ -656,7 +656,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -664,7 +664,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
                 "product": {
@@ -672,7 +672,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Product",
-                    "prettyName": "product",
+                    "prettyName": "Product",
                     "type": None,
                 },
             },
@@ -686,7 +686,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -694,7 +694,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -702,7 +702,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -716,7 +716,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "created_time": {
@@ -724,7 +724,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "created_time",
+                    "prettyName": "Created time",
                     "type": "datetime",
                 },
                 "description": {
@@ -732,7 +732,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "description",
+                    "prettyName": "Description",
                     "type": "string",
                 },
                 "fields": {
@@ -740,7 +740,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "fields",
+                    "prettyName": "Fields",
                     "type": "string",
                 },
                 "google_sheets_formula": {
@@ -748,7 +748,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "google_sheets_formula",
+                    "prettyName": "Google sheets formula",
                     "type": "html",
                 },
                 "id": {
@@ -756,7 +756,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "id",
+                    "prettyName": "Id",
                     "type": "string",
                 },
                 "limit": {
@@ -764,7 +764,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "limit",
+                    "prettyName": "Limit",
                     "type": "number",
                 },
                 "model_name": {
@@ -772,7 +772,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "model_name",
+                    "prettyName": "Model name",
                     "type": "string",
                 },
                 "name": {
@@ -780,7 +780,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
                 "open_view": {
@@ -788,7 +788,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "open_view",
+                    "prettyName": "Open view",
                     "type": "html",
                 },
                 "owner": {
@@ -796,7 +796,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "auth.User",
-                    "prettyName": "owner",
+                    "prettyName": "Owner",
                     "type": None,
                 },
                 "public": {
@@ -804,7 +804,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "public",
+                    "prettyName": "Public",
                     "type": "boolean",
                 },
                 "public_link": {
@@ -812,7 +812,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "public_link",
+                    "prettyName": "Public link",
                     "type": "html",
                 },
                 "public_slug": {
@@ -820,7 +820,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "public_slug",
+                    "prettyName": "Public slug",
                     "type": "string",
                 },
                 "query": {
@@ -828,7 +828,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "query",
+                    "prettyName": "Query",
                     "type": "string",
                 },
             },
@@ -874,7 +874,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -882,7 +882,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number",
                 },
                 "iso_year": {
@@ -890,7 +890,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year",
                 },
                 "max": {
@@ -922,7 +922,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date",
                 },
                 "quarter": {
@@ -938,7 +938,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday",
                 },
                 "week_start": {
@@ -946,7 +946,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date",
                 },
                 "year": {
@@ -1014,7 +1014,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -1022,7 +1022,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number",
                 },
                 "iso_year": {
@@ -1030,7 +1030,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year",
                 },
                 "max": {
@@ -1070,7 +1070,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date",
                 },
                 "quarter": {
@@ -1094,7 +1094,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday",
                 },
                 "week_start": {
@@ -1102,7 +1102,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date",
                 },
                 "year": {
@@ -1158,7 +1158,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "max": {
@@ -1204,7 +1204,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1226,7 +1226,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1248,7 +1248,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1270,7 +1270,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1292,7 +1292,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1322,7 +1322,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "max": {
@@ -1346,7 +1346,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "std_dev",
+                    "prettyName": "std dev",
                     "type": "number",
                 },
                 "sum": {
@@ -1393,7 +1393,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1415,7 +1415,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "raw": {
@@ -1445,7 +1445,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1467,7 +1467,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1489,7 +1489,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1511,7 +1511,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1533,7 +1533,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "raw": {
@@ -1563,7 +1563,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1585,7 +1585,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1607,7 +1607,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -1637,7 +1637,7 @@ snapshots["test_query_html config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2069,7 +2069,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "sum": {
@@ -2091,7 +2091,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "andrew",
+                    "prettyName": "Andrew",
                     "type": "string",
                 },
                 "id": {
@@ -2099,7 +2099,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
             },
@@ -2113,7 +2113,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "annotated",
+                    "prettyName": "Annotated",
                     "type": "string",
                 },
                 "id": {
@@ -2121,7 +2121,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "stealth_annotation": {
@@ -2129,7 +2129,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "stealth_annotation",
+                    "prettyName": "Stealth annotation",
                     "type": "string",
                 },
             },
@@ -2143,7 +2143,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "id",
+                    "prettyName": "Id",
                     "type": "string",
                 }
             },
@@ -2173,7 +2173,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -2181,7 +2181,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number",
                 },
                 "iso_year": {
@@ -2189,7 +2189,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year",
                 },
                 "max": {
@@ -2221,7 +2221,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date",
                 },
                 "quarter": {
@@ -2237,7 +2237,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday",
                 },
                 "week_start": {
@@ -2245,7 +2245,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date",
                 },
                 "year": {
@@ -2313,7 +2313,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -2321,7 +2321,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number",
                 },
                 "iso_year": {
@@ -2329,7 +2329,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year",
                 },
                 "max": {
@@ -2369,7 +2369,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date",
                 },
                 "quarter": {
@@ -2393,7 +2393,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday",
                 },
                 "week_start": {
@@ -2401,7 +2401,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date",
                 },
                 "year": {
@@ -2457,7 +2457,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "max": {
@@ -2503,7 +2503,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2525,7 +2525,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2547,7 +2547,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2569,7 +2569,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2591,7 +2591,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2621,7 +2621,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "max": {
@@ -2645,7 +2645,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "std_dev",
+                    "prettyName": "std dev",
                     "type": "number",
                 },
                 "sum": {
@@ -2692,7 +2692,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2714,7 +2714,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "raw": {
@@ -2744,7 +2744,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2766,7 +2766,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2788,7 +2788,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2810,7 +2810,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2832,7 +2832,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "raw": {
@@ -2862,7 +2862,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2884,7 +2884,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2906,7 +2906,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -2936,7 +2936,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -3333,7 +3333,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -3341,7 +3341,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -3349,7 +3349,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -3363,7 +3363,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "date_joined": {
@@ -3371,7 +3371,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "date_joined",
+                    "prettyName": "Date joined",
                     "type": "datetime",
                 },
                 "email": {
@@ -3379,7 +3379,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "email",
+                    "prettyName": "Email address",
                     "type": "string",
                 },
                 "first_name": {
@@ -3387,7 +3387,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "first_name",
+                    "prettyName": "First name",
                     "type": "string",
                 },
                 "id": {
@@ -3395,7 +3395,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "is_active": {
@@ -3403,7 +3403,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "is_active",
+                    "prettyName": "Active",
                     "type": "boolean",
                 },
                 "is_staff": {
@@ -3411,7 +3411,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "is_staff",
+                    "prettyName": "Staff status",
                     "type": "boolean",
                 },
                 "is_superuser": {
@@ -3419,7 +3419,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "is_superuser",
+                    "prettyName": "Superuser status",
                     "type": "boolean",
                 },
                 "last_login": {
@@ -3427,7 +3427,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "last_login",
+                    "prettyName": "Last login",
                     "type": "datetime",
                 },
                 "last_name": {
@@ -3435,7 +3435,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "last_name",
+                    "prettyName": "Last name",
                     "type": "string",
                 },
                 "password": {
@@ -3443,7 +3443,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "password",
+                    "prettyName": "Password",
                     "type": "string",
                 },
                 "username": {
@@ -3451,7 +3451,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "username",
+                    "prettyName": "Username",
                     "type": "string",
                 },
             },
@@ -3486,7 +3486,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "sum": {
@@ -3508,7 +3508,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "andrew": {
@@ -3516,7 +3516,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "andrew",
+                    "prettyName": "Andrew",
                     "type": "string",
                 },
                 "bob": {
@@ -3524,7 +3524,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "bob",
+                    "prettyName": "Bob",
                     "type": "html",
                 },
                 "city": {
@@ -3532,7 +3532,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "city",
+                    "prettyName": "City",
                     "type": "string",
                 },
                 "fred": {
@@ -3540,7 +3540,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "fred",
+                    "prettyName": "Fred",
                     "type": "html",
                 },
                 "id": {
@@ -3548,7 +3548,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "producer": {
@@ -3556,7 +3556,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Producer",
-                    "prettyName": "producer",
+                    "prettyName": "Producer",
                     "type": None,
                 },
                 "tom": {
@@ -3564,7 +3564,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "tom",
+                    "prettyName": "Tom",
                     "type": "html",
                 },
             },
@@ -3587,7 +3587,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -3595,7 +3595,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -3603,7 +3603,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -3617,7 +3617,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "in_admin": {
@@ -3625,7 +3625,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.InAdmin",
-                    "prettyName": "in_admin",
+                    "prettyName": "In admin",
                     "type": None,
                 },
                 "name": {
@@ -3633,7 +3633,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -3647,7 +3647,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -3655,7 +3655,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "in_admin": {
@@ -3663,7 +3663,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.InAdmin",
-                    "prettyName": "in_admin",
+                    "prettyName": "In admin",
                     "type": None,
                 },
                 "inline_admin": {
@@ -3671,7 +3671,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.InlineAdmin",
-                    "prettyName": "inline_admin",
+                    "prettyName": "Inline admin",
                     "type": None,
                 },
                 "name": {
@@ -3679,7 +3679,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -3693,7 +3693,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Address",
-                    "prettyName": "address",
+                    "prettyName": "Address",
                     "type": None,
                 },
                 "admin": {
@@ -3701,7 +3701,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "frank": {
@@ -3709,7 +3709,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "frank",
+                    "prettyName": "Frank",
                     "type": "html",
                 },
                 "id": {
@@ -3717,7 +3717,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -3725,7 +3725,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -3741,7 +3741,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "annotated": {
@@ -3749,7 +3749,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "annotated",
+                    "prettyName": "Annotated",
                     "type": "string",
                 },
                 "boat": {
@@ -3757,7 +3757,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "boat",
+                    "prettyName": "Boat",
                     "type": "number",
                 },
                 "calculated_boolean": {
@@ -3765,7 +3765,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "calculated_boolean",
+                    "prettyName": "Calculated boolean",
                     "type": "boolean",
                 },
                 "created_time": {
@@ -3773,7 +3773,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "created_time",
+                    "prettyName": "Created time",
                     "type": "datetime",
                 },
                 "date": {
@@ -3781,7 +3781,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "date",
-                    "prettyName": "date",
+                    "prettyName": "Date",
                     "type": "date",
                 },
                 "default_sku": {
@@ -3789,7 +3789,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.SKU",
-                    "prettyName": "default_sku",
+                    "prettyName": "Default sku",
                     "type": None,
                 },
                 "duration": {
@@ -3797,7 +3797,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "duration",
-                    "prettyName": "duration",
+                    "prettyName": "Duration",
                     "type": "duration",
                 },
                 "extra_inline": {
@@ -3805,7 +3805,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "extra_inline",
+                    "prettyName": "Extra inline",
                     "type": "string",
                 },
                 "extra_model": {
@@ -3813,7 +3813,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "extra_model",
+                    "prettyName": "Extra model",
                     "type": "string",
                 },
                 "fake": {
@@ -3821,7 +3821,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "unknown",
-                    "prettyName": "fake",
+                    "prettyName": "Fake",
                     "type": "unknown",
                 },
                 "funky": {
@@ -3829,7 +3829,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "funky",
+                    "prettyName": "Funky",
                     "type": "html",
                 },
                 "id": {
@@ -3837,7 +3837,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "image": {
@@ -3845,7 +3845,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "html",
-                    "prettyName": "image",
+                    "prettyName": "Image",
                     "type": "html",
                 },
                 "is_onsale": {
@@ -3853,7 +3853,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "is_onsale",
+                    "prettyName": "Is onsale",
                     "type": "html",
                 },
                 "lambda": {
@@ -3861,7 +3861,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "lambda",
+                    "prettyName": "Lambda",
                     "type": "html",
                 },
                 "name": {
@@ -3869,7 +3869,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
                 "number_choice": {
@@ -3877,7 +3877,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": ["A", "B"],
                     "concrete": True,
                     "model": "numberchoice",
-                    "prettyName": "number_choice",
+                    "prettyName": "Number choice",
                     "type": "numberchoice",
                 },
                 "only_in_list_view": {
@@ -3885,7 +3885,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "only_in_list_view",
+                    "prettyName": "Only in list view",
                     "type": "string",
                 },
                 "onsale": {
@@ -3893,7 +3893,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "onsale",
+                    "prettyName": "Onsale",
                     "type": "boolean",
                 },
                 "producer": {
@@ -3901,7 +3901,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Producer",
-                    "prettyName": "producer",
+                    "prettyName": "Producer",
                     "type": None,
                 },
                 "size": {
@@ -3909,7 +3909,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "size",
+                    "prettyName": "Size",
                     "type": "number",
                 },
                 "size_unit": {
@@ -3917,7 +3917,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "size_unit",
+                    "prettyName": "Size unit",
                     "type": "string",
                 },
                 "stealth_annotation": {
@@ -3925,7 +3925,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "stealth_annotation",
+                    "prettyName": "Stealth annotation",
                     "type": "string",
                 },
                 "string_choice": {
@@ -3933,7 +3933,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": ["A", "B"],
                     "concrete": True,
                     "model": "stringchoice",
-                    "prettyName": "string_choice",
+                    "prettyName": "String choice",
                     "type": "stringchoice",
                 },
             },
@@ -3973,7 +3973,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -3981,7 +3981,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
                 "product": {
@@ -3989,7 +3989,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "core.Product",
-                    "prettyName": "product",
+                    "prettyName": "Product",
                     "type": None,
                 },
             },
@@ -4003,7 +4003,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "id": {
@@ -4011,7 +4011,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number",
                 },
                 "name": {
@@ -4019,7 +4019,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
             },
@@ -4033,7 +4033,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html",
                 },
                 "created_time": {
@@ -4041,7 +4041,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "datetime",
-                    "prettyName": "created_time",
+                    "prettyName": "Created time",
                     "type": "datetime",
                 },
                 "description": {
@@ -4049,7 +4049,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "description",
+                    "prettyName": "Description",
                     "type": "string",
                 },
                 "fields": {
@@ -4057,7 +4057,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "fields",
+                    "prettyName": "Fields",
                     "type": "string",
                 },
                 "google_sheets_formula": {
@@ -4065,7 +4065,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "google_sheets_formula",
+                    "prettyName": "Google sheets formula",
                     "type": "html",
                 },
                 "id": {
@@ -4073,7 +4073,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "id",
+                    "prettyName": "Id",
                     "type": "string",
                 },
                 "limit": {
@@ -4081,7 +4081,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "number",
-                    "prettyName": "limit",
+                    "prettyName": "Limit",
                     "type": "number",
                 },
                 "model_name": {
@@ -4089,7 +4089,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "model_name",
+                    "prettyName": "Model name",
                     "type": "string",
                 },
                 "name": {
@@ -4097,7 +4097,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string",
                 },
                 "open_view": {
@@ -4105,7 +4105,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "open_view",
+                    "prettyName": "Open view",
                     "type": "html",
                 },
                 "owner": {
@@ -4113,7 +4113,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": "auth.User",
-                    "prettyName": "owner",
+                    "prettyName": "Owner",
                     "type": None,
                 },
                 "public": {
@@ -4121,7 +4121,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "boolean",
-                    "prettyName": "public",
+                    "prettyName": "Public",
                     "type": "boolean",
                 },
                 "public_link": {
@@ -4129,7 +4129,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": False,
                     "model": None,
-                    "prettyName": "public_link",
+                    "prettyName": "Public link",
                     "type": "html",
                 },
                 "public_slug": {
@@ -4137,7 +4137,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "public_slug",
+                    "prettyName": "Public slug",
                     "type": "string",
                 },
                 "query": {
@@ -4145,7 +4145,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": "string",
-                    "prettyName": "query",
+                    "prettyName": "Query",
                     "type": "string",
                 },
             },
@@ -4191,7 +4191,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -4199,7 +4199,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number",
                 },
                 "iso_year": {
@@ -4207,7 +4207,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year",
                 },
                 "max": {
@@ -4239,7 +4239,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date",
                 },
                 "quarter": {
@@ -4255,7 +4255,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday",
                 },
                 "week_start": {
@@ -4263,7 +4263,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date",
                 },
                 "year": {
@@ -4331,7 +4331,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -4339,7 +4339,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number",
                 },
                 "iso_year": {
@@ -4347,7 +4347,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year",
                 },
                 "max": {
@@ -4387,7 +4387,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date",
                 },
                 "quarter": {
@@ -4411,7 +4411,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday",
                 },
                 "week_start": {
@@ -4419,7 +4419,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date",
                 },
                 "year": {
@@ -4475,7 +4475,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "max": {
@@ -4521,7 +4521,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4543,7 +4543,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4565,7 +4565,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4587,7 +4587,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4609,7 +4609,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4639,7 +4639,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "max": {
@@ -4663,7 +4663,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "std_dev",
+                    "prettyName": "std dev",
                     "type": "number",
                 },
                 "sum": {
@@ -4710,7 +4710,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4732,7 +4732,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "raw": {
@@ -4762,7 +4762,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4784,7 +4784,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4806,7 +4806,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4828,7 +4828,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4850,7 +4850,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
                 "raw": {
@@ -4880,7 +4880,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4902,7 +4902,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4924,7 +4924,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -4954,7 +4954,7 @@ snapshots["test_query_ctx config"] = {
                     "choices": [],
                     "concrete": True,
                     "model": None,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull",
                 },
             },
@@ -5356,77 +5356,77 @@ snapshots["test_query_ctx config"] = {
 snapshots["test_query_csv_pivot_permutations[----] key"] = [[""]]
 
 snapshots["test_query_csv_pivot_permutations[---b] key"] = [
-    ["id count", "size max"],
+    ["ID count", "Size max"],
     ["0.0", ""],
 ]
 
 snapshots["test_query_csv_pivot_permutations[--c-] key"] = [
-    ["created_time month"],
+    ["Created time month"],
     [""],
 ]
 
 snapshots["test_query_csv_pivot_permutations[--cb] key"] = [
-    ["created_time month"],
+    ["Created time month"],
     [""],
 ]
 
-snapshots["test_query_csv_pivot_permutations[-r--] key"] = [["created_time year"]]
+snapshots["test_query_csv_pivot_permutations[-r--] key"] = [["Created time year"]]
 
 snapshots["test_query_csv_pivot_permutations[-r-b] key"] = [
-    ["created_time year", "id count", "size max"]
+    ["Created time year", "ID count", "Size max"]
 ]
 
 snapshots["test_query_csv_pivot_permutations[-rc-] key"] = [
-    ["created_time month"],
-    ["created_time year"],
+    ["Created time month"],
+    ["Created time year"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[-rcb] key"] = [
-    ["created_time month"],
-    ["created_time year"],
+    ["Created time month"],
+    ["Created time year"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[d---] key"] = [[""]]
 
 snapshots["test_query_csv_pivot_permutations[d--b] key"] = [
-    ["id count", "size max"],
+    ["ID count", "Size max"],
     ["6.0", "6.0"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[d-c-] key"] = [
-    ["created_time month", "January", "Feburary"],
+    ["Created time month", "January", "Feburary"],
     [""],
     [""],
 ]
 
 snapshots["test_query_csv_pivot_permutations[d-cb] key"] = [
-    ["created_time month", "January", "", "Feburary", ""],
-    ["", "id count", "size max", "id count", "size max"],
+    ["Created time month", "January", "", "Feburary", ""],
+    ["", "ID count", "Size max", "ID count", "Size max"],
     ["", "4.0", "6.0", "2.0", "3.0"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[dr--] key"] = [
-    ["created_time year"],
+    ["Created time year"],
     ["2020.0"],
     ["2021.0"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[dr-b] key"] = [
-    ["created_time year", "id count", "size max"],
+    ["Created time year", "ID count", "Size max"],
     ["2020.0", "3.0", "3.0"],
     ["2021.0", "3.0", "6.0"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[drc-] key"] = [
-    ["created_time month", "January", "Feburary"],
-    ["created_time year"],
+    ["Created time month", "January", "Feburary"],
+    ["Created time year"],
     ["2020.0"],
     ["2021.0"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[drcb] key"] = [
-    ["created_time month", "January", "", "Feburary", ""],
-    ["created_time year", "id count", "size max", "id count", "size max"],
+    ["Created time month", "January", "", "Feburary", ""],
+    ["Created time year", "ID count", "Size max", "ID count", "Size max"],
     ["2020.0", "1.0", "1.0", "2.0", "3.0"],
     ["2021.0", "3.0", "6.0", "", ""],
 ]

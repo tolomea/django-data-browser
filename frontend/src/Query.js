@@ -244,6 +244,19 @@ class Query {
       return [];
     }
   }
+
+  prettyPathStr(pathStr) {
+    const path = pathStr.split("__");
+    const prettyPath = [];
+    let model = this.query.model;
+    let field = null;
+    for (const part of path) {
+      field = this.config.allModelFields[model].fields[part];
+      model = field.model;
+      prettyPath.push(field.prettyName);
+    }
+    return prettyPath.join(" \u21d2 ");
+  }
 }
 
 export { Query, getPartsForQuery, getRelUrlForQuery, getUrlForQuery, empty };

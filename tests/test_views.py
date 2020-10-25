@@ -148,7 +148,7 @@ def test_query_csv(admin_client):
     dump(res)
     rows = list(csv.reader(res.splitlines()))
     dump(rows)
-    assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
+    assert rows == [["Size", "Name", "Size unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
 
 
 @pytest.mark.usefixtures("pivot_products")
@@ -162,8 +162,8 @@ def test_query_csv_pivoted(admin_client):
     rows = list(csv.reader(res.splitlines()))
     dump(rows)
     assert rows == [
-        ["created_time month", "January", "", "Feburary", ""],
-        ["created_time year", "id count", "size max", "id count", "size max"],
+        ["Created time month", "January", "", "Feburary", ""],
+        ["Created time year", "ID count", "Size max", "ID count", "Size max"],
         ["2020.0", "1.0", "1.0", "2.0", "3.0"],
         ["2021.0", "3.0", "6.0", "", ""],
     ]
@@ -260,7 +260,7 @@ def test_view_csv(admin_client, settings):
     dump(res)
     rows = list(csv.reader(res.splitlines()))
     dump(rows)
-    assert rows == [["size", "name", "size_unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
+    assert rows == [["Size", "Name", "Size unit"], ["1.0", "a", "g"], ["1.0", "b", "g"]]
 
     settings.DATA_BROWSER_ALLOW_PUBLIC = False
     res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")

@@ -8,7 +8,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "id": {
@@ -16,7 +16,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "name": {
@@ -24,7 +24,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 }
             },
@@ -42,7 +42,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "date_joined": {
@@ -50,7 +50,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "datetime",
-                    "prettyName": "date_joined",
+                    "prettyName": "Date joined",
                     "type": "datetime"
                 },
                 "email": {
@@ -58,7 +58,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "email",
+                    "prettyName": "Email address",
                     "type": "string"
                 },
                 "first_name": {
@@ -66,7 +66,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "first_name",
+                    "prettyName": "First name",
                     "type": "string"
                 },
                 "id": {
@@ -74,7 +74,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "is_active": {
@@ -82,7 +82,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "boolean",
-                    "prettyName": "is_active",
+                    "prettyName": "Active",
                     "type": "boolean"
                 },
                 "is_staff": {
@@ -90,7 +90,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "boolean",
-                    "prettyName": "is_staff",
+                    "prettyName": "Staff status",
                     "type": "boolean"
                 },
                 "is_superuser": {
@@ -98,7 +98,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "boolean",
-                    "prettyName": "is_superuser",
+                    "prettyName": "Superuser status",
                     "type": "boolean"
                 },
                 "last_login": {
@@ -106,7 +106,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "datetime",
-                    "prettyName": "last_login",
+                    "prettyName": "Last login",
                     "type": "datetime"
                 },
                 "last_name": {
@@ -114,7 +114,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "last_name",
+                    "prettyName": "Last name",
                     "type": "string"
                 },
                 "password": {
@@ -122,7 +122,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "password",
+                    "prettyName": "Password",
                     "type": "string"
                 },
                 "username": {
@@ -130,7 +130,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "username",
+                    "prettyName": "Username",
                     "type": "string"
                 }
             },
@@ -165,7 +165,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 },
                 "sum": {
@@ -191,7 +191,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "andrew": {
@@ -199,7 +199,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "andrew",
+                    "prettyName": "Andrew",
                     "type": "string"
                 },
                 "bob": {
@@ -207,7 +207,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "bob",
+                    "prettyName": "Bob",
                     "type": "html"
                 },
                 "city": {
@@ -215,7 +215,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "city",
+                    "prettyName": "City",
                     "type": "string"
                 },
                 "fred": {
@@ -223,7 +223,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "fred",
+                    "prettyName": "Fred",
                     "type": "html"
                 },
                 "id": {
@@ -231,7 +231,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "producer": {
@@ -239,7 +239,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.Producer",
-                    "prettyName": "producer",
+                    "prettyName": "Producer",
                     "type": null
                 },
                 "tom": {
@@ -247,7 +247,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "tom",
+                    "prettyName": "Tom",
                     "type": "html"
                 }
             },
@@ -270,7 +270,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "id": {
@@ -278,7 +278,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "name": {
@@ -286,7 +286,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 }
             },
@@ -304,7 +304,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "in_admin": {
@@ -312,7 +312,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.InAdmin",
-                    "prettyName": "in_admin",
+                    "prettyName": "In admin",
                     "type": null
                 },
                 "name": {
@@ -320,7 +320,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 }
             },
@@ -338,7 +338,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "id": {
@@ -346,7 +346,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "in_admin": {
@@ -354,7 +354,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.InAdmin",
-                    "prettyName": "in_admin",
+                    "prettyName": "In admin",
                     "type": null
                 },
                 "inline_admin": {
@@ -362,7 +362,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.InlineAdmin",
-                    "prettyName": "inline_admin",
+                    "prettyName": "Inline admin",
                     "type": null
                 },
                 "name": {
@@ -370,7 +370,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 }
             },
@@ -390,7 +390,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.Address",
-                    "prettyName": "address",
+                    "prettyName": "Address",
                     "type": null
                 },
                 "admin": {
@@ -398,7 +398,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "frank": {
@@ -406,7 +406,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "frank",
+                    "prettyName": "Frank",
                     "type": "html"
                 },
                 "id": {
@@ -414,7 +414,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "name": {
@@ -422,7 +422,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 }
             },
@@ -448,7 +448,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "annotated": {
@@ -456,7 +456,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "annotated",
+                    "prettyName": "Annotated",
                     "type": "string"
                 },
                 "boat": {
@@ -464,7 +464,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "boat",
+                    "prettyName": "Boat",
                     "type": "number"
                 },
                 "calculated_boolean": {
@@ -472,7 +472,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "calculated_boolean",
+                    "prettyName": "Calculated boolean",
                     "type": "boolean"
                 },
                 "created_time": {
@@ -480,7 +480,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "datetime",
-                    "prettyName": "created_time",
+                    "prettyName": "Created time",
                     "type": "datetime"
                 },
                 "date": {
@@ -488,7 +488,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "date",
-                    "prettyName": "date",
+                    "prettyName": "Date",
                     "type": "date"
                 },
                 "default_sku": {
@@ -496,7 +496,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.SKU",
-                    "prettyName": "default_sku",
+                    "prettyName": "Default sku",
                     "type": null
                 },
                 "duration": {
@@ -504,7 +504,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "duration",
-                    "prettyName": "duration",
+                    "prettyName": "Duration",
                     "type": "duration"
                 },
                 "extra_inline": {
@@ -512,7 +512,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "extra_inline",
+                    "prettyName": "Extra inline",
                     "type": "string"
                 },
                 "extra_model": {
@@ -520,7 +520,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "extra_model",
+                    "prettyName": "Extra model",
                     "type": "string"
                 },
                 "fake": {
@@ -528,7 +528,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "unknown",
-                    "prettyName": "fake",
+                    "prettyName": "Fake",
                     "type": "unknown"
                 },
                 "funky": {
@@ -536,7 +536,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "funky",
+                    "prettyName": "Funky",
                     "type": "html"
                 },
                 "id": {
@@ -544,7 +544,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "image": {
@@ -552,7 +552,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "html",
-                    "prettyName": "image",
+                    "prettyName": "Image",
                     "type": "html"
                 },
                 "is_onsale": {
@@ -560,7 +560,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "is_onsale",
+                    "prettyName": "Is onsale",
                     "type": "html"
                 },
                 "lambda": {
@@ -568,7 +568,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "lambda",
+                    "prettyName": "Lambda",
                     "type": "html"
                 },
                 "name": {
@@ -576,7 +576,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 },
                 "number_choice": {
@@ -587,7 +587,7 @@
                     ],
                     "concrete": true,
                     "model": "numberchoice",
-                    "prettyName": "number_choice",
+                    "prettyName": "Number choice",
                     "type": "numberchoice"
                 },
                 "only_in_list_view": {
@@ -595,7 +595,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "only_in_list_view",
+                    "prettyName": "Only in list view",
                     "type": "string"
                 },
                 "onsale": {
@@ -603,7 +603,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "boolean",
-                    "prettyName": "onsale",
+                    "prettyName": "Onsale",
                     "type": "boolean"
                 },
                 "producer": {
@@ -611,7 +611,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.Producer",
-                    "prettyName": "producer",
+                    "prettyName": "Producer",
                     "type": null
                 },
                 "size": {
@@ -619,7 +619,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "size",
+                    "prettyName": "Size",
                     "type": "number"
                 },
                 "size_unit": {
@@ -627,7 +627,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "size_unit",
+                    "prettyName": "Size unit",
                     "type": "string"
                 },
                 "stealth_annotation": {
@@ -635,7 +635,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "stealth_annotation",
+                    "prettyName": "Stealth annotation",
                     "type": "string"
                 },
                 "string_choice": {
@@ -646,7 +646,7 @@
                     ],
                     "concrete": true,
                     "model": "stringchoice",
-                    "prettyName": "string_choice",
+                    "prettyName": "String choice",
                     "type": "stringchoice"
                 }
             },
@@ -686,7 +686,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "name": {
@@ -694,7 +694,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 },
                 "product": {
@@ -702,7 +702,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "core.Product",
-                    "prettyName": "product",
+                    "prettyName": "Product",
                     "type": null
                 }
             },
@@ -720,7 +720,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "id": {
@@ -728,7 +728,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "id",
+                    "prettyName": "ID",
                     "type": "number"
                 },
                 "name": {
@@ -736,7 +736,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 }
             },
@@ -754,7 +754,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "admin",
+                    "prettyName": "Admin",
                     "type": "html"
                 },
                 "created_time": {
@@ -762,7 +762,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "datetime",
-                    "prettyName": "created_time",
+                    "prettyName": "Created time",
                     "type": "datetime"
                 },
                 "description": {
@@ -770,7 +770,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "description",
+                    "prettyName": "Description",
                     "type": "string"
                 },
                 "fields": {
@@ -778,7 +778,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "fields",
+                    "prettyName": "Fields",
                     "type": "string"
                 },
                 "google_sheets_formula": {
@@ -786,7 +786,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "google_sheets_formula",
+                    "prettyName": "Google sheets formula",
                     "type": "html"
                 },
                 "id": {
@@ -794,7 +794,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "id",
+                    "prettyName": "Id",
                     "type": "string"
                 },
                 "limit": {
@@ -802,7 +802,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "number",
-                    "prettyName": "limit",
+                    "prettyName": "Limit",
                     "type": "number"
                 },
                 "model_name": {
@@ -810,7 +810,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "model_name",
+                    "prettyName": "Model name",
                     "type": "string"
                 },
                 "name": {
@@ -818,7 +818,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "name",
+                    "prettyName": "Name",
                     "type": "string"
                 },
                 "open_view": {
@@ -826,7 +826,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "open_view",
+                    "prettyName": "Open view",
                     "type": "html"
                 },
                 "owner": {
@@ -834,7 +834,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": "auth.User",
-                    "prettyName": "owner",
+                    "prettyName": "Owner",
                     "type": null
                 },
                 "public": {
@@ -842,7 +842,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "boolean",
-                    "prettyName": "public",
+                    "prettyName": "Public",
                     "type": "boolean"
                 },
                 "public_link": {
@@ -850,7 +850,7 @@
                     "choices": [],
                     "concrete": false,
                     "model": null,
-                    "prettyName": "public_link",
+                    "prettyName": "Public link",
                     "type": "html"
                 },
                 "public_slug": {
@@ -858,7 +858,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "public_slug",
+                    "prettyName": "Public slug",
                     "type": "string"
                 },
                 "query": {
@@ -866,7 +866,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": "string",
-                    "prettyName": "query",
+                    "prettyName": "Query",
                     "type": "string"
                 }
             },
@@ -912,7 +912,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 },
                 "iso_week": {
@@ -920,7 +920,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number"
                 },
                 "iso_year": {
@@ -928,7 +928,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year"
                 },
                 "max": {
@@ -960,7 +960,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date"
                 },
                 "quarter": {
@@ -976,7 +976,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday"
                 },
                 "week_start": {
@@ -984,7 +984,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date"
                 },
                 "year": {
@@ -1052,7 +1052,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 },
                 "iso_week": {
@@ -1060,7 +1060,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "iso_week",
+                    "prettyName": "iso week",
                     "type": "number"
                 },
                 "iso_year": {
@@ -1068,7 +1068,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "iso_year",
+                    "prettyName": "iso year",
                     "type": "year"
                 },
                 "max": {
@@ -1108,7 +1108,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "month_start",
+                    "prettyName": "month start",
                     "type": "date"
                 },
                 "quarter": {
@@ -1132,7 +1132,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "week_day",
+                    "prettyName": "week day",
                     "type": "weekday"
                 },
                 "week_start": {
@@ -1140,7 +1140,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "week_start",
+                    "prettyName": "week start",
                     "type": "date"
                 },
                 "year": {
@@ -1196,7 +1196,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 },
                 "max": {
@@ -1249,7 +1249,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1274,7 +1274,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1299,7 +1299,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1324,7 +1324,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1349,7 +1349,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1382,7 +1382,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 },
                 "max": {
@@ -1406,7 +1406,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "std_dev",
+                    "prettyName": "std dev",
                     "type": "number"
                 },
                 "sum": {
@@ -1453,7 +1453,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1478,7 +1478,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 },
                 "raw": {
@@ -1512,7 +1512,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1537,7 +1537,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1562,7 +1562,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1587,7 +1587,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1612,7 +1612,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 },
                 "raw": {
@@ -1646,7 +1646,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1671,7 +1671,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1696,7 +1696,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -1729,7 +1729,7 @@
                     "choices": [],
                     "concrete": true,
                     "model": null,
-                    "prettyName": "is_null",
+                    "prettyName": "is null",
                     "type": "isnull"
                 }
             },

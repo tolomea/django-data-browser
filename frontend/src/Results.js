@@ -34,7 +34,7 @@ function HeadCell(props) {
             filter_alt
           </SLink>{" "}
           <TLink onClick={() => query.toggleSort(field)}>
-            {field.pathStr} {/* TODO should be pretty path */}
+            {query.prettyPathStr(field.pathStr)}
             {
               {
                 dsc: `↑${field.priority}`,
@@ -45,7 +45,7 @@ function HeadCell(props) {
           </TLink>
         </>
       ) : (
-        " " + field.pathStr /* TODO should be pretty path */
+        " " + query.prettyPathStr(field.pathStr)
       )}
     </th>
   );

@@ -459,7 +459,9 @@ class OrmFileField(OrmConcreteField):
 
 class OrmAggregateField(OrmBaseField):
     def __init__(self, model_name, name, type_):
-        super().__init__(model_name, name, name, type_=type_, concrete=True)
+        super().__init__(
+            model_name, name, name.replace("_", " "), type_=type_, concrete=True
+        )
 
     def bind(self, previous):
         assert previous
@@ -485,7 +487,12 @@ class OrmBoundFunctionField(OrmBoundField):
 class OrmFunctionField(OrmBaseField):
     def __init__(self, model_name, name, type_):
         super().__init__(
-            model_name, name, name, type_=type_, concrete=True, can_pivot=True
+            model_name,
+            name,
+            name.replace("_", " "),
+            type_=type_,
+            concrete=True,
+            can_pivot=True,
         )
 
     def bind(self, previous):

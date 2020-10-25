@@ -179,14 +179,23 @@ def _get_all_admin_fields(request):
     return model_admins, all_admin_fields
 
 
+def _upper(name):
+    return name[0].upper() + name[1:]
+
+
 def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
     if isinstance(field_name, str):
         field_func = getattr(admin, field_name, None)
     else:
+        # an actual function in list_display
         field_func = field_name
-        field_name = getattr(
-            field_func, "short_description", slugify(str(field_func.__name__))
+        field_name = slugify(
+            getattr(field_func, "short_description", str(field_func.__name__))
         )
+
+    pretty_name = _upper(
+        getattr(field_func, "short_description", field_name.replace("_", " "))
+    )
 
     if isinstance(field_func, AnnotationDescriptor):
         qs = admin_get_queryset(admin, request, [field_name])
@@ -207,7 +216,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
         return OrmAnnotatedField(
             model_name=model_name,
             name=field_name,
-            pretty_name=field_name,
+            pretty_name=pretty_name,
             type_=type_,
             field_type=field_type,
             admin=admin,
@@ -226,7 +235,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
         return OrmCalculatedField(
             model_name=model_name,
             name=field_name,
-            pretty_name=field_name,
+            pretty_name=pretty_name,
             func=field_func,
         )
 
@@ -312,29 +321,37 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
+        pretty_name = (
+            _upper(getattr(field, "verbose_name", field_name)) if field else None
+        )
+        # FK's and OneToOne's
         if isinstance(field, (models.ForeignKey, OneToOneRel)):
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(
                     model_name=model_name,
                     name=field_name,
-                    pretty_name=field_name,
+                    pretty_name=pretty_name,
                     rel_name=get_model_name(field.related_model),
                 )
+        # ManyToMany
         elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
-            pass  # TODO 2many support
+            pass
+        # Files and Images
         elif isinstance(field, models.FileField):
             fields[field_name] = OrmFileField(
                 model_name=model_name,
                 name=field_name,
-                pretty_name=field_name,
+                pretty_name=pretty_name,
                 django_field=field,
             )
+        # Calculated and annoted fields
         elif isinstance(field, type(None)):
             orm_field = _get_calculated_field(
                 request, field_name, model_name, model, admin, model_fields
             )
             if orm_field:
                 fields[orm_field.name] = orm_field
+        # Normal fields
         else:
             field_type, choices = _get_field_type(model, field_name, field)
 
@@ -350,7 +367,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             fields[field_name] = OrmConcreteField(
                 model_name=model_name,
                 name=field_name,
-                pretty_name=field_name,
+                pretty_name=pretty_name,
                 type_=field_type,
                 rel_name=rel_name,
                 choices=choices,

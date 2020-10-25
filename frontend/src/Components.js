@@ -120,7 +120,7 @@ function Filter(props) {
       <td>
         <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
         <TLink onClick={() => query.addField(pathStr, type.defaultSort)}>
-          {pathStr} {/* TODO should be pretty path */}
+          {query.prettyPathStr(pathStr)}
         </TLink>{" "}
       </td>
       <td>

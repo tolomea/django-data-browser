@@ -291,6 +291,7 @@ Release History
 |           |                | | Remove path and prettyPath from fields and filters on JSON responses.          |
 |           |                | | Choice and isnull fields use human readable values in filters.                 |
 |           |                | | Choice fields have a raw sub field for accessing the underlying values.        |
+|           |                | | Use verbose_names and short_descriptions for display in web frontend and CSV.  |
 +-----------+----------------+----------------------------------------------------------------------------------+
 | 2.2.20    | 2020-10-22     | Fix bug with ArrayField on Django>=3.0                                           |
 +-----------+----------------+----------------------------------------------------------------------------------+
