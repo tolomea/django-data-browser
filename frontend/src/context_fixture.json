@@ -1750,7 +1750,7 @@
                     "type": "boolean"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "not_equals": {
                     "type": "boolean"
@@ -1778,7 +1778,7 @@
                     "type": "date"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "lt": {
                     "type": "date"
@@ -1816,7 +1816,7 @@
                     "type": "datetime"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "lt": {
                     "type": "datetime"
@@ -1854,7 +1854,7 @@
                     "type": "duration"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "lt": {
                     "type": "duration"
@@ -1892,7 +1892,7 @@
                     "type": "string"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "not_contains": {
                     "type": "string"
@@ -1960,7 +1960,7 @@
                     "type": "string"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "not_field_equals": {
                     "type": "jsonfield"
@@ -2019,7 +2019,7 @@
                     "type": "number"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "lt": {
                     "type": "number"
@@ -2051,7 +2051,7 @@
                     "type": "number"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "length": {
                     "type": "number"
@@ -2081,7 +2081,7 @@
                     "type": "stringchoice"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "not_equals": {
                     "type": "stringchoice"
@@ -2103,7 +2103,7 @@
                     "type": "numberchoice"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "length": {
                     "type": "number"
@@ -2147,7 +2147,7 @@
                     "type": "string"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "not_contains": {
                     "type": "string"
@@ -2195,7 +2195,7 @@
                     "type": "string"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "length": {
                     "type": "number"
@@ -2225,7 +2225,7 @@
                     "type": "stringchoice"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "not_equals": {
                     "type": "stringchoice"
@@ -2247,7 +2247,7 @@
                     "type": "stringchoice"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "length": {
                     "type": "number"
@@ -2274,7 +2274,7 @@
             "defaultValue": null,
             "lookups": {
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 }
             },
             "sortedLookups": [
@@ -2315,7 +2315,7 @@
                     "type": "year"
                 },
                 "is_null": {
-                    "type": "boolean"
+                    "type": "isnull"
                 },
                 "lt": {
                     "type": "year"

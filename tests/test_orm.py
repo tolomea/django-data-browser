@@ -398,13 +398,9 @@ def test_get_results_collapsed(get_product_flat):
 
 @pytest.mark.usefixtures("products")
 def test_get_results_null_filter(get_product_flat):
-    data = get_product_flat(1, "name", {"onsale__is_null": ["True"]})
+    data = get_product_flat(1, "name", {"onsale__is_null": ["IsNull"]})
     sortedAssert(data, [["a"], ["b"], ["c"]])
-    data = get_product_flat(1, "name", {"onsale__is_null": ["true"]})
-    sortedAssert(data, [["a"], ["b"], ["c"]])
-    data = get_product_flat(1, "name", {"onsale__is_null": ["False"]})
-    sortedAssert(data, [])
-    data = get_product_flat(1, "name", {"onsale__is_null": ["false"]})
+    data = get_product_flat(1, "name", {"onsale__is_null": ["NotNull"]})
     sortedAssert(data, [])
 
 

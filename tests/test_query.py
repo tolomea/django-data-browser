@@ -331,7 +331,7 @@ class TestNumberType:
         assert NumberType.parse("gt", "6.1", None) == (6.1, None)
         assert NumberType.parse("pontains", "6.1", None) == (None, ANY(str))
         assert NumberType.parse("gt", "hello", None) == (None, ANY(str))
-        assert NumberType.parse("is_null", "True", None) == (True, None)
+        assert NumberType.parse("is_null", "IsNull", None) == (True, None)
         assert NumberType.parse("is_null", "hello", None) == (None, ANY(str))
 
     def test_default_lookup(self):
@@ -347,7 +347,7 @@ class TestYearType:
         assert YearType.parse("gt", "6", None) == (6, None)
         assert YearType.parse("pontains", "6.1", None) == (None, ANY(str))
         assert YearType.parse("gt", "hello", None) == (None, ANY(str))
-        assert YearType.parse("is_null", "True", None) == (True, None)
+        assert YearType.parse("is_null", "IsNull", None) == (True, None)
         assert YearType.parse("is_null", "hello", None) == (None, ANY(str))
         assert YearType.parse("equals", "0", None) == (None, ANY(str))
 
@@ -370,7 +370,7 @@ class TestDateTimeType:
             None,
             ANY(str),
         )
-        assert DateTimeType.parse("is_null", "True", None) == (True, None)
+        assert DateTimeType.parse("is_null", "IsNull", None) == (True, None)
         assert DateTimeType.parse("is_null", "hello", None) == (None, ANY(str))
         assert DateTimeType.parse("gt", "now", None) == (ANY(datetime), None)
 
@@ -407,7 +407,7 @@ class TestDurationType:
         )
         assert DurationType.parse("gt", "5 dayss", None) == (None, ANY(str))
         assert DurationType.parse("pontains", "5 days", None) == (None, ANY(str))
-        assert DurationType.parse("is_null", "True", None) == (True, None)
+        assert DurationType.parse("is_null", "IsNull", None) == (True, None)
         assert DurationType.parse("is_null", "hello", None) == (None, ANY(str))
 
     def test_default_lookup(self):
@@ -430,7 +430,7 @@ class TestDateType:
             None,
             ANY(str),
         )
-        assert DateType.parse("is_null", "True", None) == (True, None)
+        assert DateType.parse("is_null", "IsNull", None) == (True, None)
         assert DateType.parse("is_null", "hello", None) == (None, ANY(str))
         assert DateType.parse("gt", "today", None) == (ANY(date), None)
 

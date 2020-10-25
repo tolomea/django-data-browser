@@ -90,7 +90,7 @@ class StringType(BaseType):
             "not_starts_with": StringType,
             "not_ends_with": StringType,
             "not_regex": RegexType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
 
@@ -106,7 +106,7 @@ class NumberType(BaseType):
             "gte": NumberType,
             "lt": NumberType,
             "lte": NumberType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
     @staticmethod
@@ -164,7 +164,7 @@ class YearType(NumberType):
             "gte": YearType,
             "lt": YearType,
             "lte": YearType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
     @staticmethod
@@ -188,7 +188,7 @@ class DurationType(BaseType):
             "gte": DurationType,
             "lt": DurationType,
             "lte": DurationType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
     @staticmethod
@@ -220,7 +220,7 @@ class DateTimeType(BaseType):
             "gte": DateTimeType,
             "lt": DateTimeType,
             "lte": DateTimeType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
     @staticmethod
@@ -254,7 +254,7 @@ class DateType(BaseType):
             "gte": DateType,
             "lt": DateType,
             "lte": DateType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
     @staticmethod
@@ -351,11 +351,7 @@ class BooleanType(BaseType):
 
     @staticmethod
     def _lookups():
-        return {
-            "equals": BooleanType,
-            "not_equals": BooleanType,
-            "is_null": BooleanType,
-        }
+        return {"equals": BooleanType, "not_equals": BooleanType, "is_null": IsNullType}
 
     @staticmethod
     def _parse(value, choices):
@@ -382,7 +378,7 @@ class UnknownType(BaseType):
 
     @staticmethod
     def _lookups():
-        return {"is_null": BooleanType}
+        return {"is_null": IsNullType}
 
 
 class JSONFieldType(BaseType):
@@ -410,7 +406,7 @@ class JSONType(BaseType):
     @staticmethod
     def _lookups():
         return {
-            "is_null": BooleanType,
+            "is_null": IsNullType,
             "has_key": StringType,
             "field_equals": JSONFieldType,
             "not_has_key": StringType,
@@ -445,7 +441,7 @@ class ChoiceTypeMixin:
         return {
             "equals": StringChoiceType,
             "not_equals": StringChoiceType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
 
@@ -488,7 +484,7 @@ class ArrayTypeMixin:
             "length": NumberType,
             "not_contains": cls.base_type,
             "not_length": NumberType,
-            "is_null": BooleanType,
+            "is_null": IsNullType,
         }
 
 
