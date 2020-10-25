@@ -78,18 +78,18 @@ class BaseType(metaclass=TypeMeta):
 class StringType(BaseType):
     default_value = ""
 
-    @staticmethod
-    def _lookups():
+    @classmethod
+    def _lookups(cls):
         return {
-            "equals": StringType,
-            "contains": StringType,
-            "starts_with": StringType,
-            "ends_with": StringType,
+            "equals": cls,
+            "contains": cls,
+            "starts_with": cls,
+            "ends_with": cls,
             "regex": RegexType,
-            "not_equals": StringType,
-            "not_contains": StringType,
-            "not_starts_with": StringType,
-            "not_ends_with": StringType,
+            "not_equals": cls,
+            "not_contains": cls,
+            "not_starts_with": cls,
+            "not_ends_with": cls,
             "not_regex": RegexType,
             "is_null": IsNullType,
         }
@@ -98,15 +98,15 @@ class StringType(BaseType):
 class NumberType(BaseType):
     default_value = 0
 
-    @staticmethod
-    def _lookups():
+    @classmethod
+    def _lookups(cls):
         return {
-            "equals": NumberType,
-            "not_equals": NumberType,
-            "gt": NumberType,
-            "gte": NumberType,
-            "lt": NumberType,
-            "lte": NumberType,
+            "equals": cls,
+            "not_equals": cls,
+            "gt": cls,
+            "gte": cls,
+            "lt": cls,
+            "lte": cls,
             "is_null": IsNullType,
         }
 
@@ -157,18 +157,6 @@ class YearType(NumberType):
     default_sort = ASC
 
     @staticmethod
-    def _lookups():
-        return {
-            "equals": YearType,
-            "not_equals": YearType,
-            "gt": YearType,
-            "gte": YearType,
-            "lt": YearType,
-            "lte": YearType,
-            "is_null": IsNullType,
-        }
-
-    @staticmethod
     def _parse(value, choices):
         assert not choices
         res = int(value)
@@ -180,15 +168,15 @@ class YearType(NumberType):
 class DurationType(BaseType):
     default_value = ""
 
-    @staticmethod
-    def _lookups():
+    @classmethod
+    def _lookups(cls):
         return {
-            "equals": DurationType,
-            "not_equals": DurationType,
-            "gt": DurationType,
-            "gte": DurationType,
-            "lt": DurationType,
-            "lte": DurationType,
+            "equals": cls,
+            "not_equals": cls,
+            "gt": cls,
+            "gte": cls,
+            "lt": cls,
+            "lte": cls,
             "is_null": IsNullType,
         }
 
@@ -212,15 +200,15 @@ class DateTimeType(BaseType):
     default_value = "now"
     default_sort = ASC
 
-    @staticmethod
-    def _lookups():
+    @classmethod
+    def _lookups(cls):
         return {
-            "equals": DateTimeType,
-            "not_equals": DateTimeType,
-            "gt": DateTimeType,
-            "gte": DateTimeType,
-            "lt": DateTimeType,
-            "lte": DateTimeType,
+            "equals": cls,
+            "not_equals": cls,
+            "gt": cls,
+            "gte": cls,
+            "lt": cls,
+            "lte": cls,
             "is_null": IsNullType,
         }
 
@@ -246,15 +234,15 @@ class DateType(BaseType):
     default_value = "today"
     default_sort = ASC
 
-    @staticmethod
-    def _lookups():
+    @classmethod
+    def _lookups(cls):
         return {
-            "equals": DateType,
-            "not_equals": DateType,
-            "gt": DateType,
-            "gte": DateType,
-            "lt": DateType,
-            "lte": DateType,
+            "equals": cls,
+            "not_equals": cls,
+            "gt": cls,
+            "gte": cls,
+            "lt": cls,
+            "lte": cls,
             "is_null": IsNullType,
         }
 
@@ -275,9 +263,9 @@ class WeekDayType(BaseType):
     default_value = "Monday"
     default_sort = ASC
 
-    @staticmethod
-    def _lookups():
-        return {"equals": WeekDayType, "not_equals": WeekDayType}
+    @classmethod
+    def _lookups(cls):
+        return {"equals": cls, "not_equals": cls}
 
     _days = [
         "Sunday",
@@ -307,9 +295,9 @@ class MonthType(BaseType):
     default_value = "January"
     default_sort = ASC
 
-    @staticmethod
-    def _lookups():
-        return {"equals": MonthType, "not_equals": MonthType}
+    @classmethod
+    def _lookups(cls):
+        return {"equals": cls, "not_equals": cls}
 
     _months = [
         "January",
@@ -342,6 +330,10 @@ class MonthType(BaseType):
 
 class HTMLType(StringType):
     @staticmethod
+    def _lookups():
+        return {}
+
+    @staticmethod
     def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else html.conditional_escape(value)
@@ -350,9 +342,9 @@ class HTMLType(StringType):
 class BooleanType(BaseType):
     default_value = True
 
-    @staticmethod
-    def _lookups():
-        return {"equals": BooleanType, "not_equals": BooleanType, "is_null": IsNullType}
+    @classmethod
+    def _lookups(cls):
+        return {"equals": cls, "not_equals": cls, "is_null": IsNullType}
 
     @staticmethod
     def _parse(value, choices):
@@ -405,13 +397,13 @@ class JSONFieldType(BaseType):
 
 
 class JSONType(BaseType):
-    @staticmethod
-    def _lookups():
+    @classmethod
+    def _lookups(cls):
         return {
-            "equals": JSONType,
+            "equals": cls,
             "has_key": StringType,
             "field_equals": JSONFieldType,
-            "not_equals": JSONType,
+            "not_equals": cls,
             "not_has_key": StringType,
             "not_field_equals": JSONFieldType,
             "is_null": IsNullType,
@@ -447,13 +439,9 @@ class ChoiceTypeMixin:
             raise ValueError(f"Unknown choice '{value}'")
         return choices[value]
 
-    @staticmethod
-    def _lookups():
-        return {
-            "equals": StringChoiceType,
-            "not_equals": StringChoiceType,
-            "is_null": IsNullType,
-        }
+    @classmethod
+    def _lookups(cls):
+        return {"equals": cls, "not_equals": cls, "is_null": IsNullType}
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):

@@ -1914,57 +1914,11 @@
         },
         "html": {
             "choices": [],
-            "defaultLookup": "equals",
+            "defaultLookup": null,
             "defaultSort": null,
             "defaultValue": "",
-            "lookups": {
-                "contains": {
-                    "type": "string"
-                },
-                "ends_with": {
-                    "type": "string"
-                },
-                "equals": {
-                    "type": "string"
-                },
-                "is_null": {
-                    "type": "isnull"
-                },
-                "not_contains": {
-                    "type": "string"
-                },
-                "not_ends_with": {
-                    "type": "string"
-                },
-                "not_equals": {
-                    "type": "string"
-                },
-                "not_regex": {
-                    "type": "regex"
-                },
-                "not_starts_with": {
-                    "type": "string"
-                },
-                "regex": {
-                    "type": "regex"
-                },
-                "starts_with": {
-                    "type": "string"
-                }
-            },
-            "sortedLookups": [
-                "equals",
-                "contains",
-                "starts_with",
-                "ends_with",
-                "regex",
-                "not_equals",
-                "not_contains",
-                "not_starts_with",
-                "not_ends_with",
-                "not_regex",
-                "is_null"
-            ]
+            "lookups": {},
+            "sortedLookups": []
         },
         "isnull": {
             "choices": [
@@ -2130,13 +2084,13 @@
             "defaultValue": null,
             "lookups": {
                 "equals": {
-                    "type": "stringchoice"
+                    "type": "numberchoice"
                 },
                 "is_null": {
                     "type": "isnull"
                 },
                 "not_equals": {
-                    "type": "stringchoice"
+                    "type": "numberchoice"
                 }
             },
             "sortedLookups": [
