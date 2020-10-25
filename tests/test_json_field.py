@@ -84,10 +84,11 @@ def test_filter_field_value_no_field(get_results_flat):
 
 
 def test_filter_field_value_list(get_results_flat):
-    JsonModel.objects.create(json_field={"goodbye": "universe"})
+    JsonModel.objects.create(json_field={"goodbye": ["world"]})
+    JsonModel.objects.create(json_field={"goodbye": ["universe"]})
     assert get_results_flat(
         "json_field", {"json_field__field_equals": ['goodbye|["world"]']}
-    ) == [{"json_field": '{"goodbye": "universe"}'}]
+    ) == [{"json_field": '{"goodbye": ["world"]}'}]
 
 
 def test_filter_field_value_bad_json(get_results_flat):
@@ -103,3 +104,19 @@ def test_filter_has_key(get_results_flat):
     assert get_results_flat("json_field", {"json_field__has_key": ["hello"]}) == [
         {"json_field": '{"hello": "world"}'}
     ]
+
+
+def test_filter_equals(get_results_flat):
+    JsonModel.objects.create(json_field={"hello": "world"})
+    JsonModel.objects.create(json_field={"goodbye": "world"})
+    assert get_results_flat(
+        "json_field", {"json_field__equals": ['{"hello": "world"}']}
+    ) == [{"json_field": '{"hello": "world"}'}]
+
+
+def test_filter_equals_bad_json(get_results_flat):
+    JsonModel.objects.create(json_field={"hello": "world"})
+    JsonModel.objects.create(json_field={"goodbye": "world"})
+    assert get_results_flat(
+        "json_field-1", {"json_field__equals": ['{"hello": "world"']}
+    ) == [{"json_field": '{"hello": "world"}'}, {"json_field": '{"goodbye": "world"}'}]

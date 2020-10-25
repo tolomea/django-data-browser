@@ -394,8 +394,6 @@ class JSONFieldType(BaseType):
         field, value = value.split("|", 1)
         if not field:
             raise ValueError("Invalid field name")
-        if value.startswith("{") or value.startswith("["):
-            raise ValueError("Not a JSON primitive")
         try:
             value = json.loads(value)
         except json.JSONDecodeError:
@@ -407,12 +405,23 @@ class JSONType(BaseType):
     @staticmethod
     def _lookups():
         return {
-            "is_null": IsNullType,
+            "equals": JSONType,
             "has_key": StringType,
             "field_equals": JSONFieldType,
+            "not_equals": JSONType,
             "not_has_key": StringType,
             "not_field_equals": JSONFieldType,
+            "is_null": IsNullType,
         }
+
+    @staticmethod
+    def _parse(value, choices):
+        assert not choices
+        try:
+            value = json.loads(value.strip())
+        except json.JSONDecodeError:
+            raise ValueError("Not a JSON primitive")
+        return value
 
 
 class ChoiceTypeMixin:

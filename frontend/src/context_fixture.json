@@ -1967,10 +1967,13 @@
         },
         "json": {
             "choices": [],
-            "defaultLookup": "is_null",
+            "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": null,
             "lookups": {
+                "equals": {
+                    "type": "json"
+                },
                 "field_equals": {
                     "type": "jsonfield"
                 },
@@ -1980,6 +1983,9 @@
                 "is_null": {
                     "type": "isnull"
                 },
+                "not_equals": {
+                    "type": "json"
+                },
                 "not_field_equals": {
                     "type": "jsonfield"
                 },
@@ -1988,11 +1994,13 @@
                 }
             },
             "sortedLookups": [
-                "is_null",
+                "equals",
                 "has_key",
                 "field_equals",
+                "not_equals",
                 "not_has_key",
-                "not_field_equals"
+                "not_field_equals",
+                "is_null"
             ]
         },
         "jsonfield": {
