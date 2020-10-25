@@ -382,6 +382,13 @@ class UnknownType(BaseType):
         return {"is_null": IsNullType}
 
 
+def _json_loads(value):
+    try:
+        return json.loads(value.strip())
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON value")
+
+
 class JSONFieldType(BaseType):
     default_value = "|"
 
@@ -394,11 +401,7 @@ class JSONFieldType(BaseType):
         field, value = value.split("|", 1)
         if not field:
             raise ValueError("Invalid field name")
-        try:
-            value = json.loads(value)
-        except json.JSONDecodeError:
-            raise ValueError("Not a JSON primitive")
-        return [field, value]
+        return [field, _json_loads(value)]
 
 
 class JSONType(BaseType):
@@ -417,11 +420,7 @@ class JSONType(BaseType):
     @staticmethod
     def _parse(value, choices):
         assert not choices
-        try:
-            value = json.loads(value.strip())
-        except json.JSONDecodeError:
-            raise ValueError("Not a JSON primitive")
-        return value
+        return _json_loads(value)
 
 
 class ChoiceTypeMixin:
@@ -444,6 +443,8 @@ class ChoiceTypeMixin:
 
         assert choices
         choices = {v: k for k, v in choices}
+        if value not in choices:
+            raise ValueError(f"Unknown choice '{value}'")
         return choices[value]
 
     @staticmethod
@@ -475,27 +476,33 @@ class IsNullType(ChoiceTypeMixin, BaseType):
 class ArrayTypeMixin:
     default_value = None
 
-    @staticmethod
-    def _get_formatter(choices):  # pragma: postgres
-        if choices:
-            choices = dict(choices)
-            choices[None] = None
-            return (
-                lambda value: None
-                if value is None
-                else ", ".join(str(choices.get(v, v)) for v in value)
-            )
-        return lambda value: None if value is None else ", ".join(str(v) for v in value)
+    @classmethod
+    def _get_formatter(cls, choices):  # pragma: postgres
+        element_formatter = cls.element_type._get_formatter(choices)
+        return (
+            lambda value: None
+            if value is None
+            else json.dumps([element_formatter(v) for v in value])
+        )
 
     @classmethod
     def _lookups(cls):
         return {
+            "equals": cls,
             "contains": cls.element_type,
             "length": NumberType,
+            "not_equals": cls,
             "not_contains": cls.element_type,
             "not_length": NumberType,
             "is_null": IsNullType,
         }
+
+    @classmethod
+    def _parse(cls, value, choices):
+        value = _json_loads(value)
+        if not isinstance(value, list):
+            raise ValueError("Expected a list")
+        return [cls.element_type._parse(v, choices) for v in value]
 
 
 class StringArrayType(ArrayTypeMixin, BaseType):

@@ -2087,12 +2087,15 @@
         },
         "numberarray": {
             "choices": [],
-            "defaultLookup": "contains",
+            "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
                     "type": "number"
+                },
+                "equals": {
+                    "type": "numberarray"
                 },
                 "is_null": {
                     "type": "isnull"
@@ -2103,13 +2106,18 @@
                 "not_contains": {
                     "type": "number"
                 },
+                "not_equals": {
+                    "type": "numberarray"
+                },
                 "not_length": {
                     "type": "number"
                 }
             },
             "sortedLookups": [
+                "equals",
                 "contains",
                 "length",
+                "not_equals",
                 "not_contains",
                 "not_length",
                 "is_null"
@@ -2139,12 +2147,15 @@
         },
         "numberchoicearray": {
             "choices": [],
-            "defaultLookup": "contains",
+            "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
                     "type": "numberchoice"
+                },
+                "equals": {
+                    "type": "numberchoicearray"
                 },
                 "is_null": {
                     "type": "isnull"
@@ -2155,13 +2166,18 @@
                 "not_contains": {
                     "type": "numberchoice"
                 },
+                "not_equals": {
+                    "type": "numberchoicearray"
+                },
                 "not_length": {
                     "type": "number"
                 }
             },
             "sortedLookups": [
+                "equals",
                 "contains",
                 "length",
+                "not_equals",
                 "not_contains",
                 "not_length",
                 "is_null"
@@ -2231,12 +2247,15 @@
         },
         "stringarray": {
             "choices": [],
-            "defaultLookup": "contains",
+            "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
                     "type": "string"
+                },
+                "equals": {
+                    "type": "stringarray"
                 },
                 "is_null": {
                     "type": "isnull"
@@ -2247,13 +2266,18 @@
                 "not_contains": {
                     "type": "string"
                 },
+                "not_equals": {
+                    "type": "stringarray"
+                },
                 "not_length": {
                     "type": "number"
                 }
             },
             "sortedLookups": [
+                "equals",
                 "contains",
                 "length",
+                "not_equals",
                 "not_contains",
                 "not_length",
                 "is_null"
@@ -2283,12 +2307,15 @@
         },
         "stringchoicearray": {
             "choices": [],
-            "defaultLookup": "contains",
+            "defaultLookup": "equals",
             "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
                     "type": "stringchoice"
+                },
+                "equals": {
+                    "type": "stringchoicearray"
                 },
                 "is_null": {
                     "type": "isnull"
@@ -2299,13 +2326,18 @@
                 "not_contains": {
                     "type": "stringchoice"
                 },
+                "not_equals": {
+                    "type": "stringchoicearray"
+                },
                 "not_length": {
                     "type": "number"
                 }
             },
             "sortedLookups": [
+                "equals",
                 "contains",
                 "length",
+                "not_equals",
                 "not_contains",
                 "not_length",
                 "is_null"

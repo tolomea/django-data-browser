@@ -19,6 +19,7 @@ from data_browser.types import (
     MonthType,
     NumberChoiceType,
     NumberType,
+    StringArrayType,
     StringChoiceType,
     StringType,
     UnknownType,
@@ -540,3 +541,9 @@ class TestIsNullType:
 class TestUnknownType:
     def test_format(self):
         assert UnknownType.get_formatter(None)(None) is None
+
+
+class TestArrayStringType:
+    def test_validate(self):
+        assert StringArrayType.parse("equals", '["X"]', None) == (["X"], None)
+        assert StringArrayType.parse("equals", '"X"', None) == (None, ANY(str))
