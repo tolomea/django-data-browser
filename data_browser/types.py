@@ -508,10 +508,12 @@ class NumberArrayType(ArrayTypeMixin, BaseType):
 
 class StringChoiceArrayType(ArrayTypeMixin, BaseType):
     element_type = StringChoiceType
+    raw_type = StringArrayType
 
 
 class NumberChoiceArrayType(ArrayTypeMixin, BaseType):
     element_type = NumberChoiceType
+    raw_type = NumberArrayType
 
 
 TYPES = {cls.name: cls for cls in all_subclasses(BaseType)}

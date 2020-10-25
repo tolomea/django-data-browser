@@ -1514,11 +1514,20 @@
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
+                },
+                "raw": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "numberarray",
+                    "prettyName": "raw",
+                    "type": "numberarray"
                 }
             },
             "sortedFields": [
                 "count",
-                "is_null"
+                "is_null",
+                "raw"
             ]
         },
         "regex": {
@@ -1648,11 +1657,20 @@
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
+                },
+                "raw": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": "stringarray",
+                    "prettyName": "raw",
+                    "type": "stringarray"
                 }
             },
             "sortedFields": [
                 "count",
-                "is_null"
+                "is_null",
+                "raw"
             ]
         },
         "unknown": {
