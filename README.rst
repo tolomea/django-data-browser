@@ -291,6 +291,7 @@ Release History
 |           |                | | Path and prettyPath have been removed from fields and filters on JSON responses.       |
 |           |                | | Choice and is_null fields use human readable values in filters.                        |
 |           |                | | Choice fields have a raw sub field for accessing the underlying values.                |
+|           |                | | Starts with, regex, etc have been removed form choice fields, equivalents are on raw.  |
 |           |                | | Verbose_names and short_descriptions are used for display in the web frontend and CSV. |
 |           |                | | Equals and not equals for JSON and Arrays.                                             |
 |           |                | | JSON field filter supports lists and objects.                                          |
