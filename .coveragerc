@@ -2,6 +2,7 @@
 branch = True
 omit =
 	setup.py
+	data_browser/migrations/*.py
 
 [report]
 exclude_lines =

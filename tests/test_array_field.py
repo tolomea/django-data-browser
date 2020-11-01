@@ -1,6 +1,8 @@
 import pytest
 from django.contrib import admin
 
+from data_browser import migration_helpers
+from data_browser.models import View
 from data_browser.orm_admin import get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
@@ -137,3 +139,38 @@ def test_char_choice_array_equals(get_results_flat):  # pragma: postgres
     assert get_results_flat(
         "char_choice_array_field", {"char_choice_array_field__equals": ['["A", "B"]']}
     ) == [{"char_choice_array_field": '["A", "B"]'}]
+
+
+@pytest.mark.parametrize(
+    "before,after",
+    [
+        # choice_array contains / not_contains
+        ("char_choice_array_field__contains=a", "char_choice_array_field__contains=A"),
+        (
+            "char_choice_array_field__contains=d",
+            "char_choice_array_field__raw__contains=d",
+        ),
+        ("int_choice_array_field__contains=1", "int_choice_array_field__contains=A"),
+        (
+            "int_choice_array_field__contains=4",
+            "int_choice_array_field__raw__contains=4.0",
+        ),
+        # choice_array other -> noop
+        ("char_choice_array_field__length=1", "char_choice_array_field__length=1"),
+        ("int_choice_array_field__length=1", "int_choice_array_field__length=1"),
+        ("char_choice_array_field__wtf=1", "char_choice_array_field__wtf=1"),
+        ("int_choice_array_field__wtf=1", "int_choice_array_field__wtf=1"),
+        # regular array -> noop
+        ("char_array_field__contains=a", "char_array_field__contains=a"),
+        ("int_array_field__contains=1", "int_array_field__contains=1"),
+    ],
+)
+def test_0009(req, with_arrays, before, after):  # pragma: postgres
+    orm_models = get_models(req)
+    valid = int("wtf" not in before)
+
+    view = View.objects.create(model_name="array.ArrayModel", query=before)
+    migration_helpers.forwards_0009(View)
+    view.refresh_from_db()
+    assert view.query == after
+    assert len(BoundQuery.bind(view.get_query(), orm_models).valid_filters) == valid

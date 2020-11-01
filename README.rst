@@ -296,6 +296,7 @@ Release History
 |           |                | | Equals and not equals for JSON and Arrays.                                             |
 |           |                | | JSON field filter supports lists and objects.                                          |
 |           |                | | Array values are now JSON encoded across the board.                                    |
+|           |                | | Backfill saved views for above changes to filter formats.                              |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 2.2.20    | 2020-10-22     | Fix bug with ArrayField on Django>=3.0                                                   |
 +-----------+----------------+------------------------------------------------------------------------------------------+
