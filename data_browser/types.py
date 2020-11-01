@@ -11,6 +11,12 @@ ASC, DSC = "asc", "dsc"
 
 
 class TypeMeta(type):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.raw_type and self.element_type:
+            assert self.raw_type.element_type == self.element_type.raw_type
+
     def __repr__(cls):
         return cls.__name__
 
@@ -35,6 +41,7 @@ class BaseType(metaclass=TypeMeta):
     default_sort = None
     choices = ()
     raw_type = None
+    element_type = None
 
     def __init__(self):
         assert False
