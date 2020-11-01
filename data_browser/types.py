@@ -54,7 +54,6 @@ class BaseType(metaclass=TypeMeta):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         return value
 
     @classmethod
@@ -117,12 +116,10 @@ class NumberType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         return float(value)
 
     @staticmethod
     def get_format_hints(name, data):
-        # we add . here so there is always at least one .
         nums = [
             row[name] for row in data if row and row[name] and abs(row[name] > 0.0001)
         ]
@@ -140,7 +137,6 @@ class RegexType(BaseType):
     @staticmethod
     @lru_cache(maxsize=None)
     def _parse(value, choices):
-        assert not choices
         from django.contrib.contenttypes.models import ContentType
         from django.db.transaction import atomic
 
@@ -158,7 +154,6 @@ class YearType(NumberType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         res = int(value)
         if res <= 1:
             raise Exception("Years must be > 1")
@@ -182,7 +177,6 @@ class DurationType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         if value.count(":") == 1:
             value += ":0"
 
@@ -214,7 +208,6 @@ class DateTimeType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         if value.lower().strip() == "now":
             return timezone.now()
         return timezone.make_aware(dateutil.parser.parse(value))
@@ -248,7 +241,6 @@ class DateType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         if value.lower().strip() == "today":
             return timezone.now().date()
         return timezone.make_aware(dateutil.parser.parse(value)).date()
@@ -348,7 +340,6 @@ class BooleanType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         value = value.lower()
         if value == "true":
             return True
@@ -386,7 +377,6 @@ class JSONFieldType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         value = value.strip()
         if "|" not in value:
             raise ValueError("Missing seperator '|'")
@@ -411,7 +401,6 @@ class JSONType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        assert not choices
         return _json_loads(value)
 
 

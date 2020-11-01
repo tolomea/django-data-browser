@@ -117,6 +117,15 @@ def test_filter_length(get_results_flat):  # pragma: postgres
     ]
 
 
+def test_choice_array_filter_length(get_results_flat):  # pragma: postgres
+    ArrayModel.objects.create(int_choice_array_field=[1])
+    ArrayModel.objects.create(int_choice_array_field=[1, 2])
+    ArrayModel.objects.create(int_choice_array_field=[1, 2, 3])
+    assert get_results_flat(
+        "int_choice_array_field", {"int_choice_array_field__length": [2]}
+    ) == [{"int_choice_array_field": '["A", "B"]'}]
+
+
 def test_char_choice_array_equals(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(char_choice_array_field=["a", "b"])
     ArrayModel.objects.create(char_choice_array_field=["b", "c"])
