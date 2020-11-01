@@ -93,13 +93,6 @@ def pivot_products(db):
 
 
 @pytest.fixture
-def req(rf, admin_user):
-    req = rf.get("/")
-    req.user = admin_user
-    return req
-
-
-@pytest.fixture
 def orm_models(req):
     return get_models(req)
 
