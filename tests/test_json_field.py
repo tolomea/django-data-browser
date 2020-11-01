@@ -22,19 +22,28 @@ class JsonAdmin(admin.ModelAdmin):
 
 
 @pytest.fixture
-@pytest.mark.usefixtures("db")
-def get_results_flat(req):
+def with_json(db):
+    admin.site.register(JsonModel, JsonAdmin)
+    yield
+    admin.site.unregister(JsonModel)
+
+
+@pytest.fixture
+def get_results_flat(with_json, req):
     def helper(fields, query=None):
         query = query or {}
 
-        admin.site.register(JsonModel, JsonAdmin)
-        try:
-            orm_models = get_models(req)
-            query = Query.from_request("json.JsonModel", fields, query)
-            bound_query = BoundQuery.bind(query, orm_models)
-            data = get_results(req, bound_query, orm_models, False)
-        finally:
-            admin.site.unregister(JsonModel)
+        orm_models = get_models(req)
+        query = Query.from_request("json.JsonModel", fields, query)
+        bound_query = BoundQuery.bind(query, orm_models)
+        data = get_results(req, bound_query, orm_models, False)
+
+        for f in bound_query.filters:
+            if f.err_message:
+                print(
+                    "filter error:", f.path_str, f.lookup, f.value, "->", f.err_message
+                )
+
         return data["rows"]
 
     return helper

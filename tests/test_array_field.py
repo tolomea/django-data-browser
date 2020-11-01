@@ -23,24 +23,28 @@ class ArrayAdmin(admin.ModelAdmin):
 
 
 @pytest.fixture
-@pytest.mark.usefixtures("db")
-def get_results_flat(req):  # pragma: postgres
+def with_arrays(db):  # pragma: postgres
+    admin.site.register(ArrayModel, ArrayAdmin)
+    yield
+    admin.site.unregister(ArrayModel)
+
+
+@pytest.fixture
+def get_results_flat(with_arrays, req):  # pragma: postgres
     def helper(fields, query=None):
         query = query or {}
 
-        admin.site.register(ArrayModel, ArrayAdmin)
-        try:
-            orm_models = get_models(req)
-            query = Query.from_request("array.ArrayModel", fields, query)
-            bound_query = BoundQuery.bind(query, orm_models)
-            data = get_results(req, bound_query, orm_models, False)
-        finally:
-            admin.site.unregister(ArrayModel)
+        orm_models = get_models(req)
+        query = Query.from_request("array.ArrayModel", fields, query)
+        bound_query = BoundQuery.bind(query, orm_models)
+        data = get_results(req, bound_query, orm_models, False)
+
         for f in bound_query.filters:
             if f.err_message:
                 print(
                     "filter error:", f.path_str, f.lookup, f.value, "->", f.err_message
                 )
+
         return data["rows"]
 
     return helper
