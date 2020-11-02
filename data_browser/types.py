@@ -268,27 +268,40 @@ class DurationType(BaseType):
         return lambda value: None if value is None else str(value)
 
 
-class DateTimeType(BaseType):
-    default_value = "now"
+class DateTypeMixin:
     default_sort = ASC
 
-    @staticmethod
-    def _lookups():
+    @classmethod
+    def _lookups(cls):
         return {
-            "equals": DateTimeType,
-            "not_equals": DateTimeType,
-            "gt": DateTimeType,
-            "gte": DateTimeType,
-            "lt": DateTimeType,
-            "lte": DateTimeType,
+            "equals": cls,
+            "not_equals": cls,
+            "gt": cls,
+            "gte": cls,
+            "lt": cls,
+            "lte": cls,
             "is_null": BooleanType,
         }
 
-    @staticmethod
-    def _parse(value):
+    @classmethod
+    def _parse(cls, value):
+        res = {
+            dateutil.parser.parse(value, dayfirst=False, yearfirst=False),
+            dateutil.parser.parse(value, dayfirst=True, yearfirst=False),
+            dateutil.parser.parse(value, dayfirst=False, yearfirst=True),
+        }
+        assert len(res) == 1, "Ambiguous value"
+        return timezone.make_aware(res.pop())
+
+
+class DateTimeType(DateTypeMixin, BaseType):
+    default_value = "now"
+
+    @classmethod
+    def _parse(cls, value):
         if value.lower().strip() == "now":
             return timezone.now()
-        return timezone.make_aware(dateutil.parser.parse(value))
+        return super()._parse(value)
 
     @staticmethod
     def get_formatter(choices):
@@ -301,27 +314,14 @@ class DateTimeType(BaseType):
             return lambda value: None if value is None else str(value)
 
 
-class DateType(BaseType):
+class DateType(DateTypeMixin, BaseType):
     default_value = "today"
-    default_sort = ASC
 
-    @staticmethod
-    def _lookups():
-        return {
-            "equals": DateType,
-            "not_equals": DateType,
-            "gt": DateType,
-            "gte": DateType,
-            "lt": DateType,
-            "lte": DateType,
-            "is_null": BooleanType,
-        }
-
-    @staticmethod
-    def _parse(value):
+    @classmethod
+    def _parse(cls, value):
         if value.lower().strip() == "today":
             return timezone.now().date()
-        return timezone.make_aware(dateutil.parser.parse(value)).date()
+        return super()._parse(value).date()
 
     @staticmethod
     def get_formatter(choices):

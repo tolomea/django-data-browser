@@ -361,6 +361,10 @@ class TestDateTimeType:
         assert DateTimeType.parse("is_null", "True") == (True, None)
         assert DateTimeType.parse("is_null", "hello") == (None, ANY(str))
         assert DateTimeType.parse("gt", "now") == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "11-22-2018") == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "21-12-2018") == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "11-12-2018") == (None, ANY(str))
+        assert DateTimeType.parse("gt", "21-22-2018") == (None, ANY(str))
 
     def test_default_lookup(self):
         assert DateTimeType.default_lookup == "equals"
@@ -418,6 +422,10 @@ class TestDateType:
         assert DateType.parse("is_null", "True") == (True, None)
         assert DateType.parse("is_null", "hello") == (None, ANY(str))
         assert DateType.parse("gt", "today") == (ANY(date), None)
+        assert DateType.parse("gt", "11-22-2018") == (ANY(date), None)
+        assert DateType.parse("gt", "21-12-2018") == (ANY(date), None)
+        assert DateType.parse("gt", "11-12-2018") == (None, ANY(str))
+        assert DateType.parse("gt", "21-22-2018") == (None, ANY(str))
 
     def test_default_lookup(self):
         assert DateType.default_lookup == "equals"
