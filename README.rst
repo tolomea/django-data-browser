@@ -300,6 +300,8 @@ Release History
 |           |                | | Pickup calculated fields on inlines when there is no actual admin.                     |
 |           |                | | Fix bug where ID's and annotations on inlines were visible to users without perms.     |
 +-----------+----------------+------------------------------------------------------------------------------------------+
+| 2.2.21    | 2020-11-02     | Reject ambiguous date and datetime values in filters.                                    |
++-----------+----------------+------------------------------------------------------------------------------------------+
 | 2.2.20    | 2020-10-22     | Fix bug with ArrayField on Django>=3.0                                                   |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 2.2.19    | 2020-10-19     | Support for annotations on inlines.                                                      |
