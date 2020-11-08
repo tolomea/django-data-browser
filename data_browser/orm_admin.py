@@ -1,7 +1,6 @@
 from collections import defaultdict
 
 from django.contrib.admin import site
-from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
@@ -109,7 +108,7 @@ def _get_all_admin_fields(request):
         fields = admin.get_fieldsets(request, obj)
         for f in flatten_fieldsets(fields):
             # skip calculated fields on inlines
-            if not isinstance(admin, InlineModelAdmin) or hasattr(admin.model, f):
+            if all_ or hasattr(admin.model, f):
                 yield f
 
     def visible(model_admin, request):
@@ -132,9 +131,9 @@ def _get_all_admin_fields(request):
     hidden_fields = defaultdict(set)
     model_admins = {}
     for model, model_admin in site._registry.items():
-        model_admins[model] = model_admin
         if visible(model_admin, request):
-            all_admin_fields[model].update(from_fieldsets(model_admin, True))
+            model_admins[model] = model_admin
+            all_admin_fields[model].update(from_fieldsets(model_admin, False))
             all_admin_fields[model].update(model_admin.get_list_display(request))
             all_admin_fields[model].update(getattr(model_admin, "ddb_extra_fields", []))
             all_admin_fields[model].add(open_in_admin)
@@ -148,6 +147,7 @@ def _get_all_admin_fields(request):
                     except Exception as e:
                         debug_log(e)  # ignore things like GenericInlineModelAdmin
                     else:
+
                         if inline.model not in model_admins:  # pragma: no branch
                             model_admins[inline.model] = inline
                         all_admin_fields[inline.model].update(
@@ -164,6 +164,7 @@ def _get_all_admin_fields(request):
     for model, model_admin in model_admins.items():
         if isinstance(model_admin, AdminMixin):
             all_admin_fields[model].update(model_admin._ddb_annotations())
+        all_admin_fields[model].update(from_fieldsets(model_admin, True))
 
     # we always have id and never pk
     for fields in all_admin_fields.values():

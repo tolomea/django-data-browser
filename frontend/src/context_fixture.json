@@ -681,6 +681,14 @@
         "core.SKU": {
             "defaultFilters": [],
             "fields": {
+                "bob": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": false,
+                    "model": null,
+                    "prettyName": "Bob",
+                    "type": "html"
+                },
                 "id": {
                     "canPivot": true,
                     "choices": [],
@@ -708,6 +716,7 @@
             },
             "sortedFields": [
                 "id",
+                "bob",
                 "name",
                 "product"
             ]

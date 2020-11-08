@@ -297,6 +297,8 @@ Release History
 |           |                | | JSON field filter supports lists and objects.                                          |
 |           |                | | Array values are now JSON encoded across the board.                                    |
 |           |                | | Backfill saved views for above changes to filter formats.                              |
+|           |                | | Pickup calculated fields on inlines when there is no actual admin.                     |
+|           |                | | Fix bug where ID's and annotations on inlines were visible to users without perms.     |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 2.2.20    | 2020-10-22     | Fix bug with ArrayField on Django>=3.0                                                   |
 +-----------+----------------+------------------------------------------------------------------------------------------+

@@ -651,6 +651,14 @@ snapshots["test_query_html config"] = {
         "core.SKU": {
             "defaultFilters": [],
             "fields": {
+                "bob": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": False,
+                    "model": None,
+                    "prettyName": "Bob",
+                    "type": "html",
+                },
                 "id": {
                     "canPivot": True,
                     "choices": [],
@@ -676,7 +684,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
             },
-            "sortedFields": ["id", "name", "product"],
+            "sortedFields": ["id", "bob", "name", "product"],
         },
         "core.Tag": {
             "defaultFilters": [],
@@ -2095,72 +2103,6 @@ snapshots["test_query_html_no_perms config"] = {
             },
             "sortedFields": ["average", "is_null", "sum"],
         },
-        "core.Address": {
-            "defaultFilters": [],
-            "fields": {
-                "andrew": {
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "model": None,
-                    "prettyName": "Andrew",
-                    "type": "string",
-                },
-                "id": {
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "model": "number",
-                    "prettyName": "ID",
-                    "type": "number",
-                },
-            },
-            "sortedFields": ["id", "andrew"],
-        },
-        "core.Product": {
-            "defaultFilters": [],
-            "fields": {
-                "annotated": {
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "model": None,
-                    "prettyName": "Annotated",
-                    "type": "string",
-                },
-                "id": {
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "model": "number",
-                    "prettyName": "ID",
-                    "type": "number",
-                },
-                "stealth_annotation": {
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "model": None,
-                    "prettyName": "Stealth annotation",
-                    "type": "string",
-                },
-            },
-            "sortedFields": ["id", "annotated", "stealth_annotation"],
-        },
-        "data_browser.View": {
-            "defaultFilters": [],
-            "fields": {
-                "id": {
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "model": "string",
-                    "prettyName": "Id",
-                    "type": "string",
-                }
-            },
-            "sortedFields": ["id"],
-        },
         "date": {
             "defaultFilters": [],
             "fields": {
@@ -2975,7 +2917,7 @@ snapshots["test_query_html_no_perms config"] = {
     "canMakePublic": False,
     "defaultRowLimit": 1000,
     "sentryDsn": None,
-    "sortedModels": ["core.Address", "core.Product", "data_browser.View"],
+    "sortedModels": [],
     "types": {
         "boolean": {
             "choices": [],
@@ -3992,6 +3934,14 @@ snapshots["test_query_ctx config"] = {
         "core.SKU": {
             "defaultFilters": [],
             "fields": {
+                "bob": {
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": False,
+                    "model": None,
+                    "prettyName": "Bob",
+                    "type": "html",
+                },
                 "id": {
                     "canPivot": True,
                     "choices": [],
@@ -4017,7 +3967,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
             },
-            "sortedFields": ["id", "name", "product"],
+            "sortedFields": ["id", "bob", "name", "product"],
         },
         "core.Tag": {
             "defaultFilters": [],
