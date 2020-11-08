@@ -301,6 +301,7 @@ Release History
 |           |                | | Pickup calculated fields on inlines when there is no actual admin.                     |
 |           |                | | Fix bug where ID's and annotations on inlines were visible to users without perms.     |
 |           |                | | Support for aggregation and functions on annotated fields.                             |
+|           |                | | Annotations now respect ddb_hide.                                                      |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 2.2.21    | 2020-11-02     | Reject ambiguous date and datetime values in filters.                                    |
 +-----------+----------------+------------------------------------------------------------------------------------------+

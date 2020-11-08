@@ -107,6 +107,9 @@ class AnnotationDescriptor:
     def __call__(self, obj):
         return getattr(obj, self.name)
 
+    def __getattr__(self, name):
+        return getattr(self.get_queryset, name)
+
 
 def ddb_hide(func):  # pragma: no cover
     logging.getLogger(__name__).warning(

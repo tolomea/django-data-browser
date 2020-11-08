@@ -194,6 +194,9 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
             getattr(field_func, "short_description", str(field_func.__name__))
         )
 
+    if getattr(field_func, "ddb_hide", False):
+        return None
+
     pretty_name = _upper(
         getattr(field_func, "short_description", field_name.replace("_", " "))
     )
@@ -224,9 +227,6 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
             choices=choices,
         )
     else:
-        if getattr(field_func, "ddb_hide", False):
-            return None
-
         if field_func is None:
 
             def field_func(obj):

@@ -164,6 +164,11 @@ class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
     def stealth_annotation(self, request, qs):
         return qs.annotate(stealth_annotation=F("name"))
 
+    @annotation
+    @attributes(ddb_hide=True)
+    def hidden_annotation(self, request, qs):
+        return qs.annotate(hidden_annotation=F("name"))
+
     @attributes(boolean=True)
     def calculated_boolean(self, obj):
         return obj.size
