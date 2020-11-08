@@ -57,8 +57,8 @@ def _rows_sub_query(bound_query):
 
 
 def get_result_queryset(request, bound_query, orm_models):
-    all_fields = {f.queryset_path: f for f in bound_query.bound_fields}
-    all_fields.update({f.queryset_path: f for f in bound_query.bound_filters})
+    all_fields = {f.queryset_path_str: f for f in bound_query.bound_fields}
+    all_fields.update({f.queryset_path_str: f for f in bound_query.bound_filters})
 
     admin = orm_models[bound_query.model_name].admin
     qs = admin_get_queryset(admin, request, {f.split("__")[0] for f in all_fields})
@@ -70,7 +70,7 @@ def get_result_queryset(request, bound_query, orm_models):
     # filter normal and sql function fields (aka __date)
     for filter_ in bound_query.valid_filters:
         if filter_.orm_bound_field.filter_:
-            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
+            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path_str)
 
     # nothing to group on, early out with an aggregate
     if not any(f.group_by for f in bound_query.bound_fields):
@@ -86,7 +86,11 @@ def get_result_queryset(request, bound_query, orm_models):
 
     # group by
     qs = qs.values(
-        *[field.queryset_path for field in bound_query.bound_fields if field.group_by]
+        *[
+            field.queryset_path_str
+            for field in bound_query.bound_fields
+            if field.group_by
+        ]
     ).distinct()
 
     # aggregates
@@ -101,15 +105,15 @@ def get_result_queryset(request, bound_query, orm_models):
     # having, aka filter aggregate fields
     for filter_ in bound_query.valid_filters:
         if filter_.orm_bound_field.having:
-            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path)
+            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path_str)
 
     # sort
     sort_fields = []
     for field in bound_query.sort_fields:
         if field.direction is ASC:
-            sort_fields.append(field.orm_bound_field.queryset_path)
+            sort_fields.append(field.orm_bound_field.queryset_path_str)
         if field.direction is DSC:
-            sort_fields.append(f"-{field.orm_bound_field.queryset_path}")
+            sort_fields.append(f"-{field.orm_bound_field.queryset_path_str}")
     qs = qs.order_by(*sort_fields)
 
     return qs[: bound_query.limit]
@@ -128,7 +132,7 @@ def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
             loading_for[field.model_name].add(field.name)
             pks = to_load[field.model_name]
             for row in res:
-                pks.add(row[field.queryset_path])
+                pks.add(row[field.queryset_path_str])
 
     # fetch all the calculated field objects
     objs = {}
@@ -148,7 +152,7 @@ def _format_table(fields, data, objs):
     field_lines = []
     for i, field in enumerate(fields):
         namespace[f"format_{i}"] = field.get_formatter()
-        value = f"row[{field.queryset_path!r}]"
+        value = f"row[{field.queryset_path_str!r}]"
         if field.model_name:
             value = f"objs[{field.model_name!r}].get({value})"
         field_lines.append(f"{field.path_str!r}: format_{i}({value}),")
@@ -161,14 +165,14 @@ def _format_table(fields, data, objs):
 def _get_fields(row, fields):
     res = []
     for field in fields:
-        v = row[field.queryset_path]
+        v = row[field.queryset_path_str]
         if isinstance(v, list):  # pragma: postgres
             v = tuple(v)
         try:
             hash(v)
         except TypeError:
             v = json.dumps(v)
-        res.append((field.queryset_path, v))
+        res.append((field.queryset_path_str, v))
     return tuple(res)
 
 

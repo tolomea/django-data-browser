@@ -198,7 +198,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
-                    "model": null,
+                    "model": "string",
                     "prettyName": "Andrew",
                     "type": "string"
                 },
@@ -455,7 +455,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
-                    "model": null,
+                    "model": "string",
                     "prettyName": "Annotated",
                     "type": "string"
                 },
@@ -634,7 +634,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
-                    "model": null,
+                    "model": "string",
                     "prettyName": "Stealth annotation",
                     "type": "string"
                 },

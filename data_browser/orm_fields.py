@@ -221,7 +221,7 @@ class OrmBoundField:
     previous: "OrmBoundField"
     full_path: Sequence[str]
     pretty_path: Sequence[str]
-    queryset_path: str = None
+    queryset_path: Sequence[str]
     aggregate_clause: Tuple[str, models.Func] = None
     filter_: bool = False
     having: bool = False
@@ -232,10 +232,24 @@ class OrmBoundField:
         return s(self.full_path)
 
     @property
+    def queryset_path_str(self):
+        return s(self.queryset_path)
+
+    @property
     def group_by(self):
         return self.field.can_pivot
 
+    def _lineage(self):
+        if self.previous:
+            return self.previous._lineage() + [self]
+        return [self]
+
     def annotate(self, request, qs):
+        for field in self._lineage():
+            qs = field._annotate(request, qs)
+        return qs
+
+    def _annotate(self, request, qs):
         return qs
 
     def __getattr__(self, name):
@@ -243,7 +257,9 @@ class OrmBoundField:
 
     @classmethod
     def blank(cls):
-        return cls(field=None, previous=None, full_path=[], pretty_path=[])
+        return cls(
+            field=None, previous=None, full_path=[], pretty_path=[], queryset_path=[]
+        )
 
     def get_format_hints(self, data):
         return self.type_.get_format_hints(self.path_str, data)
@@ -295,12 +311,12 @@ class OrmFkField(OrmBaseField):
 
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()
-        full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=full_path,
+            full_path=previous.full_path + [self.name],
             pretty_path=previous.pretty_path + [self.pretty_name],
+            queryset_path=previous.queryset_path + [self.name],
         )
 
 
@@ -319,26 +335,24 @@ class OrmConcreteField(OrmBaseField):
 
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()
-        full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=full_path,
+            full_path=previous.full_path + [self.name],
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(full_path),
+            queryset_path=previous.queryset_path + [self.name],
             filter_=True,
         )
 
 
 class OrmRawField(OrmConcreteField):
     def bind(self, previous):
-        full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=full_path,
+            full_path=previous.full_path + [self.name],
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(full_path[:-1]),
+            queryset_path=previous.queryset_path,
             filter_=True,
         )
 
@@ -355,13 +369,12 @@ class OrmCalculatedField(OrmBaseField):
 
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()
-        full_path = previous.full_path + [self.name]
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=full_path,
+            full_path=previous.full_path + [self.name],
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(previous.full_path + ["id"]),
+            queryset_path=previous.queryset_path + ["id"],
             model_name=self.model_name,
         )
 
@@ -383,14 +396,14 @@ class OrmCalculatedField(OrmBaseField):
 
 
 class OrmBoundAnnotatedField(OrmBoundField):
-    def annotate(self, request, qs):
+    def _annotate(self, request, qs):
         from .orm_results import admin_get_queryset
 
         return qs.annotate(
             **{
-                self.queryset_path: Subquery(
+                s(self.queryset_path): Subquery(
                     admin_get_queryset(self.admin, request, [self.name])
-                    .filter(pk=OuterRef(s(self.previous.full_path + ["id"])))
+                    .filter(pk=OuterRef(s(self.previous.queryset_path + ["id"])))
                     .values(self.name)[:1],
                     output_field=self.field_type,
                 )
@@ -407,6 +420,7 @@ class OrmAnnotatedField(OrmBaseField):
             name,
             pretty_name,
             type_=type_,
+            rel_name=type_.name,
             can_pivot=True,
             concrete=True,
             choices=choices or (),
@@ -423,7 +437,7 @@ class OrmAnnotatedField(OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=f"ddb_{s(full_path)}",
+            queryset_path=[s(["ddb"] + full_path)],
             filter_=True,
         )
 
@@ -465,23 +479,23 @@ class OrmAggregateField(OrmBaseField):
 
     def bind(self, previous):
         assert previous
-        full_path = previous.full_path + [self.name]
+        queryset_path = previous.queryset_path + [self.name]
         agg_func = _get_django_aggregate(previous.type_, self.name)
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=full_path,
+            full_path=previous.full_path + [self.name],
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(full_path),
-            aggregate_clause=(s(full_path), agg_func(s(previous.full_path))),
+            queryset_path=queryset_path,
+            aggregate_clause=(s(queryset_path), agg_func(s(previous.queryset_path))),
             having=True,
         )
 
 
 class OrmBoundFunctionField(OrmBoundField):
-    def annotate(self, request, qs):
-        func = _get_django_function(self.name)[0](s(self.previous.full_path))
-        return qs.annotate(**{self.queryset_path: func})
+    def _annotate(self, request, qs):
+        func = _get_django_function(self.name)[0](s(self.previous.queryset_path))
+        return qs.annotate(**{s(self.queryset_path): func})
 
 
 class OrmFunctionField(OrmBaseField):
@@ -497,12 +511,11 @@ class OrmFunctionField(OrmBaseField):
 
     def bind(self, previous):
         assert previous
-        full_path = previous.full_path + [self.name]
         return OrmBoundFunctionField(
             field=self,
             previous=previous,
-            full_path=full_path,
+            full_path=previous.full_path + [self.name],
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=s(full_path),
+            queryset_path=previous.queryset_path + [self.name],
             filter_=True,
         )

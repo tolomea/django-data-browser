@@ -215,6 +215,24 @@ def test_get_annotated_field_at_base(products, get_product_flat, mocker):
     assert len(mock.call_args_list) == 2
 
 
+def test_get_aggretated_annotated_field_at_base(products, get_product_flat, mocker):
+    mock = mocker.patch(
+        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+    )
+    data = get_product_flat(1, "annotated__count+1,size-2", {})
+    assert data == [[1, 2], [2, 1]]
+    assert len(mock.call_args_list) == 2
+
+
+def test_get_annotated_field_function_at_base(products, get_product_flat, mocker):
+    mock = mocker.patch(
+        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+    )
+    data = get_product_flat(1, "annotated__is_null+1,size-2", {})
+    assert data == [["NotNull", 2.0], ["NotNull", 1.0]]
+    assert len(mock.call_args_list) == 2
+
+
 def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
     mock = mocker.patch(
         "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
@@ -225,6 +243,24 @@ def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
         {"producer__address__andrew__not_equals": ["bad"]},
     )
     assert data == [["good", 1]]
+    assert len(mock.call_args_list) == 2
+
+
+def test_get_aggregated_annotated_field_down_tree(products, get_product_flat, mocker):
+    mock = mocker.patch(
+        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+    )
+    data = get_product_flat(1, "producer__address__andrew__count+1,size-2", {},)
+    assert data == [[0, 2], [2, 1]]
+    assert len(mock.call_args_list) == 2
+
+
+def test_get_annotated_field_function_down_tree(products, get_product_flat, mocker):
+    mock = mocker.patch(
+        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+    )
+    data = get_product_flat(1, "producer__address__andrew__is_null+1,size-2", {},)
+    assert data == [["NotNull", 1.0], ["IsNull", 2.0]]
     assert len(mock.call_args_list) == 2
 
 

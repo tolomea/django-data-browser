@@ -173,6 +173,7 @@ Exposing an a annotated field in this way requires two changes.
         def my_field(self, request, qs):
             return qs.annotate(my_field=Cast(..., output_field=IntegerField()))
 
+WARNING: annotated aggregations will produce misleading results when further aggregated in the Data Browser.
 
 It is important that the decorated annotation function name and the annotated queryset field name match.
 
@@ -299,6 +300,7 @@ Release History
 |           |                | | Backfill saved views for above changes to filter formats.                              |
 |           |                | | Pickup calculated fields on inlines when there is no actual admin.                     |
 |           |                | | Fix bug where ID's and annotations on inlines were visible to users without perms.     |
+|           |                | | Support for aggregation and functions on annotated fields.                             |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 2.2.21    | 2020-11-02     | Reject ambiguous date and datetime values in filters.                                    |
 +-----------+----------------+------------------------------------------------------------------------------------------+
