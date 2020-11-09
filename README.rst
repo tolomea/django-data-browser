@@ -288,7 +288,7 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | | The format of ddb_default_filters has changed.                                         |
+| 3.0.0     |                | | The format of ddb_default_filters has changed.                                         |
 |           |                | | Path and prettyPath have been removed from fields and filters on JSON responses.       |
 |           |                | | Choice and is_null fields use human readable values in filters.                        |
 |           |                | | Choice fields have a raw sub field for accessing the underlying values.                |
