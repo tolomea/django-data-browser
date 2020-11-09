@@ -69,21 +69,24 @@ class AdminMixin:
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        url = reverse(
-            "data_browser:query_html",
-            args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
-        )
-        args = getattr(self, "ddb_default_filters", [])
-        params = urlencode(
-            [
-                (
-                    f"{field}__{lookup}",
-                    value if isinstance(value, str) else json.dumps(value),
-                )
-                for field, lookup, value in args
-            ]
-        )
-        extra_context["ddb_url"] = f"{url}?{params}"
+
+        if not getattr(self, "ddb_ignore", False):
+            url = reverse(
+                "data_browser:query_html",
+                args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
+            )
+            args = getattr(self, "ddb_default_filters", [])
+            params = urlencode(
+                [
+                    (
+                        f"{field}__{lookup}",
+                        value if isinstance(value, str) else json.dumps(value),
+                    )
+                    for field, lookup, value in args
+                ]
+            )
+            extra_context["ddb_url"] = f"{url}?{params}"
+
         return super().changelist_view(request, extra_context)
 
 

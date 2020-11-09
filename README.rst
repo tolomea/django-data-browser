@@ -106,7 +106,7 @@ One convenient way of utilizing this is to create the file ``templates/admin/cha
     {% endblock %}
 
 This will place a "Data Browser" button on the list view of every admin that inherits from the mixin.
-
+Note: to do this at the top level the app you put the template in must be before contrib.admin in INSTALLED_APPS.
 
 
 Specifying models and fields
@@ -302,6 +302,7 @@ Release History
 |           |                | | Fix bug where ID's and annotations on inlines were visible to users without perms.     |
 |           |                | | Support for aggregation and functions on annotated fields.                             |
 |           |                | | Annotations now respect ddb_hide.                                                      |
+|           |                | | Admin links to the Data Browser respect ddb_ignore.                                    |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 2.2.21    | 2020-11-02     | Reject ambiguous date and datetime values in filters.                                    |
 +-----------+----------------+------------------------------------------------------------------------------------------+

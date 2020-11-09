@@ -75,3 +75,8 @@ class TestAdminMixin:
             resp.context["ddb_url"]
             == "/data_browser/query/core.Product/.html?a_field__a_lookup=a_value&name__not_equals=not+a+thing&a_field__a_lookup=true"
         )
+
+    def test_ddb_url_ignored(self, admin_client):
+        resp = admin_client.get(f"/admin/core/ignored/")
+        assert resp.status_code == 200
+        assert "ddb_url" not in resp.context

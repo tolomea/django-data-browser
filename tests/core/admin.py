@@ -34,7 +34,7 @@ class NotAnAdminInline(admin.TabularInline):
 
 
 @admin.register(models.Ignored)
-class IgnoredAdmin(admin.ModelAdmin):
+class IgnoredAdmin(AdminMixin, admin.ModelAdmin):
     fields = ["name", "in_admin"]
     ddb_ignore = True
 
