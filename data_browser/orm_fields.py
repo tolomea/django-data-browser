@@ -87,6 +87,7 @@ _TYPE_FUNCTIONS = defaultdict(
     {
         DateType: _DATE_FUNCTIONS,
         DateTimeType: _DATE_FUNCTIONS + ["hour", "minute", "second", "date"],
+        StringType: ["is_null", "length"],
     },
 )
 
@@ -177,6 +178,7 @@ def _get_django_function(name):
         "second": (functions.ExtractSecond, NumberType),
         "date": (functions.TruncDate, DateType),
         "is_null": (IsNull, IsNullType),
+        "length": (functions.Length, NumberType),
     }
     if django.VERSION >= (2, 2):  # pragma: no branch
         mapping.update(

@@ -288,6 +288,7 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
+|           |                | | Add length function to string fields.                                                  |
 |           |                | | Add support for DB query explain via ".explain" url.                                   |
 |           |                | | Prevent exception when getting SQL view of pure aggregates.                            |
 |           |                | | Fix incorrect handling of ISO dates whose day portion is less than 13.                 |

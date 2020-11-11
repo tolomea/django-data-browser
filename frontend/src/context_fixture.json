@@ -1582,11 +1582,20 @@
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
+                },
+                "length": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "model": null,
+                    "prettyName": "length",
+                    "type": "number"
                 }
             },
             "sortedFields": [
                 "count",
-                "is_null"
+                "is_null",
+                "length"
             ]
         },
         "stringarray": {
