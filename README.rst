@@ -288,8 +288,9 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | Fix incorrect handling of isodates whose day portion is less than 13.                    |
-|           |                | Python 3.9 and 3.10 support.                                                             |
+|           |                | | Prevent exception when getting SQL view of pure aggregates.                            |
+|           |                | | Fix incorrect handling of ISO dates whose day portion is less than 13.                 |
+|           |                | | Python 3.9 and 3.10 support.                                                           |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.0.0     | 2020-11-09     | | The format of ddb_default_filters has changed.                                         |
 |           |                | | Path and prettyPath have been removed from fields and filters on JSON responses.       |

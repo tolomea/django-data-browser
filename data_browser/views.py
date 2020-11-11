@@ -298,10 +298,13 @@ def _data_response(request, query, media, privileged=False):
         return JsonResponse(resp)
     elif privileged and media == "sql":
         query_set = get_result_queryset(request, bound_query, orm_models)
-        return HttpResponse(
-            sqlparse.format(str(query_set.query), reindent=True, keyword_case="upper"),
-            content_type="text/plain",
-        )
+        if isinstance(query_set, list):
+            res = "Not available for pure aggregates"
+        else:
+            res = sqlparse.format(
+                str(query_set.query), reindent=True, keyword_case="upper"
+            )
+        return HttpResponse(res, content_type="text/plain")
     else:
         raise http.Http404(f"Bad file format {media} requested")
 
