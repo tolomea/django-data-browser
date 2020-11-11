@@ -144,7 +144,7 @@ def func(obj):
 
 
 @admin.register(models.Product)
-class ProductAdmin(AdminMixin, ProductMixin, admin.ModelAdmin):
+class ProductAdmin(ProductMixin, AdminMixin, admin.ModelAdmin):
     inlines = [SKUInline]
     list_display = [
         "only_in_list_view",

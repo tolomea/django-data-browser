@@ -113,21 +113,26 @@ Specifying models and fields
 ********************************
 
 By default the Data Browser has access to all models and fields that the current user can see anywhere in the Admin site.
-However if necessary this can be tweaked using the following class level properties on ModelAdmins and Inlines.
+However if necessary this can be tweaked using the following class level properties and functions on ModelAdmins and Inlines.
 
-+---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
-| Name                | Format                                    | Purpose                                                                                                                                      |
-+=====================+===========================================+==============================================================================================================================================+
-| ddb_ignore          | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.                                   |
-+---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
-| ddb_hide_fields     | ``[field_name]``                          | Explicitly hide the specified fields.                                                                                                        |
-+---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
-| ddb_extra_fields    | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                                                           |
-+---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
-| ddb_json_fields     | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean".                                  |
-+---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
-| ddb_default_filters | ``[(path, lookup, value)]``               | Default filters to be added when opening this model. E.G. to add ``client__name__equals=Test`` use ``[(`client__name`, `equals`, `Test`)]``. |
-+---------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+|   Name                          | Format                                    | Purpose                                                                                                     |
++=================================+===========================================+=============================================================================================================+
+| | ddb_ignore                    | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.  |
+| | get_ddb_ignore(request)       |                                           |                                                                                                             |
++---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ddb_hide_fields               | ``[field_name]``                          | Explicitly hide the specified fields.                                                                       |
+| | get_ddb_hide_fields(request)  |                                           |                                                                                                             |
++---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ddb_extra_fields              | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                          |
+| | get_ddb_extra_fields(request) |                                           |                                                                                                             |
++---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ddb_json_fields               | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean". |
+| | get_ddb_json_fields(request)  |                                           |                                                                                                             |
++---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ddb_default_filters           | ``[(path, lookup, value)]``               | | Default filters to be added when opening this model.                                                      |
+| | get_ddb_default_filters()     |                                           | | E.G. to add ``client__name__equals=Test`` use ``[(`client__name`, `equals`, `Test`)]``.                   |
++---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
 Additionally, per the below sections, calculated fields can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
@@ -288,8 +293,9 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
+|           |                | | Add ``get_*`` functions for the ``ddb_*`` admin options.                               |
 |           |                | | Add length function to string fields.                                                  |
-|           |                | | Add support for DB query explain via ".explain" url.                                   |
+|           |                | | Add support for DB query explain via ``.explain`` url.                                 |
 |           |                | | Prevent exception when getting SQL view of pure aggregates.                            |
 |           |                | | Fix incorrect handling of ISO dates whose day portion is less than 13.                 |
 |           |                | | Python 3.9 and 3.10 support.                                                           |

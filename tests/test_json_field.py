@@ -1,6 +1,7 @@
 import pytest
 from django.contrib import admin
 
+from data_browser.helpers import AdminMixin
 from data_browser.orm_admin import get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
@@ -16,7 +17,7 @@ else:  # pragma: no cover
     pytestmark = pytest.mark.skip("Needs JSONField support")
 
 
-class JsonAdmin(admin.ModelAdmin):
+class JsonAdmin(AdminMixin, admin.ModelAdmin):
     fields = ["json_field"]
     ddb_json_fields = {"json_field": {"hello": "string"}}
 

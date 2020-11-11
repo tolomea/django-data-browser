@@ -20,7 +20,40 @@ class Everything:
         return True
 
 
-class AdminMixin:
+class _AdminOptions:
+    ddb_ignore = False
+    ddb_extra_fields = []
+    ddb_hide_fields = []
+    ddb_json_fields = {}
+    ddb_default_filters = []
+
+    def get_ddb_ignore(self, request):
+        return self.ddb_ignore
+
+    def get_ddb_extra_fields(self, request):
+        return self.ddb_extra_fields
+
+    def get_ddb_hide_fields(self, request):
+        return self.ddb_hide_fields
+
+    def get_ddb_json_fields(self, request):
+        return self.ddb_json_fields
+
+    def get_ddb_default_filters(self):
+        return self.ddb_default_filters
+
+
+def _get_option(admin, name, *args):
+    field = f"ddb_{name}"
+    func = f"get_ddb_{name}"
+
+    if hasattr(admin, func):
+        return getattr(admin, func)(*args)
+    else:
+        return getattr(admin, field, getattr(_AdminOptions, field))
+
+
+class AdminMixin(_AdminOptions):
     def get_fields_for_request(self, request):
         if hasattr(request, "data_browser"):
             return request.data_browser["fields"]
@@ -70,12 +103,12 @@ class AdminMixin:
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
 
-        if not getattr(self, "ddb_ignore", False):
+        if not self.get_ddb_ignore(request):
             url = reverse(
                 "data_browser:query_html",
                 args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
             )
-            args = getattr(self, "ddb_default_filters", [])
+            args = self.get_ddb_default_filters()
             params = urlencode(
                 [
                     (

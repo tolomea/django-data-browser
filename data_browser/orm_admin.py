@@ -11,7 +11,7 @@ from django.utils.html import format_html
 from django.utils.text import slugify
 
 from .common import debug_log, settings
-from .helpers import AdminMixin, AnnotationDescriptor, attributes
+from .helpers import AdminMixin, AnnotationDescriptor, _get_option, attributes
 from .orm_fields import (
     OrmAnnotatedField,
     OrmCalculatedField,
@@ -118,10 +118,13 @@ def _get_all_admin_fields(request):
                 f"{type(model_admin)} instance does not look like a ModelAdmin or InlineModelAdmin"
             )
             return False
-        if getattr(model_admin, "ddb_ignore", False):
+
+        if _get_option(model_admin, "ignore", request):
             return False
+
         if model_admin.has_change_permission(request):
             return True
+
         if hasattr(model_admin, "has_view_permission"):
             return model_admin.has_view_permission(request)
         else:
@@ -129,15 +132,19 @@ def _get_all_admin_fields(request):
 
     all_admin_fields = defaultdict(set)
     hidden_fields = defaultdict(set)
+
+    def get_common(admin, model):
+        all_admin_fields[model].update(from_fieldsets(admin, False))
+        all_admin_fields[model].update(_get_option(admin, "extra_fields", request))
+        hidden_fields[model].update(_get_option(admin, "hide_fields", request))
+
     model_admins = {}
     for model, model_admin in site._registry.items():
         if visible(model_admin, request):
             model_admins[model] = model_admin
-            all_admin_fields[model].update(from_fieldsets(model_admin, False))
             all_admin_fields[model].update(model_admin.get_list_display(request))
-            all_admin_fields[model].update(getattr(model_admin, "ddb_extra_fields", []))
             all_admin_fields[model].add(open_in_admin)
-            hidden_fields[model].update(getattr(model_admin, "ddb_hide_fields", []))
+            get_common(model_admin, model)
 
             # check the inlines, these are already filtered for access
             for inline in model_admin.get_inline_instances(request):
@@ -147,19 +154,10 @@ def _get_all_admin_fields(request):
                     except Exception as e:
                         debug_log(e)  # ignore things like GenericInlineModelAdmin
                     else:
-
                         if inline.model not in model_admins:  # pragma: no branch
                             model_admins[inline.model] = inline
-                        all_admin_fields[inline.model].update(
-                            from_fieldsets(inline, False)
-                        )
-                        all_admin_fields[inline.model].update(
-                            getattr(inline, "ddb_extra_fields", [])
-                        )
                         all_admin_fields[inline.model].add(fk_field.name)
-                        hidden_fields[inline.model].update(
-                            getattr(inline, "ddb_hide_fields", [])
-                        )
+                        get_common(inline, inline.model)
 
     for model, model_admin in model_admins.items():
         if isinstance(model_admin, AdminMixin):
@@ -358,7 +356,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
             rel_name = field_type.name
             if field_type is JSONType:
-                json_fields = getattr(admin, "ddb_json_fields", {}).get(field_name)
+                json_fields = _get_option(admin, "json_fields", request).get(field_name)
                 if json_fields:  # pragma: no branch
                     rel_name = f"{model_name}__{field_name}"
                     orm_models[rel_name] = _make_json_sub_module(

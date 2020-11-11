@@ -20,6 +20,7 @@ from django.db.models import (
 from django.db.models.functions import Cast
 from django.utils.html import format_html
 
+from .helpers import _get_option
 from .types import (
     BaseType,
     BooleanType,
@@ -278,11 +279,11 @@ class OrmModel:
 
     @property
     def default_filters(self):
-        ddb_default_filters = getattr(self.admin, "ddb_default_filters", [])
-        assert isinstance(ddb_default_filters, list)
+        default_filters = _get_option(self.admin, "default_filters")
+        assert isinstance(default_filters, list)
         return [
             (f, l, v if isinstance(v, str) else json.dumps(v))
-            for (f, l, v) in ddb_default_filters
+            for (f, l, v) in default_filters
         ]
 
 
