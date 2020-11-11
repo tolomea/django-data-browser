@@ -47,6 +47,9 @@ Format determines the returned data format, the currently available formats are:
 | sql     | | See the raw SQL query that Django will perform.                                                |
 |         | | This shows the primary query, pages with pivoted or calculated data may do additional queries. |
 +---------+--------------------------------------------------------------------------------------------------+
+| explain | | See the database explain output.                                                               |
+|         | | This shows the primary query, pages with pivoted or calculated data may do additional queries. |
++---------+--------------------------------------------------------------------------------------------------+
 | profile | | Run within cProfile and return the profile summary.                                            |
 |         | | When suffixed with _csv (etc) will profile that specific format, defaults to JSON.             |
 +---------+--------------------------------------------------------------------------------------------------+
