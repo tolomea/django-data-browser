@@ -375,10 +375,35 @@ class TestDateTimeType:
         assert DateTimeType.parse("is_null", "hello", None) == (None, ANY(str))
         assert DateTimeType.parse("gt", "now", None) == (ANY(datetime), None)
 
+        assert DateTimeType.parse("gt", "11-11-2018", None) == (ANY(datetime), None)
         assert DateTimeType.parse("gt", "11-22-2018", None) == (ANY(datetime), None)
         assert DateTimeType.parse("gt", "21-12-2018", None) == (ANY(datetime), None)
         assert DateTimeType.parse("gt", "11-12-2018", None) == (None, ANY(str))
         assert DateTimeType.parse("gt", "21-22-2018", None) == (None, ANY(str))
+
+        assert DateTimeType.parse("gt", "2018-11-11", None) == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "2018-11-22", None) == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "2018-21-12", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "2018-11-12", None) == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "2018-21-22", None) == (None, ANY(str))
+
+        assert DateTimeType.parse("gt", "20181111", None) == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "20181122", None) == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "20182112", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "20181112", None) == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "20182122", None) == (None, ANY(str))
+
+        assert DateTimeType.parse("gt", "181111", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "181122", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "182112", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "181112", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "182122", None) == (None, ANY(str))
+
+        assert DateTimeType.parse("gt", "111118", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "112218", None) == (ANY(datetime), None)
+        assert DateTimeType.parse("gt", "211218", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "111218", None) == (None, ANY(str))
+        assert DateTimeType.parse("gt", "212218", None) == (None, ANY(str))
 
     def test_default_lookup(self):
         assert DateTimeType.default_lookup == "equals"

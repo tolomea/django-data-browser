@@ -1,4 +1,5 @@
 import json
+import re
 from functools import lru_cache
 
 import dateutil.parser
@@ -214,13 +215,21 @@ class DateTypeMixin:
 
     @classmethod
     def _parse(cls, value, choices):
-        res = {
-            dateutil.parser.parse(value, dayfirst=False, yearfirst=False),
-            dateutil.parser.parse(value, dayfirst=True, yearfirst=False),
-            dateutil.parser.parse(value, dayfirst=False, yearfirst=True),
-        }
-        assert len(res) == 1, "Ambiguous value"
-        return timezone.make_aware(res.pop())
+        d8 = r"(\d{8})"
+        d422 = r"(\d{4}[^\d]*\d{2}[^\d]*\d{2})"
+        if re.match(r"[^\d]*(" + d8 + "|" + d422 + ")", value):
+            # looks like some kinda iso date, roll with the defaults
+            res = dateutil.parser.parse(value)
+        else:
+            res = {
+                dateutil.parser.parse(value, dayfirst=False, yearfirst=False),
+                dateutil.parser.parse(value, dayfirst=True, yearfirst=False),
+                dateutil.parser.parse(value, dayfirst=False, yearfirst=True),
+                dateutil.parser.parse(value, dayfirst=True, yearfirst=True),
+            }
+            assert len(res) == 1, "Ambiguous value"
+            res = res.pop()
+        return timezone.make_aware(res)
 
 
 class DateTimeType(DateTypeMixin, BaseType):
