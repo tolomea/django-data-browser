@@ -162,7 +162,7 @@ def query(request, *, model_name, fields="", media):
             profiler.enable()
 
             query = Query.from_request(model_name, fields, request.GET)
-            for x in _data_response(request, query, media, privilaged=True):
+            for x in _data_response(request, query, media, privileged=True):
                 pass
 
             profiler.disable()
@@ -190,7 +190,7 @@ def query(request, *, model_name, fields="", media):
                 profiler.disable()
     else:
         query = Query.from_request(model_name, fields, request.GET)
-        return _data_response(request, query, media, privilaged=True)
+        return _data_response(request, query, media, privileged=True)
 
 
 def view(request, pk, media):
@@ -204,7 +204,7 @@ def view(request, pk, media):
     ):
         request.user = view.owner  # public views are run as the person who owns them
         query = view.get_query()
-        return _data_response(request, query, media, privilaged=False)
+        return _data_response(request, query, media, privileged=False)
     else:
         raise http.Http404("No View matches the given query.")
 
@@ -246,7 +246,7 @@ class Echo:
         return value
 
 
-def _data_response(request, query, media, privilaged=False):
+def _data_response(request, query, media, privileged=False):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
@@ -290,13 +290,13 @@ def _data_response(request, query, media, privilaged=False):
         return response
     elif media == "json":
         results = get_results(request, bound_query, orm_models, True)
-        resp = _get_query_data(bound_query) if privilaged else {}
+        resp = _get_query_data(bound_query) if privileged else {}
         resp.update(results)
         return JsonResponse(resp)
-    elif privilaged and media == "query":
+    elif privileged and media == "query":
         resp = _get_query_data(bound_query)
         return JsonResponse(resp)
-    elif privilaged and media == "sql":
+    elif privileged and media == "sql":
         query_set = get_result_queryset(request, bound_query, orm_models)
         return HttpResponse(
             sqlparse.format(str(query_set.query), reindent=True, keyword_case="upper"),
