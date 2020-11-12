@@ -25,61 +25,10 @@ from .orm_fields import (
     OrmRawField,
 )
 from .orm_functions import get_functions_for_type
-from .types import (
-    TYPES,
-    BooleanType,
-    DateTimeType,
-    DateType,
-    DurationType,
-    JSONType,
-    NumberArrayType,
-    NumberChoiceArrayType,
-    NumberChoiceType,
-    NumberType,
-    StringArrayType,
-    StringChoiceArrayType,
-    StringChoiceType,
-    StringType,
-    UnknownType,
-)
-
-try:
-    from django.contrib.postgres.fields import ArrayField
-except ModuleNotFoundError:  # pragma: postgres
-    ArrayField = None.__class__
-
-try:
-    from django.db.models import JSONField
-except ImportError:  # pragma: django < 3.1
-    try:
-        from django.contrib.postgres.fields import JSONField
-    except ModuleNotFoundError:  # pragma: postgres
-        JSONField = None.__class__
-
+from .orm_types import get_field_type
+from .types import TYPES, BooleanType, JSONType, NumberType, StringType
 
 OPEN_IN_ADMIN = "admin"
-
-_STRING_FIELDS = (
-    models.CharField,
-    models.TextField,
-    models.GenericIPAddressField,
-    models.UUIDField,
-)
-_NUMBER_FIELDS = (
-    models.DecimalField,
-    models.FloatField,
-    models.IntegerField,
-    models.AutoField,
-)
-_FIELD_TYPE_MAP = {
-    models.BooleanField: BooleanType,
-    models.DurationField: DurationType,
-    models.NullBooleanField: BooleanType,
-    models.DateTimeField: DateTimeType,
-    models.DateField: DateType,
-    **{f: StringType for f in _STRING_FIELDS},
-    **{f: NumberType for f in _NUMBER_FIELDS},
-}
 
 
 @dataclass
@@ -252,7 +201,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 f"Annotation '{field_name}' for {admin}.{field_name} doesn't specify 'output_field'"
             )
 
-        type_, choices = _get_field_type(field)
+        type_, choices = get_field_type(field)
         return OrmAnnotatedField(
             model_name=model_name,
             name=field_name,
@@ -275,60 +224,6 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
             pretty_name=pretty_name,
             func=field_func,
         )
-
-
-def _fmt_choices(choices):
-    return [(value, str(label)) for value, label in choices or []]
-
-
-def _get_field_type(field):
-    if isinstance(field, ArrayField) and isinstance(
-        field.base_field, _STRING_FIELDS
-    ):  # pragma: postgres
-        base_field, choices = _get_field_type(field.base_field)
-        array_types = {
-            StringType: StringArrayType,
-            NumberType: NumberArrayType,
-            StringChoiceType: StringChoiceArrayType,
-            NumberChoiceType: NumberChoiceArrayType,
-        }
-        if base_field in array_types:
-            return array_types[base_field], choices
-        else:
-            debug_log(
-                f"{field.model.__name__}.{field.name} unsupported subarray type {type(field.base_field).__name__}"
-            )
-            return UnknownType, None
-
-    elif isinstance(field, ArrayField) and isinstance(
-        field.base_field, _NUMBER_FIELDS
-    ):  # pragma: postgres
-        if field.base_field.choices:
-            return NumberChoiceArrayType, _fmt_choices(field.base_field.choices)
-        else:
-            return NumberArrayType, None
-    elif isinstance(field, JSONField):
-        res = JSONType
-    elif field.__class__ in _FIELD_TYPE_MAP:
-        res = _FIELD_TYPE_MAP[field.__class__]
-    else:
-        for django_type, field_type in _FIELD_TYPE_MAP.items():
-            if isinstance(field, django_type):
-                res = field_type
-                break
-        else:
-            debug_log(
-                f"{field.model.__name__}.{field.name} unsupported type {type(field).__name__}"
-            )
-            res = UnknownType
-
-    # Choice fields have different lookups
-    if res is StringType and field.choices:
-        return StringChoiceType, _fmt_choices(field.choices)
-    elif res is NumberType and field.choices:
-        return NumberChoiceType, _fmt_choices(field.choices)
-    else:
-        return res, None
 
 
 def _make_json_sub_module(model_name, field_types):
@@ -390,7 +285,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 fields[orm_field.name] = orm_field
         # Normal fields
         else:
-            field_type, choices = _get_field_type(field)
+            field_type, choices = get_field_type(field)
 
             rel_name = field_type.name
             if field_type is JSONType:
