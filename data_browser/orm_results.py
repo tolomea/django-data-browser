@@ -3,7 +3,7 @@ import json
 from collections import defaultdict
 
 from .orm_admin import admin_get_queryset
-from .orm_fields import _get_django_lookup
+from .orm_lookups import get_django_lookup
 from .query import BoundQuery
 from .types import ASC, DSC
 
@@ -17,7 +17,7 @@ def _filter(qs, filter_, filter_str):
         lookup = lookup[4:]
 
     filter_value = filter_.parsed
-    lookup, filter_value = _get_django_lookup(
+    lookup, filter_value = get_django_lookup(
         filter_.orm_bound_field.type_, lookup, filter_value
     )
     filter_str = f"{filter_str}__{lookup}"

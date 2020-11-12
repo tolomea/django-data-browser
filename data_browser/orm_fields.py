@@ -8,41 +8,8 @@ from django.db.models import OuterRef, Subquery
 from django.utils.html import format_html
 
 from .helpers import _get_option
-from .types import BaseType, BooleanType, HTMLType, StringType
+from .types import BaseType, BooleanType, HTMLType
 from .util import s
-
-
-def _get_django_lookup(field_type, lookup, filter_value):
-    if lookup == "field_equals":
-        lookup, filter_value = filter_value
-        return lookup, filter_value
-    elif field_type == StringType:
-        return (
-            {
-                "equals": "iexact",
-                "regex": "iregex",
-                "contains": "icontains",
-                "starts_with": "istartswith",
-                "ends_with": "iendswith",
-                "is_null": "isnull",
-            }[lookup],
-            filter_value,
-        )
-    else:
-        return (
-            {
-                "equals": "exact",
-                "is_null": "isnull",
-                "gt": "gt",
-                "gte": "gte",
-                "lt": "lt",
-                "lte": "lte",
-                "contains": "contains",
-                "length": "len",
-                "has_key": "has_key",
-            }[lookup],
-            filter_value,
-        )
 
 
 def get_model_name(model, sep="."):
