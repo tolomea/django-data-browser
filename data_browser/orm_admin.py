@@ -1,6 +1,9 @@
+import json
 from collections import defaultdict
+from dataclasses import dataclass
 
 from django.contrib.admin import site
+from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
@@ -19,9 +22,7 @@ from .orm_fields import (
     OrmConcreteField,
     OrmFileField,
     OrmFkField,
-    OrmModel,
     OrmRawField,
-    get_model_name,
 )
 from .orm_functions import get_functions_for_type
 from .types import (
@@ -79,6 +80,29 @@ _FIELD_TYPE_MAP = {
     **{f: StringType for f in _STRING_FIELDS},
     **{f: NumberType for f in _NUMBER_FIELDS},
 }
+
+
+@dataclass
+class OrmModel:
+    fields: dict
+    admin: BaseModelAdmin = None
+
+    @property
+    def root(self):
+        return bool(self.admin)
+
+    @property
+    def default_filters(self):
+        default_filters = _get_option(self.admin, "default_filters")
+        assert isinstance(default_filters, list)
+        return [
+            (f, l, v if isinstance(v, str) else json.dumps(v))
+            for (f, l, v) in default_filters
+        ]
+
+
+def get_model_name(model, sep="."):
+    return f"{model._meta.app_label}{sep}{model.__name__}"
 
 
 def get_fields_for_type(type_):

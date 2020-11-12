@@ -1,19 +1,12 @@
-import json
 from dataclasses import dataclass
 from typing import Sequence, Tuple
 
-from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.utils.html import format_html
 
-from .helpers import _get_option
 from .types import BaseType, BooleanType, HTMLType
 from .util import s
-
-
-def get_model_name(model, sep="."):
-    return f"{model._meta.app_label}{sep}{model.__name__}"
 
 
 @dataclass
@@ -64,25 +57,6 @@ class OrmBoundField:
 
     def get_format_hints(self, data):
         return self.type_.get_format_hints(self.path_str, data)
-
-
-@dataclass
-class OrmModel:
-    fields: dict
-    admin: BaseModelAdmin = None
-
-    @property
-    def root(self):
-        return bool(self.admin)
-
-    @property
-    def default_filters(self):
-        default_filters = _get_option(self.admin, "default_filters")
-        assert isinstance(default_filters, list)
-        return [
-            (f, l, v if isinstance(v, str) else json.dumps(v))
-            for (f, l, v) in default_filters
-        ]
 
 
 @dataclass

@@ -48,7 +48,7 @@ def orm_models():
     return {
         "string": OrmModel(get_fields_for_type(StringType)),
         "number": OrmModel(get_fields_for_type(NumberType)),
-        "app.model": orm_fields.OrmModel(
+        "app.model": OrmModel(
             fields={
                 "fa": orm_fields.OrmConcreteField(
                     model_name="app.model",
@@ -94,7 +94,7 @@ def orm_models():
             },
             admin=True,
         ),
-        "app.Tom": orm_fields.OrmModel(
+        "app.Tom": OrmModel(
             fields={
                 "jones": orm_fields.OrmConcreteField(
                     model_name="app.Tom",
@@ -113,7 +113,7 @@ def orm_models():
             },
             admin=True,
         ),
-        "app.Michael": orm_fields.OrmModel(
+        "app.Michael": OrmModel(
             fields={
                 "bolton": orm_fields.OrmConcreteField(
                     model_name="app.Michael",

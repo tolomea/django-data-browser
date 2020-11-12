@@ -6,8 +6,7 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
 
-from data_browser import orm_fields
-from data_browser.orm_admin import get_models
+from data_browser.orm_admin import OrmModel, get_models
 from data_browser.orm_results import admin_get_queryset, get_results
 from data_browser.query import BoundQuery, Query
 
@@ -695,13 +694,13 @@ class TestPermissions:
         )
 
         assert "core.NotInAdmin" not in orm_models
-        assert orm_models["core.InAdmin"] == orm_fields.OrmModel(
+        assert orm_models["core.InAdmin"] == OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
-        assert orm_models["core.InlineAdmin"] == orm_fields.OrmModel(
+        assert orm_models["core.InlineAdmin"] == OrmModel(
             fields=KEYS("id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
-        assert orm_models["core.Normal"] == orm_fields.OrmModel(
+        assert orm_models["core.Normal"] == OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin", "inline_admin"),
             admin=ANY(BaseModelAdmin),
         )
@@ -713,7 +712,7 @@ class TestPermissions:
         assert "core.NotInAdmin" not in orm_models
         assert "core.InAdmin" not in orm_models
         assert "core.InlineAdmin" not in orm_models
-        assert orm_models["core.Normal"] == orm_fields.OrmModel(
+        assert orm_models["core.Normal"] == OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
@@ -724,7 +723,7 @@ class TestPermissions:
         assert "core.NotInAdmin" not in orm_models
         assert "core.InAdmin" not in orm_models
         assert "core.InlineAdmin" not in orm_models
-        assert orm_models["core.Normal"] == orm_fields.OrmModel(
+        assert orm_models["core.Normal"] == OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
 
@@ -733,11 +732,11 @@ class TestPermissions:
         orm_models = self.get_fields_with_perms(rf, ["normal", "inadmin"])
 
         assert "core.NotInAdmin" not in orm_models
-        assert orm_models["core.InAdmin"] == orm_fields.OrmModel(
+        assert orm_models["core.InAdmin"] == OrmModel(
             fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
         )
         assert "core.InlineAdmin" not in orm_models
-        assert orm_models["core.Normal"] == orm_fields.OrmModel(
+        assert orm_models["core.Normal"] == OrmModel(
             fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
 
