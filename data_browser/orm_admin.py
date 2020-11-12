@@ -246,19 +246,19 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 f"Can't find annotation '{field_name}' for {admin}.{field_name}"
             )
 
-        field_type = getattr(annotation, "output_field", None)
-        if not field_type:  # pragma: no cover
+        field = getattr(annotation, "output_field", None)
+        if not field:  # pragma: no cover
             raise Exception(
                 f"Annotation '{field_name}' for {admin}.{field_name} doesn't specify 'output_field'"
             )
 
-        type_, choices = _get_field_type(model, field_name, field_type)
+        type_, choices = _get_field_type(field)
         return OrmAnnotatedField(
             model_name=model_name,
             name=field_name,
             pretty_name=pretty_name,
             type_=type_,
-            field_type=field_type,
+            django_field=field,
             admin=admin,
             choices=choices,
         )
@@ -281,11 +281,11 @@ def _fmt_choices(choices):
     return [(value, str(label)) for value, label in choices or []]
 
 
-def _get_field_type(model, field_name, field):
+def _get_field_type(field):
     if isinstance(field, ArrayField) and isinstance(
         field.base_field, _STRING_FIELDS
     ):  # pragma: postgres
-        base_field, choices = _get_field_type(model, field_name, field.base_field)
+        base_field, choices = _get_field_type(field.base_field)
         array_types = {
             StringType: StringArrayType,
             NumberType: NumberArrayType,
@@ -296,7 +296,7 @@ def _get_field_type(model, field_name, field):
             return array_types[base_field], choices
         else:
             debug_log(
-                f"{model.__name__}.{field_name} unsupported subarray type {type(field.base_field).__name__}"
+                f"{field.model.__name__}.{field.name} unsupported subarray type {type(field.base_field).__name__}"
             )
             return UnknownType, None
 
@@ -318,7 +318,7 @@ def _get_field_type(model, field_name, field):
                 break
         else:
             debug_log(
-                f"{model.__name__}.{field_name} unsupported type {type(field).__name__}"
+                f"{field.model.__name__}.{field.name} unsupported type {type(field).__name__}"
             )
             res = UnknownType
 
@@ -390,7 +390,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 fields[orm_field.name] = orm_field
         # Normal fields
         else:
-            field_type, choices = _get_field_type(model, field_name, field)
+            field_type, choices = _get_field_type(field)
 
             rel_name = field_type.name
             if field_type is JSONType:

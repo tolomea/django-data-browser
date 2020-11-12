@@ -180,7 +180,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
                     admin_get_queryset(self.admin, request, [self.name])
                     .filter(pk=OuterRef(s(self.previous.queryset_path + ["id"])))
                     .values(self.name)[:1],
-                    output_field=self.field_type,
+                    output_field=self.django_field,
                 )
             }
         )
@@ -188,7 +188,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
 
 class OrmAnnotatedField(OrmBaseField):
     def __init__(
-        self, model_name, name, pretty_name, type_, field_type, admin, choices
+        self, model_name, name, pretty_name, type_, django_field, admin, choices
     ):
         super().__init__(
             model_name,
@@ -200,7 +200,7 @@ class OrmAnnotatedField(OrmBaseField):
             concrete=True,
             choices=choices or (),
         )
-        self.field_type = field_type
+        self.django_field = django_field
         self.admin = admin
 
     def bind(self, previous):
