@@ -3,20 +3,9 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Sequence, Tuple
 
-import django
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
-from django.db.models import (
-    BooleanField,
-    DateField,
-    DurationField,
-    ExpressionWrapper,
-    IntegerField,
-    OuterRef,
-    Q,
-    Subquery,
-    functions,
-)
+from django.db.models import DurationField, IntegerField, OuterRef, Subquery
 from django.db.models.functions import Cast
 from django.utils.html import format_html
 
@@ -28,14 +17,12 @@ from .types import (
     DateType,
     DurationType,
     HTMLType,
-    IsNullType,
-    MonthType,
     NumberType,
     StringChoiceType,
     StringType,
-    WeekDayType,
     YearType,
 )
+from .util import s
 
 _TYPE_AGGREGATES = defaultdict(
     lambda: [("count", NumberType)],
@@ -66,29 +53,6 @@ _TYPE_AGGREGATES = defaultdict(
         ],
         BooleanType: [("average", NumberType), ("sum", NumberType)],
         YearType: [("count", NumberType), ("average", NumberType)],  # todo min and max
-    },
-)
-
-
-_DATE_FUNCTIONS = [
-    "is_null",
-    "year",
-    "quarter",
-    "month",
-    "day",
-    "week_day",
-    "month_start",
-]
-if django.VERSION >= (2, 2):  # pragma: no branch
-    _DATE_FUNCTIONS += ["iso_year", "iso_week", "week_start"]
-
-
-_TYPE_FUNCTIONS = defaultdict(
-    lambda: ["is_null"],
-    {
-        DateType: _DATE_FUNCTIONS,
-        DateTimeType: _DATE_FUNCTIONS + ["hour", "minute", "second", "date"],
-        StringType: ["is_null", "length"],
     },
 )
 
@@ -162,60 +126,8 @@ def _get_django_lookup(field_type, lookup, filter_value):
         )
 
 
-def IsNull(field_name):
-    return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
-
-
-def _get_django_function(name):
-    mapping = {
-        "year": (functions.ExtractYear, YearType),
-        "quarter": (functions.ExtractQuarter, NumberType),
-        "month": (functions.ExtractMonth, MonthType),
-        "month_start": (lambda x: functions.TruncMonth(x, DateField()), DateType),
-        "day": (functions.ExtractDay, NumberType),
-        "week_day": (functions.ExtractWeekDay, WeekDayType),
-        "hour": (functions.ExtractHour, NumberType),
-        "minute": (functions.ExtractMinute, NumberType),
-        "second": (functions.ExtractSecond, NumberType),
-        "date": (functions.TruncDate, DateType),
-        "is_null": (IsNull, IsNullType),
-        "length": (functions.Length, NumberType),
-    }
-    if django.VERSION >= (2, 2):  # pragma: no branch
-        mapping.update(
-            {
-                "iso_year": (functions.ExtractIsoYear, YearType),
-                "iso_week": (functions.ExtractWeek, NumberType),
-                "week_start": (lambda x: functions.TruncWeek(x, DateField()), DateType),
-            }
-        )
-    return mapping[name]
-
-
-def s(path):
-    return "__".join(path)
-
-
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
-
-
-def get_fields_for_type(type_):
-    aggregates = {
-        aggregate: OrmAggregateField(type_.name, aggregate, res_type)
-        for aggregate, res_type in _TYPE_AGGREGATES[type_]
-    }
-    functions = {
-        func: OrmFunctionField(type_.name, func, _get_django_function(func)[1])
-        for func in _TYPE_FUNCTIONS[type_]
-    }
-    others = {}
-    if type_.raw_type:
-        others["raw"] = OrmRawField(
-            type_.name, "raw", "raw", type_.raw_type, type_.raw_type.name, None
-        )
-
-    return {**aggregates, **functions, **others}
 
 
 @dataclass
@@ -492,33 +404,4 @@ class OrmAggregateField(OrmBaseField):
             queryset_path=queryset_path,
             aggregate_clause=(s(queryset_path), agg_func(s(previous.queryset_path))),
             having=True,
-        )
-
-
-class OrmBoundFunctionField(OrmBoundField):
-    def _annotate(self, request, qs):
-        func = _get_django_function(self.name)[0](s(self.previous.queryset_path))
-        return qs.annotate(**{s(self.queryset_path): func})
-
-
-class OrmFunctionField(OrmBaseField):
-    def __init__(self, model_name, name, type_):
-        super().__init__(
-            model_name,
-            name,
-            name.replace("_", " "),
-            type_=type_,
-            concrete=True,
-            can_pivot=True,
-        )
-
-    def bind(self, previous):
-        assert previous
-        return OrmBoundFunctionField(
-            field=self,
-            previous=previous,
-            full_path=previous.full_path + [self.name],
-            pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=previous.queryset_path + [self.name],
-            filter_=True,
         )

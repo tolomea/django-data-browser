@@ -13,15 +13,18 @@ from django.utils.text import slugify
 from .common import debug_log, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_fields import (
+    _TYPE_AGGREGATES,
+    OrmAggregateField,
     OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
     OrmFileField,
     OrmFkField,
     OrmModel,
-    get_fields_for_type,
+    OrmRawField,
     get_model_name,
 )
+from .orm_functions import get_functions_for_type
 from .types import (
     TYPES,
     BooleanType,
@@ -77,6 +80,21 @@ _FIELD_TYPE_MAP = {
     **{f: StringType for f in _STRING_FIELDS},
     **{f: NumberType for f in _NUMBER_FIELDS},
 }
+
+
+def get_fields_for_type(type_):
+    aggregates = {
+        aggregate: OrmAggregateField(type_.name, aggregate, res_type)
+        for aggregate, res_type in _TYPE_AGGREGATES[type_]
+    }
+    functions = get_functions_for_type(type_)
+    others = {}
+    if type_.raw_type:
+        others["raw"] = OrmRawField(
+            type_.name, "raw", "raw", type_.raw_type, type_.raw_type.name, None
+        )
+
+    return {**aggregates, **functions, **others}
 
 
 @attributes(short_description=OPEN_IN_ADMIN)
