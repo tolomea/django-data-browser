@@ -293,7 +293,7 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | | Add ``get_*`` functions for the ``ddb_*`` admin options.                               |
+| 3.0.1     | 2020-11-12     | | Add ``get_*`` functions for the ``ddb_*`` admin options.                               |
 |           |                | | Add length function to string fields.                                                  |
 |           |                | | Add support for DB query explain via ``.explain`` url.                                 |
 |           |                | | Prevent exception when getting SQL view of pure aggregates.                            |
