@@ -11,7 +11,7 @@ from django.utils.html import format_html
 from django.utils.text import slugify
 
 from .common import debug_log, settings
-from .helpers import AdminMixin, AnnotationDescriptor, _get_option, attributes
+from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_fields import (
     OrmAnnotatedField,
     OrmCalculatedField,
@@ -199,7 +199,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
         getattr(field_func, "short_description", field_name.replace("_", " "))
     )
 
-    if isinstance(field_func, AnnotationDescriptor):
+    if isinstance(field_func, _AnnotationDescriptor):
         qs = admin_get_queryset(admin, request, [field_name])
 
         annotation = qs.query.annotations.get(field_name)

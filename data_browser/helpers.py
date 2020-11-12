@@ -15,7 +15,7 @@ def attributes(**kwargs):
     return inner
 
 
-class Everything:
+class _Everything:
     def __contains__(self, item):
         return True
 
@@ -53,8 +53,8 @@ def _get_option(admin, name, *args):
         return getattr(admin, field, getattr(_AdminOptions, field))
 
 
-class AdminMixin(_AdminOptions):
-    def get_fields_for_request(self, request):
+class _AdminAnnotations:
+    def _get_fields_for_request(self, request):
         if hasattr(request, "data_browser"):
             return request.data_browser["fields"]
         elif (
@@ -63,11 +63,11 @@ class AdminMixin(_AdminOptions):
         ):
             return set(self.get_list_display(request))
         else:
-            return Everything()
+            return _Everything()
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        fields = self.get_fields_for_request(request)
+        fields = self._get_fields_for_request(request)
 
         for name, descriptor in self._ddb_annotations().items():
             if name not in fields:
@@ -100,7 +100,10 @@ class AdminMixin(_AdminOptions):
             cls._ddb_annotations_real = {}
         return cls._ddb_annotations_real
 
+
+class AdminMixin(_AdminOptions, _AdminAnnotations):
     def changelist_view(self, request, extra_context=None):
+        """ Inject ddb_url """
         extra_context = extra_context or {}
 
         if not self.get_ddb_ignore(request):
@@ -123,7 +126,7 @@ class AdminMixin(_AdminOptions):
         return super().changelist_view(request, extra_context)
 
 
-class AnnotationDescriptor:
+class _AnnotationDescriptor:
     def __init__(self, get_queryset):
         self.get_queryset = get_queryset
 
@@ -155,4 +158,4 @@ def ddb_hide(func):  # pragma: no cover
     return func
 
 
-annotation = AnnotationDescriptor
+annotation = _AnnotationDescriptor
