@@ -12,9 +12,8 @@ from django.utils.text import slugify
 
 from .common import debug_log, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
+from .orm_aggregates import get_aggregates_for_type
 from .orm_fields import (
-    _TYPE_AGGREGATES,
-    OrmAggregateField,
     OrmAnnotatedField,
     OrmCalculatedField,
     OrmConcreteField,
@@ -83,10 +82,7 @@ _FIELD_TYPE_MAP = {
 
 
 def get_fields_for_type(type_):
-    aggregates = {
-        aggregate: OrmAggregateField(type_.name, aggregate, res_type)
-        for aggregate, res_type in _TYPE_AGGREGATES[type_]
-    }
+    aggregates = get_aggregates_for_type(type_)
     functions = get_functions_for_type(type_)
     others = {}
     if type_.raw_type:

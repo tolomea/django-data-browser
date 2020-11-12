@@ -1,99 +1,18 @@
 import json
-from collections import defaultdict
 from dataclasses import dataclass
 from typing import Sequence, Tuple
 
 from django.contrib.admin.options import BaseModelAdmin
 from django.db import models
-from django.db.models import DurationField, IntegerField, OuterRef, Subquery
-from django.db.models.functions import Cast
+from django.db.models import OuterRef, Subquery
 from django.utils.html import format_html
 
 from .helpers import _get_option
-from .types import (
-    BaseType,
-    BooleanType,
-    DateTimeType,
-    DateType,
-    DurationType,
-    HTMLType,
-    NumberType,
-    StringChoiceType,
-    StringType,
-    YearType,
-)
+from .types import BaseType, BooleanType, HTMLType, StringType
 from .util import s
-
-_TYPE_AGGREGATES = defaultdict(
-    lambda: [("count", NumberType)],
-    {
-        StringType: [("count", NumberType)],
-        StringChoiceType: [("count", NumberType)],
-        NumberType: [
-            ("average", NumberType),
-            ("count", NumberType),
-            ("max", NumberType),
-            ("min", NumberType),
-            ("std_dev", NumberType),
-            ("sum", NumberType),
-            ("variance", NumberType),
-        ],
-        DateTimeType: [
-            ("count", NumberType),
-            ("max", DateTimeType),
-            ("min", DateTimeType),
-        ],
-        DateType: [("count", NumberType), ("max", DateType), ("min", DateType)],
-        DurationType: [
-            ("count", NumberType),
-            ("average", DurationType),
-            ("sum", DurationType),
-            ("max", DurationType),
-            ("min", DurationType),
-        ],
-        BooleanType: [("average", NumberType), ("sum", NumberType)],
-        YearType: [("count", NumberType), ("average", NumberType)],  # todo min and max
-    },
-)
-
-
-class _CastDuration(Cast):
-    def __init__(self, expression):
-        super().__init__(expression, output_field=DurationField())
-
-    def as_mysql(self, compiler, connection, **extra_context):  # pragma: mysql
-        # https://github.com/django/django/pull/13398
-        template = "%(function)s(%(expressions)s AS signed integer)"
-        return self.as_sql(compiler, connection, template=template, **extra_context)
-
-
-def _get_django_aggregate(field_type, name):
-    if field_type == BooleanType:
-        return {
-            "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
-            "sum": lambda x: models.Sum(Cast(x, output_field=IntegerField())),
-        }[name]
-    if field_type == DurationType and name in ["average", "sum"]:
-        return {
-            "average": lambda x: models.Avg(_CastDuration(x)),
-            "sum": lambda x: models.Sum(_CastDuration(x)),
-        }[name]
-    else:
-        return {
-            # these all have result type number
-            "average": models.Avg,
-            "count": lambda x: models.Count(x, distinct=True),
-            "max": models.Max,
-            "min": models.Min,
-            "std_dev": models.StdDev,
-            "sum": models.Sum,
-            "variance": models.Variance,
-        }[name]
 
 
 def _get_django_lookup(field_type, lookup, filter_value):
-    from .types import StringType
-
     if lookup == "field_equals":
         lookup, filter_value = filter_value
         return lookup, filter_value
@@ -384,24 +303,3 @@ class OrmFileField(OrmConcreteField):
                 return str(e)
 
         return format
-
-
-class OrmAggregateField(OrmBaseField):
-    def __init__(self, model_name, name, type_):
-        super().__init__(
-            model_name, name, name.replace("_", " "), type_=type_, concrete=True
-        )
-
-    def bind(self, previous):
-        assert previous
-        queryset_path = previous.queryset_path + [self.name]
-        agg_func = _get_django_aggregate(previous.type_, self.name)
-        return OrmBoundField(
-            field=self,
-            previous=previous,
-            full_path=previous.full_path + [self.name],
-            pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=queryset_path,
-            aggregate_clause=(s(queryset_path), agg_func(s(previous.queryset_path))),
-            having=True,
-        )
