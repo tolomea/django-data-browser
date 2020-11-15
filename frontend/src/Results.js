@@ -68,10 +68,7 @@ const DataCell = React.memo((props) => {
     ) {
       formattedValue = value.toExponential(formatHint.significantFigures - 1);
     } else {
-      formattedValue = value.toFixed(formatHint.decimalPlaces);
-      var parts = value.toFixed(formatHint.decimalPlaces).toString().split(".");
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      formattedValue = parts.join(".");
+      formattedValue = value.toLocaleString(undefined, formatHint);
     }
   } else {
     formattedValue = String(value);

@@ -16,15 +16,12 @@ from data_browser.types import (
     DurationType,
     HTMLType,
     IsNullType,
-    MonthType,
     NumberChoiceType,
     NumberType,
     StringArrayType,
     StringChoiceType,
     StringType,
     UnknownType,
-    WeekDayType,
-    YearType,
 )
 
 from .util import ANY
@@ -343,23 +340,6 @@ class TestNumberType:
         assert NumberType.get_formatter(None)(None) is None
 
 
-class TestYearType:
-    def test_validate(self):
-        assert YearType.parse("gt", "6", None) == (6, None)
-        assert YearType.parse("pontains", "6.1", None) == (None, ANY(str))
-        assert YearType.parse("gt", "hello", None) == (None, ANY(str))
-        assert YearType.parse("is_null", "IsNull", None) == (True, None)
-        assert YearType.parse("is_null", "hello", None) == (None, ANY(str))
-        assert YearType.parse("equals", "0", None) == (None, ANY(str))
-
-    def test_default_lookup(self):
-        assert YearType.default_lookup == "equals"
-
-    def test_format(self):
-        assert YearType.get_formatter(None)(6) == 6
-        assert YearType.get_formatter(None)(None) is None
-
-
 class TestDateTimeType:
     def test_validate(self):
         assert DateTimeType.parse("gt", "2018-03-20T22:31:23", None) == (
@@ -476,38 +456,6 @@ class TestDateType:
     def test_format(self):
         assert DateType.get_formatter(None)(date(2020, 5, 19)) == "2020-05-19"
         assert DateType.get_formatter(None)(None) is None
-
-
-class TestWeekDayType:
-    def test_validate(self):
-        assert WeekDayType.parse("equals", "Sunday", None) == (1, None)
-        assert WeekDayType.parse("equals", "Saturday", None) == (7, None)
-        assert WeekDayType.parse("equals", "Bob", None) == (None, ANY(str))
-        assert WeekDayType.parse("gt", "Monday", None) == (None, ANY(str))
-
-    def test_format(self):
-        assert WeekDayType.get_formatter(None)(1) == "Sunday"
-        assert WeekDayType.get_formatter(None)(7) == "Saturday"
-        assert WeekDayType.get_formatter(None)(None) is None
-
-    def test_default_lookup(self):
-        assert WeekDayType.default_lookup == "equals"
-
-
-class TestMonthType:
-    def test_validate(self):
-        assert MonthType.parse("equals", "January", None) == (1, None)
-        assert MonthType.parse("equals", "December", None) == (12, None)
-        assert MonthType.parse("equals", "Bob", None) == (None, ANY(str))
-        assert MonthType.parse("gt", "January", None) == (None, ANY(str))
-
-    def test_format(self):
-        assert MonthType.get_formatter(None)(1) == "January"
-        assert MonthType.get_formatter(None)(12) == "December"
-        assert MonthType.get_formatter(None)(None) is None
-
-    def test_default_lookup(self):
-        assert MonthType.default_lookup == "equals"
 
 
 class TestBooleanType:

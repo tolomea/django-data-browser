@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.utils.html import format_html
 
-from .types import BaseType, BooleanType, HTMLType
+from .types import ASC, BaseType, BooleanType, DateTimeType, DateType, HTMLType
 from .util import s
 
 
@@ -56,7 +56,8 @@ class OrmBoundField:
         )
 
     def get_format_hints(self, data):
-        return self.type_.get_format_hints(self.path_str, data)
+        hints = self.type_.get_format_hints(self.path_str, data)
+        return {**hints, **(self.format_hints or {})}
 
 
 @dataclass
@@ -69,6 +70,8 @@ class OrmBaseField:
     rel_name: str = None
     can_pivot: bool = False
     choices: Sequence[Tuple[str, str]] = ()
+    default_sort: str = None
+    format_hints: dict = None
 
     def __post_init__(self):
         if not self.type_:
@@ -106,6 +109,7 @@ class OrmConcreteField(OrmBaseField):
             rel_name=rel_name,
             can_pivot=True,
             choices=choices or (),
+            default_sort=ASC if type_ in [DateType, DateTimeType] else None,
         )
 
     def bind(self, previous):

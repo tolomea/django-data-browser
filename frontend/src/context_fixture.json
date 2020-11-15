@@ -7,6 +7,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -15,6 +16,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -23,6 +25,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -41,6 +44,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -49,6 +53,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Date joined",
                     "type": "datetime"
@@ -57,6 +62,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Email address",
                     "type": "string"
@@ -65,6 +71,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "First name",
                     "type": "string"
@@ -73,6 +80,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -81,6 +89,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Active",
                     "type": "boolean"
@@ -89,6 +98,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Staff status",
                     "type": "boolean"
@@ -97,6 +107,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Superuser status",
                     "type": "boolean"
@@ -105,6 +116,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Last login",
                     "type": "datetime"
@@ -113,6 +125,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Last name",
                     "type": "string"
@@ -121,6 +134,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Password",
                     "type": "string"
@@ -129,6 +143,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Username",
                     "type": "string"
@@ -156,6 +171,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "average",
                     "type": "number"
@@ -164,6 +180,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -172,6 +189,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "sum",
                     "type": "number"
@@ -190,6 +208,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -198,6 +217,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Andrew",
                     "type": "string"
@@ -206,6 +226,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Bob",
                     "type": "html"
@@ -214,6 +235,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "City",
                     "type": "string"
@@ -222,6 +244,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Fred",
                     "type": "html"
@@ -230,6 +253,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -238,6 +262,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.Producer",
                     "prettyName": "Producer",
                     "type": null
@@ -246,6 +271,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Tom",
                     "type": "html"
@@ -269,6 +295,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -277,6 +304,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -285,6 +313,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -303,6 +332,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -311,6 +341,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
                     "type": null
@@ -319,6 +350,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -337,6 +369,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -345,6 +378,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -353,6 +387,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
                     "type": null
@@ -361,6 +396,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.InlineAdmin",
                     "prettyName": "Inline admin",
                     "type": null
@@ -369,6 +405,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -389,6 +426,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.Address",
                     "prettyName": "Address",
                     "type": null
@@ -397,6 +435,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -405,6 +444,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Frank",
                     "type": "html"
@@ -413,6 +453,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -421,6 +462,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -447,6 +489,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -455,6 +498,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Annotated",
                     "type": "string"
@@ -463,6 +507,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "Boat",
                     "type": "number"
@@ -471,6 +516,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Calculated boolean",
                     "type": "boolean"
@@ -479,6 +525,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
                     "type": "datetime"
@@ -487,6 +534,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": "date",
                     "prettyName": "Date",
                     "type": "date"
@@ -495,6 +543,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.SKU",
                     "prettyName": "Default sku",
                     "type": null
@@ -503,6 +552,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "duration",
                     "prettyName": "Duration",
                     "type": "duration"
@@ -511,6 +561,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Extra inline",
                     "type": "string"
@@ -519,6 +570,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Extra model",
                     "type": "string"
@@ -527,6 +579,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "unknown",
                     "prettyName": "Fake",
                     "type": "unknown"
@@ -535,6 +588,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Funky",
                     "type": "html"
@@ -543,6 +597,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -551,6 +606,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "html",
                     "prettyName": "Image",
                     "type": "html"
@@ -559,6 +615,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Is onsale",
                     "type": "html"
@@ -567,6 +624,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Lambda",
                     "type": "html"
@@ -575,6 +633,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -586,6 +645,7 @@
                         "B"
                     ],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "numberchoice",
                     "prettyName": "Number choice",
                     "type": "numberchoice"
@@ -594,6 +654,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Only in list view",
                     "type": "string"
@@ -602,6 +663,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Onsale",
                     "type": "boolean"
@@ -610,6 +672,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.Producer",
                     "prettyName": "Producer",
                     "type": null
@@ -618,6 +681,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "Size",
                     "type": "number"
@@ -626,6 +690,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Size unit",
                     "type": "string"
@@ -634,6 +699,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Stealth annotation",
                     "type": "string"
@@ -645,6 +711,7 @@
                         "B"
                     ],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "stringchoice",
                     "prettyName": "String choice",
                     "type": "stringchoice"
@@ -685,6 +752,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Bob",
                     "type": "html"
@@ -693,6 +761,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -701,6 +770,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -709,6 +779,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "core.Product",
                     "prettyName": "Product",
                     "type": null
@@ -728,6 +799,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -736,6 +808,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
                     "type": "number"
@@ -744,6 +817,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -762,6 +836,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
                     "type": "html"
@@ -770,6 +845,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
                     "type": "datetime"
@@ -778,6 +854,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Description",
                     "type": "string"
@@ -786,6 +863,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Fields",
                     "type": "string"
@@ -794,6 +872,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Google sheets formula",
                     "type": "html"
@@ -802,6 +881,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Id",
                     "type": "string"
@@ -810,6 +890,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "Limit",
                     "type": "number"
@@ -818,6 +899,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Model name",
                     "type": "string"
@@ -826,6 +908,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
@@ -834,6 +917,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Open view",
                     "type": "html"
@@ -842,6 +926,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": "auth.User",
                     "prettyName": "Owner",
                     "type": null
@@ -850,6 +935,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Public",
                     "type": "boolean"
@@ -858,6 +944,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "Public link",
                     "type": "html"
@@ -866,6 +953,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Public slug",
                     "type": "string"
@@ -874,6 +962,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "Query",
                     "type": "string"
@@ -904,6 +993,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -912,6 +1002,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "day",
                     "type": "number"
@@ -920,6 +1011,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -928,6 +1020,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso week",
                     "type": "number"
@@ -936,14 +1029,16 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso year",
-                    "type": "year"
+                    "type": "number"
                 },
                 "max": {
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
                     "type": "date"
@@ -952,22 +1047,38 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
                     "type": "date"
                 },
                 "month": {
                     "canPivot": true,
-                    "choices": [],
+                    "choices": [
+                        "January",
+                        "Feburary",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December"
+                    ],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month",
-                    "type": "month"
+                    "type": "numberchoice"
                 },
                 "month_start": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month start",
                     "type": "date"
@@ -976,22 +1087,33 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "quarter",
                     "type": "number"
                 },
                 "week_day": {
                     "canPivot": true,
-                    "choices": [],
+                    "choices": [
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday"
+                    ],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week day",
-                    "type": "weekday"
+                    "type": "numberchoice"
                 },
                 "week_start": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week start",
                     "type": "date"
@@ -1000,9 +1122,10 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "year",
-                    "type": "year"
+                    "type": "number"
                 }
             },
             "sortedFields": [
@@ -1028,6 +1151,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1036,6 +1160,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "date",
                     "type": "date"
@@ -1044,6 +1169,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "day",
                     "type": "number"
@@ -1052,6 +1178,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "hour",
                     "type": "number"
@@ -1060,6 +1187,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1068,6 +1196,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso week",
                     "type": "number"
@@ -1076,14 +1205,16 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso year",
-                    "type": "year"
+                    "type": "number"
                 },
                 "max": {
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
                     "type": "datetime"
@@ -1092,6 +1223,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
                     "type": "datetime"
@@ -1100,22 +1232,38 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "minute",
                     "type": "number"
                 },
                 "month": {
                     "canPivot": true,
-                    "choices": [],
+                    "choices": [
+                        "January",
+                        "Feburary",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December"
+                    ],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month",
-                    "type": "month"
+                    "type": "numberchoice"
                 },
                 "month_start": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month start",
                     "type": "date"
@@ -1124,6 +1272,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "quarter",
                     "type": "number"
@@ -1132,22 +1281,33 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "second",
                     "type": "number"
                 },
                 "week_day": {
                     "canPivot": true,
-                    "choices": [],
+                    "choices": [
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday"
+                    ],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week day",
-                    "type": "weekday"
+                    "type": "numberchoice"
                 },
                 "week_start": {
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week start",
                     "type": "date"
@@ -1156,9 +1316,10 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": "asc",
                     "model": null,
                     "prettyName": "year",
-                    "type": "year"
+                    "type": "number"
                 }
             },
             "sortedFields": [
@@ -1188,6 +1349,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "average",
                     "type": "duration"
@@ -1196,6 +1358,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1204,6 +1367,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1212,6 +1376,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
                     "type": "duration"
@@ -1220,6 +1385,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
                     "type": "duration"
@@ -1228,6 +1394,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "sum",
                     "type": "duration"
@@ -1249,6 +1416,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1257,6 +1425,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1274,6 +1443,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1282,6 +1452,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1299,6 +1470,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1307,6 +1479,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1324,6 +1497,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1332,31 +1506,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
-                    "model": null,
-                    "prettyName": "is null",
-                    "type": "isnull"
-                }
-            },
-            "sortedFields": [
-                "count",
-                "is_null"
-            ]
-        },
-        "month": {
-            "defaultFilters": [],
-            "fields": {
-                "count": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "count",
-                    "type": "number"
-                },
-                "is_null": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1374,6 +1524,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "average",
                     "type": "number"
@@ -1382,6 +1533,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1390,6 +1542,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1398,6 +1551,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
                     "type": "number"
@@ -1406,6 +1560,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
                     "type": "number"
@@ -1414,6 +1569,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "std dev",
                     "type": "number"
@@ -1422,6 +1578,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "sum",
                     "type": "number"
@@ -1430,6 +1587,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "variance",
                     "type": "number"
@@ -1453,6 +1611,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1461,6 +1620,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1478,6 +1638,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1486,6 +1647,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1494,6 +1656,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "number",
                     "prettyName": "raw",
                     "type": "number"
@@ -1512,6 +1675,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1520,6 +1684,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1528,6 +1693,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "numberarray",
                     "prettyName": "raw",
                     "type": "numberarray"
@@ -1546,6 +1712,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1554,6 +1721,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1571,6 +1739,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1579,6 +1748,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1587,6 +1757,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "length",
                     "type": "number"
@@ -1605,6 +1776,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1613,6 +1785,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1630,6 +1803,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1638,6 +1812,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1646,6 +1821,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "string",
                     "prettyName": "raw",
                     "type": "string"
@@ -1664,6 +1840,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1672,6 +1849,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
@@ -1680,6 +1858,7 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": "stringarray",
                     "prettyName": "raw",
                     "type": "stringarray"
@@ -1698,6 +1877,7 @@
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
                     "type": "number"
@@ -1706,71 +1886,13 @@
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
+                    "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
                     "type": "isnull"
                 }
             },
             "sortedFields": [
-                "count",
-                "is_null"
-            ]
-        },
-        "weekday": {
-            "defaultFilters": [],
-            "fields": {
-                "count": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "count",
-                    "type": "number"
-                },
-                "is_null": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "is null",
-                    "type": "isnull"
-                }
-            },
-            "sortedFields": [
-                "count",
-                "is_null"
-            ]
-        },
-        "year": {
-            "defaultFilters": [],
-            "fields": {
-                "average": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "average",
-                    "type": "number"
-                },
-                "count": {
-                    "canPivot": false,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "count",
-                    "type": "number"
-                },
-                "is_null": {
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "model": null,
-                    "prettyName": "is null",
-                    "type": "isnull"
-                }
-            },
-            "sortedFields": [
-                "average",
                 "count",
                 "is_null"
             ]
@@ -1795,9 +1917,7 @@
     ],
     "types": {
         "boolean": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": true,
             "lookups": {
                 "equals": {
@@ -1817,9 +1937,7 @@
             ]
         },
         "date": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": "asc",
             "defaultValue": "today",
             "lookups": {
                 "equals": {
@@ -1855,9 +1973,7 @@
             ]
         },
         "datetime": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": "asc",
             "defaultValue": "now",
             "lookups": {
                 "equals": {
@@ -1893,9 +2009,7 @@
             ]
         },
         "duration": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": "",
             "lookups": {
                 "equals": {
@@ -1931,20 +2045,13 @@
             ]
         },
         "html": {
-            "choices": [],
             "defaultLookup": null,
-            "defaultSort": null,
             "defaultValue": "",
             "lookups": {},
             "sortedLookups": []
         },
         "isnull": {
-            "choices": [
-                "IsNull",
-                "NotNull"
-            ],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": "IsNull",
             "lookups": {
                 "equals": {
@@ -1956,9 +2063,7 @@
             ]
         },
         "json": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "equals": {
@@ -1994,35 +2099,13 @@
             ]
         },
         "jsonfield": {
-            "choices": [],
             "defaultLookup": null,
-            "defaultSort": null,
             "defaultValue": "|",
             "lookups": {},
             "sortedLookups": []
         },
-        "month": {
-            "choices": [],
-            "defaultLookup": "equals",
-            "defaultSort": "asc",
-            "defaultValue": "January",
-            "lookups": {
-                "equals": {
-                    "type": "month"
-                },
-                "not_equals": {
-                    "type": "month"
-                }
-            },
-            "sortedLookups": [
-                "equals",
-                "not_equals"
-            ]
-        },
         "number": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": 0,
             "lookups": {
                 "equals": {
@@ -2058,9 +2141,7 @@
             ]
         },
         "numberarray": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
@@ -2096,9 +2177,7 @@
             ]
         },
         "numberchoice": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "equals": {
@@ -2118,9 +2197,7 @@
             ]
         },
         "numberchoicearray": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
@@ -2156,17 +2233,13 @@
             ]
         },
         "regex": {
-            "choices": [],
             "defaultLookup": null,
-            "defaultSort": null,
             "defaultValue": ".*",
             "lookups": {},
             "sortedLookups": []
         },
         "string": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": "",
             "lookups": {
                 "contains": {
@@ -2218,9 +2291,7 @@
             ]
         },
         "stringarray": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
@@ -2256,9 +2327,7 @@
             ]
         },
         "stringchoice": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "equals": {
@@ -2278,9 +2347,7 @@
             ]
         },
         "stringchoicearray": {
-            "choices": [],
             "defaultLookup": "equals",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "contains": {
@@ -2316,9 +2383,7 @@
             ]
         },
         "unknown": {
-            "choices": [],
             "defaultLookup": "is_null",
-            "defaultSort": null,
             "defaultValue": null,
             "lookups": {
                 "is_null": {
@@ -2326,62 +2391,6 @@
                 }
             },
             "sortedLookups": [
-                "is_null"
-            ]
-        },
-        "weekday": {
-            "choices": [],
-            "defaultLookup": "equals",
-            "defaultSort": "asc",
-            "defaultValue": "Monday",
-            "lookups": {
-                "equals": {
-                    "type": "weekday"
-                },
-                "not_equals": {
-                    "type": "weekday"
-                }
-            },
-            "sortedLookups": [
-                "equals",
-                "not_equals"
-            ]
-        },
-        "year": {
-            "choices": [],
-            "defaultLookup": "equals",
-            "defaultSort": "asc",
-            "defaultValue": 2020,
-            "lookups": {
-                "equals": {
-                    "type": "year"
-                },
-                "gt": {
-                    "type": "year"
-                },
-                "gte": {
-                    "type": "year"
-                },
-                "is_null": {
-                    "type": "isnull"
-                },
-                "lt": {
-                    "type": "year"
-                },
-                "lte": {
-                    "type": "year"
-                },
-                "not_equals": {
-                    "type": "year"
-                }
-            },
-            "sortedLookups": [
-                "equals",
-                "not_equals",
-                "gt",
-                "gte",
-                "lt",
-                "lte",
                 "is_null"
             ]
         }

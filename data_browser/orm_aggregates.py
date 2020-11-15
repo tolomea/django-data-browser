@@ -13,7 +13,6 @@ from .types import (
     NumberType,
     StringChoiceType,
     StringType,
-    YearType,
 )
 from .util import s
 
@@ -45,7 +44,6 @@ _TYPE_AGGREGATES = defaultdict(
             ("min", DurationType),
         ],
         BooleanType: [("average", NumberType), ("sum", NumberType)],
-        YearType: [("count", NumberType), ("average", NumberType)],  # todo min and max
     },
 )
 

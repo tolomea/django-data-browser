@@ -315,10 +315,11 @@ def test_view_json(admin_client):
         "formatHints": {
             "name": {},
             "size": {
-                "decimalPlaces": 0,
-                "significantFigures": 3,
+                "highCutOff": 10000000000.0,
                 "lowCutOff": 0.0001,
-                "highCutOff": 1e10,
+                "maximumFractionDigits": 0,
+                "minimumFractionDigits": 0,
+                "significantFigures": 3,
             },
             "size_unit": {},
         },

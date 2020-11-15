@@ -67,6 +67,7 @@ def _get_model_fields(model_name, orm_models):
             "canPivot": orm_field.can_pivot,
             "prettyName": orm_field.pretty_name,
             "choices": [v for k, v in orm_field.choices],
+            "defaultSort": orm_field.default_sort,
         }
         for name, orm_field in orm_model.fields.items()
     }
@@ -96,8 +97,6 @@ def _get_config(request):
             "sortedLookups": list(type_.lookups),
             "defaultLookup": type_.default_lookup,
             "defaultValue": type_.default_value,
-            "defaultSort": type_.default_sort,
-            "choices": [v for k, v in type_.choices],
         }
         for name, type_ in TYPES.items()
     }

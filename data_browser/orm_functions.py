@@ -5,14 +5,13 @@ from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, func
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
+    ASC,
     DateTimeType,
     DateType,
     IsNullType,
-    MonthType,
+    NumberChoiceType,
     NumberType,
     StringType,
-    WeekDayType,
-    YearType,
 )
 from .util import s
 
@@ -43,27 +42,72 @@ def IsNull(field_name):
     return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
 
 
+_month_choices = [
+    (1, "January"),
+    (2, "Feburary"),
+    (3, "March"),
+    (4, "April"),
+    (5, "May"),
+    (6, "June"),
+    (7, "July"),
+    (8, "August"),
+    (9, "September"),
+    (10, "October"),
+    (11, "November"),
+    (12, "December"),
+]
+
+
+_weekday_choices = [
+    (1, "Sunday"),
+    (2, "Monday"),
+    (3, "Tuesday"),
+    (4, "Wednesday"),
+    (5, "Thursday"),
+    (6, "Friday"),
+    (7, "Saturday"),
+]
+
+
 def _get_django_function(name):
     mapping = {
-        "year": (functions.ExtractYear, YearType),
-        "quarter": (functions.ExtractQuarter, NumberType),
-        "month": (functions.ExtractMonth, MonthType),
-        "month_start": (lambda x: functions.TruncMonth(x, DateField()), DateType),
-        "day": (functions.ExtractDay, NumberType),
-        "week_day": (functions.ExtractWeekDay, WeekDayType),
-        "hour": (functions.ExtractHour, NumberType),
-        "minute": (functions.ExtractMinute, NumberType),
-        "second": (functions.ExtractSecond, NumberType),
-        "date": (functions.TruncDate, DateType),
-        "is_null": (IsNull, IsNullType),
-        "length": (functions.Length, NumberType),
+        "year": (functions.ExtractYear, NumberType, (), ASC, {"useGrouping": False}),
+        "quarter": (functions.ExtractQuarter, NumberType, (), ASC, {}),
+        "month": (functions.ExtractMonth, NumberChoiceType, _month_choices, ASC, {}),
+        "month_start": (
+            lambda x: functions.TruncMonth(x, DateField()),
+            DateType,
+            (),
+            ASC,
+            {},
+        ),
+        "day": (functions.ExtractDay, NumberType, (), ASC, {}),
+        "week_day": (
+            functions.ExtractWeekDay,
+            NumberChoiceType,
+            _weekday_choices,
+            ASC,
+            {},
+        ),
+        "hour": (functions.ExtractHour, NumberType, (), ASC, {}),
+        "minute": (functions.ExtractMinute, NumberType, (), ASC, {}),
+        "second": (functions.ExtractSecond, NumberType, (), ASC, {}),
+        "date": (functions.TruncDate, DateType, (), ASC, {}),
+        "is_null": (IsNull, IsNullType, (), None, {}),
+        "length": (functions.Length, NumberType, (), None, {}),
     }
     if django.VERSION >= (2, 2):  # pragma: no branch
         mapping.update(
             {
-                "iso_year": (functions.ExtractIsoYear, YearType),
-                "iso_week": (functions.ExtractWeek, NumberType),
-                "week_start": (lambda x: functions.TruncWeek(x, DateField()), DateType),
+                "iso_year": (functions.ExtractIsoYear, NumberType, (), ASC, {}),
+                "iso_week": (functions.ExtractWeek, NumberType, (), ASC, {}),
+                "week_start": (
+                    lambda x: functions.TruncWeek(x, DateField()),
+                    DateType,
+                    (),
+                    ASC,
+                    {},
+                ),
             }
         )
     return mapping[name]
@@ -76,7 +120,7 @@ class OrmBoundFunctionField(OrmBoundField):
 
 
 class OrmFunctionField(OrmBaseField):
-    def __init__(self, model_name, name, type_):
+    def __init__(self, model_name, name, type_, choices, default_sort, format_hints):
         super().__init__(
             model_name,
             name,
@@ -84,6 +128,9 @@ class OrmFunctionField(OrmBaseField):
             type_=type_,
             concrete=True,
             can_pivot=True,
+            choices=choices,
+            default_sort=default_sort,
+            format_hints=format_hints,
         )
 
     def bind(self, previous):
@@ -100,6 +147,6 @@ class OrmFunctionField(OrmBaseField):
 
 def get_functions_for_type(type_):
     return {
-        func: OrmFunctionField(type_.name, func, _get_django_function(func)[1])
+        func: OrmFunctionField(type_.name, func, *_get_django_function(func)[1:])
         for func in _TYPE_FUNCTIONS[type_]
     }

@@ -39,7 +39,6 @@ class TypeMeta(type):
 
 class BaseType(metaclass=TypeMeta):
     default_value = None
-    default_sort = None
     choices = ()
     raw_type = None
     element_type = None
@@ -131,8 +130,10 @@ class NumberType(BaseType):
         nums = [
             row[name] for row in data if row and row[name] and abs(row[name] > 0.0001)
         ]
+        dp = get_optimal_decimal_places(nums)
         return {
-            "decimalPlaces": get_optimal_decimal_places(nums),
+            "minimumFractionDigits": dp,
+            "maximumFractionDigits": dp,
             "significantFigures": 3,
             "lowCutOff": 0.0001,
             "highCutOff": 1e10,
@@ -154,18 +155,6 @@ class RegexType(BaseType):
         with atomic():
             list(ContentType.objects.filter(model__regex=value))
         return value
-
-
-class YearType(NumberType):
-    default_value = timezone.now().year
-    default_sort = ASC
-
-    @staticmethod
-    def _parse(value, choices):
-        res = int(value)
-        if res <= 1:
-            raise Exception("Years must be > 1")
-        return res
 
 
 class DurationType(BaseType):
@@ -199,8 +188,6 @@ class DurationType(BaseType):
 
 
 class DateTypeMixin:
-    default_sort = ASC
-
     @classmethod
     def _lookups(cls):
         return {
@@ -265,75 +252,6 @@ class DateType(DateTypeMixin, BaseType):
     def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else str(value)
-
-
-class WeekDayType(BaseType):
-    default_value = "Monday"
-    default_sort = ASC
-
-    @classmethod
-    def _lookups(cls):
-        return {"equals": cls, "not_equals": cls}
-
-    _days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-    ]
-
-    @classmethod
-    def _get_formatter(cls, choices):
-        assert not choices
-        return lambda value: None if value is None else cls._days[value - 1]
-
-    @classmethod
-    def _parse(cls, value, choices):
-        assert not choices
-        for i, v in enumerate(cls._days):
-            if v.lower()[:3] == value.lower()[:3]:
-                return i + 1
-        raise Exception("not a day of the week")
-
-
-class MonthType(BaseType):
-    default_value = "January"
-    default_sort = ASC
-
-    @classmethod
-    def _lookups(cls):
-        return {"equals": cls, "not_equals": cls}
-
-    _months = [
-        "January",
-        "Feburary",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
-
-    @classmethod
-    def _get_formatter(cls, choices):
-        assert not choices
-        return lambda value: None if value is None else cls._months[value - 1]
-
-    @classmethod
-    def _parse(cls, value, choices):
-        assert not choices
-        for i, v in enumerate(cls._months):
-            if v.lower()[:3] == value.lower()[:3]:
-                return i + 1
-        raise Exception("not a month")
 
 
 class HTMLType(StringType):
@@ -425,9 +343,6 @@ class ChoiceTypeMixin:
 
     @classmethod
     def _get_formatter(cls, choices):
-        if cls.choices:
-            choices = cls.choices
-
         assert choices
         choices = dict(choices)
         choices[None] = None
@@ -435,9 +350,6 @@ class ChoiceTypeMixin:
 
     @classmethod
     def _parse(cls, value, choices):
-        if cls.choices:
-            choices = cls.choices
-
         assert choices
         choices = {v: k for k, v in choices}
         if value not in choices:
@@ -464,6 +376,14 @@ class IsNullType(ChoiceTypeMixin, BaseType):
     @staticmethod
     def _lookups():
         return {"equals": IsNullType}
+
+    @classmethod
+    def _get_formatter(cls, choices):
+        return super()._get_formatter(cls.choices)
+
+    @classmethod
+    def _parse(cls, value, choices):
+        return super()._parse(value, cls.choices)
 
 
 class ArrayTypeMixin:

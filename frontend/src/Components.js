@@ -15,49 +15,11 @@ function FilterValue(props) {
         <option value={false}>false</option>
       </select>
     );
-  else if (lookup.type === "weekday")
+  else if (props.lookup.type === "isnull")
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
-        {[
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ].map((weekday) => (
-          <option value={weekday}>{weekday}</option>
-        ))}
-      </select>
-    );
-  else if (lookup.type === "month")
-    return (
-      <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
-        {[
-          "January",
-          "Febuary",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ].map((month) => (
-          <option value={month}>{month}</option>
-        ))}
-      </select>
-    );
-  else if (lookupType.choices.length)
-    return (
-      <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
-        {lookupType.choices.map((option) => (
-          <option value={option}>{option}</option>
-        ))}
+        <option value={"IsNull"}>IsNull</option>
+        <option value={"NotNull"}>NotNull</option>
       </select>
     );
   else if (lookup.type.endsWith("choice"))
@@ -68,11 +30,7 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (
-    lookup.type === "number" ||
-    lookup.type === "numberchoice" ||
-    lookup.type === "year"
-  )
+  else if (lookup.type === "number")
     return (
       <input
         {...{ value }}
@@ -119,7 +77,7 @@ function Filter(props) {
     <tr>
       <td>
         <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
-        <TLink onClick={() => query.addField(pathStr, type.defaultSort)}>
+        <TLink onClick={() => query.addField(pathStr, field.defaultSort)}>
           {query.prettyPathStr(pathStr)}
         </TLink>{" "}
       </td>
@@ -197,7 +155,9 @@ function Field(props) {
         <td>
           {modelField.type ? (
             <TLink
-              onClick={() => query.addField(path.join("__"), type.defaultSort)}
+              onClick={() =>
+                query.addField(path.join("__"), modelField.defaultSort)
+              }
             >
               {modelField.prettyName}
             </TLink>
