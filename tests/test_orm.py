@@ -307,6 +307,16 @@ def test_get_is_null_function(get_product_flat):
     assert data == [["a", "NotNull"], ["b", "NotNull"], ["c", "IsNull"]]
 
 
+def test_get_aggregated_is_null_function(get_product_flat):
+    a = models.Producer.objects.create()
+    b = models.Producer.objects.create()
+    models.Product.objects.create(producer=a)
+    models.Product.objects.create(producer=b)
+    models.Product.objects.create(producer=b)
+    data = get_product_flat(1, "producer__id__is_null,id__count", {})
+    assert data == [["NotNull", 3]]
+
+
 @pytest.mark.usefixtures("products")
 def test_get_aggregate(get_product_flat):
     data = get_product_flat(1, "size_unit,id__count", {})

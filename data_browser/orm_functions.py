@@ -1,7 +1,15 @@
 from collections import defaultdict
 
 import django
-from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, functions
+from django.db.models import (
+    BooleanField,
+    DateField,
+    ExpressionWrapper,
+    OuterRef,
+    Q,
+    Subquery,
+    functions,
+)
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
@@ -38,10 +46,6 @@ _TYPE_FUNCTIONS = defaultdict(
 )
 
 
-def IsNull(field_name):
-    return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
-
-
 _month_choices = [
     (1, "January"),
     (2, "Feburary"),
@@ -69,7 +73,25 @@ _weekday_choices = [
 ]
 
 
-def _get_django_function(name):
+def _get_django_function(name, qs):
+    def IsNull(field_name):
+        # https://code.djangoproject.com/ticket/32200
+        if django.VERSION[:3] == (3, 1, 3):
+            return Subquery(
+                qs.annotate(
+                    ddb_is_null=ExpressionWrapper(
+                        Q(**{field_name: None}), output_field=BooleanField()
+                    )
+                )
+                .filter(pk=OuterRef("id"))
+                .values("ddb_is_null")[:1],
+                output_field=BooleanField(),
+            )
+        else:  # pragma: django != 3.1.3
+            return ExpressionWrapper(
+                Q(**{field_name: None}), output_field=BooleanField()
+            )
+
     mapping = {
         "year": (functions.ExtractYear, NumberType, (), ASC, {"useGrouping": False}),
         "quarter": (functions.ExtractQuarter, NumberType, (), ASC, {}),
@@ -115,7 +137,7 @@ def _get_django_function(name):
 
 class OrmBoundFunctionField(OrmBoundField):
     def _annotate(self, request, qs):
-        func = _get_django_function(self.name)[0](s(self.previous.queryset_path))
+        func = _get_django_function(self.name, qs)[0](s(self.previous.queryset_path))
         return qs.annotate(**{s(self.queryset_path): func})
 
 
@@ -147,6 +169,6 @@ class OrmFunctionField(OrmBaseField):
 
 def get_functions_for_type(type_):
     return {
-        func: OrmFunctionField(type_.name, func, *_get_django_function(func)[1:])
+        func: OrmFunctionField(type_.name, func, *_get_django_function(func, None)[1:])
         for func in _TYPE_FUNCTIONS[type_]
     }
