@@ -1,3 +1,4 @@
+import django
 import pytest
 from django.contrib import admin
 
@@ -6,7 +7,7 @@ from data_browser.orm_admin import get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
-from .conftest import JSON_FIELD_SUPPORT
+from .conftest import JSON_FIELD_SUPPORT, SQLITE
 
 """ Howto enable SQLite JSON support https://code.djangoproject.com/wiki/JSON1Extension """
 
@@ -19,7 +20,9 @@ else:  # pragma: no cover
 
 class JsonAdmin(AdminMixin, admin.ModelAdmin):
     fields = ["json_field"]
-    ddb_json_fields = {"json_field": {"hello": "string"}}
+    ddb_json_fields = {
+        "json_field": {"hello": "string", "position": "number", "bool": "boolean"}
+    }
 
 
 @pytest.fixture
@@ -55,9 +58,27 @@ def test_hello_world(get_results_flat):
     assert get_results_flat("json_field") == [{"json_field": '{"hello": "world"}'}]
 
 
-def test_get_sub_field(get_results_flat):
+def test_get_string_sub_field(get_results_flat):
     JsonModel.objects.create(json_field={"hello": "world"})
     assert get_results_flat("json_field__hello") == [{"json_field__hello": "world"}]
+
+
+@pytest.mark.skipif(
+    SQLITE and django.VERSION[:3] == (3, 1, 3),
+    reason="https://code.djangoproject.com/ticket/32203",
+)
+def test_get_number_sub_field(get_results_flat):  # pragma: not sqlite
+    JsonModel.objects.create(json_field={"position": 1})
+    assert get_results_flat("json_field__position") == [{"json_field__position": 1}]
+
+
+@pytest.mark.skipif(
+    SQLITE and django.VERSION[:3] == (3, 1, 3),
+    reason="https://code.djangoproject.com/ticket/32203",
+)
+def test_get_boolean_sub_field(get_results_flat):  # pragma: not sqlite
+    JsonModel.objects.create(json_field={"bool": True})
+    assert get_results_flat("json_field__bool") == [{"json_field__bool": True}]
 
 
 def test_filter_sub_field(get_results_flat):

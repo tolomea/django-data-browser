@@ -7,7 +7,10 @@ DATABASE_CONFIG = dj_database_url.config(
     conn_max_age=600, default="sqlite:///db.sqlite3"
 )
 
-if "postgresql" in DATABASE_CONFIG["ENGINE"]:  # pragma: postgres
+POSTGRES = "postgresql" in DATABASE_CONFIG["ENGINE"]
+SQLITE = "sqlite" in DATABASE_CONFIG["ENGINE"]
+
+if POSTGRES:  # pragma: postgres
     JSON_FIELD_SUPPORT = django.VERSION >= (2, 1)
     ARRAY_FIELD_SUPPORT = True
 else:  # pragma: not postgres
