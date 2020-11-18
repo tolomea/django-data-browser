@@ -293,7 +293,7 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | | Fix bug with aggregating around is_null values on Django 3.1.                          |
+| 3.0.2     | 2020-11-18     | | Fix bug with aggregating around is_null values on Django 3.1.                          |
 |           |                | | Fix is_null returning None for missing fields in JsonFields.                           |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.0.1     | 2020-11-12     | | Add ``get_*`` functions for the ``ddb_*`` admin options.                               |
