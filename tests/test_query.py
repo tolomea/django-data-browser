@@ -511,7 +511,7 @@ class TestIsNullType:
     def test_format(self):
         assert IsNullType.get_formatter(IsNullType.choices)(True) == "IsNull"
         assert IsNullType.get_formatter(IsNullType.choices)(False) == "NotNull"
-        assert IsNullType.get_formatter(IsNullType.choices)(None) is None
+        assert IsNullType.get_formatter(IsNullType.choices)(None) == "IsNull"
 
     def test_validate(self):
         assert IsNullType.parse("equals", "IsNull", IsNullType.choices) == (True, None)

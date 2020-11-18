@@ -3,12 +3,12 @@ import json
 from collections import defaultdict
 
 from .orm_admin import admin_get_queryset
-from .orm_lookups import get_django_lookup
+from .orm_lookups import get_django_filter
 from .query import BoundQuery
 from .types import ASC, DSC
 
 
-def _filter(qs, filter_, filter_str):
+def _filter(qs, path_str, filter_):
     negation = False
     lookup = filter_.lookup
 
@@ -16,17 +16,13 @@ def _filter(qs, filter_, filter_str):
         negation = True
         lookup = lookup[4:]
 
-    filter_value = filter_.parsed
-    lookup, filter_value = get_django_lookup(
-        filter_.orm_bound_field.type_, lookup, filter_value
+    filter_expression = get_django_filter(
+        filter_.orm_bound_field.type_, path_str, lookup, filter_.parsed
     )
-    filter_str = f"{filter_str}__{lookup}"
-    if lookup == "contains":  # pragma: postgres
-        filter_value = [filter_value]
     if negation:
-        return qs.exclude(**{filter_str: filter_value})
+        return qs.exclude(filter_expression)
     else:
-        return qs.filter(**{filter_str: filter_value})
+        return qs.filter(filter_expression)
 
 
 def _cols_sub_query(bound_query):
@@ -70,7 +66,7 @@ def get_result_queryset(request, bound_query, orm_models):
     # filter normal and sql function fields (aka __date)
     for filter_ in bound_query.valid_filters:
         if filter_.orm_bound_field.filter_:
-            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path_str)
+            qs = _filter(qs, filter_.orm_bound_field.queryset_path_str, filter_)
 
     # nothing to group on, early out with an aggregate
     if not any(f.group_by for f in bound_query.bound_fields):
@@ -105,7 +101,7 @@ def get_result_queryset(request, bound_query, orm_models):
     # having, aka filter aggregate fields
     for filter_ in bound_query.valid_filters:
         if filter_.orm_bound_field.having:
-            qs = _filter(qs, filter_, filter_.orm_bound_field.queryset_path_str)
+            qs = _filter(qs, filter_.orm_bound_field.queryset_path_str, filter_)
 
     # sort
     sort_fields = []

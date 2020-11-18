@@ -345,7 +345,6 @@ class ChoiceTypeMixin:
     def _get_formatter(cls, choices):
         assert choices
         choices = dict(choices)
-        choices[None] = None
         return lambda value: choices.get(value, value)
 
     @classmethod
@@ -370,7 +369,7 @@ class NumberChoiceType(ChoiceTypeMixin, BaseType):
 
 
 class IsNullType(ChoiceTypeMixin, BaseType):
-    choices = [(True, "IsNull"), (False, "NotNull")]
+    choices = [(None, "IsNull"), (True, "IsNull"), (False, "NotNull")]
     default_value = choices[0][1]
 
     @staticmethod

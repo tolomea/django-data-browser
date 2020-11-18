@@ -882,3 +882,24 @@ def test_number_choice_field(get_product_flat):
         1, f"number_choice__raw", {"number_choice__raw__equals": [1]}
     )
     assert data == [[1]]
+
+
+def test_is_null_variants(get_product_flat):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(producer=producer, size=1, onsale=True)
+    models.Product.objects.create(producer=producer, size=2, onsale=None)
+
+    assert get_product_flat(1, "onsale__is_null,size+1", {}) == [
+        ["NotNull", 1],
+        ["IsNull", 2],
+    ]
+
+    # __is_null=
+    assert get_product_flat(1, "size", {"onsale__is_null": ["NotNull"]}) == [[1]]
+    assert get_product_flat(1, "size", {"onsale__is_null": ["IsNull"]}) == [[2]]
+
+    # __is_null__equals=
+    assert get_product_flat(1, "size", {"onsale__is_null__equals": ["NotNull"]}) == [
+        [1]
+    ]
+    assert get_product_flat(1, "size", {"onsale__is_null__equals": ["IsNull"]}) == [[2]]
