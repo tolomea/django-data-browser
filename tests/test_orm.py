@@ -302,6 +302,21 @@ def test_get_time_function(get_product_flat):
 
 
 @pytest.mark.usefixtures("products")
+def test_filter_year_bounds(get_product_flat):
+    data = get_product_flat(1, "size+1", {"created_time__year__equals": ["1"]})
+    assert data == [[1], [2]]  # this errors on the filter and returns all values
+
+    data = get_product_flat(1, "size+1", {"created_time__year__equals": ["2"]})
+    assert data == []
+
+    data = get_product_flat(1, "size+1", {"created_time__year__equals": ["9998"]})
+    assert data == []
+
+    data = get_product_flat(1, "size+1", {"created_time__year__equals": ["9999"]})
+    assert data == [[1], [2]]  # this errors on the filter and returns all values
+
+
+@pytest.mark.usefixtures("products")
 def test_get_is_null_function(get_product_flat):
     data = get_product_flat(1, "name+0,producer__address__city__is_null", {})
     assert data == [["a", "NotNull"], ["b", "NotNull"], ["c", "IsNull"]]

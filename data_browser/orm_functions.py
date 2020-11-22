@@ -140,6 +140,15 @@ class OrmBoundFunctionField(OrmBoundField):
         func = _get_django_function(self.name, qs)[0](s(self.previous.queryset_path))
         return qs.annotate(**{s(self.queryset_path): func})
 
+    def parse(self, lookup, value):
+        parsed, err_message = super().parse(lookup, value)
+        if self.name in ["year", "iso_year"] and parsed is not None:
+            if parsed < 2:
+                err_message = "Can't filter to years less than 2"
+            if parsed > 9998:
+                err_message = "Can't filter to years greater than 9998"
+        return parsed, err_message
+
 
 class OrmFunctionField(OrmBaseField):
     def __init__(self, model_name, name, type_, choices, default_sort, format_hints):
