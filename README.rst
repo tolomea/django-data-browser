@@ -36,6 +36,18 @@ Features
 * Download views as CSV or JSON.
 
 
+Supported Versions
+*************************
+
+The Data Browser is currently tested on:
+
+* Django 2.0 - 3.1
+* Python 3.6 - 3.10
+* MySQL, PostgreSQL, SQLite
+
+We highly recommend and only officially support the latest patch release of each Python and Django series.
+
+
 Installation
 *************************
 
