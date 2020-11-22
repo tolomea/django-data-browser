@@ -305,7 +305,7 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | Fix exception when filtering to out of bounds year values.                               |
+| 3.0.3     | 2020-11-22     | Fix exception when filtering to out of bounds year values.                               |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.0.2     | 2020-11-18     | | Fix bug with aggregating around is_null values on Django 3.1.                          |
 |           |                | | Fix is_null returning None for missing fields in JsonFields.                           |
