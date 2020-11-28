@@ -1,9 +1,12 @@
 #!/bin/bash
 set -ex
 
+git add README.rst data_browser/__init__.py
+git update-index --refresh  # will error if there are unstaged changes
+
 ./build_fe.sh
 
-git add data_browser/fe_build data_browser/templates/data_browser/index.html README.rst data_browser/__init__.py
+git add data_browser/fe_build data_browser/templates/data_browser/index.html
 
 ./build_whl.sh
 
@@ -12,7 +15,4 @@ set +x
 echo SUCCESS
 echo
 echo "To release run the following:"
-echo "    git commit -m $version"
-echo "    git tag -a -m $version $version"
-echo "    git push --follow-tags"
-echo "    python -m twine upload -u __token__ dist/*"
+echo "    git commit -m $version && git tag -a -m $version $version && git push --follow-tags && python -m twine upload -u __token__ dist/*"
