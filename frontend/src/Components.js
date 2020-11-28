@@ -6,7 +6,7 @@ import { getPartsForQuery, getRelUrlForQuery } from "./Query";
 import "./App.css";
 
 function FilterValue(props) {
-  const { lookup, lookupType, onChange, value, field } = props;
+  const { lookup, onChange, value, field } = props;
   const onChangeEvent = (e) => onChange(e.target.value);
   if (props.lookup.type === "boolean")
     return (
@@ -100,7 +100,6 @@ function Filter(props) {
           {...{ value, field }}
           onChange={(val) => query.setFilterValue(index, val)}
           lookup={type.lookups[lookup]}
-          lookupType={query.getType(type.lookups[lookup])}
         />
         {errorMessage && <p className="Error">{errorMessage}</p>}
       </td>
