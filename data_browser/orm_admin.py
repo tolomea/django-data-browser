@@ -99,8 +99,10 @@ def _get_all_admin_fields(request):
                 yield f
 
     def visible(model_admin, request):
-        attrs = ["get_fieldsets", "model", "get_queryset"]
-        if not all(hasattr(model_admin, a) for a in attrs):
+        has_attrs = all(
+            hasattr(model_admin, a) for a in ["get_fieldsets", "model", "get_queryset"]
+        )
+        if not has_attrs or not issubclass(model_admin.model, models.Model):
             debug_log(
                 f"{type(model_admin)} instance does not look like a ModelAdmin or InlineModelAdmin"
             )
