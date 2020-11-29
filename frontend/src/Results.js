@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./App.css";
 import { TLink, SLink, Overlay } from "./Util";
 import { ShowContextMenu } from "./ContextMenu";
@@ -74,29 +74,30 @@ const DataCell = React.memo((props) => {
   } else {
     formattedValue = String(value);
   }
+
+  const showContextMenu = useContext(ShowContextMenu);
+
+  function onContextMenu(e) {
+    showContextMenu(e, [
+      navigator.clipboard && {
+        name: "Copy",
+        fn: () => navigator.clipboard.writeText(formattedValue),
+      },
+    ]);
+  }
+
   return (
-    <ShowContextMenu.Consumer>
-      {(showContextMenu) => (
-        <td
-          className={modelField.type + " " + className || ""}
-          colSpan={span || 1}
-          onContextMenu={(e) =>
-            showContextMenu(e, [
-              navigator.clipboard && {
-                name: "Copy",
-                fn: () => navigator.clipboard.writeText(formattedValue),
-              },
-            ])
-          }
-        >
-          {modelField.type === "html" ? (
-            <div dangerouslySetInnerHTML={{ __html: value }} />
-          ) : (
-            formattedValue
-          )}
-        </td>
+    <td
+      className={modelField.type + " " + className || ""}
+      colSpan={span || 1}
+      onContextMenu={onContextMenu}
+    >
+      {modelField.type === "html" ? (
+        <div dangerouslySetInnerHTML={{ __html: value }} />
+      ) : (
+        formattedValue
       )}
-    </ShowContextMenu.Consumer>
+    </td>
   );
 });
 
