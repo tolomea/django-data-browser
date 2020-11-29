@@ -4,6 +4,13 @@
   box-sizing: border-box;
 }
 
+:root {
+  --dark-color: #333e48;
+  --link-color: #069;
+  --border-color: #ccc;
+  --shade-color: #eee;
+}
+
 select,
 input,
 th,
@@ -19,7 +26,7 @@ body {
   padding: 0;
   margin: 0;
   font-size: 16px;
-  color: #333e48;
+  color: var(--dark-color);
 }
 
 a {
@@ -39,7 +46,7 @@ p {
 
 select,
 input {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 3px;
 }
 input {
@@ -55,7 +62,7 @@ select {
   border: none;
   padding: 0 !important;
   cursor: pointer;
-  color: #069;
+  color: var(--link-color);
   text-align: left;
 }
 .Link:hover {
@@ -66,7 +73,7 @@ select {
   border: none;
   padding: 0 !important;
   cursor: pointer;
-  color: #069;
+  color: var(--link-color);
   vertical-align: -20%;
   font-size: inherit;
   font-weight: inherit;
@@ -76,7 +83,7 @@ select {
 }
 input::placeholder,
 textarea::placeholder {
-  color: #ccc;
+  color: var(--border-color);
 }
 
 /***************** Element specific stuff *****************/
@@ -125,10 +132,10 @@ textarea::placeholder {
   border: none;
   padding: 1px;
   font-size: 28px;
-  color: #333e48;
+  color: var(--dark-color);
 }
 .ModelSelector:hover {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 3px;
   padding: 0;
 }
@@ -168,7 +175,7 @@ select.Lookup {
   overflow-y: auto;
 }
 .FieldsList table {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 3px;
 }
 .FieldsList tbody,
@@ -195,12 +202,12 @@ select.Lookup {
   top: 2px;
 }
 .Results th {
-  background-color: #eee;
+  background-color: var(--shade-color);
 }
 .Results .Scroller,
 .Results th,
 .Results td {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 2px;
 }
 .Results tr {
@@ -238,7 +245,7 @@ a.Logo {
   font-size: 40px;
   font-family: "Anton", sans-serif;
   cursor: pointer;
-  color: #333e48;
+  color: var(--dark-color);
 }
 a.Logo > span {
   display: inline-block;
@@ -255,8 +262,8 @@ div.Index {
 div.Index > div {
   width: 46%;
   float: left;
-  color: #333e48;
-  border: 1px solid #ccc;
+  color: var(--dark-color);
+  border: 1px solid var(--border-color);
   border-radius: 3px;
   margin: 30px 2% 0 2%;
   padding: 0 2% 2% 2%;
@@ -276,7 +283,7 @@ div.Index .Link {
   font-size: 28px;
 }
 .EditSavedView form {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 3px;
   padding: 15px 15px 12px 15px;
 }
@@ -285,7 +292,7 @@ div.Index .Link {
   width: 100%;
 }
 .EditSavedView textarea {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 3px;
   padding: 10px;
   min-width: 500px;
