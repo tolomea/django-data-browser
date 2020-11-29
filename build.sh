@@ -15,4 +15,4 @@ set +x
 echo SUCCESS
 echo
 echo "To release run the following:"
-echo "    git commit -m $version && git tag -a -m $version $version && git push --follow-tags && python -m twine upload -u __token__ dist/*"
+echo "    git commit -m $version && git tag -a -m $version $version && git push --follow-tags && python -m twine upload dist/*"
