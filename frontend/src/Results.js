@@ -61,6 +61,7 @@ function DataCell(props) {
     formatHint,
     query,
     pathStr,
+    fullRow,
   } = props;
   let formattedValue;
   if (value === undefined) {
@@ -95,6 +96,10 @@ function DataCell(props) {
         name: "Filter",
         fn: () => query.addExactFilter(pathStr, value),
       },
+      fullRow && {
+        name: "Drill down",
+        fn: () => query.drillDown(fullRow),
+      },
     ]);
   }
 
@@ -125,7 +130,15 @@ function VTableHeadRow(props) {
 }
 
 function VTableBodyRow(props) {
-  const { fields, query, classNameFirst, className, row, formatHints } = props;
+  const {
+    fields,
+    query,
+    classNameFirst,
+    className,
+    row,
+    formatHints,
+    fullRow,
+  } = props;
   return fields.map((field, i) => {
     if (row)
       return (
@@ -137,6 +150,7 @@ function VTableBodyRow(props) {
           className={`${i ? "" : classNameFirst} ${className}`}
           modelField={query.getField(field.pathStr)}
           formatHint={formatHints[field.pathStr]}
+          fullRow={fullRow}
         />
       );
     else
@@ -156,10 +170,12 @@ function HTableRow(props) {
       <HeadCell {...{ query, field }} />
       {data.map((col, key) => (
         <DataCell
-          {...{ key, span, className }}
+          {...{ key, span, className, query }}
           value={col[field.pathStr]}
           modelField={query.getField(field.pathStr)}
           formatHint={formatHints[field.pathStr]}
+          fullRow={col}
+          pathStr={field.pathStr}
         />
       ))}
     </>
@@ -216,12 +232,14 @@ function Results(props) {
                 <VTableBodyRow
                   {...{ query, row, formatHints }}
                   fields={query.rowFields()}
+                  fullRow={row}
                 />
                 {body.map((table, key) => (
                   <VTableBodyRow
                     {...{ key, query, formatHints }}
                     fields={query.resFields()}
                     row={table[rowIndex]}
+                    fullRow={{ ...row, ...cols[key] }}
                     classNameFirst="LeftBorder"
                   />
                 ))}

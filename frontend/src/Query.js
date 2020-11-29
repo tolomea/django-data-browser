@@ -188,6 +188,22 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
+  drillDown(values) {
+    const newFilters = this.query.filters.concat(
+      this.query.fields
+        .filter((field) => this.getField(field.pathStr).canPivot)
+        .filter((field) => values.hasOwnProperty(field.pathStr))
+        .map((field) => {
+          return {
+            pathStr: field.pathStr,
+            lookup: "equals",
+            value: String(values[field.pathStr]),
+          };
+        })
+    );
+    this.setQuery({ filters: newFilters });
+  }
+
   removeFilter(index) {
     const newFilters = this.query.filters.slice();
     newFilters.splice(index, 1);
