@@ -59,8 +59,8 @@ const DataCell = React.memo((props) => {
     formattedValue = "";
   } else if (value === null) {
     formattedValue = null;
-  } else if (modelField.type === "html" && value) {
-    formattedValue = <div dangerouslySetInnerHTML={{ __html: value }} />;
+  } else if (modelField.type === "html") {
+    formattedValue = value;
   } else if (modelField.type === "number") {
     if (
       value > formatHint.highCutOff ||
@@ -85,7 +85,11 @@ const DataCell = React.memo((props) => {
             e.preventDefault();
           }}
         >
-          {formattedValue}
+          {modelField.type === "html" ? (
+            <div dangerouslySetInnerHTML={{ __html: value }} />
+          ) : (
+            formattedValue
+          )}
         </td>
       )}
     </ShowContextMenu.Consumer>
