@@ -45,15 +45,16 @@ function ContextMenu(props) {
             {state && (
                 <div ref={node} className="ContextMenu" style={divStyle}>
                     {state.entries.map((entry) => (
-                        <TLink
-                            key={entry.name}
-                            onClick={() => {
-                                entry.fn();
-                                setState();
-                            }}
-                        >
-                            {entry.name}
-                        </TLink>
+                        <p key={entry.name}>
+                            <TLink
+                                onClick={() => {
+                                    entry.fn();
+                                    setState();
+                                }}
+                            >
+                                {entry.name}
+                            </TLink>
+                        </p>
                     ))}
                 </div>
             )}

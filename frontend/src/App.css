@@ -354,5 +354,11 @@ input.RowLimit {
   position: fixed;
   background: white;
   border: 1px solid var(--border-color);
+  padding: 10px;
+  box-shadow: 3px 3px 10px var(--dark-color);
+}
+
+.ContextMenu p {
   padding: 5px;
+  margin: 0px;
 }
