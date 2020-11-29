@@ -178,6 +178,16 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
+  addExactFilter(pathStr, value) {
+    const newFilters = this.query.filters.slice();
+    newFilters.push({
+      pathStr: pathStr,
+      lookup: "equals",
+      value: String(value),
+    });
+    this.setQuery({ filters: newFilters });
+  }
+
   removeFilter(index) {
     const newFilters = this.query.filters.slice();
     newFilters.splice(index, 1);

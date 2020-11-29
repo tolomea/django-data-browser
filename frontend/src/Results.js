@@ -52,8 +52,16 @@ function HeadCell(props) {
   );
 }
 
-const DataCell = React.memo((props) => {
-  const { modelField, className, span, value, formatHint } = props;
+function DataCell(props) {
+  const {
+    modelField,
+    className,
+    span,
+    value,
+    formatHint,
+    query,
+    pathStr,
+  } = props;
   let formattedValue;
   if (value === undefined) {
     formattedValue = "";
@@ -83,6 +91,10 @@ const DataCell = React.memo((props) => {
         name: "Copy",
         fn: () => navigator.clipboard.writeText(formattedValue),
       },
+      modelField.concrete && {
+        name: "Filter",
+        fn: () => query.addExactFilter(pathStr, value),
+      },
     ]);
   }
 
@@ -99,7 +111,7 @@ const DataCell = React.memo((props) => {
       )}
     </td>
   );
-});
+}
 
 function VTableHeadRow(props) {
   const { fields, query, classNameFirst, className } = props;
@@ -118,6 +130,8 @@ function VTableBodyRow(props) {
     if (row)
       return (
         <DataCell
+          {...{ query }}
+          pathStr={field.pathStr}
           key={field.pathStr}
           value={row[field.pathStr]}
           className={`${i ? "" : classNameFirst} ${className}`}
