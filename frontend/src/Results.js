@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { TLink, SLink, Overlay } from "./Util";
+import { ShowContextMenu } from "./ContextMenu";
 
 function Spacer(props) {
   const { spaces } = props;
@@ -74,9 +75,20 @@ const DataCell = React.memo((props) => {
     formattedValue = String(value);
   }
   return (
-    <td className={modelField.type + " " + className || ""} colSpan={span || 1}>
-      {formattedValue}
-    </td>
+    <ShowContextMenu.Consumer>
+      {(showContextMenu) => (
+        <td
+          className={modelField.type + " " + className || ""}
+          colSpan={span || 1}
+          onContextMenu={(e) => {
+            console.log(showContextMenu);
+            e.preventDefault();
+          }}
+        >
+          {formattedValue}
+        </td>
+      )}
+    </ShowContextMenu.Consumer>
   );
 });
 

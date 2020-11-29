@@ -9,6 +9,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./App.css";
+import { ContextMenu } from "./ContextMenu";
 import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";
 import { Query, getUrlForQuery, empty } from "./Query";
 import { doGet, fetchInProgress } from "./Util";
@@ -142,20 +143,22 @@ function App(props) {
   const { baseUrl, canMakePublic } = props;
   return (
     <BrowserRouter basename={baseUrl}>
-      <Logo />
-      <div id="body">
-        <Switch>
-          <Route path="/query/:model/:fieldStr?.html">
-            <QueryApp config={props} />
-          </Route>
-          <Route path="/views/:pk.html">
-            <EditSavedView {...{ baseUrl, canMakePublic }} />
-          </Route>
-          <Route path="/">
-            <HomePage {...props} />
-          </Route>
-        </Switch>
-      </div>
+      <ContextMenu>
+        <Logo />
+        <div id="body">
+          <Switch>
+            <Route path="/query/:model/:fieldStr?.html">
+              <QueryApp config={props} />
+            </Route>
+            <Route path="/views/:pk.html">
+              <EditSavedView {...{ baseUrl, canMakePublic }} />
+            </Route>
+            <Route path="/">
+              <HomePage {...props} />
+            </Route>
+          </Switch>
+        </div>
+      </ContextMenu>
     </BrowserRouter>
   );
 }
