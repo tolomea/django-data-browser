@@ -80,10 +80,14 @@ const DataCell = React.memo((props) => {
         <td
           className={modelField.type + " " + className || ""}
           colSpan={span || 1}
-          onContextMenu={(e) => {
-            console.log(showContextMenu);
-            e.preventDefault();
-          }}
+          onContextMenu={(e) =>
+            showContextMenu(e, [
+              navigator.clipboard && {
+                name: "Copy",
+                fn: () => navigator.clipboard.writeText(formattedValue),
+              },
+            ])
+          }
         >
           {modelField.type === "html" ? (
             <div dangerouslySetInnerHTML={{ __html: value }} />
