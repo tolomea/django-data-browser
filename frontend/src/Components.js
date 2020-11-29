@@ -26,7 +26,9 @@ function FilterValue(props) {
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         {field.choices.map((option) => (
-          <option value={option}>{option}</option>
+          <option key={option} value={option}>
+            {option}
+          </option>
         ))}
       </select>
     );
