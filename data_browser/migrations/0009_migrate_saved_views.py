@@ -2,12 +2,13 @@
 
 from django.db import migrations
 
-from data_browser.migration_helpers import forwards_0009
-
 
 def forwards(apps, schema_editor):
     View = apps.get_model("data_browser", "View")
-    forwards_0009(View)
+    if View.objects.exists():
+        from data_browser.migration_helpers import forwards_0009
+
+        forwards_0009(View)
 
 
 class Migration(migrations.Migration):
