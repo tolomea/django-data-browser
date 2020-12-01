@@ -409,6 +409,15 @@
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
+                },
+                "not_in_admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": "number",
+                    "prettyName": "Not in admin",
+                    "type": "number"
                 }
             },
             "sortedFields": [
@@ -416,7 +425,8 @@
                 "admin",
                 "in_admin",
                 "inline_admin",
-                "name"
+                "name",
+                "not_in_admin"
             ]
         },
         "core.Producer": {
@@ -629,6 +639,15 @@
                     "prettyName": "Lambda",
                     "type": "html"
                 },
+                "model_not_in_admin": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": "number",
+                    "prettyName": "Model not in admin",
+                    "type": "number"
+                },
                 "name": {
                     "canPivot": true,
                     "choices": [],
@@ -734,6 +753,7 @@
                 "image",
                 "is_onsale",
                 "lambda",
+                "model_not_in_admin",
                 "name",
                 "number_choice",
                 "only_in_list_view",

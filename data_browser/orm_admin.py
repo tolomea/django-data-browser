@@ -267,6 +267,18 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     pretty_name=pretty_name,
                     rel_name=get_model_name(field.related_model),
                 )
+            elif len(field.foreign_related_fields) == 1:  # pragma: no branch
+                field_type, choices = get_field_type(field.foreign_related_fields[0])
+                assert field_type != JSONType
+                fields[field_name] = OrmConcreteField(
+                    model_name=model_name,
+                    name=field_name,
+                    pretty_name=pretty_name,
+                    type_=field_type,
+                    rel_name=field_type.name,
+                    choices=choices,
+                )
+
         # ManyToMany
         elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
             pass

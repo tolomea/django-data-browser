@@ -726,7 +726,9 @@ class TestPermissions:
             fields=KEYS("id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
         )
         assert orm_models["core.Normal"] == OrmModel(
-            fields=KEYS("admin", "id", "name", "in_admin", "inline_admin"),
+            fields=KEYS(
+                "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
+            ),
             admin=ANY(BaseModelAdmin),
         )
 
@@ -738,7 +740,10 @@ class TestPermissions:
         assert "core.InAdmin" not in orm_models
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
-            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
+            fields=KEYS(
+                "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
+            ),
+            admin=ANY(BaseModelAdmin),
         )
 
     @pytest.mark.django_db
@@ -749,7 +754,10 @@ class TestPermissions:
         assert "core.InAdmin" not in orm_models
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
-            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin)
+            fields=KEYS(
+                "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
+            ),
+            admin=ANY(BaseModelAdmin),
         )
 
     @pytest.mark.django_db
@@ -762,7 +770,10 @@ class TestPermissions:
         )
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
-            fields=KEYS("admin", "id", "name", "in_admin"), admin=ANY(BaseModelAdmin)
+            fields=KEYS(
+                "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
+            ),
+            admin=ANY(BaseModelAdmin),
         )
 
 
