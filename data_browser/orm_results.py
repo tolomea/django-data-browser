@@ -2,6 +2,8 @@ import itertools
 import json
 from collections import defaultdict
 
+from django.core.serializers.json import DjangoJSONEncoder
+
 from .orm_admin import admin_get_queryset
 from .orm_lookups import get_django_filter
 from .query import BoundQuery
@@ -162,12 +164,12 @@ def _get_fields(row, fields):
     res = []
     for field in fields:
         v = row[field.queryset_path_str]
-        if isinstance(v, list):  # pragma: postgres
+        if isinstance(v, (list, set)):  # pragma: postgres
             v = tuple(v)
         try:
             hash(v)
         except TypeError:
-            v = json.dumps(v)
+            v = json.dumps(v, cls=DjangoJSONEncoder)
         res.append((field.queryset_path_str, v))
     return tuple(res)
 

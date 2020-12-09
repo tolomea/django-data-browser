@@ -6,6 +6,7 @@ from django.contrib.admin import site
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
 from django.forms.models import _get_foreign_key
@@ -45,7 +46,7 @@ class OrmModel:
         default_filters = _get_option(self.admin, "default_filters")
         assert isinstance(default_filters, list)
         return [
-            (f, l, v if isinstance(v, str) else json.dumps(v))
+            (f, l, v if isinstance(v, str) else json.dumps(v, cls=DjangoJSONEncoder))
             for (f, l, v) in default_filters
         ]
 

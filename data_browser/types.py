@@ -4,6 +4,7 @@ from functools import lru_cache
 
 import dateutil.parser
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import dateparse, html, timezone
 
 from .common import all_subclasses, get_optimal_decimal_places
@@ -394,7 +395,9 @@ class ArrayTypeMixin:
         return (
             lambda value: None
             if value is None
-            else json.dumps([element_formatter(v) for v in value])
+            else json.dumps(
+                [element_formatter(v) for v in value], cls=DjangoJSONEncoder
+            )
         )
 
     @classmethod

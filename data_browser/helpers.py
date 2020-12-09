@@ -2,6 +2,7 @@ import json
 import logging
 from urllib.parse import urlencode
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import BooleanField
 from django.urls import reverse
 
@@ -116,7 +117,9 @@ class AdminMixin(_AdminOptions, _AdminAnnotations):
                 [
                     (
                         f"{field}__{lookup}",
-                        value if isinstance(value, str) else json.dumps(value),
+                        value
+                        if isinstance(value, str)
+                        else json.dumps(value, cls=DjangoJSONEncoder),
                     )
                     for field, lookup, value in args
                 ]
