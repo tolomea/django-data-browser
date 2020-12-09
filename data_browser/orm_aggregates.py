@@ -5,22 +5,12 @@ from django.db.models import DurationField, IntegerField
 from django.db.models.functions import Cast
 
 from .orm_fields import OrmBaseField, OrmBoundField
-from .types import (
-    BooleanType,
-    DateTimeType,
-    DateType,
-    DurationType,
-    NumberType,
-    StringChoiceType,
-    StringType,
-)
+from .types import BooleanType, DateTimeType, DateType, DurationType, NumberType
 from .util import s
 
 _TYPE_AGGREGATES = defaultdict(
     lambda: [("count", NumberType)],
     {
-        StringType: [("count", NumberType)],
-        StringChoiceType: [("count", NumberType)],
         NumberType: [
             ("average", NumberType),
             ("count", NumberType),
