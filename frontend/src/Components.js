@@ -267,6 +267,7 @@ function QueryPage(props) {
         </span>
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
+        <a href={query.getUrlForMedia("sql")}>View SQL Query</a> -{" "}
         <Save
           name="View"
           apiUrl={`${baseUrl}api/views/`}
