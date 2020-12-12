@@ -887,11 +887,11 @@ def test_string_choice_field(get_product_flat):
     models.Product.objects.create(producer=producer, string_choice="a")
     models.Product.objects.create(producer=producer, string_choice="b")
 
-    data = get_product_flat(1, f"string_choice", {"string_choice__equals": ["A"]})
+    data = get_product_flat(1, "string_choice", {"string_choice__equals": ["A"]})
     assert data == [["A"]]
 
     data = get_product_flat(
-        1, f"string_choice__raw", {"string_choice__raw__equals": ["a"]}
+        1, "string_choice__raw", {"string_choice__raw__equals": ["a"]}
     )
     assert data == [["a"]]
 
@@ -901,11 +901,11 @@ def test_number_choice_field(get_product_flat):
     models.Product.objects.create(producer=producer, number_choice=1)
     models.Product.objects.create(producer=producer, number_choice=2)
 
-    data = get_product_flat(1, f"number_choice", {"number_choice__equals": ["A"]})
+    data = get_product_flat(1, "number_choice", {"number_choice__equals": ["A"]})
     assert data == [["A"]]
 
     data = get_product_flat(
-        1, f"number_choice__raw", {"number_choice__raw__equals": [1]}
+        1, "number_choice__raw", {"number_choice__raw__equals": [1]}
     )
     assert data == [[1]]
 

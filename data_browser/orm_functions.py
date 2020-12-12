@@ -140,8 +140,8 @@ class OrmBoundFunctionField(OrmBoundField):
         func = _get_django_function(self.name, qs)[0](s(self.previous.queryset_path))
         return qs.annotate(**{s(self.queryset_path): func})
 
-    def parse(self, lookup, value):
-        parsed, err_message = super().parse(lookup, value)
+    def parse_lookup(self, lookup, value):
+        parsed, err_message = super().parse_lookup(lookup, value)
         if self.name in ["year", "iso_year"] and parsed is not None:
             if parsed < 2:
                 err_message = "Can't filter to years less than 2"

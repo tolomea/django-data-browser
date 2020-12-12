@@ -65,17 +65,21 @@ class BaseType(metaclass=TypeMeta):
         return value
 
     @classmethod
-    def parse(cls, lookup, value, choices):
+    def parse(cls, value, choices):
+        try:
+            return cls._parse(value, choices), None
+        except Exception as e:
+            err_message = str(e) if str(e) else repr(e)
+            return None, err_message
+
+    @classmethod
+    def parse_lookup(cls, lookup, value, choices):
         lookups = cls.lookups
         if lookup not in lookups:
             return None, f"Bad lookup '{lookup}' expected {lookups}"
         else:
             type_ = TYPES[lookups[lookup]]
-            try:
-                return type_._parse(value, choices), None
-            except Exception as e:
-                err_message = str(e) if str(e) else repr(e)
-                return None, err_message
+            return type_.parse(value, choices)
 
     @staticmethod
     def get_format_hints(name, data):

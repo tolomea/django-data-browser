@@ -21,7 +21,7 @@ def _fix_filter(models, field, parts, lookup, value):
         value = {"true": "IsNull", "false": "NotNull"}.get(value.lower(), value)
     elif field.type_ in [StringChoiceType, NumberChoiceType]:
         if lookup in ["equals", "not_equals"]:
-            value, err = field.type_.raw_type.parse(lookup, value, None)
+            value, err = field.type_.raw_type.parse_lookup(lookup, value, None)
             choices = dict(field.choices)
             if err is None and value in choices:
                 value = choices[value]
@@ -36,7 +36,7 @@ def _fix_filter(models, field, parts, lookup, value):
         NumberChoiceArrayType,
     ]:  # pragma: postgres
         if lookup in ["contains", "not_contains"]:
-            value, err = field.type_.raw_type.parse(lookup, value, None)
+            value, err = field.type_.raw_type.parse_lookup(lookup, value, None)
             choices = dict(field.choices)
             if err is None and value in choices:
                 value = choices[value]

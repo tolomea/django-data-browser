@@ -32,7 +32,7 @@ class TestAdminMixin:
             "tests.core.admin.ProductAdmin.annotated.get_queryset",
             wraps=ProductAdmin.annotated.get_queryset,
         )
-        assert admin_client.get(f"/admin/core/product/").status_code == 200
+        assert admin_client.get("/admin/core/product/").status_code == 200
         get_queryset.assert_called_once()
 
     def test_annotation_not_loaded_on_list(self, admin_client, mocker):
@@ -40,7 +40,7 @@ class TestAdminMixin:
             "tests.core.admin.AddressAdmin.andrew.get_queryset",
             wraps=AddressAdmin.andrew.get_queryset,
         )
-        assert admin_client.get(f"/admin/core/address/").status_code == 200
+        assert admin_client.get("/admin/core/address/").status_code == 200
         get_queryset.assert_not_called()
 
     def test_request_factory_compability_list(self, rf, admin_user, mocker):
@@ -69,7 +69,7 @@ class TestAdminMixin:
         get_queryset.assert_called_once()
 
     def test_ddb_url(self, admin_client):
-        resp = admin_client.get(f"/admin/core/product/")
+        resp = admin_client.get("/admin/core/product/")
         assert resp.status_code == 200
         assert (
             resp.context["ddb_url"]
@@ -77,6 +77,6 @@ class TestAdminMixin:
         )
 
     def test_ddb_url_ignored(self, admin_client):
-        resp = admin_client.get(f"/admin/core/ignored/")
+        resp = admin_client.get("/admin/core/ignored/")
         assert resp.status_code == 200
         assert "ddb_url" not in resp.context

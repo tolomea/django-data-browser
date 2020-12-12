@@ -75,13 +75,13 @@ def test_query_misc_formats(admin_client, format):
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_query_explain(admin_client):
     res = admin_client.get(
-        f"/data_browser/query/core.Product/size-0,name+1,size_unit.explain?size__lt=2&id__gt=0"
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.explain?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
 
 
 def test_query_sql_aggregate(admin_client):
-    res = admin_client.get(f"/data_browser/query/core.Product/size__count.sql")
+    res = admin_client.get("/data_browser/query/core.Product/size__count.sql")
     assert res.status_code == 200
 
 

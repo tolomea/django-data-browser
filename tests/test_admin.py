@@ -32,7 +32,12 @@ def test_change_form_links_have_full_url(view, admin_client):
     )
     assert res.status_code == 200
 
-    all_fields = [f for fs in res.context[0]["adminform"] for l in fs for f in l]
+    all_fields = [
+        field
+        for fieldset in res.context[0]["adminform"]
+        for line in fieldset
+        for field in line
+    ]
     for field in all_fields:
         if field.is_readonly and field.field["name"] == "public_link":
             expected = f"http://testserver/data_browser/view/{view.public_slug}.csv"
@@ -59,7 +64,7 @@ def get_admin_details(rf):
 @pytest.fixture
 def staff_user(admin_user):
     admin_user.is_superuser = False
-    admin_user.user_permissions.add(Permission.objects.get(codename=f"change_view"))
+    admin_user.user_permissions.add(Permission.objects.get(codename="change_view"))
     return admin_user
 
 

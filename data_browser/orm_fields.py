@@ -49,8 +49,8 @@ class OrmBoundField:
     def __getattr__(self, name):
         return getattr(self.field, name)
 
-    def parse(self, lookup, value):
-        return self.type_.parse(lookup, value, self.choices)
+    def parse_lookup(self, lookup, value):
+        return self.type_.parse_lookup(lookup, value, self.choices)
 
     @classmethod
     def blank(cls):

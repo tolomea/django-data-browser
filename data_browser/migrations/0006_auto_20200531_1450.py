@@ -19,6 +19,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AlterField(
-            model_name="view", name="query", field=models.TextField(blank=True),
+            model_name="view", name="query", field=models.TextField(blank=True)
         ),
     ]

@@ -9,6 +9,4 @@ class Migration(migrations.Migration):
         ("data_browser", "0002_auto_20200331_1842"),
     ]
 
-    operations = [
-        migrations.RemoveField(model_name="view", name="app",),
-    ]
+    operations = [migrations.RemoveField(model_name="view", name="app")]
