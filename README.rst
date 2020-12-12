@@ -42,7 +42,7 @@ Supported Versions
 The Data Browser is currently tested on:
 
 * Django 2.0 - 3.1
-* Python 3.6 - 3.10
+* Python 3.6 - 3.9
 * MySQL, PostgreSQL, SQLite
 
 We highly recommend and only officially support the latest patch release of each Python and Django series.
@@ -324,7 +324,7 @@ Release History
 |           |                | | Add support for DB query explain via ``.explain`` url.                                 |
 |           |                | | Prevent exception when getting SQL view of pure aggregates.                            |
 |           |                | | Fix incorrect handling of ISO dates whose day portion is less than 13.                 |
-|           |                | | Python 3.9 and 3.10 support.                                                           |
+|           |                | | Python 3.9 support.                                                                    |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.0.0     | 2020-11-09     | | The format of ddb_default_filters has changed.                                         |
 |           |                | | Path and prettyPath have been removed from fields and filters on JSON responses.       |
