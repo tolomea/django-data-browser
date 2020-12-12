@@ -3,6 +3,7 @@ import re
 from functools import lru_cache
 
 import dateutil.parser
+from dateutil import relativedelta
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import dateparse, html, timezone
@@ -193,6 +194,32 @@ class DurationType(BaseType):
 
 
 class DateTypeMixin:
+    # be nice and treat single space in the right place as a +
+    _clause_str = r"(\w{3,})([ +-=])(\d+) *"
+    _clause = re.compile(_clause_str)
+    _clauses = re.compile(fr"^({_clause_str})+$")
+
+    _clause_types = {
+        "day": "day",
+        "fri": relativedelta.FR,
+        "hour": "hour",
+        "mic": "microsecond",
+        "min": "minute",
+        "mond": relativedelta.MO,
+        "mont": "month",
+        "sat": relativedelta.SA,
+        "sec": "second",
+        "sun": relativedelta.SU,
+        "thu": relativedelta.TH,
+        "tue": relativedelta.TU,
+        "wed": relativedelta.WE,
+        "yea": "year",
+    }
+
+    for c1 in _clause_types:
+        for c2 in _clause_types:
+            assert c1 == c2 or not c1.startswith(c2), c2
+
     @classmethod
     def _lookups(cls):
         return {
@@ -207,20 +234,53 @@ class DateTypeMixin:
 
     @classmethod
     def _parse(cls, value, choices):
+        value = value.strip()
+
         d8 = r"(\d{8})"
         d422 = r"(\d{4}[^\d]*\d{2}[^\d]*\d{2})"
         if re.match(r"[^\d]*(" + d8 + "|" + d422 + ")", value):
             # looks like some kinda iso date, roll with the defaults
             res = dateutil.parser.parse(value)
         else:
-            res = {
-                dateutil.parser.parse(value, dayfirst=False, yearfirst=False),
-                dateutil.parser.parse(value, dayfirst=True, yearfirst=False),
-                dateutil.parser.parse(value, dayfirst=False, yearfirst=True),
-                dateutil.parser.parse(value, dayfirst=True, yearfirst=True),
-            }
-            assert len(res) == 1, "Ambiguous value"
-            res = res.pop()
+            try:
+                # not an iso date, let the parser do it thing, but check for ambiguities
+                res = {
+                    dateutil.parser.parse(value, dayfirst=False, yearfirst=False),
+                    dateutil.parser.parse(value, dayfirst=True, yearfirst=False),
+                    dateutil.parser.parse(value, dayfirst=False, yearfirst=True),
+                    dateutil.parser.parse(value, dayfirst=True, yearfirst=True),
+                }
+                assert len(res) == 1, "Ambiguous value"
+                res = res.pop()
+            except dateutil.parser.ParserError:
+                # failing that must be relative delta stuff
+                res = timezone.now()
+                assert cls._clauses.match(value), "Unrecognized value"
+
+                for match in cls._clause.finditer(value):
+                    field, op, val = match.groups()
+                    val = int(val)
+
+                    for prefix, arg in cls._clause_types.items():
+                        if field.startswith(prefix):
+                            break
+                    else:
+                        assert False, "Unrecognized field {field}"
+
+                    if isinstance(arg, str):
+                        # be nice and treat single space in the right place as a +
+                        if op in "+ ":
+                            kwargs = {f"{arg}s": val}
+                        elif op == "-":
+                            kwargs = {f"{arg}s": -val}
+                        else:
+                            kwargs = {arg: val}
+                    else:
+                        kwargs = {"weekday": arg(val)}
+
+                    res += relativedelta.relativedelta(**kwargs)
+                return res
+
         return timezone.make_aware(res)
 
 
