@@ -38,6 +38,7 @@ def _get_query_data(bound_query):
             for filter_ in bound_query.filters
         ],
         "filterErrors": [filter_.err_message for filter_ in bound_query.filters],
+        "filterMessages": [filter_.message for filter_ in bound_query.filters],
         "fields": [
             {
                 "pathStr": field.path_str,
