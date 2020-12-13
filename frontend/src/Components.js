@@ -6,23 +6,23 @@ import { getPartsForQuery, getRelUrlForQuery } from "./Query";
 import "./App.css";
 
 function FilterValue(props) {
-  const { lookup, onChange, value, field } = props;
+  const { lookupType, onChange, value, field } = props;
   const onChangeEvent = (e) => onChange(e.target.value);
-  if (props.lookup.type === "boolean")
+  if (props.lookupType === "boolean")
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         <option value={true}>true</option>
         <option value={false}>false</option>
       </select>
     );
-  else if (props.lookup.type === "isnull")
+  else if (props.lookupType === "isnull")
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         <option value={"IsNull"}>IsNull</option>
         <option value={"NotNull"}>NotNull</option>
       </select>
     );
-  else if (lookup.type.endsWith("choice"))
+  else if (lookupType.endsWith("choice"))
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         {field.choices.map((option) => (
@@ -32,7 +32,7 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (lookup.type === "number")
+  else if (lookupType === "number")
     return (
       <input
         {...{ value }}
@@ -42,7 +42,7 @@ function FilterValue(props) {
         step="0"
       />
     );
-  else if (lookup.type === "jsonfield") {
+  else if (lookupType === "jsonfield") {
     const parts = value.split(/\|(.*)/);
     return (
       <>
@@ -72,9 +72,10 @@ function FilterValue(props) {
 }
 
 function Filter(props) {
-  const { pathStr, index, lookup, query, value, errorMessage, message } = props;
+  const { pathStr, index, lookup, query, value, errorMessage, parsed } = props;
   const field = query.getField(pathStr);
   const type = query.getType(field);
+  const lookupType = type.lookups[lookup].type;
   return (
     <tr>
       <td>
@@ -99,19 +100,20 @@ function Filter(props) {
       <td>=</td>
       <td>
         <FilterValue
-          {...{ value, field }}
+          {...{ value, field, lookupType }}
           onChange={(val) => query.setFilterValue(index, val)}
-          lookup={type.lookups[lookup]}
         />
         {errorMessage && <p className="Error">{errorMessage}</p>}
-        {message && <p className="Success">{message}</p>}
+        {parsed && (lookupType == "date" || lookupType == "datetime") && (
+          <p className="Success">{parsed}</p>
+        )}
       </td>
     </tr>
   );
 }
 
 function Filters(props) {
-  const { query, filterErrors, filterMessages } = props;
+  const { query, filterErrors, parsedFilterValues } = props;
   return (
     <form className="Filters">
       <table className="Flat">
@@ -122,7 +124,7 @@ function Filters(props) {
               {...filter}
               key={index}
               errorMessage={filterErrors[index]}
-              message={filterMessages[index]}
+              parsed={parsedFilterValues[index]}
             />
           ))}
         </tbody>
@@ -237,7 +239,7 @@ function QueryPage(props) {
     model,
     filters,
     filterErrors,
-    filterMessages,
+    parsedFilterValues,
     baseUrl,
     overlay,
     formatHints,
@@ -253,7 +255,7 @@ function QueryPage(props) {
   return (
     <>
       <ModelSelector {...{ query, sortedModels, model }} />
-      <Filters {...{ query, filters, filterErrors, filterMessages }} />
+      <Filters {...{ query, filters, filterErrors, parsedFilterValues }} />
       <p>
         <span className={length >= query.query.limit ? "Error" : ""}>
           Limit:{" "}

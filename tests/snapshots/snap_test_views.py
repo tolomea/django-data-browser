@@ -5560,7 +5560,6 @@ snapshots["test_query_json data"] = {
         {"pathStr": "size_unit", "pivoted": False, "priority": None, "sort": None},
     ],
     "filterErrors": [None, None],
-    "filterMessages": [None, None],
     "filters": [
         {"lookup": "lt", "pathStr": "size", "value": "2"},
         {"lookup": "gt", "pathStr": "id", "value": "0"},
@@ -5579,6 +5578,7 @@ snapshots["test_query_json data"] = {
     "length": 2,
     "limit": 1000,
     "model": "core.Product",
+    "parsedFilterValues": [2.0, 0.0],
     "rows": [
         {"name": "a", "size": 1.0, "size_unit": "g"},
         {"name": "b", "size": 1.0, "size_unit": "g"},
@@ -5608,7 +5608,6 @@ snapshots["test_query_json_pivot data"] = {
         {"pathStr": "size__max", "pivoted": False, "priority": None, "sort": None},
     ],
     "filterErrors": [],
-    "filterMessages": [],
     "filters": [],
     "formatHints": {
         "created_time__month": {},
@@ -5638,6 +5637,7 @@ snapshots["test_query_json_pivot data"] = {
     "length": 3,
     "limit": 1000,
     "model": "core.Product",
+    "parsedFilterValues": [],
     "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],
 }
 
@@ -5648,11 +5648,11 @@ snapshots["test_query_query query"] = {
         {"pathStr": "size_unit", "pivoted": False, "priority": None, "sort": None},
     ],
     "filterErrors": [None, None],
-    "filterMessages": [None, None],
     "filters": [
         {"lookup": "lt", "pathStr": "size", "value": "2"},
         {"lookup": "gt", "pathStr": "id", "value": "0"},
     ],
     "limit": 1000,
     "model": "core.Product",
+    "parsedFilterValues": [2.0, 0.0],
 }

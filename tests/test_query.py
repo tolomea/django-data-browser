@@ -132,14 +132,12 @@ def bound_query(query, orm_models):
 
 
 def parse_helper(type_, choices, value, expected):
-    res, msg, err = type_.parse(value, choices)
+    res, err = type_.parse(value, choices)
     if res is None:
-        assert msg is None
         assert isinstance(err, str)
     else:
         assert res == expected
         assert err is None
-        assert msg is None or isinstance(msg, str)
 
 
 class TestQuery:

@@ -781,7 +781,7 @@ class TestPermissions:
 @pytest.mark.parametrize(
     "lookup,value",
     [
-        ("", "2020-01-02 03:04:05.000006"),
+        ("", "2020-01-02 03:04:05"),
         ("year", 2020),
         ("quarter", 1),
         ("month", "January"),

@@ -63,22 +63,20 @@ class BaseType(metaclass=TypeMeta):
 
     @staticmethod
     def _parse(value, choices):
-        return value, None
+        return value
 
     @classmethod
     def parse(cls, value, choices):
         try:
-            res, msg = cls._parse(value, choices)
-            return res, msg, None
+            return cls._parse(value, choices), None
         except Exception as e:
-            err_message = str(e) if str(e) else repr(e)
-            return None, None, err_message
+            return None, str(e) if str(e) else repr(e)
 
     @classmethod
     def parse_lookup(cls, lookup, value, choices):
         lookups = cls.lookups
         if lookup not in lookups:
-            return None, None, f"Bad lookup '{lookup}' expected {lookups}"
+            return None, f"Bad lookup '{lookup}' expected {lookups}"
         else:
             type_ = TYPES[lookups[lookup]]
             return type_.parse(value, choices)
@@ -130,7 +128,7 @@ class NumberType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        return float(value), None
+        return float(value)
 
     @staticmethod
     def get_format_hints(name, data):
@@ -161,7 +159,7 @@ class RegexType(BaseType):
         # and not kill any in progress transaction as we check
         with atomic():
             list(ContentType.objects.filter(model__regex=value))
-        return value, None
+        return value
 
 
 class DurationType(BaseType):
@@ -186,7 +184,7 @@ class DurationType(BaseType):
 
         res = dateparse.parse_duration(value)
         assert res is not None, "Duration value should be 'DD HH:MM:SS'"
-        return res, None
+        return res
 
     @staticmethod
     def _get_formatter(choices):
@@ -298,10 +296,9 @@ class DateTimeType(DateTypeMixin, BaseType):
     @classmethod
     def _parse(cls, value, choices):
         if value.lower().strip() == "now":
-            res = timezone.now()
+            return timezone.now()
         else:
-            res = super()._parse(value, choices)
-        return res, cls._get_formatter(None)(res)
+            return super()._parse(value, choices)
 
     @staticmethod
     def _get_formatter(choices):
@@ -326,10 +323,10 @@ class DateType(DateTypeMixin, BaseType):
     @classmethod
     def _parse(cls, value, choices):
         if value.lower().strip() == "today":
-            res = timezone.now().date()
+            res = timezone.now()
         else:
-            res = super()._parse(value, choices).date()
-        return res, cls._get_formatter(None)(res)
+            res = super()._parse(value, choices)
+        return res.date()
 
     @staticmethod
     def _get_formatter(choices):
@@ -359,9 +356,9 @@ class BooleanType(BaseType):
     def _parse(value, choices):
         value = value.lower()
         if value == "true":
-            return True, None
+            return True
         elif value == "false":
-            return False, None
+            return False
         else:
             raise ValueError("Expected 'true' or 'false'")
 
@@ -400,7 +397,7 @@ class JSONFieldType(BaseType):
         field, value = value.split("|", 1)
         if not field:
             raise ValueError("Invalid field name")
-        return [field, _json_loads(value)], None
+        return [field, _json_loads(value)]
 
 
 class JSONType(BaseType):
@@ -418,7 +415,7 @@ class JSONType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        return _json_loads(value), None
+        return _json_loads(value)
 
 
 class ChoiceTypeMixin:
@@ -436,7 +433,7 @@ class ChoiceTypeMixin:
         choices = {v: k for k, v in choices}
         if value not in choices:
             raise ValueError(f"Unknown choice '{value}'")
-        return choices[value], None
+        return choices[value]
 
     @classmethod
     def _lookups(cls):
@@ -499,7 +496,7 @@ class ArrayTypeMixin:
         value = _json_loads(value)
         if not isinstance(value, list):
             raise ValueError("Expected a list")
-        return [cls.element_type._parse(v, choices)[0] for v in value], None
+        return [cls.element_type._parse(v, choices)[0] for v in value]
 
 
 class StringArrayType(ArrayTypeMixin, BaseType):
