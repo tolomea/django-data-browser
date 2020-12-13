@@ -9,6 +9,8 @@
   --link-color: #069;
   --border-color: #ccc;
   --shade-color: #eee;
+  --bad-color: red;
+  --good-color: green;
 }
 
 select,
@@ -347,7 +349,11 @@ input.RowLimit {
 }
 
 .Error {
-  color: red;
+  color: var(--bad-color);
+}
+
+.Success {
+  color: var(--good-color);
 }
 
 .ContextMenu {

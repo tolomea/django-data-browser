@@ -54,6 +54,7 @@ function QueryApp(props) {
         length: response.length,
         formatHints: response.formatHints,
         filterErrors: response.filterErrors,
+        filterMessages: response.filterMessages,
       }));
       setStatus(fetchInProgress ? LOADING : undefined);
       return response;

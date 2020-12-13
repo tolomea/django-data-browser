@@ -4,6 +4,7 @@ const empty = {
   body: [[{}]],
   length: 0,
   filterErrors: [],
+  filterMessages: [],
   formatHints: {},
 };
 

@@ -72,7 +72,7 @@ function FilterValue(props) {
 }
 
 function Filter(props) {
-  const { pathStr, index, lookup, query, value, errorMessage } = props;
+  const { pathStr, index, lookup, query, value, errorMessage, message } = props;
   const field = query.getField(pathStr);
   const type = query.getType(field);
   return (
@@ -104,13 +104,14 @@ function Filter(props) {
           lookup={type.lookups[lookup]}
         />
         {errorMessage && <p className="Error">{errorMessage}</p>}
+        {message && <p className="Success">{message}</p>}
       </td>
     </tr>
   );
 }
 
 function Filters(props) {
-  const { query, filterErrors } = props;
+  const { query, filterErrors, filterMessages } = props;
   return (
     <form className="Filters">
       <table className="Flat">
@@ -121,6 +122,7 @@ function Filters(props) {
               {...filter}
               key={index}
               errorMessage={filterErrors[index]}
+              message={filterMessages[index]}
             />
           ))}
         </tbody>
@@ -235,6 +237,7 @@ function QueryPage(props) {
     model,
     filters,
     filterErrors,
+    filterMessages,
     baseUrl,
     overlay,
     formatHints,
@@ -250,7 +253,7 @@ function QueryPage(props) {
   return (
     <>
       <ModelSelector {...{ query, sortedModels, model }} />
-      <Filters {...{ query, filters, filterErrors }} />
+      <Filters {...{ query, filters, filterErrors, filterMessages }} />
       <p>
         <span className={length >= query.query.limit ? "Error" : ""}>
           Limit:{" "}
