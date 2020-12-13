@@ -146,7 +146,7 @@ class BoundFilter(BoundFieldMixin):
         return cls(orm_bound_field, query_filter.lookup, query_filter.value)
 
     def __post_init__(self):
-        self.parsed, self.err_message = self.orm_bound_field.parse_lookup(
+        self.parsed, self.message, self.err_message = self.orm_bound_field.parse_lookup(
             self.lookup, self.value
         )
         self.is_valid = not self.err_message

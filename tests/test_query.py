@@ -26,8 +26,6 @@ from data_browser.types import (
     UnknownType,
 )
 
-from .util import ANY
-
 
 @pytest.fixture
 def query():
@@ -131,6 +129,17 @@ def orm_models():
 @pytest.fixture
 def bound_query(query, orm_models):
     return BoundQuery.bind(query, orm_models)
+
+
+def parse_helper(type_, choices, value, expected):
+    res, msg, err = type_.parse(value, choices)
+    if res is None:
+        assert msg is None
+        assert isinstance(err, str)
+    else:
+        assert res == expected
+        assert err is None
+        assert msg is None or isinstance(msg, str)
 
 
 class TestQuery:
@@ -315,12 +324,12 @@ class TestRegexType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            (".*", (".*", None)),
-            ("\\", (None, ANY(str))),
+            (".*", ".*"),
+            ("\\", None),
         ],
     )
     def test_parse(self, value, expected):
-        assert RegexType.parse(value, None) == expected
+        parse_helper(RegexType, None, value, expected)
 
 
 class TestStringType:
@@ -336,12 +345,12 @@ class TestNumberType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("6.1", (6.1, None)),
-            ("hello", (None, ANY(str))),
+            ("6.1", 6.1),
+            ("hello", None),
         ],
     )
     def test_parse(self, value, expected):
-        assert NumberType.parse(value, None) == expected
+        parse_helper(NumberType, None, value, expected)
 
     def test_default_lookup(self):
         assert NumberType.default_lookup == "equals"
@@ -360,50 +369,50 @@ class TestDateTimeType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("2018-03-20T22:31:23", (dt(2018, 3, 20, 22, 31, 23), None)),
-            ("hello", (None, ANY(str))),
-            ("now", (dt(2020, 12, 13, 9, 42, 53), None)),
+            ("2018-03-20T22:31:23", dt(2018, 3, 20, 22, 31, 23)),
+            ("hello", None),
+            ("now", dt(2020, 12, 13, 9, 42, 53)),
             # dateutil.parser
-            ("11-11-2018", (dt(2018, 11, 11), None)),
-            ("11-22-2018", (dt(2018, 11, 22), None)),
-            ("21-12-2018", (dt(2018, 12, 21), None)),
-            ("11-12-2018", (None, ANY(str))),
-            ("21-22-2018", (None, ANY(str))),
-            ("2018-11-11", (dt(2018, 11, 11), None)),
-            ("2018-11-22", (dt(2018, 11, 22), None)),
-            ("2018-21-12", (None, ANY(str))),
-            ("2018-11-12", (dt(2018, 11, 12), None)),
-            ("2018-21-22", (None, ANY(str))),
-            ("20181111", (dt(2018, 11, 11), None)),
-            ("20181122", (dt(2018, 11, 22), None)),
-            ("20182112", (None, ANY(str))),
-            ("20181112", (dt(2018, 11, 12), None)),
-            ("20182122", (None, ANY(str))),
-            ("181111", (None, ANY(str))),
-            ("181122", (None, ANY(str))),
-            ("182112", (None, ANY(str))),
-            ("181112", (None, ANY(str))),
-            ("182122", (None, ANY(str))),
-            ("111118", (None, ANY(str))),
-            ("112218", (dt(2018, 11, 22), None)),
-            ("211218", (None, ANY(str))),
-            ("111218", (None, ANY(str))),
-            ("212218", (None, ANY(str))),
+            ("11-11-2018", dt(2018, 11, 11)),
+            ("11-22-2018", dt(2018, 11, 22)),
+            ("21-12-2018", dt(2018, 12, 21)),
+            ("11-12-2018", None),
+            ("21-22-2018", None),
+            ("2018-11-11", dt(2018, 11, 11)),
+            ("2018-11-22", dt(2018, 11, 22)),
+            ("2018-21-12", None),
+            ("2018-11-12", dt(2018, 11, 12)),
+            ("2018-21-22", None),
+            ("20181111", dt(2018, 11, 11)),
+            ("20181122", dt(2018, 11, 22)),
+            ("20182112", None),
+            ("20181112", dt(2018, 11, 12)),
+            ("20182122", None),
+            ("181111", None),
+            ("181122", None),
+            ("182112", None),
+            ("181112", None),
+            ("182122", None),
+            ("111118", None),
+            ("112218", dt(2018, 11, 22)),
+            ("211218", None),
+            ("111218", None),
+            ("212218", None),
             # dateutil.relativedelta
-            ("month+1", (dt(2021, 1, 13, 9, 42, 53), None)),
-            ("month 1", (dt(2021, 1, 13, 9, 42, 53), None)),
-            ("month-1", (dt(2020, 11, 13, 9, 42, 53), None)),
-            ("month=1", (dt(2020, 1, 13, 9, 42, 53), None)),
-            ("thurs+1", (dt(2020, 12, 17, 9, 42, 53), None)),
-            ("thurs-1", (dt(2020, 12, 10, 9, 42, 53), None)),
-            ("thurs=1", (None, ANY(str))),
-            ("month+1 month=1", (dt(2021, 1, 13, 9, 42, 53), None)),
-            ("month=1 month+1", (dt(2020, 2, 13, 9, 42, 53), None)),
-            ("bobit+1", (None, ANY(str))),
+            ("month+1", dt(2021, 1, 13, 9, 42, 53)),
+            ("month 1", dt(2021, 1, 13, 9, 42, 53)),
+            ("month-1", dt(2020, 11, 13, 9, 42, 53)),
+            ("month=1", dt(2020, 1, 13, 9, 42, 53)),
+            ("thurs+1", dt(2020, 12, 17, 9, 42, 53)),
+            ("thurs-1", dt(2020, 12, 10, 9, 42, 53)),
+            ("thurs=1", None),
+            ("month+1 month=1", dt(2021, 1, 13, 9, 42, 53)),
+            ("month=1 month+1", dt(2020, 2, 13, 9, 42, 53)),
+            ("bobit+1", None),
         ],
     )
     def test_parse(self, value, expected):
-        assert DateTimeType.parse(value, None) == expected
+        parse_helper(DateTimeType, None, value, expected)
 
     def test_default_lookup(self):
         assert DateTimeType.default_lookup == "equals"
@@ -433,13 +442,13 @@ class TestDurationType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("5 days", (timedelta(days=5), None)),
-            ("5 5:5", (timedelta(days=5, hours=5, minutes=5), None)),
-            ("5 dayss", (None, ANY(str))),
+            ("5 days", timedelta(days=5)),
+            ("5 5:5", timedelta(days=5, hours=5, minutes=5)),
+            ("5 dayss", None),
         ],
     )
     def test_parse(self, value, expected):
-        assert DurationType.parse(value, None) == expected
+        parse_helper(DurationType, None, value, expected)
 
     def test_default_lookup(self):
         assert DurationType.default_lookup == "equals"
@@ -458,18 +467,18 @@ class TestDateType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("2018-03-20T22:31:23", (dt(2018, 3, 20).date(), None)),
-            ("hello", (None, ANY(str))),
-            ("today", (dt(2020, 12, 13).date(), None)),
-            ("11-22-2018", (dt(2018, 11, 22).date(), None)),
-            ("21-12-2018", (dt(2018, 12, 21).date(), None)),
-            ("11-12-2018", (None, ANY(str))),
-            ("21-22-2018", (None, ANY(str))),
-            ("days+1", (dt(2020, 12, 14).date(), None)),
+            ("2018-03-20T22:31:23", dt(2018, 3, 20).date()),
+            ("hello", None),
+            ("today", dt(2020, 12, 13).date()),
+            ("11-22-2018", dt(2018, 11, 22).date()),
+            ("21-12-2018", dt(2018, 12, 21).date()),
+            ("11-12-2018", None),
+            ("21-22-2018", None),
+            ("days+1", dt(2020, 12, 14).date()),
         ],
     )
     def test_parse(self, value, expected):
-        assert DateType.parse(value, None) == expected
+        parse_helper(DateType, None, value, expected)
 
     def test_default_lookup(self):
         assert DateType.default_lookup == "equals"
@@ -483,13 +492,13 @@ class TestBooleanType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("True", (True, None)),
-            ("False", (False, None)),
-            ("hello", (None, ANY(str))),
+            ("True", True),
+            ("False", False),
+            ("hello", None),
         ],
     )
     def test_parse(self, value, expected):
-        assert BooleanType.parse(value, None) == expected
+        parse_helper(BooleanType, None, value, expected)
 
     def test_format(self):
         assert BooleanType.get_formatter(None)(None) is None
@@ -511,12 +520,12 @@ class TestStringChoiceType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("B", ("b", None)),
-            ("X", (None, ANY(str))),
+            ("B", "b"),
+            ("X", None),
         ],
     )
     def test_parse(self, value, expected):
-        assert NumberChoiceType.parse(value, self.choices) == expected
+        parse_helper(NumberChoiceType, self.choices, value, expected)
 
 
 class TestNumberChoiceType:
@@ -532,12 +541,12 @@ class TestNumberChoiceType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("B", (2, None)),
-            ("X", (None, ANY(str))),
+            ("B", 2),
+            ("X", None),
         ],
     )
     def test_parse(self, value, expected):
-        assert NumberChoiceType.parse(value, self.choices) == expected
+        parse_helper(NumberChoiceType, self.choices, value, expected)
 
 
 class TestHTMLType:
@@ -554,12 +563,12 @@ class TestIsNullType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("IsNull", (True, None)),
-            ("NotNull", (False, None)),
+            ("IsNull", True),
+            ("NotNull", False),
         ],
     )
     def test_parse(self, value, expected):
-        assert IsNullType.parse(value, IsNullType.choices) == expected
+        parse_helper(IsNullType, IsNullType.choices, value, expected)
 
 
 class TestUnknownType:
@@ -571,9 +580,9 @@ class TestArrayStringType:
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ('["X"]', (["X"], None)),
-            ('"X"', (None, ANY(str))),
+            ('["X"]', ["X"]),
+            ('"X"', None),
         ],
     )
     def test_parse(self, value, expected):
-        assert StringArrayType.parse(value, None) == expected
+        parse_helper(StringArrayType, None, value, expected)

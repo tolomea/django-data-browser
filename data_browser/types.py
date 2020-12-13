@@ -63,21 +63,22 @@ class BaseType(metaclass=TypeMeta):
 
     @staticmethod
     def _parse(value, choices):
-        return value
+        return value, None
 
     @classmethod
     def parse(cls, value, choices):
         try:
-            return cls._parse(value, choices), None
+            res, msg = cls._parse(value, choices)
+            return res, msg, None
         except Exception as e:
             err_message = str(e) if str(e) else repr(e)
-            return None, err_message
+            return None, None, err_message
 
     @classmethod
     def parse_lookup(cls, lookup, value, choices):
         lookups = cls.lookups
         if lookup not in lookups:
-            return None, f"Bad lookup '{lookup}' expected {lookups}"
+            return None, None, f"Bad lookup '{lookup}' expected {lookups}"
         else:
             type_ = TYPES[lookups[lookup]]
             return type_.parse(value, choices)
@@ -129,7 +130,7 @@ class NumberType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        return float(value)
+        return float(value), None
 
     @staticmethod
     def get_format_hints(name, data):
@@ -160,7 +161,7 @@ class RegexType(BaseType):
         # and not kill any in progress transaction as we check
         with atomic():
             list(ContentType.objects.filter(model__regex=value))
-        return value
+        return value, None
 
 
 class DurationType(BaseType):
@@ -185,7 +186,7 @@ class DurationType(BaseType):
 
         res = dateparse.parse_duration(value)
         assert res is not None, "Duration value should be 'DD HH:MM:SS'"
-        return res
+        return res, None
 
     @staticmethod
     def _get_formatter(choices):
@@ -298,8 +299,10 @@ class DateTimeType(DateTypeMixin, BaseType):
     @classmethod
     def _parse(cls, value, choices):
         if value.lower().strip() == "now":
-            return timezone.now()
-        return super()._parse(value, choices)
+            res = timezone.now()
+        else:
+            res = super()._parse(value, choices)
+        return res, str(res)
 
     @staticmethod
     def _get_formatter(choices):
@@ -318,8 +321,10 @@ class DateType(DateTypeMixin, BaseType):
     @classmethod
     def _parse(cls, value, choices):
         if value.lower().strip() == "today":
-            return timezone.now().date()
-        return super()._parse(value, choices).date()
+            res = timezone.now().date()
+        else:
+            res = super()._parse(value, choices).date()
+        return res, str(res)
 
     @staticmethod
     def _get_formatter(choices):
@@ -349,9 +354,9 @@ class BooleanType(BaseType):
     def _parse(value, choices):
         value = value.lower()
         if value == "true":
-            return True
+            return True, None
         elif value == "false":
-            return False
+            return False, None
         else:
             raise ValueError("Expected 'true' or 'false'")
 
@@ -390,7 +395,7 @@ class JSONFieldType(BaseType):
         field, value = value.split("|", 1)
         if not field:
             raise ValueError("Invalid field name")
-        return [field, _json_loads(value)]
+        return [field, _json_loads(value)], None
 
 
 class JSONType(BaseType):
@@ -408,7 +413,7 @@ class JSONType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
-        return _json_loads(value)
+        return _json_loads(value), None
 
 
 class ChoiceTypeMixin:
@@ -426,7 +431,7 @@ class ChoiceTypeMixin:
         choices = {v: k for k, v in choices}
         if value not in choices:
             raise ValueError(f"Unknown choice '{value}'")
-        return choices[value]
+        return choices[value], None
 
     @classmethod
     def _lookups(cls):
@@ -489,7 +494,7 @@ class ArrayTypeMixin:
         value = _json_loads(value)
         if not isinstance(value, list):
             raise ValueError("Expected a list")
-        return [cls.element_type._parse(v, choices) for v in value]
+        return [cls.element_type._parse(v, choices)[0] for v in value], None
 
 
 class StringArrayType(ArrayTypeMixin, BaseType):
