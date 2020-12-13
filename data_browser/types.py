@@ -195,8 +195,7 @@ class DurationType(BaseType):
 
 
 class DateTypeMixin:
-    # be nice and treat single space in the right place as a +
-    _clause_str = r"(\w{3,})([ +-=])(\d+) *"
+    _clause_str = r"(\w{3,})([+-=])(\d+) *"
     _clause = re.compile(_clause_str)
     _clauses = re.compile(fr"^({_clause_str})+$")
 
@@ -269,17 +268,17 @@ class DateTypeMixin:
                         assert False, f"Unrecognized field {field}"
 
                     if isinstance(arg, str):
-                        # be nice and treat single space in the right place as a +
-                        if op in "+ ":
+                        if op == "+":
                             kwargs = {f"{arg}s": val}
                         elif op == "-":
                             kwargs = {f"{arg}s": -val}
                         else:
                             if arg in ["year", "month", "day"]:
-                                assert val > 0, f"Can't set {arg} to {val}"
+                                assert val > 0, f"Can't set {field} to {val}"
                             kwargs = {arg: val}
                     else:
-                        if op in "+ ":
+                        assert val > 0, f"Can't set {field} to {val}"
+                        if op == "+":
                             kwargs = {"weekday": arg(val)}
                         elif op == "-":
                             kwargs = {"weekday": arg(-val)}
@@ -302,17 +301,23 @@ class DateTimeType(DateTypeMixin, BaseType):
             res = timezone.now()
         else:
             res = super()._parse(value, choices)
-        return res, str(res)
+        return res, cls._get_formatter(None)(res)
 
     @staticmethod
     def _get_formatter(choices):
         assert not choices
         if settings.USE_TZ:
             return (
-                lambda value: None if value is None else str(timezone.make_naive(value))
+                lambda value: None
+                if value is None
+                else str(timezone.make_naive(value).replace(microsecond=0))
             )
         else:
-            return lambda value: None if value is None else str(value)
+            return (
+                lambda value: None
+                if value is None
+                else str(value.replace(microsecond=0))
+            )
 
 
 class DateType(DateTypeMixin, BaseType):
@@ -324,7 +329,7 @@ class DateType(DateTypeMixin, BaseType):
             res = timezone.now().date()
         else:
             res = super()._parse(value, choices).date()
-        return res, str(res)
+        return res, cls._get_formatter(None)(res)
 
     @staticmethod
     def _get_formatter(choices):

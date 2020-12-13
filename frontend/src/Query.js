@@ -20,7 +20,7 @@ function getPartsForQuery(query) {
       )
       .join(","),
     query: query.filters
-      .map((f) => `${f.pathStr}__${f.lookup}=${f.value}`)
+      .map((f) => `${f.pathStr}__${f.lookup}=${encodeURIComponent(f.value)}`)
       .join("&"),
     limit: query.limit,
   };

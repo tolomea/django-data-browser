@@ -306,6 +306,7 @@ Release History
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
 |           |                | Relative time support in date and time filters.                                          |
+|           |                | Show parsed date and datetimes next to filters.                                          |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.2     | 2020-12-09     | Remove length function from UUID's.                                                      |
 |           |                | FK's with no admin are exposed as just the FK field.                                     |
