@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 
 import pytest
+import time_machine
 from django.http import QueryDict
 from django.utils import timezone
 
@@ -355,12 +356,14 @@ def dt(Y, M, D, h=0, m=0, s=0):
 
 
 class TestDateTimeType:
+    @time_machine.travel("2020-12-13 09:42:53", tick=False)
     @pytest.mark.parametrize(
         "value,expected",
         [
             ("2018-03-20T22:31:23", (dt(2018, 3, 20, 22, 31, 23), None)),
             ("hello", (None, ANY(str))),
-            ("now", (ANY(datetime), None)),
+            ("now", (dt(2020, 12, 13, 9, 42, 53), None)),
+            # dateutil.parser
             ("11-11-2018", (dt(2018, 11, 11), None)),
             ("11-22-2018", (dt(2018, 11, 22), None)),
             ("21-12-2018", (dt(2018, 12, 21), None)),
@@ -386,6 +389,17 @@ class TestDateTimeType:
             ("211218", (None, ANY(str))),
             ("111218", (None, ANY(str))),
             ("212218", (None, ANY(str))),
+            # dateutil.relativedelta
+            ("month+1", (dt(2021, 1, 13, 9, 42, 53), None)),
+            ("month 1", (dt(2021, 1, 13, 9, 42, 53), None)),
+            ("month-1", (dt(2020, 11, 13, 9, 42, 53), None)),
+            ("month=1", (dt(2020, 1, 13, 9, 42, 53), None)),
+            ("thurs+1", (dt(2020, 12, 17, 9, 42, 53), None)),
+            ("thurs-1", (dt(2020, 12, 10, 9, 42, 53), None)),
+            ("thurs=1", (None, ANY(str))),
+            ("month+1 month=1", (dt(2021, 1, 13, 9, 42, 53), None)),
+            ("month=1 month+1", (dt(2020, 2, 13, 9, 42, 53), None)),
+            ("bobit+1", (None, ANY(str))),
         ],
     )
     def test_parse(self, value, expected):
@@ -440,16 +454,18 @@ class TestDurationType:
 
 
 class TestDateType:
+    @time_machine.travel("2020-12-13 09:42:53", tick=False)
     @pytest.mark.parametrize(
         "value,expected",
         [
-            ("2018-03-20T22:31:23", (ANY(date), None)),
+            ("2018-03-20T22:31:23", (dt(2018, 3, 20).date(), None)),
             ("hello", (None, ANY(str))),
-            ("today", (ANY(date), None)),
-            ("11-22-2018", (ANY(date), None)),
-            ("21-12-2018", (ANY(date), None)),
+            ("today", (dt(2020, 12, 13).date(), None)),
+            ("11-22-2018", (dt(2018, 11, 22).date(), None)),
+            ("21-12-2018", (dt(2018, 12, 21).date(), None)),
             ("11-12-2018", (None, ANY(str))),
             ("21-22-2018", (None, ANY(str))),
+            ("days+1", (dt(2020, 12, 14).date(), None)),
         ],
     )
     def test_parse(self, value, expected):

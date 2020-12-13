@@ -200,20 +200,20 @@ class DateTypeMixin:
     _clauses = re.compile(fr"^({_clause_str})+$")
 
     _clause_types = {
-        "day": "day",
-        "fri": relativedelta.FR,
-        "hour": "hour",
-        "mic": "microsecond",
-        "min": "minute",
-        "mond": relativedelta.MO,
+        "yea": "year",
         "mont": "month",
-        "sat": relativedelta.SA,
+        "day": "day",
+        "hour": "hour",
+        "min": "minute",
         "sec": "second",
-        "sun": relativedelta.SU,
-        "thu": relativedelta.TH,
+        "mic": "microsecond",
+        "mond": relativedelta.MO,
         "tue": relativedelta.TU,
         "wed": relativedelta.WE,
-        "yea": "year",
+        "thu": relativedelta.TH,
+        "fri": relativedelta.FR,
+        "sat": relativedelta.SA,
+        "sun": relativedelta.SU,
     }
 
     for c1 in _clause_types:
@@ -265,7 +265,7 @@ class DateTypeMixin:
                         if field.startswith(prefix):
                             break
                     else:
-                        assert False, "Unrecognized field {field}"
+                        assert False, f"Unrecognized field {field}"
 
                     if isinstance(arg, str):
                         # be nice and treat single space in the right place as a +
@@ -274,9 +274,17 @@ class DateTypeMixin:
                         elif op == "-":
                             kwargs = {f"{arg}s": -val}
                         else:
+                            if arg in ["year", "month", "day"]:
+                                assert val > 0, f"Can't set {arg} to {val}"
                             kwargs = {arg: val}
                     else:
-                        kwargs = {"weekday": arg(val)}
+                        if op in "+ ":
+                            kwargs = {"weekday": arg(val)}
+                        elif op == "-":
+                            kwargs = {"weekday": arg(-val)}
+                        else:
+                            # =
+                            assert False, f"{op} not supported for {field}"
 
                     res += relativedelta.relativedelta(**kwargs)
                 return res
