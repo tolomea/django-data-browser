@@ -277,6 +277,16 @@ As with ``get_queryset`` the Data Browser will set ``request.data_browser`` when
 The Django User Admin has code to change the fieldsets when adding a new user. To compensate for this, when calling ``get_fieldsets`` on a subclass of ``django.contrib.auth.admin.UserAdmin`` the Data Browser will pass a newly constructed instance of the relevant model. This behavior can be disabled by setting ``settings.DATA_BROWSER_AUTH_USER_COMPAT`` to ``False``.
 
 
+Style customization
+*************************
+
+You can override the ``data_browser/index.html`` template per https://docs.djangoproject.com/en/3.1/howto/overriding-templates/#extending-an-overridden-template (make sure data_browser is after your app in ``INSTALLED_APPS``) and replace the ``extrahead`` block.
+
+This will let you inject custom CSS and stylesheets.
+
+However note that because of how the normal CSS is built into the JS any custom CSS will be before the normal CSS so you will need to use more specific selectors or ``!important``.
+
+
 Version numbers
 *************************
 
@@ -308,6 +318,7 @@ Release History
 |           |                | Fix UUID's not being filterable.                                                         |
 |           |                | Fix right click drill and filter trying to filter unfilterable fields.                   |
 |           |                | Fix spurious 0 appearing below numeric 0 filter values.                                  |
+|           |                | Add an extrahead block to the template and documentation for overriding CSS.             |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.3     | 2020-12-13     | Relative time support in date and time filters.                                          |
 |           |                | Show parsed dates and datetimes next to filters.                                         |

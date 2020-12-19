@@ -43,6 +43,7 @@
     />
     <link rel="manifest" href="{% url 'data_browser:home' %}site.webmanifest" />
     <title>View</title>
+    {% block extrahead %} {% endblock %}
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
