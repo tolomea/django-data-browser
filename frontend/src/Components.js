@@ -104,7 +104,7 @@ function Filter(props) {
           onChange={(val) => query.setFilterValue(index, val)}
         />
         {errorMessage && <p className="Error">{errorMessage}</p>}
-        {parsed && (lookupType == "date" || lookupType == "datetime") && (
+        {parsed && (lookupType === "date" || lookupType === "datetime") && (
           <p className="Success">{parsed}</p>
         )}
       </td>
@@ -272,7 +272,7 @@ function QueryPage(props) {
         </span>
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
         <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
-        <a href={query.getUrlForMedia("sql")} target="_blank">View SQL Query</a> -{" "}
+        <a href={query.getUrlForMedia("sql")}>View SQL Query</a> -{" "}
         <Save
           name="View"
           apiUrl={`${baseUrl}api/views/`}
