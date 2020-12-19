@@ -104,9 +104,10 @@ function Filter(props) {
           onChange={(val) => query.setFilterValue(index, val)}
         />
         {errorMessage && <p className="Error">{errorMessage}</p>}
-        {parsed && (lookupType === "date" || lookupType === "datetime") && (
-          <p className="Success">{parsed}</p>
-        )}
+        {parsed !== null &&
+          (lookupType === "date" || lookupType === "datetime") && (
+            <p className="Success">{parsed}</p>
+          )}
       </td>
     </tr>
   );

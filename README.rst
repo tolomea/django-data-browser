@@ -307,6 +307,7 @@ Release History
 +===========+================+==========================================================================================+
 |           |                | Fix UUID's not being filterable.                                                         |
 |           |                | Fix right click drill and filter trying to filter unfilterable fields.                   |
+|           |                | Fix spurious 0 appearing below numeric 0 filter values.                                  |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.3     | 2020-12-13     | Relative time support in date and time filters.                                          |
 |           |                | Show parsed dates and datetimes next to filters.                                         |
