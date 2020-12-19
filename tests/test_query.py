@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from uuid import UUID
 
 import pytest
 import time_machine
@@ -24,6 +25,7 @@ from data_browser.types import (
     StringChoiceType,
     StringType,
     UnknownType,
+    UUIDType,
 )
 
 
@@ -567,6 +569,26 @@ class TestIsNullType:
     )
     def test_parse(self, value, expected):
         parse_helper(IsNullType, IsNullType.choices, value, expected)
+
+
+class TestUUIDType:
+    s = "210081a4-7315-4173-aa73-4bab47b2f9a5"
+    u = UUID(s)
+
+    def test_format(self):
+        assert UUIDType.get_formatter(None)(self.u) == self.s
+        assert UUIDType.get_formatter(None)(None) is None
+
+    @pytest.mark.parametrize(
+        "value,expected",
+        [
+            (s, u),
+            (s.replace("-", ""), u),
+            (s[1:], None),
+        ],
+    )
+    def test_parse(self, value, expected):
+        parse_helper(UUIDType, None, value, expected)
 
 
 class TestUnknownType:

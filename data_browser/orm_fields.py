@@ -5,7 +5,15 @@ from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.utils.html import format_html
 
-from .types import ASC, BaseType, BooleanType, DateTimeType, DateType, HTMLType
+from .types import (
+    ASC,
+    BaseType,
+    BooleanType,
+    DateTimeType,
+    DateType,
+    HTMLType,
+    UnknownType,
+)
 from .util import s
 
 
@@ -79,7 +87,18 @@ class OrmBaseField:
     def __post_init__(self):
         if not self.type_:
             assert self.rel_name
-        if self.concrete or self.can_pivot:
+        if self.concrete:
+            assert self.type_
+            # ideally all concrete fields would be equals filterable
+            assert "equals" in self.type_.lookups or self.type_ in {
+                UnknownType,
+                HTMLType,
+            }, (
+                self.model_name,
+                self.name,
+                self.type_,
+            )
+        if self.can_pivot:
             assert self.type_
 
     def get_formatter(self):

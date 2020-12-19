@@ -1916,6 +1916,33 @@
                 "count",
                 "is_null"
             ]
+        },
+        "uuid": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": null,
+                    "prettyName": "count",
+                    "type": "number"
+                },
+                "is_null": {
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": null,
+                    "prettyName": "is null",
+                    "type": "isnull"
+                }
+            },
+            "sortedFields": [
+                "count",
+                "is_null"
+            ]
         }
     },
     "baseUrl": "/data_browser/",
@@ -2065,10 +2092,16 @@
             ]
         },
         "html": {
-            "defaultLookup": null,
+            "defaultLookup": "is_null",
             "defaultValue": "",
-            "lookups": {},
-            "sortedLookups": []
+            "lookups": {
+                "is_null": {
+                    "type": "isnull"
+                }
+            },
+            "sortedLookups": [
+                "is_null"
+            ]
         },
         "isnull": {
             "defaultLookup": "equals",
@@ -2119,10 +2152,24 @@
             ]
         },
         "jsonfield": {
-            "defaultLookup": null,
+            "defaultLookup": "equals",
             "defaultValue": "|",
-            "lookups": {},
-            "sortedLookups": []
+            "lookups": {
+                "equals": {
+                    "type": "jsonfield"
+                },
+                "is_null": {
+                    "type": "isnull"
+                },
+                "not_equals": {
+                    "type": "jsonfield"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "is_null"
+            ]
         },
         "number": {
             "defaultLookup": "equals",
@@ -2253,10 +2300,24 @@
             ]
         },
         "regex": {
-            "defaultLookup": null,
+            "defaultLookup": "equals",
             "defaultValue": ".*",
-            "lookups": {},
-            "sortedLookups": []
+            "lookups": {
+                "equals": {
+                    "type": "regex"
+                },
+                "is_null": {
+                    "type": "isnull"
+                },
+                "not_equals": {
+                    "type": "regex"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
+                "is_null"
+            ]
         },
         "string": {
             "defaultLookup": "equals",
@@ -2411,6 +2472,26 @@
                 }
             },
             "sortedLookups": [
+                "is_null"
+            ]
+        },
+        "uuid": {
+            "defaultLookup": "equals",
+            "defaultValue": null,
+            "lookups": {
+                "equals": {
+                    "type": "uuid"
+                },
+                "is_null": {
+                    "type": "isnull"
+                },
+                "not_equals": {
+                    "type": "uuid"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
                 "is_null"
             ]
         }

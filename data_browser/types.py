@@ -1,5 +1,6 @@
 import json
 import re
+import uuid
 from functools import lru_cache
 
 import dateutil.parser
@@ -48,9 +49,9 @@ class BaseType(metaclass=TypeMeta):
     def __init__(self):
         assert False
 
-    @staticmethod
-    def _lookups():
-        return {}
+    @classmethod
+    def _lookups(cls):
+        return {"equals": cls, "not_equals": cls, "is_null": IsNullType}
 
     @staticmethod
     def _get_formatter(choices):
@@ -337,7 +338,7 @@ class DateType(DateTypeMixin, BaseType):
 class HTMLType(StringType):
     @staticmethod
     def _lookups():
-        return {}
+        return {"is_null": IsNullType}
 
     @staticmethod
     def _get_formatter(choices):
@@ -347,10 +348,6 @@ class HTMLType(StringType):
 
 class BooleanType(BaseType):
     default_value = True
-
-    @classmethod
-    def _lookups(cls):
-        return {"equals": cls, "not_equals": cls, "is_null": IsNullType}
 
     @staticmethod
     def _parse(value, choices):
@@ -366,6 +363,17 @@ class BooleanType(BaseType):
     def _get_formatter(choices):
         assert not choices
         return lambda value: None if value is None else bool(value)
+
+
+class UUIDType(BaseType):
+    @staticmethod
+    def _get_formatter(choices):
+        assert not choices
+        return lambda value: None if value is None else str(value)
+
+    @staticmethod
+    def _parse(value, choices):
+        return uuid.UUID(value)
 
 
 class UnknownType(BaseType):
@@ -434,10 +442,6 @@ class ChoiceTypeMixin:
         if value not in choices:
             raise ValueError(f"Unknown choice '{value}'")
         return choices[value]
-
-    @classmethod
-    def _lookups(cls):
-        return {"equals": cls, "not_equals": cls, "is_null": IsNullType}
 
 
 class StringChoiceType(ChoiceTypeMixin, BaseType):

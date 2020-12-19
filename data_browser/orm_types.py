@@ -16,6 +16,7 @@ from .types import (
     StringChoiceType,
     StringType,
     UnknownType,
+    UUIDType,
 )
 
 try:
@@ -48,7 +49,7 @@ _FIELD_TYPE_MAP = {
     models.NullBooleanField: BooleanType,
     models.DateTimeField: DateTimeType,
     models.DateField: DateType,
-    models.UUIDField: UnknownType,
+    models.UUIDField: UUIDType,
     **{f: StringType for f in _STRING_FIELDS},
     **{f: NumberType for f in _NUMBER_FIELDS},
 }
