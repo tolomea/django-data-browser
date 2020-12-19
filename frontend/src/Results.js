@@ -18,7 +18,7 @@ function HeadCell(props) {
   const modelField = query.getField(field.pathStr);
   const type = query.getType(modelField);
   return (
-    <th {...{ className }}>
+    <th className={`HeadCell ${className}`}>
       <SLink onClick={() => query.removeField(field)}>close</SLink>
       <SLink onClick={() => query.moveField(field, true)}>chevron_left</SLink>
       <SLink onClick={() => query.moveField(field, false)}>chevron_right</SLink>
@@ -106,7 +106,7 @@ function DataCell(props) {
 
   return (
     <td
-      className={modelField.type + " " + className || ""}
+      className={`DataCell ${modelField.type + " " + className || ""}`}
       colSpan={span || 1}
       onContextMenu={onContextMenu}
     >

@@ -10,10 +10,12 @@ Roadmap (in no particular order)
 *********************************
 
 * UI improvements
-* ToMany support
-* Advanced filtering
-* PII controls
 * Graphs
+* And/Or filtering
+* User specified calculated fields
+* Comparing to other fields
+* Scheduled views
+* Totals
 
 
 URL Format

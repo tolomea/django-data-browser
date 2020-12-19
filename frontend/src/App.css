@@ -59,7 +59,7 @@ select {
   width: auto;
   padding: 2px;
 }
-.Link {
+.TLink {
   background: none !important;
   border: none;
   padding: 0 !important;
@@ -67,10 +67,10 @@ select {
   color: var(--link-color);
   text-align: left;
 }
-.Link:hover {
+.TLink:hover {
   text-decoration: underline;
 }
-.sLink {
+.SLink {
   background: none !important;
   border: none;
   padding: 0 !important;
@@ -80,7 +80,7 @@ select {
   font-size: inherit;
   font-weight: inherit;
 }
-.sLink:hover {
+.SLink:hover {
   text-decoration: underline;
 }
 input::placeholder,
@@ -95,10 +95,17 @@ textarea::placeholder {
   max-height: 100vh;
   padding: 10px 0 0 0;
 }
-#body > * {
+
+.QueryPage {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  padding: 10px 0 0 0;
+}
+.QueryPage > * {
   flex: 0 0 auto;
 }
-#body > .MainSpace {
+.QueryPage > .MainSpace {
   flex: 0 1 auto;
   overflow-y: hidden;
 }
@@ -164,8 +171,8 @@ select.Lookup {
   width: 100%;
 }
 .Filters table,
-.Filters table.Flat th,
-.Filters table.Flat td {
+.Filters table th,
+.Filters table td {
   border: none;
   padding: 3px 1px;
 }
@@ -258,10 +265,10 @@ a.Logo > span.Version {
 
 /* Index Page */
 
-div.Index {
+div.HomePage {
   margin: 30px;
 }
-div.Index > div {
+div.HomePage > div {
   width: 46%;
   float: left;
   color: var(--dark-color);
@@ -270,7 +277,7 @@ div.Index > div {
   margin: 30px 2% 0 2%;
   padding: 0 2% 2% 2%;
 }
-div.Index .Link {
+div.HomePage .Link {
   display: inline-block;
   font-size: 20px;
 }

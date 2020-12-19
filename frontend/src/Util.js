@@ -38,7 +38,7 @@ function TLink(props) {
         <button
             {...{ onClick }}
             type="button"
-            className={"Link " + (className || "")}
+            className={"TLink " + (className || "")}
         >
             {children}
         </button>
@@ -51,7 +51,7 @@ function SLink(props) {
         <button
             {...{ onClick }}
             type="button"
-            className={"sLink material-icons " + (className || "")}
+            className={"SLink material-icons " + (className || "")}
         >
             {children}
         </button>

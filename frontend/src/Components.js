@@ -77,7 +77,7 @@ function Filter(props) {
   const type = query.getType(field);
   const lookupType = type.lookups[lookup].type;
   return (
-    <tr>
+    <tr className="Filter">
       <td>
         <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
         <TLink onClick={() => query.addField(pathStr, field.defaultSort)}>
@@ -117,7 +117,7 @@ function Filters(props) {
   const { query, filterErrors, parsedFilterValues } = props;
   return (
     <form className="Filters">
-      <table className="Flat">
+      <table>
         <tbody>
           {props.filters.map((filter, index) => (
             <Filter
@@ -140,7 +140,7 @@ function Field(props) {
   const [toggled, setToggled] = useState(false);
   return (
     <>
-      <tr>
+      <tr className="Field">
         <td>
           {modelField.concrete && type.defaultLookup && (
             <SLink onClick={() => query.addFilter(path.join("__"))}>
@@ -188,7 +188,7 @@ function AllFields(props) {
   const { query, model, path } = props;
   const modelFields = query.getModelFields(model);
   return (
-    <table>
+    <table className="AllFields">
       <tbody>
         {modelFields.sortedFields.map((fieldName) => {
           const modelField = modelFields.fields[fieldName];
@@ -254,7 +254,7 @@ function QueryPage(props) {
   else results = <h2>No fields selected</h2>;
 
   return (
-    <>
+    <div className="QueryPage">
       <ModelSelector {...{ query, sortedModels, model }} />
       <Filters {...{ query, filters, filterErrors, parsedFilterValues }} />
       <p>
@@ -288,7 +288,7 @@ function QueryPage(props) {
         {results}
         <div />
       </div>
-    </>
+    </div>
   );
 }
 
@@ -396,7 +396,7 @@ function SavedViewList(props) {
   const [savedViews] = useData(`${baseUrl}api/views/`);
   if (!savedViews) return "";
   return (
-    <div>
+    <div className="SavedViewList">
       <h1>Saved Views</h1>
       <div>
         {savedViews.map((view, index) => (
@@ -418,7 +418,7 @@ function SavedViewList(props) {
 function HomePage(props) {
   const { sortedModels, baseUrl, defaultRowLimit, allModelFields } = props;
   return (
-    <div className="Index">
+    <div className="HomePage">
       <div>
         <h1>Models</h1>
         <div>
