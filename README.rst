@@ -315,10 +315,10 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | Fix UUID's not being filterable.                                                         |
+| 3.1.4     | 2020-12-19     | Fix UUID's not being filterable.                                                         |
 |           |                | Fix right click drill and filter trying to filter unfilterable fields.                   |
-|           |                | Fix spurious 0 appearing below numeric 0 filter values.                                  |
-|           |                | Add an extrahead block to the template and documentation for overriding CSS.             |
+|           |                | Fix spurious ``0`` appearing below numeric ``0`` filter values.                          |
+|           |                | Add an ``extrahead`` block to the template and documentation for overriding CSS.         |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.3     | 2020-12-13     | Relative time support in date and time filters.                                          |
 |           |                | Show parsed dates and datetimes next to filters.                                         |
