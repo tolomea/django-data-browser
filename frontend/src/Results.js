@@ -92,10 +92,11 @@ function DataCell(props) {
         name: "Copy",
         fn: () => navigator.clipboard.writeText(formattedValue),
       },
-      modelField.concrete && {
-        name: "Filter",
-        fn: () => query.addExactFilter(pathStr, value),
-      },
+      modelField.concrete &&
+        query.getType(modelField).lookups.hasOwnProperty("equals") && {
+          name: "Filter",
+          fn: () => query.addExactFilter(pathStr, value),
+        },
       fullRow && {
         name: "Drill down",
         fn: () => query.drillDown(fullRow),

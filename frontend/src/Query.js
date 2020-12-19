@@ -194,6 +194,11 @@ class Query {
       this.query.fields
         .filter((field) => this.getField(field.pathStr).canPivot)
         .filter((field) => values.hasOwnProperty(field.pathStr))
+        .filter((field) =>
+          this.getType(this.getField(field.pathStr)).lookups.hasOwnProperty(
+            "equals"
+          )
+        )
         .map((field) => {
           return {
             pathStr: field.pathStr,
