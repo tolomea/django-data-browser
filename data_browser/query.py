@@ -47,7 +47,7 @@ class Query:
     limit: int = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
 
     @classmethod
-    def from_request(cls, model_name, field_str, get_args):
+    def from_request(cls, model_name, field_str, params):
         fields = []
         found_fields = set()
         for field in field_str.split(","):
@@ -76,16 +76,15 @@ class Query:
         limit = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
 
         filters = []
-        for path__lookup, values in dict(get_args).items():
-            for value in values:
-                if path__lookup == "limit":
-                    try:
-                        limit = max(1, int(value))
-                    except:  # noqa: E722  input sanitization
-                        pass
-                if "__" in path__lookup:
-                    path, lookup = path__lookup.rsplit("__", 1)
-                    filters.append(QueryFilter(path, lookup, value))
+        for path__lookup, value in params:
+            if path__lookup == "limit":
+                try:
+                    limit = max(1, int(value))
+                except:  # noqa: E722  input sanitization
+                    pass
+            if "__" in path__lookup:
+                path, lookup = path__lookup.rsplit("__", 1)
+                filters.append(QueryFilter(path, lookup, value))
 
         return cls(model_name, fields, filters, limit)
 

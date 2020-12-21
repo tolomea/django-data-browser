@@ -3,7 +3,6 @@ from uuid import UUID
 
 import pytest
 import time_machine
-from django.http import QueryDict
 from django.utils import timezone
 
 from data_browser import orm_fields
@@ -144,78 +143,76 @@ def parse_helper(type_, choices, value, expected):
 
 class TestQuery:
     def test_from_request(self, query):
-        q = Query.from_request(
-            "app.model", "fa+1,fd-0,fn", QueryDict("bob__equals=fred")
-        )
+        q = Query.from_request("app.model", "fa+1,fd-0,fn", [("bob__equals", "fred")])
         assert q == query
 
     def test_from_request_duplicate_field(self, query):
         q = Query.from_request(
-            "app.model", "fa+1,fd-0,fn,&fa-2", QueryDict("bob__equals=fred")
+            "app.model", "fa+1,fd-0,fn,&fa-2", [("bob__equals", "fred")]
         )
         assert q == query
 
     def test_from_request_with_limit(self, query):
         q = Query.from_request(
-            "app.model", "fa+1,fd-0,fn", QueryDict("limit=123&bob__equals=fred")
+            "app.model", "fa+1,fd-0,fn", [("limit", "123"), ("bob__equals", "fred")]
         )
         query.limit = 123
         assert q == query
 
     def test_from_request_with_bad_limit(self, query):
         q = Query.from_request(
-            "app.model", "fa+1,fd-0,fn", QueryDict("limit=bob&bob__equals=fred")
+            "app.model", "fa+1,fd-0,fn", [("limit", "bob"), ("bob__equals", "fred")]
         )
         query.limit = 1000
         assert q == query
 
     def test_from_request_with_low_limit(self, query):
         q = Query.from_request(
-            "app.model", "fa+1,fd-0,fn", QueryDict("limit=0&bob__equals=fred")
+            "app.model", "fa+1,fd-0,fn", [("limit", "0"), ("bob__equals", "fred")]
         )
         query.limit = 1
         assert q == query
 
     def test_from_request_with_related_filter(self):
-        q = Query.from_request("app.model", "", QueryDict("bob__jones__equals=fred"))
+        q = Query.from_request("app.model", "", [("bob__jones__equals", "fred")])
         assert q == Query(
             "app.model", [], [QueryFilter("bob__jones", "equals", "fred")]
         )
 
     def test_from_request_with_missing(self):
-        q = Query.from_request("app.model", ",,", QueryDict(""))
+        q = Query.from_request("app.model", ",,", [])
         assert q == Query("app.model", [], [])
 
     def test_from_request_filter_no_value(self):
-        q = Query.from_request("app.model", "", QueryDict("joe__equals="))
+        q = Query.from_request("app.model", "", [("joe__equals", "")])
         assert q == Query("app.model", [], [QueryFilter("joe", "equals", "")])
 
     def test_from_request_filter_no_lookup(self):
-        q = Query.from_request("app.model", "", QueryDict("joe=tom"))
+        q = Query.from_request("app.model", "", [("joe", "tom")])
         assert q == Query("app.model", [], [])
 
     def test_from_request_filter_bad_lookup(self):
-        q = Query.from_request("app.model", "", QueryDict("joe__blah=123"))
+        q = Query.from_request("app.model", "", [("joe__blah", "123")])
         assert q == Query("app.model", [], [QueryFilter("joe", "blah", "123")])
 
     def test_from_request_filter_no_name(self):
-        q = Query.from_request("app.model", "", QueryDict("=123"))
+        q = Query.from_request("app.model", "", [("", "123")])
         assert q == Query("app.model", [], [])
 
     def test_from_request_field_no_name(self):
-        q = Query.from_request("app.model", "+2", QueryDict(""))
+        q = Query.from_request("app.model", "+2", [])
         assert q == Query("app.model", [QueryField("", False, ASC, 2)], [])
 
     def test_from_request_field_no_priority(self):
-        q = Query.from_request("app.model", "fn+", QueryDict(""))
+        q = Query.from_request("app.model", "fn+", [])
         assert q == Query("app.model", [QueryField("fn")], [])
 
     def test_from_request_field_bad_priority(self):
-        q = Query.from_request("app.model", "fn+x", QueryDict(""))
+        q = Query.from_request("app.model", "fn+x", [])
         assert q == Query("app.model", [QueryField("fn")], [])
 
     def test_from_request_field_pivoted(self):
-        q = Query.from_request("app.model", "&fn", QueryDict(""))
+        q = Query.from_request("app.model", "&fn", [])
         assert q == Query("app.model", [QueryField("fn", True)], [])
 
     def test_url(self, query):

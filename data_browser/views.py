@@ -8,6 +8,7 @@ import pstats
 import sys
 
 import django.contrib.admin.views.decorators as admin_decorators
+import hyperlink
 import sqlparse
 from django import http
 from django.core.serializers.json import DjangoJSONEncoder
@@ -153,6 +154,8 @@ def query_html(request, *, model_name="", fields=""):
 
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
+    params = hyperlink.parse(request.get_full_path()).query
+
     if media.startswith("profile") or media.startswith("pstats"):
         if "_" in media:
             prof_media, media = media.split("_")
@@ -164,7 +167,7 @@ def query(request, *, model_name, fields="", media):
         try:
             profiler.enable()
 
-            query = Query.from_request(model_name, fields, request.GET)
+            query = Query.from_request(model_name, fields, params)
             for x in _data_response(request, query, media, privileged=True):
                 pass
 
@@ -192,7 +195,7 @@ def query(request, *, model_name, fields="", media):
             if profiler:  # pragma: no branch
                 profiler.disable()
     else:
-        query = Query.from_request(model_name, fields, request.GET)
+        query = Query.from_request(model_name, fields, params)
         return _data_response(request, query, media, privileged=True)
 
 

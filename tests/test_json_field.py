@@ -35,7 +35,7 @@ def with_json(db):
 @pytest.fixture
 def get_results_flat(with_json, req):
     def helper(fields, query=None):
-        query = query or {}
+        query = query or []
 
         orm_models = get_models(req)
         query = Query.from_request("json.JsonModel", fields, query)
@@ -97,25 +97,25 @@ def test_sub_field_is_null(get_results_flat):  # pragma: not sqlite
 
     # __is_null=
     assert get_results_flat(
-        "json_field__position+1", {"json_field__hello__is_null": ["NotNull"]}
+        "json_field__position+1", [("json_field__hello__is_null", "NotNull")]
     ) == [{"json_field__position": 1}]
     assert get_results_flat(
-        "json_field__position+1", {"json_field__hello__is_null": ["IsNull"]}
+        "json_field__position+1", [("json_field__hello__is_null", "IsNull")]
     ) == [{"json_field__position": 2}, {"json_field__position": 3}]
 
     # __is_null__equals=
     assert get_results_flat(
-        "json_field__position+1", {"json_field__hello__is_null__equals": ["NotNull"]}
+        "json_field__position+1", [("json_field__hello__is_null__equals", "NotNull")]
     ) == [{"json_field__position": 1}]
     assert get_results_flat(
-        "json_field__position+1", {"json_field__hello__is_null__equals": ["IsNull"]}
+        "json_field__position+1", [("json_field__hello__is_null__equals", "IsNull")]
     ) == [{"json_field__position": 2}, {"json_field__position": 3}]
 
 
 def test_filter_sub_field(get_results_flat):
     JsonModel.objects.create(json_field={"hello": "world"})
     JsonModel.objects.create(json_field={"hello": "universe"})
-    assert get_results_flat("json_field", {"json_field__hello__equals": ["world"]}) == [
+    assert get_results_flat("json_field", [("json_field__hello__equals", "world")]) == [
         {"json_field": '{"hello": "world"}'}
     ]
 
@@ -125,7 +125,7 @@ def test_filter_field_value(get_results_flat):
     assert get_results_flat("json_field") == [{"json_field": '{"goodbye": "universe"}'}]
     assert (
         get_results_flat(
-            "json_field", {"json_field__field_equals": ['goodbye|"world"']}
+            "json_field", [("json_field__field_equals", 'goodbye|"world"')]
         )
         == []
     )
@@ -134,14 +134,14 @@ def test_filter_field_value(get_results_flat):
 def test_filter_field_value_no_seperator(get_results_flat):
     JsonModel.objects.create(json_field={"goodbye": "universe"})
     assert get_results_flat(
-        "json_field", {"json_field__field_equals": ['goodbye"world"']}
+        "json_field", [("json_field__field_equals", 'goodbye"world"')]
     ) == [{"json_field": '{"goodbye": "universe"}'}]
 
 
 def test_filter_field_value_no_field(get_results_flat):
     JsonModel.objects.create(json_field={"goodbye": "universe"})
     assert get_results_flat(
-        "json_field", {"json_field__field_equals": ['|"world"']}
+        "json_field", [("json_field__field_equals", '|"world"')]
     ) == [{"json_field": '{"goodbye": "universe"}'}]
 
 
@@ -149,21 +149,21 @@ def test_filter_field_value_list(get_results_flat):
     JsonModel.objects.create(json_field={"goodbye": ["world"]})
     JsonModel.objects.create(json_field={"goodbye": ["universe"]})
     assert get_results_flat(
-        "json_field", {"json_field__field_equals": ['goodbye|["world"]']}
+        "json_field", [("json_field__field_equals", 'goodbye|["world"]')]
     ) == [{"json_field": '{"goodbye": ["world"]}'}]
 
 
 def test_filter_field_value_bad_json(get_results_flat):
     JsonModel.objects.create(json_field={"goodbye": "universe"})
     assert get_results_flat(
-        "json_field", {"json_field__field_equals": ["goodbye|world"]}
+        "json_field", [("json_field__field_equals", "goodbye|world")]
     ) == [{"json_field": '{"goodbye": "universe"}'}]
 
 
 def test_filter_has_key(get_results_flat):
     JsonModel.objects.create(json_field={"hello": "world"})
     JsonModel.objects.create(json_field={"goodbye": "world"})
-    assert get_results_flat("json_field", {"json_field__has_key": ["hello"]}) == [
+    assert get_results_flat("json_field", [("json_field__has_key", "hello")]) == [
         {"json_field": '{"hello": "world"}'}
     ]
 
@@ -172,7 +172,7 @@ def test_filter_equals(get_results_flat):
     JsonModel.objects.create(json_field={"hello": "world"})
     JsonModel.objects.create(json_field={"goodbye": "world"})
     assert get_results_flat(
-        "json_field", {"json_field__equals": ['{"hello": "world"}']}
+        "json_field", [("json_field__equals", '{"hello": "world"}')]
     ) == [{"json_field": '{"hello": "world"}'}]
 
 
@@ -180,5 +180,5 @@ def test_filter_equals_bad_json(get_results_flat):
     JsonModel.objects.create(json_field={"hello": "world"})
     JsonModel.objects.create(json_field={"goodbye": "world"})
     assert get_results_flat(
-        "json_field-1", {"json_field__equals": ['{"hello": "world"']}
+        "json_field-1", [("json_field__equals", '{"hello": "world"')]
     ) == [{"json_field": '{"hello": "world"}'}, {"json_field": '{"goodbye": "world"}'}]

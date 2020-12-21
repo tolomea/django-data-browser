@@ -34,7 +34,7 @@ def with_arrays(db):  # pragma: postgres
 @pytest.fixture
 def get_results_flat(with_arrays, req):  # pragma: postgres
     def helper(fields, query=None):
-        query = query or {}
+        query = query or []
 
         orm_models = get_models(req)
         query = Query.from_request("array.ArrayModel", fields, query)
@@ -75,7 +75,9 @@ def test_int_array_contains(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(int_array_field=[1, 2])
     ArrayModel.objects.create(int_array_field=[2, 3])
     ArrayModel.objects.create(int_array_field=[1, 3])
-    assert get_results_flat("int_array_field", {"int_array_field__contains": [2]}) == [
+    assert get_results_flat(
+        "int_array_field", [("int_array_field__contains", "2")]
+    ) == [
         {"int_array_field": "[1.0, 2.0]"},
         {"int_array_field": "[2.0, 3.0]"},
     ]
@@ -86,7 +88,7 @@ def test_int_choice_array_contains(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(int_choice_array_field=[2, 3])
     ArrayModel.objects.create(int_choice_array_field=[1, 3])
     assert get_results_flat(
-        "int_choice_array_field", {"int_choice_array_field__contains": ["B"]}
+        "int_choice_array_field", [("int_choice_array_field__contains", "B")]
     ) == [
         {"int_choice_array_field": '["A", "B"]'},
         {"int_choice_array_field": '["B", "C"]'},
@@ -98,7 +100,7 @@ def test_char_array_contains(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(char_array_field=["b", "c"])
     ArrayModel.objects.create(char_array_field=["a", "c"])
     assert get_results_flat(
-        "char_array_field", {"char_array_field__contains": ["b"]}
+        "char_array_field", [("char_array_field__contains", "b")]
     ) == [{"char_array_field": '["a", "b"]'}, {"char_array_field": '["b", "c"]'}]
 
 
@@ -107,7 +109,7 @@ def test_char_choice_array_contains(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(char_choice_array_field=["b", "c"])
     ArrayModel.objects.create(char_choice_array_field=["a", "c"])
     assert get_results_flat(
-        "char_choice_array_field", {"char_choice_array_field__contains": ["B"]}
+        "char_choice_array_field", [("char_choice_array_field__contains", "B")]
     ) == [
         {"char_choice_array_field": '["A", "B"]'},
         {"char_choice_array_field": '["B", "C"]'},
@@ -118,7 +120,7 @@ def test_filter_length(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(int_array_field=[1])
     ArrayModel.objects.create(int_array_field=[1, 2])
     ArrayModel.objects.create(int_array_field=[1, 2, 3])
-    assert get_results_flat("int_array_field", {"int_array_field__length": [2]}) == [
+    assert get_results_flat("int_array_field", [("int_array_field__length", "2")]) == [
         {"int_array_field": "[1.0, 2.0]"}
     ]
 
@@ -128,7 +130,7 @@ def test_choice_array_filter_length(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(int_choice_array_field=[1, 2])
     ArrayModel.objects.create(int_choice_array_field=[1, 2, 3])
     assert get_results_flat(
-        "int_choice_array_field", {"int_choice_array_field__length": [2]}
+        "int_choice_array_field", [("int_choice_array_field__length", "2")]
     ) == [{"int_choice_array_field": '["A", "B"]'}]
 
 
@@ -137,7 +139,7 @@ def test_char_choice_array_equals(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(char_choice_array_field=["b", "c"])
     ArrayModel.objects.create(char_choice_array_field=["a", "c"])
     assert get_results_flat(
-        "char_choice_array_field", {"char_choice_array_field__equals": ['["A", "B"]']}
+        "char_choice_array_field", [("char_choice_array_field__equals", '["A", "B"]')]
     ) == [{"char_choice_array_field": '["A", "B"]'}]
 
 

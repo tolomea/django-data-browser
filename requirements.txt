@@ -1,6 +1,7 @@
 # package requirements
 dataclasses; python_version<"3.7"
 Django>=2.0
+hyperlink
 python-dateutil
 sqlparse
 

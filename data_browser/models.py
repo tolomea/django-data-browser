@@ -1,7 +1,7 @@
 import threading
 
+import hyperlink
 from django.db import models
-from django.http import QueryDict
 from django.urls import reverse
 from django.utils import crypto, timezone
 
@@ -40,7 +40,8 @@ class View(models.Model):
     def get_query(self):
         from .query import Query
 
-        return Query.from_request(self.model_name, self.fields, QueryDict(self.query))
+        params = hyperlink.parse(f"?{self.query}").query
+        return Query.from_request(self.model_name, self.fields, params)
 
     def public_link(self):
         if self.public:
