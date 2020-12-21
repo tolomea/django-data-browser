@@ -6,6 +6,7 @@ from django.contrib.admin import site
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin
+from django.core.exceptions import FieldDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
@@ -156,7 +157,12 @@ def _get_all_admin_fields(request):
 
     # we always have id and never pk
     for fields in all_admin_fields.values():
-        fields.add("id")
+        try:
+            model._meta.get_field("id")
+        except FieldDoesNotExist:  # pragma: no cover
+            pass
+        else:
+            fields.add("id")
         fields.discard("pk")
         fields.discard("__str__")
 
