@@ -1968,12 +1968,15 @@
             "defaultValue": true,
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "boolean"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "boolean"
                 }
             },
@@ -1988,24 +1991,31 @@
             "defaultValue": "today",
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "date"
                 },
                 "gt": {
+                    "tidyName": ">",
                     "type": "date"
                 },
                 "gte": {
+                    "tidyName": ">=",
                     "type": "date"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "lt": {
+                    "tidyName": "<",
                     "type": "date"
                 },
                 "lte": {
+                    "tidyName": "<=",
                     "type": "date"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "date"
                 }
             },
@@ -2024,24 +2034,31 @@
             "defaultValue": "now",
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "datetime"
                 },
                 "gt": {
+                    "tidyName": ">",
                     "type": "datetime"
                 },
                 "gte": {
+                    "tidyName": ">=",
                     "type": "datetime"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "lt": {
+                    "tidyName": "<",
                     "type": "datetime"
                 },
                 "lte": {
+                    "tidyName": "<=",
                     "type": "datetime"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "datetime"
                 }
             },
@@ -2060,24 +2077,31 @@
             "defaultValue": "",
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "duration"
                 },
                 "gt": {
+                    "tidyName": ">",
                     "type": "duration"
                 },
                 "gte": {
+                    "tidyName": ">=",
                     "type": "duration"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "lt": {
+                    "tidyName": "<",
                     "type": "duration"
                 },
                 "lte": {
+                    "tidyName": "<=",
                     "type": "duration"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "duration"
                 }
             },
@@ -2096,6 +2120,7 @@
             "defaultValue": "",
             "lookups": {
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -2108,6 +2133,7 @@
             "defaultValue": "IsNull",
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "isnull"
                 }
             },
@@ -2120,24 +2146,31 @@
             "defaultValue": null,
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "json"
                 },
                 "field_equals": {
+                    "tidyName": "field equals",
                     "type": "jsonfield"
                 },
                 "has_key": {
+                    "tidyName": "has key",
                     "type": "string"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "json"
                 },
                 "not_field_equals": {
+                    "tidyName": "not field equals",
                     "type": "jsonfield"
                 },
                 "not_has_key": {
+                    "tidyName": "not has key",
                     "type": "string"
                 }
             },
@@ -2156,12 +2189,15 @@
             "defaultValue": "|",
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "jsonfield"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "jsonfield"
                 }
             },
@@ -2176,24 +2212,31 @@
             "defaultValue": 0,
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "number"
                 },
                 "gt": {
+                    "tidyName": ">",
                     "type": "number"
                 },
                 "gte": {
+                    "tidyName": ">=",
                     "type": "number"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "lt": {
+                    "tidyName": "<",
                     "type": "number"
                 },
                 "lte": {
+                    "tidyName": "<=",
                     "type": "number"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "number"
                 }
             },
@@ -2212,24 +2255,31 @@
             "defaultValue": null,
             "lookups": {
                 "contains": {
+                    "tidyName": "contains",
                     "type": "number"
                 },
                 "equals": {
+                    "tidyName": "equals",
                     "type": "numberarray"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "length": {
+                    "tidyName": "length",
                     "type": "number"
                 },
                 "not_contains": {
+                    "tidyName": "not contains",
                     "type": "number"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "numberarray"
                 },
                 "not_length": {
+                    "tidyName": "not length",
                     "type": "number"
                 }
             },
@@ -2248,12 +2298,15 @@
             "defaultValue": null,
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "numberchoice"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "numberchoice"
                 }
             },
@@ -2268,24 +2321,31 @@
             "defaultValue": null,
             "lookups": {
                 "contains": {
+                    "tidyName": "contains",
                     "type": "numberchoice"
                 },
                 "equals": {
+                    "tidyName": "equals",
                     "type": "numberchoicearray"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "length": {
+                    "tidyName": "length",
                     "type": "number"
                 },
                 "not_contains": {
+                    "tidyName": "not contains",
                     "type": "numberchoice"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "numberchoicearray"
                 },
                 "not_length": {
+                    "tidyName": "not length",
                     "type": "number"
                 }
             },
@@ -2304,12 +2364,15 @@
             "defaultValue": ".*",
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "regex"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "regex"
                 }
             },
@@ -2324,36 +2387,47 @@
             "defaultValue": "",
             "lookups": {
                 "contains": {
+                    "tidyName": "contains",
                     "type": "string"
                 },
                 "ends_with": {
+                    "tidyName": "ends with",
                     "type": "string"
                 },
                 "equals": {
+                    "tidyName": "equals",
                     "type": "string"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_contains": {
+                    "tidyName": "not contains",
                     "type": "string"
                 },
                 "not_ends_with": {
+                    "tidyName": "not ends with",
                     "type": "string"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "string"
                 },
                 "not_regex": {
+                    "tidyName": "not regex",
                     "type": "regex"
                 },
                 "not_starts_with": {
+                    "tidyName": "not starts with",
                     "type": "string"
                 },
                 "regex": {
+                    "tidyName": "regex",
                     "type": "regex"
                 },
                 "starts_with": {
+                    "tidyName": "starts with",
                     "type": "string"
                 }
             },
@@ -2376,24 +2450,31 @@
             "defaultValue": null,
             "lookups": {
                 "contains": {
+                    "tidyName": "contains",
                     "type": "string"
                 },
                 "equals": {
+                    "tidyName": "equals",
                     "type": "stringarray"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "length": {
+                    "tidyName": "length",
                     "type": "number"
                 },
                 "not_contains": {
+                    "tidyName": "not contains",
                     "type": "string"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "stringarray"
                 },
                 "not_length": {
+                    "tidyName": "not length",
                     "type": "number"
                 }
             },
@@ -2412,12 +2493,15 @@
             "defaultValue": null,
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "stringchoice"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "stringchoice"
                 }
             },
@@ -2432,24 +2516,31 @@
             "defaultValue": null,
             "lookups": {
                 "contains": {
+                    "tidyName": "contains",
                     "type": "stringchoice"
                 },
                 "equals": {
+                    "tidyName": "equals",
                     "type": "stringchoicearray"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "length": {
+                    "tidyName": "length",
                     "type": "number"
                 },
                 "not_contains": {
+                    "tidyName": "not contains",
                     "type": "stringchoice"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "stringchoicearray"
                 },
                 "not_length": {
+                    "tidyName": "not length",
                     "type": "number"
                 }
             },
@@ -2468,6 +2559,7 @@
             "defaultValue": null,
             "lookups": {
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 }
             },
@@ -2480,12 +2572,15 @@
             "defaultValue": null,
             "lookups": {
                 "equals": {
+                    "tidyName": "equals",
                     "type": "uuid"
                 },
                 "is_null": {
+                    "tidyName": "is null",
                     "type": "isnull"
                 },
                 "not_equals": {
+                    "tidyName": "not equals",
                     "type": "uuid"
                 }
             },

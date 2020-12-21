@@ -31,7 +31,14 @@ class TypeMeta(type):
 
     @property
     def lookups(cls):
-        return {name: type_.name for name, type_ in cls._lookups().items()}
+        res = {}
+        for name, type_ in cls._lookups().items():
+            if isinstance(type_, tuple):
+                tidy_name, type_ = type_
+            else:
+                tidy_name = name.replace("_", " ")
+            res[name] = tidy_name, type_.name
+        return res
 
     @property
     def name(cls):
@@ -79,7 +86,8 @@ class BaseType(metaclass=TypeMeta):
         if lookup not in lookups:
             return None, f"Bad lookup '{lookup}' expected {lookups}"
         else:
-            type_ = TYPES[lookups[lookup]]
+            tidy_name, type_name = lookups[lookup]
+            type_ = TYPES[type_name]
             return type_.parse(value, choices)
 
     @staticmethod
@@ -115,10 +123,10 @@ class NumberType(BaseType):
         return {
             "equals": cls,
             "not_equals": cls,
-            "gt": cls,
-            "gte": cls,
-            "lt": cls,
-            "lte": cls,
+            "gt": (">", cls),
+            "gte": (">=", cls),
+            "lt": ("<", cls),
+            "lte": ("<=", cls),
             "is_null": IsNullType,
         }
 
@@ -171,10 +179,10 @@ class DurationType(BaseType):
         return {
             "equals": cls,
             "not_equals": cls,
-            "gt": cls,
-            "gte": cls,
-            "lt": cls,
-            "lte": cls,
+            "gt": (">", cls),
+            "gte": (">=", cls),
+            "lt": ("<", cls),
+            "lte": ("<=", cls),
             "is_null": IsNullType,
         }
 
@@ -224,10 +232,10 @@ class DateTypeMixin:
         return {
             "equals": cls,
             "not_equals": cls,
-            "gt": cls,
-            "gte": cls,
-            "lt": cls,
-            "lte": cls,
+            "gt": (">", cls),
+            "gte": (">=", cls),
+            "lt": ("<", cls),
+            "lte": ("<=", cls),
             "is_null": IsNullType,
         }
 

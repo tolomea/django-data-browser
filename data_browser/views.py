@@ -98,7 +98,9 @@ def _get_config(request):
     orm_models = get_models(request)
     types = {
         name: {
-            "lookups": {n: {"type": t} for n, t in type_.lookups.items()},
+            "lookups": {
+                n: {"tidyName": tn, "type": t} for n, (tn, t) in type_.lookups.items()
+            },
             "sortedLookups": list(type_.lookups),
             "defaultLookup": type_.default_lookup,
             "defaultValue": type_.default_value,
