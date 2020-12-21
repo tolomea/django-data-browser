@@ -99,7 +99,7 @@ def _get_config(request):
     types = {
         name: {
             "lookups": {
-                n: {"tidyName": tn, "type": t} for n, (tn, t) in type_.lookups.items()
+                n: {"prettyName": tn, "type": t} for n, (tn, t) in type_.lookups.items()
             },
             "sortedLookups": list(type_.lookups),
             "defaultLookup": type_.default_lookup,

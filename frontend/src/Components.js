@@ -92,7 +92,7 @@ function Filter(props) {
         >
           {type.sortedLookups.map((lookupName) => (
             <option key={lookupName} value={lookupName}>
-              {type.lookups[lookupName].tidyName}
+              {type.lookups[lookupName].prettyName}
             </option>
           ))}
         </select>

@@ -34,10 +34,10 @@ class TypeMeta(type):
         res = {}
         for name, type_ in cls._lookups().items():
             if isinstance(type_, tuple):
-                tidy_name, type_ = type_
+                pretty_name, type_ = type_
             else:
-                tidy_name = name.replace("_", " ")
-            res[name] = tidy_name, type_.name
+                pretty_name = name.replace("_", " ")
+            res[name] = pretty_name, type_.name
         return res
 
     @property
@@ -86,7 +86,7 @@ class BaseType(metaclass=TypeMeta):
         if lookup not in lookups:
             return None, f"Bad lookup '{lookup}' expected {lookups}"
         else:
-            tidy_name, type_name = lookups[lookup]
+            pretty_name, type_name = lookups[lookup]
             type_ = TYPES[type_name]
             return type_.parse(value, choices)
 
