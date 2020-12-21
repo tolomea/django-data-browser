@@ -375,3 +375,18 @@ input.RowLimit {
   padding: 5px;
   margin: 0px;
 }
+
+.Tooltip {
+  position: fixed;
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  box-shadow: 3px 3px 10px var(--dark-color);
+  font-size: 14px;
+  margin: 10px;
+}
+
+.Tooltip p {
+  padding: 5px;
+  margin: 0px;
+}

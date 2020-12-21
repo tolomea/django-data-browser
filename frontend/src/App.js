@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import { ContextMenu } from "./ContextMenu";
+import { Tooltip } from "./Tooltip";
 import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";
 import { Query, getUrlForQuery, empty } from "./Query";
 import { doGet, fetchInProgress } from "./Util";
@@ -142,20 +143,22 @@ function App(props) {
   return (
     <BrowserRouter basename={baseUrl}>
       <ContextMenu>
-        <Logo />
-        <div id="body">
-          <Switch>
-            <Route path="/query/:model/:fieldStr?.html">
-              <QueryApp config={props} />
-            </Route>
-            <Route path="/views/:pk.html">
-              <EditSavedView {...{ baseUrl, canMakePublic }} />
-            </Route>
-            <Route path="/">
-              <HomePage {...props} />
-            </Route>
-          </Switch>
-        </div>
+        <Tooltip>
+          <Logo />
+          <div id="body">
+            <Switch>
+              <Route path="/query/:model/:fieldStr?.html">
+                <QueryApp config={props} />
+              </Route>
+              <Route path="/views/:pk.html">
+                <EditSavedView {...{ baseUrl, canMakePublic }} />
+              </Route>
+              <Route path="/">
+                <HomePage {...props} />
+              </Route>
+            </Switch>
+          </div>
+        </Tooltip>
       </ContextMenu>
     </BrowserRouter>
   );

@@ -1,28 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import { TLink, SLink, useData, version, Save, Delete, CopyText } from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery, getRelUrlForQuery } from "./Query";
+import { ShowTooltip, HideTooltip } from "./Tooltip";
 import "./App.css";
 
 function FilterValue(props) {
   const { lookupType, onChange, value, field } = props;
   const onChangeEvent = (e) => onChange(e.target.value);
-  if (props.lookupType === "boolean")
+  const showTooltip = useContext(ShowTooltip);
+  const hideTooltip = useContext(HideTooltip);
+  const helpText = {
+    date: [
+      "Date filter values can be a literal value e.g. '2020-12-21' or 'today' or a series of clauses applied in order from today.",
+      "e.g. 'day=1 month+1 tuesday+2' which means move to the 1st of this month, then move forward a month, then move forward to the second Tuesday.",
+      "You can use 'year', 'month' or 'day' with '+', '-', or '=' to add remove or replace the given quantity.",
+      "Or you can use a weekday name with '+' or '-' to get the n-th next or previous (including today) instance of that day.",
+      "Bear in mind that 'day=1 month+1' may produce a different result from 'month+1 day=1', for example on Jan 31st.",
+    ],
+    datetime: [
+      "Datetime filter values can be a literal value e.g. '2020-12-21 14:56' or 'now' or a series of clauses applied in order from now.",
+      "e.g. 'day=1 month+1 tuesday+2' which means move to the 1st of this month, then move forward a month, then move forward to the second Tuesday.",
+      "You can use 'year', 'month', 'day', 'hour', 'minute' or 'second' with '+', '-', or '=' to add remove or replace the given quantity.",
+      "Or you can use a weekday name with '+' or '-' to get the n-th next or previous (including today) instance of that day.",
+      "Bear in mind that 'day=1 month+1' may produce a different result from 'month+1 day=1', for example on Jan 31st.",
+    ],
+  };
+
+  if (props.lookupType === "boolean") {
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         <option value={true}>true</option>
         <option value={false}>false</option>
       </select>
     );
-  else if (props.lookupType === "isnull")
+  } else if (props.lookupType === "isnull") {
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         <option value={"IsNull"}>IsNull</option>
         <option value={"NotNull"}>NotNull</option>
       </select>
     );
-  else if (lookupType.endsWith("choice"))
+  } else if (lookupType.endsWith("choice")) {
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         {field.choices.map((option) => (
@@ -32,7 +52,7 @@ function FilterValue(props) {
         ))}
       </select>
     );
-  else if (lookupType === "number")
+  } else if (lookupType === "number") {
     return (
       <input
         {...{ value }}
@@ -42,7 +62,7 @@ function FilterValue(props) {
         step="0"
       />
     );
-  else if (lookupType === "jsonfield") {
+  } else if (lookupType === "jsonfield") {
     const parts = value.split(/\|(.*)/);
     return (
       <>
@@ -60,15 +80,18 @@ function FilterValue(props) {
         />
       </>
     );
-  } else
+  } else {
     return (
       <input
         {...{ value }}
         onChange={onChangeEvent}
         className="FilterValue"
         type="text"
+        onMouseEnter={(e) => showTooltip(e, helpText[lookupType])}
+        onMouseLeave={(e) => hideTooltip(e)}
       />
     );
+  }
 }
 
 function Filter(props) {

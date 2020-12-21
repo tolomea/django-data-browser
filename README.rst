@@ -318,6 +318,7 @@ Release History
 |           |                | Fix various filter issues.                                                               |
 |           |                | Don't show ``id`` on models that don't have an ``id`` field.                             |
 |           |                | Show "less than", "greater than" etc as "<", ">", etc.                                   |
+|           |                | Mouse hover tooltip help for date and datetime filter values.                            |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.4     | 2020-12-19     | Fix UUID's not being filterable.                                                         |
 |           |                | Fix right click drill and filter trying to filter unfilterable fields.                   |
