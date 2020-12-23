@@ -202,7 +202,7 @@ class OrmCalculatedField(OrmBaseField):
 
 class OrmBoundAnnotatedField(OrmBoundField):
     def _annotate(self, request, qs):
-        from .orm_results import admin_get_queryset
+        from .orm_admin import admin_get_queryset
 
         return qs.annotate(
             **{

@@ -4,7 +4,6 @@ from collections import defaultdict
 
 from django.core.serializers.json import DjangoJSONEncoder
 
-from .orm_admin import admin_get_queryset
 from .orm_lookups import get_django_filter
 from .query import BoundQuery
 from .types import ASC, DSC
@@ -35,7 +34,11 @@ def _cols_sub_query(bound_query):
     ]
 
     return BoundQuery(
-        bound_query.model_name, bound_query.col_fields, filters, bound_query.limit
+        bound_query.model_name,
+        bound_query.col_fields,
+        filters,
+        bound_query.limit,
+        bound_query.orm_model,
     )
 
 
@@ -51,15 +54,17 @@ def _rows_sub_query(bound_query):
         bound_query.row_fields + data_fields,
         filters,
         bound_query.limit,
+        bound_query.orm_model,
     )
 
 
-def get_result_queryset(request, bound_query, orm_models):
+def get_result_queryset(request, bound_query):
     all_fields = {f.queryset_path_str: f for f in bound_query.bound_fields}
     all_fields.update({f.queryset_path_str: f for f in bound_query.bound_filters})
 
-    admin = orm_models[bound_query.model_name].admin
-    qs = admin_get_queryset(admin, request, {f.split("__")[0] for f in all_fields})
+    qs = bound_query.orm_model.get_queryset(
+        request, {f.split("__")[0] for f in all_fields}
+    )
 
     # sql functions and qs annotations
     for field in all_fields.values():
@@ -117,8 +122,8 @@ def get_result_queryset(request, bound_query, orm_models):
     return qs[: bound_query.limit]
 
 
-def _get_result_list(request, bound_query, orm_models):
-    return list(get_result_queryset(request, bound_query, orm_models))
+def _get_result_list(request, bound_query):
+    return list(get_result_queryset(request, bound_query))
 
 
 def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
@@ -135,10 +140,11 @@ def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
     # fetch all the calculated field objects
     objs = {}
     for model_name, pks in to_load.items():
-        admin = orm_models[model_name].admin
-        objs[model_name] = admin_get_queryset(
-            admin, request, loading_for[model_name]
-        ).in_bulk(pks)
+        objs[model_name] = (
+            orm_models[model_name]
+            .get_queryset(request, loading_for[model_name])
+            .in_bulk(pks)
+        )
 
     return objs
 
@@ -214,12 +220,12 @@ def get_results(request, bound_query, orm_models, with_format_hints):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": []}
 
-    res = _get_result_list(request, bound_query, orm_models)
+    res = _get_result_list(request, bound_query)
 
     if bound_query.bound_col_fields and bound_query.bound_row_fields:
         # need to fetch rows and col titles seperately to get correct sort
-        rows_res = _get_result_list(request, _rows_sub_query(bound_query), orm_models)
-        cols_res = _get_result_list(request, _cols_sub_query(bound_query), orm_models)
+        rows_res = _get_result_list(request, _rows_sub_query(bound_query))
+        cols_res = _get_result_list(request, _cols_sub_query(bound_query))
     else:
         rows_res = res
         cols_res = res

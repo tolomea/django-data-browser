@@ -6,8 +6,8 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
 
-from data_browser.orm_admin import OrmModel, get_models
-from data_browser.orm_results import admin_get_queryset, get_results
+from data_browser.orm_admin import OrmModel, admin_get_queryset, get_models
+from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
 from .core import models
@@ -207,7 +207,7 @@ def test_get_calculated_boolean_field_on_admin(get_product_flat):
 
 def test_get_annotated_field_at_base(products, get_product_flat, mocker):
     mock = mocker.patch(
-        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(1, "annotated+1,size-2", [("annotated__not_equals", "a")])
     assert data == [["b", 1], ["c", 2]]
@@ -217,7 +217,7 @@ def test_get_annotated_field_at_base(products, get_product_flat, mocker):
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_get_aggretated_annotated_field_at_base(products, get_product_flat, mocker):
     mock = mocker.patch(
-        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(1, "annotated__count+1,size-2", [])
     assert data == [[1, 2], [2, 1]]
@@ -226,7 +226,7 @@ def test_get_aggretated_annotated_field_at_base(products, get_product_flat, mock
 
 def test_get_annotated_field_function_at_base(products, get_product_flat, mocker):
     mock = mocker.patch(
-        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(1, "annotated__is_null+1,size-2", [])
     assert data == [["NotNull", 2.0], ["NotNull", 1.0]]
@@ -235,7 +235,7 @@ def test_get_annotated_field_function_at_base(products, get_product_flat, mocker
 
 def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
     mock = mocker.patch(
-        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(
         1,
@@ -249,7 +249,7 @@ def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_get_aggregated_annotated_field_down_tree(products, get_product_flat, mocker):
     mock = mocker.patch(
-        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(1, "producer__address__andrew__count+1,size-2", [])
     assert data == [[0, 2], [2, 1]]
@@ -258,7 +258,7 @@ def test_get_aggregated_annotated_field_down_tree(products, get_product_flat, mo
 
 def test_get_annotated_field_function_down_tree(products, get_product_flat, mocker):
     mock = mocker.patch(
-        "data_browser.orm_results.admin_get_queryset", wraps=admin_get_queryset
+        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(1, "producer__address__andrew__is_null+1,size-2", [])
     assert data == [["NotNull", 1.0], ["IsNull", 2.0]]

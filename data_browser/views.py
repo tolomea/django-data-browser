@@ -314,7 +314,7 @@ def _data_response(request, query, media, privileged=False):
         resp = _get_query_data(bound_query)
         return JsonResponse(resp)
     elif privileged and media in ["sql", "explain"]:
-        query_set = get_result_queryset(request, bound_query, orm_models)
+        query_set = get_result_queryset(request, bound_query)
         if isinstance(query_set, list):
             res = "Not available for pure aggregates"
         else:

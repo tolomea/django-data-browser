@@ -51,6 +51,9 @@ class OrmModel:
             for (f, l, v) in default_filters
         ]
 
+    def get_queryset(self, request, fields=()):
+        return admin_get_queryset(self.admin, request, fields)
+
 
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"

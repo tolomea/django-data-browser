@@ -173,11 +173,12 @@ def _orm_fields(fields):
 
 
 class BoundQuery:
-    def __init__(self, model_name, fields, filters, limit):
+    def __init__(self, model_name, fields, filters, limit, orm_model):
         self.model_name = model_name
         self.fields = fields
         self.filters = filters
         self.limit = limit
+        self.orm_model = orm_model
 
     @classmethod
     def bind(cls, query, orm_models):
@@ -210,7 +211,7 @@ class BoundQuery:
             if orm_bound_field and orm_bound_field.concrete:
                 filters.append(BoundFilter.bind(orm_bound_field, query_filter))
 
-        return cls(model_name, fields, filters, query.limit)
+        return cls(model_name, fields, filters, query.limit, orm_models[model_name])
 
     @cached_property
     def sort_fields(self):
