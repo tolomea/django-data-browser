@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./App.css";
-import { TLink, SLink, Overlay } from "./Util";
+import { TLink, SLink, Overlay, syncPost } from "./Util";
 import { ShowContextMenu } from "./ContextMenu";
 
 function Spacer(props) {
@@ -17,8 +17,23 @@ function HeadCell(props) {
   const { query, field, className } = props;
   const modelField = query.getField(field.pathStr);
   const type = query.getType(modelField);
+
+  const showContextMenu = useContext(ShowContextMenu);
+
+  function onContextMenu(e) {
+    showContextMenu(
+      e,
+      modelField.actions.map((action) => {
+        return {
+          name: action.prettyName,
+          fn: () => syncPost("", { action: action.name, field: field.pathStr }),
+        };
+      })
+    );
+  }
+
   return (
-    <th className={`HeadCell ${className}`}>
+    <th className={`HeadCell ${className}`} onContextMenu={onContextMenu}>
       <SLink onClick={() => query.removeField(field)}>close</SLink>
       <SLink onClick={() => query.moveField(field, true)}>chevron_left</SLink>
       <SLink onClick={() => query.moveField(field, false)}>chevron_right</SLink>

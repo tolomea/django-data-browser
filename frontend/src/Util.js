@@ -158,6 +158,27 @@ function doPost(url, data) {
     );
 }
 
+function syncPost(url, data) {
+    const form = document.createElement("form");
+    form.method = "post";
+    form.action = url;
+    data.csrfmiddlewaretoken = Cookies.get("csrftoken");
+
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            const hiddenField = document.createElement("input");
+            hiddenField.type = "hidden";
+            hiddenField.name = key;
+            hiddenField.value = data[key];
+
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
 function useData(url) {
     const [data, setData] = useState();
     useEffect(() => {
@@ -304,4 +325,5 @@ export {
     fetchInProgress,
     Overlay,
     shallowEqual,
+    syncPost,
 };
