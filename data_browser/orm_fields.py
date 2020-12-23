@@ -83,6 +83,7 @@ class OrmBaseField:
     choices: Sequence[Tuple[str, str]] = ()
     default_sort: str = None
     format_hints: dict = None
+    actions: dict = None
 
     def __post_init__(self):
         if not self.type_:
@@ -121,7 +122,9 @@ class OrmFkField(OrmBaseField):
 
 
 class OrmConcreteField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, type_, rel_name, choices):
+    def __init__(
+        self, model_name, name, pretty_name, type_, rel_name, choices, actions=None
+    ):
         super().__init__(
             model_name,
             name,
@@ -132,6 +135,7 @@ class OrmConcreteField(OrmBaseField):
             can_pivot=True,
             choices=choices or (),
             default_sort=ASC if type_ in [DateType, DateTimeType] else None,
+            actions=actions,
         )
 
     def bind(self, previous):

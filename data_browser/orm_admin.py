@@ -297,7 +297,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 pretty_name=pretty_name,
                 django_field=field,
             )
-        # Calculated and annoted fields
+        # Calculated and annotated fields
         elif isinstance(field, type(None)):
             orm_field = _get_calculated_field(
                 request, field_name, model_name, model, admin, model_fields
@@ -317,6 +317,11 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                         model_name, json_fields
                     )
 
+            if field_name == "id" and hasattr(admin, "get_actions"):
+                actions = admin.get_actions(request)
+            else:
+                actions = {}
+
             fields[field_name] = OrmConcreteField(
                 model_name=model_name,
                 name=field_name,
@@ -324,6 +329,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 type_=field_type,
                 rel_name=rel_name,
                 choices=choices,
+                actions=actions,
             )
     orm_models[model_name] = OrmModel(fields=fields, admin=admin)
     return orm_models

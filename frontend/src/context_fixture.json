@@ -4,6 +4,7 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -13,6 +14,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected groups"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -22,6 +29,7 @@
                     "type": "number"
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -41,6 +49,7 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -50,6 +59,7 @@
                     "type": "html"
                 },
                 "date_joined": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -59,6 +69,7 @@
                     "type": "datetime"
                 },
                 "email": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -68,6 +79,7 @@
                     "type": "string"
                 },
                 "first_name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -77,6 +89,12 @@
                     "type": "string"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected users"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -86,6 +104,7 @@
                     "type": "number"
                 },
                 "is_active": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -95,6 +114,7 @@
                     "type": "boolean"
                 },
                 "is_staff": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -104,6 +124,7 @@
                     "type": "boolean"
                 },
                 "is_superuser": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -113,6 +134,7 @@
                     "type": "boolean"
                 },
                 "last_login": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -122,6 +144,7 @@
                     "type": "datetime"
                 },
                 "last_name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -131,6 +154,7 @@
                     "type": "string"
                 },
                 "password": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -140,6 +164,7 @@
                     "type": "string"
                 },
                 "username": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -168,6 +193,7 @@
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -177,6 +203,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -186,6 +213,7 @@
                     "type": "isnull"
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -205,6 +233,7 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -214,6 +243,7 @@
                     "type": "html"
                 },
                 "andrew": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -223,6 +253,7 @@
                     "type": "string"
                 },
                 "bob": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -232,6 +263,7 @@
                     "type": "html"
                 },
                 "city": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -241,6 +273,7 @@
                     "type": "string"
                 },
                 "fred": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -250,6 +283,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected addresss"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -259,6 +298,7 @@
                     "type": "number"
                 },
                 "producer": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -268,6 +308,7 @@
                     "type": null
                 },
                 "tom": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -292,6 +333,7 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -301,6 +343,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected in admins"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -310,6 +358,7 @@
                     "type": "number"
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -329,6 +378,7 @@
             "defaultFilters": [],
             "fields": {
                 "id": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -338,6 +388,7 @@
                     "type": "number"
                 },
                 "in_admin": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -347,6 +398,7 @@
                     "type": null
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -366,6 +418,7 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -375,6 +428,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected normals"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -384,6 +443,7 @@
                     "type": "number"
                 },
                 "in_admin": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -393,6 +453,7 @@
                     "type": null
                 },
                 "inline_admin": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -402,6 +463,7 @@
                     "type": null
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -411,6 +473,7 @@
                     "type": "string"
                 },
                 "not_in_admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -433,6 +496,7 @@
             "defaultFilters": [],
             "fields": {
                 "address": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -442,6 +506,7 @@
                     "type": null
                 },
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -451,6 +516,7 @@
                     "type": "html"
                 },
                 "frank": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -460,6 +526,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected producers"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -469,6 +541,7 @@
                     "type": "number"
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -496,6 +569,7 @@
             ],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -505,6 +579,7 @@
                     "type": "html"
                 },
                 "annotated": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -514,6 +589,7 @@
                     "type": "string"
                 },
                 "boat": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -523,6 +599,7 @@
                     "type": "number"
                 },
                 "calculated_boolean": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -532,6 +609,7 @@
                     "type": "boolean"
                 },
                 "created_time": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -541,6 +619,7 @@
                     "type": "datetime"
                 },
                 "date": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -550,6 +629,7 @@
                     "type": "date"
                 },
                 "default_sku": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -559,6 +639,7 @@
                     "type": null
                 },
                 "duration": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -568,6 +649,7 @@
                     "type": "duration"
                 },
                 "extra_inline": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -577,6 +659,7 @@
                     "type": "string"
                 },
                 "extra_model": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -586,6 +669,7 @@
                     "type": "string"
                 },
                 "fake": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -595,6 +679,7 @@
                     "type": "unknown"
                 },
                 "funky": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -604,6 +689,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected products"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -613,6 +704,7 @@
                     "type": "number"
                 },
                 "image": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -622,6 +714,7 @@
                     "type": "html"
                 },
                 "is_onsale": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -631,6 +724,7 @@
                     "type": "html"
                 },
                 "lambda": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -640,6 +734,7 @@
                     "type": "html"
                 },
                 "model_not_in_admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -649,6 +744,7 @@
                     "type": "number"
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -658,6 +754,7 @@
                     "type": "string"
                 },
                 "number_choice": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [
                         "A",
@@ -670,6 +767,7 @@
                     "type": "numberchoice"
                 },
                 "only_in_list_view": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -679,6 +777,7 @@
                     "type": "string"
                 },
                 "onsale": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -688,6 +787,7 @@
                     "type": "boolean"
                 },
                 "producer": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -697,6 +797,7 @@
                     "type": null
                 },
                 "size": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -706,6 +807,7 @@
                     "type": "number"
                 },
                 "size_unit": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -715,6 +817,7 @@
                     "type": "string"
                 },
                 "stealth_annotation": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -724,6 +827,7 @@
                     "type": "string"
                 },
                 "string_choice": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [
                         "A",
@@ -769,6 +873,7 @@
             "defaultFilters": [],
             "fields": {
                 "bob": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -778,6 +883,7 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -787,6 +893,7 @@
                     "type": "number"
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -796,6 +903,7 @@
                     "type": "string"
                 },
                 "product": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -816,6 +924,7 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -825,6 +934,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected tags"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -834,6 +949,7 @@
                     "type": "number"
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -853,6 +969,7 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -862,6 +979,7 @@
                     "type": "html"
                 },
                 "created_time": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -871,6 +989,7 @@
                     "type": "datetime"
                 },
                 "description": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -880,6 +999,7 @@
                     "type": "string"
                 },
                 "fields": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -889,6 +1009,7 @@
                     "type": "string"
                 },
                 "google_sheets_formula": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -898,6 +1019,12 @@
                     "type": "html"
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected views"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -907,6 +1034,7 @@
                     "type": "string"
                 },
                 "limit": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -916,6 +1044,7 @@
                     "type": "number"
                 },
                 "model_name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -925,6 +1054,7 @@
                     "type": "string"
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -934,6 +1064,7 @@
                     "type": "string"
                 },
                 "open_view": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -943,6 +1074,7 @@
                     "type": "html"
                 },
                 "owner": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": false,
@@ -952,6 +1084,7 @@
                     "type": null
                 },
                 "public": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -961,6 +1094,7 @@
                     "type": "boolean"
                 },
                 "public_link": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -970,6 +1104,7 @@
                     "type": "html"
                 },
                 "public_slug": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -979,6 +1114,7 @@
                     "type": "string"
                 },
                 "query": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1010,6 +1146,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1019,6 +1156,7 @@
                     "type": "number"
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1028,6 +1166,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1037,6 +1176,7 @@
                     "type": "isnull"
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1046,6 +1186,7 @@
                     "type": "number"
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1055,6 +1196,7 @@
                     "type": "number"
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1064,6 +1206,7 @@
                     "type": "date"
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1073,6 +1216,7 @@
                     "type": "date"
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [
                         "January",
@@ -1095,6 +1239,7 @@
                     "type": "numberchoice"
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1104,6 +1249,7 @@
                     "type": "date"
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1113,6 +1259,7 @@
                     "type": "number"
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [
                         "Sunday",
@@ -1130,6 +1277,7 @@
                     "type": "numberchoice"
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1139,6 +1287,7 @@
                     "type": "date"
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1168,6 +1317,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1177,6 +1327,7 @@
                     "type": "number"
                 },
                 "date": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1186,6 +1337,7 @@
                     "type": "date"
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1195,6 +1347,7 @@
                     "type": "number"
                 },
                 "hour": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1204,6 +1357,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1213,6 +1367,7 @@
                     "type": "isnull"
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1222,6 +1377,7 @@
                     "type": "number"
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1231,6 +1387,7 @@
                     "type": "number"
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1240,6 +1397,7 @@
                     "type": "datetime"
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1249,6 +1407,7 @@
                     "type": "datetime"
                 },
                 "minute": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1258,6 +1417,7 @@
                     "type": "number"
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [
                         "January",
@@ -1280,6 +1440,7 @@
                     "type": "numberchoice"
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1289,6 +1450,7 @@
                     "type": "date"
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1298,6 +1460,7 @@
                     "type": "number"
                 },
                 "second": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1307,6 +1470,7 @@
                     "type": "number"
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [
                         "Sunday",
@@ -1324,6 +1488,7 @@
                     "type": "numberchoice"
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1333,6 +1498,7 @@
                     "type": "date"
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1366,6 +1532,7 @@
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1375,6 +1542,7 @@
                     "type": "duration"
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1384,6 +1552,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1393,6 +1562,7 @@
                     "type": "isnull"
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1402,6 +1572,7 @@
                     "type": "duration"
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1411,6 +1582,7 @@
                     "type": "duration"
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1433,6 +1605,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1442,6 +1615,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1460,6 +1634,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1469,6 +1644,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1487,6 +1663,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1496,6 +1673,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1514,6 +1692,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1523,6 +1702,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1541,6 +1721,7 @@
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1550,6 +1731,7 @@
                     "type": "number"
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1559,6 +1741,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1568,6 +1751,7 @@
                     "type": "isnull"
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1577,6 +1761,7 @@
                     "type": "number"
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1586,6 +1771,7 @@
                     "type": "number"
                 },
                 "std_dev": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1595,6 +1781,7 @@
                     "type": "number"
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1604,6 +1791,7 @@
                     "type": "number"
                 },
                 "variance": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1628,6 +1816,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1637,6 +1826,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1655,6 +1845,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1664,6 +1855,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1673,6 +1865,7 @@
                     "type": "isnull"
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1692,6 +1885,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1701,6 +1895,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1710,6 +1905,7 @@
                     "type": "isnull"
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1729,6 +1925,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1738,6 +1935,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1756,6 +1954,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1765,6 +1964,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1774,6 +1974,7 @@
                     "type": "isnull"
                 },
                 "length": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1793,6 +1994,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1802,6 +2004,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1820,6 +2023,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1829,6 +2033,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1838,6 +2043,7 @@
                     "type": "isnull"
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1857,6 +2063,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1866,6 +2073,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1875,6 +2083,7 @@
                     "type": "isnull"
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1894,6 +2103,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1903,6 +2113,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -1921,6 +2132,7 @@
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": false,
                     "choices": [],
                     "concrete": true,
@@ -1930,6 +2142,7 @@
                     "type": "number"
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,

@@ -90,6 +90,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -99,6 +100,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected groups",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -108,6 +115,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -123,6 +131,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -132,6 +141,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "date_joined": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -141,6 +151,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "datetime",
                 },
                 "email": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -150,6 +161,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "first_name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -159,6 +171,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected users",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -168,6 +186,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_active": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -177,6 +196,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "boolean",
                 },
                 "is_staff": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -186,6 +206,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "boolean",
                 },
                 "is_superuser": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -195,6 +216,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "boolean",
                 },
                 "last_login": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -204,6 +226,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "datetime",
                 },
                 "last_name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -213,6 +236,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "password": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -222,6 +246,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "username": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -250,6 +275,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -259,6 +285,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -268,6 +295,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -283,6 +311,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -292,6 +321,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "andrew": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -301,6 +331,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "bob": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -310,6 +341,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "city": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -319,6 +351,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "fred": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -328,6 +361,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected addresss",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -337,6 +376,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "producer": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -346,6 +386,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "tom": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -370,6 +411,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -379,6 +421,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected in admins",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -388,6 +436,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -403,6 +452,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "id": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -412,6 +462,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "in_admin": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -421,6 +472,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -436,6 +488,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -445,6 +498,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected normals",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -454,6 +513,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "in_admin": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -463,6 +523,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "inline_admin": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -472,6 +533,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -481,6 +543,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "not_in_admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -503,6 +566,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "address": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -512,6 +576,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -521,6 +586,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "frank": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -530,6 +596,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected producers",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -539,6 +611,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -556,6 +629,7 @@ snapshots["test_query_ctx config"] = {
             ],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -565,6 +639,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "annotated": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -574,6 +649,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "boat": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -583,6 +659,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "calculated_boolean": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -592,6 +669,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "boolean",
                 },
                 "created_time": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -601,6 +679,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "datetime",
                 },
                 "date": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -610,6 +689,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "default_sku": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -619,6 +699,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "duration": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -628,6 +709,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "duration",
                 },
                 "extra_inline": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -637,6 +719,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "extra_model": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -646,6 +729,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "fake": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -655,6 +739,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "unknown",
                 },
                 "funky": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -664,6 +749,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected products",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -673,6 +764,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "image": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -682,6 +774,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "is_onsale": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -691,6 +784,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "lambda": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -700,6 +794,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "model_not_in_admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -709,6 +804,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -718,6 +814,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "number_choice": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": ["A", "B"],
                     "concrete": True,
@@ -727,6 +824,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "numberchoice",
                 },
                 "only_in_list_view": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -736,6 +834,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "onsale": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -745,6 +844,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "boolean",
                 },
                 "producer": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -754,6 +854,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "size": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -763,6 +864,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "size_unit": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -772,6 +874,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "stealth_annotation": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -781,6 +884,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "string_choice": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": ["A", "B"],
                     "concrete": True,
@@ -823,6 +927,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "bob": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -832,6 +937,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -841,6 +947,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -850,6 +957,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "product": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -865,6 +973,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -874,6 +983,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected tags",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -883,6 +998,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -898,6 +1014,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -907,6 +1024,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "created_time": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -916,6 +1034,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "datetime",
                 },
                 "description": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -925,6 +1044,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "fields": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -934,6 +1054,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "google_sheets_formula": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -943,6 +1064,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected views",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -952,6 +1079,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "limit": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -961,6 +1089,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "model_name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -970,6 +1099,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -979,6 +1109,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "open_view": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -988,6 +1119,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "owner": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -997,6 +1129,7 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "public": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1006,6 +1139,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "boolean",
                 },
                 "public_link": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -1015,6 +1149,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "public_slug": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1024,6 +1159,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
                 "query": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1055,6 +1191,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1064,6 +1201,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1073,6 +1211,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1082,6 +1221,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1091,6 +1231,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1100,6 +1241,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1109,6 +1251,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1118,6 +1261,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "January",
@@ -1140,6 +1284,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "numberchoice",
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1149,6 +1294,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1158,6 +1304,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "Sunday",
@@ -1175,6 +1322,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "numberchoice",
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1184,6 +1332,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1213,6 +1362,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1222,6 +1372,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "date": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1231,6 +1382,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1240,6 +1392,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "hour": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1249,6 +1402,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1258,6 +1412,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1267,6 +1422,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1276,6 +1432,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1285,6 +1442,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "datetime",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1294,6 +1452,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "datetime",
                 },
                 "minute": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1303,6 +1462,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "January",
@@ -1325,6 +1485,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "numberchoice",
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1334,6 +1495,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1343,6 +1505,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "second": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1352,6 +1515,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "Sunday",
@@ -1369,6 +1533,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "numberchoice",
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1378,6 +1543,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "date",
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1411,6 +1577,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1420,6 +1587,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "duration",
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1429,6 +1597,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1438,6 +1607,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1447,6 +1617,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "duration",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1456,6 +1627,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "duration",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1471,6 +1643,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1480,6 +1653,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1495,6 +1669,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1504,6 +1679,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1519,6 +1695,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1528,6 +1705,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1543,6 +1721,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1552,6 +1731,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1567,6 +1747,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1576,6 +1757,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1585,6 +1767,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1594,6 +1777,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1603,6 +1787,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1612,6 +1797,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "std_dev": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1621,6 +1807,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1630,6 +1817,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "variance": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1654,6 +1842,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1663,6 +1852,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1678,6 +1868,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1687,6 +1878,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1696,6 +1888,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1711,6 +1904,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1720,6 +1914,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1729,6 +1924,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1744,6 +1940,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1753,6 +1950,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1768,6 +1966,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1777,6 +1976,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1786,6 +1986,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "length": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1801,6 +2002,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1810,6 +2012,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1825,6 +2028,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1834,6 +2038,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1843,6 +2048,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1858,6 +2064,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1867,6 +2074,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1876,6 +2084,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1891,6 +2100,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1900,6 +2110,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1915,6 +2126,7 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -1924,6 +2136,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2272,6 +2485,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2281,6 +2495,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected groups",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2290,6 +2510,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2305,6 +2526,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2314,6 +2536,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "date_joined": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2323,6 +2546,7 @@ snapshots["test_query_html config"] = {
                     "type": "datetime",
                 },
                 "email": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2332,6 +2556,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "first_name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2341,6 +2566,12 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected users",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2350,6 +2581,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_active": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2359,6 +2591,7 @@ snapshots["test_query_html config"] = {
                     "type": "boolean",
                 },
                 "is_staff": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2368,6 +2601,7 @@ snapshots["test_query_html config"] = {
                     "type": "boolean",
                 },
                 "is_superuser": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2377,6 +2611,7 @@ snapshots["test_query_html config"] = {
                     "type": "boolean",
                 },
                 "last_login": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2386,6 +2621,7 @@ snapshots["test_query_html config"] = {
                     "type": "datetime",
                 },
                 "last_name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2395,6 +2631,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "password": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2404,6 +2641,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "username": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2432,6 +2670,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -2441,6 +2680,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2450,6 +2690,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -2465,6 +2706,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2474,6 +2716,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "andrew": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2483,6 +2726,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "bob": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2492,6 +2736,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "city": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2501,6 +2746,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "fred": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2510,6 +2756,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected addresss",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2519,6 +2771,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "producer": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -2528,6 +2781,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "tom": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2552,6 +2806,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2561,6 +2816,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected in admins",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2570,6 +2831,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2585,6 +2847,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "id": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2594,6 +2857,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "in_admin": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -2603,6 +2867,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2618,6 +2883,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2627,6 +2893,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected normals",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2636,6 +2908,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "in_admin": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -2645,6 +2918,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "inline_admin": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -2654,6 +2928,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2663,6 +2938,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "not_in_admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2685,6 +2961,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "address": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -2694,6 +2971,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2703,6 +2981,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "frank": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2712,6 +2991,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected producers",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2721,6 +3006,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2738,6 +3024,7 @@ snapshots["test_query_html config"] = {
             ],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2747,6 +3034,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "annotated": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2756,6 +3044,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "boat": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2765,6 +3054,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "calculated_boolean": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2774,6 +3064,7 @@ snapshots["test_query_html config"] = {
                     "type": "boolean",
                 },
                 "created_time": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2783,6 +3074,7 @@ snapshots["test_query_html config"] = {
                     "type": "datetime",
                 },
                 "date": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2792,6 +3084,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "default_sku": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -2801,6 +3094,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "duration": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2810,6 +3104,7 @@ snapshots["test_query_html config"] = {
                     "type": "duration",
                 },
                 "extra_inline": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2819,6 +3114,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "extra_model": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2828,6 +3124,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "fake": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2837,6 +3134,7 @@ snapshots["test_query_html config"] = {
                     "type": "unknown",
                 },
                 "funky": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2846,6 +3144,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected products",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2855,6 +3159,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "image": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2864,6 +3169,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "is_onsale": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2873,6 +3179,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "lambda": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -2882,6 +3189,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "model_not_in_admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2891,6 +3199,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2900,6 +3209,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "number_choice": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": ["A", "B"],
                     "concrete": True,
@@ -2909,6 +3219,7 @@ snapshots["test_query_html config"] = {
                     "type": "numberchoice",
                 },
                 "only_in_list_view": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2918,6 +3229,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "onsale": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2927,6 +3239,7 @@ snapshots["test_query_html config"] = {
                     "type": "boolean",
                 },
                 "producer": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -2936,6 +3249,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "size": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2945,6 +3259,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "size_unit": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2954,6 +3269,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "stealth_annotation": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -2963,6 +3279,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "string_choice": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": ["A", "B"],
                     "concrete": True,
@@ -3005,6 +3322,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "bob": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3014,6 +3332,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3023,6 +3342,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3032,6 +3352,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "product": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -3047,6 +3368,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3056,6 +3378,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected tags",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3065,6 +3393,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3080,6 +3409,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3089,6 +3419,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "created_time": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3098,6 +3429,7 @@ snapshots["test_query_html config"] = {
                     "type": "datetime",
                 },
                 "description": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3107,6 +3439,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "fields": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3116,6 +3449,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "google_sheets_formula": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3125,6 +3459,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected views",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3134,6 +3474,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "limit": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3143,6 +3484,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "model_name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3152,6 +3494,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "name": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3161,6 +3504,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "open_view": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3170,6 +3514,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "owner": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": False,
@@ -3179,6 +3524,7 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "public": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3188,6 +3534,7 @@ snapshots["test_query_html config"] = {
                     "type": "boolean",
                 },
                 "public_link": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3197,6 +3544,7 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "public_slug": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3206,6 +3554,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
                 "query": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3237,6 +3586,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3246,6 +3596,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3255,6 +3606,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3264,6 +3616,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3273,6 +3626,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3282,6 +3636,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3291,6 +3646,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3300,6 +3656,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "January",
@@ -3322,6 +3679,7 @@ snapshots["test_query_html config"] = {
                     "type": "numberchoice",
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3331,6 +3689,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3340,6 +3699,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "Sunday",
@@ -3357,6 +3717,7 @@ snapshots["test_query_html config"] = {
                     "type": "numberchoice",
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3366,6 +3727,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3395,6 +3757,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3404,6 +3767,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "date": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3413,6 +3777,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3422,6 +3787,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "hour": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3431,6 +3797,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3440,6 +3807,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3449,6 +3817,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3458,6 +3827,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3467,6 +3837,7 @@ snapshots["test_query_html config"] = {
                     "type": "datetime",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3476,6 +3847,7 @@ snapshots["test_query_html config"] = {
                     "type": "datetime",
                 },
                 "minute": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3485,6 +3857,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "January",
@@ -3507,6 +3880,7 @@ snapshots["test_query_html config"] = {
                     "type": "numberchoice",
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3516,6 +3890,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3525,6 +3900,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "second": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3534,6 +3910,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "Sunday",
@@ -3551,6 +3928,7 @@ snapshots["test_query_html config"] = {
                     "type": "numberchoice",
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3560,6 +3938,7 @@ snapshots["test_query_html config"] = {
                     "type": "date",
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3593,6 +3972,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3602,6 +3982,7 @@ snapshots["test_query_html config"] = {
                     "type": "duration",
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3611,6 +3992,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3620,6 +4002,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3629,6 +4012,7 @@ snapshots["test_query_html config"] = {
                     "type": "duration",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3638,6 +4022,7 @@ snapshots["test_query_html config"] = {
                     "type": "duration",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3653,6 +4038,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3662,6 +4048,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3677,6 +4064,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3686,6 +4074,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3701,6 +4090,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3710,6 +4100,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3725,6 +4116,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3734,6 +4126,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3749,6 +4142,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3758,6 +4152,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3767,6 +4162,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3776,6 +4172,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3785,6 +4182,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3794,6 +4192,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "std_dev": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3803,6 +4202,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3812,6 +4212,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "variance": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3836,6 +4237,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3845,6 +4247,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3860,6 +4263,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3869,6 +4273,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3878,6 +4283,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3893,6 +4299,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3902,6 +4309,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3911,6 +4319,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3926,6 +4335,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3935,6 +4345,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3950,6 +4361,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3959,6 +4371,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3968,6 +4381,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "length": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3983,6 +4397,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -3992,6 +4407,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4007,6 +4423,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4016,6 +4433,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4025,6 +4443,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4040,6 +4459,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4049,6 +4469,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4058,6 +4479,7 @@ snapshots["test_query_html config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4073,6 +4495,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4082,6 +4505,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4097,6 +4521,7 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4106,6 +4531,7 @@ snapshots["test_query_html config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4454,6 +4880,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4463,6 +4890,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4472,6 +4900,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4487,6 +4916,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4496,6 +4926,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4505,6 +4936,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4514,6 +4946,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4523,6 +4956,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4532,6 +4966,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4541,6 +4976,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "date",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4550,6 +4986,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "date",
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "January",
@@ -4572,6 +5009,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "numberchoice",
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4581,6 +5019,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "date",
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4590,6 +5029,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "Sunday",
@@ -4607,6 +5047,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "numberchoice",
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4616,6 +5057,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "date",
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4645,6 +5087,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4654,6 +5097,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "date": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4663,6 +5107,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "date",
                 },
                 "day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4672,6 +5117,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "hour": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4681,6 +5127,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4690,6 +5137,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "iso_week": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4699,6 +5147,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "iso_year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4708,6 +5157,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4717,6 +5167,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "datetime",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4726,6 +5177,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "datetime",
                 },
                 "minute": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4735,6 +5187,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "month": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "January",
@@ -4757,6 +5210,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "numberchoice",
                 },
                 "month_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4766,6 +5220,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "date",
                 },
                 "quarter": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4775,6 +5230,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "second": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4784,6 +5240,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "week_day": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [
                         "Sunday",
@@ -4801,6 +5258,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "numberchoice",
                 },
                 "week_start": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4810,6 +5268,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "date",
                 },
                 "year": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4843,6 +5302,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4852,6 +5312,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "duration",
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4861,6 +5322,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4870,6 +5332,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4879,6 +5342,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "duration",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4888,6 +5352,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "duration",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4903,6 +5368,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4912,6 +5378,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4927,6 +5394,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4936,6 +5404,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4951,6 +5420,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4960,6 +5430,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4975,6 +5446,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -4984,6 +5456,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4999,6 +5472,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "average": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5008,6 +5482,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5017,6 +5492,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5026,6 +5502,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "max": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5035,6 +5512,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "min": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5044,6 +5522,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "std_dev": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5053,6 +5532,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "sum": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5062,6 +5542,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "variance": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5086,6 +5567,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5095,6 +5577,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5110,6 +5593,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5119,6 +5603,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5128,6 +5613,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5143,6 +5629,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5152,6 +5639,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5161,6 +5649,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5176,6 +5665,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5185,6 +5675,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5200,6 +5691,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5209,6 +5701,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5218,6 +5711,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "length": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5233,6 +5727,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5242,6 +5737,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5257,6 +5753,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5266,6 +5763,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5275,6 +5773,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5290,6 +5789,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5299,6 +5799,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5308,6 +5809,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "isnull",
                 },
                 "raw": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5323,6 +5825,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5332,6 +5835,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -5347,6 +5851,7 @@ snapshots["test_query_html_no_perms config"] = {
             "defaultFilters": [],
             "fields": {
                 "count": {
+                    "actions": [],
                     "canPivot": False,
                     "choices": [],
                     "concrete": True,
@@ -5356,6 +5861,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "type": "number",
                 },
                 "is_null": {
+                    "actions": [],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
