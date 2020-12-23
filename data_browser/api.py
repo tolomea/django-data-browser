@@ -2,6 +2,7 @@ import json
 
 import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
+from django.views.decorators import csrf
 
 from .common import HttpResponse, JsonResponse, can_make_public
 from .models import View, global_data
@@ -61,6 +62,7 @@ def get_queryset(request):
     return View.objects.filter(owner=request.user)
 
 
+@csrf.csrf_protect
 @admin_decorators.staff_member_required
 def view_list(request):
     global_data.request = request
@@ -79,6 +81,7 @@ def view_list(request):
         return HttpResponse(status=400)
 
 
+@csrf.csrf_protect
 @admin_decorators.staff_member_required
 def view_detail(request, pk):
     global_data.request = request

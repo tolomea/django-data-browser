@@ -140,6 +140,7 @@ def query_ctx(request, *, model_name="", fields=""):
     return JsonResponse(config)
 
 
+@csrf.csrf_protect
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
