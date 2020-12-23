@@ -54,6 +54,11 @@ class OrmModel:
     def get_queryset(self, request, fields=()):
         return admin_get_queryset(self.admin, request, fields)
 
+    def do_action(self, request, action, pks):
+        qs = self.get_queryset(request).filter(id__in=pks)
+        func, _, _ = self.admin.get_actions(request)[action]
+        return func(self.admin, request, qs)
+
 
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"

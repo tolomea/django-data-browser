@@ -140,10 +140,43 @@ def query_ctx(request, *, model_name="", fields=""):
     return JsonResponse(config)
 
 
+def admin_action(request, model_name, fields):
+    action = request.POST["action"]
+    field = request.POST["field"]
+
+    assert field in fields
+    if field not in fields.split(","):
+        return
+
+    params = hyperlink.parse(request.get_full_path()).query
+    query = Query.from_request(model_name, field, params)
+
+    orm_models = get_models(request)
+    if query.model_name not in orm_models:
+        raise http.Http404(f"{query.model_name} does not exist")
+
+    bound_query = BoundQuery.bind(query, orm_models)
+
+    results = get_results(request, bound_query, orm_models, False)
+
+    pks = {row.get(field) for row in results["rows"]} | {
+        col.get(field) for col in results["cols"]
+    }
+    pks -= {None}
+
+    model_name = bound_query.fields[0].orm_bound_field.field.model_name
+    return orm_models[model_name].do_action(request, action, pks)
+
+
 @csrf.csrf_protect
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
+    if request.method == "POST":
+        resp = admin_action(request, model_name, fields)
+        if resp:
+            return resp
+
     config = _get_config(request)
     config = json.dumps(config, cls=DjangoJSONEncoder)
     config = (
@@ -152,7 +185,7 @@ def query_html(request, *, model_name="", fields=""):
 
     if settings.DATA_BROWSER_DEV:  # pragma: no cover
         try:
-            response = _get_from_js_dev_server(request)
+            response = _get_from_js_dev_server(request, "get")
         except Exception as e:
             return HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
 
@@ -331,12 +364,14 @@ def _data_response(request, query, media, privileged=False):
         raise http.Http404(f"Bad file format {media} requested")
 
 
-def _get_from_js_dev_server(request):  # pragma: no cover
+def _get_from_js_dev_server(request, method=None):  # pragma: no cover
     import requests
 
+    if method is None:
+        method = request.META["REQUEST_METHOD"].lower()
+
     upstream_url = f"http://127.0.0.1:3000{request.path}"
-    print(f"Proxy request: {upstream_url}")
-    method = request.META["REQUEST_METHOD"].lower()
+    print(f"Proxy request: {method} {upstream_url}")
     return getattr(requests, method)(upstream_url, stream=True)
 
 
