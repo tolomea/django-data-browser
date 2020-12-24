@@ -143,6 +143,15 @@ def func(obj):
     return f"f{obj.name}"
 
 
+def an_action(modeladmin, request, queryset):
+    pass  # pragma: no cover
+
+
+@attributes(ddb_hide=True)
+def a_hidden_action(modeladmin, request, queryset):
+    pass  # pragma: no cover
+
+
 @admin.register(models.Product)
 class ProductAdmin(ProductMixin, AdminMixin, admin.ModelAdmin):
     inlines = [SKUInline]
@@ -155,6 +164,7 @@ class ProductAdmin(ProductMixin, AdminMixin, admin.ModelAdmin):
     ]
     ddb_hide_fields = ["hidden_model"]
     ddb_extra_fields = ["extra_model"]
+    actions = [an_action, a_hidden_action]
 
     @annotation
     def annotated(self, request, qs):

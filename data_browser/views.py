@@ -11,7 +11,6 @@ import django.contrib.admin.views.decorators as admin_decorators
 import hyperlink
 import sqlparse
 from django import http
-from django.contrib.admin.utils import model_format_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404
 from django.template import engines, loader
@@ -75,11 +74,8 @@ def _get_model_fields(model_name, orm_models):
             "choices": [v for k, v in orm_field.choices],
             "defaultSort": orm_field.default_sort,
             "actions": [
-                {
-                    "name": name,
-                    "prettyName": desc % model_format_dict(orm_model.admin.opts),
-                }
-                for func, name, desc in (orm_field.actions or {}).values()
+                {"name": name, "prettyName": desc}
+                for name, (func, desc) in sorted((orm_field.actions or {}).items())
             ],
         }
         for name, orm_field in orm_model.fields.items()

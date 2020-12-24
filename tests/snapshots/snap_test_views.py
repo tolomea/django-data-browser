@@ -750,10 +750,11 @@ snapshots["test_query_ctx config"] = {
                 },
                 "id": {
                     "actions": [
+                        {"name": "an_action", "prettyName": "An action"},
                         {
                             "name": "delete_selected",
                             "prettyName": "Delete selected products",
-                        }
+                        },
                     ],
                     "canPivot": True,
                     "choices": [],
@@ -3145,10 +3146,11 @@ snapshots["test_query_html config"] = {
                 },
                 "id": {
                     "actions": [
+                        {"name": "an_action", "prettyName": "An action"},
                         {
                             "name": "delete_selected",
                             "prettyName": "Delete selected products",
-                        }
+                        },
                     ],
                     "canPivot": True,
                     "choices": [],

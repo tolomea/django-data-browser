@@ -691,6 +691,10 @@
                 "id": {
                     "actions": [
                         {
+                            "name": "an_action",
+                            "prettyName": "An action"
+                        },
+                        {
                             "name": "delete_selected",
                             "prettyName": "Delete selected products"
                         }

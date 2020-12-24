@@ -146,7 +146,7 @@ However if necessary this can be tweaked using the following class level propert
 | | get_ddb_default_filters()     |                                           | | E.G. to add ``client__name__equals=Test`` use ``[(`client__name`, `equals`, `Test`)]``.                   |
 +---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
-Additionally, per the below sections, calculated fields can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
+Additionally, per the below sections, calculated fields and actions can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
 
 Calculated and Annotated fields

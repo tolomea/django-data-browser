@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from django.contrib.admin import site
 from django.contrib.admin.options import BaseModelAdmin
-from django.contrib.admin.utils import flatten_fieldsets
+from django.contrib.admin.utils import flatten_fieldsets, model_format_dict
 from django.contrib.auth.admin import UserAdmin
 from django.core.exceptions import FieldDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
@@ -56,7 +56,7 @@ class OrmModel:
 
     def do_action(self, request, action, pks):
         qs = self.get_queryset(request).filter(id__in=pks)
-        func, _, _ = self.admin.get_actions(request)[action]
+        func, desc = admin_get_actions(self.admin, request)[action]
         return func(self.admin, request, qs)
 
 
@@ -90,6 +90,16 @@ def open_in_admin(obj):
 def admin_get_queryset(admin, request, fields=()):
     request.data_browser = {"calculated_fields": set(fields), "fields": set(fields)}
     return admin.get_queryset(request)
+
+
+def admin_get_actions(admin, request):
+    request.data_browser = {"calculated_fields": set(), "fields": set()}
+    res = {}
+    for func, name, desc in admin.get_actions(request).values():
+        if not getattr(func, "ddb_hide", False):
+            desc %= model_format_dict(admin.opts)
+            res[name] = func, desc
+    return res
 
 
 def _get_all_admin_fields(request):
@@ -326,7 +336,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     )
 
             if field_name == "id" and hasattr(admin, "get_actions"):
-                actions = admin.get_actions(request)
+                actions = admin_get_actions(admin, request)
             else:
                 actions = {}
 
