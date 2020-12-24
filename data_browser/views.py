@@ -146,14 +146,14 @@ def admin_action(request, model_name, fields):
 
     assert field in fields
     if field not in fields.split(","):
-        return
+        return  # pragma: no cover
 
     params = hyperlink.parse(request.get_full_path()).query
     query = Query.from_request(model_name, field, params)
 
     orm_models = get_models(request)
     if query.model_name not in orm_models:
-        raise http.Http404(f"{query.model_name} does not exist")
+        raise http.Http404(f"{query.model_name} does not exist")  # pragma: no cover
 
     bound_query = BoundQuery.bind(query, orm_models)
 
@@ -174,7 +174,7 @@ def admin_action(request, model_name, fields):
 def query_html(request, *, model_name="", fields=""):
     if request.method == "POST":
         resp = admin_action(request, model_name, fields)
-        if resp:
+        if resp:  # pragma: no branch
             return resp
 
     config = _get_config(request)

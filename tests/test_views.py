@@ -329,3 +329,54 @@ def test_view_json(admin_client):
     view.save()
     res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 404
+
+
+@pytest.mark.usefixtures("products")
+def test_action(admin_client):
+    url = "/data_browser/query/core.Product/id.%s"
+
+    ids = set(models.Product.objects.values_list("id", flat=True))
+    assert len(ids) == 3
+
+    res = admin_client.get(url % "json")
+    assert {row["id"] for row in res.json()["rows"]} == ids
+
+    res = admin_client.post(url % "html", {"action": "delete_selected", "field": "id"})
+    assert "Are you sure you want to delete the selected" in res.rendered_content
+    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == ids
+
+
+@pytest.mark.usefixtures("products")
+def test_action_filtered(admin_client):
+    url = "/data_browser/query/core.Product/id.%s?size__equals=2"
+
+    ids = set(models.Product.objects.filter(size=2).values_list("id", flat=True))
+    assert len(ids) == 1
+
+    res = admin_client.get(url % "json")
+    assert {row["id"] for row in res.json()["rows"]} == set(ids)
+
+    res = admin_client.post(url % "html", {"action": "delete_selected", "field": "id"})
+    assert "Are you sure you want to delete the selected" in res.rendered_content
+    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == ids
+
+
+@pytest.mark.usefixtures("products")
+def test_related_action(admin_client):
+    url = "/data_browser/query/core.Product/address__id,producer__id,id.%s"
+
+    product_ids = set(models.Product.objects.values_list("id", flat=True))
+    assert len(product_ids) == 3
+
+    producer_ids = set(models.Producer.objects.values_list("id", flat=True))
+    assert len(producer_ids) == 1
+
+    res = admin_client.get(url % "json")
+    assert {row["id"] for row in res.json()["rows"]} == product_ids
+    assert {row["producer__id"] for row in res.json()["rows"]} == producer_ids
+
+    res = admin_client.post(
+        url % "html", {"action": "delete_selected", "field": "producer__id"}
+    )
+    assert "Are you sure you want to delete the selected" in res.rendered_content
+    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == producer_ids
