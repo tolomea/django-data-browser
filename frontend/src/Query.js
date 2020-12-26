@@ -47,7 +47,9 @@ class Query {
     const path = pathStr.split("__");
     let model = this.query.model;
     for (const field of path.slice(0, -1)) {
-      model = this.config.allModelFields[model].fields[field].model;
+      const modelField = this.config.allModelFields[model].fields[field];
+      if (modelField === undefined) return null;
+      model = modelField.model;
     }
     return this.config.allModelFields[model].fields[path.slice(-1)];
   }

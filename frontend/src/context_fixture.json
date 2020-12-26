@@ -562,9 +562,19 @@
         "core.Product": {
             "defaultFilters": [
                 {
+                    "lookup": "a_lookup",
+                    "pathStr": "a_field",
+                    "value": "a_value"
+                },
+                {
                     "lookup": "not_equals",
                     "pathStr": "name",
                     "value": "not a thing"
+                },
+                {
+                    "lookup": "a_lookup",
+                    "pathStr": "a_field",
+                    "value": "true"
                 }
             ],
             "fields": {

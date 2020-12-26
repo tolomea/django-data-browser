@@ -97,8 +97,30 @@ function FilterValue(props) {
 function Filter(props) {
   const { pathStr, index, lookup, query, value, errorMessage, parsed } = props;
   const field = query.getField(pathStr);
-  const type = query.getType(field);
-  const lookupType = type.lookups[lookup].type;
+  var type = null;
+  var lookupType = null;
+  if (field !== null) {
+    type = query.getType(field);
+    if (type.lookups.hasOwnProperty(lookup))
+      lookupType = type.lookups[lookup].type;
+  }
+
+  if (lookupType === null)
+    return (
+      <tr className="Filter">
+        <td>
+          {" "}
+          <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
+          {pathStr}
+        </td>
+        <td>{lookup}</td>
+        <td>
+          {value}
+          <p className="Error">{errorMessage}</p>
+        </td>
+      </tr>
+    );
+
   return (
     <tr className="Filter">
       <td>

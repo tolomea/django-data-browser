@@ -625,7 +625,9 @@ snapshots["test_query_ctx config"] = {
         },
         "core.Product": {
             "defaultFilters": [
-                {"lookup": "not_equals", "pathStr": "name", "value": "not a thing"}
+                {"lookup": "a_lookup", "pathStr": "a_field", "value": "a_value"},
+                {"lookup": "not_equals", "pathStr": "name", "value": "not a thing"},
+                {"lookup": "a_lookup", "pathStr": "a_field", "value": "true"},
             ],
             "fields": {
                 "admin": {
@@ -3021,7 +3023,9 @@ snapshots["test_query_html config"] = {
         },
         "core.Product": {
             "defaultFilters": [
-                {"lookup": "not_equals", "pathStr": "name", "value": "not a thing"}
+                {"lookup": "a_lookup", "pathStr": "a_field", "value": "a_value"},
+                {"lookup": "not_equals", "pathStr": "name", "value": "not a thing"},
+                {"lookup": "a_lookup", "pathStr": "a_field", "value": "true"},
             ],
             "fields": {
                 "admin": {

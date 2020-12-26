@@ -288,7 +288,7 @@ class TestBoundQuery:
     def test_bad_filter(self, orm_models):
         query = Query("app.model", [], [QueryFilter("yata", "equals", "fred")])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.filters] == []
+        assert [f.path for f in bound_query.filters] == [["yata"]]
 
     def test_bad_filter_value(self, orm_models):
         query = Query(
@@ -308,7 +308,7 @@ class TestBoundQuery:
     def test_filter_calculated_field(self, orm_models):
         query = Query("app.model", [], [QueryFilter("fn", "equals", "fred")])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.filters] == []
+        assert [f.path for f in bound_query.filters] == [["fn"]]
 
 
 class TestType:

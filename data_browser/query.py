@@ -28,6 +28,7 @@ class QueryFilter:
     value: str
 
     def __post_init__(self):
+        self.path_str = self.path
         self.path = self.path.split("__")
 
 
@@ -120,39 +121,39 @@ class Query:
         return f"{base_url}?{params}"
 
 
-class BoundFieldMixin:
-    @cached_property
-    def path(self):
-        return self.orm_bound_field.full_path
-
-    @cached_property
-    def pretty_path(self):
-        return self.orm_bound_field.pretty_path
-
-    @cached_property
-    def path_str(self):
-        return self.orm_bound_field.path_str
-
-
 @dataclass
-class BoundFilter(BoundFieldMixin):
+class BoundFilter:
     orm_bound_field: Any
     lookup: str
     value: str
+    query_filter: QueryFilter
 
     @classmethod
     def bind(cls, orm_bound_field, query_filter):
-        return cls(orm_bound_field, query_filter.lookup, query_filter.value)
+        return cls(
+            orm_bound_field, query_filter.lookup, query_filter.value, query_filter
+        )
 
     def __post_init__(self):
-        self.parsed, self.err_message = self.orm_bound_field.parse_lookup(
-            self.lookup, self.value
-        )
+        if self.orm_bound_field:
+            self.parsed, self.err_message = self.orm_bound_field.parse_lookup(
+                self.lookup, self.value
+            )
+        else:
+            self.err_message = "Unknown field"
         self.is_valid = not self.err_message
+
+    @cached_property
+    def path(self):
+        return self.query_filter.path
+
+    @cached_property
+    def path_str(self):
+        return self.query_filter.path_str
 
 
 @dataclass
-class BoundField(BoundFieldMixin):
+class BoundField:
     orm_bound_field: Any
     pivoted: bool
     direction: Optional[str]
@@ -166,6 +167,18 @@ class BoundField(BoundFieldMixin):
             query_field.direction if orm_bound_field.concrete else None,
             query_field.priority if orm_bound_field.concrete else None,
         )
+
+    @cached_property
+    def path(self):
+        return self.orm_bound_field.full_path
+
+    @cached_property
+    def pretty_path(self):
+        return self.orm_bound_field.pretty_path
+
+    @cached_property
+    def path_str(self):
+        return self.orm_bound_field.path_str
 
 
 def _orm_fields(fields):
@@ -208,8 +221,9 @@ class BoundQuery:
         filters = []
         for query_filter in query.filters:
             orm_bound_field = get_orm_field(query_filter.path)
-            if orm_bound_field and orm_bound_field.concrete:
-                filters.append(BoundFilter.bind(orm_bound_field, query_filter))
+            if orm_bound_field and not orm_bound_field.concrete:
+                orm_bound_field = None
+            filters.append(BoundFilter.bind(orm_bound_field, query_filter))
 
         return cls(model_name, fields, filters, query.limit, orm_models[model_name])
 

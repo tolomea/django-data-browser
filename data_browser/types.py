@@ -84,7 +84,7 @@ class BaseType(metaclass=TypeMeta):
     def parse_lookup(cls, lookup, value, choices):
         lookups = cls.lookups
         if lookup not in lookups:
-            return None, f"Bad lookup '{lookup}' expected {lookups}"
+            return None, "Bad lookup"
         else:
             pretty_name, type_name = lookups[lookup]
             type_ = TYPES[type_name]

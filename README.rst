@@ -320,6 +320,7 @@ Release History
 |           |                | Show "less than", "greater than" etc as "<", ">", etc.                                   |
 |           |                | Mouse hover tooltip help for date and datetime filter values.                            |
 |           |                | Support for invoking admin actions by right clicking on ``id`` column headers.           |
+|           |                | Filters with bad fields and lookups are reported as errors rather than being ignored.    |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.4     | 2020-12-19     | Fix UUID's not being filterable.                                                         |
 |           |                | Fix right click drill and filter trying to filter unfilterable fields.                   |

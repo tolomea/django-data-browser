@@ -41,6 +41,8 @@ def _get_query_data(bound_query):
         "filterErrors": [filter_.err_message for filter_ in bound_query.filters],
         "parsedFilterValues": [
             filter_.orm_bound_field.get_formatter()(filter_.parsed)
+            if filter_.is_valid
+            else None
             for filter_ in bound_query.filters
         ],
         "fields": [
