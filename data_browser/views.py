@@ -252,7 +252,7 @@ def view(request, pk, media):
     ):
         request.user = view.owner  # public views are run as the person who owns them
         query = view.get_query()
-        return _data_response(request, query, media, privileged=False)
+        return _data_response(request, query, media, privileged=False, strict=True)
     else:
         raise http.Http404("No View matches the given query.")
 
@@ -294,11 +294,14 @@ class Echo:
         return value
 
 
-def _data_response(request, query, media, privileged=False):
+def _data_response(request, query, media, privileged=False, strict=False):
     orm_models = get_models(request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)
+
+    if strict and not all(f.is_valid for f in bound_query.filters):
+        return http.HttpResponseBadRequest()
 
     if media == "csv":
         results = get_results(request, bound_query, orm_models, False)

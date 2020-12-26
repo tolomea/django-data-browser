@@ -321,6 +321,7 @@ Release History
 |           |                | Mouse hover tooltip help for date and datetime filter values.                            |
 |           |                | Support for invoking admin actions by right clicking on ``id`` column headers.           |
 |           |                | Filters with bad fields and lookups are reported as errors rather than being ignored.    |
+|           |                | Bad filters on public saved View's now result in a 400 when loading the public URL.      |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.4     | 2020-12-19     | Fix UUID's not being filterable.                                                         |
 |           |                | Fix right click drill and filter trying to filter unfilterable fields.                   |
