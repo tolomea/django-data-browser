@@ -32,16 +32,16 @@ class _AdminOptions:
         return self.ddb_ignore
 
     def get_ddb_extra_fields(self, request):
-        return self.ddb_extra_fields
+        return list(self.ddb_extra_fields)
 
     def get_ddb_hide_fields(self, request):
-        return self.ddb_hide_fields
+        return list(self.ddb_hide_fields)
 
     def get_ddb_json_fields(self, request):
-        return self.ddb_json_fields
+        return dict(self.ddb_json_fields)
 
     def get_ddb_default_filters(self):
-        return self.ddb_default_filters
+        return list(self.ddb_default_filters)
 
 
 def _get_option(admin, name, *args):
