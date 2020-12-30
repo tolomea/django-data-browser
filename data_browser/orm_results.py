@@ -88,22 +88,18 @@ def get_result_queryset(request, bound_query):
         ]
 
     # group by
-    qs = qs.values(
-        *[
-            field.queryset_path_str
-            for field in bound_query.bound_fields
-            if field.group_by
-        ]
-    ).distinct()
+    group_by_fields = [
+        field.queryset_path_str for field in bound_query.bound_fields if field.group_by
+    ]
+    qs = qs.values(*group_by_fields).distinct()
 
     # aggregates
-    qs = qs.annotate(
-        **dict(
-            field.aggregate_clause
-            for field in bound_query.bound_fields + bound_query.bound_filters
-            if field.aggregate_clause
-        )
+    aggregate_clauses = dict(
+        field.aggregate_clause
+        for field in bound_query.bound_fields + bound_query.bound_filters
+        if field.aggregate_clause
     )
+    qs = qs.annotate(**aggregate_clauses)
 
     # having, aka filter aggregate fields
     for filter_ in bound_query.valid_filters:

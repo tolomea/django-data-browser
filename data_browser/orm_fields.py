@@ -14,7 +14,7 @@ from .types import (
     HTMLType,
     UnknownType,
 )
-from .util import s
+from .util import annotation_path, s
 
 
 @dataclass
@@ -242,7 +242,7 @@ class OrmAnnotatedField(OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=[s(["ddb"] + full_path)],
+            queryset_path=annotation_path(full_path),
             filter_=True,
         )
 
