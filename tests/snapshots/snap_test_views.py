@@ -985,21 +985,6 @@ snapshots["test_query_ctx config"] = {
                     "prettyName": "Admin",
                     "type": "html",
                 },
-                "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "defaultSort": None,
-                    "model": "number",
-                    "prettyName": "ID",
-                    "type": "number",
-                },
                 "name": {
                     "actions": [],
                     "canPivot": True,
@@ -1011,7 +996,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["id", "admin", "name"],
+            "sortedFields": ["admin", "name"],
         },
         "data_browser.View": {
             "defaultFilters": [],
@@ -3383,21 +3368,6 @@ snapshots["test_query_html config"] = {
                     "prettyName": "Admin",
                     "type": "html",
                 },
-                "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
-                    "canPivot": True,
-                    "choices": [],
-                    "concrete": True,
-                    "defaultSort": None,
-                    "model": "number",
-                    "prettyName": "ID",
-                    "type": "number",
-                },
                 "name": {
                     "actions": [],
                     "canPivot": True,
@@ -3409,7 +3379,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["id", "admin", "name"],
+            "sortedFields": ["admin", "name"],
         },
         "data_browser.View": {
             "defaultFilters": [],

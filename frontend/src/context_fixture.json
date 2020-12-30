@@ -947,21 +947,6 @@
                     "prettyName": "Admin",
                     "type": "html"
                 },
-                "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags"
-                        }
-                    ],
-                    "canPivot": true,
-                    "choices": [],
-                    "concrete": true,
-                    "defaultSort": null,
-                    "model": "number",
-                    "prettyName": "ID",
-                    "type": "number"
-                },
                 "name": {
                     "actions": [],
                     "canPivot": true,
@@ -974,7 +959,6 @@
                 }
             },
             "sortedFields": [
-                "id",
                 "admin",
                 "name"
             ]

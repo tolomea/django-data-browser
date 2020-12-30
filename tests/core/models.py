@@ -85,7 +85,7 @@ class Normal(models.Model):
 
 
 class Tag(models.Model):
-    name = models.TextField()
+    name = models.TextField(primary_key=True)
 
 
 class Address(models.Model):

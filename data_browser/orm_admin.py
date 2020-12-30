@@ -174,10 +174,10 @@ def _get_all_admin_fields(request):
         all_admin_fields[model].update(from_fieldsets(model_admin, True))
 
     # we always have id and never pk
-    for fields in all_admin_fields.values():
+    for model, fields in all_admin_fields.items():
         try:
             model._meta.get_field("id")
-        except FieldDoesNotExist:  # pragma: no cover
+        except FieldDoesNotExist:
             pass
         else:
             fields.add("id")
