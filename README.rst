@@ -315,7 +315,7 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | Protect model admin class option values from accidental modification.                    |
+| 3.2.1     | 2020-12-30     | Protect model admin class option values from accidental modification.                    |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.2.0     | 2020-12-30     | | Support for invoking admin actions by right clicking on ``id`` column headers.         |
 |           |                | | Fix various filter issues.                                                             |
