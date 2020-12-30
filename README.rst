@@ -315,25 +315,26 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | Fix various filter issues.                                                               |
-|           |                | Don't show ``id`` on models that don't have an ``id`` field.                             |
-|           |                | Show "less than", "greater than" etc as "<", ">", etc.                                   |
-|           |                | Mouse hover tooltip help for date and datetime filter values.                            |
-|           |                | Support for invoking admin actions by right clicking on ``id`` column headers.           |
-|           |                | Filters with bad fields and lookups are reported as errors rather than being ignored.    |
-|           |                | Bad filters on public saved View's now result in a 400 when loading the public URL.      |
+| 3.2.0     | 2020-12-30     | | Support for invoking admin actions by right clicking on ``id`` column headers.         |
+|           |                | | Fix various filter issues.                                                             |
+|           |                | | Don't show ``id`` on models that don't have an ``id`` field.                           |
+|           |                | | Show "less than", "greater than" etc as "<", ">", etc.                                 |
+|           |                | | Mouse hover tooltip help for date and datetime filter values.                          |
+|           |                | | Filters with bad fields and lookups are reported as errors rather than being ignored.  |
+|           |                | | Bad filters on public saved View's now result in a 400 when loading the public URL.    |
+|           |                | | Fix issue filtering on aggregated annotations.                                         |
 +-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.4     | 2020-12-19     | Fix UUID's not being filterable.                                                         |
-|           |                | Fix right click drill and filter trying to filter unfilterable fields.                   |
-|           |                | Fix spurious ``0`` appearing below numeric ``0`` filter values.                          |
-|           |                | Add an ``extrahead`` block to the template and documentation for overriding CSS.         |
+| 3.1.4     | 2020-12-19     | | Fix UUID's not being filterable.                                                       |
+|           |                | | Fix right click drill and filter trying to filter unfilterable fields.                 |
+|           |                | | Fix spurious ``0`` appearing below numeric ``0`` filter values.                        |
+|           |                | | Add an ``extrahead`` block to the template and documentation for overriding CSS.       |
 +-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.3     | 2020-12-13     | Relative time support in date and time filters.                                          |
-|           |                | Show parsed dates and datetimes next to filters.                                         |
-|           |                | Add view SQL link on front page.                                                         |
+| 3.1.3     | 2020-12-13     | | Relative time support in date and time filters.                                        |
+|           |                | | Show parsed dates and datetimes next to filters.                                       |
+|           |                | | Add view SQL link on front page.                                                       |
 +-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.2     | 2020-12-09     | Remove length function from UUID's.                                                      |
-|           |                | FK's with no admin are exposed as just the FK field.                                     |
+| 3.1.2     | 2020-12-09     | | Remove length function from UUID's.                                                    |
+|           |                | | FK's with no admin are exposed as just the FK field.                                   |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.1.1     | 2020-12-01     | Don't run the 3.0.0 data migration when there are no saved views.                        |
 +-----------+----------------+------------------------------------------------------------------------------------------+
