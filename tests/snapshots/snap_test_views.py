@@ -6168,6 +6168,20 @@ snapshots["test_query_html_no_perms config"] = {
     },
 }
 
+snapshots["test_query_is_null_date_filter data"] = {
+    "body": [[{}, {}, {}]],
+    "cols": [{}],
+    "fields": [{"pathStr": "name", "pivoted": False, "priority": 0, "sort": "asc"}],
+    "filterErrors": [None],
+    "filters": [{"lookup": "is_null", "pathStr": "created_time", "value": "NotNull"}],
+    "formatHints": {"name": {}},
+    "length": 3,
+    "limit": 1000,
+    "model": "core.Product",
+    "parsedFilterValues": ["NotNull"],
+    "rows": [{"name": "a"}, {"name": "b"}, {"name": "c"}],
+}
+
 snapshots["test_query_json data"] = {
     "body": [[{}, {}]],
     "cols": [{}],

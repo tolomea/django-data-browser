@@ -151,6 +151,11 @@ class BoundFilter:
     def path_str(self):
         return self.query_filter.path_str
 
+    def formatted_value(self):
+        if not self.is_valid:
+            return None
+        return self.orm_bound_field.format_lookup(self.lookup, self.parsed)
+
 
 @dataclass
 class BoundField:

@@ -235,6 +235,16 @@ def test_query_json(admin_client, snapshot):
     snapshot.assert_match(data, "data")
 
 
+@pytest.mark.usefixtures("products")
+def test_query_is_null_date_filter(admin_client, snapshot):
+    res = admin_client.get(
+        "/data_browser/query/core.Product/name+0.json?created_time__is_null=NotNull"
+    )
+    assert res.status_code == 200
+    data = json.loads(res.content.decode("utf-8"))
+    snapshot.assert_match(data, "data")
+
+
 @pytest.mark.usefixtures("pivot_products")
 def test_query_json_pivot(admin_client, snapshot):
     res = admin_client.get(

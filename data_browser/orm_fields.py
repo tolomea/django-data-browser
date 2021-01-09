@@ -60,6 +60,9 @@ class OrmBoundField:
     def parse_lookup(self, lookup, value):
         return self.type_.parse_lookup(lookup, value, self.choices)
 
+    def format_lookup(self, lookup, value):
+        return self.type_.format_lookup(lookup, value, self.choices)
+
     @classmethod
     def blank(cls):
         return cls(

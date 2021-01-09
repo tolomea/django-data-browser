@@ -90,6 +90,11 @@ class BaseType(metaclass=TypeMeta):
             type_ = TYPES[type_name]
             return type_.parse(value, choices)
 
+    @classmethod
+    def format_lookup(cls, lookup, value, choices):
+        pretty_name, type_name = cls.lookups[lookup]
+        return TYPES[type_name]._get_formatter(choices)(value)
+
     @staticmethod
     def get_format_hints(name, data):
         return {}

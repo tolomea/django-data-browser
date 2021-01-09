@@ -468,6 +468,11 @@ def test_get_results_null_filter(get_product_flat):
     data = get_product_flat(1, "name", [("onsale__is_null", "NotNull")])
     sortedAssert(data, [])
 
+    data = get_product_flat(1, "name", [("created_time__is_null", "IsNull")])
+    sortedAssert(data, [])
+    data = get_product_flat(1, "name", [("created_time__is_null", "NotNull")])
+    sortedAssert(data, [["a"], ["b"], ["c"]])
+
 
 @pytest.mark.usefixtures("products")
 def test_get_results_boolean_filter(get_product_flat):
