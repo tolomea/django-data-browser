@@ -315,7 +315,7 @@ Release History
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | Version   | Date           | Summary                                                                                  |
 +===========+================+==========================================================================================+
-|           |                | Fix issue when using a filter with a different type from the field, e.g. ``is_null``.    |
+| 3.2.3     | 2020-01-11     | Fix issue when using a filter with a different type from the field, e.g. ``is_null``.    |
 +-----------+----------------+------------------------------------------------------------------------------------------+
 | 3.2.2     | 2020-12-30     | | Fix ``id`` field missing from some models.                                             |
 |           |                | | Per Django, Django 2.0 & 2.1 are not supported on Py3.8 and 3.9.                       |
