@@ -108,7 +108,7 @@ function DataCell(props) {
         fn: () => navigator.clipboard.writeText(formattedValue),
       },
       modelField.concrete &&
-        query.getType(modelField).lookups.hasOwnProperty("equals") && {
+        query.filterForValue(pathStr, value) && {
           name: "Filter",
           fn: () => query.addExactFilter(pathStr, value),
         },

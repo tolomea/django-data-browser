@@ -315,7 +315,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Fix not equals excluding nulls with functions and aggregates, e.g. ``year``, ``min`` etc.                |
+|         |            | | Fix not equals excluding nulls with functions and aggregates, e.g. ``year``, ``min`` etc.              |
+|         |            | | Right click filter and drill down now correctly handle null values.                                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.3   | 2020-01-11 | Fix issue when using a filter with a different type from the field, e.g. ``is_null``.                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+

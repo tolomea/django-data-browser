@@ -181,13 +181,26 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
+  filterForValue(pathStr, value) {
+    const lookups = this.getType(this.getField(pathStr)).lookups;
+    if (value === null && lookups.hasOwnProperty("is_null"))
+      return {
+        pathStr: pathStr,
+        lookup: "is_null",
+        value: "IsNull",
+      };
+    else if (lookups.hasOwnProperty("equals"))
+      return {
+        pathStr: pathStr,
+        lookup: "equals",
+        value: String(value),
+      };
+    else return null;
+  }
+
   addExactFilter(pathStr, value) {
     const newFilters = this.query.filters.slice();
-    newFilters.push({
-      pathStr: pathStr,
-      lookup: "equals",
-      value: String(value),
-    });
+    newFilters.push(this.filterForValue(pathStr, value));
     this.setQuery({ filters: newFilters });
   }
 
@@ -196,18 +209,11 @@ class Query {
       this.query.fields
         .filter((field) => this.getField(field.pathStr).canPivot)
         .filter((field) => values.hasOwnProperty(field.pathStr))
-        .filter((field) =>
-          this.getType(this.getField(field.pathStr)).lookups.hasOwnProperty(
-            "equals"
-          )
+        .filter((field) => this.getField(field.pathStr).concrete)
+        .map((field) =>
+          this.filterForValue(field.pathStr, values[field.pathStr])
         )
-        .map((field) => {
-          return {
-            pathStr: field.pathStr,
-            lookup: "equals",
-            value: String(values[field.pathStr]),
-          };
-        })
+        .filter((f) => f !== null)
     );
     this.setQuery({ filters: newFilters });
   }
