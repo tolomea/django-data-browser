@@ -315,6 +315,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Empty file fields render as empty string instead of null.                                              |
 |         |            | | Fix ``is null`` not working with the ``year`` function.                                                |
 |         |            | | The field list is now sorted by display name (except for ``id`` and ``admin``).                        |
 |         |            | | Fix ``not equals`` excluding ``nulls`` with functions and aggregates, e.g. ``year``, ``min`` etc.      |

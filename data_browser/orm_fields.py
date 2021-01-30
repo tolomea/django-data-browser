@@ -265,7 +265,7 @@ class OrmFileField(OrmConcreteField):
     def get_formatter(self):
         def format(value):
             if not value:
-                return None
+                return value
 
             try:
                 # some storage backends will hard fail if their underlying storage isn't

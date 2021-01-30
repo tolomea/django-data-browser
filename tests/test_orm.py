@@ -157,7 +157,7 @@ def test_get_file_link(get_product_flat):
     models.Product.objects.create(name="a", producer=producer)
     models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
     data = get_product_flat(1, "name,image", [])
-    sortedAssert(data, [["a", None], ["b", '<a href="/media/bob.jpg">bob.jpg</a>']])
+    sortedAssert(data, [["a", ""], ["b", '<a href="/media/bob.jpg">bob.jpg</a>']])
 
 
 def test_bad_storage(monkeypatch, req):
@@ -186,7 +186,7 @@ def test_bad_storage(monkeypatch, req):
     models.Product.objects.create(name="a", producer=producer)
     models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
     data = get_product_flat("name,image", [])
-    sortedAssert(data, [["a", None], ["b", "assert False"]])
+    sortedAssert(data, [["a", ""], ["b", "assert False"]])
 
 
 @pytest.mark.usefixtures("products")
