@@ -48,4 +48,4 @@ def get_django_filter(field_type, path_str, lookup, filter_value):
             "has_key": "has_key",
         }[lookup]
 
-    return Q(**{f"{path_str}__{lookup}": filter_value})
+    return Q(**{f"{path_str}__{lookup}": filter_value, f"{path_str}__isnull": False})

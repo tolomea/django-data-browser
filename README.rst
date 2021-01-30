@@ -312,191 +312,193 @@ For alpha and beta releases absolutely anything may change / break.
 Release History
 *************************
 
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| Version   | Date           | Summary                                                                                  |
-+===========+================+==========================================================================================+
-| 3.2.3     | 2020-01-11     | Fix issue when using a filter with a different type from the field, e.g. ``is_null``.    |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.2.2     | 2020-12-30     | | Fix ``id`` field missing from some models.                                             |
-|           |                | | Per Django, Django 2.0 & 2.1 are not supported on Py3.8 and 3.9.                       |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.2.1     | 2020-12-30     | Protect model admin class option values from accidental modification.                    |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.2.0     | 2020-12-30     | | Support for invoking admin actions by right clicking on ``id`` column headers.         |
-|           |                | | Fix various filter issues.                                                             |
-|           |                | | Don't show ``id`` on models that don't have an ``id`` field.                           |
-|           |                | | Show "less than", "greater than" etc as "<", ">", etc.                                 |
-|           |                | | Mouse hover tooltip help for date and datetime filter values.                          |
-|           |                | | Filters with bad fields and lookups are reported as errors rather than being ignored.  |
-|           |                | | Bad filters on public saved View's now result in a 400 when loading the public URL.    |
-|           |                | | Fix issue filtering on aggregated annotations.                                         |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.4     | 2020-12-19     | | Fix UUID's not being filterable.                                                       |
-|           |                | | Fix right click drill and filter trying to filter unfilterable fields.                 |
-|           |                | | Fix spurious ``0`` appearing below numeric ``0`` filter values.                        |
-|           |                | | Add an ``extrahead`` block to the template and documentation for overriding CSS.       |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.3     | 2020-12-13     | | Relative time support in date and time filters.                                        |
-|           |                | | Show parsed dates and datetimes next to filters.                                       |
-|           |                | | Add view SQL link on front page.                                                       |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.2     | 2020-12-09     | | Remove length function from UUID's.                                                    |
-|           |                | | FK's with no admin are exposed as just the FK field.                                   |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.1     | 2020-12-01     | Don't run the 3.0.0 data migration when there are no saved views.                        |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.1.0     | 2020-11-29     | Add right click menu with filter and drill down options.                                 |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.0.4     | 2020-11-28     | Ignore admins for things that are not Models.                                            |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.0.3     | 2020-11-22     | Fix exception when filtering to out of bounds year values.                               |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.0.2     | 2020-11-18     | | Fix bug with aggregating around is_null values on Django 3.1.                          |
-|           |                | | Fix is_null returning None for missing fields in JsonFields.                           |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.0.1     | 2020-11-12     | | Add ``get_*`` functions for the ``ddb_*`` admin options.                               |
-|           |                | | Add length function to string fields.                                                  |
-|           |                | | Add support for DB query explain via ``.explain`` url.                                 |
-|           |                | | Prevent exception when getting SQL view of pure aggregates.                            |
-|           |                | | Fix incorrect handling of ISO dates whose day portion is less than 13.                 |
-|           |                | | Python 3.9 support.                                                                    |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 3.0.0     | 2020-11-09     | | The format of ddb_default_filters has changed.                                         |
-|           |                | | Path and prettyPath have been removed from fields and filters on JSON responses.       |
-|           |                | | Choice and is_null fields use human readable values in filters.                        |
-|           |                | | Choice fields have a raw sub field for accessing the underlying values.                |
-|           |                | | Starts with, regex, etc have been removed form choice fields, equivalents are on raw.  |
-|           |                | | Verbose_names and short_descriptions are used for display in the web frontend and CSV. |
-|           |                | | Equals and not equals for JSON and Arrays.                                             |
-|           |                | | JSON field filter supports lists and objects.                                          |
-|           |                | | Array values are now JSON encoded across the board.                                    |
-|           |                | | Backfill saved views for above changes to filter formats.                              |
-|           |                | | Pickup calculated fields on inlines when there is no actual admin.                     |
-|           |                | | Fix bug where ID's and annotations on inlines were visible to users without perms.     |
-|           |                | | Support for aggregation and functions on annotated fields.                             |
-|           |                | | Annotations now respect ddb_hide.                                                      |
-|           |                | | Admin links to the Data Browser respect ddb_ignore.                                    |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.21    | 2020-11-02     | Reject ambiguous date and datetime values in filters.                                    |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.20    | 2020-10-22     | Fix bug with ArrayField on Django>=3.0                                                   |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.19    | 2020-10-19     | Support for annotations on inlines.                                                      |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.18    | 2020-10-18     | | Support for profiling CSV etc output. See CONTRIBUTING.rst                             |
-|           |                | | Performance improvements for large result sets.                                        |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.17    | 2020-10-15     | | Performance improvements for large result sets.                                        |
-|           |                | | Fix error when choices field has an unexpected value.                                  |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.16    | 2020-09-28     | | Fix being unable to reorder aggregates when there is no pivot.                         |
-|           |                | | Fix back button sometimes not remembering column reorderings.                          |
-|           |                | | Fix reordering columns while a long reload is in progress causes an error.             |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.15    | 2020-09-27     | | Handle callables in ModelAdmin.list_display.                                           |
-|           |                | | Add ``data_browser.helpers.attributes``.                                               |
-|           |                | | Deprecated ``@ddb_hide`` in favor of ``@attributes(ddb_hide=True)``.                   |
-|           |                | | Render safestrings returned by calculated fields as HTML.                              |
-|           |                | | Respect the ``boolean`` attribute on calculated fields.                                |
-|           |                | | Aside from declared booleans, calculated fields now always format as strings.          |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.14    | 2020-09-20     | | Saved view style tweaks.                                                               |
-|           |                | | Only reload on field delete when it might change the results.                          |
-|           |                | | Add UI controls for reordering fields.                                                 |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.13    | 2020-09-13     | | Add .sql format to show raw SQL query.                                                 |
-|           |                | | Min and max for date and datetime fields.                                              |
-|           |                | | Add ddb_default_filters.                                                               |
-|           |                | | Integrated cProfile support via ``.profile`` and ``.pstats``.                          |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.12    | 2020-09-09     | | DurationField support.                                                                 |
-|           |                | | Sort newly added date (etc) fields by default.                                         |
-|           |                | | Fix JSONField support when psycopg2 is not installed.                                  |
-|           |                | | Fix bug with number formatting and pivoted data.                                       |
-|           |                | | Fix error with multiple non adjacent filters on the same field.                        |
-|           |                | | Fix error with naive DateTimeFields.                                                   |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.11    | 2020-08-31     | Minor enhancements and some small fixes.                                                 |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.10    | 2020-08-31     | Minor enhancements.                                                                      |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.9     | 2020-08-25     | Small fixes.                                                                             |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.8     | 2020-08-23     | Small fixes.                                                                             |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.7     | 2020-08-22     | Small fixes.                                                                             |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.6     | 2020-08-16     | Basic JSONField support.                                                                 |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.5     | 2020-08-01     | Bug fix.                                                                                 |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.4     | 2020-08-01     | | Additional field support.                                                              |
-|           |                | | Minor features and bug fixes.                                                          |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **2.2.3** | **2020-07-31** | **File and Image field support**                                                         |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **2.2.2** | **2020-07-26** | **Better support for choice fields.**                                                    |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.2.1     | 2020-07-25     | Performance tweaks.                                                                      |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **2.2.0** | **2020-07-21** | **Sort and filter annotated fields.**                                                    |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.1.2     | 2020-07-11     | Minor bug fixes.                                                                         |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.1.1     | 2020-07-06     | | Bug fixes.                                                                             |
-|           |                | | The representation of empty pivot cells has changed in the JSON.                       |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **2.1.0** | **2020-07-06** | | **Bring views into the JS frontend.**                                                  |
-|           |                | | **Implement row limits on results.**                                                   |
-|           |                | | All existing saved views will be limited to 1000 rows.                                 |
-|           |                | | Better loading and error status indication.                                            |
-|           |                | | Lock column headers.                                                                   |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.0.5     | 2020-06-20     | Bug fixes.                                                                               |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **2.0.4** | **2020-06-18** | **Fix Py3.6 support.**                                                                   |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.0.3     | 2020-06-14     | Improve filtering on aggregates when pivoted.                                            |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.0.2     | 2020-06-14     | Improve fonts and symbols.                                                               |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 2.0.1     | 2020-06-14     | Improve sorting when pivoted.                                                            |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **2.0.0** | **2020-06-14** | | **Pivot tables.**                                                                      |
-|           |                | | All public view URL's have changed.                                                    |
-|           |                | | The JSON data format has changed.                                                      |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.2.6     | 2020-06-08     | Bug fixes.                                                                               |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.2.5     | 2020-06-08     | Bug fixes.                                                                               |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **1.2.4** | **2020-06-03** | **Calculated fields interact better with aggregation.**                                  |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.2.3     | 2020-06-02     | JS error handling tweaks.                                                                |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.2.2     | 2020-06-01     | Minor fix.                                                                               |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.2.1     | 2020-05-31     | Improved date handling.                                                                  |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **1.2.0** | **2020-05-31** | **Support for date functions "year", "month" etc and filtering based on "now".**         |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.1.6     | 2020-05-24     | Stronger sanitizing of URL strings.                                                      |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.1.5     | 2020-05-23     | Fix bug aggregating time fields.                                                         |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.1.4     | 2020-05-23     | Fix breaking bug with GenericInlineModelAdmin.                                           |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.1.3     | 2020-05-23     | Cosmetic fixes.                                                                          |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.1.2     | 2020-05-22     | Cosmetic fixes.                                                                          |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.1.1     | 2020-05-20     | Cosmetic fixes.                                                                          |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| **1.1.0** | **2020-05-20** | **Aggregate support.**                                                                   |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.0.2     | 2020-05-17     | Py3.6 support.                                                                           |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.0.1     | 2020-05-17     | Small fixes.                                                                             |
-+-----------+----------------+------------------------------------------------------------------------------------------+
-| 1.0.0     | 2020-05-17     | Initial version.                                                                         |
-+-----------+----------------+------------------------------------------------------------------------------------------+
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| Version | Date       | Summary                                                                                                  |
++=========+============+==========================================================================================================+
+|         |            | Fix not equals excluding nulls with functions and aggregates, e.g. ``year``, ``min`` etc.                |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.2.3   | 2020-01-11 | Fix issue when using a filter with a different type from the field, e.g. ``is_null``.                    |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.2.2   | 2020-12-30 | | Fix ``id`` field missing from some models.                                                             |
+|         |            | | Per Django, Django 2.0 & 2.1 are not supported on Py3.8 and 3.9.                                       |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.2.1   | 2020-12-30 | Protect model admin class option values from accidental modification.                                    |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.2.0   | 2020-12-30 | | Support for invoking admin actions by right clicking on ``id`` column headers.                         |
+|         |            | | Fix various filter issues.                                                                             |
+|         |            | | Don't show ``id`` on models that don't have an ``id`` field.                                           |
+|         |            | | Show "less than", "greater than" etc as "<", ">", etc.                                                 |
+|         |            | | Mouse hover tooltip help for date and datetime filter values.                                          |
+|         |            | | Filters with bad fields and lookups are reported as errors rather than being ignored.                  |
+|         |            | | Bad filters on public saved View's now result in a 400 when loading the public URL.                    |
+|         |            | | Fix issue filtering on aggregated annotations.                                                         |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.1.4   | 2020-12-19 | | Fix UUID's not being filterable.                                                                       |
+|         |            | | Fix right click drill and filter trying to filter unfilterable fields.                                 |
+|         |            | | Fix spurious ``0`` appearing below numeric ``0`` filter values.                                        |
+|         |            | | Add an ``extrahead`` block to the template and documentation for overriding CSS.                       |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.1.3   | 2020-12-13 | | Relative time support in date and time filters.                                                        |
+|         |            | | Show parsed dates and datetimes next to filters.                                                       |
+|         |            | | Add view SQL link on front page.                                                                       |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.1.2   | 2020-12-09 | | Remove length function from UUID's.                                                                    |
+|         |            | | FK's with no admin are exposed as just the FK field.                                                   |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.1.1   | 2020-12-01 | Don't run the 3.0.0 data migration when there are no saved views.                                        |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.1.0   | 2020-11-29 | Add right click menu with filter and drill down options.                                                 |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.0.4   | 2020-11-28 | Ignore admins for things that are not Models.                                                            |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.0.3   | 2020-11-22 | Fix exception when filtering to out of bounds year values.                                               |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.0.2   | 2020-11-18 | | Fix bug with aggregating around is_null values on Django 3.1.                                          |
+|         |            | | Fix is_null returning None for missing fields in JsonFields.                                           |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.0.1   | 2020-11-12 | | Add ``get_*`` functions for the ``ddb_*`` admin options.                                               |
+|         |            | | Add length function to string fields.                                                                  |
+|         |            | | Add support for DB query explain via ``.explain`` url.                                                 |
+|         |            | | Prevent exception when getting SQL view of pure aggregates.                                            |
+|         |            | | Fix incorrect handling of ISO dates whose day portion is less than 13.                                 |
+|         |            | | Python 3.9 support.                                                                                    |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 3.0.0   | 2020-11-09 | | The format of ddb_default_filters has changed.                                                         |
+|         |            | | Path and prettyPath have been removed from fields and filters on JSON responses.                       |
+|         |            | | Choice and is_null fields use human readable values in filters.                                        |
+|         |            | | Choice fields have a raw sub field for accessing the underlying values.                                |
+|         |            | | Starts with, regex, etc have been removed form choice fields, equivalents are on raw.                  |
+|         |            | | Verbose_names and short_descriptions are used for display in the web frontend and CSV.                 |
+|         |            | | Equals and not equals for JSON and Arrays.                                                             |
+|         |            | | JSON field filter supports lists and objects.                                                          |
+|         |            | | Array values are now JSON encoded across the board.                                                    |
+|         |            | | Backfill saved views for above changes to filter formats.                                              |
+|         |            | | Pickup calculated fields on inlines when there is no actual admin.                                     |
+|         |            | | Fix bug where ID's and annotations on inlines were visible to users without perms.                     |
+|         |            | | Support for aggregation and functions on annotated fields.                                             |
+|         |            | | Annotations now respect ddb_hide.                                                                      |
+|         |            | | Admin links to the Data Browser respect ddb_ignore.                                                    |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.21  | 2020-11-02 | Reject ambiguous date and datetime values in filters.                                                    |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.20  | 2020-10-22 | Fix bug with ArrayField on Django>=3.0                                                                   |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.19  | 2020-10-19 | Support for annotations on inlines.                                                                      |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.18  | 2020-10-18 | | Support for profiling CSV etc output. See CONTRIBUTING.rst                                             |
+|         |            | | Performance improvements for large result sets.                                                        |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.17  | 2020-10-15 | | Performance improvements for large result sets.                                                        |
+|         |            | | Fix error when choices field has an unexpected value.                                                  |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.16  | 2020-09-28 | | Fix being unable to reorder aggregates when there is no pivot.                                         |
+|         |            | | Fix back button sometimes not remembering column reorderings.                                          |
+|         |            | | Fix reordering columns while a long reload is in progress causes an error.                             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.15  | 2020-09-27 | | Handle callables in ModelAdmin.list_display.                                                           |
+|         |            | | Add ``data_browser.helpers.attributes``.                                                               |
+|         |            | | Deprecated ``@ddb_hide`` in favor of ``@attributes(ddb_hide=True)``.                                   |
+|         |            | | Render safestrings returned by calculated fields as HTML.                                              |
+|         |            | | Respect the ``boolean`` attribute on calculated fields.                                                |
+|         |            | | Aside from declared booleans, calculated fields now always format as strings.                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.14  | 2020-09-20 | | Saved view style tweaks.                                                                               |
+|         |            | | Only reload on field delete when it might change the results.                                          |
+|         |            | | Add UI controls for reordering fields.                                                                 |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.13  | 2020-09-13 | | Add .sql format to show raw SQL query.                                                                 |
+|         |            | | Min and max for date and datetime fields.                                                              |
+|         |            | | Add ddb_default_filters.                                                                               |
+|         |            | | Integrated cProfile support via ``.profile`` and ``.pstats``.                                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.12  | 2020-09-09 | | DurationField support.                                                                                 |
+|         |            | | Sort newly added date (etc) fields by default.                                                         |
+|         |            | | Fix JSONField support when psycopg2 is not installed.                                                  |
+|         |            | | Fix bug with number formatting and pivoted data.                                                       |
+|         |            | | Fix error with multiple non adjacent filters on the same field.                                        |
+|         |            | | Fix error with naive DateTimeFields.                                                                   |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.11  | 2020-08-31 | Minor enhancements and some small fixes.                                                                 |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.10  | 2020-08-31 | Minor enhancements.                                                                                      |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.9   | 2020-08-25 | Small fixes.                                                                                             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.8   | 2020-08-23 | Small fixes.                                                                                             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.7   | 2020-08-22 | Small fixes.                                                                                             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.6   | 2020-08-16 | Basic JSONField support.                                                                                 |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.5   | 2020-08-01 | Bug fix.                                                                                                 |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.4   | 2020-08-01 | | Additional field support.                                                                              |
+|         |            | | Minor features and bug fixes.                                                                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.3   | 2020-07-31 | File and Image field support                                                                             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.2   | 2020-07-26 | Better support for choice fields.                                                                        |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.1   | 2020-07-25 | Performance tweaks.                                                                                      |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.2.0   | 2020-07-21 | Sort and filter annotated fields.                                                                        |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.1.2   | 2020-07-11 | Minor bug fixes.                                                                                         |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.1.1   | 2020-07-06 | | Bug fixes.                                                                                             |
+|         |            | | The representation of empty pivot cells has changed in the JSON.                                       |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.1.0   | 2020-07-06 | | Bring views into the JS frontend.                                                                      |
+|         |            | | Implement row limits on results.                                                                       |
+|         |            | | All existing saved views will be limited to 1000 rows.                                                 |
+|         |            | | Better loading and error status indication.                                                            |
+|         |            | | Lock column headers.                                                                                   |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.0.5   | 2020-06-20 | Bug fixes.                                                                                               |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.0.4   | 2020-06-18 | Fix Py3.6 support.                                                                                       |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.0.3   | 2020-06-14 | Improve filtering on aggregates when pivoted.                                                            |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.0.2   | 2020-06-14 | Improve fonts and symbols.                                                                               |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.0.1   | 2020-06-14 | Improve sorting when pivoted.                                                                            |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 2.0.0   | 2020-06-14 | | Pivot tables.                                                                                          |
+|         |            | | All public view URL's have changed.                                                                    |
+|         |            | | The JSON data format has changed.                                                                      |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.2.6   | 2020-06-08 | Bug fixes.                                                                                               |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.2.5   | 2020-06-08 | Bug fixes.                                                                                               |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.2.4   | 2020-06-03 | Calculated fields interact better with aggregation.                                                      |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.2.3   | 2020-06-02 | JS error handling tweaks.                                                                                |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.2.2   | 2020-06-01 | Minor fix.                                                                                               |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.2.1   | 2020-05-31 | Improved date handling.                                                                                  |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.2.0   | 2020-05-31 | Support for date functions "year", "month" etc and filtering based on "now".                             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.1.6   | 2020-05-24 | Stronger sanitizing of URL strings.                                                                      |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.1.5   | 2020-05-23 | Fix bug aggregating time fields.                                                                         |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.1.4   | 2020-05-23 | Fix breaking bug with GenericInlineModelAdmin.                                                           |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.1.3   | 2020-05-23 | Cosmetic fixes.                                                                                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.1.2   | 2020-05-22 | Cosmetic fixes.                                                                                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.1.1   | 2020-05-20 | Cosmetic fixes.                                                                                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.1.0   | 2020-05-20 | Aggregate support.                                                                                       |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.0.2   | 2020-05-17 | Py3.6 support.                                                                                           |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.0.1   | 2020-05-17 | Small fixes.                                                                                             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 1.0.0   | 2020-05-17 | Initial version.                                                                                         |
++---------+------------+----------------------------------------------------------------------------------------------------------+

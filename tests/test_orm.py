@@ -43,6 +43,7 @@ def products(db):
             producer=producer,
             fake="phoney",
             boat=2.2,
+            date="2001-01-01",
         )
     )
 
@@ -63,6 +64,7 @@ def products(db):
             size_unit="g",
             producer=producer,
             boat=2.4,
+            date="2002-02-02",
         )
     )
 
@@ -247,10 +249,10 @@ def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
     )
     data = get_product_flat(
         1,
-        "producer__address__andrew+1,size-2",
+        "producer__address__andrew+2,size-1",
         [("producer__address__andrew__not_equals", "bad")],
     )
-    assert data == [["good", 1]]
+    assert data == [[None, 2.0], ["good", 1]]
     assert len(mock.call_args_list) == 2
 
 
@@ -324,6 +326,17 @@ def test_filter_year_bounds(get_product_flat):
     assert data == [[1], [2]]  # this errors on the filter and returns all values
 
 
+@pytest.mark.usefixtures("products")
+def test_filter_year_not_equals(get_product_flat):
+    # https://github.com/tolomea/django-data-browser/issues/27
+    data = get_product_flat(1, "name+1", [("date__year__equals", 2001)])
+    assert data == [["a"]]
+
+    data = get_product_flat(1, "name+1", [("date__year__not_equals", 2001)])
+    assert data == [["b"], ["c"]]
+
+
+@pytest.mark.usefixtures("products")
 @pytest.mark.usefixtures("products")
 def test_get_is_null_function(get_product_flat):
     data = get_product_flat(1, "name+0,producer__address__city__is_null", [])
