@@ -315,9 +315,10 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Fix ``is null`` not working with the ``year`` function.                                                |
 |         |            | | The field list is now sorted by display name (except for ``id`` and ``admin``).                        |
-|         |            | | Fix not equals excluding nulls with functions and aggregates, e.g. ``year``, ``min`` etc.              |
-|         |            | | Right click filter and drill down now correctly handle null values.                                    |
+|         |            | | Fix ``not equals`` excluding ``nulls`` with functions and aggregates, e.g. ``year``, ``min`` etc.      |
+|         |            | | Right click filter and drill down now correctly handle ``null`` values.                                |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.3   | 2020-01-11 | Fix issue when using a filter with a different type from the field, e.g. ``is_null``.                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+

@@ -337,6 +337,15 @@ def test_filter_year_not_equals(get_product_flat):
 
 
 @pytest.mark.usefixtures("products")
+def test_filter_year_is_null(get_product_flat):
+    data = get_product_flat(1, "name+1", [("date__year__is_null", "NotNull")])
+    assert data == [["a"], ["c"]]
+
+    data = get_product_flat(1, "name+1", [("date__year__is_null", "IsNull")])
+    assert data == [["b"]]
+
+
+@pytest.mark.usefixtures("products")
 @pytest.mark.usefixtures("products")
 def test_get_is_null_function(get_product_flat):
     data = get_product_flat(1, "name+0,producer__address__city__is_null", [])

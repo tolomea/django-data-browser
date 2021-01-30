@@ -142,7 +142,11 @@ class OrmBoundFunctionField(OrmBoundField):
 
     def parse_lookup(self, lookup, value):
         parsed, err_message = super().parse_lookup(lookup, value)
-        if self.name in ["year", "iso_year"] and parsed is not None:
+        if (
+            self.name in ["year", "iso_year"]
+            and parsed is not None
+            and lookup != "is_null"
+        ):
             if parsed < 2:
                 err_message = "Can't filter to years less than 2"
             if parsed > 9998:
