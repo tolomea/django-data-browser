@@ -315,6 +315,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | The field list is now sorted by display name (except for ``id`` and ``admin``).                        |
 |         |            | | Fix not equals excluding nulls with functions and aggregates, e.g. ``year``, ``min`` etc.              |
 |         |            | | Right click filter and drill down now correctly handle null values.                                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+

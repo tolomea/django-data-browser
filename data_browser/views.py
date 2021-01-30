@@ -61,7 +61,14 @@ def _get_model_fields(model_name, orm_models):
 
     def sort_model_fields(fields):
         front = {"id": 1, OPEN_IN_ADMIN: 2}
-        return sorted(fields, key=lambda f: (front.get(f, sys.maxsize), f))
+        sorted_fields = sorted(
+            fields.items(),
+            key=lambda name_field: (
+                front.get(name_field[0], sys.maxsize),
+                name_field[1]["prettyName"],
+            ),
+        )
+        return [name for name, field in sorted_fields]
 
     all_fields = {
         name: {
