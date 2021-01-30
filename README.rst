@@ -61,19 +61,19 @@ Installation
 Settings
 *************************
 
-+--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
-| Name                           | Default | Docs Section     | Function                                                                                           |
-+================================+=========+==================+====================================================================================================+
-| DATA_BROWSER_ALLOW_PUBLIC      | False   | `Security`_      | Allow selected saved views to be accessed without admin login in limited circumstances.            |
-+--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
-| DATA_BROWSER_AUTH_USER_COMPAT  | True    | `Performance`_   | When calling ``get_fieldsets`` on a ``UserAdmin`` always pass an instance of the associated model. |
-+--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
-| DATA_BROWSER_DEFAULT_ROW_LIMIT | 1000    |                  | The default value for the row limit selector in the UI.                                            |
-+--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
-| DATA_BROWSER_DEV               | False   | CONTRIBUTING.rst | Enable proxying frontend to JS dev server.                                                         |
-+--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
-| DATA_BROWSER_FE_DSN            | None    | `Sentry`_        | The DSN the frontend sentry should report to, disabled by default.                                 |
-+--------------------------------+---------+------------------+----------------------------------------------------------------------------------------------------+
++------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
+| Name                               | Default   | Docs Section     | Function                                                                                           |
++====================================+===========+==================+====================================================================================================+
+| ``DATA_BROWSER_ALLOW_PUBLIC``      | ``False`` | `Security`_      | Allow selected saved views to be accessed without admin login in limited circumstances.            |
++------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_AUTH_USER_COMPAT``  | ``True``  | `Performance`_   | When calling ``get_fieldsets`` on a ``UserAdmin`` always pass an instance of the associated model. |
++------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_DEFAULT_ROW_LIMIT`` | ``1000``  |                  | The default value for the row limit selector in the UI.                                            |
++------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_DEV``               | ``False`` | CONTRIBUTING.rst | Enable proxying frontend to JS dev server.                                                         |
++------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_FE_DSN``            | ``None``  | `Sentry`_        | The DSN the frontend sentry should report to, disabled by default.                                 |
++------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
 
 
 Security
@@ -127,24 +127,24 @@ Specifying models and fields
 By default the Data Browser has access to all models and fields that the current user can see anywhere in the Admin site.
 However if necessary this can be tweaked using the following class level properties and functions on ModelAdmins and Inlines.
 
-+---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-|   Name                          | Format                                    | Purpose                                                                                                     |
-+=================================+===========================================+=============================================================================================================+
-| | ddb_ignore                    | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.  |
-| | get_ddb_ignore(request)       |                                           |                                                                                                             |
-+---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| | ddb_hide_fields               | ``[field_name]``                          | Explicitly hide the specified fields.                                                                       |
-| | get_ddb_hide_fields(request)  |                                           |                                                                                                             |
-+---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| | ddb_extra_fields              | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                          |
-| | get_ddb_extra_fields(request) |                                           |                                                                                                             |
-+---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| | ddb_json_fields               | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean". |
-| | get_ddb_json_fields(request)  |                                           |                                                                                                             |
-+---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| | ddb_default_filters           | ``[(path, lookup, value)]``               | | Default filters to be added when opening this model.                                                      |
-| | get_ddb_default_filters()     |                                           | | E.G. to add ``client__name__equals=Test`` use ``[(`client__name`, `equals`, `Test`)]``.                   |
-+---------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
++-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+|   Name                              | Format                                    | Purpose                                                                                                     |
++=====================================+===========================================+=============================================================================================================+
+| | ``ddb_ignore``                    | ``bool``                                  | Ignore this Admin / Inline entirely, will still show fields from other Inlines / Admins on the same model.  |
+| | ``get_ddb_ignore(request)``       |                                           |                                                                                                             |
++-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ``ddb_hide_fields``               | ``[field_name]``                          | Explicitly hide the specified fields.                                                                       |
+| | ``get_ddb_hide_fields(request)``  |                                           |                                                                                                             |
++-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ``ddb_extra_fields``              | ``[field_name]``                          | Add additional fields that are not mentioned in fields, fieldsets or list_display.                          |
+| | ``get_ddb_extra_fields(request)`` |                                           |                                                                                                             |
++-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ``ddb_json_fields``               | ``{field_name: {json_field_name: type}}`` | Expose fields within JSON data for access in the Data Browser. Type can be "string", "number" or "boolean". |
+| | ``get_ddb_json_fields(request)``  |                                           |                                                                                                             |
++-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ``ddb_default_filters``           | ``[(path, lookup, value)]``               | | Default filters to be added when opening this model.                                                      |
+| | ``get_ddb_default_filters()``     |                                           | | E.G. to add ``client__name__equals=Test`` use ``[("client__name", "equals", "Test")]``.                   |
++-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
 Additionally, per the below sections, calculated fields and actions can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
