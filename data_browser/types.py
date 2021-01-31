@@ -1,5 +1,6 @@
 import json
 import re
+import traceback
 import uuid
 from functools import lru_cache
 
@@ -9,7 +10,7 @@ from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import dateparse, html, timezone
 
-from .common import all_subclasses, get_optimal_decimal_places
+from .common import all_subclasses, debug_log, get_optimal_decimal_places
 
 ASC, DSC = "asc", "dsc"
 
@@ -78,6 +79,10 @@ class BaseType(metaclass=TypeMeta):
         try:
             return cls._parse(value, choices), None
         except Exception as e:
+            if isinstance(e, AssertionError):
+                raise
+
+            debug_log(f"Error parsing filter value:\n{traceback.format_exc()}")
             return None, str(e) if str(e) else repr(e)
 
     @classmethod
@@ -197,7 +202,8 @@ class DurationType(BaseType):
             value += ":0"
 
         res = dateparse.parse_duration(value)
-        assert res is not None, "Duration value should be 'DD HH:MM:SS'"
+        if res is None:
+            raise Exception("Duration value should be 'DD HH:MM:SS'")
         return res
 
     @staticmethod
@@ -262,12 +268,14 @@ class DateTypeMixin:
                     dateutil.parser.parse(value, dayfirst=False, yearfirst=True),
                     dateutil.parser.parse(value, dayfirst=True, yearfirst=True),
                 }
-                assert len(res) == 1, "Ambiguous value"
+                if len(res) != 1:
+                    raise Exception("Ambiguous value")
                 res = res.pop()
             except dateutil.parser.ParserError:
                 # failing that must be relative delta stuff
                 res = timezone.now()
-                assert cls._clauses.match(value), "Unrecognized value"
+                if not cls._clauses.match(value):
+                    raise Exception("Unrecognized value")
 
                 for match in cls._clause.finditer(value):
                     field, op, val = match.groups()
@@ -277,7 +285,7 @@ class DateTypeMixin:
                         if field.startswith(prefix):
                             break
                     else:
-                        assert False, f"Unrecognized field {field}"
+                        raise Exception(f"Unrecognized field {field}")
 
                     if isinstance(arg, str):
                         if op == "+":
@@ -286,17 +294,19 @@ class DateTypeMixin:
                             kwargs = {f"{arg}s": -val}
                         else:
                             if arg in ["year", "month", "day"]:
-                                assert val > 0, f"Can't set {field} to {val}"
+                                if val <= 0:
+                                    raise Exception(f"Can't set {field} to {val}")
                             kwargs = {arg: val}
                     else:
-                        assert val > 0, f"Can't set {field} to {val}"
+                        if val <= 0:
+                            raise Exception(f"Can't set {field} to {val}")
                         if op == "+":
                             kwargs = {"weekday": arg(val)}
                         elif op == "-":
                             kwargs = {"weekday": arg(-val)}
                         else:
                             # =
-                            assert False, f"{op} not supported for {field}"
+                            raise Exception(f"{op} not supported for {field}")
 
                     res += relativedelta.relativedelta(**kwargs)
                 return res
