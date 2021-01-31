@@ -79,7 +79,8 @@ class BaseType(metaclass=TypeMeta):
             return cls._parse(value, choices), None
         except Exception as e:
             debug_log("Error parsing filter value", e)
-            return None, str(e) if str(e) else repr(e)
+            msg = str(e) if str(e) else repr(e)
+            return None, msg[0].upper() + msg[1:]
 
     @classmethod
     def parse_lookup(cls, lookup, value, choices):

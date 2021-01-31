@@ -348,7 +348,7 @@ class TestNumberType:
         "value,expected,err",
         [
             ("6.1", 6.1, None),
-            ("hello", None, "could not convert string to float: 'hello'"),
+            ("hello", None, "Could not convert string to float: 'hello'"),
         ],
     )
     def test_parse(self, value, expected, err):
@@ -382,14 +382,14 @@ class TestDateTimeType:
             ("21-22-2018", None, "Unrecognized clause '21-22-2018'"),
             ("2018-11-11", dt(2018, 11, 11), None),
             ("2018-11-22", dt(2018, 11, 22), None),
-            ("2018-21-12", None, "month must be in 1..12: 2018-21-12"),
+            ("2018-21-12", None, "Month must be in 1..12: 2018-21-12"),
             ("2018-11-12", dt(2018, 11, 12), None),
-            ("2018-21-22", None, "month must be in 1..12: 2018-21-22"),
+            ("2018-21-22", None, "Month must be in 1..12: 2018-21-22"),
             ("20181111", dt(2018, 11, 11), None),
             ("20181122", dt(2018, 11, 22), None),
-            ("20182112", None, "month must be in 1..12: 20182112"),
+            ("20182112", None, "Month must be in 1..12: 20182112"),
             ("20181112", dt(2018, 11, 12), None),
-            ("20182122", None, "month must be in 1..12: 20182122"),
+            ("20182122", None, "Month must be in 1..12: 20182122"),
             ("181111", None, "Ambiguous value"),
             ("181122", None, "Ambiguous value"),
             ("182112", None, "Unrecognized clause '182112'"),
@@ -597,7 +597,7 @@ class TestUUIDType:
         [
             (s, u, None),
             (s.replace("-", ""), u, None),
-            (s[1:], None, "badly formed hexadecimal UUID string"),
+            (s[1:], None, "Badly formed hexadecimal UUID string"),
         ],
     )
     def test_parse(self, value, expected, err):
