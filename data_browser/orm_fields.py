@@ -182,7 +182,7 @@ class OrmCalculatedField(OrmBaseField):
             previous=previous,
             full_path=previous.full_path + [self.name],
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=previous.queryset_path + ["id"],
+            queryset_path=previous.queryset_path + ["pk"],
             model_name=self.model_name,
         )
 
@@ -211,7 +211,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
             **{
                 s(self.queryset_path): Subquery(
                     admin_get_queryset(self.admin, request, [self.name])
-                    .filter(pk=OuterRef(s(self.previous.queryset_path + ["id"])))
+                    .filter(pk=OuterRef(s(self.previous.queryset_path + ["pk"])))
                     .values(self.name)[:1],
                     output_field=self.django_field,
                 )

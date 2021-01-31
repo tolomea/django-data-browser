@@ -315,6 +315,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Various fixes for models where the ``pk`` is not ``id``, including for actions and calculated fields.  |
 |         |            | | Empty file fields render as empty string instead of null.                                              |
 |         |            | | Fix ``is null`` not working with the ``year`` function.                                                |
 |         |            | | The field list is now sorted by display name (except for ``id`` and ``admin``).                        |

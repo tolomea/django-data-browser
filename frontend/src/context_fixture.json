@@ -948,7 +948,12 @@
                     "type": "html"
                 },
                 "name": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected tags"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": true,
@@ -959,8 +964,8 @@
                 }
             },
             "sortedFields": [
-                "admin",
-                "name"
+                "name",
+                "admin"
             ]
         },
         "data_browser.View": {

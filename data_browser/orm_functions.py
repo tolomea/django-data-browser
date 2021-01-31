@@ -83,7 +83,7 @@ def _get_django_function(name, qs):
                         Q(**{field_name: None}), output_field=BooleanField()
                     )
                 )
-                .filter(pk=OuterRef("id"))
+                .filter(pk=OuterRef("pk"))
                 .values("ddb_is_null")[:1],
                 output_field=BooleanField(),
             )

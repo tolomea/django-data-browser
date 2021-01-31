@@ -6,7 +6,6 @@ from django.contrib.admin import site
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets, model_format_dict
 from django.contrib.auth.admin import UserAdmin
-from django.core.exceptions import FieldDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
@@ -37,6 +36,7 @@ OPEN_IN_ADMIN = "admin"
 class OrmModel:
     fields: dict
     admin: BaseModelAdmin = None
+    pk: str = None
 
     @property
     def root(self):
@@ -55,7 +55,7 @@ class OrmModel:
         return admin_get_queryset(self.admin, request, fields)
 
     def do_action(self, request, action, pks):
-        qs = self.get_queryset(request).filter(id__in=pks)
+        qs = self.get_queryset(request).filter(pk__in=pks)
         func, desc = admin_get_actions(self.admin, request)[action]
         return func(self.admin, request, qs)
 
@@ -173,14 +173,9 @@ def _get_all_admin_fields(request):
             all_admin_fields[model].update(model_admin._ddb_annotations())
         all_admin_fields[model].update(from_fieldsets(model_admin, True))
 
-    # we always have id and never pk
+    # we always have the actual pk field and never have the "pk" proxy
     for model, fields in all_admin_fields.items():
-        try:
-            model._meta.get_field("id")
-        except FieldDoesNotExist:
-            pass
-        else:
-            fields.add("id")
+        fields.add(model._meta.pk.name)
         fields.discard("pk")
         fields.discard("__str__")
 
@@ -335,7 +330,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                         model_name, json_fields
                     )
 
-            if field_name == "id" and hasattr(admin, "get_actions"):
+            if field_name == model._meta.pk.name and hasattr(admin, "get_actions"):
                 actions = admin_get_actions(admin, request)
             else:
                 actions = {}
@@ -349,7 +344,9 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 choices=choices,
                 actions=actions,
             )
-    orm_models[model_name] = OrmModel(fields=fields, admin=admin)
+    orm_models[model_name] = OrmModel(
+        fields=fields, admin=admin, pk=model._meta.pk.name
+    )
     return orm_models
 
 

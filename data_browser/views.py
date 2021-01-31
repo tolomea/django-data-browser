@@ -60,7 +60,7 @@ def _get_model_fields(model_name, orm_models):
     orm_model = orm_models[model_name]
 
     def sort_model_fields(fields):
-        front = {"id": 1, OPEN_IN_ADMIN: 2}
+        front = {orm_model.pk: 1, OPEN_IN_ADMIN: 2}
         sorted_fields = sorted(
             fields.items(),
             key=lambda name_field: (

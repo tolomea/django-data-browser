@@ -986,7 +986,12 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "name": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected tags",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -996,7 +1001,7 @@ snapshots["test_query_ctx config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["admin", "name"],
+            "sortedFields": ["name", "admin"],
         },
         "data_browser.View": {
             "defaultFilters": [],
@@ -3369,7 +3374,12 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "name": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected tags",
+                        }
+                    ],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3379,7 +3389,7 @@ snapshots["test_query_html config"] = {
                     "type": "string",
                 },
             },
-            "sortedFields": ["admin", "name"],
+            "sortedFields": ["name", "admin"],
         },
         "data_browser.View": {
             "defaultFilters": [],
