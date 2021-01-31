@@ -181,10 +181,11 @@ select.Lookup {
 /* Fields */
 
 .FieldsList {
-  margin: 0;
   overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
 }
-.FieldsList table {
+.FieldsList table table {
   border: 1px solid var(--border-color);
   border-radius: 3px;
 }
