@@ -1,6 +1,5 @@
 import json
 import re
-import traceback
 import uuid
 from functools import lru_cache
 
@@ -79,10 +78,7 @@ class BaseType(metaclass=TypeMeta):
         try:
             return cls._parse(value, choices), None
         except Exception as e:
-            if isinstance(e, AssertionError):
-                raise
-
-            debug_log(f"Error parsing filter value:\n{traceback.format_exc()}")
+            debug_log("Error parsing filter value", e)
             return None, str(e) if str(e) else repr(e)
 
     @classmethod
@@ -176,8 +172,12 @@ class RegexType(BaseType):
         # this is dirty
         # we need to check if the regex is going to cause a db exception
         # and not kill any in progress transaction as we check
-        with atomic():
-            list(ContentType.objects.filter(model__regex=value))
+        try:
+            with atomic():
+                list(ContentType.objects.filter(model__regex=value))
+        except Exception as e:
+            debug_log("Error parsing filter value", e)
+            raise Exception("Invalid regex")
         return value
 
 
@@ -213,9 +213,7 @@ class DurationType(BaseType):
 
 
 class DateTypeMixin:
-    _clause_str = r"(\w{3,})([+-=])(\d+) *"
-    _clause = re.compile(_clause_str)
-    _clauses = re.compile(fr"^({_clause_str})+$")
+    _clause = re.compile(r"(\w{3,})([-+=])(\d+) *")
 
     _clause_types = {
         "yea": "year",
@@ -274,39 +272,48 @@ class DateTypeMixin:
             except dateutil.parser.ParserError:
                 # failing that must be relative delta stuff
                 res = timezone.now()
-                if not cls._clauses.match(value):
-                    raise Exception("Unrecognized value")
 
-                for match in cls._clause.finditer(value):
+                for clause_str in value.split():
+                    match = cls._clause.fullmatch(clause_str)
+                    if not match:
+                        raise Exception(f"Unrecognized clause '{clause_str}'")
+
                     field, op, val = match.groups()
                     val = int(val)
+                    human_op = {
+                        "+": "add",
+                        "-": "subtract",
+                        "=": "set",
+                    }[op]
 
                     for prefix, arg in cls._clause_types.items():
                         if field.startswith(prefix):
                             break
                     else:
-                        raise Exception(f"Unrecognized field {field}")
+                        raise Exception(f"Unrecognized field '{field}'")
 
                     if isinstance(arg, str):
                         if op == "+":
                             kwargs = {f"{arg}s": val}
                         elif op == "-":
                             kwargs = {f"{arg}s": -val}
-                        else:
+                        else:  # op == "="
                             if arg in ["year", "month", "day"]:
                                 if val <= 0:
-                                    raise Exception(f"Can't set {field} to {val}")
+                                    raise Exception(
+                                        f"Can't {human_op} '{field}' to '{val}'"
+                                    )
                             kwargs = {arg: val}
                     else:
-                        if val <= 0:
-                            raise Exception(f"Can't set {field} to {val}")
-                        if op == "+":
-                            kwargs = {"weekday": arg(val)}
-                        elif op == "-":
-                            kwargs = {"weekday": arg(-val)}
+                        if op == "=":
+                            raise Exception(f"'{op}' not supported for '{field}'")
                         else:
-                            # =
-                            raise Exception(f"{op} not supported for {field}")
+                            if val <= 0:
+                                raise Exception(f"Can't {human_op} '{val}' '{field}'s")
+                            if op == "+":
+                                kwargs = {"weekday": arg(val)}
+                            else:  # op == "-"
+                                kwargs = {"weekday": arg(-val)}
 
                     res += relativedelta.relativedelta(**kwargs)
                 return res
@@ -493,7 +500,7 @@ class IsNullType(ChoiceTypeMixin, BaseType):
 
 
 class ArrayTypeMixin:
-    default_value = None
+    default_value = "[]"
 
     @classmethod
     def _get_formatter(cls, choices):  # pragma: postgres
@@ -523,7 +530,7 @@ class ArrayTypeMixin:
         value = _json_loads(value)
         if not isinstance(value, list):
             raise ValueError("Expected a list")
-        return [cls.element_type._parse(v, choices)[0] for v in value]
+        return [cls.element_type._parse(v, choices) for v in value]
 
 
 class StringArrayType(ArrayTypeMixin, BaseType):

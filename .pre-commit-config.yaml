@@ -31,5 +31,13 @@ repos:
     rev: v1.0.1
     hooks:
     -   id: rst-linter
+- repo: local
+  hooks:
+  - id: no-prints
+    name: Check for python prints
+    entry: ' *print\('
+    language: pygrep
+    types: [python]
+    exclude: tests/
 exclude:
     data_browser/fe_build/|data_browser/templates/data_browser/index.html

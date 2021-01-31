@@ -2468,7 +2468,7 @@
         },
         "numberarray": {
             "defaultLookup": "equals",
-            "defaultValue": null,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {
                     "prettyName": "contains",
@@ -2534,7 +2534,7 @@
         },
         "numberchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": null,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {
                     "prettyName": "contains",
@@ -2663,7 +2663,7 @@
         },
         "stringarray": {
             "defaultLookup": "equals",
-            "defaultValue": null,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {
                     "prettyName": "contains",
@@ -2729,7 +2729,7 @@
         },
         "stringchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": null,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {
                     "prettyName": "contains",

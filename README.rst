@@ -315,6 +315,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Fix ``equals`` and ``not equals`` not working for array fields.                                        |
+|         |            | | Improve date and datetime filter errors.                                                               |
 |         |            | | Improve and contrast display of null and empty string.                                                 |
 |         |            | | Various fixes for models where the primary key is not ``id``.                                          |
 |         |            | | Empty but non null file fields render as empty string instead of null.                                 |
@@ -375,7 +377,7 @@ Release History
 |         |            | | Choice fields have a raw sub field for accessing the underlying values.                                |
 |         |            | | Starts with, regex, etc have been removed form choice fields, equivalents are on raw.                  |
 |         |            | | Verbose_names and short_descriptions are used for display in the web frontend and CSV.                 |
-|         |            | | Equals and not equals for JSON and Arrays.                                                             |
+|         |            | | Equals and not equals for JSON and arrays.                                                             |
 |         |            | | JSON field filter supports lists and objects.                                                          |
 |         |            | | Array values are now JSON encoded across the board.                                                    |
 |         |            | | Backfill saved views for above changes to filter formats.                                              |
@@ -387,7 +389,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 2.2.21  | 2020-11-02 | Reject ambiguous date and datetime values in filters.                                                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 2.2.20  | 2020-10-22 | Fix bug with ArrayField on Django>=3.0                                                                   |
+| 2.2.20  | 2020-10-22 | Fix bug with ``ArrayField`` on Django>=3.0                                                               |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 2.2.19  | 2020-10-19 | Support for annotations on inlines.                                                                      |
 +---------+------------+----------------------------------------------------------------------------------------------------------+

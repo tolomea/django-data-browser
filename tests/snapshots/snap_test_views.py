@@ -2307,7 +2307,7 @@ snapshots["test_query_ctx config"] = {
         },
         "numberarray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "number"},
                 "equals": {"prettyName": "equals", "type": "numberarray"},
@@ -2339,7 +2339,7 @@ snapshots["test_query_ctx config"] = {
         },
         "numberchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "numberchoice"},
                 "equals": {"prettyName": "equals", "type": "numberchoicearray"},
@@ -2401,7 +2401,7 @@ snapshots["test_query_ctx config"] = {
         },
         "stringarray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "string"},
                 "equals": {"prettyName": "equals", "type": "stringarray"},
@@ -2433,7 +2433,7 @@ snapshots["test_query_ctx config"] = {
         },
         "stringchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "stringchoice"},
                 "equals": {"prettyName": "equals", "type": "stringchoicearray"},
@@ -4695,7 +4695,7 @@ snapshots["test_query_html config"] = {
         },
         "numberarray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "number"},
                 "equals": {"prettyName": "equals", "type": "numberarray"},
@@ -4727,7 +4727,7 @@ snapshots["test_query_html config"] = {
         },
         "numberchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "numberchoice"},
                 "equals": {"prettyName": "equals", "type": "numberchoicearray"},
@@ -4789,7 +4789,7 @@ snapshots["test_query_html config"] = {
         },
         "stringarray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "string"},
                 "equals": {"prettyName": "equals", "type": "stringarray"},
@@ -4821,7 +4821,7 @@ snapshots["test_query_html config"] = {
         },
         "stringchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "stringchoice"},
                 "equals": {"prettyName": "equals", "type": "stringchoicearray"},
@@ -6013,7 +6013,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "numberarray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "number"},
                 "equals": {"prettyName": "equals", "type": "numberarray"},
@@ -6045,7 +6045,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "numberchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "numberchoice"},
                 "equals": {"prettyName": "equals", "type": "numberchoicearray"},
@@ -6107,7 +6107,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "stringarray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "string"},
                 "equals": {"prettyName": "equals", "type": "stringarray"},
@@ -6139,7 +6139,7 @@ snapshots["test_query_html_no_perms config"] = {
         },
         "stringchoicearray": {
             "defaultLookup": "equals",
-            "defaultValue": None,
+            "defaultValue": "[]",
             "lookups": {
                 "contains": {"prettyName": "contains", "type": "stringchoice"},
                 "equals": {"prettyName": "equals", "type": "stringchoicearray"},

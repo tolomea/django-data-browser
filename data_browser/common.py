@@ -1,5 +1,6 @@
 import logging
 import math
+import traceback
 
 from django import http
 
@@ -26,7 +27,12 @@ def HttpResponse(*args, **kwargs):
     return res
 
 
-def debug_log(msg):  # pragma: no cover
+def debug_log(msg, exc=None):  # pragma: no cover
+    if exc:
+        if isinstance(exc, AssertionError):
+            raise
+        msg = f"{msg}:\n{traceback.format_exc()}"
+
     if settings.DEBUG:
         logging.getLogger(__name__).warning(f"DDB: {msg}")
 
