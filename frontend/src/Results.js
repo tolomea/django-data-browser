@@ -78,11 +78,13 @@ function DataCell(props) {
     pathStr,
     fullRow,
   } = props;
+
+  // The value we will use in copy
   let formattedValue;
   if (value === undefined) {
     formattedValue = "";
   } else if (value === null) {
-    formattedValue = null;
+    formattedValue = "null";
   } else if (modelField.type === "html") {
     formattedValue = value;
   } else if (modelField.type === "number") {
@@ -99,8 +101,19 @@ function DataCell(props) {
     formattedValue = String(value);
   }
 
-  const showContextMenu = useContext(ShowContextMenu);
+  // Any extra gubbins we need to render it
+  let displayValue;
+  if (value === null) {
+    displayValue = <span className="Null">{formattedValue}</span>;
+  } else if (formattedValue === "") {
+    displayValue = "\xa0"; // nbsp
+  } else if (modelField.type === "html") {
+    displayValue = <div dangerouslySetInnerHTML={{ __html: value }} />;
+  } else {
+    displayValue = formattedValue;
+  }
 
+  const showContextMenu = useContext(ShowContextMenu);
   function onContextMenu(e) {
     showContextMenu(e, [
       navigator.clipboard && {
@@ -125,11 +138,7 @@ function DataCell(props) {
       colSpan={span || 1}
       onContextMenu={onContextMenu}
     >
-      {modelField.type === "html" ? (
-        <div dangerouslySetInnerHTML={{ __html: value }} />
-      ) : (
-        formattedValue
-      )}
+      {displayValue}
     </td>
   );
 }

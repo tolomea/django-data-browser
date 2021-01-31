@@ -9,6 +9,7 @@
   --link-color: #069;
   --border-color: #ccc;
   --shade-color: #eee;
+  --null-color: #ddd;
   --bad-color: red;
   --good-color: green;
 }
@@ -389,4 +390,8 @@ input.RowLimit {
 .Tooltip p {
   padding: 5px;
   margin: 0px;
+}
+
+.DataCell .Null {
+  color: var(--null-color);
 }

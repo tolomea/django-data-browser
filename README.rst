@@ -315,14 +315,15 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Various fixes for models where the ``pk`` is not ``id``, including for actions and calculated fields.  |
-|         |            | | Empty file fields render as empty string instead of null.                                              |
+|         |            | | Improve and contrast display of null and empty string.                                                 |
+|         |            | | Various fixes for models where the primary key is not ``id``.                                          |
+|         |            | | Empty but non null file fields render as empty string instead of null.                                 |
 |         |            | | Fix ``is null`` not working with the ``year`` function.                                                |
-|         |            | | The field list is now sorted by display name (except for ``id`` and ``admin``).                        |
-|         |            | | Fix ``not equals`` excluding ``nulls`` with functions and aggregates, e.g. ``year``, ``min`` etc.      |
-|         |            | | Right click filter and drill down now correctly handle ``null`` values.                                |
+|         |            | | The field list is now sorted by display name (except for the primary key and admin link).              |
+|         |            | | Fix ``not equals`` excluding nulls with functions and aggregates, e.g. ``year``, ``min`` etc.          |
+|         |            | | Right click filter and drill down now correctly handle null values.                                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 3.2.3   | 2020-01-11 | Fix issue when using a filter with a different type from the field, e.g. ``is_null``.                    |
+| 3.2.3   | 2020-01-11 | Fix issue when using a filter with a different type from the field, e.g. ``is null``.                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.2   | 2020-12-30 | | Fix ``id`` field missing from some models.                                                             |
 |         |            | | Per Django, Django 2.0 & 2.1 are not supported on Py3.8 and 3.9.                                       |
@@ -358,8 +359,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.0.3   | 2020-11-22 | Fix exception when filtering to out of bounds year values.                                               |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 3.0.2   | 2020-11-18 | | Fix bug with aggregating around is_null values on Django 3.1.                                          |
-|         |            | | Fix is_null returning None for missing fields in JsonFields.                                           |
+| 3.0.2   | 2020-11-18 | | Fix bug with aggregating around ``is null`` values on Django 3.1.                                      |
+|         |            | | Fix ``is null`` returning None for missing fields in JsonFields.                                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.0.1   | 2020-11-12 | | Add ``get_*`` functions for the ``ddb_*`` admin options.                                               |
 |         |            | | Add length function to string fields.                                                                  |
@@ -370,7 +371,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.0.0   | 2020-11-09 | | The format of ddb_default_filters has changed.                                                         |
 |         |            | | Path and prettyPath have been removed from fields and filters on JSON responses.                       |
-|         |            | | Choice and is_null fields use human readable values in filters.                                        |
+|         |            | | Choice and ``is null`` fields use human readable values in filters.                                    |
 |         |            | | Choice fields have a raw sub field for accessing the underlying values.                                |
 |         |            | | Starts with, regex, etc have been removed form choice fields, equivalents are on raw.                  |
 |         |            | | Verbose_names and short_descriptions are used for display in the web frontend and CSV.                 |
