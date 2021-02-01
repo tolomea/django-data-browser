@@ -90,11 +90,8 @@ textarea::placeholder {
 }
 
 /***************** Element specific stuff *****************/
-#body {
-  display: flex;
-  flex-direction: column;
-  max-height: 100vh;
-  padding: 10px 0 0 0;
+#root {
+  position: relative;
 }
 
 .QueryPage {
@@ -126,13 +123,14 @@ textarea::placeholder {
   flex: 0 1 auto;
   overflow: hidden;
 }
-.MainSpace > .Results > .Scroller {
+.MainSpace > .FieldsList {
+  margin: 10px 0 10px 10px;
+}
+
+.Scroller {
   max-width: 100%;
   max-height: 100%;
   overflow: auto;
-}
-.MainSpace > .FieldsList {
-  margin: 10px 0 10px 10px;
 }
 
 .ModelSelector {
@@ -180,11 +178,7 @@ select.Lookup {
 
 /* Fields */
 
-.FieldsList {
-  overflow-y: auto;
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-}
+.FieldsList .Scroller,
 .FieldsList table table {
   border: 1px solid var(--border-color);
   border-radius: 3px;
@@ -268,11 +262,13 @@ a.Logo > span.Version {
 /* Index Page */
 
 div.HomePage {
-  margin: 30px;
+  margin: 0;
+  padding: 40px 30px 30px 30px;
+  display: flex;
+  align-items: start;
 }
 div.HomePage > div {
-  width: 46%;
-  float: left;
+  flex: 1;
   color: var(--dark-color);
   border: 1px solid var(--border-color);
   border-radius: 3px;
@@ -280,14 +276,19 @@ div.HomePage > div {
   padding: 0 2% 2% 2%;
 }
 div.HomePage .Link {
-  display: inline-block;
   font-size: 20px;
 }
 
 /* Edit View */
 
 .EditSavedView {
-  margin: 50px auto 30px auto;
+  margin: 0 auto;
+  padding: 50px 10px 30px 10px;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.EditSavedView > div {
+  margin: 0 auto;
 }
 .EditSavedView .SavedViewTitle {
   font-weight: bold;

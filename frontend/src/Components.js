@@ -328,7 +328,9 @@ function QueryPage(props) {
       </p>
       <div className="MainSpace">
         <div className="FieldsList">
-          <AllFields {...{ query, model }} path={[]} />
+          <div className="Scroller">
+            <AllFields {...{ query, model }} path={[]} />
+          </div>
         </div>
         {results}
         <div />
@@ -345,92 +347,96 @@ function EditSavedView(props) {
   if (!view) return "";
   return (
     <div className="EditSavedView">
-      <div className="SavedViewActions">
-        <span className="SavedViewTitle">Saved View</span>
-        <Link to={view.link}>Open</Link>
-      </div>
-      <form>
-        <input
-          type="text"
-          value={view.name}
-          onChange={(event) => {
-            setView({ name: event.target.value });
-          }}
-          className="SavedViewName"
-          placeholder="enter a name"
-        />
-        <table>
-          <tbody>
-            <tr>
-              <th>Model:</th>
-              <td>{view.model}</td>
-            </tr>
-            <tr>
-              <th>Fields:</th>
-              <td>{view.fields.replace(/,/g, "\u200b,")}</td>
-            </tr>
-            <tr>
-              <th>Filters:</th>
-              <td>{view.query.replace(/&/g, "\u200b&")}</td>
-            </tr>
-            <tr>
-              <th>Limit:</th>
-              <td className="SavedViewLimit">
-                <input
-                  className="RowLimit"
-                  type="number"
-                  value={view.limit}
-                  onChange={(event) => {
-                    setView({ limit: event.target.value });
-                  }}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>Created Time:</th>
-              <td>{view.createdTime}</td>
-            </tr>
-          </tbody>
-        </table>
-        <textarea
-          value={view.description}
-          onChange={(event) => {
-            setView({ description: event.target.value });
-          }}
-          placeholder="enter a description"
-        />
-        {canMakePublic && (
+      <div>
+        <div className="SavedViewActions">
+          <span className="SavedViewTitle">Saved View</span>
+          <Link to={view.link}>Open</Link>
+        </div>
+        <form>
+          <input
+            type="text"
+            value={view.name}
+            onChange={(event) => {
+              setView({ name: event.target.value });
+            }}
+            className="SavedViewName"
+            placeholder="enter a name"
+          />
           <table>
             <tbody>
               <tr>
-                <th>Is Public:</th>
-                <td>
+                <th>Model:</th>
+                <td>{view.model}</td>
+              </tr>
+              <tr>
+                <th>Fields:</th>
+                <td>{view.fields.replace(/,/g, "\u200b,")}</td>
+              </tr>
+              <tr>
+                <th>Filters:</th>
+                <td>{view.query.replace(/&/g, "\u200b&")}</td>
+              </tr>
+              <tr>
+                <th>Limit:</th>
+                <td className="SavedViewLimit">
                   <input
-                    type="checkbox"
-                    checked={view.public}
+                    className="RowLimit"
+                    type="number"
+                    value={view.limit}
                     onChange={(event) => {
-                      setView({ public: event.target.checked });
+                      setView({ limit: event.target.value });
                     }}
                   />
                 </td>
               </tr>
               <tr>
-                <th>Public link:</th>
-                <td>{view.public && <CopyText text={view.publicLink} />}</td>
-              </tr>
-              <tr>
-                <th>Google Sheets:</th>
-                <td>
-                  {view.public && <CopyText text={view.googleSheetsFormula} />}
-                </td>
+                <th>Created Time:</th>
+                <td>{view.createdTime}</td>
               </tr>
             </tbody>
           </table>
-        )}
-      </form>
-      <div className="SavedViewActions">
-        <Delete apiUrl={url} redirectUrl="/" />
-        <Link to="/">Done</Link>
+          <textarea
+            value={view.description}
+            onChange={(event) => {
+              setView({ description: event.target.value });
+            }}
+            placeholder="enter a description"
+          />
+          {canMakePublic && (
+            <table>
+              <tbody>
+                <tr>
+                  <th>Is Public:</th>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={view.public}
+                      onChange={(event) => {
+                        setView({ public: event.target.checked });
+                      }}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Public link:</th>
+                  <td>{view.public && <CopyText text={view.publicLink} />}</td>
+                </tr>
+                <tr>
+                  <th>Google Sheets:</th>
+                  <td>
+                    {view.public && (
+                      <CopyText text={view.googleSheetsFormula} />
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          )}
+        </form>
+        <div className="SavedViewActions">
+          <Delete apiUrl={url} redirectUrl="/" />
+          <Link to="/">Done</Link>
+        </div>
       </div>
     </div>
   );

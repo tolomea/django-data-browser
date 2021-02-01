@@ -145,19 +145,17 @@ function App(props) {
       <ContextMenu>
         <Tooltip>
           <Logo />
-          <div id="body">
-            <Switch>
-              <Route path="/query/:model/:fieldStr?.html">
-                <QueryApp config={props} />
-              </Route>
-              <Route path="/views/:pk.html">
-                <EditSavedView {...{ baseUrl, canMakePublic }} />
-              </Route>
-              <Route path="/">
-                <HomePage {...props} />
-              </Route>
-            </Switch>
-          </div>
+          <Switch>
+            <Route path="/query/:model/:fieldStr?.html">
+              <QueryApp config={props} />
+            </Route>
+            <Route path="/views/:pk.html">
+              <EditSavedView {...{ baseUrl, canMakePublic }} />
+            </Route>
+            <Route path="/">
+              <HomePage {...props} />
+            </Route>
+          </Switch>
         </Tooltip>
       </ContextMenu>
     </BrowserRouter>
