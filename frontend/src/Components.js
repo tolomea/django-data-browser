@@ -449,19 +449,19 @@ function SavedViewList(props) {
   return (
     <div className="SavedViewList">
       <h1>Saved Views</h1>
-      <div>
-        {savedViews.map((view, index) => (
-          <div key={index}>
-            <p>
-              <Link className="Link" to={view.link}>
-                {view.name} - {view.model}
-              </Link>{" "}
-              (<Link to={`/views/${view.pk}.html`}>edit</Link>)
-            </p>
-            <p>{view.description}</p>
-          </div>
-        ))}
-      </div>
+      {savedViews.map((view, index) => (
+        <div key={index}>
+          <h2>
+            <Link className="Link" to={view.link}>
+              {view.name || "<unnamed>"}
+            </Link>
+          </h2>
+          <p>
+            on {view.model} - <Link to={`/views/${view.pk}.html`}>edit</Link>
+          </p>
+          <p>{view.description}</p>
+        </div>
+      ))}
     </div>
   );
 }
@@ -475,20 +475,22 @@ function HomePage(props) {
         <div>
           {sortedModels.map((model) => (
             <div key={model}>
-              <Link
-                to={getRelUrlForQuery(
-                  {
-                    model: model,
-                    fields: [],
-                    filters: allModelFields[model].defaultFilters,
-                    limit: defaultRowLimit,
-                  },
-                  "html"
-                )}
-                className="Link"
-              >
-                {model}
-              </Link>
+              <h2>
+                <Link
+                  to={getRelUrlForQuery(
+                    {
+                      model: model,
+                      fields: [],
+                      filters: allModelFields[model].defaultFilters,
+                      limit: defaultRowLimit,
+                    },
+                    "html"
+                  )}
+                  className="Link"
+                >
+                  {model}
+                </Link>
+              </h2>
             </div>
           ))}
         </div>

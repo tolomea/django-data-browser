@@ -275,8 +275,17 @@ div.HomePage > div {
   margin: 30px 2% 0 2%;
   padding: 0 2% 2% 2%;
 }
-div.HomePage .Link {
+div.HomePage h2 {
   font-size: 20px;
+  font-weight: 400;
+  padding: 0;
+  margin: 0;
+}
+.SavedViewList div {
+  margin: 0 0 20px 0;
+}
+.SavedViewList div:last-child {
+  margin: 0;
 }
 
 /* Edit View */

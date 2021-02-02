@@ -26,6 +26,8 @@ def deserialize(request):
         ]
         if f in data
     }
+    if "name" in res:
+        res["name"] = res["name"][: View._meta.get_field("name").max_length]
 
     if "limit" in res:
         try:
