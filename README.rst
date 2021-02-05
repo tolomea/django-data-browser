@@ -315,6 +315,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Rework @annotation and AdminMixin so @annotation can be used on mixins.                                  |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.4   | 2020-02-02 | | Fix ``equals`` and ``not equals`` not working for array fields.                                        |
 |         |            | | Improve date and datetime filter errors.                                                               |
 |         |            | | Improve and contrast display of null and empty string.                                                 |

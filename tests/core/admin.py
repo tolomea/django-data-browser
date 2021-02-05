@@ -112,6 +112,10 @@ class ProductMixin:
     def hidden_calculated(self, obj):
         return obj
 
+    @annotation
+    def annotated(self, request, qs):
+        return qs.annotate(annotated=F("name"))
+
 
 class ProductInline(ProductMixin, admin.TabularInline):
     model = models.Product
@@ -152,8 +156,14 @@ def a_hidden_action(modeladmin, request, queryset):
     pass  # pragma: no cover
 
 
+class OtherMixin:
+    @annotation
+    def other_annotation(self, request, qs):
+        return qs.annotate(other_annotation=F("name"))
+
+
 @admin.register(models.Product)
-class ProductAdmin(ProductMixin, AdminMixin, admin.ModelAdmin):
+class ProductAdmin(OtherMixin, ProductMixin, AdminMixin, admin.ModelAdmin):
     inlines = [SKUInline]
     list_display = [
         "only_in_list_view",
@@ -165,10 +175,6 @@ class ProductAdmin(ProductMixin, AdminMixin, admin.ModelAdmin):
     ddb_hide_fields = ["hidden_model"]
     ddb_extra_fields = ["extra_model"]
     actions = [an_action, a_hidden_action]
-
-    @annotation
-    def annotated(self, request, qs):
-        return qs.annotate(annotated=F("name"))
 
     @annotation
     def stealth_annotation(self, request, qs):

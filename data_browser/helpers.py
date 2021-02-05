@@ -97,9 +97,12 @@ class _AdminAnnotations:
 
     @classmethod
     def _ddb_annotations(cls):
-        if not hasattr(cls, "_ddb_annotations_real"):
-            cls._ddb_annotations_real = {}
-        return cls._ddb_annotations_real
+        res = {}
+        for name in dir(cls):
+            value = getattr(cls, name)
+            if isinstance(value, _AnnotationDescriptor):
+                res[name] = value
+        return res
 
 
 class AdminMixin(_AdminOptions, _AdminAnnotations):
@@ -137,13 +140,12 @@ class _AnnotationDescriptor:
         self.name = name
         self.__name__ = name
         self.admin_order_field = name
+
+    def __get__(self, instance, owner=None):
         if not issubclass(owner, AdminMixin):  # pragma: no cover
             raise Exception(
                 "Django Data Browser 'annotation' decorator used without 'AdminMixin'"
             )
-        owner._ddb_annotations()[name] = self
-
-    def __get__(self, instance, owner=None):
         return self
 
     def __call__(self, obj):

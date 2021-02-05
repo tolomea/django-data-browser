@@ -800,6 +800,16 @@
                     "prettyName": "Onsale",
                     "type": "boolean"
                 },
+                "other_annotation": {
+                    "actions": [],
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": "string",
+                    "prettyName": "Other annotation",
+                    "type": "string"
+                },
                 "producer": {
                     "actions": [],
                     "canPivot": false,
@@ -876,6 +886,7 @@
                 "number_choice",
                 "only_in_list_view",
                 "onsale",
+                "other_annotation",
                 "producer",
                 "size",
                 "size_unit",
