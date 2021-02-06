@@ -315,6 +315,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Date filter values formated as ``2020-1-2`` are now considered ISO ordered and no longer ambiguous.      |
 |         |            | Rework @annotation and AdminMixin so @annotation can be used on mixins.                                  |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.4   | 2020-02-02 | | Fix ``equals`` and ``not equals`` not working for array fields.                                        |

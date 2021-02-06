@@ -254,7 +254,7 @@ class DateTypeMixin:
         value = value.strip()
 
         d8 = r"(\d{8})"
-        d422 = r"(\d{4}[^\d]*\d{2}[^\d]*\d{2})"
+        d422 = r"(\d{4}[^\d]+\d{1,2}[^\d]+\d{1,2}([^\d]|$))"
         if re.match(r"[^\d]*(" + d8 + "|" + d422 + ")", value):
             # looks like some kinda iso date, roll with the defaults
             res = dateutil.parser.parse(value)

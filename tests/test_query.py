@@ -372,6 +372,7 @@ class TestDateTimeType:
         "value,expected,err",
         [
             ("2018-03-20T22:31:23", dt(2018, 3, 20, 22, 31, 23), None),
+            ("2018-3-2T22:31:23", dt(2018, 3, 2, 22, 31, 23), None),
             ("hello", None, "Unrecognized clause 'hello'"),
             ("now", dt(2020, 12, 13, 9, 42, 53), None),
             # dateutil.parser
@@ -385,6 +386,7 @@ class TestDateTimeType:
             ("2018-21-12", None, "Month must be in 1..12: 2018-21-12"),
             ("2018-11-12", dt(2018, 11, 12), None),
             ("2018-21-22", None, "Month must be in 1..12: 2018-21-22"),
+            ("2018-3-2", dt(2018, 3, 2), None),
             ("20181111", dt(2018, 11, 11), None),
             ("20181122", dt(2018, 11, 22), None),
             ("20182112", None, "Month must be in 1..12: 20182112"),
