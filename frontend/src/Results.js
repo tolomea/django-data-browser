@@ -14,7 +14,14 @@ function Spacer(props) {
 }
 
 function HeadCell(props) {
-  const { query, field, className } = props;
+  const {
+    query,
+    field,
+    className,
+    leftArrow,
+    rightArrow,
+    verticalArrows,
+  } = props;
   const modelField = query.getField(field.pathStr);
   const type = query.getType(modelField);
 
@@ -35,8 +42,16 @@ function HeadCell(props) {
   return (
     <th className={`HeadCell ${className}`} onContextMenu={onContextMenu}>
       <SLink onClick={() => query.removeField(field)}>close</SLink>
-      <SLink onClick={() => query.moveField(field, true)}>chevron_left</SLink>
-      <SLink onClick={() => query.moveField(field, false)}>chevron_right</SLink>
+      {leftArrow && (
+        <SLink onClick={() => query.moveField(field, true)}>
+          {verticalArrows ? "expand_less" : "chevron_left"}
+        </SLink>
+      )}
+      {rightArrow && (
+        <SLink onClick={() => query.moveField(field, false)}>
+          {verticalArrows ? "expand_more" : "chevron_right"}
+        </SLink>
+      )}
       {modelField.canPivot && (
         <>
           <SLink onClick={() => query.togglePivot(field)}>
@@ -150,6 +165,9 @@ function VTableHeadRow(props) {
       {...{ query, field }}
       key={field.pathStr}
       className={`HoriBorder ${className} ` + (i ? "" : classNameFirst)}
+      verticalArrows={false}
+      leftArrow={i !== 0}
+      rightArrow={i !== fields.length - 1}
     />
   ));
 }
@@ -189,10 +207,22 @@ function VTableBodyRow(props) {
 }
 
 function HTableRow(props) {
-  const { query, field, data, span, className, formatHints } = props;
+  const {
+    query,
+    field,
+    data,
+    span,
+    className,
+    formatHints,
+    leftArrow,
+    rightArrow,
+  } = props;
   return (
     <>
-      <HeadCell {...{ query, field }} />
+      <HeadCell
+        {...{ query, field, leftArrow, rightArrow }}
+        verticalArrows={true}
+      />
       {data.map((col, key) => (
         <DataCell
           {...{ key, span, className, query }}
@@ -209,6 +239,7 @@ function HTableRow(props) {
 
 function Results(props) {
   const { query, cols, rows, body, overlay, formatHints } = props;
+  const colFields = query.colFields();
   return (
     <div className="Results">
       <Overlay message={overlay} />
@@ -216,7 +247,7 @@ function Results(props) {
         <table>
           <thead>
             {/* pivoted data */}
-            {query.colFields().map((field) => {
+            {colFields.map((field, i) => {
               return (
                 <tr key={field.pathStr}>
                   <Spacer spaces={query.rowFields().length - 1} />
@@ -225,6 +256,8 @@ function Results(props) {
                     span={query.resFields().length}
                     data={cols}
                     className={overlay && "Fade"}
+                    leftArrow={i !== 0}
+                    rightArrow={i !== colFields.length - 1}
                   />
                 </tr>
               );

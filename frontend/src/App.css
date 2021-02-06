@@ -265,7 +265,7 @@ div.HomePage {
   margin: 0;
   padding: 40px 30px 30px 30px;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
 }
 div.HomePage > div {
   flex: 1;
