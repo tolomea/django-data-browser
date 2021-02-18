@@ -145,6 +145,9 @@ However if necessary this can be tweaked using the following class level propert
 | | ``ddb_default_filters``           | ``[(path, lookup, value)]``               | | Default filters to be added when opening this model.                                                      |
 | | ``get_ddb_default_filters()``     |                                           | | E.G. to add ``client__name__equals=Test`` use ``[("client__name", "equals", "Test")]``.                   |
 +-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+| | ``ddb_action_url``                | ``str``                                   | The url to post admin actions to, usually the changelist view. See `Admin Actions`_                         |
+| | ``get_ddb_action_url(request)``   |                                           |                                                                                                             |
++-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
 Additionally, per the below sections, calculated fields and actions can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
@@ -260,7 +263,7 @@ The context also includes a ``fields`` member that lists all the fields the Data
 .. code-block:: python
 
     if (
-        not hasattr(request, "databrowser")
+        not hasattr(request, "data_browser")
         or "my_field" in request.data_browser["fields"]
     ):
         # do prefetching and annotating associated with my_field
@@ -276,6 +279,17 @@ As with ``get_queryset`` the Data Browser will set ``request.data_browser`` when
 
 The Django User Admin has code to change the fieldsets when adding a new user. To compensate for this, when calling ``get_fieldsets`` on a subclass of ``django.contrib.auth.admin.UserAdmin`` the Data Browser will pass a newly constructed instance of the relevant model. This behavior can be disabled by setting ``settings.DATA_BROWSER_AUTH_USER_COMPAT`` to ``False``.
 
+Admin Actions
+########################################
+
+Django's Admin actions are exposed by right clicking on ID (or other appropriate pk field) column headers.
+
+Due to the way these are implemented in Django there are some additional technical considerations.
+
+The actions are posted to the Admin changelist URL. Once this post happens the Data Browser is no longer involved and so can't set ``request.data_browser`` like it normally would. Instead it will set the post argument ``data_browser``.
+
+When the Data Browser triggers actions default Admin filtering is applied. If you have Admin filters that hide rows by default then actions triggered from the Data Browser will not be able to access those rows. To work around this you can specify ``get_ddb_action_url`` to override the URL the actions are posted to. By default it returns the changelist URL so you can append any arguments needed to set filters to not filter.
+
 
 Style customization
 *************************
@@ -284,7 +298,7 @@ You can override the ``data_browser/index.html`` template per https://docs.djang
 
 This will let you inject custom CSS and stylesheets.
 
-However note that because of how the normal CSS is built into the JS any custom CSS will be before the normal CSS so you will need to use more specific selectors or ``!important``.
+However note that because of how the normal CSS is injected any custom CSS will be before the normal CSS so you will need to use more specific selectors or ``!important``.
 
 
 Version numbers
@@ -315,6 +329,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Rework Admin action integration.                                                                         |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.5   | 2020-02-07 | | Date filter values formated as ``2020-1-2`` are now considered ISO ordered and no longer ambiguous.    |
 |         |            | | Rework @annotation and AdminMixin so @annotation can be used on mixins.                                |
 +---------+------------+----------------------------------------------------------------------------------------------------------+

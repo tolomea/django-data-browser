@@ -377,10 +377,32 @@ def test_action(admin_client):
     ids = set(models.Product.objects.values_list("id", flat=True))
     assert len(ids) == 3
 
+    # check our view is right
     res = admin_client.get(url % "json")
     assert {row["id"] for row in res.json()["rows"]} == ids
 
-    res = admin_client.post(url % "html", {"action": "delete_selected", "field": "id"})
+    # ask data browser for the action request
+    res = admin_client.post(
+        url % "html",
+        {"action": "delete_selected", "field": "id"},
+        content_type="application/json",
+    ).json()
+    assert res == {
+        "method": "post",
+        "url": "/admin/core/product/?",
+        "data": [
+            ["action", "delete_selected"],
+            ["select_across", 0],
+            ["index", 0],
+            ["data_browser", 1],
+            *[["_selected_action", id_] for id_ in ids],
+        ],
+    }
+
+    # post action to changelist
+    data = dict(res["data"])
+    data["_selected_action"] = [int(id_) for id_ in ids]  # JS will format 1.0 as 1
+    res = admin_client.post(res["url"], data)
     assert "Are you sure you want to delete the selected" in res.rendered_content
     assert set(res.context[0]["queryset"].values_list("id", flat=True)) == ids
 
@@ -389,15 +411,36 @@ def test_action(admin_client):
 def test_action_filtered(admin_client):
     url = "/data_browser/query/core.Product/id.%s?size__equals=2"
 
-    ids = set(models.Product.objects.filter(size=2).values_list("id", flat=True))
-    assert len(ids) == 1
+    (id_,) = set(models.Product.objects.filter(size=2).values_list("id", flat=True))
 
+    # check our view is right
     res = admin_client.get(url % "json")
-    assert {row["id"] for row in res.json()["rows"]} == set(ids)
+    assert {row["id"] for row in res.json()["rows"]} == {id_}
 
-    res = admin_client.post(url % "html", {"action": "delete_selected", "field": "id"})
+    # ask data browser for the action request
+    res = admin_client.post(
+        url % "html",
+        {"action": "delete_selected", "field": "id"},
+        content_type="application/json",
+    ).json()
+    assert res == {
+        "method": "post",
+        "url": "/admin/core/product/?",
+        "data": [
+            ["action", "delete_selected"],
+            ["select_across", 0],
+            ["index", 0],
+            ["data_browser", 1],
+            ["_selected_action", id_],
+        ],
+    }
+
+    # post action to changelist
+    data = dict(res["data"])
+    data["_selected_action"] = int(data["_selected_action"])  # JS will format 1.0 as 1
+    res = admin_client.post(res["url"], data)
     assert "Are you sure you want to delete the selected" in res.rendered_content
-    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == ids
+    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == {id_}
 
 
 @pytest.mark.usefixtures("products")
@@ -407,15 +450,34 @@ def test_related_action(admin_client):
     product_ids = set(models.Product.objects.values_list("id", flat=True))
     assert len(product_ids) == 3
 
-    producer_ids = set(models.Producer.objects.values_list("id", flat=True))
-    assert len(producer_ids) == 1
+    (producer_id,) = set(models.Producer.objects.values_list("id", flat=True))
 
+    # check our view is right
     res = admin_client.get(url % "json")
     assert {row["id"] for row in res.json()["rows"]} == product_ids
-    assert {row["producer__id"] for row in res.json()["rows"]} == producer_ids
+    assert {row["producer__id"] for row in res.json()["rows"]} == {producer_id}
 
+    # ask data browser for the action request
     res = admin_client.post(
-        url % "html", {"action": "delete_selected", "field": "producer__id"}
-    )
+        url % "html",
+        {"action": "delete_selected", "field": "producer__id"},
+        content_type="application/json",
+    ).json()
+    assert res == {
+        "method": "post",
+        "url": "/admin/core/producer/?",
+        "data": [
+            ["action", "delete_selected"],
+            ["select_across", 0],
+            ["index", 0],
+            ["data_browser", 1],
+            ["_selected_action", producer_id],
+        ],
+    }
+
+    # post action to changelist
+    data = dict(res["data"])
+    data["_selected_action"] = int(data["_selected_action"])  # JS will format 1.0 as 1
+    res = admin_client.post(res["url"], data)
     assert "Are you sure you want to delete the selected" in res.rendered_content
-    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == producer_ids
+    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == {producer_id}

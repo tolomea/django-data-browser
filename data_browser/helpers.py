@@ -27,6 +27,7 @@ class _AdminOptions:
     ddb_hide_fields = []
     ddb_json_fields = {}
     ddb_default_filters = []
+    ddb_action_url = None
 
     def get_ddb_ignore(self, request):
         return self.ddb_ignore
@@ -43,6 +44,13 @@ class _AdminOptions:
     def get_ddb_default_filters(self):
         return list(self.ddb_default_filters)
 
+    def get_ddb_action_url(self, request):
+        if self.ddb_action_url:
+            return self.ddb_action_url  # pragma: no cover
+
+        meta = self.model._meta
+        return reverse(f"admin:{meta.app_label}_{meta.model_name}_changelist") + "?"
+
 
 def _get_option(admin, name, *args):
     field = f"ddb_{name}"
@@ -50,8 +58,12 @@ def _get_option(admin, name, *args):
 
     if hasattr(admin, func):
         return getattr(admin, func)(*args)
+    elif hasattr(admin, field):
+        return getattr(admin, field)
     else:
-        return getattr(admin, field, getattr(_AdminOptions, field))
+        options = _AdminOptions()
+        options.model = getattr(admin, "model", None)
+        return getattr(options, func)(*args)
 
 
 class _AdminAnnotations:

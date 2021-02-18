@@ -162,17 +162,16 @@ function syncPost(url, data) {
     const form = document.createElement("form");
     form.method = "post";
     form.action = url;
-    data.csrfmiddlewaretoken = Cookies.get("csrftoken");
 
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            const hiddenField = document.createElement("input");
-            hiddenField.type = "hidden";
-            hiddenField.name = key;
-            hiddenField.value = data[key];
+    data.push(["csrfmiddlewaretoken", Cookies.get("csrftoken")]);
 
-            form.appendChild(hiddenField);
-        }
+    for (const [key, value] of data) {
+        const hiddenField = document.createElement("input");
+        hiddenField.type = "hidden";
+        hiddenField.name = key;
+        hiddenField.value = value;
+
+        form.appendChild(hiddenField);
     }
 
     document.body.appendChild(form);

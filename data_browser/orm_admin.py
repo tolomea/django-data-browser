@@ -2,7 +2,9 @@ import json
 from collections import defaultdict
 from dataclasses import dataclass
 
+from django import http
 from django.contrib.admin import site
+from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets, model_format_dict
 from django.contrib.auth.admin import UserAdmin
@@ -14,7 +16,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.text import slugify
 
-from .common import debug_log, settings
+from .common import JsonResponse, debug_log, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_fields import (
@@ -54,10 +56,24 @@ class OrmModel:
     def get_queryset(self, request, fields=()):
         return admin_get_queryset(self.admin, request, fields)
 
-    def do_action(self, request, action, pks):
-        qs = self.get_queryset(request).filter(pk__in=pks)
-        func, desc = admin_get_actions(self.admin, request)[action]
-        return func(self.admin, request, qs)
+    def get_action_request(self, request, action, pks):
+        actions = admin_get_actions(self.admin, request)
+        if action not in actions:
+            raise http.Http404(f"'{action}' unknown action")  # pragma: no cover
+
+        return JsonResponse(
+            {
+                "method": "post",
+                "url": _get_option(self.admin, "action_url", request),
+                "data": [
+                    ("action", action),
+                    ("select_across", 0),
+                    ("index", 0),
+                    ("data_browser", 1),
+                    *[(ACTION_CHECKBOX_NAME, pk) for pk in pks],
+                ],
+            }
+        )
 
 
 def get_model_name(model, sep="."):

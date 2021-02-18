@@ -143,19 +143,19 @@ def query_ctx(request, *, model_name="", fields=""):
 
 
 def admin_action(request, model_name, fields):
-    action = request.POST["action"]
-    field = request.POST["field"]
+    data = json.loads(request.body)
+    action = data["action"]
+    field = data["field"]
 
-    assert field in fields
-    if field not in fields.split(","):
-        return  # pragma: no cover
+    if field not in fields:
+        raise http.Http404(f"bad field '{field}'")  # pragma: no cover
 
     params = hyperlink.parse(request.get_full_path()).query
     query = Query.from_request(model_name, field, params)
 
     orm_models = get_models(request)
     if query.model_name not in orm_models:
-        raise http.Http404(f"{query.model_name} does not exist")  # pragma: no cover
+        raise http.Http404(f"'{query.model_name}' does not exist")  # pragma: no cover
 
     bound_query = BoundQuery.bind(query, orm_models)
 
@@ -167,7 +167,7 @@ def admin_action(request, model_name, fields):
     pks -= {None}
 
     model_name = bound_query.fields[0].orm_bound_field.field.model_name
-    return orm_models[model_name].do_action(request, action, pks)
+    return orm_models[model_name].get_action_request(request, action, pks)
 
 
 @csrf.csrf_protect
@@ -175,9 +175,7 @@ def admin_action(request, model_name, fields):
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
     if request.method == "POST":
-        resp = admin_action(request, model_name, fields)
-        if resp:  # pragma: no branch
-            return resp
+        return admin_action(request, model_name, fields)
 
     config = _get_config(request)
     config = json.dumps(config, cls=DjangoJSONEncoder)

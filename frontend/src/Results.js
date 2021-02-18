@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./App.css";
-import { TLink, SLink, Overlay, syncPost } from "./Util";
+import { TLink, SLink, Overlay, syncPost, doPost } from "./Util";
 import { ShowContextMenu } from "./ContextMenu";
 
 function Spacer(props) {
@@ -33,7 +33,11 @@ function HeadCell(props) {
       modelField.actions.map((action) => {
         return {
           name: action.prettyName,
-          fn: () => syncPost("", { action: action.name, field: field.pathStr }),
+          fn: () =>
+            doPost("", {
+              action: action.name,
+              field: field.pathStr,
+            }).then((response) => syncPost(response.url, response.data)),
         };
       })
     );
