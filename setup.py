@@ -34,7 +34,7 @@ setuptools.setup(
     python_requires=">=3.6",
     package_data={"": data_files},
     install_requires=[
-        "Django>=2.0",
+        "Django>=2.2",
         "hyperlink",
         "python-dateutil",
         "sqlparse",

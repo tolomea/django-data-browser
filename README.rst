@@ -41,7 +41,7 @@ Supported Versions
 
 The Data Browser is currently tested on:
 
-* Django 2.0 - 3.1
+* Django 2.2 - 3.1
 * Python 3.6 - 3.9
 * MySQL, PostgreSQL, SQLite
 
@@ -329,6 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Drop support for Django 2.0 and 2.1                                                                      |
 |         |            | Rework Admin action integration.                                                                         |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.5   | 2020-02-07 | | Date filter values formated as ``2020-1-2`` are now considered ISO ordered and no longer ambiguous.    |

@@ -31,9 +31,10 @@ _DATE_FUNCTIONS = [
     "day",
     "week_day",
     "month_start",
+    "iso_year",
+    "iso_week",
+    "week_start",
 ]
-if django.VERSION >= (2, 2):  # pragma: no branch
-    _DATE_FUNCTIONS += ["iso_year", "iso_week", "week_start"]
 
 
 _TYPE_FUNCTIONS = defaultdict(
@@ -118,20 +119,19 @@ def _get_django_function(name, qs):
         "is_null": (IsNull, IsNullType, (), None, {}),
         "length": (functions.Length, NumberType, (), None, {}),
     }
-    if django.VERSION >= (2, 2):  # pragma: no branch
-        mapping.update(
-            {
-                "iso_year": (functions.ExtractIsoYear, NumberType, (), ASC, {}),
-                "iso_week": (functions.ExtractWeek, NumberType, (), ASC, {}),
-                "week_start": (
-                    lambda x: functions.TruncWeek(x, DateField()),
-                    DateType,
-                    (),
-                    ASC,
-                    {},
-                ),
-            }
-        )
+    mapping.update(
+        {
+            "iso_year": (functions.ExtractIsoYear, NumberType, (), ASC, {}),
+            "iso_week": (functions.ExtractWeek, NumberType, (), ASC, {}),
+            "week_start": (
+                lambda x: functions.TruncWeek(x, DateField()),
+                DateType,
+                (),
+                ASC,
+                {},
+            ),
+        }
+    )
     return mapping[name]
 
 

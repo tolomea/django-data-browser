@@ -147,13 +147,7 @@ def _get_all_admin_fields(request):
         if _get_option(model_admin, "ignore", request):
             return False
 
-        if model_admin.has_change_permission(request):
-            return True
-
-        if hasattr(model_admin, "has_view_permission"):
-            return model_admin.has_view_permission(request)
-        else:
-            return False  # pragma: no cover  Django < 2.1
+        return model_admin.has_view_permission(request)
 
     all_admin_fields = defaultdict(set)
     hidden_fields = defaultdict(set)
