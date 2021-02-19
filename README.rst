@@ -329,8 +329,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Drop support for Django 2.0 and 2.1                                                                      |
-|         |            | Rework Admin action integration.                                                                         |
+| 3.3.0   | 2020-02-19 | | Drop support for Django 2.0 and 2.1                                                                    |
+|         |            | | Rework Admin action integration.                                                                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.5   | 2020-02-07 | | Date filter values formated as ``2020-1-2`` are now considered ISO ordered and no longer ambiguous.    |
 |         |            | | Rework @annotation and AdminMixin so @annotation can be used on mixins.                                |
