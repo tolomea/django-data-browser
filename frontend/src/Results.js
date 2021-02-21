@@ -257,7 +257,7 @@ function Results(props) {
                   <Spacer spaces={query.rowFields().length - 1} />
                   <HTableRow
                     {...{ query, field, formatHints }}
-                    span={query.resFields().length}
+                    span={query.bodyFields().length}
                     data={cols}
                     className={overlay && "Fade"}
                     leftArrow={i !== 0}
@@ -278,7 +278,7 @@ function Results(props) {
               {cols.map((_, key) => (
                 <VTableHeadRow
                   {...{ key, query }}
-                  fields={query.resFields()}
+                  fields={query.bodyFields()}
                   classNameFirst="LeftBorder"
                   className="Freeze"
                 />
@@ -299,7 +299,7 @@ function Results(props) {
                 {body.map((table, key) => (
                   <VTableBodyRow
                     {...{ key, query, formatHints }}
-                    fields={query.resFields()}
+                    fields={query.bodyFields()}
                     row={table[rowIndex]}
                     fullRow={{ ...row, ...cols[key] }}
                     classNameFirst="LeftBorder"

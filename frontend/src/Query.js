@@ -103,13 +103,13 @@ class Query {
     // get the fields in their sections
     const colFields = this.colFields().slice();
     const rowFields = this.rowFields().slice();
-    const resFields = this.resFields().slice();
+    const bodyFields = this.bodyFields().slice();
 
     // pick the section our field is in
     let fields = null;
     if (field.pivoted) fields = colFields;
     else if (modelField.canPivot || !colFields.length) fields = rowFields;
-    else fields = resFields;
+    else fields = bodyFields;
 
     // work out it's old and new index
     const index = this._getFieldIndex(field, fields);
@@ -121,7 +121,7 @@ class Query {
       fields.splice(index, 1);
       fields.splice(newIndex, 0, field);
       this.setQuery(
-        { fields: [].concat(rowFields, colFields, resFields) },
+        { fields: [].concat(rowFields, colFields, bodyFields) },
         false
       );
     }
@@ -275,7 +275,7 @@ class Query {
     }
   }
 
-  resFields() {
+  bodyFields() {
     if (this.colFields().length) {
       return this.query.fields.filter(
         (f) => !this.getField(f.pathStr).canPivot
