@@ -1,7 +1,6 @@
 import cProfile
 import csv
 import io
-import itertools
 import json
 import marshal
 import pstats
@@ -21,6 +20,7 @@ from django.views.decorators import csrf
 
 from . import version
 from .common import HttpResponse, JsonResponse, can_make_public, settings
+from .format_csv import get_csv_rows
 from .models import View
 from .orm_admin import OPEN_IN_ADMIN, get_models
 from .orm_results import get_result_queryset, get_results
@@ -259,38 +259,6 @@ def view(request, pk, media):
         raise http.Http404("No View matches the given query.")
 
 
-def pad(x):
-    return [None] * max(0, x)
-
-
-def concat(*lists):
-    return itertools.chain.from_iterable(lists)
-
-
-def flip_table(table):
-    return (list(x) for x in zip(*table))
-
-
-def join_tables(*tables):
-    return (list(concat(*ts)) for ts in zip(*tables))
-
-
-def format_table(fields, table, spacing=0):
-    return concat(
-        [[" ".join(f.pretty_path) for f in fields]],
-        *[
-            [[(row[f.path_str] if row else "") for f in fields]]
-            + [pad(len(fields))] * spacing
-            for row in table
-        ],
-    )
-
-
-def pad_table(x, table):
-    p = pad(x)
-    return (p + row for row in table)
-
-
 class Echo:
     def write(self, value):
         return value
@@ -307,35 +275,11 @@ def _data_response(request, query, media, privileged=False, strict=False):
 
     if media == "csv":
         results = get_results(request, bound_query, orm_models, False)
-
-        def csv_rows():
-            # the pivoted column headers
-            yield from pad_table(
-                len(bound_query.row_fields) - 1,
-                flip_table(
-                    format_table(
-                        bound_query.col_fields,
-                        results["cols"],
-                        spacing=len(bound_query.body_fields) - 1,
-                    )
-                ),
-            )
-
-            # the row headers and data area
-            yield from pad_table(
-                1 - len(bound_query.row_fields),
-                join_tables(
-                    format_table(bound_query.row_fields, results["rows"]),
-                    *(
-                        format_table(bound_query.body_fields, sub_table)
-                        for sub_table in results["body"]
-                    ),
-                ),
-            )
+        csv_rows = get_csv_rows(bound_query, results)
 
         writer = csv.writer(Echo())
         response = http.StreamingHttpResponse(
-            (writer.writerow(row) for row in csv_rows()), content_type="text/csv"
+            (writer.writerow(row) for row in csv_rows), content_type="text/csv"
         )
         response[
             "Content-Disposition"

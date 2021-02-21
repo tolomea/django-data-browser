@@ -246,19 +246,11 @@ class BoundQuery:
 
     @cached_property
     def row_fields(self):
-        if self.col_fields:
-            return [
-                f for f in self.fields if f.orm_bound_field.can_pivot and not f.pivoted
-            ]
-        else:
-            return self.fields
+        return [f for f in self.fields if f.orm_bound_field.can_pivot and not f.pivoted]
 
     @cached_property
     def body_fields(self):
-        if self.col_fields:
-            return [f for f in self.fields if not f.orm_bound_field.can_pivot]
-        else:
-            return []
+        return [f for f in self.fields if not f.orm_bound_field.can_pivot]
 
     @cached_property
     def bound_fields(self):

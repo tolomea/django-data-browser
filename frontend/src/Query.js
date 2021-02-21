@@ -108,7 +108,7 @@ class Query {
     // pick the section our field is in
     let fields = null;
     if (field.pivoted) fields = colFields;
-    else if (modelField.canPivot || !colFields.length) fields = rowFields;
+    else if (modelField.canPivot) fields = rowFields;
     else fields = bodyFields;
 
     // work out it's old and new index
@@ -266,23 +266,13 @@ class Query {
   }
 
   rowFields() {
-    if (this.colFields().length) {
-      return this.query.fields.filter(
-        (f) => !f.pivoted && this.getField(f.pathStr).canPivot
-      );
-    } else {
-      return this.query.fields;
-    }
+    return this.query.fields.filter(
+      (f) => this.getField(f.pathStr).canPivot && !f.pivoted
+    );
   }
 
   bodyFields() {
-    if (this.colFields().length) {
-      return this.query.fields.filter(
-        (f) => !this.getField(f.pathStr).canPivot
-      );
-    } else {
-      return [];
-    }
+    return this.query.fields.filter((f) => !this.getField(f.pathStr).canPivot);
   }
 
   prettyPathStr(pathStr) {

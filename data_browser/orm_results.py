@@ -197,8 +197,7 @@ def _get_keys(res, fields, all_keys):
             if key in all_keys:
                 keys[key] = None
     else:
-        if res:
-            keys[()] = None
+        keys[()] = None
     return keys
 
 
@@ -214,9 +213,12 @@ def _format_grid(data, col_keys, row_keys, fields, objs):
 
 def get_results(request, bound_query, orm_models, with_format_hints):
     if not bound_query.fields:
-        return {"rows": [], "cols": [], "body": []}
+        return {"rows": [], "cols": [], "body": [], "length": 0}
 
     res = _get_result_list(request, bound_query)
+
+    if not res:
+        return {"rows": [], "cols": [], "body": [], "length": 0}
 
     if bound_query.bound_col_fields and bound_query.bound_row_fields:
         # need to fetch rows and col titles seperately to get correct sort
@@ -286,7 +288,7 @@ def get_results(request, bound_query, orm_models, with_format_hints):
         return {
             "rows": row_data,
             "cols": [{}] if res else [],
-            "body": [[{}] * len(res)] if res else [],
+            "body": [[{}] * len(res)],
             "length": len(res),
             "formatHints": format_hints,
         }

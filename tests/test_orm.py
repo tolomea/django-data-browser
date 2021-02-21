@@ -24,7 +24,7 @@ def admin_link(obj):
 
 
 def flatten_table(fields, data):
-    return [[(row[f.path_str] if row else None) for f in fields] for row in data]
+    return [None if row is None else [row[f.path_str] for f in fields] for row in data]
 
 
 @pytest.fixture
@@ -99,18 +99,6 @@ def orm_models(req):
 
 
 @pytest.fixture
-def get_product_flat(req, orm_models, django_assert_num_queries):
-    def helper(queries, *args, **kwargs):
-        query = Query.from_request("core.Product", *args, **kwargs)
-        bound_query = BoundQuery.bind(query, orm_models)
-        with django_assert_num_queries(queries):
-            data = get_results(req, bound_query, orm_models, False)
-            return flatten_table(bound_query.fields, data["rows"])
-
-    return helper
-
-
-@pytest.fixture
 def get_product_pivot(req, orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
         query = Query.from_request("core.Product", *args, **kwargs)
@@ -124,6 +112,21 @@ def get_product_pivot(req, orm_models, django_assert_num_queries):
                     flatten_table(bound_query.body_fields, row) for row in data["body"]
                 ],
             }
+
+    return helper
+
+
+@pytest.fixture
+def get_product_flat(get_product_pivot):
+    def helper(queries, *args, **kwargs):
+        res = get_product_pivot(queries, *args, **kwargs)
+        if res["body"] == []:
+            assert res["cols"] == []
+            assert res["rows"] == []
+            return []
+        else:
+            assert res["cols"] == [[]]  # this currently can't flatten pivoted stuff
+            return [r + b for r, b in zip(res["rows"], res["body"][0])]
 
     return helper
 
@@ -222,7 +225,7 @@ def test_get_aggretated_annotated_field_at_base(products, get_product_flat, mock
         "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(1, "annotated__count+1,size-2", [])
-    assert data == [[1, 2], [2, 1]]
+    assert data == [[2, 1], [1, 2]]  # aggregates last
     assert len(mock.call_args_list) == 2
 
 
@@ -231,7 +234,7 @@ def test_filter_and_select_aggregated_annotation(products, get_product_flat):
     data = get_product_flat(
         1, "annotated__count+1,size", [("annotated__count__gt", "1")]
     )
-    assert data == [[2, 1]]
+    assert data == [[1, 2]]  # aggregates last
 
 
 def test_get_annotated_field_function_at_base(products, get_product_flat, mocker):
@@ -262,7 +265,7 @@ def test_get_aggregated_annotated_field_down_tree(products, get_product_flat, mo
         "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
     )
     data = get_product_flat(1, "producer__address__andrew__count+1,size-2", [])
-    assert data == [[0, 2], [2, 1]]
+    assert data == [[2, 0], [1, 2]]  # aggregates last
     assert len(mock.call_args_list) == 2
 
 
@@ -616,7 +619,7 @@ def test_pivot_sorting_with_empty_cell(get_product_pivot):
         3, "&created_time__year+1,created_time__month+2,id__count", []
     )
     assert data == {
-        "body": [[[None], [1]], [[2], [3]]],
+        "body": [[None, [1]], [[2], [3]]],
         "rows": [["January"], ["Feburary"]],
         "cols": [[2021], [2022]],
     }
@@ -625,7 +628,7 @@ def test_pivot_sorting_with_empty_cell(get_product_pivot):
         3, "&created_time__year+2,created_time__month+1,id__count", []
     )
     assert data == {
-        "body": [[[None], [1]], [[2], [3]]],
+        "body": [[None, [1]], [[2], [3]]],
         "rows": [["January"], ["Feburary"]],
         "cols": [[2021], [2022]],
     }
@@ -685,7 +688,7 @@ testdata = [
     # drcb, rows, cols, body
     # drcb = has_data, row_field, col_field, body_fields
     ("----", [], [], []),
-    ("---b", [[0, None]], [[]], [[[]]]),
+    ("---b", [[]], [[]], [[[0.0, None]]]),
     ("--c-", [], [], []),
     ("--cb", [], [], []),
     ("-r--", [], [], []),
@@ -693,11 +696,11 @@ testdata = [
     ("-rc-", [], [], []),
     ("-rcb", [], [], []),
     ("d---", [], [], []),
-    ("d--b", [[10, 10]], [[]], [[[]]]),
+    ("d--b", [[]], [[]], [[[10, 10]]]),
     ("d-c-", [[]], [[jan], [feb]], [[[]], [[]]]),
     ("d-cb", [[]], [[jan], [feb]], [[[4, 6]], [[6, 10]]]),
     ("dr--", [[2020], [2021]], [[]], [[[], []]]),
-    ("dr-b", [[2020, 3, 3], [2021, 7, 10]], [[]], [[[], []]]),
+    ("dr-b", [[2020], [2021]], [[]], [[[3, 3], [7, 10]]]),
     ("drc-", [[2020], [2021]], [[jan], [feb]], [[[], []], [[], []]]),
     ("drcb", [[2020], [2021]], [[jan], [feb]], [[[1, 1], [3, 6]], [[2, 3], [4, 10]]]),
 ]
@@ -718,7 +721,7 @@ def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
         filters.append(("id__equals", "-1"))
 
     queries = 0 if key.endswith("---") else 1
-    if "r" in key and "c" in key:
+    if "drc" in key:
         queries += 2
 
     results = get_product_pivot(queries, ",".join(fields), filters)

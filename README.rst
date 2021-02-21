@@ -329,6 +329,10 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | In the JSON output aggregate fields are now always in the body.                                        |
+|         |            | | The CSV format has changed so aggregate fields are always to the right of other fields.                |
+|         |            | | In the UI aggregate fields are now always to the right of other fields.                                |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.3.0   | 2020-02-19 | | Drop support for Django 2.0 and 2.1                                                                    |
 |         |            | | Rework Admin action integration.                                                                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+

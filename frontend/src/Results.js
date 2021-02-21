@@ -244,17 +244,23 @@ function HTableRow(props) {
 function Results(props) {
   const { query, cols, rows, body, overlay, formatHints } = props;
   const colFields = query.colFields();
+  const topTitleSpace = query.rowFields().length - 1;
+  const sideTitleSpace = query.colFields().length
+    ? 1 - query.rowFields().length
+    : 0;
+  const hasBody = query.rowFields().length || query.bodyFields().length || null;
+
   return (
     <div className="Results">
       <Overlay message={overlay} />
       <div className="Scroller">
         <table>
           <thead>
-            {/* pivoted data */}
+            {/* col headers and data aka pivots */}
             {colFields.map((field, i) => {
               return (
                 <tr key={field.pathStr}>
-                  <Spacer spaces={query.rowFields().length - 1} />
+                  <Spacer spaces={topTitleSpace} />
                   <HTableRow
                     {...{ query, field, formatHints }}
                     span={query.bodyFields().length}
@@ -267,46 +273,52 @@ function Results(props) {
               );
             })}
 
-            {/* column headers */}
-            <tr>
-              <Spacer spaces={1 - query.rowFields().length} />
-              <VTableHeadRow
-                {...{ query }}
-                fields={query.rowFields()}
-                className="Freeze"
-              />
-              {cols.map((_, key) => (
+            {/* body/aggregate headers */}
+            {hasBody && (
+              <tr>
+                <Spacer spaces={sideTitleSpace} />
                 <VTableHeadRow
-                  {...{ key, query }}
-                  fields={query.bodyFields()}
-                  classNameFirst="LeftBorder"
+                  {...{ query }}
+                  fields={query.rowFields()}
                   className="Freeze"
                 />
-              ))}
-            </tr>
+                {(cols.length ? cols : [null]).map((_, key) => (
+                  <VTableHeadRow
+                    {...{ key, query }}
+                    fields={query.bodyFields()}
+                    classNameFirst="LeftBorder"
+                    className="Freeze"
+                  />
+                ))}
+              </tr>
+            )}
           </thead>
 
           {/* row headers and body */}
           <tbody className={overlay && "Fade"}>
-            {rows.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                <Spacer spaces={1 - query.rowFields().length} />
-                <VTableBodyRow
-                  {...{ query, row, formatHints }}
-                  fields={query.rowFields()}
-                  fullRow={row}
-                />
-                {body.map((table, key) => (
-                  <VTableBodyRow
-                    {...{ key, query, formatHints }}
-                    fields={query.bodyFields()}
-                    row={table[rowIndex]}
-                    fullRow={{ ...row, ...cols[key] }}
-                    classNameFirst="LeftBorder"
-                  />
-                ))}
-              </tr>
-            ))}
+            {hasBody &&
+              rows.map(
+                (row, rowIndex) =>
+                  row && (
+                    <tr key={rowIndex}>
+                      <Spacer spaces={sideTitleSpace} />
+                      <VTableBodyRow
+                        {...{ query, row, formatHints }}
+                        fields={query.rowFields()}
+                        fullRow={row}
+                      />
+                      {body.map((table, key) => (
+                        <VTableBodyRow
+                          {...{ key, query, formatHints }}
+                          fields={query.bodyFields()}
+                          row={table[rowIndex]}
+                          fullRow={{ ...row, ...cols[key] }}
+                          classNameFirst="LeftBorder"
+                        />
+                      ))}
+                    </tr>
+                  )
+              )}
           </tbody>
         </table>
       </div>

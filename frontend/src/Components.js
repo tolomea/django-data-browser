@@ -292,7 +292,7 @@ function QueryPage(props) {
   } = props;
 
   let results;
-  if (query.rowFields().length || query.colFields().length)
+  if (query.query.fields.length)
     results = (
       <Results {...{ query, rows, cols, body, overlay, formatHints }} />
     );

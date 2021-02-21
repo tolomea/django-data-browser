@@ -6,21 +6,18 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots["test_query_csv_pivot_permutations[----] key"] = [[""]]
+snapshots["test_query_csv_pivot_permutations[----] key"] = []
 
 snapshots["test_query_csv_pivot_permutations[---b] key"] = [
     ["ID count", "Size max"],
     ["0.0", ""],
 ]
 
-snapshots["test_query_csv_pivot_permutations[--c-] key"] = [
-    ["Created time month"],
-    [""],
-]
+snapshots["test_query_csv_pivot_permutations[--c-] key"] = [["Created time month"]]
 
 snapshots["test_query_csv_pivot_permutations[--cb] key"] = [
     ["Created time month"],
-    [""],
+    ["", "ID count", "Size max"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[-r--] key"] = [["Created time year"]]
@@ -36,10 +33,10 @@ snapshots["test_query_csv_pivot_permutations[-rc-] key"] = [
 
 snapshots["test_query_csv_pivot_permutations[-rcb] key"] = [
     ["Created time month"],
-    ["Created time year"],
+    ["Created time year", "ID count", "Size max"],
 ]
 
-snapshots["test_query_csv_pivot_permutations[d---] key"] = [[""]]
+snapshots["test_query_csv_pivot_permutations[d---] key"] = []
 
 snapshots["test_query_csv_pivot_permutations[d--b] key"] = [
     ["ID count", "Size max"],
@@ -47,9 +44,7 @@ snapshots["test_query_csv_pivot_permutations[d--b] key"] = [
 ]
 
 snapshots["test_query_csv_pivot_permutations[d-c-] key"] = [
-    ["Created time month", "January", "Feburary"],
-    [""],
-    [""],
+    ["Created time month", "January", "Feburary"]
 ]
 
 snapshots["test_query_csv_pivot_permutations[d-cb] key"] = [
