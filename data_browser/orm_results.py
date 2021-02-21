@@ -48,10 +48,10 @@ def _rows_sub_query(bound_query):
         for filter_ in bound_query.valid_filters
         if filter_.orm_bound_field.filter_
     ]
-    data_fields = [f for f in bound_query.data_fields if f.direction]
+    body_fields = [f for f in bound_query.body_fields if f.direction]
     return BoundQuery(
         bound_query.model_name,
-        bound_query.row_fields + data_fields,
+        bound_query.row_fields + body_fields,
         filters,
         bound_query.limit,
         bound_query.orm_model,
@@ -183,7 +183,7 @@ def _get_data_and_all_keys(bound_query, res):
     for row in res:
         row_key = _get_fields(row, bound_query.bound_row_fields)
         col_key = _get_fields(row, bound_query.bound_col_fields)
-        data[row_key][col_key] = dict(_get_fields(row, bound_query.bound_data_fields))
+        data[row_key][col_key] = dict(_get_fields(row, bound_query.bound_body_fields))
         all_row_keys.add(row_key)
         all_col_keys.add(col_key)
     return data, all_row_keys, all_col_keys
@@ -228,14 +228,18 @@ def get_results(request, bound_query, orm_models, with_format_hints):
 
     objs = _get_objs_for_calculated_fields(request, bound_query, orm_models, res)
 
-    if bound_query.bound_col_fields or bound_query.bound_data_fields:
-        data, all_row_keys, all_col_keys = _get_data_and_all_keys(bound_query, res)
+    if bound_query.bound_col_fields or bound_query.bound_body_fields:
+        raw_body_data, raw_row_data, raw_col_data = _get_data_and_all_keys(
+            bound_query, res
+        )
 
-        col_keys = _get_keys(cols_res, bound_query.bound_col_fields, all_col_keys)
-        row_keys = _get_keys(rows_res, bound_query.bound_row_fields, all_row_keys)
+        # the raw versions have the subset of correct results
+        # the res versions have the correct ordering
+        col_keys = _get_keys(cols_res, bound_query.bound_col_fields, raw_col_data)
+        row_keys = _get_keys(rows_res, bound_query.bound_row_fields, raw_row_data)
 
         body_data = _format_grid(
-            data, col_keys, row_keys, bound_query.bound_data_fields, objs
+            raw_body_data, col_keys, row_keys, bound_query.bound_body_fields, objs
         )
         row_data = _format_table(
             bound_query.bound_row_fields, [dict(row) for row in row_keys], objs
@@ -249,7 +253,7 @@ def get_results(request, bound_query, orm_models, with_format_hints):
             (bound_query.bound_row_fields, row_data),
             (bound_query.bound_col_fields, col_data),
             (
-                bound_query.bound_data_fields,
+                bound_query.bound_body_fields,
                 list(itertools.chain.from_iterable(body_data)),
             ),
         ]:

@@ -316,7 +316,7 @@ def _data_response(request, query, media, privileged=False, strict=False):
                     format_table(
                         bound_query.col_fields,
                         results["cols"],
-                        spacing=len(bound_query.data_fields) - 1,
+                        spacing=len(bound_query.body_fields) - 1,
                     )
                 ),
             )
@@ -327,7 +327,7 @@ def _data_response(request, query, media, privileged=False, strict=False):
                 join_tables(
                     format_table(bound_query.row_fields, results["rows"]),
                     *(
-                        format_table(bound_query.data_fields, sub_table)
+                        format_table(bound_query.body_fields, sub_table)
                         for sub_table in results["body"]
                     ),
                 ),

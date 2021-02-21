@@ -254,7 +254,7 @@ class BoundQuery:
             return self.fields
 
     @cached_property
-    def data_fields(self):
+    def body_fields(self):
         if self.col_fields:
             return [f for f in self.fields if not f.orm_bound_field.can_pivot]
         else:
@@ -277,5 +277,5 @@ class BoundQuery:
         return _orm_fields(self.row_fields)
 
     @cached_property
-    def bound_data_fields(self):
-        return _orm_fields(self.data_fields)
+    def bound_body_fields(self):
+        return _orm_fields(self.body_fields)

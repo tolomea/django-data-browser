@@ -121,7 +121,7 @@ def get_product_pivot(req, orm_models, django_assert_num_queries):
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),
                 "body": [
-                    flatten_table(bound_query.data_fields, row) for row in data["body"]
+                    flatten_table(bound_query.body_fields, row) for row in data["body"]
                 ],
             }
 
