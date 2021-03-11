@@ -35,11 +35,7 @@ function CopyText(props) {
 function TLink(props) {
     const { className, onClick, children } = props;
     return (
-        <button
-            {...{ onClick }}
-            type="button"
-            className={"TLink " + (className || "")}
-        >
+        <button {...{ onClick }} type="button" className={`TLink ${className}`}>
             {children}
         </button>
     );
@@ -51,7 +47,7 @@ function SLink(props) {
         <button
             {...{ onClick }}
             type="button"
-            className={"SLink material-icons " + (className || "")}
+            className={`SLink material-icons ${className}`}
         >
             {children}
         </button>

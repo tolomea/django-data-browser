@@ -438,3 +438,7 @@ input.RowLimit {
 .DataCell .Null {
   color: var(--null-color);
 }
+
+.ContextCursor {
+  cursor: context-menu;
+}

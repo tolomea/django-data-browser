@@ -46,7 +46,7 @@ function HeadCell(props) {
 
   return (
     <th
-      className={`HeadCell ${className} ${fieldClass}`}
+      className={`HeadCell ContextCursor ${className} ${fieldClass}`}
       onContextMenu={onContextMenu}
     >
       <SLink onClick={() => query.removeField(field)}>close</SLink>
@@ -157,7 +157,7 @@ function DataCell(props) {
 
   return (
     <td
-      className={`DataCell ${modelField.type + " " + className || ""}`}
+      className={`DataCell ContextCursor ${modelField.type} ${className}`}
       colSpan={span || 1}
       onContextMenu={onContextMenu}
     >
