@@ -5,13 +5,40 @@
 }
 
 :root {
-  --dark-color: #333e48;
-  --link-color: #069;
-  --border-color: #ccc;
-  --shade-color: #eee;
-  --null-color: #ddd;
-  --bad-color: red;
-  --good-color: green;
+  --dark-color: hsl(209, 17%, 24%);
+  --link-color: hsl(237, 100%, 45%); /* was hsl(200, 100%, 30%)*/
+  --dark-link-color: hsl(237, 100%, 30%); /* was hsl(200, 100%, 30%)*/
+  --border-color: hsl(0, 0%, 80%);
+  --shade-color: hsl(0, 0%, 93%);
+  --null-color: hsl(0, 0%, 87%);
+  --bad-color: hsl(14, 100%, 50%);
+  --good-color: hsl(126, 68%, 30%);
+
+  --concrete-field-color: hsl(126, 36%, 88%);
+  --calculated-field-color: hsl(14, 68%, 88%);
+  --aggregate-field-color: hsl(237, 33%, 88%);
+  --function-field-color: hsl(126, 36%, 88%);
+  --related-field-color: hsl(0, 0%, 100%);
+}
+
+.ConcreteField {
+  background-color: var(--concrete-field-color);
+}
+
+.CalculatedField {
+  background-color: var(--calculated-field-color);
+}
+
+.AggregateField {
+  background-color: var(--aggregate-field-color);
+}
+
+.FunctionField {
+  background-color: var(--function-field-color);
+}
+
+.RelatedField {
+  background-color: var(--related-field-color);
 }
 
 select,
@@ -34,6 +61,10 @@ body {
 
 a {
   text-decoration: none;
+  color: var(--link-color);
+}
+a:visited {
+  color: var(--dark-link-color);
 }
 a:hover {
   text-decoration: underline;
@@ -65,7 +96,7 @@ select {
   border: none;
   padding: 0 !important;
   cursor: pointer;
-  color: var(--link-color);
+  color: var(--dark-link-color);
   text-align: left;
 }
 .TLink:hover {
@@ -76,7 +107,7 @@ select {
   border: none;
   padding: 0 !important;
   cursor: pointer;
-  color: var(--link-color);
+  color: var(--dark-link-color);
   vertical-align: -20%;
   font-size: inherit;
   font-weight: inherit;
@@ -197,6 +228,10 @@ select.Lookup {
 .FieldsList td {
   text-align: left;
 }
+.FieldsList .FieldName {
+  border-radius: 4px;
+  padding: 4px;
+}
 
 /* Results */
 .Results {
@@ -205,9 +240,6 @@ select.Lookup {
 .Results .Freeze {
   position: sticky;
   top: 2px;
-}
-.Results th {
-  background-color: var(--shade-color);
 }
 .Results .Scroller,
 .Results th,

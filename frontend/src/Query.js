@@ -287,6 +287,14 @@ class Query {
     }
     return prettyPath.join(" \u21d2 ");
   }
+
+  getFieldClass(field) {
+    if (!field.type) return "RelatedField";
+    if (!field.concrete) return "CalculatedField";
+    if (!field.canPivot) return "AggregateField";
+    if (!field.model) return "FunctionField";
+    return "ConcreteField";
+  }
 }
 
 export { Query, getPartsForQuery, getRelUrlForQuery, getUrlForQuery, empty };

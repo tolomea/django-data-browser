@@ -24,6 +24,7 @@ function HeadCell(props) {
   } = props;
   const modelField = query.getField(field.pathStr);
   const type = query.getType(modelField);
+  const fieldClass = query.getFieldClass(modelField);
 
   const showContextMenu = useContext(ShowContextMenu);
 
@@ -44,7 +45,10 @@ function HeadCell(props) {
   }
 
   return (
-    <th className={`HeadCell ${className}`} onContextMenu={onContextMenu}>
+    <th
+      className={`HeadCell ${className} ${fieldClass}`}
+      onContextMenu={onContextMenu}
+    >
       <SLink onClick={() => query.removeField(field)}>close</SLink>
       {leftArrow && (
         <SLink onClick={() => query.moveField(field, true)}>

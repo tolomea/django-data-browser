@@ -186,6 +186,7 @@ function Field(props) {
   return (
     <>
       <tr className="Field">
+        {/* filter */}
         <td>
           {modelField.concrete && type.defaultLookup && (
             <SLink onClick={() => query.addFilter(path.join("__"))}>
@@ -193,6 +194,8 @@ function Field(props) {
             </SLink>
           )}
         </td>
+
+        {/* expand */}
         <td>
           {modelField.model && (
             <SLink
@@ -203,7 +206,9 @@ function Field(props) {
             </SLink>
           )}
         </td>
-        <td>
+
+        {/* name */}
+        <td className={`FieldName ${query.getFieldClass(modelField)}`}>
           {modelField.type ? (
             <TLink
               onClick={() =>
@@ -217,6 +222,8 @@ function Field(props) {
           )}
         </td>
       </tr>
+
+      {/* sub fields */}
       {toggled && (
         <tr>
           <td></td>
