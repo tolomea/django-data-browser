@@ -297,6 +297,8 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     pretty_name=pretty_name,
                     rel_name=get_model_name(field.related_model),
                 )
+            # if the related model is exposed, and it's not a composite fk
+            # then just expose it as it's native type
             elif len(field.foreign_related_fields) == 1:  # pragma: no branch
                 field_type, choices = get_field_type(field.foreign_related_fields[0])
                 assert field_type != JSONType
