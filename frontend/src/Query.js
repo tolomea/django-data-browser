@@ -207,9 +207,18 @@ class Query {
   drillDown(values) {
     const newFilters = this.query.filters.concat(
       this.query.fields
+        // limit to filterable
         .filter((field) => this.getField(field.pathStr).canPivot)
-        .filter((field) => values.hasOwnProperty(field.pathStr))
         .filter((field) => this.getField(field.pathStr).concrete)
+        // values is the contextually filterable stuff, so overlap with above
+        .filter((field) => values.hasOwnProperty(field.pathStr))
+        // and only the filters that will actually do some filtering
+        .filter((field) => {
+          const allValues = field.pivoted ? this.query.cols : this.query.rows;
+          const fieldValues = allValues.map((row) => row[field.pathStr]);
+          const uniqueValues = new Set(fieldValues);
+          return uniqueValues.size > 1;
+        })
         .map((field) =>
           this.filterForValue(field.pathStr, values[field.pathStr])
         )
