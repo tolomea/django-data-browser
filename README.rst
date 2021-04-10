@@ -329,7 +329,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Fix rare issue with helpers.AdminMixin and MRO ordering of child classes.                                |
+|         |            | | Disable custom context menus when right clicking inside a text selection.                              |
+|         |            | | Fix rare issue with helpers.AdminMixin and MRO ordering of child classes.                              |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.0   | 2020-03-13 | | In the JSON output aggregate fields are now always in the body.                                        |
 |         |            | | The CSV format has changed so aggregate fields are always to the right of other fields.                |
