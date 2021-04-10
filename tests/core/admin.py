@@ -125,7 +125,7 @@ class ProductInline(ProductMixin, admin.TabularInline):
 
 @admin.register(models.Producer)
 class ProducerAdmin(admin.ModelAdmin):
-    fields = ["name", "address", "frank"]
+    fields = ["name", "frank"]
     readonly_fields = ["frank"]
     inlines = [ProductInline]
 
