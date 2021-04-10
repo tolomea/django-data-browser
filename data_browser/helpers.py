@@ -2,6 +2,7 @@ import json
 import logging
 from urllib.parse import urlencode
 
+from django.contrib.admin.options import BaseModelAdmin
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import BooleanField
 from django.urls import reverse
@@ -117,7 +118,9 @@ class _AdminAnnotations:
         return res
 
 
-class AdminMixin(_AdminOptions, _AdminAnnotations):
+# we need BaseModelAdmin in the inheritnce chain to ensure our mixins end up before it
+# in the MRO of the final class
+class AdminMixin(_AdminOptions, _AdminAnnotations, BaseModelAdmin):
     def changelist_view(self, request, extra_context=None):
         """ Inject ddb_url """
         extra_context = extra_context or {}
