@@ -8,6 +8,7 @@ from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets, model_format_dict
 from django.contrib.auth.admin import UserAdmin
+from django.core.exceptions import FieldDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
@@ -118,10 +119,18 @@ def admin_get_actions(admin, request):
     return res
 
 
+def _model_has_field(model, field_name):
+    try:
+        model._meta.get_field(field_name)
+    except FieldDoesNotExist:
+        return False
+    return True
+
+
 def _get_all_admin_fields(request):
     request.data_browser = {"calculated_fields": set(), "fields": set()}
 
-    def from_fieldsets(admin, all_):
+    def from_fieldsets(admin, include_calculated):
         auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT
         if auth_user_compat and isinstance(admin, UserAdmin):
             obj = admin.model()  # get the change fieldsets, not the add ones
@@ -130,8 +139,8 @@ def _get_all_admin_fields(request):
 
         fields = admin.get_fieldsets(request, obj)
         for f in flatten_fieldsets(fields):
-            # skip calculated fields on inlines
-            if all_ or hasattr(admin.model, f):
+            # skip calculated fields unless include_calculated given
+            if include_calculated or _model_has_field(admin.model, f):
                 yield f
 
     def visible(model_admin, request):
@@ -149,20 +158,20 @@ def _get_all_admin_fields(request):
 
         return model_admin.has_view_permission(request)
 
-    all_admin_fields = defaultdict(set)
-    hidden_fields = defaultdict(set)
+    all_model_fields = defaultdict(set)
+    hidden_model_fields = defaultdict(set)
 
     def get_common(admin, model):
-        all_admin_fields[model].update(from_fieldsets(admin, False))
-        all_admin_fields[model].update(_get_option(admin, "extra_fields", request))
-        hidden_fields[model].update(_get_option(admin, "hide_fields", request))
+        all_model_fields[model].update(from_fieldsets(admin, include_calculated=False))
+        all_model_fields[model].update(_get_option(admin, "extra_fields", request))
+        hidden_model_fields[model].update(_get_option(admin, "hide_fields", request))
 
     model_admins = {}
     for model, model_admin in site._registry.items():
         if visible(model_admin, request):
             model_admins[model] = model_admin
-            all_admin_fields[model].update(model_admin.get_list_display(request))
-            all_admin_fields[model].add(open_in_admin)
+            all_model_fields[model].update(model_admin.get_list_display(request))
+            all_model_fields[model].add(open_in_admin)
             get_common(model_admin, model)
 
             # check the inlines, these are already filtered for access
@@ -175,26 +184,31 @@ def _get_all_admin_fields(request):
                     else:
                         if inline.model not in model_admins:  # pragma: no branch
                             model_admins[inline.model] = inline
-                        all_admin_fields[inline.model].add(fk_field.name)
+                        all_model_fields[inline.model].add(fk_field.name)
                         get_common(inline, inline.model)
 
     for model, model_admin in model_admins.items():
+        # and the calculated fields
+        all_model_fields[model].update(
+            from_fieldsets(model_admin, include_calculated=True)
+        )
+
+        # and any annotations that weren't mentioned in field_sets etc
         if isinstance(model_admin, AdminMixin):
-            all_admin_fields[model].update(model_admin._ddb_annotations())
-        all_admin_fields[model].update(from_fieldsets(model_admin, True))
+            all_model_fields[model].update(model_admin._ddb_annotations())
 
     # we always have the actual pk field and never have the "pk" proxy
-    for model, fields in all_admin_fields.items():
+    for model, fields in all_model_fields.items():
         fields.add(model._meta.pk.name)
         fields.discard("pk")
         fields.discard("__str__")
 
     # throw away the hidden ones
-    for model, fields in hidden_fields.items():
+    for model, fields in hidden_model_fields.items():
         for f in fields:
-            all_admin_fields[model].discard(f)
+            all_model_fields[model].discard(f)
 
-    return model_admins, all_admin_fields
+    return model_admins, all_model_fields
 
 
 def _upper(name):
