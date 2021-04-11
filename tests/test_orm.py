@@ -139,7 +139,7 @@ def test_get_results_all(get_product_flat):
 
 @pytest.mark.usefixtures("products")
 def test_get_results_unknown_field(get_product_flat):
-    data = get_product_flat(1, "name+!,fake", [])
+    data = get_product_flat(1, "name+1,fake", [])
     assert data == [["a", "phoney"], ["b", "{}"], ["c", "{}"]]
 
 
