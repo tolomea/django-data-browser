@@ -329,6 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Change pivot icon.                                                                                     |
 |         |            | | Automatically include the other side of OneToOne fields.                                               |
 |         |            | | Disable custom context menus when right clicking inside a text selection.                              |
 |         |            | | Fix rare issue with helpers.AdminMixin and MRO ordering of child classes.                              |

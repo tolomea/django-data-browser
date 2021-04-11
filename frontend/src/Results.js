@@ -61,11 +61,9 @@ function HeadCell(props) {
         </SLink>
       )}
       {modelField.canPivot && (
-        <>
-          <SLink onClick={() => query.togglePivot(field)}>
-            {field.pivoted ? "call_received" : "call_made"}
-          </SLink>
-        </>
+        <SLink onClick={() => query.togglePivot(field)}>
+          pivot_table_chart
+        </SLink>
       )}
       {modelField.concrete && type.defaultLookup ? (
         <>
