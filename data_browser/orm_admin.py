@@ -188,11 +188,15 @@ def _get_all_admin_fields(request):
                         get_common(inline, inline.model)
 
     for model, model_admin in model_admins.items():
-        # add in the backside of one2one's
-        for field_name in all_model_fields[model]:
+        # add in the backside of related fields's
+        for field_name in set(all_model_fields[model]):  # copy because we might modify
             if _model_has_field(model, field_name):
                 field = model._meta.get_field(field_name)
-                if isinstance(field, (OneToOneRel, models.OneToOneField)):
+                if (
+                    field.is_relation
+                    and field.related_model in all_model_fields
+                    and not field.remote_field.hidden
+                ):
                     all_model_fields[field.related_model].add(field.remote_field.name)
 
         # and the calculated fields
