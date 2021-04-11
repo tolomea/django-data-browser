@@ -329,25 +329,25 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | URLFields display as links.                                                                            |
+| 4.0.1   | 2021-04-11 | | URLFields display as links.                                                                            |
 |         |            | | Change pivot icon.                                                                                     |
 |         |            | | Automatically include the other side of OneToOne fields.                                               |
 |         |            | | Disable custom context menus when right clicking inside a text selection.                              |
 |         |            | | Fix rare issue with helpers.AdminMixin and MRO ordering of child classes.                              |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 4.0.0   | 2020-03-13 | | In the JSON output aggregate fields are now always in the body.                                        |
+| 4.0.0   | 2021-03-13 | | In the JSON output aggregate fields are now always in the body.                                        |
 |         |            | | The CSV format has changed so aggregate fields are always to the right of other fields.                |
 |         |            | | In the UI aggregate fields are now always to the right of other fields.                                |
 |         |            | | Fields are colored by type, green: normal, blue: aggregates, red: can't sort or filter.                |
 |         |            | | The right click drill down action now only adds filters where the row/column has multiple values.      |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 3.3.0   | 2020-02-19 | | Drop support for Django 2.0 and 2.1                                                                    |
+| 3.3.0   | 2021-02-19 | | Drop support for Django 2.0 and 2.1                                                                    |
 |         |            | | Rework Admin action integration.                                                                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 3.2.5   | 2020-02-07 | | Date filter values formated as ``2020-1-2`` are now considered ISO ordered and no longer ambiguous.    |
+| 3.2.5   | 2021-02-07 | | Date filter values formated as ``2020-1-2`` are now considered ISO ordered and no longer ambiguous.    |
 |         |            | | Rework @annotation and AdminMixin so @annotation can be used on mixins.                                |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 3.2.4   | 2020-02-02 | | Fix ``equals`` and ``not equals`` not working for array fields.                                        |
+| 3.2.4   | 2021-02-02 | | Fix ``equals`` and ``not equals`` not working for array fields.                                        |
 |         |            | | Improve date and datetime filter errors.                                                               |
 |         |            | | Improve and contrast display of null and empty string.                                                 |
 |         |            | | Various fixes for models where the primary key is not ``id``.                                          |
@@ -358,7 +358,7 @@ Release History
 |         |            | | Right click filter and drill down now correctly handle null values.                                    |
 |         |            | | Prevent exception when a saved views name gets too long.                                               |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 3.2.3   | 2020-01-11 | Fix issue when using a filter with a different type from the field, e.g. ``is null``.                    |
+| 3.2.3   | 2021-01-11 | Fix issue when using a filter with a different type from the field, e.g. ``is null``.                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.2.2   | 2020-12-30 | | Fix ``id`` field missing from some models.                                                             |
 |         |            | | Per Django, Django 2.0 & 2.1 are not supported on Py3.8 and 3.9.                                       |
