@@ -73,6 +73,7 @@ def _get_model_fields(model_name, orm_models):
     all_fields = {
         name: {
             "model": orm_field.rel_name,
+            "toMany": orm_field.to_many,
             "type": orm_field.type_.name if orm_field.type_ else None,
             "concrete": orm_field.concrete,
             "canPivot": orm_field.can_pivot,

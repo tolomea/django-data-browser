@@ -293,8 +293,9 @@ class Query {
       field = this.config.allModelFields[model].fields[part];
       model = field.model;
       prettyPath.push(field.prettyName);
+      prettyPath.push(field.toMany ? "\u21f6" : "\u21d2");
     }
-    return prettyPath.join(" \u21d2 ");
+    return prettyPath.slice(0, -1).join(" ");
   }
 
   getFieldClass(field) {

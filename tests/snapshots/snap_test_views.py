@@ -92,6 +92,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -107,6 +108,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -117,6 +119,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -133,6 +136,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "date_joined": {
@@ -143,6 +147,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Date joined",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "email": {
@@ -153,6 +158,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Email address",
+                    "toMany": False,
                     "type": "string",
                 },
                 "first_name": {
@@ -163,6 +169,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "First name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "id": {
@@ -178,6 +185,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_active": {
@@ -188,6 +196,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Active",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "is_staff": {
@@ -198,6 +207,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Staff status",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "is_superuser": {
@@ -208,6 +218,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Superuser status",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "last_login": {
@@ -218,6 +229,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Last login",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "last_name": {
@@ -228,6 +240,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Last name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "password": {
@@ -238,6 +251,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Password",
+                    "toMany": False,
                     "type": "string",
                 },
                 "username": {
@@ -248,6 +262,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Username",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -277,6 +292,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -287,6 +303,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "sum": {
@@ -297,6 +314,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -313,6 +331,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "andrew": {
@@ -323,6 +342,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Andrew",
+                    "toMany": False,
                     "type": "string",
                 },
                 "bob": {
@@ -333,6 +353,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Bob",
+                    "toMany": False,
                     "type": "html",
                 },
                 "city": {
@@ -343,6 +364,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "City",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fred": {
@@ -353,6 +375,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Fred",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -368,6 +391,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "producer": {
@@ -378,6 +402,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": False,
                     "type": None,
                 },
                 "tom": {
@@ -388,6 +413,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Tom",
+                    "toMany": False,
                     "type": "html",
                 },
             },
@@ -413,6 +439,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -428,6 +455,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -438,6 +466,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -454,6 +483,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "in_admin": {
@@ -464,6 +494,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "name": {
@@ -474,6 +505,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -490,6 +522,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -505,6 +538,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "in_admin": {
@@ -515,6 +549,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "inline_admin": {
@@ -525,6 +560,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.InlineAdmin",
                     "prettyName": "Inline admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "name": {
@@ -535,6 +571,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "not_in_admin": {
@@ -545,6 +582,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Not in admin",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -568,6 +606,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.Address",
                     "prettyName": "Address",
+                    "toMany": False,
                     "type": None,
                 },
                 "admin": {
@@ -578,6 +617,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "frank": {
@@ -588,6 +628,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Frank",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -603,6 +644,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -613,6 +655,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -633,6 +676,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "annotated": {
@@ -643,6 +687,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Annotated",
+                    "toMany": False,
                     "type": "string",
                 },
                 "boat": {
@@ -653,6 +698,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Boat",
+                    "toMany": False,
                     "type": "number",
                 },
                 "calculated_boolean": {
@@ -663,6 +709,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Calculated boolean",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "created_time": {
@@ -673,6 +720,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "date": {
@@ -683,6 +731,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": "date",
                     "prettyName": "Date",
+                    "toMany": False,
                     "type": "date",
                 },
                 "default_sku": {
@@ -693,6 +742,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.SKU",
                     "prettyName": "Default sku",
+                    "toMany": False,
                     "type": None,
                 },
                 "duration": {
@@ -703,6 +753,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "duration",
                     "prettyName": "Duration",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "extra_inline": {
@@ -713,6 +764,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Extra inline",
+                    "toMany": False,
                     "type": "string",
                 },
                 "extra_model": {
@@ -723,6 +775,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Extra model",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fake": {
@@ -733,6 +786,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "unknown",
                     "prettyName": "Fake",
+                    "toMany": False,
                     "type": "unknown",
                 },
                 "funky": {
@@ -743,6 +797,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Funky",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -759,6 +814,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "image": {
@@ -769,6 +825,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "html",
                     "prettyName": "Image",
+                    "toMany": False,
                     "type": "html",
                 },
                 "is_onsale": {
@@ -779,6 +836,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Is onsale",
+                    "toMany": False,
                     "type": "html",
                 },
                 "lambda": {
@@ -789,6 +847,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Lambda",
+                    "toMany": False,
                     "type": "html",
                 },
                 "model_not_in_admin": {
@@ -799,6 +858,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Model not in admin",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -809,6 +869,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "number_choice": {
@@ -819,6 +880,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "numberchoice",
                     "prettyName": "Number choice",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "only_in_list_view": {
@@ -829,6 +891,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Only in list view",
+                    "toMany": False,
                     "type": "string",
                 },
                 "onsale": {
@@ -839,6 +902,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Onsale",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "other_annotation": {
@@ -849,6 +913,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Other annotation",
+                    "toMany": False,
                     "type": "string",
                 },
                 "producer": {
@@ -859,6 +924,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": False,
                     "type": None,
                 },
                 "size": {
@@ -869,6 +935,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Size",
+                    "toMany": False,
                     "type": "number",
                 },
                 "size_unit": {
@@ -879,6 +946,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Size unit",
+                    "toMany": False,
                     "type": "string",
                 },
                 "stealth_annotation": {
@@ -889,6 +957,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Stealth annotation",
+                    "toMany": False,
                     "type": "string",
                 },
                 "string_choice": {
@@ -899,6 +968,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "stringchoice",
                     "prettyName": "String choice",
+                    "toMany": False,
                     "type": "stringchoice",
                 },
             },
@@ -943,6 +1013,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Bob",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -953,6 +1024,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -963,6 +1035,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "product": {
@@ -973,6 +1046,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "core.Product",
                     "prettyName": "Product",
+                    "toMany": False,
                     "type": None,
                 },
             },
@@ -989,6 +1063,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "name": {
@@ -1004,6 +1079,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -1020,6 +1096,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "created_time": {
@@ -1030,6 +1107,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "description": {
@@ -1040,6 +1118,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Description",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fields": {
@@ -1050,6 +1129,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Fields",
+                    "toMany": False,
                     "type": "string",
                 },
                 "google_sheets_formula": {
@@ -1060,6 +1140,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Google sheets formula",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -1075,6 +1156,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Id",
+                    "toMany": False,
                     "type": "string",
                 },
                 "limit": {
@@ -1085,6 +1167,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Limit",
+                    "toMany": False,
                     "type": "number",
                 },
                 "model_name": {
@@ -1095,6 +1178,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Model name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "name": {
@@ -1105,6 +1189,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "open_view": {
@@ -1115,6 +1200,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Open view",
+                    "toMany": False,
                     "type": "html",
                 },
                 "owner": {
@@ -1125,6 +1211,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "auth.User",
                     "prettyName": "Owner",
+                    "toMany": False,
                     "type": None,
                 },
                 "public": {
@@ -1135,6 +1222,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Public",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "public_link": {
@@ -1145,6 +1233,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Public link",
+                    "toMany": False,
                     "type": "html",
                 },
                 "public_slug": {
@@ -1155,6 +1244,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Public slug",
+                    "toMany": False,
                     "type": "string",
                 },
                 "query": {
@@ -1165,6 +1255,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Query",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -1197,6 +1288,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "day": {
@@ -1207,6 +1299,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1217,6 +1310,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -1227,6 +1321,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -1237,6 +1332,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -1247,6 +1343,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "date",
                 },
                 "min": {
@@ -1257,6 +1354,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "date",
                 },
                 "month": {
@@ -1280,6 +1378,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -1290,6 +1389,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -1300,6 +1400,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -1318,6 +1419,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -1328,6 +1430,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -1338,6 +1441,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -1368,6 +1472,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "date": {
@@ -1378,6 +1483,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "date",
+                    "toMany": False,
                     "type": "date",
                 },
                 "day": {
@@ -1388,6 +1494,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "hour": {
@@ -1398,6 +1505,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "hour",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1408,6 +1516,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -1418,6 +1527,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -1428,6 +1538,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -1438,6 +1549,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "min": {
@@ -1448,6 +1560,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "minute": {
@@ -1458,6 +1571,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "minute",
+                    "toMany": False,
                     "type": "number",
                 },
                 "month": {
@@ -1481,6 +1595,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -1491,6 +1606,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -1501,6 +1617,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "second": {
@@ -1511,6 +1628,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "second",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -1529,6 +1647,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -1539,6 +1658,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -1549,6 +1669,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -1583,6 +1704,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "count": {
@@ -1593,6 +1715,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1603,6 +1726,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -1613,6 +1737,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "min": {
@@ -1623,6 +1748,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "sum": {
@@ -1633,6 +1759,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "duration",
                 },
             },
@@ -1649,6 +1776,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1659,6 +1787,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -1675,6 +1804,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1685,6 +1815,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -1701,6 +1832,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1711,6 +1843,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -1727,6 +1860,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1737,6 +1871,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -1753,6 +1888,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "count": {
@@ -1763,6 +1899,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1773,6 +1910,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -1783,6 +1921,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "number",
                 },
                 "min": {
@@ -1793,6 +1932,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "number",
                 },
                 "std_dev": {
@@ -1803,6 +1943,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "std dev",
+                    "toMany": False,
                     "type": "number",
                 },
                 "sum": {
@@ -1813,6 +1954,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
                 "variance": {
@@ -1823,6 +1965,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "variance",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -1848,6 +1991,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1858,6 +2002,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -1874,6 +2019,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1884,6 +2030,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -1894,6 +2041,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -1910,6 +2058,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1920,6 +2069,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -1930,6 +2080,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "numberarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "numberarray",
                 },
             },
@@ -1946,6 +2097,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1956,6 +2108,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -1972,6 +2125,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -1982,6 +2136,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "length": {
@@ -1992,6 +2147,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "length",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -2008,6 +2164,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -2018,6 +2175,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -2034,6 +2192,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -2044,6 +2203,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -2054,6 +2214,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -2070,6 +2231,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -2080,6 +2242,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -2090,6 +2253,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": "stringarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "stringarray",
                 },
             },
@@ -2106,6 +2270,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -2116,6 +2281,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -2132,6 +2298,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -2142,6 +2309,7 @@ snapshots["test_query_ctx config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -2491,6 +2659,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -2506,6 +2675,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -2516,6 +2686,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "user_set": {
@@ -2543,6 +2714,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "date_joined": {
@@ -2553,6 +2725,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Date joined",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "email": {
@@ -2563,6 +2736,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Email address",
+                    "toMany": False,
                     "type": "string",
                 },
                 "first_name": {
@@ -2573,6 +2747,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "First name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "groups": {
@@ -2599,6 +2774,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_active": {
@@ -2609,6 +2785,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Active",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "is_staff": {
@@ -2619,6 +2796,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Staff status",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "is_superuser": {
@@ -2629,6 +2807,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Superuser status",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "last_login": {
@@ -2639,6 +2818,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Last login",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "last_name": {
@@ -2649,6 +2829,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Last name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "password": {
@@ -2659,6 +2840,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Password",
+                    "toMany": False,
                     "type": "string",
                 },
                 "username": {
@@ -2669,6 +2851,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Username",
+                    "toMany": False,
                     "type": "string",
                 },
                 "view_set": {
@@ -2711,6 +2894,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -2721,6 +2905,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "sum": {
@@ -2731,6 +2916,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -2747,6 +2933,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "andrew": {
@@ -2757,6 +2944,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Andrew",
+                    "toMany": False,
                     "type": "string",
                 },
                 "bob": {
@@ -2767,6 +2955,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Bob",
+                    "toMany": False,
                     "type": "html",
                 },
                 "city": {
@@ -2777,6 +2966,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "City",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fred": {
@@ -2787,6 +2977,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Fred",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -2802,6 +2993,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "producer": {
@@ -2812,6 +3004,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": False,
                     "type": None,
                 },
                 "tom": {
@@ -2822,6 +3015,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Tom",
+                    "toMany": False,
                     "type": "html",
                 },
             },
@@ -2847,6 +3041,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -2862,6 +3057,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "inlineadmin_set": {
@@ -2883,6 +3079,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "normal_set": {
@@ -2910,6 +3107,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "in_admin": {
@@ -2920,6 +3118,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "name": {
@@ -2930,6 +3129,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "normal_set": {
@@ -2957,6 +3157,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -2972,6 +3173,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "in_admin": {
@@ -2982,6 +3184,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "inline_admin": {
@@ -2992,6 +3195,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.InlineAdmin",
                     "prettyName": "Inline admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "name": {
@@ -3002,6 +3206,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "not_in_admin": {
@@ -3012,6 +3217,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Not in admin",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -3035,6 +3241,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.Address",
                     "prettyName": "Address",
+                    "toMany": False,
                     "type": None,
                 },
                 "admin": {
@@ -3045,6 +3252,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "frank": {
@@ -3055,6 +3263,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Frank",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -3070,6 +3279,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -3080,6 +3290,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "product_set": {
@@ -3111,6 +3322,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "annotated": {
@@ -3121,6 +3333,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Annotated",
+                    "toMany": False,
                     "type": "string",
                 },
                 "boat": {
@@ -3131,6 +3344,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Boat",
+                    "toMany": False,
                     "type": "number",
                 },
                 "calculated_boolean": {
@@ -3141,6 +3355,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Calculated boolean",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "created_time": {
@@ -3151,6 +3366,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "date": {
@@ -3161,6 +3377,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": "date",
                     "prettyName": "Date",
+                    "toMany": False,
                     "type": "date",
                 },
                 "default_sku": {
@@ -3171,6 +3388,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.SKU",
                     "prettyName": "Default sku",
+                    "toMany": False,
                     "type": None,
                 },
                 "duration": {
@@ -3181,6 +3399,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "duration",
                     "prettyName": "Duration",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "extra_inline": {
@@ -3191,6 +3410,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Extra inline",
+                    "toMany": False,
                     "type": "string",
                 },
                 "extra_model": {
@@ -3201,6 +3421,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Extra model",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fake": {
@@ -3211,6 +3432,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "unknown",
                     "prettyName": "Fake",
+                    "toMany": False,
                     "type": "unknown",
                 },
                 "funky": {
@@ -3221,6 +3443,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Funky",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -3237,6 +3460,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "image": {
@@ -3247,6 +3471,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "html",
                     "prettyName": "Image",
+                    "toMany": False,
                     "type": "html",
                 },
                 "is_onsale": {
@@ -3257,6 +3482,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Is onsale",
+                    "toMany": False,
                     "type": "html",
                 },
                 "lambda": {
@@ -3267,6 +3493,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Lambda",
+                    "toMany": False,
                     "type": "html",
                 },
                 "model_not_in_admin": {
@@ -3277,6 +3504,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Model not in admin",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -3287,6 +3515,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "number_choice": {
@@ -3297,6 +3526,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "numberchoice",
                     "prettyName": "Number choice",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "only_in_list_view": {
@@ -3307,6 +3537,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Only in list view",
+                    "toMany": False,
                     "type": "string",
                 },
                 "onsale": {
@@ -3317,6 +3548,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Onsale",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "other_annotation": {
@@ -3327,6 +3559,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Other annotation",
+                    "toMany": False,
                     "type": "string",
                 },
                 "producer": {
@@ -3337,6 +3570,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": False,
                     "type": None,
                 },
                 "size": {
@@ -3347,6 +3581,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Size",
+                    "toMany": False,
                     "type": "number",
                 },
                 "size_unit": {
@@ -3357,6 +3592,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Size unit",
+                    "toMany": False,
                     "type": "string",
                 },
                 "sku_set": {
@@ -3378,6 +3614,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Stealth annotation",
+                    "toMany": False,
                     "type": "string",
                 },
                 "string_choice": {
@@ -3388,6 +3625,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "stringchoice",
                     "prettyName": "String choice",
+                    "toMany": False,
                     "type": "stringchoice",
                 },
                 "tags": {
@@ -3445,6 +3683,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Bob",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -3455,6 +3694,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -3465,6 +3705,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "product": {
@@ -3475,6 +3716,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "core.Product",
                     "prettyName": "Product",
+                    "toMany": False,
                     "type": None,
                 },
                 "products": {
@@ -3502,6 +3744,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "name": {
@@ -3517,6 +3760,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "product_set": {
@@ -3544,6 +3788,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "created_time": {
@@ -3554,6 +3799,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "description": {
@@ -3564,6 +3810,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Description",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fields": {
@@ -3574,6 +3821,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Fields",
+                    "toMany": False,
                     "type": "string",
                 },
                 "google_sheets_formula": {
@@ -3584,6 +3832,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Google sheets formula",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -3599,6 +3848,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Id",
+                    "toMany": False,
                     "type": "string",
                 },
                 "limit": {
@@ -3609,6 +3859,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Limit",
+                    "toMany": False,
                     "type": "number",
                 },
                 "model_name": {
@@ -3619,6 +3870,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Model name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "name": {
@@ -3629,6 +3881,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "open_view": {
@@ -3639,6 +3892,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Open view",
+                    "toMany": False,
                     "type": "html",
                 },
                 "owner": {
@@ -3649,6 +3903,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "auth.User",
                     "prettyName": "Owner",
+                    "toMany": False,
                     "type": None,
                 },
                 "public": {
@@ -3659,6 +3914,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Public",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "public_link": {
@@ -3669,6 +3925,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Public link",
+                    "toMany": False,
                     "type": "html",
                 },
                 "public_slug": {
@@ -3679,6 +3936,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Public slug",
+                    "toMany": False,
                     "type": "string",
                 },
                 "query": {
@@ -3689,6 +3947,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Query",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -3721,6 +3980,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "day": {
@@ -3731,6 +3991,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -3741,6 +4002,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -3751,6 +4013,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -3761,6 +4024,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -3771,6 +4035,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "date",
                 },
                 "min": {
@@ -3781,6 +4046,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "date",
                 },
                 "month": {
@@ -3804,6 +4070,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -3814,6 +4081,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -3824,6 +4092,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -3842,6 +4111,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -3852,6 +4122,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -3862,6 +4133,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -3892,6 +4164,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "date": {
@@ -3902,6 +4175,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "date",
+                    "toMany": False,
                     "type": "date",
                 },
                 "day": {
@@ -3912,6 +4186,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "hour": {
@@ -3922,6 +4197,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "hour",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -3932,6 +4208,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -3942,6 +4219,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -3952,6 +4230,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -3962,6 +4241,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "min": {
@@ -3972,6 +4252,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "minute": {
@@ -3982,6 +4263,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "minute",
+                    "toMany": False,
                     "type": "number",
                 },
                 "month": {
@@ -4005,6 +4287,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -4015,6 +4298,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -4025,6 +4309,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "second": {
@@ -4035,6 +4320,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "second",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -4053,6 +4339,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -4063,6 +4350,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -4073,6 +4361,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -4107,6 +4396,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "count": {
@@ -4117,6 +4407,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4127,6 +4418,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -4137,6 +4429,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "min": {
@@ -4147,6 +4440,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "sum": {
@@ -4157,6 +4451,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "duration",
                 },
             },
@@ -4173,6 +4468,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4183,6 +4479,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4199,6 +4496,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4209,6 +4507,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4225,6 +4524,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4235,6 +4535,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4251,6 +4552,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4261,6 +4563,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4277,6 +4580,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "count": {
@@ -4287,6 +4591,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4297,6 +4602,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -4307,6 +4613,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "number",
                 },
                 "min": {
@@ -4317,6 +4624,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "number",
                 },
                 "std_dev": {
@@ -4327,6 +4635,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "std dev",
+                    "toMany": False,
                     "type": "number",
                 },
                 "sum": {
@@ -4337,6 +4646,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
                 "variance": {
@@ -4347,6 +4657,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "variance",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -4372,6 +4683,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4382,6 +4694,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4398,6 +4711,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4408,6 +4722,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -4418,6 +4733,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -4434,6 +4750,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4444,6 +4761,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -4454,6 +4772,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "numberarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "numberarray",
                 },
             },
@@ -4470,6 +4789,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4480,6 +4800,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4496,6 +4817,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4506,6 +4828,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "length": {
@@ -4516,6 +4839,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "length",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -4532,6 +4856,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4542,6 +4867,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4558,6 +4884,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4568,6 +4895,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -4578,6 +4906,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -4594,6 +4923,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4604,6 +4934,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -4614,6 +4945,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": "stringarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "stringarray",
                 },
             },
@@ -4630,6 +4962,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4640,6 +4973,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -4656,6 +4990,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -4666,6 +5001,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -5015,6 +5351,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5030,6 +5367,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -5040,6 +5378,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -5056,6 +5395,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "date_joined": {
@@ -5066,6 +5406,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Date joined",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "email": {
@@ -5076,6 +5417,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Email address",
+                    "toMany": False,
                     "type": "string",
                 },
                 "first_name": {
@@ -5086,6 +5428,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "First name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "id": {
@@ -5101,6 +5444,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_active": {
@@ -5111,6 +5455,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Active",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "is_staff": {
@@ -5121,6 +5466,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Staff status",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "is_superuser": {
@@ -5131,6 +5477,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Superuser status",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "last_login": {
@@ -5141,6 +5488,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Last login",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "last_name": {
@@ -5151,6 +5499,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Last name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "password": {
@@ -5161,6 +5510,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Password",
+                    "toMany": False,
                     "type": "string",
                 },
                 "username": {
@@ -5171,6 +5521,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Username",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -5200,6 +5551,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -5210,6 +5562,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "sum": {
@@ -5220,6 +5573,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -5236,6 +5590,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "andrew": {
@@ -5246,6 +5601,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Andrew",
+                    "toMany": False,
                     "type": "string",
                 },
                 "bob": {
@@ -5256,6 +5612,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Bob",
+                    "toMany": False,
                     "type": "html",
                 },
                 "city": {
@@ -5266,6 +5623,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "City",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fred": {
@@ -5276,6 +5634,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Fred",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5291,6 +5650,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "producer": {
@@ -5301,6 +5661,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": False,
                     "type": None,
                 },
                 "tom": {
@@ -5311,6 +5672,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Tom",
+                    "toMany": False,
                     "type": "html",
                 },
             },
@@ -5336,6 +5698,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5351,6 +5714,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -5361,6 +5725,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -5377,6 +5742,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "in_admin": {
@@ -5387,6 +5753,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "name": {
@@ -5397,6 +5764,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -5413,6 +5781,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5428,6 +5797,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "in_admin": {
@@ -5438,6 +5808,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "inline_admin": {
@@ -5448,6 +5819,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.InlineAdmin",
                     "prettyName": "Inline admin",
+                    "toMany": False,
                     "type": None,
                 },
                 "name": {
@@ -5458,6 +5830,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "not_in_admin": {
@@ -5468,6 +5841,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Not in admin",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -5491,6 +5865,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.Address",
                     "prettyName": "Address",
+                    "toMany": False,
                     "type": None,
                 },
                 "admin": {
@@ -5501,6 +5876,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "frank": {
@@ -5511,6 +5887,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Frank",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5526,6 +5903,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -5536,6 +5914,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -5556,6 +5935,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "annotated": {
@@ -5566,6 +5946,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Annotated",
+                    "toMany": False,
                     "type": "string",
                 },
                 "boat": {
@@ -5576,6 +5957,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Boat",
+                    "toMany": False,
                     "type": "number",
                 },
                 "calculated_boolean": {
@@ -5586,6 +5968,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Calculated boolean",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "created_time": {
@@ -5596,6 +5979,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "date": {
@@ -5606,6 +5990,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": "date",
                     "prettyName": "Date",
+                    "toMany": False,
                     "type": "date",
                 },
                 "default_sku": {
@@ -5616,6 +6001,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.SKU",
                     "prettyName": "Default sku",
+                    "toMany": False,
                     "type": None,
                 },
                 "duration": {
@@ -5626,6 +6012,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "duration",
                     "prettyName": "Duration",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "extra_inline": {
@@ -5636,6 +6023,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Extra inline",
+                    "toMany": False,
                     "type": "string",
                 },
                 "extra_model": {
@@ -5646,6 +6034,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Extra model",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fake": {
@@ -5656,6 +6045,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "unknown",
                     "prettyName": "Fake",
+                    "toMany": False,
                     "type": "unknown",
                 },
                 "funky": {
@@ -5666,6 +6056,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Funky",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5682,6 +6073,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "image": {
@@ -5692,6 +6084,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "html",
                     "prettyName": "Image",
+                    "toMany": False,
                     "type": "html",
                 },
                 "is_onsale": {
@@ -5702,6 +6095,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Is onsale",
+                    "toMany": False,
                     "type": "html",
                 },
                 "lambda": {
@@ -5712,6 +6106,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Lambda",
+                    "toMany": False,
                     "type": "html",
                 },
                 "model_not_in_admin": {
@@ -5722,6 +6117,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Model not in admin",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -5732,6 +6128,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "number_choice": {
@@ -5742,6 +6139,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "numberchoice",
                     "prettyName": "Number choice",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "only_in_list_view": {
@@ -5752,6 +6150,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Only in list view",
+                    "toMany": False,
                     "type": "string",
                 },
                 "onsale": {
@@ -5762,6 +6161,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Onsale",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "other_annotation": {
@@ -5772,6 +6172,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Other annotation",
+                    "toMany": False,
                     "type": "string",
                 },
                 "producer": {
@@ -5782,6 +6183,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": False,
                     "type": None,
                 },
                 "size": {
@@ -5792,6 +6194,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Size",
+                    "toMany": False,
                     "type": "number",
                 },
                 "size_unit": {
@@ -5802,6 +6205,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Size unit",
+                    "toMany": False,
                     "type": "string",
                 },
                 "stealth_annotation": {
@@ -5812,6 +6216,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Stealth annotation",
+                    "toMany": False,
                     "type": "string",
                 },
                 "string_choice": {
@@ -5822,6 +6227,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "stringchoice",
                     "prettyName": "String choice",
+                    "toMany": False,
                     "type": "stringchoice",
                 },
             },
@@ -5866,6 +6272,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Bob",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5876,6 +6283,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": False,
                     "type": "number",
                 },
                 "name": {
@@ -5886,6 +6294,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "product": {
@@ -5896,6 +6305,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "core.Product",
                     "prettyName": "Product",
+                    "toMany": False,
                     "type": None,
                 },
             },
@@ -5912,6 +6322,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "name": {
@@ -5927,6 +6338,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -5943,6 +6355,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Admin",
+                    "toMany": False,
                     "type": "html",
                 },
                 "created_time": {
@@ -5953,6 +6366,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "description": {
@@ -5963,6 +6377,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Description",
+                    "toMany": False,
                     "type": "string",
                 },
                 "fields": {
@@ -5973,6 +6388,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Fields",
+                    "toMany": False,
                     "type": "string",
                 },
                 "google_sheets_formula": {
@@ -5983,6 +6399,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Google sheets formula",
+                    "toMany": False,
                     "type": "html",
                 },
                 "id": {
@@ -5998,6 +6415,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Id",
+                    "toMany": False,
                     "type": "string",
                 },
                 "limit": {
@@ -6008,6 +6426,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "Limit",
+                    "toMany": False,
                     "type": "number",
                 },
                 "model_name": {
@@ -6018,6 +6437,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Model name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "name": {
@@ -6028,6 +6448,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": False,
                     "type": "string",
                 },
                 "open_view": {
@@ -6038,6 +6459,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Open view",
+                    "toMany": False,
                     "type": "html",
                 },
                 "owner": {
@@ -6048,6 +6470,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "auth.User",
                     "prettyName": "Owner",
+                    "toMany": False,
                     "type": None,
                 },
                 "public": {
@@ -6058,6 +6481,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "boolean",
                     "prettyName": "Public",
+                    "toMany": False,
                     "type": "boolean",
                 },
                 "public_link": {
@@ -6068,6 +6492,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "Public link",
+                    "toMany": False,
                     "type": "html",
                 },
                 "public_slug": {
@@ -6078,6 +6503,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Public slug",
+                    "toMany": False,
                     "type": "string",
                 },
                 "query": {
@@ -6088,6 +6514,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "Query",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -6120,6 +6547,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "day": {
@@ -6130,6 +6558,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6140,6 +6569,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -6150,6 +6580,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -6160,6 +6591,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -6170,6 +6602,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "date",
                 },
                 "min": {
@@ -6180,6 +6613,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "date",
                 },
                 "month": {
@@ -6203,6 +6637,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -6213,6 +6648,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -6223,6 +6659,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -6241,6 +6678,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -6251,6 +6689,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -6261,6 +6700,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -6291,6 +6731,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "date": {
@@ -6301,6 +6742,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "date",
+                    "toMany": False,
                     "type": "date",
                 },
                 "day": {
@@ -6311,6 +6753,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "hour": {
@@ -6321,6 +6764,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "hour",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6331,6 +6775,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -6341,6 +6786,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -6351,6 +6797,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -6361,6 +6808,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "min": {
@@ -6371,6 +6819,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "minute": {
@@ -6381,6 +6830,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "minute",
+                    "toMany": False,
                     "type": "number",
                 },
                 "month": {
@@ -6404,6 +6854,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -6414,6 +6865,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -6424,6 +6876,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "second": {
@@ -6434,6 +6887,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "second",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -6452,6 +6906,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -6462,6 +6917,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -6472,6 +6928,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -6506,6 +6963,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "count": {
@@ -6516,6 +6974,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6526,6 +6985,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -6536,6 +6996,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "min": {
@@ -6546,6 +7007,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "sum": {
@@ -6556,6 +7018,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "duration",
                 },
             },
@@ -6572,6 +7035,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6582,6 +7046,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -6598,6 +7063,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6608,6 +7074,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -6624,6 +7091,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6634,6 +7102,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -6650,6 +7119,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6660,6 +7130,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -6676,6 +7147,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "count": {
@@ -6686,6 +7158,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6696,6 +7169,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -6706,6 +7180,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "number",
                 },
                 "min": {
@@ -6716,6 +7191,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "number",
                 },
                 "std_dev": {
@@ -6726,6 +7202,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "std dev",
+                    "toMany": False,
                     "type": "number",
                 },
                 "sum": {
@@ -6736,6 +7213,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
                 "variance": {
@@ -6746,6 +7224,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "variance",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -6771,6 +7250,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6781,6 +7261,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -6797,6 +7278,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6807,6 +7289,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -6817,6 +7300,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -6833,6 +7317,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6843,6 +7328,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -6853,6 +7339,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "numberarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "numberarray",
                 },
             },
@@ -6869,6 +7356,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6879,6 +7367,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -6895,6 +7384,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6905,6 +7395,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "length": {
@@ -6915,6 +7406,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "length",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -6931,6 +7423,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6941,6 +7434,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -6957,6 +7451,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -6967,6 +7462,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -6977,6 +7473,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -6993,6 +7490,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7003,6 +7501,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -7013,6 +7512,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": "stringarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "stringarray",
                 },
             },
@@ -7029,6 +7529,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7039,6 +7540,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -7055,6 +7557,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7065,6 +7568,7 @@ snapshots["test_query_html config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -7414,6 +7918,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7424,6 +7929,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "sum": {
@@ -7434,6 +7940,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -7450,6 +7957,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "day": {
@@ -7460,6 +7968,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7470,6 +7979,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -7480,6 +7990,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -7490,6 +8001,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -7500,6 +8012,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "date",
                 },
                 "min": {
@@ -7510,6 +8023,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "date",
                 },
                 "month": {
@@ -7533,6 +8047,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -7543,6 +8058,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -7553,6 +8069,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -7571,6 +8088,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -7581,6 +8099,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -7591,6 +8110,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -7621,6 +8141,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "date": {
@@ -7631,6 +8152,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "date",
+                    "toMany": False,
                     "type": "date",
                 },
                 "day": {
@@ -7641,6 +8163,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "day",
+                    "toMany": False,
                     "type": "number",
                 },
                 "hour": {
@@ -7651,6 +8174,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "hour",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7661,6 +8185,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "iso_week": {
@@ -7671,6 +8196,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso week",
+                    "toMany": False,
                     "type": "number",
                 },
                 "iso_year": {
@@ -7681,6 +8207,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "iso year",
+                    "toMany": False,
                     "type": "number",
                 },
                 "max": {
@@ -7691,6 +8218,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "min": {
@@ -7701,6 +8229,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "datetime",
                 },
                 "minute": {
@@ -7711,6 +8240,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "minute",
+                    "toMany": False,
                     "type": "number",
                 },
                 "month": {
@@ -7734,6 +8264,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "month_start": {
@@ -7744,6 +8275,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "month start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "quarter": {
@@ -7754,6 +8286,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "quarter",
+                    "toMany": False,
                     "type": "number",
                 },
                 "second": {
@@ -7764,6 +8297,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "second",
+                    "toMany": False,
                     "type": "number",
                 },
                 "week_day": {
@@ -7782,6 +8316,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week day",
+                    "toMany": False,
                     "type": "numberchoice",
                 },
                 "week_start": {
@@ -7792,6 +8327,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "week start",
+                    "toMany": False,
                     "type": "date",
                 },
                 "year": {
@@ -7802,6 +8338,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": "asc",
                     "model": None,
                     "prettyName": "year",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -7836,6 +8373,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "count": {
@@ -7846,6 +8384,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7856,6 +8395,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -7866,6 +8406,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "min": {
@@ -7876,6 +8417,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "duration",
                 },
                 "sum": {
@@ -7886,6 +8428,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "duration",
                 },
             },
@@ -7902,6 +8445,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7912,6 +8456,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -7928,6 +8473,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7938,6 +8484,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -7954,6 +8501,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7964,6 +8512,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -7980,6 +8529,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -7990,6 +8540,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -8006,6 +8557,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "average",
+                    "toMany": False,
                     "type": "number",
                 },
                 "count": {
@@ -8016,6 +8568,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8026,6 +8579,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "max": {
@@ -8036,6 +8590,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "max",
+                    "toMany": False,
                     "type": "number",
                 },
                 "min": {
@@ -8046,6 +8601,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "min",
+                    "toMany": False,
                     "type": "number",
                 },
                 "std_dev": {
@@ -8056,6 +8612,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "std dev",
+                    "toMany": False,
                     "type": "number",
                 },
                 "sum": {
@@ -8066,6 +8623,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "sum",
+                    "toMany": False,
                     "type": "number",
                 },
                 "variance": {
@@ -8076,6 +8634,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "variance",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -8101,6 +8660,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8111,6 +8671,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -8127,6 +8688,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8137,6 +8699,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -8147,6 +8710,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": "number",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -8163,6 +8727,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8173,6 +8738,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -8183,6 +8749,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": "numberarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "numberarray",
                 },
             },
@@ -8199,6 +8766,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8209,6 +8777,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -8225,6 +8794,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8235,6 +8805,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "length": {
@@ -8245,6 +8816,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "length",
+                    "toMany": False,
                     "type": "number",
                 },
             },
@@ -8261,6 +8833,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8271,6 +8844,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -8287,6 +8861,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8297,6 +8872,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -8307,6 +8883,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": "string",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "string",
                 },
             },
@@ -8323,6 +8900,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8333,6 +8911,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
                 "raw": {
@@ -8343,6 +8922,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": "stringarray",
                     "prettyName": "raw",
+                    "toMany": False,
                     "type": "stringarray",
                 },
             },
@@ -8359,6 +8939,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8369,6 +8950,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },
@@ -8385,6 +8967,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "count",
+                    "toMany": False,
                     "type": "number",
                 },
                 "is_null": {
@@ -8395,6 +8978,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "defaultSort": None,
                     "model": None,
                     "prettyName": "is null",
+                    "toMany": False,
                     "type": "isnull",
                 },
             },

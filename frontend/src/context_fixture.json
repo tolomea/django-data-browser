@@ -11,6 +11,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -26,6 +27,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "name": {
@@ -36,6 +38,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "user_set": {
@@ -68,6 +71,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "date_joined": {
@@ -78,6 +82,7 @@
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Date joined",
+                    "toMany": false,
                     "type": "datetime"
                 },
                 "email": {
@@ -88,6 +93,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Email address",
+                    "toMany": false,
                     "type": "string"
                 },
                 "first_name": {
@@ -98,6 +104,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "First name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "groups": {
@@ -124,6 +131,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_active": {
@@ -134,6 +142,7 @@
                     "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Active",
+                    "toMany": false,
                     "type": "boolean"
                 },
                 "is_staff": {
@@ -144,6 +153,7 @@
                     "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Staff status",
+                    "toMany": false,
                     "type": "boolean"
                 },
                 "is_superuser": {
@@ -154,6 +164,7 @@
                     "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Superuser status",
+                    "toMany": false,
                     "type": "boolean"
                 },
                 "last_login": {
@@ -164,6 +175,7 @@
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Last login",
+                    "toMany": false,
                     "type": "datetime"
                 },
                 "last_name": {
@@ -174,6 +186,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Last name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "password": {
@@ -184,6 +197,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Password",
+                    "toMany": false,
                     "type": "string"
                 },
                 "username": {
@@ -194,6 +208,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Username",
+                    "toMany": false,
                     "type": "string"
                 },
                 "view_set": {
@@ -236,6 +251,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "average",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -246,6 +262,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "sum": {
@@ -256,6 +273,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "sum",
+                    "toMany": false,
                     "type": "number"
                 }
             },
@@ -276,6 +294,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "andrew": {
@@ -286,6 +305,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Andrew",
+                    "toMany": false,
                     "type": "string"
                 },
                 "bob": {
@@ -296,6 +316,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Bob",
+                    "toMany": false,
                     "type": "html"
                 },
                 "city": {
@@ -306,6 +327,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "City",
+                    "toMany": false,
                     "type": "string"
                 },
                 "fred": {
@@ -316,6 +338,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Fred",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -331,6 +354,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "producer": {
@@ -341,6 +365,7 @@
                     "defaultSort": null,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": false,
                     "type": null
                 },
                 "tom": {
@@ -351,6 +376,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Tom",
+                    "toMany": false,
                     "type": "html"
                 }
             },
@@ -376,6 +402,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -391,6 +418,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "inlineadmin_set": {
@@ -412,6 +440,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "normal_set": {
@@ -445,6 +474,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "in_admin": {
@@ -455,6 +485,7 @@
                     "defaultSort": null,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": false,
                     "type": null
                 },
                 "name": {
@@ -465,6 +496,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "normal_set": {
@@ -497,6 +529,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -512,6 +545,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "in_admin": {
@@ -522,6 +556,7 @@
                     "defaultSort": null,
                     "model": "core.InAdmin",
                     "prettyName": "In admin",
+                    "toMany": false,
                     "type": null
                 },
                 "inline_admin": {
@@ -532,6 +567,7 @@
                     "defaultSort": null,
                     "model": "core.InlineAdmin",
                     "prettyName": "Inline admin",
+                    "toMany": false,
                     "type": null
                 },
                 "name": {
@@ -542,6 +578,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "not_in_admin": {
@@ -552,6 +589,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "Not in admin",
+                    "toMany": false,
                     "type": "number"
                 }
             },
@@ -575,6 +613,7 @@
                     "defaultSort": null,
                     "model": "core.Address",
                     "prettyName": "Address",
+                    "toMany": false,
                     "type": null
                 },
                 "admin": {
@@ -585,6 +624,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "frank": {
@@ -595,6 +635,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Frank",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -610,6 +651,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "name": {
@@ -620,6 +662,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "product_set": {
@@ -670,6 +713,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "annotated": {
@@ -680,6 +724,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Annotated",
+                    "toMany": false,
                     "type": "string"
                 },
                 "boat": {
@@ -690,6 +735,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "Boat",
+                    "toMany": false,
                     "type": "number"
                 },
                 "calculated_boolean": {
@@ -700,6 +746,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Calculated boolean",
+                    "toMany": false,
                     "type": "boolean"
                 },
                 "created_time": {
@@ -710,6 +757,7 @@
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": false,
                     "type": "datetime"
                 },
                 "date": {
@@ -720,6 +768,7 @@
                     "defaultSort": "asc",
                     "model": "date",
                     "prettyName": "Date",
+                    "toMany": false,
                     "type": "date"
                 },
                 "default_sku": {
@@ -730,6 +779,7 @@
                     "defaultSort": null,
                     "model": "core.SKU",
                     "prettyName": "Default sku",
+                    "toMany": false,
                     "type": null
                 },
                 "duration": {
@@ -740,6 +790,7 @@
                     "defaultSort": null,
                     "model": "duration",
                     "prettyName": "Duration",
+                    "toMany": false,
                     "type": "duration"
                 },
                 "extra_inline": {
@@ -750,6 +801,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Extra inline",
+                    "toMany": false,
                     "type": "string"
                 },
                 "extra_model": {
@@ -760,6 +812,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Extra model",
+                    "toMany": false,
                     "type": "string"
                 },
                 "fake": {
@@ -770,6 +823,7 @@
                     "defaultSort": null,
                     "model": "unknown",
                     "prettyName": "Fake",
+                    "toMany": false,
                     "type": "unknown"
                 },
                 "funky": {
@@ -780,6 +834,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Funky",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -799,6 +854,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "image": {
@@ -809,6 +865,7 @@
                     "defaultSort": null,
                     "model": "html",
                     "prettyName": "Image",
+                    "toMany": false,
                     "type": "html"
                 },
                 "is_onsale": {
@@ -819,6 +876,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Is onsale",
+                    "toMany": false,
                     "type": "html"
                 },
                 "lambda": {
@@ -829,6 +887,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Lambda",
+                    "toMany": false,
                     "type": "html"
                 },
                 "model_not_in_admin": {
@@ -839,6 +898,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "Model not in admin",
+                    "toMany": false,
                     "type": "number"
                 },
                 "name": {
@@ -849,6 +909,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "number_choice": {
@@ -862,6 +923,7 @@
                     "defaultSort": null,
                     "model": "numberchoice",
                     "prettyName": "Number choice",
+                    "toMany": false,
                     "type": "numberchoice"
                 },
                 "only_in_list_view": {
@@ -872,6 +934,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Only in list view",
+                    "toMany": false,
                     "type": "string"
                 },
                 "onsale": {
@@ -882,6 +945,7 @@
                     "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Onsale",
+                    "toMany": false,
                     "type": "boolean"
                 },
                 "other_annotation": {
@@ -892,6 +956,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Other annotation",
+                    "toMany": false,
                     "type": "string"
                 },
                 "producer": {
@@ -902,6 +967,7 @@
                     "defaultSort": null,
                     "model": "core.Producer",
                     "prettyName": "Producer",
+                    "toMany": false,
                     "type": null
                 },
                 "size": {
@@ -912,6 +978,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "Size",
+                    "toMany": false,
                     "type": "number"
                 },
                 "size_unit": {
@@ -922,6 +989,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Size unit",
+                    "toMany": false,
                     "type": "string"
                 },
                 "sku_set": {
@@ -943,6 +1011,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Stealth annotation",
+                    "toMany": false,
                     "type": "string"
                 },
                 "string_choice": {
@@ -956,6 +1025,7 @@
                     "defaultSort": null,
                     "model": "stringchoice",
                     "prettyName": "String choice",
+                    "toMany": false,
                     "type": "stringchoice"
                 },
                 "tags": {
@@ -1013,6 +1083,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Bob",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -1023,6 +1094,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "ID",
+                    "toMany": false,
                     "type": "number"
                 },
                 "name": {
@@ -1033,6 +1105,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "product": {
@@ -1043,6 +1116,7 @@
                     "defaultSort": null,
                     "model": "core.Product",
                     "prettyName": "Product",
+                    "toMany": false,
                     "type": null
                 },
                 "products": {
@@ -1076,6 +1150,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "name": {
@@ -1091,6 +1166,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "product_set": {
@@ -1122,6 +1198,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Admin",
+                    "toMany": false,
                     "type": "html"
                 },
                 "created_time": {
@@ -1132,6 +1209,7 @@
                     "defaultSort": "asc",
                     "model": "datetime",
                     "prettyName": "Created time",
+                    "toMany": false,
                     "type": "datetime"
                 },
                 "description": {
@@ -1142,6 +1220,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Description",
+                    "toMany": false,
                     "type": "string"
                 },
                 "fields": {
@@ -1152,6 +1231,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Fields",
+                    "toMany": false,
                     "type": "string"
                 },
                 "google_sheets_formula": {
@@ -1162,6 +1242,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Google sheets formula",
+                    "toMany": false,
                     "type": "html"
                 },
                 "id": {
@@ -1177,6 +1258,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Id",
+                    "toMany": false,
                     "type": "string"
                 },
                 "limit": {
@@ -1187,6 +1269,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "Limit",
+                    "toMany": false,
                     "type": "number"
                 },
                 "model_name": {
@@ -1197,6 +1280,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Model name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "name": {
@@ -1207,6 +1291,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Name",
+                    "toMany": false,
                     "type": "string"
                 },
                 "open_view": {
@@ -1217,6 +1302,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Open view",
+                    "toMany": false,
                     "type": "html"
                 },
                 "owner": {
@@ -1227,6 +1313,7 @@
                     "defaultSort": null,
                     "model": "auth.User",
                     "prettyName": "Owner",
+                    "toMany": false,
                     "type": null
                 },
                 "public": {
@@ -1237,6 +1324,7 @@
                     "defaultSort": null,
                     "model": "boolean",
                     "prettyName": "Public",
+                    "toMany": false,
                     "type": "boolean"
                 },
                 "public_link": {
@@ -1247,6 +1335,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "Public link",
+                    "toMany": false,
                     "type": "html"
                 },
                 "public_slug": {
@@ -1257,6 +1346,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Public slug",
+                    "toMany": false,
                     "type": "string"
                 },
                 "query": {
@@ -1267,6 +1357,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "Query",
+                    "toMany": false,
                     "type": "string"
                 }
             },
@@ -1299,6 +1390,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "day": {
@@ -1309,6 +1401,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "day",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1319,6 +1412,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "iso_week": {
@@ -1329,6 +1423,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso week",
+                    "toMany": false,
                     "type": "number"
                 },
                 "iso_year": {
@@ -1339,6 +1434,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso year",
+                    "toMany": false,
                     "type": "number"
                 },
                 "max": {
@@ -1349,6 +1445,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
+                    "toMany": false,
                     "type": "date"
                 },
                 "min": {
@@ -1359,6 +1456,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
+                    "toMany": false,
                     "type": "date"
                 },
                 "month": {
@@ -1382,6 +1480,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month",
+                    "toMany": false,
                     "type": "numberchoice"
                 },
                 "month_start": {
@@ -1392,6 +1491,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month start",
+                    "toMany": false,
                     "type": "date"
                 },
                 "quarter": {
@@ -1402,6 +1502,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "quarter",
+                    "toMany": false,
                     "type": "number"
                 },
                 "week_day": {
@@ -1420,6 +1521,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week day",
+                    "toMany": false,
                     "type": "numberchoice"
                 },
                 "week_start": {
@@ -1430,6 +1532,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week start",
+                    "toMany": false,
                     "type": "date"
                 },
                 "year": {
@@ -1440,6 +1543,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "year",
+                    "toMany": false,
                     "type": "number"
                 }
             },
@@ -1470,6 +1574,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "date": {
@@ -1480,6 +1585,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "date",
+                    "toMany": false,
                     "type": "date"
                 },
                 "day": {
@@ -1490,6 +1596,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "day",
+                    "toMany": false,
                     "type": "number"
                 },
                 "hour": {
@@ -1500,6 +1607,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "hour",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1510,6 +1618,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "iso_week": {
@@ -1520,6 +1629,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso week",
+                    "toMany": false,
                     "type": "number"
                 },
                 "iso_year": {
@@ -1530,6 +1640,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "iso year",
+                    "toMany": false,
                     "type": "number"
                 },
                 "max": {
@@ -1540,6 +1651,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
+                    "toMany": false,
                     "type": "datetime"
                 },
                 "min": {
@@ -1550,6 +1662,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
+                    "toMany": false,
                     "type": "datetime"
                 },
                 "minute": {
@@ -1560,6 +1673,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "minute",
+                    "toMany": false,
                     "type": "number"
                 },
                 "month": {
@@ -1583,6 +1697,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month",
+                    "toMany": false,
                     "type": "numberchoice"
                 },
                 "month_start": {
@@ -1593,6 +1708,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "month start",
+                    "toMany": false,
                     "type": "date"
                 },
                 "quarter": {
@@ -1603,6 +1719,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "quarter",
+                    "toMany": false,
                     "type": "number"
                 },
                 "second": {
@@ -1613,6 +1730,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "second",
+                    "toMany": false,
                     "type": "number"
                 },
                 "week_day": {
@@ -1631,6 +1749,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week day",
+                    "toMany": false,
                     "type": "numberchoice"
                 },
                 "week_start": {
@@ -1641,6 +1760,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "week start",
+                    "toMany": false,
                     "type": "date"
                 },
                 "year": {
@@ -1651,6 +1771,7 @@
                     "defaultSort": "asc",
                     "model": null,
                     "prettyName": "year",
+                    "toMany": false,
                     "type": "number"
                 }
             },
@@ -1685,6 +1806,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "average",
+                    "toMany": false,
                     "type": "duration"
                 },
                 "count": {
@@ -1695,6 +1817,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1705,6 +1828,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "max": {
@@ -1715,6 +1839,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
+                    "toMany": false,
                     "type": "duration"
                 },
                 "min": {
@@ -1725,6 +1850,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
+                    "toMany": false,
                     "type": "duration"
                 },
                 "sum": {
@@ -1735,6 +1861,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "sum",
+                    "toMany": false,
                     "type": "duration"
                 }
             },
@@ -1758,6 +1885,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1768,6 +1896,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -1787,6 +1916,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1797,6 +1927,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -1816,6 +1947,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1826,6 +1958,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -1845,6 +1978,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1855,6 +1989,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -1874,6 +2009,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "average",
+                    "toMany": false,
                     "type": "number"
                 },
                 "count": {
@@ -1884,6 +2020,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1894,6 +2031,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "max": {
@@ -1904,6 +2042,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "max",
+                    "toMany": false,
                     "type": "number"
                 },
                 "min": {
@@ -1914,6 +2053,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "min",
+                    "toMany": false,
                     "type": "number"
                 },
                 "std_dev": {
@@ -1924,6 +2064,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "std dev",
+                    "toMany": false,
                     "type": "number"
                 },
                 "sum": {
@@ -1934,6 +2075,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "sum",
+                    "toMany": false,
                     "type": "number"
                 },
                 "variance": {
@@ -1944,6 +2086,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "variance",
+                    "toMany": false,
                     "type": "number"
                 }
             },
@@ -1969,6 +2112,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -1979,6 +2123,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -1998,6 +2143,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2008,6 +2154,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "raw": {
@@ -2018,6 +2165,7 @@
                     "defaultSort": null,
                     "model": "number",
                     "prettyName": "raw",
+                    "toMany": false,
                     "type": "number"
                 }
             },
@@ -2038,6 +2186,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2048,6 +2197,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "raw": {
@@ -2058,6 +2208,7 @@
                     "defaultSort": null,
                     "model": "numberarray",
                     "prettyName": "raw",
+                    "toMany": false,
                     "type": "numberarray"
                 }
             },
@@ -2078,6 +2229,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2088,6 +2240,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -2107,6 +2260,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2117,6 +2271,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "length": {
@@ -2127,6 +2282,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "length",
+                    "toMany": false,
                     "type": "number"
                 }
             },
@@ -2147,6 +2303,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2157,6 +2314,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -2176,6 +2334,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2186,6 +2345,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "raw": {
@@ -2196,6 +2356,7 @@
                     "defaultSort": null,
                     "model": "string",
                     "prettyName": "raw",
+                    "toMany": false,
                     "type": "string"
                 }
             },
@@ -2216,6 +2377,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2226,6 +2388,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 },
                 "raw": {
@@ -2236,6 +2399,7 @@
                     "defaultSort": null,
                     "model": "stringarray",
                     "prettyName": "raw",
+                    "toMany": false,
                     "type": "stringarray"
                 }
             },
@@ -2256,6 +2420,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2266,6 +2431,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },
@@ -2285,6 +2451,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "count",
+                    "toMany": false,
                     "type": "number"
                 },
                 "is_null": {
@@ -2295,6 +2462,7 @@
                     "defaultSort": null,
                     "model": null,
                     "prettyName": "is null",
+                    "toMany": false,
                     "type": "isnull"
                 }
             },

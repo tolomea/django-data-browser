@@ -218,7 +218,7 @@ function Field(props) {
               {modelField.prettyName}
             </TLink>
           ) : (
-            modelField.prettyName
+            modelField.prettyName + (modelField.toMany ? " \u21f6" : "")
           )}
         </td>
       </tr>

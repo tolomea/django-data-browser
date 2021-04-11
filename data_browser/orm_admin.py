@@ -317,9 +317,8 @@ def _get_fields_for_model(request, model, admin, admin_fields):
         if isinstance(
             field, (models.ForeignKey, ForeignObjectRel, models.ManyToManyField)
         ):
-            if (field.many_to_many or field.one_to_many) and not get_feature_flag(
-                "to_many", request
-            ):
+            to_many = field.one_to_many or field.many_to_many
+            if to_many and not get_feature_flag("to_many", request):
                 continue
 
             if isinstance(field, ForeignObjectRel):
@@ -332,6 +331,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     name=field_name,
                     pretty_name=pretty_name,
                     rel_name=get_model_name(field.related_model),
+                    to_many=to_many,
                 )
 
             # if the related model is not exposed, and it's not a composite fk

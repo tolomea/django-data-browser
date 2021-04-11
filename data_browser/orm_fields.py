@@ -87,6 +87,7 @@ class OrmBaseField:
     default_sort: str = None
     format_hints: dict = None
     actions: dict = None
+    to_many: bool = False
 
     def __post_init__(self):
         if not self.type_:
@@ -110,8 +111,10 @@ class OrmBaseField:
 
 
 class OrmFkField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, rel_name):
-        super().__init__(model_name, name, pretty_name, rel_name=rel_name)
+    def __init__(self, model_name, name, pretty_name, rel_name, to_many):
+        super().__init__(
+            model_name, name, pretty_name, rel_name=rel_name, to_many=to_many
+        )
 
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()
