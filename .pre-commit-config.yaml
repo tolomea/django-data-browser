@@ -11,6 +11,11 @@ repos:
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: check-added-large-files
+-   repo: https://github.com/hakancelik96/unimport
+    rev: 0.7.4
+    hooks:
+      - id: unimport
+        args: [--remove, --include-star-import, --ignore-init, --gitignore]
 -   repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.6.4
     hooks:
@@ -31,13 +36,13 @@ repos:
     rev: v1.0.1
     hooks:
     -   id: rst-linter
-- repo: local
-  hooks:
-  - id: no-prints
-    name: Check for python prints
-    entry: ' *print\('
-    language: pygrep
-    types: [python]
-    exclude: tests/
+-   repo: local
+    hooks:
+    -   id: no-prints
+        name: Check for python prints
+        entry: ' *print\('
+        language: pygrep
+        types: [python]
+        exclude: tests/
 exclude:
     data_browser/fe_build/|data_browser/templates/data_browser/index.html
