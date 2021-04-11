@@ -48,7 +48,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "auth.User",
-                    "prettyName": "User_set",
+                    "prettyName": "User set",
                     "toMany": true,
                     "type": null
                 }
@@ -218,7 +218,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "data_browser.View",
-                    "prettyName": "View_set",
+                    "prettyName": "View set",
                     "toMany": true,
                     "type": null
                 }
@@ -428,7 +428,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "core.InlineAdmin",
-                    "prettyName": "Inlineadmin_set",
+                    "prettyName": "Inlineadmin set",
                     "toMany": true,
                     "type": null
                 },
@@ -450,7 +450,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "core.Normal",
-                    "prettyName": "Normal_set",
+                    "prettyName": "Normal set",
                     "toMany": true,
                     "type": null
                 }
@@ -506,7 +506,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "core.Normal",
-                    "prettyName": "Normal_set",
+                    "prettyName": "Normal set",
                     "toMany": true,
                     "type": null
                 }
@@ -672,7 +672,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "core.Product",
-                    "prettyName": "Product_set",
+                    "prettyName": "Product set",
                     "toMany": true,
                     "type": null
                 }
@@ -999,7 +999,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "core.SKU",
-                    "prettyName": "Sku_set",
+                    "prettyName": "Sku set",
                     "toMany": true,
                     "type": null
                 },
@@ -1176,7 +1176,7 @@
                     "concrete": false,
                     "defaultSort": null,
                     "model": "core.Product",
-                    "prettyName": "Product_set",
+                    "prettyName": "Product set",
                     "toMany": true,
                     "type": null
                 }

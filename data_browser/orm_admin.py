@@ -222,8 +222,8 @@ def _get_all_admin_fields(request):
     return model_admins, all_model_fields
 
 
-def _upper(name):
-    return name[0].upper() + name[1:]
+def _make_pretty(name):
+    return (name[0].upper() + name[1:]).replace("_", " ")
 
 
 def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
@@ -239,7 +239,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
     if getattr(field_func, "ddb_hide", False):
         return None
 
-    pretty_name = _upper(
+    pretty_name = _make_pretty(
         getattr(field_func, "short_description", field_name.replace("_", " "))
     )
 
@@ -311,7 +311,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
         pretty_name = (
-            _upper(getattr(field, "verbose_name", field_name)) if field else None
+            _make_pretty(getattr(field, "verbose_name", field_name)) if field else None
         )
         # FK's and OneToOne's
         if isinstance(
@@ -323,7 +323,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
             if isinstance(field, ForeignObjectRel):
                 field_name = field.get_accessor_name()
-                pretty_name = _upper(field_name)
+                pretty_name = _make_pretty(field_name)
 
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(
