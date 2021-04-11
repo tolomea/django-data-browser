@@ -1038,6 +1038,17 @@
                     "prettyName": "Tags",
                     "toMany": true,
                     "type": null
+                },
+                "url": {
+                    "actions": [],
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": "html",
+                    "prettyName": "Url",
+                    "toMany": false,
+                    "type": "html"
                 }
             },
             "sortedFields": [
@@ -1069,7 +1080,8 @@
                 "sku_set",
                 "stealth_annotation",
                 "string_choice",
-                "tags"
+                "tags",
+                "url"
             ]
         },
         "core.SKU": {

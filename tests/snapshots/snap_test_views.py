@@ -971,6 +971,17 @@ snapshots["test_query_ctx config"] = {
                     "toMany": False,
                     "type": "stringchoice",
                 },
+                "url": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": "html",
+                    "prettyName": "Url",
+                    "toMany": False,
+                    "type": "html",
+                },
             },
             "sortedFields": [
                 "id",
@@ -1000,6 +1011,7 @@ snapshots["test_query_ctx config"] = {
                 "size_unit",
                 "stealth_annotation",
                 "string_choice",
+                "url",
             ],
         },
         "core.SKU": {
@@ -3639,6 +3651,17 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": True,
                     "type": None,
                 },
+                "url": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": "html",
+                    "prettyName": "Url",
+                    "toMany": False,
+                    "type": "html",
+                },
             },
             "sortedFields": [
                 "id",
@@ -3670,6 +3693,7 @@ snapshots["test_query_ctx_m2m config"] = {
                 "stealth_annotation",
                 "string_choice",
                 "tags",
+                "url",
             ],
         },
         "core.SKU": {
@@ -6230,6 +6254,17 @@ snapshots["test_query_html config"] = {
                     "toMany": False,
                     "type": "stringchoice",
                 },
+                "url": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": "html",
+                    "prettyName": "Url",
+                    "toMany": False,
+                    "type": "html",
+                },
             },
             "sortedFields": [
                 "id",
@@ -6259,6 +6294,7 @@ snapshots["test_query_html config"] = {
                 "size_unit",
                 "stealth_annotation",
                 "string_choice",
+                "url",
             ],
         },
         "core.SKU": {

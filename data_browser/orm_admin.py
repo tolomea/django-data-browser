@@ -27,6 +27,7 @@ from .orm_fields import (
     OrmFileField,
     OrmFkField,
     OrmRawField,
+    OrmURLField,
 )
 from .orm_functions import get_functions_for_type
 from .orm_types import get_field_type
@@ -353,6 +354,15 @@ def _get_fields_for_model(request, model, admin, admin_fields):
         # Files and Images
         elif isinstance(field, models.FileField):
             fields[field_name] = OrmFileField(
+                model_name=model_name,
+                name=field_name,
+                pretty_name=pretty_name,
+                django_field=field,
+            )
+
+        # URL's
+        elif isinstance(field, models.URLField):
+            fields[field_name] = OrmURLField(
                 model_name=model_name,
                 name=field_name,
                 pretty_name=pretty_name,

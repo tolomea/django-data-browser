@@ -100,6 +100,7 @@ class ProductMixin:
         "size_unit",
         "string_choice",
         "tags",
+        "url",
     ]
     readonly_fields = ["id", "is_onsale", "hidden_calculated"]
     ddb_default_filters = [

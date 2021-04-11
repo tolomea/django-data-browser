@@ -163,6 +163,20 @@ def test_get_file_link(get_product_flat):
     sortedAssert(data, [["a", ""], ["b", '<a href="/media/bob.jpg">bob.jpg</a>']])
 
 
+def test_get_url_link(get_product_flat):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(name="a", producer=producer)
+    models.Product.objects.create(name="b", producer=producer, url="www.google.com")
+    data = get_product_flat(1, "name,url", [])
+    sortedAssert(
+        data,
+        [
+            ["a", None],
+            ["b", '<a href="www.google.com">www.google.com</a>'],
+        ],
+    )
+
+
 def test_bad_storage(monkeypatch, req):
     # break storage
     from django.core.files.storage import FileSystemStorage, default_storage

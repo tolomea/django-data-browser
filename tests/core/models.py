@@ -129,6 +129,7 @@ class Product(models.Model):
     duration = models.DurationField(null=True)
     date = models.DateField(null=True)
     uuid = models.UUIDField(null=True)
+    url = models.URLField(null=True)
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)
