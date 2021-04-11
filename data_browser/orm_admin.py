@@ -11,13 +11,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.core.exceptions import FieldDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.db.models.fields.reverse_related import ForeignObjectRel, OneToOneRel
+from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.text import slugify
 
-from .common import JsonResponse, debug_log, settings
+from .common import JsonResponse, debug_log, get_feature_flag, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_fields import (
@@ -314,7 +314,18 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             _upper(getattr(field, "verbose_name", field_name)) if field else None
         )
         # FK's and OneToOne's
-        if isinstance(field, (models.ForeignKey, OneToOneRel)):
+        if isinstance(
+            field, (models.ForeignKey, ForeignObjectRel, models.ManyToManyField)
+        ):
+            if (field.many_to_many or field.one_to_many) and not get_feature_flag(
+                "to_many", request
+            ):
+                continue
+
+            if isinstance(field, ForeignObjectRel):
+                field_name = field.get_accessor_name()
+                pretty_name = _upper(field_name)
+
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(
                     model_name=model_name,
@@ -322,23 +333,23 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     pretty_name=pretty_name,
                     rel_name=get_model_name(field.related_model),
                 )
-            # if the related model is exposed, and it's not a composite fk
-            # then just expose it as it's native type
-            elif len(field.foreign_related_fields) == 1:  # pragma: no branch
-                field_type, choices = get_field_type(field.foreign_related_fields[0])
-                assert field_type != JSONType
-                fields[field_name] = OrmConcreteField(
-                    model_name=model_name,
-                    name=field_name,
-                    pretty_name=pretty_name,
-                    type_=field_type,
-                    rel_name=field_type.name,
-                    choices=choices,
-                )
 
-        # ManyToMany
-        elif isinstance(field, (ForeignObjectRel, models.ManyToManyField)):
-            pass
+            # if the related model is not exposed, and it's not a composite fk
+            # then just expose it as it's native type
+            else:
+                foreign_related_fields = getattr(field, "foreign_related_fields", [])
+                if len(foreign_related_fields) == 1:  # pragma: no branch
+                    field_type, choices = get_field_type(foreign_related_fields[0])
+                    assert field_type != JSONType
+                    fields[field_name] = OrmConcreteField(
+                        model_name=model_name,
+                        name=field_name,
+                        pretty_name=pretty_name,
+                        type_=field_type,
+                        rel_name=field_type.name,
+                        choices=choices,
+                    )
+
         # Files and Images
         elif isinstance(field, models.FileField):
             fields[field_name] = OrmFileField(
@@ -347,6 +358,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 pretty_name=pretty_name,
                 django_field=field,
             )
+
         # Calculated and annotated fields
         elif isinstance(field, type(None)):
             orm_field = _get_calculated_field(
@@ -354,6 +366,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             )
             if orm_field:
                 fields[orm_field.name] = orm_field
+
         # Normal fields
         else:
             field_type, choices = get_field_type(field)
@@ -381,9 +394,11 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 choices=choices,
                 actions=actions,
             )
+
     orm_models[model_name] = OrmModel(
         fields=fields, admin=admin, pk=model._meta.pk.name
     )
+
     return orm_models
 
 

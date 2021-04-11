@@ -76,6 +76,14 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
     return max(0, min(dp_for_sf, max_actual_dp, max_dp))
 
 
+def _get_feature_flag(flag, request):
+    return False
+
+
+def get_feature_flag(flag, request):
+    return settings.DATA_BROWSER_GET_FEATURE_FLAG(flag, request)
+
+
 class Settings:
     _defaults = {
         "DATA_BROWSER_ALLOW_PUBLIC": False,
@@ -83,6 +91,7 @@ class Settings:
         "DATA_BROWSER_DEFAULT_ROW_LIMIT": 1000,
         "DATA_BROWSER_DEV": False,
         "DATA_BROWSER_FE_DSN": None,
+        "DATA_BROWSER_GET_FEATURE_FLAG": _get_feature_flag,
     }
 
     def __getattr__(self, name):

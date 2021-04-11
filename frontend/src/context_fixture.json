@@ -37,12 +37,24 @@
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
+                },
+                "user_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "auth.User",
+                    "prettyName": "User_set",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
                 "id",
                 "admin",
-                "name"
+                "name",
+                "user_set"
             ]
         },
         "auth.User": {
@@ -87,6 +99,17 @@
                     "model": "string",
                     "prettyName": "First name",
                     "type": "string"
+                },
+                "groups": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "auth.Group",
+                    "prettyName": "Groups",
+                    "toMany": true,
+                    "type": null
                 },
                 "id": {
                     "actions": [
@@ -172,6 +195,17 @@
                     "model": "string",
                     "prettyName": "Username",
                     "type": "string"
+                },
+                "view_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "data_browser.View",
+                    "prettyName": "View_set",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
@@ -181,12 +215,14 @@
                 "date_joined",
                 "email",
                 "first_name",
+                "groups",
                 "last_login",
                 "last_name",
                 "password",
                 "is_staff",
                 "is_superuser",
-                "username"
+                "username",
+                "view_set"
             ]
         },
         "boolean": {
@@ -357,6 +393,17 @@
                     "prettyName": "ID",
                     "type": "number"
                 },
+                "inlineadmin_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.InlineAdmin",
+                    "prettyName": "Inlineadmin_set",
+                    "toMany": true,
+                    "type": null
+                },
                 "name": {
                     "actions": [],
                     "canPivot": true,
@@ -366,12 +413,25 @@
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
+                },
+                "normal_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.Normal",
+                    "prettyName": "Normal_set",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
                 "id",
                 "admin",
-                "name"
+                "inlineadmin_set",
+                "name",
+                "normal_set"
             ]
         },
         "core.InlineAdmin": {
@@ -406,12 +466,24 @@
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
+                },
+                "normal_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.Normal",
+                    "prettyName": "Normal_set",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
                 "id",
                 "in_admin",
-                "name"
+                "name",
+                "normal_set"
             ]
         },
         "core.Normal": {
@@ -549,6 +621,17 @@
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
+                },
+                "product_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.Product",
+                    "prettyName": "Product_set",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
@@ -556,7 +639,8 @@
                 "admin",
                 "address",
                 "frank",
-                "name"
+                "name",
+                "product_set"
             ]
         },
         "core.Product": {
@@ -840,6 +924,17 @@
                     "prettyName": "Size unit",
                     "type": "string"
                 },
+                "sku_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.SKU",
+                    "prettyName": "Sku_set",
+                    "toMany": true,
+                    "type": null
+                },
                 "stealth_annotation": {
                     "actions": [],
                     "canPivot": true,
@@ -862,6 +957,17 @@
                     "model": "stringchoice",
                     "prettyName": "String choice",
                     "type": "stringchoice"
+                },
+                "tags": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.Tag",
+                    "prettyName": "Tags",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
@@ -890,8 +996,10 @@
                 "producer",
                 "size",
                 "size_unit",
+                "sku_set",
                 "stealth_annotation",
-                "string_choice"
+                "string_choice",
+                "tags"
             ]
         },
         "core.SKU": {
@@ -936,13 +1044,25 @@
                     "model": "core.Product",
                     "prettyName": "Product",
                     "type": null
+                },
+                "products": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.Product",
+                    "prettyName": "Products",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
                 "id",
                 "bob",
                 "name",
-                "product"
+                "product",
+                "products"
             ]
         },
         "core.Tag": {
@@ -972,11 +1092,23 @@
                     "model": "string",
                     "prettyName": "Name",
                     "type": "string"
+                },
+                "product_set": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": false,
+                    "defaultSort": null,
+                    "model": "core.Product",
+                    "prettyName": "Product_set",
+                    "toMany": true,
+                    "type": null
                 }
             },
             "sortedFields": [
                 "name",
-                "admin"
+                "admin",
+                "product_set"
             ]
         },
         "data_browser.View": {

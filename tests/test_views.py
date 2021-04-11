@@ -114,6 +114,16 @@ def test_query_ctx(admin_client, snapshot):
     update_fe_fixture("frontend/src/context_fixture.json", config)
 
 
+@pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
+def test_query_ctx_m2m(admin_client, snapshot, mocker):
+    mocker.patch("data_browser.orm_admin.get_feature_flag", return_value=True)
+    res = admin_client.get("/data_browser/query//.ctx?")
+    assert res.status_code == 200
+    config = res.json()
+    snapshot.assert_match(config, "config")
+    update_fe_fixture("frontend/src/context_fixture.json", config)
+
+
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_fields(admin_client):
     res = admin_client.get(
