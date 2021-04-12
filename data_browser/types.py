@@ -377,6 +377,10 @@ class HTMLType(StringType):
         return lambda value: None if value is None else html.conditional_escape(value)
 
 
+class URLType(StringType):
+    pass
+
+
 class BooleanType(BaseType):
     default_value = True
 

@@ -160,7 +160,7 @@ def test_get_file_link(get_product_flat):
     models.Product.objects.create(name="a", producer=producer)
     models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
     data = get_product_flat(1, "name,image", [])
-    sortedAssert(data, [["a", ""], ["b", '<a href="/media/bob.jpg">bob.jpg</a>']])
+    sortedAssert(data, [["a", ""], ["b", "/media/bob.jpg"]])
 
 
 def test_get_url_link(get_product_flat):
@@ -168,13 +168,7 @@ def test_get_url_link(get_product_flat):
     models.Product.objects.create(name="a", producer=producer)
     models.Product.objects.create(name="b", producer=producer, url="www.google.com")
     data = get_product_flat(1, "name,url", [])
-    sortedAssert(
-        data,
-        [
-            ["a", None],
-            ["b", '<a href="www.google.com">www.google.com</a>'],
-        ],
-    )
+    sortedAssert(data, [["a", None], ["b", "www.google.com"]])
 
 
 def test_bad_storage(monkeypatch, req):

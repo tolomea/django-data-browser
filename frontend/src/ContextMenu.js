@@ -29,7 +29,7 @@ function ContextMenu(props) {
 
     function showContextMenu(event, entries) {
         entries = entries.filter((x) => x);
-        if (entries.length && window.getSelection().toString().length == 0) {
+        if (entries.length && window.getSelection().toString().length === 0) {
             setState({
                 entries: entries,
                 x: event.clientX,

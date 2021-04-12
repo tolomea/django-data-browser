@@ -16,6 +16,7 @@ from .types import (
     StringChoiceType,
     StringType,
     UnknownType,
+    URLType,
     UUIDType,
 )
 
@@ -50,6 +51,7 @@ _FIELD_TYPE_MAP = {
     models.DateTimeField: DateTimeType,
     models.DateField: DateType,
     models.UUIDField: UUIDType,
+    models.URLField: URLType,
     **{f: StringType for f in _STRING_FIELDS},
     **{f: NumberType for f in _NUMBER_FIELDS},
 }

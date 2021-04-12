@@ -863,10 +863,10 @@
                     "choices": [],
                     "concrete": true,
                     "defaultSort": null,
-                    "model": "html",
+                    "model": "url",
                     "prettyName": "Image",
                     "toMany": false,
-                    "type": "html"
+                    "type": "url"
                 },
                 "is_onsale": {
                     "actions": [],
@@ -1045,10 +1045,10 @@
                     "choices": [],
                     "concrete": true,
                     "defaultSort": null,
-                    "model": "html",
+                    "model": "url",
                     "prettyName": "Url",
                     "toMany": false,
-                    "type": "html"
+                    "type": "url"
                 }
             },
             "sortedFields": [
@@ -2452,6 +2452,37 @@
                 "is_null"
             ]
         },
+        "url": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": null,
+                    "prettyName": "count",
+                    "toMany": false,
+                    "type": "number"
+                },
+                "is_null": {
+                    "actions": [],
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": null,
+                    "prettyName": "is null",
+                    "toMany": false,
+                    "type": "isnull"
+                }
+            },
+            "sortedFields": [
+                "count",
+                "is_null"
+            ]
+        },
         "uuid": {
             "defaultFilters": [],
             "fields": {
@@ -3103,6 +3134,69 @@
                 }
             },
             "sortedLookups": [
+                "is_null"
+            ]
+        },
+        "url": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "contains": {
+                    "prettyName": "contains",
+                    "type": "url"
+                },
+                "ends_with": {
+                    "prettyName": "ends with",
+                    "type": "url"
+                },
+                "equals": {
+                    "prettyName": "equals",
+                    "type": "url"
+                },
+                "is_null": {
+                    "prettyName": "is null",
+                    "type": "isnull"
+                },
+                "not_contains": {
+                    "prettyName": "not contains",
+                    "type": "url"
+                },
+                "not_ends_with": {
+                    "prettyName": "not ends with",
+                    "type": "url"
+                },
+                "not_equals": {
+                    "prettyName": "not equals",
+                    "type": "url"
+                },
+                "not_regex": {
+                    "prettyName": "not regex",
+                    "type": "regex"
+                },
+                "not_starts_with": {
+                    "prettyName": "not starts with",
+                    "type": "url"
+                },
+                "regex": {
+                    "prettyName": "regex",
+                    "type": "regex"
+                },
+                "starts_with": {
+                    "prettyName": "starts with",
+                    "type": "url"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "contains",
+                "starts_with",
+                "ends_with",
+                "regex",
+                "not_equals",
+                "not_contains",
+                "not_starts_with",
+                "not_ends_with",
+                "not_regex",
                 "is_null"
             ]
         },

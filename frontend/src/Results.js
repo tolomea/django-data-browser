@@ -108,6 +108,8 @@ function DataCell(props) {
     formattedValue = "null";
   } else if (modelField.type === "html") {
     formattedValue = value;
+  } else if (modelField.type === "url") {
+    formattedValue = <a href={value}>{value}</a>;
   } else if (modelField.type === "number") {
     if (
       value > formatHint.highCutOff ||

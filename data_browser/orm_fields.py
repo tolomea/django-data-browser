@@ -3,7 +3,6 @@ from typing import Sequence, Tuple
 
 from django.db import models
 from django.db.models import OuterRef, Subquery
-from django.utils.html import format_html
 
 from .types import (
     ASC,
@@ -13,6 +12,7 @@ from .types import (
     DateType,
     HTMLType,
     UnknownType,
+    URLType,
 )
 from .util import annotation_path, s
 
@@ -259,8 +259,8 @@ class OrmFileField(OrmConcreteField):
             model_name,
             name,
             pretty_name,
-            type_=HTMLType,
-            rel_name=HTMLType.name,
+            type_=URLType,
+            rel_name=URLType.name,
             choices=None,
         )
         self.django_field = django_field
@@ -273,31 +273,8 @@ class OrmFileField(OrmConcreteField):
             try:
                 # some storage backends will hard fail if their underlying storage isn't
                 # setup right https://github.com/tolomea/django-data-browser/issues/11
-                return format_html(
-                    '<a href="{}">{}</a>', self.django_field.storage.url(value), value
-                )
+                return self.django_field.storage.url(value)
             except Exception as e:
                 return str(e)
-
-        return format
-
-
-class OrmURLField(OrmConcreteField):
-    def __init__(self, model_name, name, pretty_name, django_field):
-        super().__init__(
-            model_name,
-            name,
-            pretty_name,
-            type_=HTMLType,
-            rel_name=HTMLType.name,
-            choices=None,
-        )
-        self.django_field = django_field
-
-    def get_formatter(self):
-        def format(value):
-            if not value:
-                return value
-            return format_html('<a href="{}">{}</a>', value, value)
 
         return format
