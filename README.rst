@@ -329,7 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | URL, image and file fields filter like strings and render as strings in CSV and JSON.                    |
+| 4.0.2   | 2021-04-12 | URL, image and file fields filter like strings and render as strings in CSV and JSON.                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.1   | 2021-04-11 | | URLFields display as links.                                                                            |
 |         |            | | Change pivot icon.                                                                                     |
