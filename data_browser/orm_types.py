@@ -61,11 +61,11 @@ def _fmt_choices(choices):
     return [(value, str(label)) for value, label in choices or []]
 
 
-def get_field_type(field):
+def get_field_type(field_name, field):
     if isinstance(field, ArrayField) and isinstance(
         field.base_field, _STRING_FIELDS
     ):  # pragma: postgres
-        base_field, choices = get_field_type(field.base_field)
+        base_field, choices = get_field_type(field_name, field.base_field)
         array_types = {
             StringType: StringArrayType,
             NumberType: NumberArrayType,
@@ -76,7 +76,7 @@ def get_field_type(field):
             return array_types[base_field], choices
         else:
             debug_log(
-                f"{field.model.__name__}.{field.name} unsupported subarray type {type(field.base_field).__name__}"
+                f"{field.model.__name__}.{field_name} unsupported subarray type {type(field.base_field).__name__}"
             )
             return UnknownType, None
 
@@ -98,7 +98,7 @@ def get_field_type(field):
                 break
         else:
             debug_log(
-                f"{field.model.__name__}.{field.name} unsupported type {type(field).__name__}"
+                f"{field.model.__name__}.{field_name} unsupported type {type(field).__name__}"
             )
             res = UnknownType
 

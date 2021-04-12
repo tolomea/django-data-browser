@@ -258,7 +258,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 f"Annotation '{field_name}' for {admin}.{field_name} doesn't specify 'output_field'"
             )
 
-        type_, choices = get_field_type(field)
+        type_, choices = get_field_type(field_name, field)
         return OrmAnnotatedField(
             model_name=model_name,
             name=field_name,
@@ -339,7 +339,9 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             else:
                 foreign_related_fields = getattr(field, "foreign_related_fields", [])
                 if len(foreign_related_fields) == 1:  # pragma: no branch
-                    field_type, choices = get_field_type(foreign_related_fields[0])
+                    field_type, choices = get_field_type(
+                        field_name, foreign_related_fields[0]
+                    )
                     assert field_type != JSONType
                     fields[field_name] = OrmConcreteField(
                         model_name=model_name,
@@ -369,7 +371,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
         # Normal fields
         else:
-            field_type, choices = get_field_type(field)
+            field_type, choices = get_field_type(field_name, field)
 
             rel_name = field_type.name
             if field_type is JSONType:
