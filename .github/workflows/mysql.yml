@@ -16,8 +16,6 @@ jobs:
           MYSQL_ROOT_PASSWORD: hunter2
         ports:
           - 3306:3306
-        volumes:
-          - type=tmpfs,destination=/var/lib/mysql
 
     env:
       DATABASE_URL: mysql://root:hunter2@127.0.0.1:3306/data_browser
