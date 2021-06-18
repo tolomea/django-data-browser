@@ -42,7 +42,7 @@ Supported Versions
 The Data Browser is currently tested on:
 
 * Django 2.2 - 3.2
-* Python 3.6 - 3.9
+* Python 3.6 - 3.10
 * MySQL, PostgreSQL, SQLite
 
 We highly recommend and only officially support the latest patch release of each Python and Django series.
@@ -329,6 +329,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Test on Django 3.2.                                                                                      |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.2   | 2021-04-12 | URL, image and file fields filter like strings and render as strings in CSV and JSON.                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.1   | 2021-04-11 | | URLFields display as links.                                                                            |
