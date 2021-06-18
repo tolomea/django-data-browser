@@ -122,7 +122,7 @@ class _AdminAnnotations:
 # in the MRO of the final class
 class AdminMixin(_AdminOptions, _AdminAnnotations, BaseModelAdmin):
     def changelist_view(self, request, extra_context=None):
-        """ Inject ddb_url """
+        """Inject ddb_url"""
         extra_context = extra_context or {}
 
         if not self.get_ddb_ignore(request):
