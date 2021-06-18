@@ -63,6 +63,7 @@ settings.configure(
     USE_I18N=True,
     USE_TZ=True,
     TIME_ZONE="UTC",
+    SECRET_KEY="secret",
 )
 
 

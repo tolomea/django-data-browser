@@ -16,8 +16,6 @@ jobs:
           POSTGRES_PASSWORD: hunter2
         ports:
           - 5432:5432
-        volumes:
-          - type=tmpfs,destination=/var/lib/postgresql
 
     env:
       DATABASE_URL: postgres://postgres:hunter2@127.0.0.1:5432/data_browser
