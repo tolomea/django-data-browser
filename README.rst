@@ -41,7 +41,7 @@ Supported Versions
 
 The Data Browser is currently tested on:
 
-* Django 2.2 - 3.1
+* Django 2.2 - 3.2
 * Python 3.6 - 3.9
 * MySQL, PostgreSQL, SQLite
 
