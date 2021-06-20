@@ -118,7 +118,7 @@ def get_result_queryset(request, bound_query):
     return qs[: bound_query.limit]
 
 
-def _get_result_list(request, bound_query):
+def get_result_list(request, bound_query):
     return list(get_result_queryset(request, bound_query))
 
 
@@ -215,15 +215,15 @@ def get_results(request, bound_query, orm_models, with_format_hints):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": [], "length": 0}
 
-    res = _get_result_list(request, bound_query)
+    res = get_result_list(request, bound_query)
 
     if not res:
         return {"rows": [], "cols": [], "body": [], "length": 0}
 
     if bound_query.bound_col_fields and bound_query.bound_row_fields:
         # need to fetch rows and col titles seperately to get correct sort
-        rows_res = _get_result_list(request, _rows_sub_query(bound_query))
-        cols_res = _get_result_list(request, _cols_sub_query(bound_query))
+        rows_res = get_result_list(request, _rows_sub_query(bound_query))
+        cols_res = get_result_list(request, _cols_sub_query(bound_query))
     else:
         rows_res = res
         cols_res = res
