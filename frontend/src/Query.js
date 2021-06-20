@@ -181,18 +181,18 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
-  filterForValue(pathStr, value) {
+  filterForValue(pathStr, value, negate) {
     const lookups = this.getType(this.getField(pathStr)).lookups;
     if (value === null && lookups.hasOwnProperty("is_null"))
       return {
         pathStr: pathStr,
         lookup: "is_null",
-        value: "IsNull",
+        value: negate ? "NotNull" : "IsNull",
       };
     else if (lookups.hasOwnProperty("equals"))
       return {
         pathStr: pathStr,
-        lookup: "equals",
+        lookup: negate ? "not_equals" : "equals",
         value: String(value),
       };
     else return null;
@@ -200,7 +200,13 @@ class Query {
 
   addExactFilter(pathStr, value) {
     const newFilters = this.query.filters.slice();
-    newFilters.push(this.filterForValue(pathStr, value));
+    newFilters.push(this.filterForValue(pathStr, value, false));
+    this.setQuery({ filters: newFilters });
+  }
+
+  addExactExclude(pathStr, value) {
+    const newFilters = this.query.filters.slice();
+    newFilters.push(this.filterForValue(pathStr, value, true));
     this.setQuery({ filters: newFilters });
   }
 
@@ -220,7 +226,7 @@ class Query {
           return uniqueValues.size > 1;
         })
         .map((field) =>
-          this.filterForValue(field.pathStr, values[field.pathStr])
+          this.filterForValue(field.pathStr, values[field.pathStr], false)
         )
         .filter((f) => f !== null)
     );

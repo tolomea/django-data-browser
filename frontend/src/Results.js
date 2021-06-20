@@ -148,6 +148,11 @@ function DataCell(props) {
           name: "Filter",
           fn: () => query.addExactFilter(pathStr, value),
         },
+      modelField.concrete &&
+        query.filterForValue(pathStr, value) && {
+          name: "Exclude",
+          fn: () => query.addExactExclude(pathStr, value),
+        },
       fullRow && {
         name: "Drill down",
         fn: () => query.drillDown(fullRow),
