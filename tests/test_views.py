@@ -85,6 +85,11 @@ def test_query_sql_aggregate(admin_client):
     assert res.status_code == 200
 
 
+def test_query_qs_function(admin_client):
+    res = admin_client.get("/data_browser/query/core.Product/size__is_null.qs")
+    assert res.status_code == 200
+
+
 @pytest.mark.parametrize(
     "format", ["bad", "profile_bad", "pstats_bad", "profilesql", "pstatsbad"]
 )
