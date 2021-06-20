@@ -220,10 +220,11 @@ class DateTypeMixin:
         "yea": "year",
         "mont": "month",
         "day": "day",
-        "hour": "hour",
+        "hou": "hour",
         "min": "minute",
         "sec": "second",
         "mic": "microsecond",
+        "wee": "week",
         "mond": relativedelta.MO,
         "tue": relativedelta.TU,
         "wed": relativedelta.WE,
@@ -274,11 +275,13 @@ class DateTypeMixin:
                 # failing that must be relative delta stuff
                 res = timezone.now()
 
+                # iterate the clauses in the expression
                 for clause_str in value.split():
                     match = cls._clause.fullmatch(clause_str)
                     if not match:
                         raise Exception(f"Unrecognized clause '{clause_str}'")
 
+                    # cut up the clause
                     field, op, val = match.groups()
                     val = int(val)
                     human_op = {
@@ -287,24 +290,30 @@ class DateTypeMixin:
                         "=": "set",
                     }[op]
 
+                    # find the field
                     for prefix, arg in cls._clause_types.items():
                         if field.startswith(prefix):
                             break
                     else:
                         raise Exception(f"Unrecognized field '{field}'")
 
+                    # year month day etc
                     if isinstance(arg, str):
                         if op == "+":
                             kwargs = {f"{arg}s": val}
                         elif op == "-":
                             kwargs = {f"{arg}s": -val}
                         else:  # op == "="
-                            if arg in ["year", "month", "day"]:
+                            if arg in ["week"]:
+                                raise Exception(f"'{op}' not supported for '{field}'")
+                            elif arg in ["year", "month", "day"]:
                                 if val <= 0:
                                     raise Exception(
                                         f"Can't {human_op} '{field}' to '{val}'"
                                     )
                             kwargs = {arg: val}
+
+                    # weekdays
                     else:
                         if op == "=":
                             raise Exception(f"'{op}' not supported for '{field}'")

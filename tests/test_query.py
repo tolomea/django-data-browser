@@ -426,6 +426,7 @@ class TestDateTimeType:
             ("month+1 month=1", dt(2021, 1, 13, 9, 42, 53), None),
             ("month=1 month+1", dt(2020, 2, 13, 9, 42, 53), None),
             ("bobit+1", None, "Unrecognized field 'bobit'"),
+            ("week=1", None, "'=' not supported for 'week'"),
         ],
     )
     def test_parse(self, value, expected, err):

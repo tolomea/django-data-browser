@@ -329,7 +329,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Fix bug filtering functions on annotations, aka __my_annotation__is_null=IsNull.                       |
+|         |            | | Support ``weeks`` in date and datetime filters.                                                        |
+|         |            | | Fix bug filtering functions on annotations e.g. ``__my_annotation__is_null=IsNull``.                   |
 |         |            | | Add admin actions to the admin column in addition to the id column.                                    |
 |         |            | | Add exclude option to right click menus.                                                               |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
