@@ -57,7 +57,7 @@ class OrmModel:
     def get_queryset(self, request, fields=()):
         return admin_get_queryset(self.admin, request, fields)
 
-    def get_action_request(self, request, action, pks):
+    def get_http_request_for_action(self, request, action, pks):
         actions = admin_get_actions(self.admin, request)
         if action not in actions:
             raise http.Http404(f"'{action}' unknown action")  # pragma: no cover
