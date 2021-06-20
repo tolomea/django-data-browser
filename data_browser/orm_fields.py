@@ -169,13 +169,15 @@ class OrmRawField(OrmConcreteField):
 
 
 class OrmCalculatedField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, func):
+    def __init__(self, model_name, name, pretty_name, func, actions=None):
         if getattr(func, "boolean", False):
             type_ = BooleanType
         else:
             type_ = HTMLType
 
-        super().__init__(model_name, name, pretty_name, type_=type_, can_pivot=True)
+        super().__init__(
+            model_name, name, pretty_name, type_=type_, can_pivot=True, actions=actions
+        )
         self.func = func
 
     def bind(self, previous):

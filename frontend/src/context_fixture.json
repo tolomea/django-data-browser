@@ -4,7 +4,12 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected groups"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -64,7 +69,12 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected users"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -287,7 +297,12 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected addresss"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -395,7 +410,12 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected in admins"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -522,7 +542,12 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected normals"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -617,7 +642,12 @@
                     "type": null
                 },
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected producers"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -706,7 +736,16 @@
             ],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "an_action",
+                            "prettyName": "An action"
+                        },
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected products"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -1155,7 +1194,12 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected tags"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,
@@ -1203,7 +1247,12 @@
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [],
+                    "actions": [
+                        {
+                            "name": "delete_selected",
+                            "prettyName": "Delete selected views"
+                        }
+                    ],
                     "canPivot": true,
                     "choices": [],
                     "concrete": false,

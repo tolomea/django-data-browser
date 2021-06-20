@@ -23,7 +23,7 @@ from .common import HttpResponse, JsonResponse, can_make_public, settings
 from .format_csv import get_csv_rows
 from .models import View
 from .orm_admin import OPEN_IN_ADMIN, get_models
-from .orm_results import get_result_queryset, get_results
+from .orm_results import get_result_list, get_result_queryset, get_results
 from .query import BoundQuery, Query, QueryFilter
 from .types import TYPES
 
@@ -159,15 +159,17 @@ def admin_action(request, model_name, fields):
         raise http.Http404(f"'{query.model_name}' does not exist")  # pragma: no cover
 
     bound_query = BoundQuery.bind(query, orm_models)
+    bound_field = bound_query.fields[0].orm_bound_field
 
-    results = get_results(request, bound_query, orm_models, False)
+    if not bound_field.field.actions or action not in bound_field.field.actions:
+        raise http.Http404(f"bad action '{action}'")  # pragma: no cover
 
-    pks = {row.get(field) for row in results["rows"]} | {
-        col.get(field) for col in results["cols"]
-    }
+    results = get_result_list(request, bound_query)
+
+    pks = {row[bound_field.queryset_path_str] for row in results}
     pks -= {None}
 
-    model_name = bound_query.fields[0].orm_bound_field.field.model_name
+    model_name = bound_field.field.model_name
     return orm_models[model_name].get_http_request_for_action(request, action, pks)
 
 

@@ -275,11 +275,17 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 value = getattr(obj, field_name)
                 return value() if callable(value) else value
 
+        if field_func == open_in_admin and hasattr(admin, "get_actions"):
+            actions = admin_get_actions(admin, request)
+        else:
+            actions = {}
+
         return OrmCalculatedField(
             model_name=model_name,
             name=field_name,
             pretty_name=pretty_name,
             func=field_func,
+            actions=actions,
         )
 
 

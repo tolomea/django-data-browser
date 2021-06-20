@@ -491,3 +491,40 @@ def test_related_action(admin_client):
     res = admin_client.post(res["url"], data)
     assert "Are you sure you want to delete the selected" in res.rendered_content
     assert set(res.context[0]["queryset"].values_list("id", flat=True)) == {producer_id}
+
+
+@pytest.mark.usefixtures("products")
+def test_admin_action(admin_client):
+    url = "/data_browser/query/core.Product/admin.%s"
+
+    ids = set(models.Product.objects.values_list("id", flat=True))
+    assert len(ids) == 3
+
+    # check our view is right
+    res = admin_client.get(url % "json")
+    assert len(res.json()["rows"]) == 3
+
+    # ask data browser for the action request
+    res = admin_client.post(
+        url % "html",
+        {"action": "delete_selected", "field": "admin"},
+        content_type="application/json",
+    ).json()
+    assert res == {
+        "method": "post",
+        "url": "/admin/core/product/?",
+        "data": [
+            ["action", "delete_selected"],
+            ["select_across", 0],
+            ["index", 0],
+            ["data_browser", 1],
+            *[["_selected_action", id_] for id_ in ids],
+        ],
+    }
+
+    # post action to changelist
+    data = dict(res["data"])
+    data["_selected_action"] = [int(id_) for id_ in ids]  # JS will format 1.0 as 1
+    res = admin_client.post(res["url"], data)
+    assert "Are you sure you want to delete the selected" in res.rendered_content
+    assert set(res.context[0]["queryset"].values_list("id", flat=True)) == ids
