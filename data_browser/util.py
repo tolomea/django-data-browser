@@ -1,6 +1,4 @@
-def s(path):
-    return "__".join(path)
-
-
 def annotation_path(path):
-    return ["_".join(["ddb"] + path)]
+    res = "_".join(["ddb"] + path)
+    assert "__" not in res
+    return res

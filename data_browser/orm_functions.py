@@ -21,7 +21,7 @@ from .types import (
     NumberType,
     StringType,
 )
-from .util import annotation_path, s
+from .util import annotation_path
 
 _DATE_FUNCTIONS = [
     "is_null",
@@ -137,8 +137,9 @@ def _get_django_function(name, qs):
 
 class OrmBoundFunctionField(OrmBoundField):
     def _annotate(self, request, qs):
-        func = _get_django_function(self.name, qs)[0](s(self.previous.queryset_path))
-        return qs.annotate(**{s(self.queryset_path): func})
+        func = _get_django_function(self.name, qs)[0](self.previous.queryset_path_str)
+        assert "__" not in self.queryset_path_str
+        return qs.annotate(**{self.queryset_path_str: func})
 
     def parse_lookup(self, lookup, value):
         parsed, err_message = super().parse_lookup(lookup, value)
@@ -176,7 +177,7 @@ class OrmFunctionField(OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=annotation_path(full_path),
+            queryset_path=[annotation_path(full_path)],
             filter_=True,
         )
 

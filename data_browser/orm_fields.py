@@ -14,7 +14,7 @@ from .types import (
     UnknownType,
     URLType,
 )
-from .util import annotation_path, s
+from .util import annotation_path
 
 
 @dataclass
@@ -31,11 +31,11 @@ class OrmBoundField:
 
     @property
     def path_str(self):
-        return s(self.full_path)
+        return "__".join(self.full_path)
 
     @property
     def queryset_path_str(self):
-        return s(self.queryset_path)
+        return "__".join(self.queryset_path)
 
     @property
     def group_by(self):
@@ -212,11 +212,14 @@ class OrmBoundAnnotatedField(OrmBoundField):
     def _annotate(self, request, qs):
         from .orm_admin import admin_get_queryset
 
+        assert "__" not in self.queryset_path_str
         return qs.annotate(
             **{
-                s(self.queryset_path): Subquery(
+                self.queryset_path_str: Subquery(
                     admin_get_queryset(self.admin, request, [self.name])
-                    .filter(pk=OuterRef(s(self.previous.queryset_path + ["pk"])))
+                    .filter(
+                        pk=OuterRef("__".join(self.previous.queryset_path + ["pk"]))
+                    )
                     .values(self.name)[:1],
                     output_field=self.django_field,
                 )
@@ -250,7 +253,7 @@ class OrmAnnotatedField(OrmBaseField):
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=annotation_path(full_path),
+            queryset_path=[annotation_path(full_path)],
             filter_=True,
         )
 

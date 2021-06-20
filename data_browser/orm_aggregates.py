@@ -6,7 +6,7 @@ from django.db.models.functions import Cast
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import BooleanType, DateTimeType, DateType, DurationType, NumberType
-from .util import annotation_path, s
+from .util import annotation_path
 
 _TYPE_AGGREGATES = defaultdict(
     lambda: [("count", NumberType)],
@@ -81,15 +81,14 @@ class OrmAggregateField(OrmBaseField):
     def bind(self, previous):
         assert previous
         full_path = previous.full_path + [self.name]
-        queryset_path = annotation_path(full_path)
         agg_func = _get_django_aggregate(previous.type_, self.name)
         return OrmBoundField(
             field=self,
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=queryset_path,
-            aggregate_clause=(s(queryset_path), agg_func(s(previous.queryset_path))),
+            queryset_path=[annotation_path(full_path)],
+            aggregate_clause=agg_func(previous.queryset_path_str),
             having=True,
         )
 

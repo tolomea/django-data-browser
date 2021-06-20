@@ -83,11 +83,11 @@ def get_result_queryset(request, bound_query, debug=False):
     if not any(f.group_by for f in bound_query.bound_fields):
         return [
             qs.aggregate(
-                **dict(
-                    field.aggregate_clause
+                **{
+                    field.queryset_path_str: field.aggregate_clause
                     for field in bound_query.bound_fields + bound_query.bound_filters
                     if field.aggregate_clause
-                )
+                }
             )
         ]
 
@@ -98,11 +98,11 @@ def get_result_queryset(request, bound_query, debug=False):
     qs = qs.values(*group_by_fields).distinct()
 
     # aggregates
-    aggregate_clauses = dict(
-        field.aggregate_clause
+    aggregate_clauses = {
+        field.queryset_path_str: field.aggregate_clause
         for field in bound_query.bound_fields + bound_query.bound_filters
         if field.aggregate_clause
-    )
+    }
     qs = qs.annotate(**aggregate_clauses)
 
     # having, aka filter aggregate fields
