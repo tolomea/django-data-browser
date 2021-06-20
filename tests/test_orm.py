@@ -245,6 +245,14 @@ def test_filter_and_select_aggregated_annotation(products, get_product_flat):
     assert data == [[1, 2]]  # aggregates last
 
 
+@pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
+def test_filter_and_select_annotation_function(products, get_product_flat):
+    data = get_product_flat(
+        1, "annotated__is_null+1,size", [("annotated__is_null__equals", "NotNull")]
+    )
+    assert data == [["NotNull", 1], ["NotNull", 2]]
+
+
 def test_get_annotated_field_function_at_base(products, get_product_flat, mocker):
     mock = mocker.patch(
         "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset

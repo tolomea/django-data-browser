@@ -21,7 +21,7 @@ from .types import (
     NumberType,
     StringType,
 )
-from .util import s
+from .util import annotation_path, s
 
 _DATE_FUNCTIONS = [
     "is_null",
@@ -170,12 +170,13 @@ class OrmFunctionField(OrmBaseField):
 
     def bind(self, previous):
         assert previous
+        full_path = previous.full_path + [self.name]
         return OrmBoundFunctionField(
             field=self,
             previous=previous,
-            full_path=previous.full_path + [self.name],
+            full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=previous.queryset_path + [self.name],
+            queryset_path=annotation_path(full_path),
             filter_=True,
         )
 
