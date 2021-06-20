@@ -296,8 +296,8 @@ def _data_response(request, query, media, privileged=False, strict=False):
     elif privileged and media == "query":
         resp = _get_query_data(bound_query)
         return JsonResponse(resp)
-    elif privileged and media in ["sql", "explain"]:
-        query_set = get_result_queryset(request, bound_query)
+    elif privileged and media in ["sql", "explain", "qs"]:
+        query_set = get_result_queryset(request, bound_query, media == "qs")
         if isinstance(query_set, list):
             res = "Not available for pure aggregates"
         else:
@@ -307,6 +307,8 @@ def _data_response(request, query, media, privileged=False, strict=False):
                 )
             elif media == "explain":
                 res = query_set.explain()
+            elif media == "qs":
+                res = str(query_set)
             else:
                 assert False
         return HttpResponse(res, content_type="text/plain")
