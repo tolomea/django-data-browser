@@ -54,6 +54,10 @@ class OrmBoundField:
     def _annotate(self, request, qs):
         return qs
 
+    def _annotate_qs(self, qs, expression):
+        assert "__" not in self.queryset_path_str
+        return qs.annotate(**{self.queryset_path_str: expression})
+
     def __getattr__(self, name):
         return getattr(self.field, name)
 
@@ -212,18 +216,14 @@ class OrmBoundAnnotatedField(OrmBoundField):
     def _annotate(self, request, qs):
         from .orm_admin import admin_get_queryset
 
-        assert "__" not in self.queryset_path_str
-        return qs.annotate(
-            **{
-                self.queryset_path_str: Subquery(
-                    admin_get_queryset(self.admin, request, [self.name])
-                    .filter(
-                        pk=OuterRef("__".join(self.previous.queryset_path + ["pk"]))
-                    )
-                    .values(self.name)[:1],
-                    output_field=self.django_field,
-                )
-            }
+        return self._annotate_qs(
+            qs,
+            Subquery(
+                admin_get_queryset(self.admin, request, [self.name])
+                .filter(pk=OuterRef("__".join(self.previous.queryset_path + ["pk"])))
+                .values(self.name)[:1],
+                output_field=self.django_field,
+            ),
         )
 
 

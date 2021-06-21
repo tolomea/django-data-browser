@@ -138,8 +138,7 @@ def _get_django_function(name, qs):
 class OrmBoundFunctionField(OrmBoundField):
     def _annotate(self, request, qs):
         func = _get_django_function(self.name, qs)[0](self.previous.queryset_path_str)
-        assert "__" not in self.queryset_path_str
-        return qs.annotate(**{self.queryset_path_str: func})
+        return self._annotate_qs(qs, func)
 
     def parse_lookup(self, lookup, value):
         parsed, err_message = super().parse_lookup(lookup, value)
