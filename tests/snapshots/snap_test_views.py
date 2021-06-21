@@ -9813,6 +9813,34 @@ snapshots["test_query_json_pivot data"] = {
     "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],
 }
 
+snapshots["test_query_qs_variants content"] = [
+    "This is an approximation of the main queryset.",
+    "Pages with pivoted or calculated data may do additional queries.",
+    "",
+    "core.ProductAdmin.get_queryset().annotate(",
+    "    ddb_size_is_null=ExpressionWrapper(",
+    "        Q(size=None),",
+    "        output_field=BooleanField(),",
+    "    ),",
+    ").annotate(",
+    "    ddb_annotated=Subquery(",
+    "        core.ProductAdmin.get_queryset().filter(",
+    "            pk=OuterRef(",
+    "                'pk',",
+    "            ),",
+    "        ).values(",
+    "            'annotated',",
+    "        )[: 1],",
+    "        output_field=TextField(),",
+    "    ),",
+    ").values(",
+    "    'ddb_size_is_null',",
+    "    'ddb_annotated',",
+    ").distinct().annotate(",
+    "    ddb_size_count=Count(F(size), distinct=True),",
+    ").order_by()[: 1000]",
+]
+
 snapshots["test_query_query query"] = {
     "fields": [
         {"pathStr": "size", "pivoted": False, "priority": 0, "sort": "dsc"},

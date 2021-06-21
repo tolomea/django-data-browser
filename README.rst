@@ -329,6 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Add ``.qs`` format support to see the main Django Queryset.                                            |
 |         |            | | Support ``weeks`` in date and datetime filters.                                                        |
 |         |            | | Fix bug filtering functions on annotations e.g. ``__my_annotation__is_null=IsNull``.                   |
 |         |            | | Add admin actions to the admin column in addition to the id column.                                    |
@@ -456,7 +457,7 @@ Release History
 |         |            | | Only reload on field delete when it might change the results.                                          |
 |         |            | | Add UI controls for reordering fields.                                                                 |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 2.2.13  | 2020-09-13 | | Add .sql format to show raw SQL query.                                                                 |
+| 2.2.13  | 2020-09-13 | | Add ``.sql`` format to show raw SQL query.                                                             |
 |         |            | | Min and max for date and datetime fields.                                                              |
 |         |            | | Add ddb_default_filters.                                                                               |
 |         |            | | Integrated cProfile support via ``.profile`` and ``.pstats``.                                          |

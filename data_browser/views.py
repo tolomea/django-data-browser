@@ -302,13 +302,17 @@ def _data_response(request, query, media, privileged=False, strict=False):
             res = "Not available for pure aggregates"
         else:
             if media == "sql":
-                res = sqlparse.format(
+                res = "This is an approximation of the main query.\n"
+                res += "Pages with pivoted or calculated data may do additional queries.\n\n"
+                res += sqlparse.format(
                     str(query_set.query), reindent=True, keyword_case="upper"
                 )
             elif media == "explain":
                 res = query_set.explain()
             elif media == "qs":
-                res = str(query_set)
+                res = "This is an approximation of the main queryset.\n"
+                res += "Pages with pivoted or calculated data may do additional queries.\n\n"
+                res += str(query_set)
             else:
                 assert False
         return HttpResponse(res, content_type="text/plain")

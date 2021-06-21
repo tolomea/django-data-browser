@@ -85,9 +85,12 @@ def test_query_sql_aggregate(admin_client):
     assert res.status_code == 200
 
 
-def test_query_qs_function(admin_client):
-    res = admin_client.get("/data_browser/query/core.Product/size__is_null.qs")
+def test_query_qs_variants(admin_client, snapshot):
+    res = admin_client.get(
+        "/data_browser/query/core.Product/size__is_null,size__count,annotated.qs"
+    )
     assert res.status_code == 200
+    snapshot.assert_match(res.content.decode("utf-8").splitlines(), "content")
 
 
 @pytest.mark.parametrize(

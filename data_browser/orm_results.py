@@ -4,7 +4,6 @@ from collections import defaultdict
 
 from django.core.serializers.json import DjangoJSONEncoder
 
-from .orm_debug import DebugQS
 from .orm_lookups import get_django_filter
 from .query import BoundQuery
 from .types import ASC, DSC
@@ -63,16 +62,13 @@ def get_result_queryset(request, bound_query, debug=False):
     all_fields = {f.queryset_path_str: f for f in bound_query.bound_fields}
     all_fields.update({f.queryset_path_str: f for f in bound_query.bound_filters})
 
-    if debug:
-        qs = DebugQS(f"{bound_query.orm_model.admin}.get_queryset()")
-    else:
-        qs = bound_query.orm_model.get_queryset(
-            request, {f.split("__")[0] for f in all_fields}
-        )
+    qs = bound_query.orm_model.get_queryset(
+        request, {f.split("__")[0] for f in all_fields}, debug=debug
+    )
 
     # sql functions and qs annotations
     for field in all_fields.values():
-        qs = field.annotate(request, qs)
+        qs = field.annotate(request, qs, debug=debug)
 
     # filter normal and sql function fields (aka __date)
     for filter_ in bound_query.valid_filters:

@@ -136,7 +136,7 @@ def _get_django_function(name, qs):
 
 
 class OrmBoundFunctionField(OrmBoundField):
-    def _annotate(self, request, qs):
+    def _annotate(self, request, qs, debug=False):
         func = _get_django_function(self.name, qs)[0](self.previous.queryset_path_str)
         return self._annotate_qs(qs, func)
 

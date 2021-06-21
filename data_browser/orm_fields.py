@@ -4,6 +4,7 @@ from typing import Sequence, Tuple
 from django.db import models
 from django.db.models import OuterRef, Subquery
 
+from .orm_debug import DebugQS
 from .types import (
     ASC,
     BaseType,
@@ -46,12 +47,12 @@ class OrmBoundField:
             return self.previous._lineage() + [self]
         return [self]
 
-    def annotate(self, request, qs):
+    def annotate(self, request, qs, debug=False):
         for field in self._lineage():
-            qs = field._annotate(request, qs)
+            qs = field._annotate(request, qs, debug=debug)
         return qs
 
-    def _annotate(self, request, qs):
+    def _annotate(self, request, qs, debug=False):
         return qs
 
     def _annotate_qs(self, qs, expression):
@@ -213,14 +214,21 @@ class OrmCalculatedField(OrmBaseField):
 
 
 class OrmBoundAnnotatedField(OrmBoundField):
-    def _annotate(self, request, qs):
+    def _annotate(self, request, qs, debug=False):
         from .orm_admin import admin_get_queryset
+
+        if debug:
+            subquery = DebugQS("Subquery")
+            outer_ref = DebugQS("OuterRef")
+        else:
+            subquery = Subquery
+            outer_ref = OuterRef
 
         return self._annotate_qs(
             qs,
-            Subquery(
-                admin_get_queryset(self.admin, request, [self.name])
-                .filter(pk=OuterRef("__".join(self.previous.queryset_path + ["pk"])))
+            subquery(
+                admin_get_queryset(self.admin, request, [self.name], debug=debug)
+                .filter(pk=outer_ref("__".join(self.previous.queryset_path + ["pk"])))
                 .values(self.name)[:1],
                 output_field=self.django_field,
             ),

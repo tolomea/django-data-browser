@@ -20,6 +20,7 @@ from django.utils.text import slugify
 from .common import JsonResponse, debug_log, get_feature_flag, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
+from .orm_debug import DebugQS
 from .orm_fields import (
     OrmAnnotatedField,
     OrmCalculatedField,
@@ -54,8 +55,8 @@ class OrmModel:
             for (f, l, v) in default_filters
         ]
 
-    def get_queryset(self, request, fields=()):
-        return admin_get_queryset(self.admin, request, fields)
+    def get_queryset(self, request, fields=(), debug=False):
+        return admin_get_queryset(self.admin, request, fields, debug=debug)
 
     def get_http_request_for_action(self, request, action, pks):
         actions = admin_get_actions(self.admin, request)
@@ -104,9 +105,12 @@ def open_in_admin(obj):
     return format_html('<a href="{}">{}</a>', url, obj)
 
 
-def admin_get_queryset(admin, request, fields=()):
-    request.data_browser = {"calculated_fields": set(fields), "fields": set(fields)}
-    return admin.get_queryset(request)
+def admin_get_queryset(admin, request, fields=(), debug=False):
+    if debug:
+        return DebugQS(f"{admin}.get_queryset()")
+    else:
+        request.data_browser = {"calculated_fields": set(fields), "fields": set(fields)}
+        return admin.get_queryset(request)
 
 
 def admin_get_actions(admin, request):
