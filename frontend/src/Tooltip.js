@@ -19,7 +19,7 @@ function Tooltip(props) {
         if (messages)
             setState({
                 messages: messages,
-                x: event.target.getBoundingClientRect().right - 10,
+                x: event.target.getBoundingClientRect().right,
                 y: event.target.getBoundingClientRect().top - 10,
             });
         event.preventDefault();
