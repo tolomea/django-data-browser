@@ -1,6 +1,15 @@
 import React, { useState, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
-import { TLink, SLink, useData, version, Save, Delete, CopyText } from "./Util";
+import {
+  TLink,
+  SLink,
+  useData,
+  version,
+  Save,
+  Delete,
+  CopyText,
+  HasActionIcon,
+} from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery, getRelUrlForQuery } from "./Query";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
@@ -216,6 +225,10 @@ function Field(props) {
               }
             >
               {modelField.prettyName}
+              <HasActionIcon
+                modelField={modelField}
+                message="Has admin actions."
+              />
             </TLink>
           ) : (
             modelField.prettyName + (modelField.toMany ? " \u21f6" : "")

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./App.css";
-import { TLink, SLink, Overlay, syncPost, doPost } from "./Util";
+import { TLink, SLink, Overlay, syncPost, doPost, HasActionIcon } from "./Util";
 import { ShowContextMenu } from "./ContextMenu";
 
 function Spacer(props) {
@@ -84,6 +84,10 @@ function HeadCell(props) {
       ) : (
         " " + query.prettyPathStr(field.pathStr)
       )}
+      <HasActionIcon
+        modelField={modelField}
+        message="Admin actions availble on right click."
+      />
     </th>
   );
 }

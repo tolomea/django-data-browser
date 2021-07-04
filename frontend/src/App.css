@@ -102,15 +102,18 @@ select {
 .TLink:hover {
   text-decoration: underline;
 }
+.Symbol,
+.SLink {
+  font-size: inherit;
+  font-weight: inherit;
+  vertical-align: -20%;
+}
 .SLink {
   background: none !important;
   border: none;
   padding: 0 !important;
   cursor: pointer;
   color: var(--dark-link-color);
-  vertical-align: -20%;
-  font-size: inherit;
-  font-weight: inherit;
 }
 .SLink:hover {
   text-decoration: underline;

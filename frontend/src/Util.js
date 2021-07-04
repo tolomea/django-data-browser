@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./App.css";
+import { ShowTooltip, HideTooltip } from "./Tooltip";
 const assert = require("assert");
 let fetchInProgress = false;
 let nextFetch = undefined;
@@ -305,6 +306,29 @@ function shallowEqual(objA: mixed, objB: mixed): boolean {
     return true;
 }
 
+function HasActionIcon(props) {
+    const { modelField, message } = props;
+    const showTooltip = useContext(ShowTooltip);
+    const hideTooltip = useContext(HideTooltip);
+
+    if (modelField.actions.length) {
+        return (
+            <>
+                <span> </span>
+                <span
+                    className="Symbol material-icons-outlined"
+                    onMouseEnter={(e) => showTooltip(e, [message])}
+                    onMouseLeave={(e) => hideTooltip(e)}
+                >
+                    build_circle
+                </span>
+            </>
+        );
+    } else {
+        return "";
+    }
+}
+
 export {
     TLink,
     SLink,
@@ -321,4 +345,5 @@ export {
     Overlay,
     shallowEqual,
     syncPost,
+    HasActionIcon,
 };
