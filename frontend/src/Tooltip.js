@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import "./App.css";
-
+import useWindowDimensions from "./WindowDimensions";
 const ShowTooltip = React.createContext();
 const HideTooltip = React.createContext();
 
 function Tooltip(props) {
     const node = useRef();
     const [state, setState] = useState();
+    const { height, width } = useWindowDimensions();
 
     const divStyle = state
         ? {
@@ -16,12 +17,20 @@ function Tooltip(props) {
         : {};
 
     function showTooltip(event, messages) {
-        if (messages)
+        if (messages) {
+            var x = event.target.getBoundingClientRect().right;
+            var y = event.target.getBoundingClientRect().top - 10;
+            if (x + 200 > width) {
+                x = width - 200;
+                y = event.target.getBoundingClientRect().bottom;
+            }
+
             setState({
                 messages: messages,
-                x: event.target.getBoundingClientRect().right,
-                y: event.target.getBoundingClientRect().top - 10,
+                x: x,
+                y: y,
             });
+        }
         event.preventDefault();
     }
 
