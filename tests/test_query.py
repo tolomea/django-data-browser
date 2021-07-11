@@ -163,22 +163,19 @@ class TestQuery:
         q = Query.from_request(
             "app.model", "fa+1,fd-0,fn", [("limit", "123"), ("bob__equals", "fred")]
         )
-        query.limit = 123
-        assert q == query
+        assert q.arguments["limit"] == 123
 
     def test_from_request_with_bad_limit(self, query):
         q = Query.from_request(
             "app.model", "fa+1,fd-0,fn", [("limit", "bob"), ("bob__equals", "fred")]
         )
-        query.limit = 1000
-        assert q == query
+        assert q.arguments["limit"] == 1000
 
     def test_from_request_with_low_limit(self, query):
         q = Query.from_request(
             "app.model", "fa+1,fd-0,fn", [("limit", "0"), ("bob__equals", "fred")]
         )
-        query.limit = 1
-        assert q == query
+        assert q.arguments["limit"] == 1
 
     def test_from_request_with_related_filter(self):
         q = Query.from_request("app.model", "", [("bob__jones__equals", "fred")])
@@ -196,7 +193,7 @@ class TestQuery:
 
     def test_from_request_filter_no_lookup(self):
         q = Query.from_request("app.model", "", [("joe", "tom")])
-        assert q == Query("app.model", [], [])
+        assert q == Query("app.model", [], [], {"joe": "tom"})
 
     def test_from_request_filter_bad_lookup(self):
         q = Query.from_request("app.model", "", [("joe__blah", "123")])
@@ -204,7 +201,7 @@ class TestQuery:
 
     def test_from_request_filter_no_name(self):
         q = Query.from_request("app.model", "", [("", "123")])
-        assert q == Query("app.model", [], [])
+        assert q == Query("app.model", [], [], {"": "123"})
 
     def test_from_request_field_no_name(self):
         q = Query.from_request("app.model", "+2", [])
@@ -223,16 +220,21 @@ class TestQuery:
         assert q == Query("app.model", [QueryField("fn", True)], [])
 
     def test_url(self, query):
-        query.limit = 123
+        query.arguments = {"limit": "123"}
         assert (
             query.get_url("html")
+            == "/query/app.model/fa+1,fd-0,fn.html?bob__equals=fred&limit=123"
+        )
+        assert (
+            query.get_full_url("html")
             == "/data_browser/query/app.model/fa+1,fd-0,fn.html?bob__equals=fred&limit=123"
         )
 
     def test_url_no_filters(self, query):
         query.filters = []
+        assert query.get_url("html") == "/query/app.model/fa+1,fd-0,fn.html?limit=1000"
         assert (
-            query.get_url("html")
+            query.get_full_url("html")
             == "/data_browser/query/app.model/fa+1,fd-0,fn.html?limit=1000"
         )
 

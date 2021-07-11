@@ -40,7 +40,8 @@ class View(models.Model):
     def get_query(self):
         from .query import Query
 
-        params = hyperlink.parse(f"?{self.query}").query
+        params = list(hyperlink.parse(f"?{self.query}").query)
+        params.append(("limit", str(self.limit)))
         return Query.from_request(self.model_name, self.fields, params)
 
     def public_link(self):

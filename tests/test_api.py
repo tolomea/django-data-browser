@@ -108,7 +108,7 @@ class TestViewList:
             "query": "",
             "publicLink": link,
             "googleSheetsFormula": f'=importdata("{link}")',
-            "link": "/query/core.Product/.html?&limit=1000",
+            "link": "/query/core.Product/.html?limit=1000",
             "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 1000,
@@ -226,6 +226,45 @@ class TestViewDetail:
         assert view.model_name == "core.Product"
         assert view.fields == "admin"
         assert view.query == "name__contains=sql"
+        assert view.limit == 1000
+
+    def test_patch_limit(self, admin_client, admin_user, view):
+        resp = admin_client.patch(
+            f"/data_browser/api/views/{view.pk}/",
+            json.dumps(
+                {
+                    "limit": "123",
+                }
+            ),
+            content_type="application/json",
+        )
+        assert resp.status_code == 200
+
+        view.refresh_from_db()
+
+        assert resp.json() == {
+            "name": "name",
+            "description": "description",
+            "public": False,
+            "model": "core.Product",
+            "fields": "admin",
+            "query": "name__contains=sql",
+            "publicLink": "N/A",
+            "googleSheetsFormula": "N/A",
+            "link": "/query/core.Product/admin.html?name__contains=sql&limit=123",
+            "createdTime": ANY(str),
+            "pk": view.pk,
+            "limit": 123,
+        }
+
+        assert view.owner == admin_user
+        assert view.name == "name"
+        assert view.description == "description"
+        assert not view.public
+        assert view.model_name == "core.Product"
+        assert view.fields == "admin"
+        assert view.query == "name__contains=sql"
+        assert view.limit == 123
 
     def test_patch_other_owner(self, admin_client, other_user, other_view):
         resp = admin_client.patch(

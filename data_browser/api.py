@@ -54,7 +54,7 @@ def serialize(view):
         "limit": view.limit,
         "publicLink": view.public_link(),
         "googleSheetsFormula": view.google_sheets_formula(),
-        "link": f"/query/{view.model_name}/{view.fields}.html?{view.query}&limit={view.limit}",
+        "link": view.get_query().get_url("html"),
         "createdTime": f"{view.created_time:%Y-%m-%d %H:%M:%S}",
         "pk": view.pk,
     }

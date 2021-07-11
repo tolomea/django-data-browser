@@ -1,6 +1,6 @@
+import dataclasses
 import urllib
-from dataclasses import dataclass
-from typing import Any, Optional, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -9,7 +9,7 @@ from .common import settings
 from .types import ASC, DSC
 
 
-@dataclass
+@dataclasses.dataclass
 class QueryField:
     path: str
     pivoted: bool = False
@@ -21,7 +21,7 @@ class QueryField:
         assert (self.direction is None) == (self.priority is None)
 
 
-@dataclass
+@dataclasses.dataclass
 class QueryFilter:
     path: str
     lookup: str
@@ -40,12 +40,12 @@ def parse_sort(value, symbol, direction):
         return path, None, None
 
 
-@dataclass
+@dataclasses.dataclass
 class Query:
     model_name: str
     fields: Sequence[QueryField]
     filters: Sequence[QueryFilter]
-    limit: int = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
+    arguments: Mapping[str, str] = dataclasses.field(default_factory=dict)
 
     @classmethod
     def from_request(cls, model_name, field_str, params):
@@ -74,20 +74,25 @@ class Query:
                     found_fields.add(path)
                     fields.append(QueryField(path, pivoted, direction, priority))
 
-        limit = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
-
         filters = []
+        arguments = {}
         for path__lookup, value in params:
-            if path__lookup == "limit":
-                try:
-                    limit = max(1, int(value))
-                except:  # noqa: E722  input sanitization
-                    pass
             if "__" in path__lookup:
                 path, lookup = path__lookup.rsplit("__", 1)
                 filters.append(QueryFilter(path, lookup, value))
+            else:
+                arguments[path__lookup] = value
 
-        return cls(model_name, fields, filters, limit)
+        return cls(model_name, fields, filters, arguments)
+
+    def __post_init__(self):
+        # sanitize limit
+        value = self.arguments.get("limit")
+        try:
+            value = int(value)
+        except:  # noqa: E722  input sanitization
+            value = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
+        self.arguments["limit"] = max(1, value)
 
     @property
     def _field_str(self):
@@ -104,9 +109,15 @@ class Query:
         return [
             ("__".join(filter.path + [filter.lookup]), filter.value)
             for filter in self.filters
-        ] + [("limit", self.limit)]
+        ] + [(key, str(value)) for key, value in self.arguments.items()]
 
     def get_url(self, media):
+        url = self.get_full_url(media)
+        home = reverse("data_browser:home")
+        assert url.startswith(home)
+        return url[len(home) - 1 :]
+
+    def get_full_url(self, media):
         base_url = reverse(
             "data_browser:query",
             kwargs={
@@ -121,7 +132,7 @@ class Query:
         return f"{base_url}?{params}"
 
 
-@dataclass
+@dataclasses.dataclass
 class BoundFilter:
     orm_bound_field: Any
     lookup: str
@@ -157,7 +168,7 @@ class BoundFilter:
         return self.orm_bound_field.format_lookup(self.lookup, self.parsed)
 
 
-@dataclass
+@dataclasses.dataclass
 class BoundField:
     orm_bound_field: Any
     pivoted: bool
@@ -230,7 +241,13 @@ class BoundQuery:
                 orm_bound_field = None
             filters.append(BoundFilter.bind(orm_bound_field, query_filter))
 
-        return cls(model_name, fields, filters, query.limit, orm_models[model_name])
+        return cls(
+            model_name=model_name,
+            fields=fields,
+            filters=filters,
+            limit=query.arguments["limit"],
+            orm_model=orm_models[model_name],
+        )
 
     @cached_property
     def sort_fields(self):
