@@ -7,7 +7,7 @@ const HideTooltip = React.createContext();
 function Tooltip(props) {
     const node = useRef();
     const [state, setState] = useState();
-    const { height, width } = useWindowDimensions();
+    const { width } = useWindowDimensions();
 
     const divStyle = state
         ? {
