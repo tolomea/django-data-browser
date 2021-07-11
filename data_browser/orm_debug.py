@@ -7,11 +7,23 @@ SPACES = "    "
 
 def _format_value(value):
     if isinstance(value, Q):
-        assert not value.negated
-        assert value.connector == Q.AND
 
-        children = ", ".join(f"{f}={_format_value(v)}" for f, v in value.children)
-        return f"Q({children})"
+        def format_child(child):
+            if isinstance(child, tuple):
+                return f"{child[0]}={_format_value(child[1])}"
+            else:
+                return _format_value(child)
+
+        if len(value.children) == 1 and isinstance(value.children[0], Q):
+            child = _format_value(value.children[0])
+            return f"~Q({child})" if value.negated else child
+
+        if value.connector == Q.AND:
+            children = ", ".join(format_child(c) for c in value.children)
+            return f"~Q({children})" if value.negated else f"Q({children})"
+        else:
+            children = " | ".join(f"Q({format_child(c)})" for c in value.children)
+            return f"~({children})" if value.negated else children
     elif isinstance(value, Field):
         return f"{value.__class__.__name__}()"
     elif isinstance(value, ExpressionWrapper):
