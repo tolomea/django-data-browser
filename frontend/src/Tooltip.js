@@ -5,51 +5,44 @@ const ShowTooltip = React.createContext();
 const HideTooltip = React.createContext();
 
 function Tooltip(props) {
+    const hidden = { left: 0, top: 0, messages: [] };
+    const pad = 10;
+    const minWidth = 200;
     const node = useRef();
-    const [state, setState] = useState();
+    const [state, setState] = useState(hidden);
     const { width } = useWindowDimensions();
-
-    const divStyle = state
-        ? {
-              left: state.x,
-              top: state.y,
-          }
-        : {};
 
     function showTooltip(event, messages) {
         if (messages) {
-            var x = event.target.getBoundingClientRect().right;
-            var y = event.target.getBoundingClientRect().top - 10;
-            if (x + 200 > width) {
-                x = width - 200;
-                y = event.target.getBoundingClientRect().bottom;
+            var left = event.target.getBoundingClientRect().right;
+            var top = event.target.getBoundingClientRect().top - pad;
+            if (left + minWidth > width) {
+                left = width - minWidth;
+                top = event.target.getBoundingClientRect().bottom;
             }
-
-            setState({
-                messages: messages,
-                x: x,
-                y: y,
-            });
+            setState({ messages, left, top });
         }
         event.preventDefault();
     }
 
     function hideTooltip(event) {
-        setState(null);
+        setState(hidden);
         event.preventDefault();
     }
+
+    const divStyle = { left: state.left, top: state.top };
 
     return (
         <ShowTooltip.Provider value={showTooltip}>
             <HideTooltip.Provider value={hideTooltip}>
                 {props.children}
-                {state && (
+                {state.messages.length ? (
                     <div ref={node} className="Tooltip" style={divStyle}>
                         {state.messages.map((m) => (
                             <p>{m}</p>
                         ))}
                     </div>
-                )}
+                ) : null}
             </HideTooltip.Provider>
         </ShowTooltip.Provider>
     );

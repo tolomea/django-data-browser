@@ -331,6 +331,7 @@ Release History
 +=========+============+==========================================================================================================+
 |         |            | | Fix exceptions when using ``.qs``.                                                                     |
 |         |            | | Fix view link on Saved View admin page not preserving ``limit``.                                       |
+|         |            | | Improve placement of context menus.                                                                    |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.4   | 2021-07-04 | | Add ``.qs`` format support to see the main Django Queryset.                                            |
 |         |            | | Support ``weeks`` in date and datetime filters.                                                        |
