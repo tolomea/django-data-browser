@@ -170,7 +170,7 @@ function Filter(props) {
 function Filters(props) {
   const { query, filterErrors, parsedFilterValues } = props;
   return (
-    <form className="Filters">
+    <form className="Filters" onSubmit={(e) => e.preventDefault()}>
       <table>
         <tbody>
           {props.filters.map((filter, index) => (
@@ -455,7 +455,7 @@ function EditSavedView(props) {
         </form>
         <div className="SavedViewActions">
           <Delete apiUrl={url} redirectUrl="/" />
-          <Link to="/">Done</Link>
+          <Link to="/">Close</Link>
         </div>
       </div>
     </div>
