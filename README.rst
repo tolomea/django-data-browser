@@ -329,6 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Fix "bad lookup" when excluding ``IsNull``/``NotNull`` values.                                         |
 |         |            | | Fix pressing enter clearing all filters.                                                               |
 |         |            | | Fix exceptions when using ``.qs``.                                                                     |
 |         |            | | Fix view link on Saved View admin page not preserving ``limit``.                                       |

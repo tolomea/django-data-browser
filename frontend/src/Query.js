@@ -189,6 +189,12 @@ class Query {
         lookup: "is_null",
         value: negate ? "NotNull" : "IsNull",
       };
+    if (value === "IsNull" || value === "NotNull")
+      return {
+        pathStr: pathStr,
+        lookup: "equals",
+        value: negate ? { IsNull: "NotNull", NotNull: "IsNull" }[value] : value,
+      };
     else if (lookups.hasOwnProperty("equals"))
       return {
         pathStr: pathStr,
