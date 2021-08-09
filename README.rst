@@ -329,6 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Don't override right click context menu for HTML values (e.g. "Admin" columns).                        |
 |         |            | | Fix "bad lookup" when excluding ``IsNull``/``NotNull`` values.                                         |
 |         |            | | Fix pressing enter clearing all filters.                                                               |
 |         |            | | Fix exceptions when using ``.qs``.                                                                     |

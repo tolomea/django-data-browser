@@ -142,26 +142,27 @@ function DataCell(props) {
 
   const showContextMenu = useContext(ShowContextMenu);
   function onContextMenu(e) {
-    showContextMenu(e, [
-      navigator.clipboard && {
-        name: "Copy",
-        fn: () => navigator.clipboard.writeText(formattedValue),
-      },
-      modelField.concrete &&
-        query.filterForValue(pathStr, value) && {
-          name: "Filter",
-          fn: () => query.addExactFilter(pathStr, value),
+    modelField.type !== "html" &&
+      showContextMenu(e, [
+        navigator.clipboard && {
+          name: "Copy",
+          fn: () => navigator.clipboard.writeText(formattedValue),
         },
-      modelField.concrete &&
-        query.filterForValue(pathStr, value) && {
-          name: "Exclude",
-          fn: () => query.addExactExclude(pathStr, value),
+        modelField.concrete &&
+          query.filterForValue(pathStr, value) && {
+            name: "Filter",
+            fn: () => query.addExactFilter(pathStr, value),
+          },
+        modelField.concrete &&
+          query.filterForValue(pathStr, value) && {
+            name: "Exclude",
+            fn: () => query.addExactExclude(pathStr, value),
+          },
+        fullRow && {
+          name: "Drill down",
+          fn: () => query.drillDown(fullRow),
         },
-      fullRow && {
-        name: "Drill down",
-        fn: () => query.drillDown(fullRow),
-      },
-    ]);
+      ]);
   }
 
   return (
