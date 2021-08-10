@@ -44,11 +44,11 @@ snapshots["test_query_csv_pivot_permutations[d--b] key"] = [
 ]
 
 snapshots["test_query_csv_pivot_permutations[d-c-] key"] = [
-    ["Created time month", "January", "Feburary"]
+    ["Created time month", "January", "February"]
 ]
 
 snapshots["test_query_csv_pivot_permutations[d-cb] key"] = [
-    ["Created time month", "January", "", "Feburary", ""],
+    ["Created time month", "January", "", "February", ""],
     ["", "ID count", "Size max", "ID count", "Size max"],
     ["", "4.0", "6.0", "2.0", "3.0"],
 ]
@@ -66,14 +66,14 @@ snapshots["test_query_csv_pivot_permutations[dr-b] key"] = [
 ]
 
 snapshots["test_query_csv_pivot_permutations[drc-] key"] = [
-    ["Created time month", "January", "Feburary"],
+    ["Created time month", "January", "February"],
     ["Created time year"],
     ["2020.0"],
     ["2021.0"],
 ]
 
 snapshots["test_query_csv_pivot_permutations[drcb] key"] = [
-    ["Created time month", "January", "", "Feburary", ""],
+    ["Created time month", "January", "", "February", ""],
     ["Created time year", "ID count", "Size max", "ID count", "Size max"],
     ["2020.0", "1.0", "1.0", "2.0", "3.0"],
     ["2021.0", "3.0", "6.0", "", ""],
@@ -1420,7 +1420,7 @@ snapshots["test_query_ctx config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -1637,7 +1637,7 @@ snapshots["test_query_ctx config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -4228,7 +4228,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -4445,7 +4445,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -6911,7 +6911,7 @@ snapshots["test_query_html config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -7128,7 +7128,7 @@ snapshots["test_query_html config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -8379,7 +8379,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -8596,7 +8596,7 @@ snapshots["test_query_html_no_perms config"] = {
                     "canPivot": True,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -9762,7 +9762,7 @@ snapshots["test_query_json_pivot data"] = {
         [{"id__count": 1.0, "size__max": 1.0}, {"id__count": 3.0, "size__max": 6.0}],
         [{"id__count": 2.0, "size__max": 3.0}, None],
     ],
-    "cols": [{"created_time__month": "January"}, {"created_time__month": "Feburary"}],
+    "cols": [{"created_time__month": "January"}, {"created_time__month": "February"}],
     "fields": [
         {
             "pathStr": "created_time__year",

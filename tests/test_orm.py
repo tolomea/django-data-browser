@@ -582,7 +582,7 @@ def test_get_pivot(get_product_pivot):
     )
     assert data == {
         "body": [[[1], [3]], [[2], [4]]],
-        "cols": [["January"], ["Feburary"]],
+        "cols": [["January"], ["February"]],
         "rows": [[2020], [2021]],
     }
 
@@ -594,7 +594,7 @@ def test_get_pivot_multi_agg(get_product_pivot):
     )
     assert data == {
         "body": [[[1, 1], [3, 6]], [[2, 3], [4, 10]]],
-        "cols": [["January"], ["Feburary"]],
+        "cols": [["January"], ["February"]],
         "rows": [[2020], [2021]],
     }
 
@@ -608,9 +608,9 @@ def test_get_pivot_all(get_product_pivot):
         "body": [[[1]], [[2]], [[3]], [[4]]],
         "cols": [
             [2020, "January"],
-            [2020, "Feburary"],
+            [2020, "February"],
             [2021, "January"],
-            [2021, "Feburary"],
+            [2021, "February"],
         ],
         "rows": [[]],
     }
@@ -636,7 +636,7 @@ def test_pivot_sorting_with_empty_cell(get_product_pivot):
     )
     assert data == {
         "body": [[None, [1]], [[2], [3]]],
-        "rows": [["January"], ["Feburary"]],
+        "rows": [["January"], ["February"]],
         "cols": [[2021], [2022]],
     }
 
@@ -645,7 +645,7 @@ def test_pivot_sorting_with_empty_cell(get_product_pivot):
     )
     assert data == {
         "body": [[None, [1]], [[2], [3]]],
-        "rows": [["January"], ["Feburary"]],
+        "rows": [["January"], ["February"]],
         "cols": [[2021], [2022]],
     }
 
@@ -674,7 +674,7 @@ def test_pivot_sorting_body(get_product_pivot):
     )
     assert data == {
         "body": [[[1], [3]], [[4], [3]]],
-        "rows": [["January"], ["Feburary"]],
+        "rows": [["January"], ["February"]],
         "cols": [[2021], [2022]],
     }
 
@@ -683,7 +683,7 @@ def test_pivot_sorting_body(get_product_pivot):
     )
     assert data == {
         "body": [[[3], [1]], [[3], [4]]],
-        "rows": [["Feburary"], ["January"]],
+        "rows": [["February"], ["January"]],
         "cols": [[2021], [2022]],
     }
 
@@ -695,11 +695,11 @@ def test_pivot_having(get_product_pivot):
         "&created_time__year,created_time__month,id__count",
         [("id__count__equals", "4")],
     )
-    assert data == {"body": [[[4]]], "rows": [["Feburary"]], "cols": [[2021]]}
+    assert data == {"body": [[[4]]], "rows": [["February"]], "cols": [[2021]]}
 
 
 jan = "January"
-feb = "Feburary"
+feb = "February"
 testdata = [
     # drcb, rows, cols, body
     # drcb = has_data, row_field, col_field, body_fields

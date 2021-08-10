@@ -1525,7 +1525,7 @@
                     "canPivot": true,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",
@@ -1742,7 +1742,7 @@
                     "canPivot": true,
                     "choices": [
                         "January",
-                        "Feburary",
+                        "February",
                         "March",
                         "April",
                         "May",

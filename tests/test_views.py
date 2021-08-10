@@ -193,7 +193,7 @@ def test_query_csv_pivoted(admin_client):
     rows = list(csv.reader(res.splitlines()))
     dump(rows)
     assert rows == [
-        ["Created time month", "January", "", "Feburary", ""],
+        ["Created time month", "January", "", "February", ""],
         ["Created time year", "ID count", "Size max", "ID count", "Size max"],
         ["2020.0", "1.0", "1.0", "2.0", "3.0"],
         ["2021.0", "3.0", "6.0", "", ""],
