@@ -11,6 +11,7 @@ from .types import (
     NumberChoiceArrayType,
     NumberChoiceType,
     NumberType,
+    StringableType,
     StringArrayType,
     StringChoiceArrayType,
     StringChoiceType,
@@ -32,6 +33,7 @@ except ImportError:  # pragma: django < 3.1
         from django.contrib.postgres.fields import JSONField
     except ModuleNotFoundError:  # pragma: postgres
         JSONField = None.__class__
+
 
 _STRING_FIELDS = (
     models.CharField,
@@ -55,6 +57,23 @@ _FIELD_TYPE_MAP = {
     **{f: StringType for f in _STRING_FIELDS},
     **{f: NumberType for f in _NUMBER_FIELDS},
 }
+
+
+# hashid support
+try:  # pragma: no cover
+    from hashid_field import (
+        BigHashidAutoField,
+        BigHashidField,
+        HashidAutoField,
+        HashidField,
+    )
+except ModuleNotFoundError:
+    pass
+else:  # pragma: no cover
+    _FIELD_TYPE_MAP[BigHashidAutoField] = StringableType
+    _FIELD_TYPE_MAP[BigHashidField] = StringableType
+    _FIELD_TYPE_MAP[HashidAutoField] = StringableType
+    _FIELD_TYPE_MAP[HashidField] = StringableType
 
 
 def _fmt_choices(choices):

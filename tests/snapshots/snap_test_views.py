@@ -2211,6 +2211,34 @@ snapshots["test_query_ctx config"] = {
             },
             "sortedFields": ["count", "is_null", "length"],
         },
+        "stringable": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "actions": [],
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "count",
+                    "toMany": False,
+                    "type": "number",
+                },
+                "is_null": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "is null",
+                    "toMany": False,
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
         "stringarray": {
             "defaultFilters": [],
             "fields": {
@@ -2658,6 +2686,16 @@ snapshots["test_query_ctx config"] = {
                 "not_regex",
                 "is_null",
             ],
+        },
+        "stringable": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {"prettyName": "equals", "type": "stringable"},
+                "is_null": {"prettyName": "is null", "type": "isnull"},
+                "not_equals": {"prettyName": "not equals", "type": "stringable"},
+            },
+            "sortedLookups": ["equals", "not_equals", "is_null"],
         },
         "stringarray": {
             "defaultLookup": "equals",
@@ -5019,6 +5057,34 @@ snapshots["test_query_ctx_m2m config"] = {
             },
             "sortedFields": ["count", "is_null", "length"],
         },
+        "stringable": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "actions": [],
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "count",
+                    "toMany": False,
+                    "type": "number",
+                },
+                "is_null": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "is null",
+                    "toMany": False,
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
         "stringarray": {
             "defaultFilters": [],
             "fields": {
@@ -5466,6 +5532,16 @@ snapshots["test_query_ctx_m2m config"] = {
                 "not_regex",
                 "is_null",
             ],
+        },
+        "stringable": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {"prettyName": "equals", "type": "stringable"},
+                "is_null": {"prettyName": "is null", "type": "isnull"},
+                "not_equals": {"prettyName": "not equals", "type": "stringable"},
+            },
+            "sortedLookups": ["equals", "not_equals", "is_null"],
         },
         "stringarray": {
             "defaultLookup": "equals",
@@ -7702,6 +7778,34 @@ snapshots["test_query_html config"] = {
             },
             "sortedFields": ["count", "is_null", "length"],
         },
+        "stringable": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "actions": [],
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "count",
+                    "toMany": False,
+                    "type": "number",
+                },
+                "is_null": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "is null",
+                    "toMany": False,
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
         "stringarray": {
             "defaultFilters": [],
             "fields": {
@@ -8149,6 +8253,16 @@ snapshots["test_query_html config"] = {
                 "not_regex",
                 "is_null",
             ],
+        },
+        "stringable": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {"prettyName": "equals", "type": "stringable"},
+                "is_null": {"prettyName": "is null", "type": "isnull"},
+                "not_equals": {"prettyName": "not equals", "type": "stringable"},
+            },
+            "sortedLookups": ["equals", "not_equals", "is_null"],
         },
         "stringarray": {
             "defaultLookup": "equals",
@@ -9170,6 +9284,34 @@ snapshots["test_query_html_no_perms config"] = {
             },
             "sortedFields": ["count", "is_null", "length"],
         },
+        "stringable": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "actions": [],
+                    "canPivot": False,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "count",
+                    "toMany": False,
+                    "type": "number",
+                },
+                "is_null": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "is null",
+                    "toMany": False,
+                    "type": "isnull",
+                },
+            },
+            "sortedFields": ["count", "is_null"],
+        },
         "stringarray": {
             "defaultFilters": [],
             "fields": {
@@ -9605,6 +9747,16 @@ snapshots["test_query_html_no_perms config"] = {
                 "not_regex",
                 "is_null",
             ],
+        },
+        "stringable": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {"prettyName": "equals", "type": "stringable"},
+                "is_null": {"prettyName": "is null", "type": "isnull"},
+                "not_equals": {"prettyName": "not equals", "type": "stringable"},
+            },
+            "sortedLookups": ["equals", "not_equals", "is_null"],
         },
         "stringarray": {
             "defaultLookup": "equals",

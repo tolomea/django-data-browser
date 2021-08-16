@@ -2353,6 +2353,37 @@
                 "length"
             ]
         },
+        "stringable": {
+            "defaultFilters": [],
+            "fields": {
+                "count": {
+                    "actions": [],
+                    "canPivot": false,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": null,
+                    "prettyName": "count",
+                    "toMany": false,
+                    "type": "number"
+                },
+                "is_null": {
+                    "actions": [],
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": null,
+                    "prettyName": "is null",
+                    "toMany": false,
+                    "type": "isnull"
+                }
+            },
+            "sortedFields": [
+                "count",
+                "is_null"
+            ]
+        },
         "stringarray": {
             "defaultFilters": [],
             "fields": {
@@ -3061,6 +3092,29 @@
                 "not_starts_with",
                 "not_ends_with",
                 "not_regex",
+                "is_null"
+            ]
+        },
+        "stringable": {
+            "defaultLookup": "equals",
+            "defaultValue": "",
+            "lookups": {
+                "equals": {
+                    "prettyName": "equals",
+                    "type": "stringable"
+                },
+                "is_null": {
+                    "prettyName": "is null",
+                    "type": "isnull"
+                },
+                "not_equals": {
+                    "prettyName": "not equals",
+                    "type": "stringable"
+                }
+            },
+            "sortedLookups": [
+                "equals",
+                "not_equals",
                 "is_null"
             ]
         },

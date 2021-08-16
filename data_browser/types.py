@@ -122,6 +122,23 @@ class StringType(BaseType):
         }
 
 
+class StringableType(BaseType):
+    default_value = ""
+
+    @classmethod
+    def _lookups(cls):
+        return {
+            "equals": cls,
+            "not_equals": cls,
+            "is_null": IsNullType,
+        }
+
+    @staticmethod
+    def _get_formatter(choices):  # pragma: no cover
+        assert not choices
+        return lambda value: None if value is None else str(value)
+
+
 class NumberType(BaseType):
     default_value = 0
 
