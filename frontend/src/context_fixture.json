@@ -735,6 +735,17 @@
                 }
             ],
             "fields": {
+                "_underscore": {
+                    "actions": [],
+                    "canPivot": true,
+                    "choices": [],
+                    "concrete": true,
+                    "defaultSort": null,
+                    "model": "number",
+                    "prettyName": " underscore",
+                    "toMany": false,
+                    "type": "number"
+                },
                 "admin": {
                     "actions": [
                         {
@@ -1093,6 +1104,7 @@
             "sortedFields": [
                 "id",
                 "admin",
+                "_underscore",
                 "annotated",
                 "boat",
                 "calculated_boolean",

@@ -387,6 +387,13 @@ def test_get_aggregate(get_product_flat):
     assert data == [["g", 3]]
 
 
+def test_get_aggregate_underscore(products, get_product_flat):
+    products[0]._underscore = 1
+    products[0].save()
+    data = get_product_flat(1, "size_unit,_underscore__count", [])
+    assert data == [["g", 1]]
+
+
 @pytest.mark.usefixtures("products")
 def test_get_time_aggregate(get_product_flat):
     data = get_product_flat(1, "size_unit,created_time__count", [])

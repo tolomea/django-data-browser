@@ -101,6 +101,7 @@ class ProductMixin:
         "string_choice",
         "tags",
         "url",
+        "_underscore",
     ]
     readonly_fields = ["id", "is_onsale", "hidden_calculated"]
     ddb_default_filters = [

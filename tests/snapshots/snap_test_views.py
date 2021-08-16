@@ -698,6 +698,17 @@ snapshots["test_query_ctx config"] = {
                 {"lookup": "a_lookup", "pathStr": "a_field", "value": "true"},
             ],
             "fields": {
+                "_underscore": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": "number",
+                    "prettyName": " underscore",
+                    "toMany": False,
+                    "type": "number",
+                },
                 "admin": {
                     "actions": [
                         {"name": "an_action", "prettyName": "An action"},
@@ -1022,6 +1033,7 @@ snapshots["test_query_ctx config"] = {
             "sortedFields": [
                 "id",
                 "admin",
+                "_underscore",
                 "annotated",
                 "boat",
                 "calculated_boolean",
@@ -3498,6 +3510,17 @@ snapshots["test_query_ctx_m2m config"] = {
                 {"lookup": "a_lookup", "pathStr": "a_field", "value": "true"},
             ],
             "fields": {
+                "_underscore": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": "number",
+                    "prettyName": " underscore",
+                    "toMany": False,
+                    "type": "number",
+                },
                 "admin": {
                     "actions": [
                         {"name": "an_action", "prettyName": "An action"},
@@ -3844,6 +3867,7 @@ snapshots["test_query_ctx_m2m config"] = {
             "sortedFields": [
                 "id",
                 "admin",
+                "_underscore",
                 "annotated",
                 "boat",
                 "calculated_boolean",
@@ -6265,6 +6289,17 @@ snapshots["test_query_html config"] = {
                 {"lookup": "a_lookup", "pathStr": "a_field", "value": "true"},
             ],
             "fields": {
+                "_underscore": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": True,
+                    "defaultSort": None,
+                    "model": "number",
+                    "prettyName": " underscore",
+                    "toMany": False,
+                    "type": "number",
+                },
                 "admin": {
                     "actions": [
                         {"name": "an_action", "prettyName": "An action"},
@@ -6589,6 +6624,7 @@ snapshots["test_query_html config"] = {
             "sortedFields": [
                 "id",
                 "admin",
+                "_underscore",
                 "annotated",
                 "boat",
                 "calculated_boolean",

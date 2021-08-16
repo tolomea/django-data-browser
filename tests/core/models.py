@@ -130,6 +130,7 @@ class Product(models.Model):
     date = models.DateField(null=True)
     uuid = models.UUIDField(null=True)
     url = models.URLField(null=True)
+    _underscore = models.IntegerField(null=True)
 
     not_in_admin = models.TextField()
     fk_not_in_admin = models.ForeignKey(InAdmin, null=True, on_delete=models.CASCADE)

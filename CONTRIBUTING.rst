@@ -21,7 +21,7 @@ Roadmap (in no particular order)
 Two audiences
 *************************
 
-There are two Data Browser user bases with differing need which must both be accommodated.
+There are two Data Browser user bases with differing needs which must both be accommodated.
 
 The developers who install the Data Browser into Django sites are crucial to adoption.
 For this group it must be easy to install and configure, flexible and secure.
@@ -29,7 +29,7 @@ It is for this group that I'm willing to entertain stuff like rebranding, ideall
 It is also for this group that the URL's and JSON files use machine readable names.
 
 But the actual end user base is non technical business people.
-These are people who should not need to know that ``Q(bob__fred=None)`` and ``Q(bob__fred__isnull=True)`` don't always return the same result when ``bob`` is a JSON field. For this group I would "fix" something like this even though it known and documented Django behavior.
+These are people who should not need to know that ``Q(bob__fred=None)`` and ``Q(bob__fred__isnull=True)`` don't always return the same result when ``bob`` is a JSON field. For this group I would "fix" something like this even though it's known and documented Django behavior.
 It's also for this group that the frontend and CSV files both use human friendly names.
 
 

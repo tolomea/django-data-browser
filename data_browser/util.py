@@ -1,4 +1,4 @@
 def annotation_path(path):
     res = "_".join(["ddb"] + path)
-    assert "__" not in res
+    res = res.replace("__", "_0")
     return res
