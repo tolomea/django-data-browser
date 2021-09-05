@@ -316,7 +316,7 @@ function QueryPage(props) {
     results = (
       <Results {...{ query, rows, cols, body, overlay, formatHints }} />
     );
-  else results = <h2>No fields selected</h2>;
+  else results = <h1>No fields selected</h1>;
 
   return (
     <div className="QueryPage">
