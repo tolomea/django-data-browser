@@ -241,7 +241,7 @@ function Field(props) {
         <tr>
           <td></td>
           <td colSpan="2">
-            <AllFields {...{ query, path }} model={modelField.model} />
+            <FieldGroup {...{ query, path }} model={modelField.model} />
           </td>
         </tr>
       )}
@@ -249,11 +249,11 @@ function Field(props) {
   );
 }
 
-function AllFields(props) {
+function FieldGroup(props) {
   const { query, model, path } = props;
   const modelFields = query.getModelFields(model);
   return (
-    <table className="AllFields">
+    <table className="FieldGroup">
       <tbody>
         {modelFields.sortedFields.map((fieldName) => {
           const modelField = modelFields.fields[fieldName];
@@ -349,7 +349,7 @@ function QueryPage(props) {
       <div className="MainSpace">
         <div className="FieldsList">
           <div className="Scroller">
-            <AllFields {...{ query, model }} path={[]} />
+            <FieldGroup {...{ query, model }} path={[]} />
           </div>
         </div>
         {results}
