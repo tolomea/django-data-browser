@@ -9,6 +9,7 @@ import {
   Delete,
   CopyText,
   HasActionIcon,
+  useToggle,
 } from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery, getRelUrlForQuery } from "./Query";
@@ -191,7 +192,8 @@ function Filters(props) {
 function Field(props) {
   const { query, path, modelField } = props;
   const type = query.getType(modelField);
-  const [toggled, setToggled] = useState(false);
+  const [toggled, toggleLink] = useToggle();
+
   return (
     <>
       <tr className="Field">
@@ -205,16 +207,7 @@ function Field(props) {
         </td>
 
         {/* expand */}
-        <td>
-          {modelField.model && (
-            <SLink
-              className="ToggleLink"
-              onClick={() => setToggled((toggled) => !toggled)}
-            >
-              {toggled ? "remove" : "add"}
-            </SLink>
-          )}
-        </td>
+        <td>{modelField.model && toggleLink}</td>
 
         {/* name */}
         <td className={`FieldName ${query.getFieldClass(modelField)}`}>

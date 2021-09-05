@@ -329,6 +329,21 @@ function HasActionIcon(props) {
     }
 }
 
+function useToggle() {
+    const [toggled, setToggled] = useState(false);
+
+    const toggleLink = (
+        <SLink
+            className="ToggleLink"
+            onClick={() => setToggled((toggled) => !toggled)}
+        >
+            {toggled ? "remove" : "add"}
+        </SLink>
+    );
+
+    return [toggled, toggleLink];
+}
+
 export {
     TLink,
     SLink,
@@ -346,4 +361,5 @@ export {
     shallowEqual,
     syncPost,
     HasActionIcon,
+    useToggle,
 };
