@@ -33,11 +33,14 @@ class TypeMeta(type):
     def lookups(cls):
         res = {}
         for name, type_ in cls._lookups().items():
-            if isinstance(type_, tuple):
-                pretty_name, type_ = type_
+            assert isinstance(type_, tuple), type_
+            if len(type_) == 3:
+                type_, keep_choices, pretty_name = type_
+                assert keep_choices is not None, (cls, name)
             else:
+                type_, keep_choices = type_
                 pretty_name = name.replace("_", " ")
-            res[name] = pretty_name, type_.name
+            res[name] = pretty_name, type_.name, keep_choices
         return res
 
     @property
@@ -58,7 +61,11 @@ class BaseType(metaclass=TypeMeta):
 
     @classmethod
     def _lookups(cls):
-        return {"equals": cls, "not_equals": cls, "is_null": IsNullType}
+        return {
+            "equals": (cls, True),
+            "not_equals": (cls, True),
+            "is_null": (IsNullType, False),
+        }
 
     @staticmethod
     def _get_formatter(choices):
@@ -89,13 +96,17 @@ class BaseType(metaclass=TypeMeta):
         if lookup not in lookups:
             return None, "Bad lookup"
         else:
-            pretty_name, type_name = lookups[lookup]
+            pretty_name, type_name, keep_choices = lookups[lookup]
+            if not keep_choices:
+                choices = ()
             type_ = TYPES[type_name]
             return type_.parse(value, choices)
 
     @classmethod
     def format_lookup(cls, lookup, value, choices):
-        pretty_name, type_name = cls.lookups[lookup]
+        pretty_name, type_name, keep_choices = cls.lookups[lookup]
+        if not keep_choices:
+            choices = ()
         return TYPES[type_name]._get_formatter(choices)(value)
 
     @staticmethod
@@ -109,30 +120,22 @@ class StringType(BaseType):
     @classmethod
     def _lookups(cls):
         return {
-            "equals": cls,
-            "contains": cls,
-            "starts_with": cls,
-            "ends_with": cls,
-            "regex": RegexType,
-            "not_equals": cls,
-            "not_contains": cls,
-            "not_starts_with": cls,
-            "not_ends_with": cls,
-            "not_regex": RegexType,
-            "is_null": IsNullType,
+            "equals": (cls, True),
+            "contains": (cls, True),
+            "starts_with": (cls, True),
+            "ends_with": (cls, True),
+            "regex": (RegexType, False),
+            "not_equals": (cls, True),
+            "not_contains": (cls, True),
+            "not_starts_with": (cls, True),
+            "not_ends_with": (cls, True),
+            "not_regex": (RegexType, False),
+            "is_null": (IsNullType, False),
         }
 
 
 class StringableType(BaseType):
     default_value = ""
-
-    @classmethod
-    def _lookups(cls):
-        return {
-            "equals": cls,
-            "not_equals": cls,
-            "is_null": IsNullType,
-        }
 
     @staticmethod
     def _get_formatter(choices):  # pragma: no cover
@@ -144,13 +147,13 @@ class SequenceTypeMixin:
     @classmethod
     def _lookups(cls):
         return {
-            "equals": cls,
-            "not_equals": cls,
-            "gt": (">", cls),
-            "gte": (">=", cls),
-            "lt": ("<", cls),
-            "lte": ("<=", cls),
-            "is_null": IsNullType,
+            "equals": (cls, True),
+            "not_equals": (cls, True),
+            "gt": (cls, True, ">"),
+            "gte": (cls, True, ">="),
+            "lt": (cls, True, "<"),
+            "lte": (cls, True, "<="),
+            "is_null": (IsNullType, False),
         }
 
 
@@ -384,7 +387,7 @@ class DateType(DateTypeMixin, BaseType):
 class HTMLType(StringType):
     @staticmethod
     def _lookups():
-        return {"is_null": IsNullType}
+        return {"is_null": (IsNullType, False)}
 
     @staticmethod
     def _get_formatter(choices):
@@ -438,7 +441,7 @@ class UnknownType(BaseType):
 
     @staticmethod
     def _lookups():
-        return {"is_null": IsNullType}
+        return {"is_null": (IsNullType, False)}
 
 
 def _json_loads(value):
@@ -468,13 +471,13 @@ class JSONType(BaseType):
     @classmethod
     def _lookups(cls):
         return {
-            "equals": cls,
-            "has_key": StringType,
-            "field_equals": JSONFieldType,
-            "not_equals": cls,
-            "not_has_key": StringType,
-            "not_field_equals": JSONFieldType,
-            "is_null": IsNullType,
+            "equals": (cls, True),
+            "has_key": (StringType, None),
+            "field_equals": (JSONFieldType, None),
+            "not_equals": (cls, True),
+            "not_has_key": (StringType, None),
+            "not_field_equals": (JSONFieldType, None),
+            "is_null": (IsNullType, False),
         }
 
     @staticmethod
@@ -516,18 +519,16 @@ class IsNullType(ChoiceTypeMixin, BaseType):
 
     @staticmethod
     def _lookups():
-        return {"equals": IsNullType}
+        return {"equals": (IsNullType, False)}
 
     @classmethod
     def _get_formatter(cls, choices):
         assert not choices
-
         return super()._get_formatter(cls.choices)
 
     @classmethod
     def _parse(cls, value, choices):
         assert not choices
-
         return super()._parse(value, cls.choices)
 
 
@@ -548,13 +549,13 @@ class ArrayTypeMixin:
     @classmethod
     def _lookups(cls):
         return {
-            "equals": cls,
-            "contains": cls.element_type,
-            "length": NumberType,
-            "not_equals": cls,
-            "not_contains": cls.element_type,
-            "not_length": NumberType,
-            "is_null": IsNullType,
+            "equals": (cls, True),
+            "contains": (cls.element_type, True),
+            "length": (NumberType, False),
+            "not_equals": (cls, True),
+            "not_contains": (cls.element_type, True),
+            "not_length": (NumberType, False),
+            "is_null": (IsNullType, False),
         }
 
     @classmethod
