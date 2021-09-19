@@ -150,6 +150,15 @@ class ParseHelpers:
             assert err is None
             assert res == expected
 
+    def parse_lookup_helper(self, lookup, value, expected, error_re):
+        res, err = self.type_.parse_lookup(lookup, value, self.choices)
+        if expected is None:
+            assert res is None
+            assert re.fullmatch(error_re, err)
+        else:
+            assert err is None
+            assert res == expected
+
 
 class TestQuery:
     def test_from_request(self, query):
@@ -668,6 +677,16 @@ class TestStringChoiceArrayType(ParseHelpers):
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
 
+    @pytest.mark.parametrize(
+        "lookup,value,expected,err",
+        [
+            ("contains", "bob", "fred", None),
+            ("length", "1", 1, None),
+        ],
+    )
+    def test_parse_lookup(self, lookup, value, expected, err):
+        self.parse_lookup_helper(lookup, value, expected, err)
+
 
 class TestNumberArrayType(ParseHelpers):
     type_ = NumberArrayType
@@ -696,3 +715,13 @@ class TestNumberChoiceArrayType(ParseHelpers):
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
+
+    @pytest.mark.parametrize(
+        "lookup,value,expected,err",
+        [
+            ("contains", "bob", 123, None),
+            ("length", "1", 1, None),
+        ],
+    )
+    def test_parse_lookup(self, lookup, value, expected, err):
+        self.parse_lookup_helper(lookup, value, expected, err)
