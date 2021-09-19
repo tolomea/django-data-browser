@@ -329,8 +329,8 @@ function HasActionIcon(props) {
     }
 }
 
-function useToggle() {
-    const [toggled, setToggled] = useState(false);
+function useToggle(initial = false) {
+    const [toggled, setToggled] = useState(initial);
 
     const toggleLink = (
         <SLink

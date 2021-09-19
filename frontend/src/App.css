@@ -146,6 +146,14 @@ textarea::placeholder {
   overflow-y: hidden;
 }
 
+.MainSpaceWrapper {
+  position: relative;
+}
+.MainSpaceWrapper .FieldsToggle {
+  position: absolute;
+  top: -15px;
+  left: 13px;
+}
 .MainSpace {
   display: flex;
   flex-flow: row;

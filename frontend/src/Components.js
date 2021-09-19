@@ -311,6 +311,8 @@ function QueryPage(props) {
     );
   else results = <h1>No fields selected</h1>;
 
+  const [fieldsToggled, fieldsToggleLink] = useToggle(true);
+
   return (
     <div className="QueryPage">
       <ModelSelector {...{ query, sortedModels, model }} />
@@ -339,14 +341,19 @@ function QueryPage(props) {
           redirectUrl={(view) => `/views/${view.pk}.html`}
         />
       </p>
-      <div className="MainSpace">
-        <div className="FieldsList">
-          <div className="Scroller">
-            <FieldGroup {...{ query, model }} path={[]} />
-          </div>
+      <div className="MainSpaceWrapper">
+        <div className="FieldsToggle">{fieldsToggleLink}</div>
+        <div className="MainSpace">
+          {fieldsToggled && (
+            <div className="FieldsList">
+              <div className="Scroller">
+                <FieldGroup {...{ query, model }} path={[]} />
+              </div>
+            </div>
+          )}
+          {results}
+          <div />
         </div>
-        {results}
-        <div />
       </div>
     </div>
   );
