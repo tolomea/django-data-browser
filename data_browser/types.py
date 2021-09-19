@@ -71,6 +71,7 @@ class BaseType(metaclass=TypeMeta):
 
     @staticmethod
     def _parse(value, choices):
+        assert not choices
         return value
 
     @classmethod
@@ -161,6 +162,7 @@ class NumberType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
+        assert not choices
         return float(value)
 
     @staticmethod
@@ -184,6 +186,7 @@ class RegexType(BaseType):
     @staticmethod
     @lru_cache(maxsize=None)
     def _parse(value, choices):
+        assert not choices
         from django.contrib.contenttypes.models import ContentType
         from django.db.transaction import atomic
 
@@ -216,6 +219,8 @@ class DurationType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
+        assert not choices
+
         if value.count(":") == 1:
             value += ":0"
 
@@ -269,6 +274,8 @@ class DateTypeMixin:
 
     @classmethod
     def _parse(cls, value, choices):
+        assert not choices
+
         value = value.strip()
 
         d8 = r"(\d{8})"
@@ -353,6 +360,8 @@ class DateTimeType(DateTypeMixin, BaseType):
 
     @classmethod
     def _parse(cls, value, choices):
+        assert not choices
+
         if value.lower().strip() == "now":
             return timezone.now()
         else:
@@ -380,6 +389,8 @@ class DateType(DateTypeMixin, BaseType):
 
     @classmethod
     def _parse(cls, value, choices):
+        assert not choices
+
         if value.lower().strip() == "today":
             res = timezone.now()
         else:
@@ -412,6 +423,8 @@ class BooleanType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
+        assert not choices
+
         value = value.lower()
         if value == "true":
             return True
@@ -434,6 +447,8 @@ class UUIDType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
+        assert not choices
+
         return uuid.UUID(value)
 
 
@@ -460,6 +475,8 @@ class JSONFieldType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
+        assert not choices
+
         value = value.strip()
         if "|" not in value:
             raise ValueError("Missing seperator '|'")
@@ -484,6 +501,8 @@ class JSONType(BaseType):
 
     @staticmethod
     def _parse(value, choices):
+        assert not choices
+
         return _json_loads(value)
 
 
@@ -523,10 +542,14 @@ class IsNullType(ChoiceTypeMixin, BaseType):
 
     @classmethod
     def _get_formatter(cls, choices):
+        assert not choices
+
         return super()._get_formatter(cls.choices)
 
     @classmethod
     def _parse(cls, value, choices):
+        assert not choices
+
         return super()._parse(value, cls.choices)
 
 

@@ -138,14 +138,17 @@ def bound_query(query, orm_models):
     return BoundQuery.bind(query, orm_models)
 
 
-def parse_helper(type_, choices, value, expected, error_re):
-    res, err = type_.parse(value, choices)
-    if expected is None:
-        assert res is None
-        assert re.fullmatch(error_re, err)
-    else:
-        assert err is None
-        assert res == expected
+class ParseHelpers:
+    choices = ()
+
+    def parse_helper(self, value, expected, error_re):
+        res, err = self.type_.parse(value, self.choices)
+        if expected is None:
+            assert res is None
+            assert re.fullmatch(error_re, err)
+        else:
+            assert err is None
+            assert res == expected
 
 
 class TestQuery:
@@ -325,7 +328,9 @@ class TestType:
         assert repr(StringType) == "StringType"
 
 
-class TestRegexType:
+class TestRegexType(ParseHelpers):
+    type_ = RegexType
+
     @pytest.mark.django_db
     @pytest.mark.parametrize(
         "value,expected,err",
@@ -335,7 +340,7 @@ class TestRegexType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(RegexType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
 class TestStringType:
@@ -347,7 +352,9 @@ class TestStringType:
         assert StringType.get_formatter(None)(None) is None
 
 
-class TestNumberType:
+class TestNumberType(ParseHelpers):
+    type_ = NumberType
+
     @pytest.mark.parametrize(
         "value,expected,err",
         [
@@ -356,21 +363,23 @@ class TestNumberType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(NumberType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
     def test_default_lookup(self):
-        assert NumberType.default_lookup == "equals"
+        assert self.type_.default_lookup == "equals"
 
     def test_format(self):
-        assert NumberType.get_formatter(None)(6) == 6
-        assert NumberType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(6) == 6
+        assert self.type_.get_formatter(None)(None) is None
 
 
 def dt(Y, M, D, h=0, m=0, s=0):
     return datetime(Y, M, D, h, m, s, tzinfo=timezone.utc)
 
 
-class TestDateTimeType:
+class TestDateTimeType(ParseHelpers):
+    type_ = DateTimeType
+
     @time_machine.travel("2020-12-13 09:42:53", tick=False)
     @pytest.mark.parametrize(
         "value,expected,err",
@@ -432,7 +441,7 @@ class TestDateTimeType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(DateTimeType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
     def test_default_lookup(self):
         assert DateTimeType.default_lookup == "equals"
@@ -441,24 +450,26 @@ class TestDateTimeType:
     def test_aware_format(self, settings):
         settings.USE_TZ = True
         assert (
-            DateTimeType.get_formatter(None)(
+            self.type_.get_formatter(None)(
                 datetime(2020, 5, 19, 8, 42, 16, tzinfo=timezone.utc)
             )
             == "2020-05-19 08:42:16"
         )
-        assert DateTimeType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(None) is None
 
     @pytest.mark.django_db
     def test_naive_format(self, settings):
         settings.USE_TZ = False
         assert (
-            DateTimeType.get_formatter(None)(datetime(2020, 5, 19, 8, 42, 16))
+            self.type_.get_formatter(None)(datetime(2020, 5, 19, 8, 42, 16))
             == "2020-05-19 08:42:16"
         )
-        assert DateTimeType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(None) is None
 
 
-class TestDurationType:
+class TestDurationType(ParseHelpers):
+    type_ = DurationType
+
     @pytest.mark.parametrize(
         "value,expected,err",
         [
@@ -468,21 +479,23 @@ class TestDurationType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(DurationType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
     def test_default_lookup(self):
-        assert DurationType.default_lookup == "equals"
+        assert self.type_.default_lookup == "equals"
 
     def test_format(self):
         assert (
-            DurationType.get_formatter(None)(timedelta(days=5, minutes=6))
+            self.type_.get_formatter(None)(timedelta(days=5, minutes=6))
             == "5 days, 0:06:00"
         )
-        assert DurationType.get_formatter(None)(timedelta(minutes=6)) == "0:06:00"
-        assert DurationType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(timedelta(minutes=6)) == "0:06:00"
+        assert self.type_.get_formatter(None)(None) is None
 
 
-class TestDateType:
+class TestDateType(ParseHelpers):
+    type_ = DateType
+
     @time_machine.travel("2020-12-13 09:42:53", tick=False)
     @pytest.mark.parametrize(
         "value,expected,err",
@@ -498,17 +511,19 @@ class TestDateType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(DateType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
     def test_default_lookup(self):
-        assert DateType.default_lookup == "equals"
+        assert self.type_.default_lookup == "equals"
 
     def test_format(self):
-        assert DateType.get_formatter(None)(date(2020, 5, 19)) == "2020-05-19"
-        assert DateType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(date(2020, 5, 19)) == "2020-05-19"
+        assert self.type_.get_formatter(None)(None) is None
 
 
-class TestBooleanType:
+class TestBooleanType(ParseHelpers):
+    type_ = BooleanType
+
     @pytest.mark.parametrize(
         "value,expected,err",
         [
@@ -518,24 +533,25 @@ class TestBooleanType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(BooleanType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
     def test_format(self):
-        assert BooleanType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(None) is None
 
     def test_default_lookup(self):
-        assert BooleanType.default_lookup == "equals"
+        assert self.type_.default_lookup == "equals"
 
 
-class TestStringChoiceType:
+class TestStringChoiceType(ParseHelpers):
+    type_ = StringChoiceType
     choices = [("a", "A"), ("b", "B"), ("c", "C")]
 
     def test_format(self):
-        assert StringChoiceType.get_formatter(self.choices)("b") == "B"
-        assert StringChoiceType.get_formatter(self.choices)(None) is None
+        assert self.type_.get_formatter(self.choices)("b") == "B"
+        assert self.type_.get_formatter(self.choices)(None) is None
 
     def test_bad_value(self):
-        assert StringChoiceType.get_formatter(self.choices)("x") == "x"
+        assert self.type_.get_formatter(self.choices)("x") == "x"
 
     @pytest.mark.parametrize(
         "value,expected,err",
@@ -545,18 +561,19 @@ class TestStringChoiceType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(NumberChoiceType, self.choices, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
-class TestNumberChoiceType:
+class TestNumberChoiceType(ParseHelpers):
+    type_ = NumberChoiceType
     choices = [(1, "A"), (2, "B"), (3, "C")]
 
     def test_format(self):
-        assert NumberChoiceType.get_formatter(self.choices)(2) == "B"
-        assert NumberChoiceType.get_formatter(self.choices)(None) is None
+        assert self.type_.get_formatter(self.choices)(2) == "B"
+        assert self.type_.get_formatter(self.choices)(None) is None
 
     def test_bad_value(self):
-        assert NumberChoiceType.get_formatter(self.choices)(6) == 6
+        assert self.type_.get_formatter(self.choices)(6) == 6
 
     @pytest.mark.parametrize(
         "value,expected,err",
@@ -566,19 +583,23 @@ class TestNumberChoiceType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(NumberChoiceType, self.choices, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
-class TestHTMLType:
+class TestHTMLType(ParseHelpers):
+    type_ = HTMLType
+
     def test_format(self):
-        assert HTMLType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(None) is None
 
 
-class TestIsNullType:
+class TestIsNullType(ParseHelpers):
+    type_ = IsNullType
+
     def test_format(self):
-        assert IsNullType.get_formatter(IsNullType.choices)(True) == "IsNull"
-        assert IsNullType.get_formatter(IsNullType.choices)(False) == "NotNull"
-        assert IsNullType.get_formatter(IsNullType.choices)(None) == "IsNull"
+        assert self.type_.get_formatter(None)(True) == "IsNull"
+        assert self.type_.get_formatter(None)(False) == "NotNull"
+        assert self.type_.get_formatter(None)(None) == "IsNull"
 
     @pytest.mark.parametrize(
         "value,expected,err",
@@ -588,16 +609,17 @@ class TestIsNullType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(IsNullType, IsNullType.choices, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
-class TestUUIDType:
+class TestUUIDType(ParseHelpers):
+    type_ = UUIDType
     s = "210081a4-7315-4173-aa73-4bab47b2f9a5"
     u = UUID(s)
 
     def test_format(self):
-        assert UUIDType.get_formatter(None)(self.u) == self.s
-        assert UUIDType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(self.u) == self.s
+        assert self.type_.get_formatter(None)(None) is None
 
     @pytest.mark.parametrize(
         "value,expected,err",
@@ -608,15 +630,19 @@ class TestUUIDType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(UUIDType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
-class TestUnknownType:
+class TestUnknownType(ParseHelpers):
+    type_ = UnknownType
+
     def test_format(self):
-        assert UnknownType.get_formatter(None)(None) is None
+        assert self.type_.get_formatter(None)(None) is None
 
 
-class TestStringArrayType:
+class TestStringArrayType(ParseHelpers):
+    type_ = StringArrayType
+
     @pytest.mark.parametrize(
         "value,expected,err",
         [
@@ -625,10 +651,11 @@ class TestStringArrayType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(StringArrayType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
-class TestStringChoiceArrayType:
+class TestStringChoiceArrayType(ParseHelpers):
+    type_ = StringChoiceArrayType
     choices = [("fred", "bob")]
 
     @pytest.mark.parametrize(
@@ -639,10 +666,12 @@ class TestStringChoiceArrayType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(StringChoiceArrayType, self.choices, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
-class TestNumberArrayType:
+class TestNumberArrayType(ParseHelpers):
+    type_ = NumberArrayType
+
     @pytest.mark.parametrize(
         "value,expected,err",
         [
@@ -651,10 +680,11 @@ class TestNumberArrayType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(NumberArrayType, None, value, expected, err)
+        self.parse_helper(value, expected, err)
 
 
-class TestNumberChoiceArrayType:
+class TestNumberChoiceArrayType(ParseHelpers):
+    type_ = NumberChoiceArrayType
     choices = [(123, "bob")]
 
     @pytest.mark.parametrize(
@@ -665,4 +695,4 @@ class TestNumberChoiceArrayType:
         ],
     )
     def test_parse(self, value, expected, err):
-        parse_helper(NumberChoiceArrayType, self.choices, value, expected, err)
+        self.parse_helper(value, expected, err)
