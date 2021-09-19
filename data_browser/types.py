@@ -140,9 +140,7 @@ class StringableType(BaseType):
         return lambda value: None if value is None else str(value)
 
 
-class NumberType(BaseType):
-    default_value = 0
-
+class SequenceTypeMixin:
     @classmethod
     def _lookups(cls):
         return {
@@ -154,6 +152,10 @@ class NumberType(BaseType):
             "lte": ("<=", cls),
             "is_null": IsNullType,
         }
+
+
+class NumberType(SequenceTypeMixin, BaseType):
+    default_value = 0
 
     @staticmethod
     def _get_formatter(choices):
@@ -202,20 +204,8 @@ class RegexType(BaseType):
         return value
 
 
-class DurationType(BaseType):
+class DurationType(SequenceTypeMixin, BaseType):
     default_value = ""
-
-    @classmethod
-    def _lookups(cls):
-        return {
-            "equals": cls,
-            "not_equals": cls,
-            "gt": (">", cls),
-            "gte": (">=", cls),
-            "lt": ("<", cls),
-            "lte": ("<=", cls),
-            "is_null": IsNullType,
-        }
 
     @staticmethod
     def _parse(value, choices):
@@ -235,7 +225,7 @@ class DurationType(BaseType):
         return lambda value: None if value is None else str(value)
 
 
-class DateTypeMixin:
+class DateTypeMixin(SequenceTypeMixin):
     _clause = re.compile(r"(\w{3,})([-+=])(\d+) *")
 
     _clause_types = {
@@ -259,18 +249,6 @@ class DateTypeMixin:
     for c1 in _clause_types:
         for c2 in _clause_types:
             assert c1 == c2 or not c1.startswith(c2), c2
-
-    @classmethod
-    def _lookups(cls):
-        return {
-            "equals": cls,
-            "not_equals": cls,
-            "gt": (">", cls),
-            "gte": (">=", cls),
-            "lt": ("<", cls),
-            "lte": ("<=", cls),
-            "is_null": IsNullType,
-        }
 
     @classmethod
     def _parse(cls, value, choices):
