@@ -33,14 +33,14 @@ def with_json(db):
 
 
 @pytest.fixture
-def get_results_flat(with_json, req):
+def get_results_flat(with_json, admin_ddb_request):
     def helper(fields, query=None):
         query = query or []
 
-        orm_models = get_models(req)
+        orm_models = get_models(admin_ddb_request)
         query = Query.from_request("json.JsonModel", fields, query)
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(req, bound_query, orm_models, False)
+        data = get_results(admin_ddb_request, bound_query, orm_models, False)
 
         for f in bound_query.filters:
             if f.err_message:

@@ -68,7 +68,12 @@ settings.configure(
 
 
 @pytest.fixture
-def req(rf, admin_user):
-    req = rf.get("/")
-    req.user = admin_user
-    return req
+def ddb_request(rf):
+    request = rf.get("/")
+    return request
+
+
+@pytest.fixture
+def admin_ddb_request(ddb_request, admin_user):
+    ddb_request.user = admin_user
+    return ddb_request

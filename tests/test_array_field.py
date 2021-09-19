@@ -32,14 +32,14 @@ def with_arrays(db):  # pragma: postgres
 
 
 @pytest.fixture
-def get_results_flat(with_arrays, req):  # pragma: postgres
+def get_results_flat(with_arrays, admin_ddb_request):  # pragma: postgres
     def helper(fields, query=None):
         query = query or []
 
-        orm_models = get_models(req)
+        orm_models = get_models(admin_ddb_request)
         query = Query.from_request("array.ArrayModel", fields, query)
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(req, bound_query, orm_models, False)
+        data = get_results(admin_ddb_request, bound_query, orm_models, False)
 
         for f in bound_query.filters:
             if f.err_message:
@@ -167,8 +167,8 @@ def test_char_choice_array_equals(get_results_flat):  # pragma: postgres
         ("int_array_field__contains=1", "int_array_field__contains=1"),
     ],
 )
-def test_0009(req, with_arrays, before, after):  # pragma: postgres
-    orm_models = get_models(req)
+def test_0009(admin_ddb_request, with_arrays, before, after):  # pragma: postgres
+    orm_models = get_models(admin_ddb_request)
     valid = int("wtf" not in before)
 
     view = View.objects.create(model_name="array.ArrayModel", query=before)

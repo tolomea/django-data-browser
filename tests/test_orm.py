@@ -94,17 +94,17 @@ def pivot_products(db):
 
 
 @pytest.fixture
-def orm_models(req):
-    return get_models(req)
+def orm_models(admin_ddb_request):
+    return get_models(admin_ddb_request)
 
 
 @pytest.fixture
-def get_product_pivot(req, orm_models, django_assert_num_queries):
+def get_product_pivot(admin_ddb_request, orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
         query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
-            data = get_results(req, bound_query, orm_models, False)
+            data = get_results(admin_ddb_request, bound_query, orm_models, False)
             return {
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),
@@ -171,7 +171,7 @@ def test_get_url_link(get_product_flat):
     sortedAssert(data, [["a", None], ["b", "www.google.com"]])
 
 
-def test_bad_storage(monkeypatch, req):
+def test_bad_storage(monkeypatch, admin_ddb_request):
     # break storage
     from django.core.files.storage import FileSystemStorage, default_storage
     from django.utils.functional import empty
@@ -183,12 +183,12 @@ def test_bad_storage(monkeypatch, req):
     default_storage._wrapped = empty
 
     # copy what the fixture does
-    orm_models = get_models(req)
+    orm_models = get_models(admin_ddb_request)
 
     def get_product_flat(*args, **kwargs):
         query = Query.from_request("core.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(req, bound_query, orm_models, False)
+        data = get_results(admin_ddb_request, bound_query, orm_models, False)
         return flatten_table(bound_query.fields, data["rows"])
 
     # some storage backends will hard fail if their underlying storage isn't
@@ -767,18 +767,18 @@ def test_get_fields(orm_models):
 
 
 class TestPermissions:
-    def get_fields_with_perms(self, rf, perms):
+    def get_fields_with_perms(self, ddb_request, perms):
         user = User.objects.create()
         for perm in perms:
             user.user_permissions.add(Permission.objects.get(codename=f"change_{perm}"))
 
-        request = rf.get("/")
-        request.user = user
-        return get_models(request)
+        ddb_request.user = user
+        return get_models(ddb_request)
 
-    def test_all_perms(self, rf, admin_user):
+    @pytest.mark.django_db
+    def test_all_perms(self, ddb_request):
         orm_models = self.get_fields_with_perms(
-            rf, ["normal", "notinadmin", "inadmin", "inlineadmin"]
+            ddb_request, ["normal", "notinadmin", "inadmin", "inlineadmin"]
         )
 
         assert "core.NotInAdmin" not in orm_models
@@ -797,8 +797,8 @@ class TestPermissions:
         )
 
     @pytest.mark.django_db
-    def test_no_perms(self, rf):
-        orm_models = self.get_fields_with_perms(rf, ["normal"])
+    def test_no_perms(self, ddb_request):
+        orm_models = self.get_fields_with_perms(ddb_request, ["normal"])
 
         assert "core.NotInAdmin" not in orm_models
         assert "core.InAdmin" not in orm_models
@@ -812,8 +812,8 @@ class TestPermissions:
         )
 
     @pytest.mark.django_db
-    def test_inline_perms(self, rf):
-        orm_models = self.get_fields_with_perms(rf, ["normal", "inlineadmin"])
+    def test_inline_perms(self, ddb_request):
+        orm_models = self.get_fields_with_perms(ddb_request, ["normal", "inlineadmin"])
 
         assert "core.NotInAdmin" not in orm_models
         assert "core.InAdmin" not in orm_models
@@ -827,8 +827,8 @@ class TestPermissions:
         )
 
     @pytest.mark.django_db
-    def test_admin_perms(self, rf):
-        orm_models = self.get_fields_with_perms(rf, ["normal", "inadmin"])
+    def test_admin_perms(self, ddb_request):
+        orm_models = self.get_fields_with_perms(ddb_request, ["normal", "inadmin"])
 
         assert "core.NotInAdmin" not in orm_models
         assert orm_models["core.InAdmin"] == OrmModel(
