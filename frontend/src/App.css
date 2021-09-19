@@ -205,6 +205,12 @@ textarea::placeholder {
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
+  min-height: 19px;
+}
+.Filters .FiltersToggle {
+  position: absolute;
+  right: -18px;
 }
 .Filters p {
   margin: 5px;
