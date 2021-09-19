@@ -137,8 +137,9 @@ def _get_config(request):
     }
 
 
-def _add_request_info(request):
+def _add_request_info(request, *, view=False):
     request.data_browser = {
+        "public_view": view,
         "fields": set(),
         "calculated_fields": set(),
     }
@@ -259,7 +260,7 @@ def query(request, *, model_name, fields="", media):
 
 
 def view(request, pk, media):
-    _add_request_info(request)
+    _add_request_info(request, view=True)
 
     view = get_object_or_404(View.objects.filter(public=True), public_slug=pk)
     if (

@@ -331,6 +331,7 @@ Release History
 +=========+============+==========================================================================================================+
 |         |            | | Make the field list and filter list collapsible.                                                       |
 |         |            | | CSS tweaks.                                                                                            |
+|         |            | | Add public view info to ``request.data_browser``.                                                      |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.7   | 2021-08-16 | | Add support for django-hashid-field.                                                                   |
 |         |            | | Fix a crash bug when aggregating fields with names starting with ``_``.                                |

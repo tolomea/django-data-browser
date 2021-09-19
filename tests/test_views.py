@@ -282,7 +282,7 @@ def test_query_json_bad_model(admin_client):
 
 
 @pytest.mark.usefixtures("products")
-def test_view_csv(admin_client, settings):
+def test_view_csv(admin_client, settings, mock_admin_get_queryset):
     view = data_browser.models.View.objects.create(
         model_name="core.Product",
         fields="size-0,name+1,size_unit",
@@ -297,6 +297,7 @@ def test_view_csv(admin_client, settings):
     view.save()
     res = admin_client.get(f"/data_browser/view/{view.public_slug}.csv")
     assert res.status_code == 200
+    assert mock_admin_get_queryset.call_args[0][1].data_browser["public_view"]
     res = res.getvalue().decode("utf-8")
     dump(res)
     rows = list(csv.reader(res.splitlines()))
