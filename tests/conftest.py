@@ -80,3 +80,12 @@ def ddb_request(rf):
 def admin_ddb_request(ddb_request, admin_user):
     ddb_request.user = admin_user
     return ddb_request
+
+
+@pytest.fixture
+def mock_admin_get_queryset(mocker):
+    from data_browser.orm_admin import admin_get_queryset
+
+    return mocker.patch(
+        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
+    )

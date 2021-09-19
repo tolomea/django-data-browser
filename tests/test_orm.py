@@ -6,7 +6,7 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
 
-from data_browser.orm_admin import OrmModel, admin_get_queryset, get_models
+from data_browser.orm_admin import OrmModel, get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
@@ -218,23 +218,21 @@ def test_get_calculated_boolean_field_on_admin(get_product_flat):
     sortedAssert(data, [[True], [True], [True]])
 
 
-def test_get_annotated_field_at_base(products, get_product_flat, mocker):
-    mock = mocker.patch(
-        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
-    )
+def test_get_annotated_field_at_base(
+    products, get_product_flat, mock_admin_get_queryset
+):
     data = get_product_flat(1, "annotated+1,size-2", [("annotated__not_equals", "a")])
     assert data == [["b", 1], ["c", 2]]
-    assert len(mock.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 2
 
 
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
-def test_get_aggretated_annotated_field_at_base(products, get_product_flat, mocker):
-    mock = mocker.patch(
-        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
-    )
+def test_get_aggretated_annotated_field_at_base(
+    products, get_product_flat, mock_admin_get_queryset
+):
     data = get_product_flat(1, "annotated__count+1,size-2", [])
     assert data == [[2, 1], [1, 2]]  # aggregates last
-    assert len(mock.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 2
 
 
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
@@ -253,45 +251,41 @@ def test_filter_and_select_annotation_function(products, get_product_flat):
     assert data == [["NotNull", 1], ["NotNull", 2]]
 
 
-def test_get_annotated_field_function_at_base(products, get_product_flat, mocker):
-    mock = mocker.patch(
-        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
-    )
+def test_get_annotated_field_function_at_base(
+    products, get_product_flat, mock_admin_get_queryset
+):
     data = get_product_flat(1, "annotated__is_null+1,size-2", [])
     assert data == [["NotNull", 2.0], ["NotNull", 1.0]]
-    assert len(mock.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 2
 
 
-def test_get_annotated_field_down_tree(products, get_product_flat, mocker):
-    mock = mocker.patch(
-        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
-    )
+def test_get_annotated_field_down_tree(
+    products, get_product_flat, mock_admin_get_queryset
+):
     data = get_product_flat(
         1,
         "producer__address__andrew+2,size-1",
         [("producer__address__andrew__not_equals", "bad")],
     )
     assert data == [[None, 2.0], ["good", 1]]
-    assert len(mock.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 2
 
 
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
-def test_get_aggregated_annotated_field_down_tree(products, get_product_flat, mocker):
-    mock = mocker.patch(
-        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
-    )
+def test_get_aggregated_annotated_field_down_tree(
+    products, get_product_flat, mock_admin_get_queryset
+):
     data = get_product_flat(1, "producer__address__andrew__count+1,size-2", [])
     assert data == [[2, 0], [1, 2]]  # aggregates last
-    assert len(mock.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 2
 
 
-def test_get_annotated_field_function_down_tree(products, get_product_flat, mocker):
-    mock = mocker.patch(
-        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
-    )
+def test_get_annotated_field_function_down_tree(
+    products, get_product_flat, mock_admin_get_queryset
+):
     data = get_product_flat(1, "producer__address__andrew__is_null+1,size-2", [])
     assert data == [["NotNull", 1.0], ["IsNull", 2.0]]
-    assert len(mock.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 2
 
 
 @pytest.mark.usefixtures("products")
