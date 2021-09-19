@@ -137,8 +137,16 @@ def _get_config(request):
     }
 
 
+def _add_request_info(request):
+    request.data_browser = {
+        "fields": set(),
+        "calculated_fields": set(),
+    }
+
+
 @admin_decorators.staff_member_required
 def query_ctx(request, *, model_name="", fields=""):
+    _add_request_info(request)
     config = _get_config(request)
     return JsonResponse(config)
 
@@ -177,6 +185,8 @@ def admin_action(request, model_name, fields):
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
+    _add_request_info(request)
+
     if request.method == "POST":
         return admin_action(request, model_name, fields)
 
@@ -201,6 +211,8 @@ def query_html(request, *, model_name="", fields=""):
 
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
+    _add_request_info(request)
+
     params = hyperlink.parse(request.get_full_path()).query
 
     if media.startswith("profile") or media.startswith("pstats"):
@@ -247,6 +259,8 @@ def query(request, *, model_name, fields="", media):
 
 
 def view(request, pk, media):
+    _add_request_info(request)
+
     view = get_object_or_404(View.objects.filter(public=True), public_slug=pk)
     if (
         # some of these are checked by the admin but this is a good time to be paranoid

@@ -109,12 +109,15 @@ def admin_get_queryset(admin, request, fields=(), debug=False):
     if debug:
         return DebugQS(f"{admin}.get_queryset()")
     else:
-        request.data_browser = {"calculated_fields": set(fields), "fields": set(fields)}
+        request.data_browser.update(
+            {"calculated_fields": set(fields), "fields": set(fields)}
+        )
         return admin.get_queryset(request)
 
 
 def admin_get_actions(admin, request):
-    request.data_browser = {"calculated_fields": set(), "fields": set()}
+    assert hasattr(request, "data_browser"), request
+
     res = {}
     for func, name, desc in admin.get_actions(request).values():
         if not getattr(func, "ddb_hide", False):
@@ -132,7 +135,7 @@ def _model_has_field(model, field_name):
 
 
 def _get_all_admin_fields(request):
-    request.data_browser = {"calculated_fields": set(), "fields": set()}
+    assert hasattr(request, "data_browser"), request
 
     def from_fieldsets(admin, include_calculated):
         auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT

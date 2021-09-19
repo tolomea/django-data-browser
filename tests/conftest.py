@@ -69,7 +69,10 @@ settings.configure(
 
 @pytest.fixture
 def ddb_request(rf):
+    from data_browser.views import _add_request_info
+
     request = rf.get("/")
+    _add_request_info(request)
     return request
 
 
