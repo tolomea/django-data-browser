@@ -1,0 +1,68 @@
+url path characters
+unreserved 0-9a-zA-Z -._~
+sub delims !$&'()*+,;=
+: @ %XX
+used ,+-
+
+
+sql
+    select
+    from
+    where
+    group
+    having
+    order
+
+django
+    lookup annotate
+    regular filters
+    values (optional)
+    distinct
+    aggregate annotate
+    aggregate filters
+    sort
+    get results (optional)
+    preload
+    get results
+
+
+rel_name -> expand  (model_name on the api and FE)
+type_ ->    add
+concrete -> filter, sort
+pivot ->    pivot
+
+
+
+             expand  add  filter  sort  pivot  color       color is based on pivot type, brightness on concrete/calc
+fk              rel    -       -     -      -  Blue
+2m          rel/agg    -       -     -      -  Blue        not implemented yet, agg only the fields
+normal          agg    +       +     +    yes  Green
+function         -?    +       +     +    yes  Green       we could aggregate functions
+calculated        -    +       -     -    yes  Dark Green  does this prevent aggregation?
+aggregate         -    +       +     +   data  Red
+
+
+
+asserts
+1, !type -> rel
+2, concrete -> type
+3, pivot -> concrete
+
+r  t  c  p
+0  0  0  0  1
+0  0  0  1  3 1
+0  0  1  0  2 1
+0  0  1  1  2 1
+0  1  0  0  red     calc
+0  1  0  1  3
+0  1  1  0  yellow  agg
+0  1  1  1  green   norm/func
+
+1  0  0  0  blue    fk
+1  0  0  1  3
+1  0  1  0  2
+1  0  1  1  2
+1  1  0  0  red     calc
+1  1  0  1  3
+1  1  1  0  yellow  agg
+1  1  1  1  green   norm / func

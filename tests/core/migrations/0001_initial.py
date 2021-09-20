@@ -11,9 +11,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ("contenttypes", "0002_remove_content_type_name"),
-    ]
+    dependencies = [("contenttypes", "0002_remove_content_type_name")]
 
     operations = [
         migrations.CreateModel(
@@ -161,7 +159,7 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(max_length=16, primary_key=True, serialize=False),
-                ),
+                )
             ],
         ),
         migrations.CreateModel(

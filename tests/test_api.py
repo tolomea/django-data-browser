@@ -231,11 +231,7 @@ class TestViewDetail:
     def test_patch_limit(self, admin_client, admin_user, view):
         resp = admin_client.patch(
             f"/data_browser/api/views/{view.pk}/",
-            json.dumps(
-                {
-                    "limit": "123",
-                }
-            ),
+            json.dumps({"limit": "123"}),
             content_type="application/json",
         )
         assert resp.status_code == 200

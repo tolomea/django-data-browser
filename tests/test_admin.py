@@ -13,7 +13,9 @@ def view(admin_user):
 
 
 def test_open_view(view, rf):
-    expected = '<a href="/data_browser/query/app.model/fa+0,fd-1,fn.html?bob__equals=fred&limit=1000">view</a>'
+    expected = (
+        '<a href="/data_browser/query/app.model/fa+0,fd-1,fn.html?bob__equals=fred&limit=1000">view</a>'
+    )
     assert ViewAdmin.open_view(view) == expected
 
 

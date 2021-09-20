@@ -5,9 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("data_browser", "0003_remove_view_app"),
-    ]
+    dependencies = [("data_browser", "0003_remove_view_app")]
 
     operations = [
         migrations.RenameField(

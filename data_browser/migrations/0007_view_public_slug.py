@@ -7,14 +7,12 @@ import data_browser.models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("data_browser", "0006_auto_20200531_1450"),
-    ]
+    dependencies = [("data_browser", "0006_auto_20200531_1450")]
 
     operations = [
         migrations.AddField(
             model_name="view",
             name="public_slug",
             field=models.CharField(default=data_browser.models.get_id, max_length=12),
-        ),
+        )
     ]

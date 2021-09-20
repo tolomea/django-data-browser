@@ -92,13 +92,15 @@ class _AdminAnnotations:
             annotation = qs.query.annotations.get(descriptor.name)
             if not annotation:  # pragma: no cover
                 raise Exception(
-                    f"Can't find annotation '{descriptor.name}' for {self}.{descriptor.name}"
+                    f"Can't find annotation '{descriptor.name}' for"
+                    f" {self}.{descriptor.name}"
                 )
 
             field_type = getattr(annotation, "output_field", None)
             if not field_type:  # pragma: no cover
                 raise Exception(
-                    f"Annotation '{descriptor.name}' for {self}.{descriptor.name} doesn't specify 'output_field'"
+                    f"Annotation '{descriptor.name}' for"
+                    f" {self}.{descriptor.name} doesn't specify 'output_field'"
                 )
 
             descriptor.boolean = isinstance(field_type, BooleanField)

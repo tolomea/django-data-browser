@@ -103,11 +103,7 @@ class OrmBaseField:
             assert "equals" in self.type_.lookups or self.type_ in {
                 UnknownType,
                 HTMLType,
-            }, (
-                self.model_name,
-                self.name,
-                self.type_,
-            )
+            }, (self.model_name, self.name, self.type_)
         if self.can_pivot:
             assert self.type_
 

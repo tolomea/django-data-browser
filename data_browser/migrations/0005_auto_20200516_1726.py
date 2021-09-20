@@ -5,9 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("data_browser", "0004_auto_20200501_0903"),
-    ]
+    dependencies = [("data_browser", "0004_auto_20200501_0903")]
 
     operations = [
         migrations.AlterModelOptions(
@@ -17,5 +15,5 @@ class Migration(migrations.Migration):
                     ("make_view_public", "Can make a saved view publically available")
                 ]
             },
-        ),
+        )
     ]

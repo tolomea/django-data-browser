@@ -1,0 +1,374 @@
+(cd frontend && WDS_SOCKET_PORT=3000 BROWSER=none PUBLIC_URL="admin/browse" DEBUG="express:*" npm start)
+
+https://djangopackages.org/grids/g/reporting/
+https://djangopackages.org/packages/p/django-data-browser/
+https://forum.djangoproject.com/t/i-made-an-app-lib-for-browsing-your-data/2567
+https://forum.djangoproject.com/c/projects/11/l/latest
+https://pypistats.org/packages/django-data-browser
+https://www.reddit.com/r/django/comments/hbwkwa/data_browser_20_now_with_pivot_tables/
+https://www.factorio.com/blog/post/fff-352
+
+u = User.objects.get(is_staff=True)
+p = Permission.objects.get(codename="make_view_public")
+u.user_permissions.remove(p)
+
+rm -Rf tests/core/migrations/ && pytest tests/test_tests.py
+
+DATABASE_URL="postgres://eligible:g7W987XRmtO5VBbC0jkj@localhost:5432/data_browser" pytest
+
+table performance
+    https://github.com/bvaughn/react-window
+    might also help with sticky problems
+
+import
+    data_browser/urls.py
+    data_browser/views.py
+
+    data_browser/admin.py
+    data_browser/api.py
+    data_browser/models.py
+
+    data_browser/helpers.py
+
+    data_browser/orm_results.py
+    data_browser/orm_admin.py
+    data_browser/orm_fields.py
+
+    data_browser/query.py
+    data_browser/types.py
+
+    data_browser/common.py
+
+
+
+eligible fields
+    PickledObjectField - picklefield
+
+
+config:
+front fields
+allow / deny
+    models for export? (be careful about transitive behaviour here)
+    fields for export (PII flags)
+permissions to access the databrowser?
+
+hooks:
+add django field type mappings
+add types? (python is fine but what about the JS?)
+
+
+debt:
+js tests
+    esp for the functions in query
+    and the result display logic
+check test_query.py covers query.py etc
+manually test aborted request behaviour
+|| -> ??
+?.
+type -> typeName
+allModelFields -> models
+the type parse tests are... weird, why is regex parsing on str test not on regex test?
+master -> trunk
+
+
+--- Major Features ---
+
+Graphs
+    top pane that starts collapsed
+    on first expand chooses best graph for data
+    retains settings across collapses but not model changes
+    only works with aggregates
+    aggregates in the middle, pivotables on the axis
+    needs the thing where aggregates are on the right always
+    needs field coloring
+And/Or filtering
+    need a way to reorder filters
+    and push them into groups
+    in the url, suffix group number, or within group, and between
+    no number means it gets it's own group
+    group appears at location of first member
+Calcualted fields
+    use the reserved query param space to assign a value to a new name
+    an add button at the top of the field selector
+    we will need a typing system and operators etc
+    can ref other fields ofc similar to comparing fields
+    example, capabu sum / capabu user count
+    v2
+        nesting
+        conditionals
+        drag and drop fields
+Comparing to other fields
+    a check box next to value
+    ticking brings up a selector for a field
+    only fields of the type that would've been there
+    selector is cascading dropdowns
+    later on drag and drop fields
+Scheduled views
+    only when changed
+    can we do only new rows?
+Totals
+    add total section, it needs to be per column
+    for pivoted could be row or column
+        when summing a row, there is a seperate sum for each aggregate field
+    it's an overall not a total, so for an average it's overall average, check synonyms
+    this falls out of the row and colum queries quite nicely
+    do we need a total total?
+    it can probably be added into the existing structure
+    what happens with having filters?
+
+
+
+--- Bugs ---
+
+
+--- Roadmap ---
+
+admin list link next to title selector?
+
+style customization
+    split index into base + index + font-head
+    more blocks in base
+    move logo out of JS?
+    css selectors need to be scoped to top js div
+    audit inline css
+
+allow additional filters against saved views
+    with a checkbox? on the saved view to enable
+    can only be filters on fields in the view (to prevent data leakage)
+
+pagination
+
+a setting for the "using" value for db replica support
+
+the big python refactor
+    base models in query that the orm ones inherit from
+    how does binding work?
+    no orm imports for query tests and no db mark
+        (except for the stupid regex thing which will require the db mark)
+
+    make query and bound query code and tests work without orm stuff
+        path toward sql alchemey support
+        type models need to come from orm side and don't 1-1 with types
+        OrmModel and OrmField should subclass off query things that can be used without them
+        tests can have fixtures for a bunch of OrmModels and OrmFields
+
+    refactor the functions table to use a lil dataclass
+        and push that queryset business onto a function on that class
+
+
+--- Backlog ---
+
+filtering for the fields section
+    sublime style longest common substring matching
+    dot to go down levels (expand the matching sections)
+    mouse over text to explain use
+    clear button
+    enter to add?
+
+pretty model names
+    and app names
+    maybe sections in the list view
+        and the top drop down, it's getting long, that's technically hard though
+
+rename prettyName -> displayName
+
+could use another announcement on reddit
+
+m2m fields in admin could be promoted to models
+    naming?
+    perms?
+    there's no actual admin class for calling get_queryset etc...
+
+in the FE instead of requesting the data and updating the url
+    update the url
+    let the page load request the data
+    same path for initial page laod
+
+date arith weeks
+
+daterange filter value
+
+filtering file fields
+
+github badges
+    copy prefetch
+
+api keys
+
+aggregates of functions
+    created_at__date__max
+
+release notes pop up
+    drop a cookie?
+    control with a setting?
+
+in the UI group fields by prefix?
+
+support the normal admin filters (harry)
+    seperate from normal filters
+    when and how do we load the choices
+    how do we extract the config?
+    I think mid level, ditch their UI, but keep their logic
+
+js table windowing
+    https://github.com/bvaughn/react-window
+
+js query functions should pass a function to setstate
+
+notes on fields
+    "are you sure you want mortgage.advisor"
+
+annotation decorator can take attributes arguments
+
+annotation needed for calculated field
+    for mortgage.loan_amount
+    respect in list and databrowser
+    on the calculated @attributes(ddb_needs=[loan_amount])
+
+look into tablib
+
+an fk you don't have perms to see should stay in the browser with only the id field
+
+postgress ipaddress field
+
+pluggable fields
+
+annotations that are only allowed on the base
+    for aggregating annotations
+
+model level fields
+    count
+    is null
+    section dividers
+    backfill id__count and id__isnull?
+
+seperate type and type model
+
+array types, if we had a subtype field we wouldn't need two array types
+
+should lookups be tied to type?
+
+allow setting own column names
+
+perf
+    code gen _get_fields
+    when pivoted don't sort the body
+    streaming end to end
+        requires streaming json creation
+            maybe manually emit top level dict and lists
+            then json dumps each row in the lists
+        also need to have format_hint input gathered up while serializing main data
+
+can we use classproperty to get rid of the meta class?
+
+array_field__0
+
+delay argument
+    also fe generally preserves args it doesn't recognize
+
+sort arrows
+    rotate on pivoted columns
+    only show when useful
+
+capabu:
+    date fill
+        for when we aggregate by dates and some dates have no entires
+        indicator and check box that appears on dateishes?
+
+events:
+    visually distinguish true and false
+    overwrite saved view aka save as
+    row highlights
+    middle click save (will save as do this?)
+
+don't install postgres on the other databases in ci
+
+table name in page header
+
+test sum of boolean can produce values greater than 1
+    https://code.djangoproject.com/ticket/24662
+
+rename api model / orm model -> field set
+
+coverage across tox run
+    coveragerc per db with db specific exclusions
+    local coverage rc for latest py, django and sqlite
+
+one_of filters (as a hack for no or support)
+
+first sort click bumps priority
+
+view.get_data for calling into DDB from python
+
+can we make the demo always up so we don't need that discalimer in the docs
+
+in admins allow adding related fields to fieldsets prop__consumer__name on mortgage
+    out of scope?
+
+select fk fields (show their str)?
+    filter them for is null
+
+restructure JS to be column driven so we can memoize better
+
+move into a to many, keep fields and filters, but offset them
+
+m2m fields in admin -> m2m table in browser?
+    there is no admin to get_queryset on
+        fakeo that just does model.objects.all()?
+        treat it like an inline
+
+super date filtering with relativetimedelta
+    this is daterange, where relativetimedelta is used to specify the start and end
+
+field colors
+    blue green orange? (and dark green for calcs)
+
+freeze panes?
+    is obvious for pivots
+    can we abuse html positioning?
+    https://stackoverflow.com/questions/53332830/freeze-multiple-rows-multiple-columns-of-html-table
+    4 copies of the table with various bits being transparent and relative positioning each whole table
+
+aggregate fields always on right? (does it simplify get_data if we always special case)
+
+is_truthy function
+turn a column or row into percents
+hooks and context for network stuff
+selective debounce, so we don't have to wait 2x for everything
+    field specific? so for text 500ms debounce but instant on enter?
+    something similar for sort toggles?
+drag and drop to sort columns
+individual exports?
+url with bad model
+what's up with filtering to years before 2?
+Some sort of lazy loading of the admin config
+    so we only look up the admins and models used in the query
+    but we get it all when we walk it for context serialization
+there are blank rows in output when there's cols but no rows
+admin field could be concrete and proxy to pk
+open in new tab / middle click
+    quite a faff as we have to calc the links, which means calcing the query
+    and we'd like to share that logic with actually clicking the thing
+GenericForeignKeys
+    including GenericInlineModelAdmin
+tool tips
+    https://www.npmjs.com/package/react-tooltip
+timezones
+2many fields aka expanding aggregates
+    filtering is complex
+average etc of id doesn't make much sense
+go to admin list page for this model (what about inlines? we just don't?)
+slow query logging
+styling (ape the admin?)
+divide through
+and/or filtering
+scheduling
+graphs
+media headers in addition to extensions
+error handling
+    https://medium.com/trabe/catching-asynchronous-errors-in-react-using-error-boundaries-5e8a5fd7b971
+    https://reactjs.org/docs/error-boundaries.html
+generally more functions
+
+Questions to dig into feature requests:
+Why do you want that?; what would that let you do?; How are you coping without it?; Do you think we should push back the launch to add that feature, or is it something we could add later?; How would that fit into your day?

@@ -1,2 +1,4 @@
  [tool.black]
  target-version = ['py38']
+experimental-string-processing = true
+skip-magic-trailing-comma = true

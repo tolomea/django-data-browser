@@ -77,10 +77,7 @@ def test_int_array_contains(get_results_flat):  # pragma: postgres
     ArrayModel.objects.create(int_array_field=[1, 3])
     assert get_results_flat(
         "int_array_field", [("int_array_field__contains", "2")]
-    ) == [
-        {"int_array_field": "[1.0, 2.0]"},
-        {"int_array_field": "[2.0, 3.0]"},
-    ]
+    ) == [{"int_array_field": "[1.0, 2.0]"}, {"int_array_field": "[2.0, 3.0]"}]
 
 
 def test_int_choice_array_contains(get_results_flat):  # pragma: postgres

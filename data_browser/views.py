@@ -246,9 +246,10 @@ def query(request, *, model_name, fields="", media):
                 marshal.dump(pstats.Stats(profiler).stats, buffer)
                 buffer.seek(0)
                 response = HttpResponse(buffer, content_type="application/octet-stream")
-                response[
-                    "Content-Disposition"
-                ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.pstats"
+                response["Content-Disposition"] = (
+                    "attachment;"
+                    f" filename={query.model_name}-{timezone.now().isoformat()}.pstats"
+                )
                 return response
             else:
                 raise http.Http404(f"Bad file format {prof_media} requested")
@@ -319,7 +320,10 @@ def _data_response(request, query, media, privileged=False, strict=False):
         else:
             if media == "sql":
                 res = "This is an approximation of the main query.\n"
-                res += "Pages with pivoted or calculated data may do additional queries.\n\n"
+                res += (
+                    "Pages with pivoted or calculated data may do additional"
+                    " queries.\n\n"
+                )
                 res += sqlparse.format(
                     str(query_set.query), reindent=True, keyword_case="upper"
                 )
@@ -327,7 +331,10 @@ def _data_response(request, query, media, privileged=False, strict=False):
                 res = query_set.explain()
             elif media == "qs":
                 res = "This is an approximation of the main queryset.\n"
-                res += "Pages with pivoted or calculated data may do additional queries.\n\n"
+                res += (
+                    "Pages with pivoted or calculated data may do additional"
+                    " queries.\n\n"
+                )
                 res += str(query_set)
             else:
                 assert False

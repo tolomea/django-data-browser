@@ -289,11 +289,7 @@ class DateTypeMixin(SequenceTypeMixin):
                     # cut up the clause
                     field, op, val = match.groups()
                     val = int(val)
-                    human_op = {
-                        "+": "add",
-                        "-": "subtract",
-                        "=": "set",
-                    }[op]
+                    human_op = {"+": "add", "-": "subtract", "=": "set"}[op]
 
                     # find the field
                     for prefix, arg in cls._clause_types.items():

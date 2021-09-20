@@ -156,7 +156,8 @@ def _get_all_admin_fields(request):
         )
         if not has_attrs or not issubclass(model_admin.model, models.Model):
             debug_log(
-                f"{type(model_admin)} instance does not look like a ModelAdmin or InlineModelAdmin"
+                f"{type(model_admin)} instance does not look like a ModelAdmin or"
+                " InlineModelAdmin"
             )
             return False
 
@@ -262,7 +263,8 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
         field = getattr(annotation, "output_field", None)
         if not field:  # pragma: no cover
             raise Exception(
-                f"Annotation '{field_name}' for {admin}.{field_name} doesn't specify 'output_field'"
+                f"Annotation '{field_name}' for {admin}.{field_name} doesn't specify"
+                " 'output_field'"
             )
 
         type_, choices = get_field_type(field_name, field)

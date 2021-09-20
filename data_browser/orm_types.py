@@ -35,11 +35,7 @@ except ImportError:  # pragma: django < 3.1
         JSONField = None.__class__
 
 
-_STRING_FIELDS = (
-    models.CharField,
-    models.TextField,
-    models.GenericIPAddressField,
-)
+_STRING_FIELDS = (models.CharField, models.TextField, models.GenericIPAddressField)
 _NUMBER_FIELDS = (
     models.DecimalField,
     models.FloatField,
@@ -95,7 +91,8 @@ def get_field_type(field_name, field):
             return array_types[base_field], choices
         else:
             debug_log(
-                f"{field.model.__name__}.{field_name} unsupported subarray type {type(field.base_field).__name__}"
+                f"{field.model.__name__}.{field_name} unsupported subarray type"
+                f" {type(field.base_field).__name__}"
             )
             return UnknownType, None
 
@@ -117,7 +114,8 @@ def get_field_type(field_name, field):
                 break
         else:
             debug_log(
-                f"{field.model.__name__}.{field_name} unsupported type {type(field).__name__}"
+                f"{field.model.__name__}.{field_name} unsupported type"
+                f" {type(field).__name__}"
             )
             res = UnknownType
 

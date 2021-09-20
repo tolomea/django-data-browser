@@ -342,11 +342,7 @@ class TestRegexType(ParseHelpers):
 
     @pytest.mark.django_db
     @pytest.mark.parametrize(
-        "value,expected,err",
-        [
-            (".*", ".*", None),
-            ("\\", None, "Invalid regex"),
-        ],
+        "value,expected,err", [(".*", ".*", None), ("\\", None, "Invalid regex")]
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
@@ -563,11 +559,7 @@ class TestStringChoiceType(ParseHelpers):
         assert self.type_.get_formatter(self.choices)("x") == "x"
 
     @pytest.mark.parametrize(
-        "value,expected,err",
-        [
-            ("B", "b", None),
-            ("X", None, "Unknown choice 'X'"),
-        ],
+        "value,expected,err", [("B", "b", None), ("X", None, "Unknown choice 'X'")]
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
@@ -585,11 +577,7 @@ class TestNumberChoiceType(ParseHelpers):
         assert self.type_.get_formatter(self.choices)(6) == 6
 
     @pytest.mark.parametrize(
-        "value,expected,err",
-        [
-            ("B", 2, None),
-            ("X", None, "Unknown choice 'X'"),
-        ],
+        "value,expected,err", [("B", 2, None), ("X", None, "Unknown choice 'X'")]
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
@@ -611,11 +599,7 @@ class TestIsNullType(ParseHelpers):
         assert self.type_.get_formatter(None)(None) == "IsNull"
 
     @pytest.mark.parametrize(
-        "value,expected,err",
-        [
-            ("IsNull", True, None),
-            ("NotNull", False, None),
-        ],
+        "value,expected,err", [("IsNull", True, None), ("NotNull", False, None)]
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
@@ -654,10 +638,7 @@ class TestStringArrayType(ParseHelpers):
 
     @pytest.mark.parametrize(
         "value,expected,err",
-        [
-            ('["bob"]', ["bob"], None),
-            ('"bob"', None, "Expected a list"),
-        ],
+        [('["bob"]', ["bob"], None), ('"bob"', None, "Expected a list")],
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
@@ -669,20 +650,14 @@ class TestStringChoiceArrayType(ParseHelpers):
 
     @pytest.mark.parametrize(
         "value,expected,err",
-        [
-            ('["bob"]', ["fred"], None),
-            ('"bob"', None, "Expected a list"),
-        ],
+        [('["bob"]', ["fred"], None), ('"bob"', None, "Expected a list")],
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
 
     @pytest.mark.parametrize(
         "lookup,value,expected,err",
-        [
-            ("contains", "bob", "fred", None),
-            ("length", "1", 1, None),
-        ],
+        [("contains", "bob", "fred", None), ("length", "1", 1, None)],
     )
     def test_parse_lookup(self, lookup, value, expected, err):
         self.parse_lookup_helper(lookup, value, expected, err)
@@ -692,11 +667,7 @@ class TestNumberArrayType(ParseHelpers):
     type_ = NumberArrayType
 
     @pytest.mark.parametrize(
-        "value,expected,err",
-        [
-            ("[123]", [123], None),
-            ("123", None, "Expected a list"),
-        ],
+        "value,expected,err", [("[123]", [123], None), ("123", None, "Expected a list")]
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
@@ -708,20 +679,14 @@ class TestNumberChoiceArrayType(ParseHelpers):
 
     @pytest.mark.parametrize(
         "value,expected,err",
-        [
-            ('["bob"]', [123], None),
-            ('"bob"', None, "Expected a list"),
-        ],
+        [('["bob"]', [123], None), ('"bob"', None, "Expected a list")],
     )
     def test_parse(self, value, expected, err):
         self.parse_helper(value, expected, err)
 
     @pytest.mark.parametrize(
         "lookup,value,expected,err",
-        [
-            ("contains", "bob", 123, None),
-            ("length", "1", 1, None),
-        ],
+        [("contains", "bob", 123, None), ("length", "1", 1, None)],
     )
     def test_parse_lookup(self, lookup, value, expected, err):
         self.parse_lookup_helper(lookup, value, expected, err)
