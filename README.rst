@@ -329,6 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Fix formatting of ``F`` expressions when using ``.qs``.                                                |
 |         |            | | Make the field list and filter list collapsible.                                                       |
 |         |            | | CSS tweaks.                                                                                            |
 |         |            | | Add public view info to ``request.data_browser``.                                                      |

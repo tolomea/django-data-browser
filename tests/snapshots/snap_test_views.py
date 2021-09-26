@@ -10023,7 +10023,7 @@ snapshots["test_query_qs_variants content"] = [
     "    'ddb_size_is_null',",
     "    'ddb_annotated',",
     ").distinct().annotate(",
-    "    ddb_size_count=Count(F(size), distinct=True),",
+    "    ddb_size_count=Count(F('size'), distinct=True),",
     ").order_by()[: 1000]",
 ]
 

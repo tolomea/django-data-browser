@@ -1,6 +1,7 @@
+import contextlib
 from textwrap import dedent, indent
 
-from django.db.models import ExpressionWrapper, Field, Q
+from django.db.models import ExpressionWrapper, F, Field, Q
 
 SPACES = "    "
 
@@ -36,6 +37,16 @@ def _format_value(value):
         return repr(value)
 
 
+@contextlib.contextmanager
+def _better_reprs():
+    F_orig = F.__repr__
+    F.__repr__ = lambda s: f"F({s.name!r})"
+
+    yield
+
+    F.__repr__ = F_orig
+
+
 class DebugQS:
     def __init__(self, s):
         self.s = s
@@ -45,10 +56,11 @@ class DebugQS:
 
     def __call__(self, *args, **kwargs):
         if args or kwargs:
-            flat_args = ",\n".join(
-                [_format_value(a) for a in args]
-                + [f"{n}={_format_value(v)}" for n, v in kwargs.items()]
-            )
+            with _better_reprs():
+                flat_args = ",\n".join(
+                    [_format_value(a) for a in args]
+                    + [f"{n}={_format_value(v)}" for n, v in kwargs.items()]
+                )
             return DebugQS(f"{self.s}(\n{indent(flat_args, SPACES)},\n)")
         else:
             return DebugQS(f"{self.s}()")
