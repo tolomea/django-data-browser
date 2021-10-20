@@ -267,17 +267,38 @@ function FieldGroup(props) {
   );
 }
 
+const SEP = '.'
+
 function ModelSelector(props) {
   const { query, sortedModels, model } = props;
+
+  const modelsByAppLabel = sortedModels.reduce(
+      (a, x) => {
+        const [appLabel, ...parts] = x.split(SEP)
+
+        return {
+          ...a,
+          [appLabel]: [...(a[appLabel] || []), parts.join(SEP)],
+        }
+      },
+      {}
+  )
+
   return (
     <select
       className="ModelSelector"
       onChange={(e) => query.setModel(e.target.value)}
       value={model}
     >
-      {sortedModels.map((model) => (
-        <option key={model}>{model}</option>
-      ))}
+      {Object.entries(modelsByAppLabel).map(([byAppLabel, models]) => {
+        return (
+          <optgroup>
+            {models.map((model) =>
+                <option key={model}>{byAppLabel}{SEP}{model}</option>
+            )}
+          </optgroup>
+        )
+      })}
     </select>
   );
 }
