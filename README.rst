@@ -329,7 +329,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Fix formatting of ``F`` expressions when using ``.qs``.                                                |
+| 4.0.8   | 2021-12-12 | | Fix formatting of ``F`` expressions when using ``.qs``.                                                |
 |         |            | | Make the field list and filter list collapsible.                                                       |
 |         |            | | CSS tweaks.                                                                                            |
 |         |            | | Add public view info to ``request.data_browser``.                                                      |

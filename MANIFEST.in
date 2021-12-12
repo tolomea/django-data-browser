@@ -22,3 +22,5 @@ recursive-include frontend/src *.json
 recursive-include frontend/src *.md
 recursive-include frontend/src *.svg
 recursive-include frontend/public *.html
+
+exclude data_browser/*.txt
