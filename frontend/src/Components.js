@@ -169,15 +169,16 @@ function Filter(props) {
 }
 
 function Filters(props) {
-  const { query, filterErrors, parsedFilterValues } = props;
+  const { query, filterErrors, parsedFilterValues, filters } = props;
   const [toggled, toggleLink] = useToggle(true);
+  if (!filters.length) return "";
   return (
     <form className="Filters" onSubmit={(e) => e.preventDefault()}>
       <div className="FiltersToggle">{toggleLink}</div>
       {toggled && (
         <table>
           <tbody>
-            {props.filters.map((filter, index) => (
+            {filters.map((filter, index) => (
               <Filter
                 {...{ query, index }}
                 {...filter}
