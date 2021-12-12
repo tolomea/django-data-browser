@@ -267,22 +267,19 @@ function FieldGroup(props) {
   );
 }
 
-const SEP = '.'
+const SEP = ".";
 
 function ModelSelector(props) {
   const { query, sortedModels, model } = props;
 
-  const modelsByAppLabel = sortedModels.reduce(
-      (a, x) => {
-        const [appLabel, ...parts] = x.split(SEP)
+  const modelsByAppLabel = sortedModels.reduce((a, x) => {
+    const [appLabel] = x.split(SEP);
 
-        return {
-          ...a,
-          [appLabel]: [...(a[appLabel] || []), parts.join(SEP)],
-        }
-      },
-      {}
-  )
+    return {
+      ...a,
+      [appLabel]: [...(a[appLabel] || []), x],
+    };
+  }, {});
 
   return (
     <select
@@ -292,12 +289,12 @@ function ModelSelector(props) {
     >
       {Object.entries(modelsByAppLabel).map(([byAppLabel, models]) => {
         return (
-          <optgroup>
-            {models.map((model) =>
-                <option key={model}>{byAppLabel}{SEP}{model}</option>
-            )}
+          <optgroup label={byAppLabel}>
+            {models.map((model) => (
+              <option key={model}>{model}</option>
+            ))}
           </optgroup>
-        )
+        );
       })}
     </select>
   );

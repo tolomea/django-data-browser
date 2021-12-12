@@ -184,7 +184,8 @@ textarea::placeholder {
   border-radius: 3px;
   padding: 0;
 }
-.ModelSelector option {
+.ModelSelector option,
+.ModelSelector optgroup {
   text-align: left;
   text-align-last: left;
 }
