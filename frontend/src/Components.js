@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   TLink,
@@ -345,19 +345,17 @@ function QueryPage(props) {
           redirectUrl={(view) => `/views/${view.pk}.html`}
         />
       </p>
-      <div className="MainSpaceWrapper">
-        <div className="FieldsToggle">{fieldsToggleLink}</div>
-        <div className="MainSpace">
+      <div className="MainSpace">
+        <div className="FieldsList">
+          <div className="FieldsToggle">{fieldsToggleLink}</div>
           {fieldsToggled && (
-            <div className="FieldsList">
-              <div className="Scroller">
-                <FieldGroup {...{ query, model }} path={[]} />
-              </div>
+            <div className="Scroller">
+              <FieldGroup {...{ query, model }} path={[]} />
             </div>
           )}
-          {results}
-          <div />
         </div>
+        {results}
+        <div />
       </div>
     </div>
   );

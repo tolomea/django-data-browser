@@ -143,16 +143,6 @@ textarea::placeholder {
 }
 .QueryPage > .MainSpace {
   flex: 0 1 auto;
-  overflow-y: hidden;
-}
-
-.MainSpaceWrapper {
-  position: relative;
-}
-.MainSpaceWrapper .FieldsToggle {
-  position: absolute;
-  top: -15px;
-  left: 13px;
 }
 .MainSpace {
   display: flex;
@@ -160,6 +150,7 @@ textarea::placeholder {
   padding: 0;
   max-width: 100vw;
   justify-content: space-between;
+  overflow-y: hidden;
 }
 .MainSpace > * {
   flex: 0 0 auto;
@@ -233,7 +224,6 @@ select.Lookup {
 }
 
 /* Fields */
-
 .FieldsList .Scroller,
 .FieldsList table table {
   border: 1px solid var(--border-color);
