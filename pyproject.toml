@@ -1,4 +1,23 @@
- [tool.black]
- target-version = ['py38']
-experimental-string-processing = true
-skip-magic-trailing-comma = true
+[tool.black]
+    target-version = ['py38']
+    experimental-string-processing = true
+    skip-magic-trailing-comma = true
+
+[tool.coverage.run]
+    branch = true
+    omit = [
+        "setup.py",
+        "data_browser/migrations/*.py",
+    ]
+
+[tool.coverage.report]
+    exclude_lines = [
+        "assert",
+        "pragma: no cover",
+        "pragma: postgres",
+        "pragma: not postgres",
+        "pragma: not sqlite",
+        "pragma: mysql",
+        "pragma: django < 3.1",
+        "pragma: django != 3.1.3",
+    ]
