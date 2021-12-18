@@ -33,3 +33,28 @@
     line_length=88
     default_section="THIRDPARTY"
     known_first_party="data_browser,tests"
+
+[tool.pytest.ini_options]
+    addopts = [
+        "-ra",
+        "--reuse-db",
+        "--durations=20",
+        "--cov=data_browser",
+        "--cov=tests",
+        "--no-cov-on-fail",
+        "--cov-fail-under=100",
+        "--cov-report=term-missing:skip-covered",
+    ]
+    norecursedirs = [
+        ".*",
+        "__pycache__",
+        "static",
+        "fixtures",
+        "templates",
+        "migrations",
+        "frontend",
+        "build",
+        "*.egg-info",
+        "dist",
+        "web_root",
+    ]
