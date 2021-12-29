@@ -62,12 +62,12 @@ body {
 a {
   text-decoration: none;
   color: var(--link-color);
-}
-a:visited {
-  color: var(--dark-link-color);
-}
-a:hover {
-  text-decoration: underline;
+  &:visited {
+    color: var(--dark-link-color);
+  }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 h1 {
@@ -77,6 +77,8 @@ h1 {
 h2 {
   font-size: 20px;
   font-weight: normal;
+  padding: 0;
+  margin: 0;
 }
 p {
   margin: 5px auto;
@@ -102,9 +104,9 @@ select {
   cursor: pointer;
   color: var(--dark-link-color);
   text-align: left;
-}
-.TLink:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 .Symbol,
 .SLink {
@@ -118,9 +120,9 @@ select {
   padding: 0 !important;
   cursor: pointer;
   color: var(--dark-link-color);
-}
-.SLink:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 input::placeholder,
 textarea::placeholder {
@@ -137,12 +139,12 @@ textarea::placeholder {
   flex-direction: column;
   max-height: 100vh;
   padding: 10px 0 0 0;
-}
-.QueryPage > * {
-  flex: 0 0 auto;
-}
-.QueryPage > .MainSpace {
-  flex: 0 1 auto;
+  > * {
+    flex: 0 0 auto;
+  }
+  > .MainSpace {
+    flex: 0 1 auto;
+  }
 }
 .MainSpace {
   display: flex;
@@ -151,17 +153,17 @@ textarea::placeholder {
   max-width: 100vw;
   justify-content: space-between;
   overflow-y: hidden;
-}
-.MainSpace > * {
-  flex: 0 0 auto;
-}
-.MainSpace > .Results {
-  margin: 10px;
-  flex: 0 1 auto;
-  overflow: hidden;
-}
-.MainSpace > .FieldsList {
-  margin: 10px 0 10px 10px;
+  > * {
+    flex: 0 0 auto;
+  }
+  > .Results {
+    margin: 10px;
+    flex: 0 1 auto;
+    overflow: hidden;
+  }
+  > .FieldsList {
+    margin: 10px 0 10px 10px;
+  }
 }
 
 .Scroller {
@@ -178,16 +180,16 @@ textarea::placeholder {
   padding: 1px;
   font-size: 28px;
   color: var(--dark-color);
-}
-.ModelSelector:hover {
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-  padding: 0;
-}
-.ModelSelector option,
-.ModelSelector optgroup {
-  text-align: left;
-  text-align-last: left;
+  &:hover {
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 0;
+  }
+  option,
+  optgroup {
+    text-align: left;
+    text-align-last: left;
+  }
 }
 
 /* Filters */
@@ -199,14 +201,21 @@ textarea::placeholder {
   flex-direction: column;
   position: relative;
   min-height: 19px;
+  .FiltersToggle {
+    position: absolute;
+    right: -18px;
+  }
+  p {
+    margin: 5px;
+  }
+  table,
+  table th,
+  table td {
+    border: none;
+    padding: 3px 1px;
+  }
 }
-.Filters .FiltersToggle {
-  position: absolute;
-  right: -18px;
-}
-.Filters p {
-  margin: 5px;
-}
+
 select.FilterValue,
 input.FilterValue {
   width: 330px;
@@ -217,77 +226,73 @@ input.FilterValue {
 select.Lookup {
   width: 100%;
 }
-.Filters table,
-.Filters table th,
-.Filters table td {
-  border: none;
-  padding: 3px 1px;
-}
 
 /* Fields */
-.FieldsList .Scroller,
-.FieldsList table table {
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-}
-.FieldsList tbody,
-.FieldsList th,
-.FieldsList td {
-  border: none;
-  vertical-align: top;
-}
-.FieldsList th,
-.FieldsList td {
-  padding: 0px;
-  padding: 1px;
-}
-.FieldsList td {
-  text-align: left;
-}
-.FieldsList .FieldName {
-  border-radius: 4px;
-  padding: 4px;
+.FieldsList {
+  .Scroller,
+  table table {
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+  }
+  tbody,
+  th,
+  td {
+    border: none;
+    vertical-align: top;
+  }
+  th,
+  td {
+    padding: 0px;
+    padding: 1px;
+  }
+  td {
+    text-align: left;
+  }
+  .FieldName {
+    border-radius: 4px;
+    padding: 4px;
+  }
 }
 
 /* Results */
 .Results {
   position: relative;
-}
-.Results .Freeze {
-  position: sticky;
-  top: 2px;
-}
-.Results .Scroller,
-.Results th,
-.Results td {
-  border: 1px solid var(--border-color);
-  border-radius: 2px;
-}
-.Results tr {
-  line-height: 120%;
-}
-.Results th,
-.Results td {
-  padding: 5px;
-}
-.Results td.number,
-.Results td.time {
-  text-align: right;
-}
-.Results td.Empty {
-  border: none;
-}
-.Results td.HoriBorder,
-.Results th.HoriBorder {
-  border-top: 2px solid black;
-  /*border-bottom: 1px solid black;*/
-}
-.Results td.LeftBorder,
-.Results th.LeftBorder {
-  border-left: 2px solid black;
-}
-.Results th {
-  text-align: center;
+  .Freeze {
+    position: sticky;
+    top: 2px;
+  }
+  .Scroller,
+  th,
+  td {
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+  }
+  tr {
+    line-height: 120%;
+  }
+  th,
+  td {
+    padding: 5px;
+  }
+  td.number,
+  td.time {
+    text-align: right;
+  }
+  td.Empty {
+    border: none;
+  }
+  td.HoriBorder,
+  th.HoriBorder {
+    border-top: 2px solid black;
+    /*border-bottom: 1px solid black;*/
+  }
+  td.LeftBorder,
+  th.LeftBorder {
+    border-left: 2px solid black;
+  }
+  th {
+    text-align: center;
+  }
 }
 
 /* Logo */
@@ -299,33 +304,29 @@ a.Logo {
   font-family: "Anton", sans-serif;
   cursor: pointer;
   color: var(--dark-color);
-}
-a.Logo > span {
-  display: inline-block;
-}
-a.Logo > span.Version {
-  font-size: 20px;
+  > span {
+    display: inline-block;
+  }
+  > span.Version {
+    font-size: 20px;
+  }
 }
 
 /* Index Page */
 
-div.HomePage {
+.HomePage {
   margin: 0;
   padding: 40px 30px 30px 30px;
   display: flex;
   align-items: flex-start;
-}
-div.HomePage > div {
-  flex: 1;
-  color: var(--dark-color);
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-  margin: 30px 2% 0 2%;
-  padding: 0 2% 2% 2%;
-}
-h2 {
-  padding: 0;
-  margin: 0;
+  > div {
+    flex: 1;
+    color: var(--dark-color);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    margin: 30px 2% 0 2%;
+    padding: 0 2% 2% 2%;
+  }
 }
 .SavedViewList div {
   margin: 0 0 20px 0;
@@ -341,40 +342,40 @@ h2 {
   padding: 50px 10px 30px 10px;
   display: flex;
   flex-flow: column nowrap;
-}
-.EditSavedView > div {
-  margin: 0 auto;
-}
-.EditSavedView .SavedViewTitle {
-  font-size: 28px;
-}
-.EditSavedView form {
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-  padding: 15px 15px 12px 15px;
-}
-.EditSavedView .SavedViewName {
-  font-size: 20px;
-  width: 100%;
-}
-.EditSavedView textarea {
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-  padding: 10px;
-  min-width: 500px;
-  width: 100%;
-  min-height: 100px;
-}
-.EditSavedView th {
-  padding: 2px;
-  font-weight: bold;
-  text-align: left;
-}
-.EditSavedView td {
-  padding: 2px;
-}
-.EditSavedView table {
-  padding: 5px 2px;
+  > div {
+    margin: 0 auto;
+  }
+  .SavedViewTitle {
+    font-size: 28px;
+  }
+  form {
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 15px 15px 12px 15px;
+  }
+  .SavedViewName {
+    font-size: 20px;
+    width: 100%;
+  }
+  textarea {
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 10px;
+    min-width: 500px;
+    width: 100%;
+    min-height: 100px;
+  }
+  th {
+    padding: 2px;
+    font-weight: bold;
+    text-align: left;
+  }
+  td {
+    padding: 2px;
+  }
+  table {
+    padding: 5px 2px;
+  }
 }
 .SavedViewActions {
   padding: 10px 20px;
@@ -426,11 +427,10 @@ input.RowLimit {
   border: 1px solid var(--border-color);
   padding: 10px;
   box-shadow: 3px 3px 10px var(--dark-color);
-}
-
-.ContextMenu p {
-  padding: 5px;
-  margin: 0px;
+  p {
+    padding: 5px;
+    margin: 0px;
+  }
 }
 
 .Tooltip {
@@ -441,11 +441,10 @@ input.RowLimit {
   box-shadow: 3px 3px 10px var(--dark-color);
   font-size: 14px;
   margin: 10px;
-}
-
-.Tooltip p {
-  padding: 5px;
-  margin: 0px;
+  p {
+    padding: 5px;
+    margin: 0px;
+  }
 }
 
 .DataCell .Null {
