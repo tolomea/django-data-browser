@@ -1,6 +1,5 @@
-****************************************************************
 Interactive and user friendly querying of Django project DBs.
-****************************************************************
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. image:: https://raw.githubusercontent.com/tolomea/django-data-browser/master/screenshot.png
     :alt: screenshot
@@ -329,7 +328,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Add support for Django 4.0 and Python 3.10 drop support for Python 3.6.                                  |
+|         |            | | Change calculated field red to grey.                                                                   |
+|         |            | | Add support for Django 4.0 and Python 3.10 drop support for Python 3.6.                                |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.8   | 2021-12-12 | | Fix formatting of ``F`` expressions when using ``.qs``.                                                |
 |         |            | | Make the field list and filter list collapsible.                                                       |
