@@ -94,13 +94,19 @@ def pivot_products(db):
 
 
 @pytest.fixture
-def orm_models(admin_ddb_request):
-    return get_models(admin_ddb_request)
+def get_orm_models(admin_ddb_request):
+    return lambda: get_models(admin_ddb_request)
 
 
 @pytest.fixture
-def get_product_pivot(admin_ddb_request, orm_models, django_assert_num_queries):
+def orm_models(get_orm_models):
+    return get_orm_models()
+
+
+@pytest.fixture
+def get_product_pivot(admin_ddb_request, get_orm_models, django_assert_num_queries):
     def helper(queries, *args, **kwargs):
+        orm_models = get_orm_models()
         query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
@@ -223,7 +229,7 @@ def test_get_annotated_field_at_base(
 ):
     data = get_product_flat(1, "annotated+1,size-2", [("annotated__not_equals", "a")])
     assert data == [["b", 1], ["c", 2]]
-    assert len(mock_admin_get_queryset.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
@@ -232,7 +238,7 @@ def test_get_aggretated_annotated_field_at_base(
 ):
     data = get_product_flat(1, "annotated__count+1,size-2", [])
     assert data == [[2, 1], [1, 2]]  # aggregates last
-    assert len(mock_admin_get_queryset.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
@@ -256,7 +262,7 @@ def test_get_annotated_field_function_at_base(
 ):
     data = get_product_flat(1, "annotated__is_null+1,size-2", [])
     assert data == [["NotNull", 2.0], ["NotNull", 1.0]]
-    assert len(mock_admin_get_queryset.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
 def test_get_annotated_field_down_tree(
@@ -268,7 +274,7 @@ def test_get_annotated_field_down_tree(
         [("producer__address__andrew__not_equals", "bad")],
     )
     assert data == [[None, 2.0], ["good", 1]]
-    assert len(mock_admin_get_queryset.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
@@ -277,7 +283,7 @@ def test_get_aggregated_annotated_field_down_tree(
 ):
     data = get_product_flat(1, "producer__address__andrew__count+1,size-2", [])
     assert data == [[2, 0], [1, 2]]  # aggregates last
-    assert len(mock_admin_get_queryset.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
 def test_get_annotated_field_function_down_tree(
@@ -285,7 +291,7 @@ def test_get_annotated_field_function_down_tree(
 ):
     data = get_product_flat(1, "producer__address__andrew__is_null+1,size-2", [])
     assert data == [["NotNull", 1.0], ["IsNull", 2.0]]
-    assert len(mock_admin_get_queryset.call_args_list) == 2
+    assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
 @pytest.mark.usefixtures("products")
