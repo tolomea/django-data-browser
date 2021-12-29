@@ -229,6 +229,8 @@ select.Lookup {
 
 /* Fields */
 .FieldsList {
+  display: flex;
+  flex-flow: column nowrap;
   .Scroller,
   table table {
     border: 1px solid var(--border-color);
