@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import Cookies from "js-cookie";
-import "./App.css";
+import "./App.scss";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
 const assert = require("assert");
 let fetchInProgress = false;

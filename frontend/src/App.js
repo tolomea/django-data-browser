@@ -7,7 +7,7 @@ import {
   useParams,
   useLocation,
 } from "react-router-dom";
-import "./App.css";
+import "./App.scss";
 import { ContextMenu } from "./ContextMenu";
 import { Tooltip } from "./Tooltip";
 import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";

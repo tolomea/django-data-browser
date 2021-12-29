@@ -14,7 +14,7 @@ import {
 import { Results } from "./Results";
 import { getPartsForQuery, getRelUrlForQuery } from "./Query";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
-import "./App.css";
+import "./App.scss";
 
 function FilterValue(props) {
   const { lookupType, onChange, value, field } = props;

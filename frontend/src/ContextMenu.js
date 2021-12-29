@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./App.css";
+import "./App.scss";
 import useWindowDimensions from "./WindowDimensions";
 import { TLink } from "./Util";
 

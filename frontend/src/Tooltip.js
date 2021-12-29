@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import "./App.css";
+import "./App.scss";
 import useWindowDimensions from "./WindowDimensions";
 const ShowTooltip = React.createContext();
 const HideTooltip = React.createContext();

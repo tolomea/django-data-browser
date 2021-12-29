@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "./App.css";
+import "./App.scss";
 import { TLink, SLink, Overlay, syncPost, doPost, HasActionIcon } from "./Util";
 import { ShowContextMenu } from "./ContextMenu";
 
@@ -14,14 +14,8 @@ function Spacer(props) {
 }
 
 function HeadCell(props) {
-  const {
-    query,
-    field,
-    className,
-    leftArrow,
-    rightArrow,
-    verticalArrows,
-  } = props;
+  const { query, field, className, leftArrow, rightArrow, verticalArrows } =
+    props;
   const modelField = query.getField(field.pathStr);
   const type = query.getType(modelField);
   const fieldClass = query.getFieldClass(modelField);
