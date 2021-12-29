@@ -46,7 +46,7 @@
                     "toMany": false,
                     "type": "string"
                 },
-                "user_set": {
+                "user": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -62,7 +62,7 @@
                 "id",
                 "admin",
                 "name",
-                "user_set"
+                "user"
             ]
         },
         "auth.User": {
@@ -221,7 +221,7 @@
                     "toMany": false,
                     "type": "string"
                 },
-                "view_set": {
+                "view": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -247,7 +247,7 @@
                 "is_staff",
                 "is_superuser",
                 "username",
-                "view_set"
+                "view"
             ]
         },
         "boolean": {
@@ -441,7 +441,7 @@
                     "toMany": false,
                     "type": "number"
                 },
-                "inlineadmin_set": {
+                "inlineadmin": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -463,7 +463,7 @@
                     "toMany": false,
                     "type": "string"
                 },
-                "normal_set": {
+                "normal": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -478,9 +478,9 @@
             "sortedFields": [
                 "id",
                 "admin",
-                "inlineadmin_set",
+                "inlineadmin",
                 "name",
-                "normal_set"
+                "normal"
             ]
         },
         "core.InlineAdmin": {
@@ -519,7 +519,7 @@
                     "toMany": false,
                     "type": "string"
                 },
-                "normal_set": {
+                "normal": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -535,7 +535,7 @@
                 "id",
                 "in_admin",
                 "name",
-                "normal_set"
+                "normal"
             ]
         },
         "core.Normal": {
@@ -695,7 +695,7 @@
                     "toMany": false,
                     "type": "string"
                 },
-                "product_set": {
+                "products": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -713,7 +713,7 @@
                 "address",
                 "frank",
                 "name",
-                "product_set"
+                "products"
             ]
         },
         "core.Product": {
@@ -1042,7 +1042,7 @@
                     "toMany": false,
                     "type": "string"
                 },
-                "sku_set": {
+                "sku": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -1128,7 +1128,7 @@
                 "producer",
                 "size",
                 "size_unit",
-                "sku_set",
+                "sku",
                 "stealth_annotation",
                 "string_choice",
                 "tags",
@@ -1237,7 +1237,7 @@
                     "toMany": false,
                     "type": "string"
                 },
-                "product_set": {
+                "product": {
                     "actions": [],
                     "canPivot": false,
                     "choices": [],
@@ -1252,7 +1252,7 @@
             "sortedFields": [
                 "name",
                 "admin",
-                "product_set"
+                "product"
             ]
         },
         "data_browser.View": {

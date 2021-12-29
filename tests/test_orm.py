@@ -549,16 +549,22 @@ def test_get_results_string_filter(get_product_flat):
 
 @pytest.mark.usefixtures("products")
 def test_get_results_basic_flat(get_product_flat):
-    # just a query
     data = get_product_flat(1, "name+0,producer__address__city", [])
     assert data == [["a", "london"], ["b", "london"], ["c", None]]
 
 
 @pytest.mark.usefixtures("products")
 def test_get_results_one_to_one(get_product_flat):
-    # just a query
     data = get_product_flat(1, "name+0,producer__address__producer__address__city", [])
     assert data == [["a", "london"], ["b", "london"], ["c", None]]
+
+
+@pytest.mark.usefixtures("products")
+def test_get_results_many_to_one(get_product_flat, mocker):
+    mocker.patch("data_browser.orm_admin.get_feature_flag", return_value=True)
+
+    data = get_product_flat(1, "name+0,producer__products__name+1", [])
+    assert data == [["a", "a"], ["b", "b"], ["c", "c"]]
 
 
 @pytest.mark.usefixtures("products")

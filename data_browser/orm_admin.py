@@ -328,7 +328,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
         pretty_name = (
             _make_pretty(getattr(field, "verbose_name", field_name)) if field else None
         )
-        # FK's and OneToOne's
+        # FK's etc
         if isinstance(
             field, (models.ForeignKey, ForeignObjectRel, models.ManyToManyField)
         ):
@@ -337,8 +337,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 continue
 
             if isinstance(field, ForeignObjectRel):
-                field_name = field.get_accessor_name()
-                pretty_name = _make_pretty(field_name)
+                pretty_name = _make_pretty(field.get_accessor_name())
 
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(

@@ -109,7 +109,12 @@ class Producer(models.Model):
 
 class Product(models.Model):
     name = models.TextField()
-    producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
+    producer = models.ForeignKey(
+        Producer,
+        on_delete=models.CASCADE,
+        related_name="product_set",
+        related_query_name="products",
+    )
     size = models.IntegerField(default=0)
     size_unit = models.TextField()
     default_sku = models.ForeignKey(

@@ -2858,7 +2858,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "string",
                 },
-                "user_set": {
+                "user": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -2870,7 +2870,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": None,
                 },
             },
-            "sortedFields": ["id", "admin", "name", "user_set"],
+            "sortedFields": ["id", "admin", "name", "user"],
         },
         "auth.User": {
             "defaultFilters": [],
@@ -3028,7 +3028,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "string",
                 },
-                "view_set": {
+                "view": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -3054,7 +3054,7 @@ snapshots["test_query_ctx_m2m config"] = {
                 "is_staff",
                 "is_superuser",
                 "username",
-                "view_set",
+                "view",
             ],
         },
         "boolean": {
@@ -3244,7 +3244,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "number",
                 },
-                "inlineadmin_set": {
+                "inlineadmin": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -3266,7 +3266,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "string",
                 },
-                "normal_set": {
+                "normal": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -3278,7 +3278,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": None,
                 },
             },
-            "sortedFields": ["id", "admin", "inlineadmin_set", "name", "normal_set"],
+            "sortedFields": ["id", "admin", "inlineadmin", "name", "normal"],
         },
         "core.InlineAdmin": {
             "defaultFilters": [],
@@ -3316,7 +3316,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "string",
                 },
-                "normal_set": {
+                "normal": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -3328,7 +3328,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": None,
                 },
             },
-            "sortedFields": ["id", "in_admin", "name", "normal_set"],
+            "sortedFields": ["id", "in_admin", "name", "normal"],
         },
         "core.Normal": {
             "defaultFilters": [],
@@ -3487,7 +3487,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "string",
                 },
-                "product_set": {
+                "products": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -3499,7 +3499,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": None,
                 },
             },
-            "sortedFields": ["id", "admin", "address", "frank", "name", "product_set"],
+            "sortedFields": ["id", "admin", "address", "frank", "name", "products"],
         },
         "core.Product": {
             "defaultFilters": [
@@ -3806,7 +3806,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "string",
                 },
-                "sku_set": {
+                "sku": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -3889,7 +3889,7 @@ snapshots["test_query_ctx_m2m config"] = {
                 "producer",
                 "size",
                 "size_unit",
-                "sku_set",
+                "sku",
                 "stealth_annotation",
                 "string_choice",
                 "tags",
@@ -3992,7 +3992,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "string",
                 },
-                "product_set": {
+                "product": {
                     "actions": [],
                     "canPivot": False,
                     "choices": [],
@@ -4004,7 +4004,7 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": None,
                 },
             },
-            "sortedFields": ["name", "admin", "product_set"],
+            "sortedFields": ["name", "admin", "product"],
         },
         "data_browser.View": {
             "defaultFilters": [],
