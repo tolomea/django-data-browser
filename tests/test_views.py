@@ -10,7 +10,6 @@ from django.utils import timezone
 import data_browser.models
 
 from .core import models
-from .util import update_fe_fixture
 
 
 def dump(val):
@@ -125,7 +124,6 @@ def test_query_ctx(admin_client, snapshot):
     assert res.status_code == 200
     config = res.json()
     snapshot.assert_match(config, "config")
-    update_fe_fixture("frontend/src/context_fixture.json", config)
 
 
 @pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
@@ -135,7 +133,6 @@ def test_query_ctx_m2m(admin_client, snapshot, mocker):
     assert res.status_code == 200
     config = res.json()
     snapshot.assert_match(config, "config")
-    update_fe_fixture("frontend/src/context_fixture.json", config)
 
 
 @pytest.mark.usefixtures("products")
