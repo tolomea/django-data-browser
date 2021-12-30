@@ -9,6 +9,7 @@ import {
   Delete,
   CopyText,
   HasActionIcon,
+  HasToManyIcon,
   useToggle,
 } from "./Util";
 import { Results } from "./Results";
@@ -229,7 +230,13 @@ function Field(props) {
               />
             </TLink>
           ) : (
-            modelField.prettyName + (modelField.toMany ? " \u21f6" : "")
+            <>
+              {modelField.prettyName}
+              <HasToManyIcon
+                modelField={modelField}
+                message="Traversing 'To Many' links may add multiple lines per result."
+              />
+            </>
           )}
         </td>
       </tr>

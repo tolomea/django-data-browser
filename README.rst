@@ -328,6 +328,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Add mouse over text for to many icon.                                                                  |
 |         |            | | Fix issue when related_name is different from related_query_name.                                      |
 |         |            | | Minor field list styling fix.                                                                          |
 |         |            | | Change calculated field red to grey.                                                                   |

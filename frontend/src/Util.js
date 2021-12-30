@@ -329,6 +329,28 @@ function HasActionIcon(props) {
     }
 }
 
+function HasToManyIcon(props) {
+    const { modelField, message } = props;
+    const showTooltip = useContext(ShowTooltip);
+    const hideTooltip = useContext(HideTooltip);
+
+    if (modelField.toMany) {
+        return (
+            <>
+                <span> </span>
+                <span
+                    onMouseEnter={(e) => showTooltip(e, [message])}
+                    onMouseLeave={(e) => hideTooltip(e)}
+                >
+                    {"\u21f6"}
+                </span>
+            </>
+        );
+    } else {
+        return "";
+    }
+}
+
 function useToggle(initial = false) {
     const [toggled, setToggled] = useState(initial);
 
@@ -361,5 +383,6 @@ export {
     shallowEqual,
     syncPost,
     HasActionIcon,
+    HasToManyIcon,
     useToggle,
 };
