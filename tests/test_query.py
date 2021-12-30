@@ -152,12 +152,13 @@ class ParseHelpers:
 
     def check_parse_lookup(self, lookup, value, expected, error_re):
         res, err = self.type_.parse_lookup(lookup, value, self.choices)
-        if expected is None:
-            assert res is None
-            assert re.fullmatch(error_re, err)
-        else:
-            assert err is None
-            assert res == expected
+        # if expected is None:
+        #    assert res is None
+        #    assert re.fullmatch(error_re, err)
+        # else:
+        assert expected is not None
+        assert err is None
+        assert res == expected
 
     def check_format(self, value, expected):
         assert self.type_.get_formatter(self.choices)(value) == expected
