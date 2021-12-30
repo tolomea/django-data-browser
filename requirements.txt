@@ -6,11 +6,11 @@ python-dateutil
 sqlparse
 
 # dev and test
+coverage[toml]
 dj-database-url
 pre-commit
 pytest
 pytest-cov
-pytest-coverage
 pytest-django
 pytest-mock
 pytest-xdist < 2.0
