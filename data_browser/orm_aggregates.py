@@ -1,12 +1,26 @@
 from collections import defaultdict
 
+from django.conf import settings
 from django.db import models
-from django.db.models import DurationField, IntegerField
+from django.db.models import DurationField, IntegerField, Value
 from django.db.models.functions import Cast
 
 from .orm_fields import OrmBaseField, OrmBoundField
-from .types import BooleanType, DateTimeType, DateType, DurationType, NumberType
+from .types import (
+    ArrayTypeMixin,
+    BooleanType,
+    DateTimeType,
+    DateType,
+    DurationType,
+    NumberType,
+)
 from .util import annotation_path
+
+try:
+    from django.contrib.postgres.aggregates import ArrayAgg
+except ModuleNotFoundError:  # pragma: not postgres
+    ArrayAgg = None
+
 
 _TYPE_AGGREGATES = defaultdict(
     lambda: [("count", NumberType)],
@@ -36,6 +50,11 @@ _TYPE_AGGREGATES = defaultdict(
         BooleanType: [("average", NumberType), ("sum", NumberType)],
     },
 )
+
+if "postgresql" in settings.DATABASES["default"]["ENGINE"]:  # pragma: postgres
+    for array_type in ArrayTypeMixin.__subclasses__():
+        if array_type.raw_type is None:
+            _TYPE_AGGREGATES[array_type.element_type].append(("all", array_type))
 
 
 class _CastDuration(Cast):
@@ -69,6 +88,7 @@ def _get_django_aggregate(field_type, name):
             "std_dev": models.StdDev,
             "sum": models.Sum,
             "variance": models.Variance,
+            "all": lambda x: ArrayAgg(x, default=Value([]), distinct=True, ordering=x),
         }[name]
 
 

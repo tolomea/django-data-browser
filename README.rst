@@ -328,6 +328,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Expose Postgres's ``ArrayAgg`` as an ``all`` aggregate.                                                |
 |         |            | | Add mouse over text for to many icon.                                                                  |
 |         |            | | Fix issue when related_name is different from related_query_name.                                      |
 |         |            | | CSS tweaks.                                                                                            |

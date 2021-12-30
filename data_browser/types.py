@@ -44,10 +44,14 @@ class TypeMeta(type):
         return res
 
     @property
+    def pretty_name(cls):
+        name = cls.__name__
+        assert name.endswith("Type")
+        return name[: -len("Type")]
+
+    @property
     def name(cls):
-        name = cls.__name__.lower()
-        assert name.endswith("type")
-        return name[: -len("type")]
+        return cls.pretty_name.lower()
 
 
 class BaseType(metaclass=TypeMeta):
@@ -562,22 +566,31 @@ class ArrayTypeMixin:
         return [cls.element_type._parse(v, choices) for v in value]
 
 
-class StringArrayType(ArrayTypeMixin, BaseType):
-    element_type = StringType
-
-
-class NumberArrayType(ArrayTypeMixin, BaseType):
-    element_type = NumberType
+# Array types
+for _cls in [
+    BooleanType,
+    DurationType,
+    BooleanType,
+    DateTimeType,
+    DateType,
+    UUIDType,
+    URLType,
+    StringType,
+    NumberType,
+    StringableType,
+]:
+    _name = f"{_cls.pretty_name}ArrayType"
+    globals()[_name] = type(_name, (ArrayTypeMixin, BaseType), {"element_type": _cls})
 
 
 class StringChoiceArrayType(ArrayTypeMixin, BaseType):
     element_type = StringChoiceType
-    raw_type = StringArrayType
+    raw_type = StringArrayType  # noqa: F821
 
 
 class NumberChoiceArrayType(ArrayTypeMixin, BaseType):
     element_type = NumberChoiceType
-    raw_type = NumberArrayType
+    raw_type = NumberArrayType  # noqa: F821
 
 
 TYPES = {cls.name: cls for cls in all_subclasses(BaseType)}

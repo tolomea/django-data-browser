@@ -16,6 +16,7 @@
         "pragma: no cover",
         "pragma: postgres",
         "pragma: not postgres",
+        "pragma: sqlite",
         "pragma: not sqlite",
         "pragma: mysql",
         "pragma: django < 3.1",

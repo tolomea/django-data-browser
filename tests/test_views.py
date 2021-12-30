@@ -9,6 +9,7 @@ from django.utils import timezone
 
 import data_browser.models
 
+from .conftest import SQLITE
 from .core import models
 
 
@@ -51,7 +52,8 @@ def test_query_html(admin_client, snapshot):
     )
     assert res.status_code == 200
     config = json.loads(res.context["config"])
-    snapshot.assert_match(config, "config")
+    if SQLITE:  # pragma: sqlite
+        snapshot.assert_match(config, "config")
 
 
 def test_query_query(admin_client, snapshot):
@@ -115,7 +117,8 @@ def test_query_html_no_perms(admin_user, admin_client, snapshot):
     res = admin_client.get("/data_browser/query//.html?")
     assert res.status_code == 200
     config = json.loads(res.context["config"])
-    snapshot.assert_match(config, "config")
+    if SQLITE:  # pragma: sqlite
+        snapshot.assert_match(config, "config")
 
 
 @pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
@@ -123,7 +126,8 @@ def test_query_ctx(admin_client, snapshot):
     res = admin_client.get("/data_browser/query//.ctx?")
     assert res.status_code == 200
     config = res.json()
-    snapshot.assert_match(config, "config")
+    if SQLITE:  # pragma: sqlite
+        snapshot.assert_match(config, "config")
 
 
 @pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
@@ -132,7 +136,8 @@ def test_query_ctx_m2m(admin_client, snapshot, mocker):
     res = admin_client.get("/data_browser/query//.ctx?")
     assert res.status_code == 200
     config = res.json()
-    snapshot.assert_match(config, "config")
+    if SQLITE:  # pragma: sqlite
+        snapshot.assert_match(config, "config")
 
 
 @pytest.mark.usefixtures("products")
