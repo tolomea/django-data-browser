@@ -52,15 +52,26 @@ def get_results_flat(with_arrays, admin_ddb_request):  # pragma: postgres
     return helper
 
 
-def test_hello_world(get_results_flat):  # pragma: postgres
+@pytest.fixture
+def get_results_flat2(get_results_flat):  # pragma: postgres
+    def helper(*fields, **filters):
+        return get_results_flat(",".join(fields), list(filters.items()))
+
+    return helper
+
+
+def test_hello_world(get_results_flat2):  # pragma: postgres
     ArrayModel.objects.create(
         int_array_field=[1, 2],
         char_array_field=["a", "b"],
         int_choice_array_field=[1, 2],
         char_choice_array_field=["a", "b"],
     )
-    assert get_results_flat(
-        "int_array_field,char_array_field,int_choice_array_field,char_choice_array_field"
+    assert get_results_flat2(
+        "int_array_field",
+        "char_array_field",
+        "int_choice_array_field",
+        "char_choice_array_field",
     ) == [
         {
             "int_array_field": "[1.0, 2.0]",

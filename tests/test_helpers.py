@@ -71,10 +71,13 @@ class TestAdminMixin:
     def test_ddb_url(self, admin_client):
         resp = admin_client.get("/admin/core/product/")
         assert resp.status_code == 200
-        assert (
-            resp.context["ddb_url"]
-            == "/data_browser/query/core.Product/.html?a_field__a_lookup=a_value&name__not_equals=not+a+thing&a_field__a_lookup=true"
+        expected = (
+            "/data_browser/query/core.Product/.html"
+            "?a_field__a_lookup=a_value"
+            "&name__not_equals=not+a+thing"
+            "&a_field__a_lookup=true"
         )
+        assert resp.context["ddb_url"] == expected
 
     def test_ddb_url_ignored(self, admin_client):
         resp = admin_client.get("/admin/core/ignored/")

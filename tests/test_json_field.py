@@ -9,7 +9,7 @@ from data_browser.query import BoundQuery, Query
 
 from .conftest import JSON_FIELD_SUPPORT, SQLITE
 
-""" Howto enable SQLite JSON support https://code.djangoproject.com/wiki/JSON1Extension """
+# Howto enable SQLite JSON support https://code.djangoproject.com/wiki/JSON1Extension
 
 
 if JSON_FIELD_SUPPORT:

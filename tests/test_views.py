@@ -47,7 +47,8 @@ def pivot_products(db):
 @pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
 def test_query_html(admin_client, snapshot):
     res = admin_client.get(
-        "/data_browser/query/core.Product/size-0,name+1,size_unit.html?size__lt=2&id__gt=0"
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.html"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     config = json.loads(res.context["config"])
@@ -56,7 +57,8 @@ def test_query_html(admin_client, snapshot):
 
 def test_query_query(admin_client, snapshot):
     res = admin_client.get(
-        "/data_browser/query/core.Product/size-0,name+1,size_unit.query?size__lt=2&id__gt=0"
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.query"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     query = json.loads(res.content.decode("utf-8"))
@@ -65,9 +67,11 @@ def test_query_query(admin_client, snapshot):
 
 @pytest.mark.parametrize("format", ["sql", "profile", "pstats", "profile_sql", "qs"])
 def test_query_misc_formats(admin_client, format):
-    # we're not going to check the result as they vary and it's sufficient that it doesn't blow up
+    # we're not going to check the result as they vary and it's sufficient that it
+    # doesn't blow up
     res = admin_client.get(
-        f"/data_browser/query/core.Product/size-0,name+1,size_unit.{format}?size__lt=2&id__gt=0"
+        f"/data_browser/query/core.Product/size-0,name+1,size_unit.{format}"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
 
@@ -75,7 +79,8 @@ def test_query_misc_formats(admin_client, format):
 @pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_query_explain(admin_client):
     res = admin_client.get(
-        "/data_browser/query/core.Product/size-0,name+1,size_unit.explain?size__lt=2&id__gt=0"
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.explain"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
 
@@ -98,7 +103,8 @@ def test_query_qs_variants(admin_client, snapshot):
 )
 def test_query_bad_formats(admin_client, format):
     res = admin_client.get(
-        f"/data_browser/query/core.Product/size-0,name+1,size_unit.{format}?size__lt=2&id__gt=0"
+        f"/data_browser/query/core.Product/size-0,name+1,size_unit.{format}"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 404
 
@@ -135,13 +141,9 @@ def test_query_ctx_m2m(admin_client, snapshot, mocker):
 @pytest.mark.usefixtures("products")
 def test_query_json_bad_fields(admin_client):
     res = admin_client.get(
-        "".join(
-            [
-                "/data_browser/query/core.Product/",
-                "size-0,name+1,size_unit,bob-2,is_onsale,pooducer__name,producer__name.json",
-                "?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx",
-            ]
-        )
+        "/data_browser/query/core.Product/"
+        "size-0,name+1,size_unit,bob-2,is_onsale,pooducer__name,producer__name.json"
+        "?size__lt=2&id__gt=0&bob__gt=1&size__xx=1&size__lt=xx"
     )
     assert res.status_code == 200
     assert json.loads(res.content.decode("utf-8"))["rows"] == [
@@ -164,7 +166,8 @@ def test_query_json_bad_fields(admin_client):
 
 def test_query_bad_media(admin_client):
     res = admin_client.get(
-        "/data_browser/query/core.Product/size-0,name+1,size_unit.bob?size__lt=2&id__gt=0"
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.bob"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 404
 
@@ -172,7 +175,8 @@ def test_query_bad_media(admin_client):
 @pytest.mark.usefixtures("products")
 def test_query_csv(admin_client):
     res = admin_client.get(
-        "/data_browser/query/core.Product/size-0,name+1,size_unit.csv?size__lt=2&id__gt=0"
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.csv"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     res = res.getvalue().decode("utf-8")
@@ -185,7 +189,8 @@ def test_query_csv(admin_client):
 @pytest.mark.usefixtures("pivot_products")
 def test_query_csv_pivoted(admin_client):
     res = admin_client.get(
-        "/data_browser/query/core.Product/created_time__year+0,&created_time__month+1,id__count,size__max.csv?"
+        "/data_browser/query/core.Product/"
+        "created_time__year+0,&created_time__month+1,id__count,size__max.csv?"
     )
     assert res.status_code == 200
     res = res.getvalue().decode("utf-8")
@@ -246,7 +251,8 @@ def test_query_csv_pivot_permutations(admin_client, key, snapshot):
 @pytest.mark.usefixtures("products")
 def test_query_json(admin_client, snapshot):
     res = admin_client.get(
-        "/data_browser/query/core.Product/size-0,name+1,size_unit.json?size__lt=2&id__gt=0"
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.json"
+        "?size__lt=2&id__gt=0"
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))
@@ -266,7 +272,8 @@ def test_query_is_null_date_filter(admin_client, snapshot):
 @pytest.mark.usefixtures("pivot_products")
 def test_query_json_pivot(admin_client, snapshot):
     res = admin_client.get(
-        "/data_browser/query/core.Product/created_time__year+0,&created_time__month+1,id__count,size__max.json?"
+        "/data_browser/query/core.Product/"
+        "created_time__year+0,&created_time__month+1,id__count,size__max.json?"
     )
     assert res.status_code == 200
     data = json.loads(res.content.decode("utf-8"))

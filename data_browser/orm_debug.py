@@ -31,7 +31,9 @@ def _format_value(value):
         expression = _format_value(value.expression)
         output_field = _format_value(value.output_field)
         return dedent(
-            f"ExpressionWrapper(\n{indent(expression, SPACES)},\n{SPACES}output_field={output_field},\n)"
+            "ExpressionWrapper(\n"
+            f"{indent(expression, SPACES)},\n"
+            f"{SPACES}output_field={output_field},\n)"
         )
     else:
         return repr(value)

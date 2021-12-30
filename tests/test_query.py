@@ -240,10 +240,10 @@ class TestQuery:
             query.get_url("html")
             == "/query/app.model/fa+1,fd-0,fn.html?bob__equals=fred&limit=123"
         )
-        assert (
-            query.get_full_url("html")
-            == "/data_browser/query/app.model/fa+1,fd-0,fn.html?bob__equals=fred&limit=123"
+        expected = (
+            "/data_browser/query/app.model/fa+1,fd-0,fn.html?bob__equals=fred&limit=123"
         )
+        assert query.get_full_url("html") == expected
 
     def test_url_no_filters(self, query):
         query.filters = []
