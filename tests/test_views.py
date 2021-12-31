@@ -52,7 +52,7 @@ def test_query_html(admin_client, snapshot):
     )
     assert res.status_code == 200
     config = json.loads(res.context["config"])
-    if SQLITE:  # pragma: sqlite
+    if SQLITE:
         snapshot.assert_match(config, "config")
 
 
@@ -117,7 +117,7 @@ def test_query_html_no_perms(admin_user, admin_client, snapshot):
     res = admin_client.get("/data_browser/query//.html?")
     assert res.status_code == 200
     config = json.loads(res.context["config"])
-    if SQLITE:  # pragma: sqlite
+    if SQLITE:
         snapshot.assert_match(config, "config")
 
 
@@ -126,7 +126,7 @@ def test_query_ctx(admin_client, snapshot):
     res = admin_client.get("/data_browser/query//.ctx?")
     assert res.status_code == 200
     config = res.json()
-    if SQLITE:  # pragma: sqlite
+    if SQLITE:
         snapshot.assert_match(config, "config")
 
 
@@ -136,7 +136,7 @@ def test_query_ctx_m2m(admin_client, snapshot, mocker):
     res = admin_client.get("/data_browser/query//.ctx?")
     assert res.status_code == 200
     config = res.json()
-    if SQLITE:  # pragma: sqlite
+    if SQLITE:
         snapshot.assert_match(config, "config")
 
 

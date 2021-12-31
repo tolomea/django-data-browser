@@ -166,7 +166,7 @@ def _get_fields(row, fields):
     res = []
     for field in fields:
         v = row[field.queryset_path_str]
-        if isinstance(v, (list, set)):  # pragma: postgres
+        if isinstance(v, (list, set)):
             v = tuple(v)
         try:
             hash(v)

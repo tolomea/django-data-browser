@@ -23,15 +23,15 @@ from .types import (
 
 try:
     from django.contrib.postgres.fields import ArrayField
-except ModuleNotFoundError:  # pragma: postgres
+except ModuleNotFoundError:  # pragma: no cover
     ArrayField = None.__class__
 
 try:
     from django.db.models import JSONField
-except ImportError:  # pragma: django < 3.1
+except ImportError:
     try:
         from django.contrib.postgres.fields import JSONField
-    except ModuleNotFoundError:  # pragma: postgres
+    except ModuleNotFoundError:  # pragma: no cover
         JSONField = None.__class__
 
 
@@ -77,9 +77,7 @@ def _fmt_choices(choices):
 
 
 def get_field_type(field_name, field):
-    if isinstance(field, ArrayField) and isinstance(
-        field.base_field, _STRING_FIELDS
-    ):  # pragma: postgres
+    if isinstance(field, ArrayField) and isinstance(field.base_field, _STRING_FIELDS):
         base_field, choices = get_field_type(field_name, field.base_field)
         array_types = {
             StringType: StringArrayType,
@@ -89,16 +87,14 @@ def get_field_type(field_name, field):
         }
         if base_field in array_types:
             return array_types[base_field], choices
-        else:
+        else:  # pragma: no cover
             debug_log(
                 f"{field.model.__name__}.{field_name} unsupported subarray type"
                 f" {type(field.base_field).__name__}"
             )
             return UnknownType, None
 
-    elif isinstance(field, ArrayField) and isinstance(
-        field.base_field, _NUMBER_FIELDS
-    ):  # pragma: postgres
+    elif isinstance(field, ArrayField) and isinstance(field.base_field, _NUMBER_FIELDS):
         if field.base_field.choices:
             return NumberChoiceArrayType, _fmt_choices(field.base_field.choices)
         else:

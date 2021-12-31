@@ -18,7 +18,7 @@ from .util import annotation_path
 
 try:
     from django.contrib.postgres.aggregates import ArrayAgg
-except ModuleNotFoundError:  # pragma: not postgres
+except ModuleNotFoundError:  # pragma: no cover
     ArrayAgg = None
 
 
@@ -51,7 +51,7 @@ _TYPE_AGGREGATES = defaultdict(
     },
 )
 
-if "postgresql" in settings.DATABASES["default"]["ENGINE"]:  # pragma: postgres
+if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
     for array_type in ArrayTypeMixin.__subclasses__():
         if array_type.raw_type is None:
             _TYPE_AGGREGATES[array_type.element_type].append(("all", array_type))
@@ -61,7 +61,7 @@ class _CastDuration(Cast):
     def __init__(self, expression):
         super().__init__(expression, output_field=DurationField())
 
-    def as_mysql(self, compiler, connection, **extra_context):  # pragma: mysql
+    def as_mysql(self, compiler, connection, **extra_context):
         # https://github.com/django/django/pull/13398
         template = "%(function)s(%(expressions)s AS signed integer)"
         return self.as_sql(compiler, connection, template=template, **extra_context)

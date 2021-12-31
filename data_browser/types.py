@@ -536,7 +536,7 @@ class ArrayTypeMixin:
     default_value = "[]"
 
     @classmethod
-    def _get_formatter(cls, choices):  # pragma: postgres
+    def _get_formatter(cls, choices):
         element_formatter = cls.element_type._get_formatter(choices)
         return (
             lambda value: None

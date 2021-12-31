@@ -77,7 +77,7 @@ _weekday_choices = [
 def _get_django_function(name, qs):
     def IsNull(field_name):
         # https://code.djangoproject.com/ticket/32200
-        if django.VERSION[:3] == (3, 1, 3):  # pragma: django != 3.1.3
+        if django.VERSION[:3] == (3, 1, 3):  # pragma: django 3.1.3
             return Subquery(
                 qs.annotate(
                     ddb_is_null=ExpressionWrapper(

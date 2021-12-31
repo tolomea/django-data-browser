@@ -31,10 +31,7 @@ def _fix_filter(models, field, parts, lookup, value):
             assert False  # should have been caught above
         else:
             parts.append("raw")
-    elif field.type_ in [
-        StringChoiceArrayType,
-        NumberChoiceArrayType,
-    ]:  # pragma: postgres
+    elif field.type_ in [StringChoiceArrayType, NumberChoiceArrayType]:
         if lookup in ["contains", "not_contains"]:
             value, err = field.type_.raw_type.parse_lookup(lookup, value, None)
             choices = dict(field.choices)

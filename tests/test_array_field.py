@@ -9,9 +9,9 @@ from data_browser.query import BoundQuery, Query
 
 from .conftest import ARRAY_FIELD_SUPPORT
 
-if ARRAY_FIELD_SUPPORT:  # pragma: postgres
+if ARRAY_FIELD_SUPPORT:
     from .array.models import ArrayModel
-else:  # pragma: not postgres
+else:
     pytestmark = pytest.mark.skip("Needs ArrayField support")
 
 
@@ -25,14 +25,14 @@ class ArrayAdmin(admin.ModelAdmin):
 
 
 @pytest.fixture
-def with_arrays(db):  # pragma: postgres
+def with_arrays(db):
     admin.site.register(ArrayModel, ArrayAdmin)
     yield
     admin.site.unregister(ArrayModel)
 
 
 @pytest.fixture
-def get_results_flat(with_arrays, admin_ddb_request):  # pragma: postgres
+def get_results_flat(with_arrays, admin_ddb_request):
     def helper(*fields, **filters):
         orm_models = get_models(admin_ddb_request)
         query = Query.from_request(
@@ -43,7 +43,7 @@ def get_results_flat(with_arrays, admin_ddb_request):  # pragma: postgres
 
         for f in bound_query.filters:
             if f.err_message:
-                print(
+                print(  # pragma: no cover
                     "filter error:", f.path_str, f.lookup, f.value, "->", f.err_message
                 )
 
@@ -52,7 +52,7 @@ def get_results_flat(with_arrays, admin_ddb_request):  # pragma: postgres
     return helper
 
 
-def test_hello_world(get_results_flat):  # pragma: postgres
+def test_hello_world(get_results_flat):
     ArrayModel.objects.create(
         int_array_field=[1, 2],
         char_array_field=["a", "b"],
@@ -74,7 +74,7 @@ def test_hello_world(get_results_flat):  # pragma: postgres
     ]
 
 
-def test_int_array_contains(get_results_flat):  # pragma: postgres
+def test_int_array_contains(get_results_flat):
     ArrayModel.objects.create(int_array_field=[1, 2])
     ArrayModel.objects.create(int_array_field=[2, 3])
     ArrayModel.objects.create(int_array_field=[1, 3])
@@ -84,7 +84,7 @@ def test_int_array_contains(get_results_flat):  # pragma: postgres
     ]
 
 
-def test_int_choice_array_contains(get_results_flat):  # pragma: postgres
+def test_int_choice_array_contains(get_results_flat):
     ArrayModel.objects.create(int_choice_array_field=[1, 2])
     ArrayModel.objects.create(int_choice_array_field=[2, 3])
     ArrayModel.objects.create(int_choice_array_field=[1, 3])
@@ -96,7 +96,7 @@ def test_int_choice_array_contains(get_results_flat):  # pragma: postgres
     ]
 
 
-def test_char_array_contains(get_results_flat):  # pragma: postgres
+def test_char_array_contains(get_results_flat):
     ArrayModel.objects.create(char_array_field=["a", "b"])
     ArrayModel.objects.create(char_array_field=["b", "c"])
     ArrayModel.objects.create(char_array_field=["a", "c"])
@@ -106,7 +106,7 @@ def test_char_array_contains(get_results_flat):  # pragma: postgres
     ]
 
 
-def test_char_choice_array_contains(get_results_flat):  # pragma: postgres
+def test_char_choice_array_contains(get_results_flat):
     ArrayModel.objects.create(char_choice_array_field=["a", "b"])
     ArrayModel.objects.create(char_choice_array_field=["b", "c"])
     ArrayModel.objects.create(char_choice_array_field=["a", "c"])
@@ -118,7 +118,7 @@ def test_char_choice_array_contains(get_results_flat):  # pragma: postgres
     ]
 
 
-def test_filter_length(get_results_flat):  # pragma: postgres
+def test_filter_length(get_results_flat):
     ArrayModel.objects.create(int_array_field=[1])
     ArrayModel.objects.create(int_array_field=[1, 2])
     ArrayModel.objects.create(int_array_field=[1, 2, 3])
@@ -127,7 +127,7 @@ def test_filter_length(get_results_flat):  # pragma: postgres
     ]
 
 
-def test_choice_array_filter_length(get_results_flat):  # pragma: postgres
+def test_choice_array_filter_length(get_results_flat):
     ArrayModel.objects.create(int_choice_array_field=[1])
     ArrayModel.objects.create(int_choice_array_field=[1, 2])
     ArrayModel.objects.create(int_choice_array_field=[1, 2, 3])
@@ -136,7 +136,7 @@ def test_choice_array_filter_length(get_results_flat):  # pragma: postgres
     ) == [{"int_choice_array_field": '["A", "B"]'}]
 
 
-def test_char_choice_array_equals(get_results_flat):  # pragma: postgres
+def test_char_choice_array_equals(get_results_flat):
     ArrayModel.objects.create(char_choice_array_field=["a", "b"])
     ArrayModel.objects.create(char_choice_array_field=["b", "c"])
     ArrayModel.objects.create(char_choice_array_field=["a", "c"])
@@ -169,7 +169,7 @@ def test_char_choice_array_equals(get_results_flat):  # pragma: postgres
         ("int_array_field__contains=1", "int_array_field__contains=1"),
     ],
 )
-def test_0009(admin_ddb_request, with_arrays, before, after):  # pragma: postgres
+def test_0009(admin_ddb_request, with_arrays, before, after):
     orm_models = get_models(admin_ddb_request)
     valid = int("wtf" not in before)
 

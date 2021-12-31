@@ -67,7 +67,7 @@ def test_get_string_sub_field(get_results_flat):
     SQLITE and django.VERSION[:3] == (3, 1, 3),
     reason="https://code.djangoproject.com/ticket/32203",
 )
-def test_get_number_sub_field(get_results_flat):  # pragma: not sqlite
+def test_get_number_sub_field(get_results_flat):
     JsonModel.objects.create(json_field={"position": 1})
     assert get_results_flat("json_field__position") == [{"json_field__position": 1}]
 
@@ -76,7 +76,7 @@ def test_get_number_sub_field(get_results_flat):  # pragma: not sqlite
     SQLITE and django.VERSION[:3] == (3, 1, 3),
     reason="https://code.djangoproject.com/ticket/32203",
 )
-def test_get_boolean_sub_field(get_results_flat):  # pragma: not sqlite
+def test_get_boolean_sub_field(get_results_flat):
     JsonModel.objects.create(json_field={"bool": True})
     assert get_results_flat("json_field__bool") == [{"json_field__bool": True}]
 
@@ -85,7 +85,7 @@ def test_get_boolean_sub_field(get_results_flat):  # pragma: not sqlite
     SQLITE and django.VERSION[:3] == (3, 1, 3),
     reason="https://code.djangoproject.com/ticket/32203",
 )
-def test_sub_field_is_null(get_results_flat):  # pragma: not sqlite
+def test_sub_field_is_null(get_results_flat):
     JsonModel.objects.create(json_field={"position": 1, "hello": "world"})
     JsonModel.objects.create(json_field={"position": 2, "hello": None})
     JsonModel.objects.create(json_field={"position": 3, "goodbye": "world"})

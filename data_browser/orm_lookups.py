@@ -33,7 +33,7 @@ def get_django_filter(field_type, path_str, lookup, filter_value):
             "ends_with": "iendswith",
             "is_null": "isnull",
         }[lookup]
-    elif lookup == "contains":  # pragma: postgres
+    elif lookup == "contains":
         filter_value = [filter_value]
     else:
         lookup = {

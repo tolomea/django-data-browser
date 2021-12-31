@@ -2,7 +2,7 @@ from django.db import models
 
 try:
     from django.db.models import JSONField
-except ImportError:  # pragma: django < 3.1
+except ImportError:
     from django.contrib.postgres.fields import JSONField
 
 
