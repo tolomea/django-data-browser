@@ -329,8 +329,8 @@ Release History
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
 |         |            | | Expose Postgres's ``ArrayAgg`` as an ``all`` aggregate.                                                |
-|         |            | | Add mouse over text for to many icon.                                                                  |
-|         |            | | Fix issue when related_name is different from related_query_name.                                      |
+|         |            | | Add mouse over text for the "to many" icon.                                                            |
+|         |            | | Fix issue when ``related_name`` is different from ``related_query_name``                               |
 |         |            | | CSS tweaks.                                                                                            |
 |         |            | | Change calculated field red to grey.                                                                   |
 |         |            | | Add support for Django 4.0 and Python 3.10 drop support for Python 3.6.                                |
