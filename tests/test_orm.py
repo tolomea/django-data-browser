@@ -10,6 +10,7 @@ from data_browser.orm_admin import OrmModel, get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
+from .conftest import POSTGRES
 from .core import models
 from .util import ANY, KEYS
 
@@ -385,6 +386,13 @@ def test_get_aggregated_is_null_function(get_product_flat):
 def test_get_aggregate(get_product_flat):
     data = get_product_flat(1, "size_unit,id__count", [])
     assert data == [["g", 3]]
+
+
+@pytest.mark.usefixtures("products")
+@pytest.mark.skipif(not POSTGRES, reason="Postgres specific feature")
+def test_get_all_aggregate(get_product_flat):
+    data = get_product_flat(1, "size_unit,size__all", [])
+    assert data == [["g", "[1.0, 2.0]"]]
 
 
 def test_get_aggregate_underscore(products, get_product_flat):
