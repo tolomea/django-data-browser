@@ -15,10 +15,6 @@
     ]
     parallel = true
 
-[tool.coverage.html]
-    skip_covered = true
-    skip_empty = true
-
 [tool.coverage.report]
     exclude_lines = [
         "assert False",
