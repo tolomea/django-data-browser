@@ -56,7 +56,7 @@ _FIELD_TYPE_MAP = {
 
 
 # hashid support
-try:  # pragma: no cover
+try:
     from hashid_field import (
         BigHashidAutoField,
         BigHashidField,

@@ -140,7 +140,7 @@ class SKUInline(admin.TabularInline):
     fields = ["name", "product", "bob"]
     readonly_fields = ["bob"]
 
-    def bob(self, obj):  # pragma: no cover don't show funcs on inlines test
+    def bob(self, obj):
         return "bob"
 
 

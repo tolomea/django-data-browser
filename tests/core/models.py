@@ -18,7 +18,7 @@ class Word:
         return self.name
 
 
-class FakeField(models.Field):  # pragma: no cover
+class FakeField(models.Field):
     description = "Text"
 
     def get_internal_type(self):

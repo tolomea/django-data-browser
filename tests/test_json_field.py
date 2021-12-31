@@ -14,7 +14,7 @@ from .conftest import JSON_FIELD_SUPPORT, SQLITE
 
 if JSON_FIELD_SUPPORT:
     from .json.models import JsonModel
-else:  # pragma: no cover
+else:
     pytestmark = pytest.mark.skip("Needs JSONField support")
 
 
