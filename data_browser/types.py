@@ -232,7 +232,7 @@ class DurationType(SequenceTypeMixin, BaseType):
         return lambda value: None if value is None else str(value)
 
 
-class DateTypeMixin(SequenceTypeMixin):
+class DateTimeParseMixin:
     _clause = re.compile(r"(\w{3,})([-+=])(\d+) *")
 
     _clause_types = {
@@ -257,96 +257,104 @@ class DateTypeMixin(SequenceTypeMixin):
         for c2 in _clause_types:
             assert c1 == c2 or not c1.startswith(c2), c2
 
+    @staticmethod
+    def _unambiguous_date_parse(value, **kwargs):
+        try:
+            res = {
+                dateutil.parser.parse(value, dayfirst=False, yearfirst=False, **kwargs),
+                dateutil.parser.parse(value, dayfirst=True, yearfirst=False, **kwargs),
+                dateutil.parser.parse(value, dayfirst=False, yearfirst=True, **kwargs),
+                dateutil.parser.parse(value, dayfirst=True, yearfirst=True, **kwargs),
+            }
+            if len(res) != 1:
+                raise Exception("Ambiguous value")
+            return res.pop()
+        except dateutil.parser.ParserError:
+            return None
+
+    @staticmethod
+    def _truncate_dt(value):
+        return value.replace(hour=0, minute=0, second=0, microsecond=0)
+
     @classmethod
     def _parse(cls, value, choices):
         assert not choices
-
-        value = value.strip()
 
         d8 = r"(\d{8})"
         d422 = r"(\d{4}[^\d]+\d{1,2}[^\d]+\d{1,2}([^\d]|$))"
-        if re.match(r"[^\d]*(" + d8 + "|" + d422 + ")", value):
-            # looks like some kinda iso date, roll with the defaults
-            res = dateutil.parser.parse(value)
-        else:
-            try:
-                # not an iso date, let the parser do it thing, but check for ambiguities
-                res = {
-                    dateutil.parser.parse(value, dayfirst=False, yearfirst=False),
-                    dateutil.parser.parse(value, dayfirst=True, yearfirst=False),
-                    dateutil.parser.parse(value, dayfirst=False, yearfirst=True),
-                    dateutil.parser.parse(value, dayfirst=True, yearfirst=True),
-                }
-                if len(res) != 1:
-                    raise Exception("Ambiguous value")
-                res = res.pop()
-            except dateutil.parser.ParserError:
-                # failing that must be relative delta stuff
+
+        res = timezone.now()
+
+        # iterate the clauses in the expression
+        for clause_str in value.split():
+            clause_str = clause_str.lower()
+
+            if clause_str == "now":
                 res = timezone.now()
+            elif clause_str == "today":
+                res = cls._truncate_dt(timezone.now())
+            elif re.match(fr"[^\d]*({d8}|{d422})", clause_str):
+                # looks like some kinda iso date, roll with the defaults
+                # includes T delimited like 2018-03-20T22:31:23
+                res = dateutil.parser.parse(clause_str, default=cls._truncate_dt(res))
+            elif cls._unambiguous_date_parse(clause_str, default=cls._truncate_dt(res)):
+                # TODO could walrus the duplicate call once we drop support for py3.7
+                res = cls._unambiguous_date_parse(
+                    clause_str, default=cls._truncate_dt(res)
+                )
+            else:
+                # failing that must be relative delta stuff
+                match = cls._clause.fullmatch(clause_str)
+                if not match:
+                    raise Exception(f"Unrecognized clause '{clause_str}'")
 
-                # iterate the clauses in the expression
-                for clause_str in value.split():
-                    match = cls._clause.fullmatch(clause_str)
-                    if not match:
-                        raise Exception(f"Unrecognized clause '{clause_str}'")
+                # cut up the clause
+                field, op, val = match.groups()
+                val = int(val)
+                human_op = {"+": "add", "-": "subtract", "=": "set"}[op]
 
-                    # cut up the clause
-                    field, op, val = match.groups()
-                    val = int(val)
-                    human_op = {"+": "add", "-": "subtract", "=": "set"}[op]
+                # find the field
+                for prefix, arg in cls._clause_types.items():
+                    if field.startswith(prefix):
+                        break
+                else:
+                    raise Exception(f"Unrecognized field '{field}'")
 
-                    # find the field
-                    for prefix, arg in cls._clause_types.items():
-                        if field.startswith(prefix):
-                            break
-                    else:
-                        raise Exception(f"Unrecognized field '{field}'")
-
-                    # year month day etc
-                    if isinstance(arg, str):
-                        if op == "+":
-                            kwargs = {f"{arg}s": val}
-                        elif op == "-":
-                            kwargs = {f"{arg}s": -val}
-                        else:  # op == "="
-                            if arg in ["week"]:
-                                raise Exception(f"'{op}' not supported for '{field}'")
-                            elif arg in ["year", "month", "day"]:
-                                if val <= 0:
-                                    raise Exception(
-                                        f"Can't {human_op} '{field}' to '{val}'"
-                                    )
-                            kwargs = {arg: val}
-
-                    # weekdays
-                    else:
-                        if op == "=":
+                # year month day etc
+                if isinstance(arg, str):
+                    if op == "+":
+                        kwargs = {f"{arg}s": val}
+                    elif op == "-":
+                        kwargs = {f"{arg}s": -val}
+                    else:  # op == "="
+                        if arg in ["week"]:
                             raise Exception(f"'{op}' not supported for '{field}'")
-                        else:
+                        elif arg in ["year", "month", "day"]:
                             if val <= 0:
-                                raise Exception(f"Can't {human_op} '{val}' '{field}'s")
-                            if op == "+":
-                                kwargs = {"weekday": arg(val)}
-                            else:  # op == "-"
-                                kwargs = {"weekday": arg(-val)}
+                                raise Exception(
+                                    f"Can't {human_op} '{field}' to '{val}'"
+                                )
+                        kwargs = {arg: val}
 
-                    res += relativedelta.relativedelta(**kwargs)
-                return res
+                # weekdays
+                else:
+                    if op == "=":
+                        raise Exception(f"'{op}' not supported for '{field}'")
+                    else:
+                        if val <= 0:
+                            raise Exception(f"Can't {human_op} '{val}' '{field}'s")
+                        if op == "+":
+                            kwargs = {"weekday": arg(val)}
+                        else:  # op == "-"
+                            kwargs = {"weekday": arg(-val)}
 
-        return timezone.make_aware(res)
+                res += relativedelta.relativedelta(**kwargs)
+
+        return res
 
 
-class DateTimeType(DateTypeMixin, BaseType):
+class DateTimeType(DateTimeParseMixin, SequenceTypeMixin, BaseType):
     default_value = "now"
-
-    @classmethod
-    def _parse(cls, value, choices):
-        assert not choices
-
-        if value.lower().strip() == "now":
-            return timezone.now()
-        else:
-            return super()._parse(value, choices)
 
     @staticmethod
     def _get_formatter(choices):
@@ -365,18 +373,12 @@ class DateTimeType(DateTypeMixin, BaseType):
             )
 
 
-class DateType(DateTypeMixin, BaseType):
+class DateType(DateTimeParseMixin, SequenceTypeMixin, BaseType):
     default_value = "today"
 
     @classmethod
     def _parse(cls, value, choices):
-        assert not choices
-
-        if value.lower().strip() == "today":
-            res = timezone.now()
-        else:
-            res = super()._parse(value, choices)
-        return res.date()
+        return super()._parse(value, choices).date()
 
     @staticmethod
     def _get_formatter(choices):

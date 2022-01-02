@@ -24,16 +24,18 @@ function FilterValue(props) {
   const hideTooltip = useContext(HideTooltip);
   const helpText = {
     date: [
-      "Date filter values can be a literal value e.g. '2020-12-21' or 'today' or a series of clauses applied in order from today.",
+      "Date filter values consist of a series of clauses applied in order left to right starting with a value of `today`.",
       "e.g. 'day=1 month+1 tuesday+2' which means move to the 1st of this month, then move forward a month, then move forward to the second Tuesday.",
-      "You can use 'year', 'month' or 'day' with '+', '-', or '=' to add remove or replace the given quantity.",
+      "Possible clauses include 'today', 'now' and literal date values in a variety of formats e.g. '2020-12-21'.",
+      "Or you can use 'year', 'month', 'week' or 'day' with '+', '-', or '=' to add remove or replace the given quantity.",
       "Or you can use a weekday name with '+' or '-' to get the n-th next or previous (including today) instance of that day.",
       "Bear in mind that 'day=1 month+1' may produce a different result from 'month+1 day=1', for example on Jan 31st.",
     ],
     datetime: [
-      "Datetime filter values can be a literal value e.g. '2020-12-21 14:56' or 'now' or a series of clauses applied in order from now.",
+      "Datetime filter consist of a series of clauses applied in order left to right starting with a value of `now`.",
       "e.g. 'day=1 month+1 tuesday+2' which means move to the 1st of this month, then move forward a month, then move forward to the second Tuesday.",
-      "You can use 'year', 'month', 'day', 'hour', 'minute' or 'second' with '+', '-', or '=' to add remove or replace the given quantity.",
+      "Possible clauses include 'today', 'now' and literal date and time values in a variety of formats e.g. '2020-12-21 14:56'.",
+      "Or you can use 'year', 'month', 'week', 'day', 'hour', 'minute' or 'second' with '+', '-', or '=' to add remove or replace the given quantity.",
       "Or you can use a weekday name with '+' or '-' to get the n-th next or previous (including today) instance of that day.",
       "Bear in mind that 'day=1 month+1' may produce a different result from 'month+1 day=1', for example on Jan 31st.",
     ],

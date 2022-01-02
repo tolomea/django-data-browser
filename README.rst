@@ -328,6 +328,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Allow combining literal date time values with relative clauses.                                        |
 |         |            | | Expose Postgres's ``ArrayAgg`` as an ``all`` aggregate.                                                |
 |         |            | | Add mouse over text for the "to many" icon.                                                            |
 |         |            | | Fix issue when ``related_name`` is different from ``related_query_name``                               |

@@ -397,8 +397,13 @@ class TestDateTimeType(ParseHelpers):
         [
             ("2018-03-20T22:31:23", dt(2018, 3, 20, 22, 31, 23), None),
             ("2018-3-2T22:31:23", dt(2018, 3, 2, 22, 31, 23), None),
+            ("2018-3-2 22:31:23", dt(2018, 3, 2, 22, 31, 23), None),
+            ("2018-3-2 days+1 22:31:23", dt(2018, 3, 3, 22, 31, 23), None),
+            ("2018-3-2 days+1 2:31", dt(2018, 3, 3, 2, 31, 0), None),
             ("hello", None, "Unrecognized clause 'hello'"),
             ("now", dt(2020, 12, 13, 9, 42, 53), None),
+            ("now hours+1", dt(2020, 12, 13, 10, 42, 53), None),
+            ("today", dt(2020, 12, 13, 0, 0, 0), None),
             # dateutil.parser
             ("11-11-2018", dt(2018, 11, 11), None),
             ("11-22-2018", dt(2018, 11, 22), None),
@@ -518,14 +523,16 @@ class TestDateType(ParseHelpers):
     @pytest.mark.parametrize(
         "value,expected,err",
         [
-            ("2018-03-20T22:31:23", dt(2018, 3, 20).date(), None),
+            ("2018-03-20T22:31:23", date(2018, 3, 20), None),
             ("hello", None, "Unrecognized clause 'hello'"),
-            ("today", dt(2020, 12, 13).date(), None),
-            ("11-22-2018", dt(2018, 11, 22).date(), None),
-            ("21-12-2018", dt(2018, 12, 21).date(), None),
+            ("today", date(2020, 12, 13), None),
+            ("today days+1", date(2020, 12, 14), None),
+            ("now", date(2020, 12, 13), None),
+            ("11-22-2018", date(2018, 11, 22), None),
+            ("21-12-2018", date(2018, 12, 21), None),
             ("11-12-2018", None, "Ambiguous value"),
             ("21-22-2018", None, "Unrecognized clause '21-22-2018'"),
-            ("days+1", dt(2020, 12, 14).date(), None),
+            ("days+1", date(2020, 12, 14), None),
         ],
     )
     def test_parse(self, value, expected, err):
