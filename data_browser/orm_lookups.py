@@ -1,6 +1,6 @@
 from django.db.models import Q
 
-from .types import IsNullType, StringType
+from .types import ArrayTypeMixin, IsNullType, StringType
 
 
 def get_django_filter(field_type, path_str, lookup, filter_value):
@@ -24,7 +24,7 @@ def get_django_filter(field_type, path_str, lookup, filter_value):
 
     if lookup == "field_equals":
         lookup, filter_value = filter_value
-    elif field_type == StringType:
+    elif issubclass(field_type, StringType):
         lookup = {
             "equals": "iexact",
             "regex": "iregex",
@@ -33,7 +33,8 @@ def get_django_filter(field_type, path_str, lookup, filter_value):
             "ends_with": "iendswith",
             "is_null": "isnull",
         }[lookup]
-    elif lookup == "contains":
+    elif issubclass(field_type, ArrayTypeMixin) and lookup == "contains":
+        # django expects the contains value for a list field to be a list
         filter_value = [filter_value]
     else:
         lookup = {

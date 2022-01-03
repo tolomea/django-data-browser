@@ -170,6 +170,14 @@ def test_get_file_link(get_product_flat):
     sortedAssert(data, [["a", ""], ["b", "/media/bob.jpg"]])
 
 
+def test_filter_file(get_product_flat):
+    producer = models.Producer.objects.create()
+    models.Product.objects.create(name="a", producer=producer, image="fred.jpg")
+    models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
+    data = get_product_flat(1, "name,image", [("image__contains", "ob")])
+    sortedAssert(data, [["b", "/media/bob.jpg"]])
+
+
 def test_get_url_link(get_product_flat):
     producer = models.Producer.objects.create()
     models.Product.objects.create(name="a", producer=producer)

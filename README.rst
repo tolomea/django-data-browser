@@ -328,6 +328,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Fix contains filter not working on files and URLs.                                                     |
 |         |            | | Allow combining literal date time values with relative clauses.                                        |
 |         |            | | Expose Postgres's ``ArrayAgg`` as an ``all`` aggregate.                                                |
 |         |            | | Add mouse over text for the "to many" icon.                                                            |
