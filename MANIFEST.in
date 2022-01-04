@@ -15,7 +15,7 @@ recursive-include tests *.py
 include frontend/package.json
 include frontend/package-lock.json
 include frontend/README.md
-recursive-include frontend/src *.css
+recursive-include frontend/src *.scss
 recursive-include frontend/src *.html
 recursive-include frontend/src *.js
 recursive-include frontend/src *.json

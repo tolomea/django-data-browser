@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as Sentry from "@sentry/browser";
-import "./index.css";
+import "./index.scss";
 import App from "./App";
 
 const config = JSON.parse(
