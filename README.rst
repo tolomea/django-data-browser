@@ -175,7 +175,7 @@ Annotated
 
 The Data Browser has additional support for annotated fields. Normally you would expose these as calculated fields. The module ``data_browser.helpers`` contains helpers which will make exposing annotated fields simpler, more performant and expose them to the Data Browser so it can do arbitrary manipulation with them.
 
-Exposing an a annotated field in this way requires two changes.
+Exposing an annotated field in this way requires two changes.
 
 1. Mix ``data_browser.helpers.AdminMixin`` into your ModelAdmin.
 2. Add a function decorated with ``data_browser.helpers.annotation`` that takes and updates a queryset.
