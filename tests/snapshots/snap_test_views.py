@@ -11400,8 +11400,8 @@ snapshots["test_query_json_pivot data"] = {
 }
 
 snapshots["test_query_qs_variants content"] = [
-    "This is an approximation of the main queryset.",
-    "Pages with pivoted or calculated data may do additional queries.",
+    "# This is an approximation of the main queryset.",
+    "# Pages with pivoted or calculated data may do additional queries.",
     "",
     "core.ProductAdmin.get_queryset().annotate(",
     "    ddb_size_is_null=ExpressionWrapper(",
