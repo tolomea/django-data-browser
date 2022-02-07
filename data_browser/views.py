@@ -22,7 +22,7 @@ from . import version
 from .common import HttpResponse, JsonResponse, can_make_public, settings
 from .format_csv import get_csv_rows
 from .models import View
-from .orm_admin import OPEN_IN_ADMIN, get_models
+from .orm_admin import get_models
 from .orm_results import get_result_list, get_result_queryset, get_results
 from .query import BoundQuery, Query, QueryFilter
 from .types import TYPES
@@ -60,7 +60,7 @@ def _get_model_fields(model_name, orm_models):
     orm_model = orm_models[model_name]
 
     def sort_model_fields(fields):
-        front = {orm_model.pk: 1, OPEN_IN_ADMIN: 2}
+        front = {orm_model.pk: 1, settings.DATA_BROWSER_ADMIN_FIELD_NAME.lower(): 2}
         sorted_fields = sorted(
             fields.items(),
             key=lambda name_field: (

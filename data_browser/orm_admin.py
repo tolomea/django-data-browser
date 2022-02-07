@@ -33,8 +33,6 @@ from .orm_functions import get_functions_for_type
 from .orm_types import get_field_type
 from .types import TYPES, BooleanType, JSONType, NumberType, StringType
 
-OPEN_IN_ADMIN = "admin"
-
 
 @dataclass
 class OrmModel:
@@ -94,7 +92,7 @@ def get_fields_for_type(type_):
     return {**aggregates, **functions, **others}
 
 
-@attributes(short_description=OPEN_IN_ADMIN)
+@attributes(short_description=settings.DATA_BROWSER_ADMIN_FIELD_NAME)
 def open_in_admin(obj):
     if obj is None:  # pragma: no cover
         return None

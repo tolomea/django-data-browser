@@ -92,6 +92,7 @@ class Settings:
         "DATA_BROWSER_DEV": False,
         "DATA_BROWSER_FE_DSN": None,
         "DATA_BROWSER_GET_FEATURE_FLAG": _get_feature_flag,
+        "DATA_BROWSER_ADMIN_FIELD_NAME": "admin",
     }
 
     def __getattr__(self, name):
