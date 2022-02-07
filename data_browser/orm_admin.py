@@ -105,7 +105,10 @@ def open_in_admin(obj):
 
 def admin_get_queryset(admin, request, fields=(), debug=False):
     if debug:
-        return DebugQS(f"{admin}.get_queryset()")
+        klass = admin.__class__
+        return DebugQS(
+            f"{klass.__module__}.{klass.__name__}(model, admin_site).queryset(request)"
+        )
     else:
         request.data_browser.update(
             {"calculated_fields": set(fields), "fields": set(fields)}
