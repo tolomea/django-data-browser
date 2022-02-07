@@ -41,6 +41,7 @@ jobs:
           - 5432:5432
     env:
       DATABASE_URL: ${{ matrix.database_url }}
+      TOX_PARALLEL_NO_SPINNER: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
