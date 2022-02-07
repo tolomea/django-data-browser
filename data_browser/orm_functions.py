@@ -11,9 +11,15 @@ from django.db.models import (
     functions,
 )
 
+try:
+    from django.contrib.postgres.fields.array import ArrayLenTransform
+except ModuleNotFoundError:  # pragma: no cover
+    ArrayLenTransform = None
+
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
     ASC,
+    ArrayTypeMixin,
     DateTimeType,
     DateType,
     IsNullType,
@@ -74,7 +80,7 @@ _weekday_choices = [
 ]
 
 
-def _get_django_function(name, qs):
+def _get_django_function(type_, name, qs):
     def IsNull(field_name):
         # https://code.djangoproject.com/ticket/32200
         if django.VERSION[:3] == (3, 1, 3):  # pragma: django 3.1.3
@@ -92,6 +98,9 @@ def _get_django_function(name, qs):
             return ExpressionWrapper(
                 Q(**{field_name: None}), output_field=BooleanField()
             )
+
+    if issubclass(type_, ArrayTypeMixin) and name == "length":
+        return (ArrayLenTransform, NumberType, (), None, {})
 
     mapping = {
         "year": (functions.ExtractYear, NumberType, (), ASC, {"useGrouping": False}),
@@ -137,7 +146,9 @@ def _get_django_function(name, qs):
 
 class OrmBoundFunctionField(OrmBoundField):
     def _annotate(self, request, qs, debug=False):
-        func = _get_django_function(self.name, qs)[0](self.previous.queryset_path_str)
+        func = _get_django_function(self.previous.type_, self.name, qs)[0](
+            self.previous.queryset_path_str
+        )
         return self._annotate_qs(qs, func)
 
     def parse_lookup(self, lookup, value):
@@ -182,7 +193,13 @@ class OrmFunctionField(OrmBaseField):
 
 
 def get_functions_for_type(type_):
+    if issubclass(type_, ArrayTypeMixin):
+        funcs = ["is_null", "length"]
+    else:
+        funcs = _TYPE_FUNCTIONS[type_]
     return {
-        func: OrmFunctionField(type_.name, func, *_get_django_function(func, None)[1:])
-        for func in _TYPE_FUNCTIONS[type_]
+        func: OrmFunctionField(
+            type_.name, func, *_get_django_function(type_, func, None)[1:]
+        )
+        for func in funcs
     }

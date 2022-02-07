@@ -127,6 +127,26 @@ def test_filter_length(get_results_flat):
     ]
 
 
+def test_function_length(get_results_flat):
+    ArrayModel.objects.create(int_array_field=[1])
+    ArrayModel.objects.create(int_array_field=[1, 2])
+    ArrayModel.objects.create(int_array_field=[1, 2, 3])
+    assert get_results_flat("int_array_field__length+1") == [
+        {"int_array_field__length": 1.0},
+        {"int_array_field__length": 2.0},
+        {"int_array_field__length": 3.0},
+    ]
+
+
+def test_function_length_filter(get_results_flat):
+    ArrayModel.objects.create(int_array_field=[1])
+    ArrayModel.objects.create(int_array_field=[1, 2])
+    ArrayModel.objects.create(int_array_field=[1, 2, 3])
+    assert get_results_flat("int_array_field__length", int_array_field__length="2") == [
+        {"int_array_field__length": 2.0}
+    ]
+
+
 def test_choice_array_filter_length(get_results_flat):
     ArrayModel.objects.create(int_choice_array_field=[1])
     ArrayModel.objects.create(int_choice_array_field=[1, 2])
