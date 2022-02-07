@@ -6,7 +6,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from .orm_lookups import get_django_filter
 from .query import BoundQuery
-from .types import ASC, DSC
+from .types import DSC
 
 
 def _filter(qs, path_str, filter_):
@@ -109,10 +109,12 @@ def get_result_queryset(request, bound_query, debug=False):
     # sort
     sort_fields = []
     for field in bound_query.sort_fields:
-        if field.direction is ASC:
-            sort_fields.append(field.orm_bound_field.queryset_path_str)
         if field.direction is DSC:
             sort_fields.append(f"-{field.orm_bound_field.queryset_path_str}")
+        else:
+            # if it's not descending then it must be ascending
+            # this comes up with impliclty ordered fields, which are neither
+            sort_fields.append(field.orm_bound_field.queryset_path_str)
     qs = qs.order_by(*sort_fields)
 
     return qs[: bound_query.limit]

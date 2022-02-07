@@ -263,6 +263,7 @@ class TestBoundQuery:
         assert [(f.path, f.direction, f.priority) for f in bound_query.sort_fields] == [
             (["fd"], DSC, 0),
             (["fa"], ASC, 1),
+            (["fn"], None, None),
         ]
 
     def test_bad_field(self, orm_models):

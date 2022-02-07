@@ -251,7 +251,10 @@ class BoundQuery:
 
     @cached_property
     def sort_fields(self):
-        return sorted((f for f in self.fields if f.direction), key=lambda f: f.priority)
+        res = sorted((f for f in self.fields if f.direction), key=lambda f: f.priority)
+        # add all unsorted fields on the end of the sort to make stuff stable
+        res += sorted((f for f in self.fields if not f.direction), key=lambda f: f.path)
+        return res
 
     @cached_property
     def valid_filters(self):
