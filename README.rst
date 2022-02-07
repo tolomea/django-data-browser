@@ -1,5 +1,8 @@
-Interactive and user friendly querying of Django project DBs.
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+===================
+django-data-browser
+===================
+
+**Interactive, user-friendly database explorer.**
 
 .. image:: https://raw.githubusercontent.com/tolomea/django-data-browser/master/screenshot.png
     :alt: screenshot
@@ -8,9 +11,8 @@ Interactive and user friendly querying of Django project DBs.
 .. contents::
     :depth: 1
 
-
 Demo
-*************************
+----
 
 There is a live demo site available here https://data-browser-demo.herokuapp.com/data-browser/.
 
@@ -22,9 +24,8 @@ Source: https://github.com/tolomea/data-browser-demo.
 
 Admin: https://data-browser-demo.herokuapp.com/admin/.
 
-
 Features
-*************************
+--------
 
 * Zero config, if it's in the admin it's in the browser.
 * Select fields (including calculated fields), aggregate, filter, sort and pivot.
@@ -36,7 +37,7 @@ Features
 
 
 Supported Versions
-*************************
+------------------
 
 The Data Browser is currently tested on:
 
@@ -46,9 +47,8 @@ The Data Browser is currently tested on:
 
 We highly recommend and only officially support the latest patch release of each Python and Django series.
 
-
 Installation
-*************************
+------------
 
 1. Run ``pip install django-data-browser``.
 2. Add ``"data_browser"`` to installed_apps.
@@ -56,9 +56,8 @@ Installation
 4. Run ``python manage.py migrate``.
 5. If you have queryset annotations in your admin or are interested in exposing calculated values see the `Calculated and Annotated fields`_ section.
 
-
 Settings
-*************************
+--------
 
 +------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
 | Name                               | Default   | Docs Section     | Function                                                                                           |
@@ -76,7 +75,7 @@ Settings
 
 
 Security
-*************************
+--------
 
 Most of the Django views in the Data Browser can only be accessed by Django "staff members". These views support general querying of the database, checked against the admin permissions of the logged in user.
 
@@ -86,9 +85,8 @@ You can use the admin permission ``data_browser | view | Can make a saved view p
 
 Additionally the entire public views system is gated by the Django settings value ``DATA_BROWSER_ALLOW_PUBLIC``.
 
-
 Sentry
-*************************
+------
 
 The frontend code has builtin Sentry support, it is **disabled by default**. To enable it set the Django settings value ``DATA_BROWSER_FE_DSN``, for example to set it to the Data Browser project Sentry use:
 
@@ -96,9 +94,8 @@ The frontend code has builtin Sentry support, it is **disabled by default**. To 
 
     DATA_BROWSER_FE_DSN = "https://af64f22b81994a0e93b82a32add8cb2b@o390136.ingest.sentry.io/5231151"
 
-
 Linking to the Data Browser
-****************************
+---------------------------
 
 The home page URL of the Data Browser is given by ``reverse("data_browser:home")``.
 
@@ -119,12 +116,11 @@ One convenient way of utilizing this is to create the file ``templates/admin/cha
 This will place a "Data Browser" button on the list view of every admin that inherits from the mixin.
 Note: to do this at the top level the app you put the template in must be before contrib.admin in INSTALLED_APPS.
 
-
 Specifying models and fields
-********************************
+----------------------------
 
 By default the Data Browser has access to all models and fields that the current user can see anywhere in the Admin site.
-However if necessary this can be tweaked using the following class level properties and functions on ModelAdmins and Inlines.
+However if necessary this can be tweaked using the following class level properties and functions on ``ModelAdmin``\s and ``Inline``\s.
 
 +-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 |   Name                              | Format                                    | Purpose                                                                                                     |
@@ -150,14 +146,13 @@ However if necessary this can be tweaked using the following class level propert
 
 Additionally, per the below sections, calculated fields and actions can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
-
 Calculated and Annotated fields
-********************************
+-------------------------------
 
 Calculated
-########################################
+^^^^^^^^^^
 
-Calculated fields are fields on the ModelAdmin whose value comes from a function on the ModelAdmin or a function or property on the Model itself, as described at the bottom of the `Django admin list display docs <https://docs.djangoproject.com/en/3.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display>`_.
+Calculated fields are fields on the ``ModelAdmin`` whose value comes from a function on the ``ModelAdmin`` or a function or property on the Model itself, as described at the bottom of the `Django admin list display docs <https://docs.djangoproject.com/en/stable/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display>`_.
 
 Being arbitrary Python code calculated fields are opaque to the Data Browser. It can fetch their values but can't sort or filter etc on them. For pivoting they are treated as equivalent to the pk on the same model.
 
@@ -169,9 +164,8 @@ Additionally calculated fields can be hidden from the Data Browser by setting th
     def my_calculated_field(self, obj):
         return ...
 
-
 Annotated
-########################################
+^^^^^^^^^
 
 The Data Browser has additional support for annotated fields. Normally you would expose these as calculated fields. The module ``data_browser.helpers`` contains helpers which will make exposing annotated fields simpler, more performant and expose them to the Data Browser so it can do arbitrary manipulation with them.
 
@@ -204,22 +198,21 @@ Additionally the annotation will only be applied to the list view when it's ment
 
 And finally even if not mentioned in fields, fieldsets or list_display, the annotation will still be visible in the Data Browser unless it is explicitly mentioned in ``ddb_hide_fields``.
 
-
 Performance
-******************************
+-----------
 
-get_queryset
-########################################
+``get_queryset()``
+^^^^^^^^^^^^^^^^^^
 
 The Data Browser does it's fetching in two stages.
 
-First it does a single DB query to get the majority of the data. To construct the queryset for this it will call get_queryset on the ModelAdmin of the current Model. It uses ``.values()`` to fetch only the data it needs from the database and it will inline all referenced models to ensure it doesn't do multiple queries.
+First it does a single DB query to get the majority of the data. To construct the queryset for this it will call ``get_queryset()`` on the ``ModelAdmin`` of the current Model. It uses ``.values()`` to fetch only the data it needs from the database and it will inline all referenced models to ensure it doesn't do multiple queries.
 
-At this stage annotated fields on related models are attached with subquery annotations, the data_browser will call get_queryset on the relevant ModelAdmins in order to generate these subquery annotations.
+At this stage annotated fields on related models are attached with subquery annotations, the data browser will call ``get_queryset()`` on the relevant ``ModelAdmin``\s in order to generate these subquery annotations.
 
-Secondly for any calculated fields it will then fetch the complete objects that are needed for those calculated fields. To construct the querysets for these it will call get_queryset on their associated ModelAdmins. These calls are aggregated so it will only make one per model.
+Secondly for any calculated fields it will then fetch the complete objects that are needed for those calculated fields. To construct the querysets for these it will call ``get_queryset()`` on their associated ``ModelAdmin``\s. These calls are aggregated so it will only make one per model.
 
-As a simple example. If you did a query against the Book model for the fields:
+As a simple example, if you did a query against the ``Book`` model for the fields:
 
 * ``book.name``
 * ``book.author.name``
@@ -227,7 +220,7 @@ As a simple example. If you did a query against the Book model for the fields:
 * ``book.author.number_of_books``
 * ``book.publisher.name``
 
-Where the ``author.age`` is actually a property on the Author Model and ``author.number_of_books`` is an ``@annotation`` on the Author Admin then it would do something like the following two queries:
+Where the ``author.age`` is actually a property on the ``Author`` model, and ``author.number_of_books`` is an ``@annotation`` on the ``Author`` ``ModelAdmin``, then it would do something like the following two queries:
 
 .. code-block:: python
 
@@ -248,11 +241,11 @@ Where the ``author.age`` is actually a property on the Author Model and ``author
 
 Where the ``pks`` passed to in_bulk in the second query came from ``author__id`` in the first.
 
-When the Data Browser calls the admin ``get_queryset`` functions it will put some context in ``request.data_browser``. This allows you to test to see if the Data Browser is making the call as follows:
+When the Data Browser calls the admin ``get_queryset()`` functions it will put some context in ``request.data_browser``. This allows you to test to see if the Data Browser is making the call as follows:
 
 .. code-block:: python
 
-    if getattr(request, "data_browser"):
+    if hasattr(request, "data_browser"):
         # Data Browser specific customization
 
 This is particularly useful if you want to route the Data Browser to a DB replica.
@@ -269,8 +262,8 @@ The context also includes a ``fields`` member that lists all the fields the Data
 
 The AdminMixin described in the `Calculated and Annotated fields`_ section is doing this internally for ``@annotation`` fields.
 
-get_fieldsets
-########################################
+``get_fieldsets()``
+^^^^^^^^^^^^^^^^^^^
 
 The Data Browser also calls ``get_fieldsets`` to find out what fields the current user can access.
 
@@ -279,7 +272,7 @@ As with ``get_queryset`` the Data Browser will set ``request.data_browser`` when
 The Django User Admin has code to change the fieldsets when adding a new user. To compensate for this, when calling ``get_fieldsets`` on a subclass of ``django.contrib.auth.admin.UserAdmin`` the Data Browser will pass a newly constructed instance of the relevant model. This behavior can be disabled by setting ``settings.DATA_BROWSER_AUTH_USER_COMPAT`` to ``False``.
 
 Admin Actions
-########################################
+^^^^^^^^^^^^^
 
 Django's Admin actions are exposed by right clicking on ID (or other appropriate pk field) column headers.
 
@@ -291,17 +284,17 @@ When the Data Browser triggers actions default Admin filtering is applied. If yo
 
 
 Style customization
-*************************
+-------------------
 
-You can override the ``data_browser/index.html`` template per https://docs.djangoproject.com/en/3.1/howto/overriding-templates/#extending-an-overridden-template (make sure data_browser is after your app in ``INSTALLED_APPS``) and replace the ``extrahead`` block.
+You can override the ``data_browser/index.html`` template per `Django’s template overriding docs <https://docs.djangoproject.com/en/stable/howto/overriding-templates/#extending-an-overridden-template>`__, and replace the ``extrahead`` block.
+(Ensure ``"data_browser"`` is after your app in ``INSTALLED_APPS``.)
 
 This will let you inject custom CSS and stylesheets.
 
 However note that because of how the normal CSS is injected any custom CSS will be before the normal CSS so you will need to use more specific selectors or ``!important``.
 
-
 Version numbers
-*************************
+---------------
 
 The Data Browser uses the standard ``Major.Minor.Patch`` version numbering scheme.
 
@@ -321,9 +314,8 @@ Patch and Minor versions should never contain breaking changes and should always
 
 For alpha and beta releases absolutely anything may change / break.
 
-
 Release History
-*************************
+---------------
 
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
