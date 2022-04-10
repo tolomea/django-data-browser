@@ -268,13 +268,13 @@ The context also includes a ``fields`` member that lists all the fields the Data
 
 The AdminMixin described in the `Calculated and Annotated fields`_ section is doing this internally for ``@annotation`` fields.
 
-``QuerySet.using()``
-^^^^^^^^^^^^^^^^^^^^
+QuerySet.using()
+^^^^^^^^^^^^^^^^
 
 The setting ``DATA_BROWSER_USING_DB`` can be used to direct Data Browser initiated database queries to a replica. Underneath the value of this is passed into ``QuerySet.using()``.
 
-``ModelAdmin.get_fieldsets()``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModelAdmin.get_fieldsets()
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Data Browser also calls ``get_fieldsets`` to find out what fields the current user can access.
 
@@ -331,12 +331,12 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-| 4.0.10  | 2022-04-10 | Make results stable by always sorting all fields.                                                        |
-|         |            | Fix an issue with few to no results when pivoted and the headers exceed the result limit.                |
-|         |            | Add support for Postgres's array length function.                                                        |
-|         |            | Allow overriding the "open in Django admin" field name with ``DATA_BROWSER_ADMIN_FIELD_NAME``.           |
-|         |            | Add an AppConfig and declare the ``default_auto_field``.                                                 |
-|         |            | Expose access to ``QuerySet.using()`` via a new ``DATA_BROWSER_USING_DB`` setting.                       |
+| 4.0.10  | 2022-04-10 | | Make results stable by always sorting all fields.                                                      |
+|         |            | | Fix an issue with few to no results when pivoted and the headers exceed the result limit.              |
+|         |            | | Add support for Postgres's array length function.                                                      |
+|         |            | | Allow overriding the "open in Django admin" field name with ``DATA_BROWSER_ADMIN_FIELD_NAME``.         |
+|         |            | | Add an AppConfig and declare the ``default_auto_field``.                                               |
+|         |            | | Expose access to ``QuerySet.using()`` via a new ``DATA_BROWSER_USING_DB`` setting.                     |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.9   | 2022-01-04 | | Fix contains filter not working on files and URLs.                                                     |
 |         |            | | Allow combining literal date time values with relative clauses.                                        |
