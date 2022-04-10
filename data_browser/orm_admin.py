@@ -107,7 +107,8 @@ def admin_get_queryset(admin, request, fields=(), debug=False):
     if debug:
         klass = admin.__class__
         return DebugQS(
-            f"{klass.__module__}.{klass.__name__}(model, admin_site).queryset(request)"
+            f"{klass.__module__}.{klass.__name__}(model,"
+            " admin_site).get_queryset(request)"
         )
     else:
         request.data_browser.update(

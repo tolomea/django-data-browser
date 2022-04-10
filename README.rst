@@ -41,8 +41,8 @@ Supported Versions
 
 The Data Browser is currently tested on:
 
-* Django 2.2 - 3.2
-* Python 3.6 - 3.10
+* Django 2.2 - 4.0
+* Python 3.7 - 3.10
 * MySQL, PostgreSQL, SQLite
 
 We highly recommend and only officially support the latest patch release of each Python and Django series.
@@ -244,6 +244,8 @@ Where the ``author.age`` is actually a property on the ``Author`` model, and ``a
     AuthorAdmin.get_queryset().in_bulk(pks=...)
 
 Where the ``pks`` passed to in_bulk in the second query came from ``author__id`` in the first.
+
+You can view an approximation of the main queryset by changing the `.html` in the URL to `.qs`. In a similar manner `.sql` and `.explain` are also available.
 
 When the Data Browser calls the admin ``get_queryset()`` functions it will put some context in ``request.data_browser``. This allows you to test to see if the Data Browser is making the call as follows:
 

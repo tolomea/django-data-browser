@@ -11887,7 +11887,7 @@ snapshots["test_query_qs_variants content"] = [
     "# This is an approximation of the main queryset.",
     "# Pages with pivoted or calculated data may do additional queries.",
     "",
-    "tests.core.admin.ProductAdmin(model, admin_site).queryset(request).annotate(",
+    "tests.core.admin.ProductAdmin(model, admin_site).get_queryset(request).annotate(",
     "    ddb_size_is_null=ExpressionWrapper(",
     "        Q(size=None),",
     "        output_field=BooleanField(),",
@@ -11895,7 +11895,7 @@ snapshots["test_query_qs_variants content"] = [
     ").annotate(",
     "    ddb_annotated=Subquery(",
     "        tests.core.admin.ProductAdmin(model,"
-    " admin_site).queryset(request).filter(",
+    " admin_site).get_queryset(request).filter(",
     "            pk=OuterRef(",
     "                'pk',",
     "            ),",
