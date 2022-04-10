@@ -114,10 +114,7 @@ def admin_get_queryset(admin, request, fields=(), debug=False):
         request.data_browser.update(
             {"calculated_fields": set(fields), "fields": set(fields)}
         )
-        qs = admin.get_queryset(request)
-        if settings.DATA_BROWSER_USING_DB:
-            qs = qs.using(settings.DATA_BROWSER_USING_DB)
-        return qs
+        return admin.get_queryset(request).using(settings.DATA_BROWSER_USING_DB)
 
 
 def admin_get_actions(admin, request):
