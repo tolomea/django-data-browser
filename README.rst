@@ -331,7 +331,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Make results stable by always sorting all fields.                                                        |
+| 4.0.10  | 2022-04-10 | Make results stable by always sorting all fields.                                                        |
 |         |            | Fix an issue with few to no results when pivoted and the headers exceed the result limit.                |
 |         |            | Add support for Postgres's array length function.                                                        |
 |         |            | Allow overriding the "open in Django admin" field name with ``DATA_BROWSER_ADMIN_FIELD_NAME``.           |
