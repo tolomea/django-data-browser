@@ -74,6 +74,8 @@ Settings
 +------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
 | ``DATA_BROWSER_FE_DSN``            | ``None``  | `Sentry`_        | The DSN the frontend sentry should report to, disabled by default.                                 |
 +------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_USING_DB``          | ``None``  | `Performance`_   | Specify a database alias to use by default on all database queries.                                |
++------------------------------------+-----------+------------------+----------------------------------------------------------------------------------------------------+
 
 
 Security
@@ -250,7 +252,7 @@ When the Data Browser calls the admin ``get_queryset()`` functions it will put s
     if hasattr(request, "data_browser"):
         # Data Browser specific customization
 
-This is particularly useful if you want to route the Data Browser to a DB replica.
+This is particularly useful if you want to route the Data Browser to a DB replica for a particular model (n.b. if you want to do this for all models see `QuerySet.using()`_ below.).
 
 The context also includes a ``fields`` member that lists all the fields the Data Browser plans to access. You can use this to do conditional prefetching or annotating to support those fields like this:
 
@@ -264,8 +266,13 @@ The context also includes a ``fields`` member that lists all the fields the Data
 
 The AdminMixin described in the `Calculated and Annotated fields`_ section is doing this internally for ``@annotation`` fields.
 
-``get_fieldsets()``
-^^^^^^^^^^^^^^^^^^^
+``QuerySet.using()``
+^^^^^^^^^^^^^^^^^^^^
+
+The setting ``DATA_BROWSER_USING_DB`` can be used to direct Data Browser initiated database queries to a replica. Underneath the value of this is passed into ``QuerySet.using()``.
+
+``ModelAdmin.get_fieldsets()``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Data Browser also calls ``get_fieldsets`` to find out what fields the current user can access.
 
@@ -327,6 +334,7 @@ Release History
 |         |            | Add support for Postgres's array length function.                                                        |
 |         |            | Allow overriding the "open in Django admin" field name with ``DATA_BROWSER_ADMIN_FIELD_NAME``.           |
 |         |            | Add an AppConfig and declare the ``default_auto_field``.                                                 |
+|         |            | Expose access to ``QuerySet.using()`` via a new ``DATA_BROWSER_USING_DB`` setting.                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.9   | 2022-01-04 | | Fix contains filter not working on files and URLs.                                                     |
 |         |            | | Allow combining literal date time values with relative clauses.                                        |
