@@ -362,7 +362,7 @@ def proxy_js_dev_server(request, path):  # pragma: no cover
     """
     response = _get_from_js_dev_server(request)
     return http.StreamingHttpResponse(
-        streaming_content=response.iter_content(2 ** 12),
+        streaming_content=response.iter_content(2**12),
         content_type=response.headers.get("Content-Type"),
         status=response.status_code,
         reason=response.reason,

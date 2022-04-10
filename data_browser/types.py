@@ -293,7 +293,7 @@ class DateTimeParseMixin:
                 res = timezone.now()
             elif clause_str == "today":
                 res = cls._truncate_dt(timezone.now())
-            elif re.match(fr"[^\d]*({d8}|{d422})", clause_str):
+            elif re.match(rf"[^\d]*({d8}|{d422})", clause_str):
                 # looks like some kinda iso date, roll with the defaults
                 # includes T delimited like 2018-03-20T22:31:23
                 res = dateutil.parser.parse(clause_str, default=cls._truncate_dt(res))
