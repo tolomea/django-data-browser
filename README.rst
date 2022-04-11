@@ -331,6 +331,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Fix bug when ``DATA_BROWSER_ADMIN_FIELD_NAME`` contains spaces.                                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.10  | 2022-04-10 | | Make results stable by always sorting all fields.                                                      |
 |         |            | | Fix an issue with few to no results when pivoted and the headers exceed the result limit.              |
 |         |            | | Add support for Postgres's array length function.                                                      |

@@ -15,7 +15,6 @@ from django.db.models.fields.reverse_related import ForeignObjectRel
 from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.text import slugify
 
 from .common import JsonResponse, debug_log, get_feature_flag, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
@@ -32,6 +31,7 @@ from .orm_fields import (
 from .orm_functions import get_functions_for_type
 from .orm_types import get_field_type
 from .types import TYPES, BooleanType, JSONType, NumberType, StringType
+from .util import str_to_field
 
 
 @dataclass
@@ -242,7 +242,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
     else:
         # an actual function in list_display
         field_func = field_name
-        field_name = slugify(
+        field_name = str_to_field(
             getattr(field_func, "short_description", str(field_func.__name__))
         )
 

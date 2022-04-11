@@ -26,6 +26,7 @@ from .orm_admin import get_models
 from .orm_results import get_result_list, get_result_queryset, get_results
 from .query import BoundQuery, Query, QueryFilter
 from .types import TYPES
+from .util import str_to_field
 
 
 def _get_query_data(bound_query):
@@ -60,7 +61,10 @@ def _get_model_fields(model_name, orm_models):
     orm_model = orm_models[model_name]
 
     def sort_model_fields(fields):
-        front = {orm_model.pk: 1, settings.DATA_BROWSER_ADMIN_FIELD_NAME.lower(): 2}
+        front = {
+            orm_model.pk: 1,
+            str_to_field(settings.DATA_BROWSER_ADMIN_FIELD_NAME.lower()): 2,
+        }
         sorted_fields = sorted(
             fields.items(),
             key=lambda name_field: (
@@ -362,7 +366,7 @@ def proxy_js_dev_server(request, path):  # pragma: no cover
     """
     response = _get_from_js_dev_server(request)
     return http.StreamingHttpResponse(
-        streaming_content=response.iter_content(2**12),
+        streaming_content=response.iter_content(2 ** 12),
         content_type=response.headers.get("Content-Type"),
         status=response.status_code,
         reason=response.reason,
