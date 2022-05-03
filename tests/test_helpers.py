@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from data_browser.orm_admin import get_models
+
 from .core.admin import AddressAdmin, ProductAdmin
 from .core.models import Address, Producer, Product
 
@@ -83,3 +85,9 @@ class TestAdminMixin:
         resp = admin_client.get("/admin/core/ignored/")
         assert resp.status_code == 200
         assert "ddb_url" not in resp.context
+
+
+def test_admin_options_setting(admin_ddb_request, settings):
+    assert "core.InAdmin" in get_models(admin_ddb_request)
+    settings.DATA_BROWSER_ADMIN_OPTIONS = {"tests.core.admin.InAdmin": {"ignore": True}}
+    assert "core.InAdmin" not in get_models(admin_ddb_request)

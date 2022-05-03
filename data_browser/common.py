@@ -94,6 +94,7 @@ class Settings:
         "DATA_BROWSER_GET_FEATURE_FLAG": _get_feature_flag,
         "DATA_BROWSER_ADMIN_FIELD_NAME": "admin",
         "DATA_BROWSER_USING_DB": "default",
+        "DATA_BROWSER_ADMIN_OPTIONS": {},
     }
 
     def __getattr__(self, name):

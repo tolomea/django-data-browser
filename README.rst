@@ -59,23 +59,25 @@ Installation
 Settings
 --------
 
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
-| Name                               | Default       | Docs Section     | Function                                                                                           |
-+====================================+===============+==================+====================================================================================================+
-| ``DATA_BROWSER_ADMIN_FIELD_NAME``  | ``admin``     |                  | Set the name for the "open in Django admin" field.                                                 |
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_ALLOW_PUBLIC``      | ``False``     | `Security`_      | Allow selected saved views to be accessed without admin login in limited circumstances.            |
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_AUTH_USER_COMPAT``  | ``True``      | `Performance`_   | When calling ``get_fieldsets`` on a ``UserAdmin`` always pass an instance of the associated model. |
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_DEFAULT_ROW_LIMIT`` | ``1000``      |                  | The default value for the row limit selector in the UI.                                            |
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_DEV``               | ``False``     | CONTRIBUTING.rst | Enable proxying frontend to JS dev server.                                                         |
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_FE_DSN``            | ``None``      | `Sentry`_        | The DSN the frontend sentry should report to, disabled by default.                                 |
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_USING_DB``          | ``"default"`` | `Performance`_   | Specify a database alias to use by default on all database queries.                                |
-+------------------------------------+---------------+------------------+----------------------------------------------------------------------------------------------------+
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| Name                               | Default       | Docs Section                    | Function                                                                                           |
++====================================+===============+=================================+====================================================================================================+
+| ``DATA_BROWSER_ADMIN_FIELD_NAME``  | ``admin``     |                                 | Set the name for the "open in Django admin" field.                                                 |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_ALLOW_PUBLIC``      | ``False``     | `Security`_                     | Allow selected saved views to be accessed without admin login in limited circumstances.            |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_AUTH_USER_COMPAT``  | ``True``      | `Performance`_                  | When calling ``get_fieldsets`` on a ``UserAdmin`` always pass an instance of the associated model. |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_DEFAULT_ROW_LIMIT`` | ``1000``      |                                 | The default value for the row limit selector in the UI.                                            |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_DEV``               | ``False``     | CONTRIBUTING.rst                | Enable proxying frontend to JS dev server.                                                         |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_FE_DSN``            | ``None``      | `Sentry`_                       | The DSN the frontend sentry should report to, disabled by default.                                 |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_USING_DB``          | ``"default"`` | `Performance`_                  | Specify a database alias to use by default on all database queries.                                |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_ADMIN_OPTIONS``     | ``{}``        | `Specifying models and fields`_ | Set admin specific configuration options.                                                          |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 
 
 Security
@@ -148,7 +150,17 @@ However if necessary this can be tweaked using the following class level propert
 | | ``get_ddb_action_url(request)``   |                                           |                                                                                                             |
 +-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
-Additionally, per the below sections, calculated fields and actions can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
+These can also be set via the settings entry ``DATA_BROWSER_ADMIN_OPTIONS``, this is useful if you wish to change option on a third party admin.
+The format for this is ``{'my_package.MyAdmin': {'option': value}}``, for example to remove Django Q's Task and Fail admins entirely you would use:
+
+.. code-block:: python
+
+    DATA_BROWSER_ADMIN_OPTIONS = {
+        'django_q.admin.TaskAdmin': {'ignore': True},
+        'django_q.admin.FailAdmin': {'ignore': True},
+    }
+
+Finally, per the below sections, calculated fields and actions can be hidden by setting the ``ddb_hide`` attribute and annotated fields are always visible unless explicitly hidden.
 
 Calculated and Annotated fields
 -------------------------------
@@ -331,6 +343,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Allow setting the per admin options via ``DATA_BROWSER_ADMIN_OPTIONS``.                                  |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.11  | 2022-04-12 | Fix bug when ``DATA_BROWSER_ADMIN_FIELD_NAME`` contains spaces.                                          |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.10  | 2022-04-10 | | Make results stable by always sorting all fields.                                                      |

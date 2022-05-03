@@ -7,6 +7,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import BooleanField
 from django.urls import reverse
 
+from .common import settings
+
 
 def attributes(**kwargs):
     def inner(func):
@@ -54,6 +56,9 @@ class _AdminOptions:
 
 
 def _get_option(admin, name, *args):
+    admin_name = f"{admin.__class__.__module__}.{admin.__class__.__qualname__}"
+    defaults = settings.DATA_BROWSER_ADMIN_OPTIONS.get(admin_name, {})
+
     field = f"ddb_{name}"
     func = f"get_ddb_{name}"
 
@@ -61,6 +66,8 @@ def _get_option(admin, name, *args):
         return getattr(admin, func)(*args)
     elif hasattr(admin, field):
         return getattr(admin, field)
+    elif name in defaults:
+        return defaults[name]
     else:
         options = _AdminOptions()
         options.model = getattr(admin, "model", None)
