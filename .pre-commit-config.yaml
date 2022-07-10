@@ -21,7 +21,7 @@ repos:
     hooks:
       - id: django-upgrade
         args: [--target-version, "2.2"]
--   repo: https://github.com/hakancelik96/unimport
+-   repo: https://github.com/hakancelikdev/unimport
     rev: 0.9.5
     hooks:
       - id: unimport
