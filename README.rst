@@ -150,7 +150,7 @@ However if necessary this can be tweaked using the following class level propert
 | | ``get_ddb_action_url(request)``   |                                           |                                                                                                             |
 +-------------------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
-These can also be set via the settings entry ``DATA_BROWSER_ADMIN_OPTIONS``, this is useful if you wish to change option on a third party admin.
+These can also be set via the settings entry ``DATA_BROWSER_ADMIN_OPTIONS``, this is useful if you wish to change an option on a third party admin.
 The format for this is ``{'my_package.MyAdmin': {'option': value}}``, for example to remove Django Q's Task and Fail admins entirely you would use:
 
 .. code-block:: python
