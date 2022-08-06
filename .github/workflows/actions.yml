@@ -24,19 +24,19 @@ jobs:
         python: ["3.7", "3.8", "3.9", "3.10"]
         database_url:
           - sqlite:///db.sqlite3
-          - mysql://root:hunter2@127.0.0.1:3306/data_browser
-          - postgres://postgres:hunter2@127.0.0.1:5432/data_browser,
+          - mysql://root:test@127.0.0.1:3306/data_browser
+          - postgres://postgres:test@127.0.0.1:5432/data_browser,
     services:
       mysql:
         image: mysql
         env:
-          MYSQL_ROOT_PASSWORD: hunter2
+          MYSQL_ROOT_PASSWORD: test
         ports:
           - 3306:3306
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: hunter2
+          POSTGRES_PASSWORD: test
         ports:
           - 5432:5432
     env:
