@@ -11,8 +11,6 @@ object-assign
  * @license  MIT
  */
 
-/*! js-cookie v3.0.1 | MIT */
-
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
