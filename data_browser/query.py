@@ -36,7 +36,7 @@ def parse_sort(value, symbol, direction):
     path, priority = value.split(symbol)
     try:
         return path, direction, int(priority)
-    except:  # noqa: E722  input sanitization
+    except Exception:  # noqa: E722  input sanitization
         return path, None, None
 
 
@@ -90,7 +90,7 @@ class Query:
         value = self.arguments.get("limit")
         try:
             value = int(value)
-        except:  # noqa: E722  input sanitization
+        except Exception:  # noqa: E722  input sanitization
             value = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
         self.arguments["limit"] = max(1, value)
 

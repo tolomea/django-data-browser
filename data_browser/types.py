@@ -15,11 +15,11 @@ ASC, DSC = "asc", "dsc"
 
 
 class TypeMeta(type):
-    def __init__(self, *args, **kwargs):
+    def __init__(cls, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if self.raw_type and self.element_type:
-            assert self.raw_type.element_type == self.element_type.raw_type
+        if cls.raw_type and cls.element_type:
+            assert cls.raw_type.element_type == cls.element_type.raw_type
 
     def __repr__(cls):
         return cls.__name__
@@ -360,16 +360,14 @@ class DateTimeType(DateTimeParseMixin, SequenceTypeMixin, BaseType):
     def _get_formatter(choices):
         assert not choices
         if settings.USE_TZ:
-            return (
-                lambda value: None
+            return lambda value: (
+                None
                 if value is None
                 else str(timezone.make_naive(value).replace(microsecond=0))
             )
         else:
-            return (
-                lambda value: None
-                if value is None
-                else str(value.replace(microsecond=0))
+            return lambda value: (
+                None if value is None else str(value.replace(microsecond=0))
             )
 
 
@@ -540,8 +538,8 @@ class ArrayTypeMixin:
     @classmethod
     def _get_formatter(cls, choices):
         element_formatter = cls.element_type._get_formatter(choices)
-        return (
-            lambda value: None
+        return lambda value: (
+            None
             if value is None
             else json.dumps(
                 [element_formatter(v) for v in value], cls=DjangoJSONEncoder

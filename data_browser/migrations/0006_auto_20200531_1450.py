@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("data_browser", "0005_auto_20200516_1726")]
 
     operations = [

@@ -776,7 +776,6 @@ def test_get_pivot_permutations(get_product_pivot, key, rows, cols, body):
 
 
 def test_get_fields(orm_models):
-
     # remap pk to id
     assert "pk" not in orm_models["core.Product"].fields
     assert "id" in orm_models["core.Product"].fields

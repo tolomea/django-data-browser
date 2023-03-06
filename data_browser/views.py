@@ -305,9 +305,9 @@ def _data_response(request, query, media, privileged=False, strict=False):
         response = http.StreamingHttpResponse(
             (writer.writerow(row) for row in csv_rows), content_type="text/csv"
         )
-        response[
-            "Content-Disposition"
-        ] = f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
+        response["Content-Disposition"] = (
+            f"attachment; filename={query.model_name}-{timezone.now().isoformat()}.csv"
+        )
         return response
     elif media == "json":
         results = get_results(request, bound_query, orm_models, True)

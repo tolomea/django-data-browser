@@ -1,6 +1,6 @@
 [tool.black]
     target-version = ['py38']
-    experimental-string-processing = true
+    preview = true
     skip-magic-trailing-comma = true
 
 [tool.coverage.run]
@@ -26,8 +26,60 @@
     skip_empty = true
 
 [tool.flake8]
-    extend-ignore = "E203"
-    max-line-length = 88
+    extend-ignore = [
+        # Loop control variable not used within the loop body TODO enable this
+        "B007",
+        # use raise exception instead of assert False TODO enable this
+        "B011",
+        # Abstract base class with no abstract method.
+        "B024",
+        # use "{s!r}" instead of "'{s}'" TODO enable this
+        "B028",
+        # Whitespace before ':', conflicts with Black
+        "E203",
+        # Line length, conflicts with Black
+        "E501",
+        # Do not use variables named 'I', 'O', or 'l'
+        "E741",
+        # unnecessary variable assignment before return statement.
+        "R504",
+        # unnecessary else after return statement.
+        "R505",
+        # unnecessary else after raise statement.
+        "R506",
+        # unnecessary else after continue statement.
+        "R507",
+        # unnecessary else after break statement.
+        "R508",
+        # unnecessary else after break statement.
+        "SIM102",
+        # Use 'contextlib.suppress(...)' instead of try-except-pass
+        "SIM105",
+        # Combine conditions via a logical or to prevent duplicating code, TODO maybe enable
+        "SIM114",
+        # Merge with-statements that use the same scope, TODO maybe enable
+        "SIM117",
+        # Use 'a_dict.get(key, "default_value")' instead of an if-block
+        "SIM401",
+    ]
+    extend-select = [
+        # don't use return X in generators
+        "B901",
+        # only use self and cls for first args
+        "B902",
+    ]
+    ban-relative-imports = "parents"
+    extend-immutable-calls = [
+        "timedelta",
+        "Decimal",
+    ]
+    per-file-ignores = [
+        # allowing prints in some files
+        "tests/*:T20",
+        # allow no __init__ at the toplevel
+        "setup.py:INP001",
+    ]
+
 
 [tool.isort]
     multi_line_output=3

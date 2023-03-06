@@ -6,7 +6,6 @@ import data_browser.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("data_browser", "0001_initial")]
 
     operations = [

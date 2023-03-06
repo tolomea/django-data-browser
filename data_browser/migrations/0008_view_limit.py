@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("data_browser", "0007_view_public_slug")]
 
     operations = [

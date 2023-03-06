@@ -11894,8 +11894,10 @@ snapshots["test_query_qs_variants content"] = [
     "    ),",
     ").annotate(",
     "    ddb_annotated=Subquery(",
-    "        tests.core.admin.ProductAdmin(model,"
-    " admin_site).get_queryset(request).filter(",
+    (
+        "        tests.core.admin.ProductAdmin(model,"
+        " admin_site).get_queryset(request).filter("
+    ),
     "            pk=OuterRef(",
     "                'pk',",
     "            ),",

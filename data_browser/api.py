@@ -32,7 +32,7 @@ def deserialize(request):
     if "limit" in res:
         try:
             res["limit"] = int(res["limit"])
-        except:  # noqa: E722  input sanitization
+        except Exception:  # noqa: E722  input sanitization
             res["limit"] = 1
         if res["limit"] < 1:
             res["limit"] = 1

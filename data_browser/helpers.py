@@ -144,9 +144,11 @@ class AdminMixin(_AdminOptions, _AdminAnnotations, BaseModelAdmin):
                 [
                     (
                         f"{field}__{lookup}",
-                        value
-                        if isinstance(value, str)
-                        else json.dumps(value, cls=DjangoJSONEncoder),
+                        (
+                            value
+                            if isinstance(value, str)
+                            else json.dumps(value, cls=DjangoJSONEncoder)
+                        ),
                     )
                     for field, lookup, value in args
                 ]
