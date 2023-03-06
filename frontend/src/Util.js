@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import Cookies from "js-cookie";
 import "./App.scss";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
 const assert = require("assert");
@@ -8,6 +7,7 @@ let fetchInProgress = false;
 let nextFetch = undefined;
 
 const version = document.getElementById("backend-version").textContent.trim();
+const csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
 function CopyText(props) {
     const { text } = props;
@@ -119,7 +119,7 @@ function doDelete(url) {
         url,
         {
             method: "DELETE",
-            headers: { "X-CSRFToken": Cookies.get("csrftoken") },
+            headers: { "X-CSRFToken": csrf_token },
         },
         (response) => response
     );
@@ -132,7 +132,7 @@ function doPatch(url, data) {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": Cookies.get("csrftoken"),
+                "X-CSRFToken": csrf_token,
             },
             body: JSON.stringify(data),
         },
@@ -147,7 +147,7 @@ function doPost(url, data) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": Cookies.get("csrftoken"),
+                "X-CSRFToken": csrf_token,
             },
             body: JSON.stringify(data),
         },
@@ -160,7 +160,7 @@ function syncPost(url, data) {
     form.method = "post";
     form.action = url;
 
-    data.push(["csrfmiddlewaretoken", Cookies.get("csrftoken")]);
+    data.push(["csrfmiddlewaretoken", csrf_token]);
 
     for (const [key, value] of data) {
         const hiddenField = document.createElement("input");

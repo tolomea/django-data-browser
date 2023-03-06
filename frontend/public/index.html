@@ -89,6 +89,7 @@
 
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
+    {% csrf_token %}
     <script id="backend-version" type="application/json">
       {{ version }}
     </script>
