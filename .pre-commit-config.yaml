@@ -22,9 +22,9 @@ repos:
       - id: django-upgrade
         args: [--target-version, "2.2"]
 -   repo: https://github.com/hakancelik96/unimport
-    rev: 0.9.5
+    rev: 0.12.3
     hooks:
-      - id: unimport
+    -   id: unimport
         args: [--remove, --include-star-import, --ignore-init, --gitignore]
 -   repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.10.1
@@ -34,8 +34,8 @@ repos:
     rev: 22.3.0
     hooks:
     -   id: black
--   repo: https://gitlab.com/PyCQA/flake8
-    rev: 3.9.2
+-   repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
     hooks:
     -   id: flake8
         entry: pflake8
