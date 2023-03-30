@@ -16,7 +16,7 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .common import JsonResponse, debug_log, get_feature_flag, settings
+from .common import JsonResponse, debug_log, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_debug import DebugQS
@@ -334,10 +334,6 @@ def _get_fields_for_model(request, model, admin, admin_fields):
         if isinstance(
             field, (models.ForeignKey, ForeignObjectRel, models.ManyToManyField)
         ):
-            to_many = field.one_to_many or field.many_to_many
-            if to_many and not get_feature_flag("to_many", request):
-                continue
-
             if isinstance(field, ForeignObjectRel):
                 pretty_name = _make_pretty(field.get_accessor_name())
 
@@ -347,7 +343,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     name=field_name,
                     pretty_name=pretty_name,
                     rel_name=get_model_name(field.related_model),
-                    to_many=to_many,
+                    to_many=field.one_to_many or field.many_to_many,
                 )
 
             # if the related model is not exposed, and it's not a composite fk

@@ -577,8 +577,6 @@ def test_get_results_one_to_one(get_product_flat):
 
 @pytest.mark.usefixtures("products")
 def test_get_results_many_to_one(get_product_flat, mocker):
-    mocker.patch("data_browser.orm_admin.get_feature_flag", return_value=True)
-
     data = get_product_flat(1, "name+0,producer__products__name+1", [])
     assert data == [["a", "a"], ["b", "b"], ["c", "c"]]
 
@@ -780,9 +778,6 @@ def test_get_fields(orm_models):
     assert "pk" not in orm_models["core.Product"].fields
     assert "id" in orm_models["core.Product"].fields
 
-    # no many to many fields
-    assert "tags" not in orm_models["core.Product"].fields
-
     # no admin on inlines
     assert "admin" not in orm_models["core.InlineAdmin"].fields
 
@@ -804,10 +799,14 @@ class TestPermissions:
 
         assert "core.NotInAdmin" not in orm_models
         assert orm_models["core.InAdmin"] == OrmModel(
-            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin), pk="id"
+            fields=KEYS("admin", "id", "name", "normal", "inlineadmin"),
+            admin=ANY(BaseModelAdmin),
+            pk="id",
         )
         assert orm_models["core.InlineAdmin"] == OrmModel(
-            fields=KEYS("id", "name", "in_admin"), admin=ANY(BaseModelAdmin), pk="id"
+            fields=KEYS("id", "name", "in_admin", "normal"),
+            admin=ANY(BaseModelAdmin),
+            pk="id",
         )
         assert orm_models["core.Normal"] == OrmModel(
             fields=KEYS(
@@ -853,7 +852,9 @@ class TestPermissions:
 
         assert "core.NotInAdmin" not in orm_models
         assert orm_models["core.InAdmin"] == OrmModel(
-            fields=KEYS("admin", "id", "name"), admin=ANY(BaseModelAdmin), pk="id"
+            fields=KEYS("admin", "id", "name", "normal"),
+            admin=ANY(BaseModelAdmin),
+            pk="id",
         )
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
