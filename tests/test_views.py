@@ -5,12 +5,12 @@ from datetime import datetime
 import django
 import pytest
 from django.contrib.auth.models import User
-from django.utils import timezone
 
 import data_browser.models
 
 from .conftest import SQLITE
 from .core import models
+from .util import UTC
 
 
 def dump(val):
@@ -31,12 +31,12 @@ def pivot_products(db):
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
-        datetime(2020, 1, 1, tzinfo=timezone.utc),
-        datetime(2020, 2, 1, tzinfo=timezone.utc),
-        datetime(2020, 2, 2, tzinfo=timezone.utc),
-        datetime(2021, 1, 1, tzinfo=timezone.utc),
-        datetime(2021, 1, 2, tzinfo=timezone.utc),
-        datetime(2021, 1, 3, tzinfo=timezone.utc),
+        datetime(2020, 1, 1, tzinfo=UTC),
+        datetime(2020, 2, 1, tzinfo=UTC),
+        datetime(2020, 2, 2, tzinfo=UTC),
+        datetime(2021, 1, 1, tzinfo=UTC),
+        datetime(2021, 1, 2, tzinfo=UTC),
+        datetime(2021, 1, 3, tzinfo=UTC),
     ]
     for i, dt in enumerate(datetimes):
         models.Product.objects.create(

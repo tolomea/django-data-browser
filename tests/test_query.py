@@ -4,7 +4,6 @@ from uuid import UUID
 
 import pytest
 import time_machine
-from django.utils import timezone
 
 from data_browser import orm_fields
 from data_browser.orm_admin import OrmModel, get_fields_for_type
@@ -30,6 +29,8 @@ from data_browser.types import (
     UnknownType,
     UUIDType,
 )
+
+from .util import UTC
 
 
 @pytest.fixture
@@ -386,7 +387,7 @@ class TestNumberType(ParseHelpers):
 
 
 def dt(Y, M, D, h=0, m=0, s=0):
-    return datetime(Y, M, D, h, m, s, tzinfo=timezone.utc)
+    return datetime(Y, M, D, h, m, s, tzinfo=UTC)
 
 
 class TestDateTimeType(ParseHelpers):
@@ -467,10 +468,7 @@ class TestDateTimeType(ParseHelpers):
     @pytest.mark.parametrize(
         "value,expected",
         [
-            (
-                datetime(2020, 5, 19, 8, 42, 16, tzinfo=timezone.utc),
-                "2020-05-19 08:42:16",
-            ),
+            (datetime(2020, 5, 19, 8, 42, 16, tzinfo=UTC), "2020-05-19 08:42:16"),
             (None, None),
         ],
     )

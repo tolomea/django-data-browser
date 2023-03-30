@@ -12,7 +12,7 @@ from data_browser.query import BoundQuery, Query
 
 from .conftest import POSTGRES
 from .core import models
-from .util import ANY, KEYS
+from .util import ANY, KEYS, UTC
 
 
 def sortedAssert(a, b):
@@ -77,16 +77,16 @@ def pivot_products(db):
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
-        datetime(2020, 1, 1, tzinfo=timezone.utc),
-        datetime(2020, 2, 1, tzinfo=timezone.utc),
-        datetime(2020, 2, 2, tzinfo=timezone.utc),
-        datetime(2021, 1, 1, tzinfo=timezone.utc),
-        datetime(2021, 1, 2, tzinfo=timezone.utc),
-        datetime(2021, 1, 3, tzinfo=timezone.utc),
-        datetime(2021, 2, 1, tzinfo=timezone.utc),
-        datetime(2021, 2, 2, tzinfo=timezone.utc),
-        datetime(2021, 2, 3, tzinfo=timezone.utc),
-        datetime(2021, 2, 4, tzinfo=timezone.utc),
+        datetime(2020, 1, 1, tzinfo=UTC),
+        datetime(2020, 2, 1, tzinfo=UTC),
+        datetime(2020, 2, 2, tzinfo=UTC),
+        datetime(2021, 1, 1, tzinfo=UTC),
+        datetime(2021, 1, 2, tzinfo=UTC),
+        datetime(2021, 1, 3, tzinfo=UTC),
+        datetime(2021, 2, 1, tzinfo=UTC),
+        datetime(2021, 2, 2, tzinfo=UTC),
+        datetime(2021, 2, 3, tzinfo=UTC),
+        datetime(2021, 2, 4, tzinfo=UTC),
     ]
     for i, dt in enumerate(datetimes):
         models.Product.objects.create(
@@ -650,12 +650,12 @@ def test_pivot_sorting_with_empty_cell(get_product_pivot):
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
         # 2021, 1, 1 is notably missing
-        datetime(2021, 2, 1, tzinfo=timezone.utc),
-        datetime(2022, 1, 1, tzinfo=timezone.utc),
-        datetime(2022, 1, 2, tzinfo=timezone.utc),
-        datetime(2022, 2, 1, tzinfo=timezone.utc),
-        datetime(2022, 2, 2, tzinfo=timezone.utc),
-        datetime(2022, 2, 3, tzinfo=timezone.utc),
+        datetime(2021, 2, 1, tzinfo=UTC),
+        datetime(2022, 1, 1, tzinfo=UTC),
+        datetime(2022, 1, 2, tzinfo=UTC),
+        datetime(2022, 2, 1, tzinfo=UTC),
+        datetime(2022, 2, 2, tzinfo=UTC),
+        datetime(2022, 2, 3, tzinfo=UTC),
     ]
     for dt in datetimes:
         models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
@@ -683,17 +683,17 @@ def test_pivot_sorting_body(get_product_pivot):
     address = models.Address.objects.create(city="london", street="bad")
     producer = models.Producer.objects.create(name="Bob", address=address)
     datetimes = [
-        datetime(2021, 1, 1, tzinfo=timezone.utc),
-        datetime(2021, 2, 1, tzinfo=timezone.utc),
-        datetime(2021, 2, 2, tzinfo=timezone.utc),
-        datetime(2021, 2, 3, tzinfo=timezone.utc),
-        datetime(2022, 1, 1, tzinfo=timezone.utc),
-        datetime(2022, 1, 2, tzinfo=timezone.utc),
-        datetime(2022, 1, 3, tzinfo=timezone.utc),
-        datetime(2022, 1, 4, tzinfo=timezone.utc),
-        datetime(2022, 2, 1, tzinfo=timezone.utc),
-        datetime(2022, 2, 2, tzinfo=timezone.utc),
-        datetime(2022, 2, 3, tzinfo=timezone.utc),
+        datetime(2021, 1, 1, tzinfo=UTC),
+        datetime(2021, 2, 1, tzinfo=UTC),
+        datetime(2021, 2, 2, tzinfo=UTC),
+        datetime(2021, 2, 3, tzinfo=UTC),
+        datetime(2022, 1, 1, tzinfo=UTC),
+        datetime(2022, 1, 2, tzinfo=UTC),
+        datetime(2022, 1, 3, tzinfo=UTC),
+        datetime(2022, 1, 4, tzinfo=UTC),
+        datetime(2022, 2, 1, tzinfo=UTC),
+        datetime(2022, 2, 2, tzinfo=UTC),
+        datetime(2022, 2, 3, tzinfo=UTC),
     ]
     for dt in datetimes:
         models.Product.objects.create(created_time=dt, name=str(dt), producer=producer)
@@ -885,7 +885,7 @@ class TestPermissions:
 def test_all_datetime_functions(get_product_flat, lookup, value):
     models.Product.objects.create(
         producer=models.Producer.objects.create(),
-        created_time=datetime(2020, 1, 2, 3, 4, 5, 6, tzinfo=timezone.utc),
+        created_time=datetime(2020, 1, 2, 3, 4, 5, 6, tzinfo=UTC),
     )
 
     fields = f"created_time__{lookup}" if lookup else "created_time"
@@ -901,7 +901,7 @@ def test_all_datetime_functions(get_product_flat, lookup, value):
 def test_all_datetime_functions_2_2(get_product_flat, lookup, value):
     models.Product.objects.create(
         producer=models.Producer.objects.create(),
-        created_time=datetime(2020, 1, 2, 3, 4, 5, 6, tzinfo=timezone.utc),
+        created_time=datetime(2020, 1, 2, 3, 4, 5, 6, tzinfo=UTC),
     )
 
     fields = f"created_time__{lookup}" if lookup else "created_time"
@@ -917,16 +917,16 @@ def test_all_datetime_functions_2_2(get_product_flat, lookup, value):
 def test_datetime_aggregations(get_product_flat, aggregation, value):
     producer = models.Producer.objects.create()
     models.Product.objects.create(
-        producer=producer, created_time=datetime(2020, 1, 1, tzinfo=timezone.utc)
+        producer=producer, created_time=datetime(2020, 1, 1, tzinfo=UTC)
     )
     models.Product.objects.create(
-        producer=producer, created_time=datetime(2020, 1, 2, tzinfo=timezone.utc)
+        producer=producer, created_time=datetime(2020, 1, 2, tzinfo=UTC)
     )
     models.Product.objects.create(
-        producer=producer, created_time=datetime(2020, 1, 2, tzinfo=timezone.utc)
+        producer=producer, created_time=datetime(2020, 1, 2, tzinfo=UTC)
     )
     models.Product.objects.create(
-        producer=producer, created_time=datetime(2020, 1, 3, tzinfo=timezone.utc)
+        producer=producer, created_time=datetime(2020, 1, 3, tzinfo=UTC)
     )
 
     data = get_product_flat(1, f"created_time__{aggregation}", [])

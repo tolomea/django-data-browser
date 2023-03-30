@@ -1,3 +1,8 @@
+from datetime import timezone
+
+UTC = timezone.utc
+
+
 class ANY:
     def __init__(self, type):
         self.type = type
