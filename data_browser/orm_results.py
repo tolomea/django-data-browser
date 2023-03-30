@@ -208,7 +208,7 @@ def _format_grid(data, col_keys, row_keys, fields, objs):
     for col_key in col_keys:
         table = []
         for row_key in row_keys:
-            table.append(data[row_key].get(col_key, None))
+            table.append(data[row_key].get(col_key))
         body_data.append(_format_table(fields, table, objs))
     return body_data
 
