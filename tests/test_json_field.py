@@ -1,4 +1,3 @@
-import django
 import pytest
 from django.contrib import admin
 
@@ -7,15 +6,9 @@ from data_browser.orm_admin import get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
-from .conftest import JSON_FIELD_SUPPORT, SQLITE
+from .json.models import JsonModel
 
 # Howto enable SQLite JSON support https://code.djangoproject.com/wiki/JSON1Extension
-
-
-if JSON_FIELD_SUPPORT:
-    from .json.models import JsonModel
-else:
-    pytestmark = pytest.mark.skip("Needs JSONField support")
 
 
 class JsonAdmin(AdminMixin, admin.ModelAdmin):
@@ -63,28 +56,16 @@ def test_get_string_sub_field(get_results_flat):
     assert get_results_flat("json_field__hello") == [{"json_field__hello": "world"}]
 
 
-@pytest.mark.skipif(
-    SQLITE and django.VERSION[:3] == (3, 1, 3),
-    reason="https://code.djangoproject.com/ticket/32203",
-)
 def test_get_number_sub_field(get_results_flat):
     JsonModel.objects.create(json_field={"position": 1})
     assert get_results_flat("json_field__position") == [{"json_field__position": 1}]
 
 
-@pytest.mark.skipif(
-    SQLITE and django.VERSION[:3] == (3, 1, 3),
-    reason="https://code.djangoproject.com/ticket/32203",
-)
 def test_get_boolean_sub_field(get_results_flat):
     JsonModel.objects.create(json_field={"bool": True})
     assert get_results_flat("json_field__bool") == [{"json_field__bool": True}]
 
 
-@pytest.mark.skipif(
-    SQLITE and django.VERSION[:3] == (3, 1, 3),
-    reason="https://code.djangoproject.com/ticket/32203",
-)
 def test_sub_field_is_null(get_results_flat):
     JsonModel.objects.create(json_field={"position": 1, "hello": "world"})
     JsonModel.objects.create(json_field={"position": 2, "hello": None})

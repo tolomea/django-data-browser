@@ -1,5 +1,4 @@
 import dj_database_url
-import django
 import pytest
 from django.conf import settings
 
@@ -11,10 +10,8 @@ POSTGRES = "postgresql" in DATABASE_CONFIG["ENGINE"]
 SQLITE = "sqlite" in DATABASE_CONFIG["ENGINE"]
 
 if POSTGRES:
-    JSON_FIELD_SUPPORT = django.VERSION >= (2, 1)
     ARRAY_FIELD_SUPPORT = True
 else:
-    JSON_FIELD_SUPPORT = django.VERSION >= (3, 1)
     ARRAY_FIELD_SUPPORT = False
 
 INSTALLED_APPS = [
@@ -24,11 +21,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.admin",
     "tests.core",
+    "tests.json",
     "data_browser",
 ]
 
-if JSON_FIELD_SUPPORT:  # pragma: no branch
-    INSTALLED_APPS.append("tests.json")
 if ARRAY_FIELD_SUPPORT:
     INSTALLED_APPS.append("tests.array")
 

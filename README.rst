@@ -41,8 +41,8 @@ Supported Versions
 
 The Data Browser is currently tested on:
 
-* Django 2.2 - 4.1
-* Python 3.7 - 3.10
+* Django 3.2 - 4.2
+* Python 3.7 - 3.11
 * MySQL, PostgreSQL, SQLite
 
 We highly recommend and only officially support the latest patch release of each Python and Django series.
@@ -343,6 +343,9 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | | Add support for Django 4.2 and Python 3.11 drop support for Django 2.2, 3.0 and 3.1.                   |
+|         |            | | Make "to many" support generally available.                                                            |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.13  | 2023-03-06 | | Add support for Django 4.1.                                                                            |
 |         |            | | Work with CSRF_COOKIE_HTTPONLY which is enabled by cookiecutter-django.                                |
 +---------+------------+----------------------------------------------------------------------------------------------------------+

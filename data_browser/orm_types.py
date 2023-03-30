@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import JSONField
 
 from .common import debug_log
 from .types import (
@@ -25,14 +26,6 @@ try:
     from django.contrib.postgres.fields import ArrayField
 except ModuleNotFoundError:  # pragma: no cover
     ArrayField = None.__class__
-
-try:
-    from django.db.models import JSONField
-except ImportError:
-    try:
-        from django.contrib.postgres.fields import JSONField
-    except ModuleNotFoundError:  # pragma: no cover
-        JSONField = None.__class__
 
 
 _STRING_FIELDS = (models.CharField, models.TextField, models.GenericIPAddressField)

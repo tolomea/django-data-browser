@@ -1,20 +1,6 @@
 from collections import defaultdict
 
-import django
-from django.db.models import (
-    BooleanField,
-    DateField,
-    ExpressionWrapper,
-    OuterRef,
-    Q,
-    Subquery,
-    functions,
-)
-
-try:
-    from django.contrib.postgres.fields.array import ArrayLenTransform
-except ModuleNotFoundError:  # pragma: no cover
-    ArrayLenTransform = None
+from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, functions
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
@@ -28,6 +14,12 @@ from .types import (
     StringType,
 )
 from .util import annotation_path
+
+try:
+    from django.contrib.postgres.fields.array import ArrayLenTransform
+except ModuleNotFoundError:  # pragma: no cover
+    ArrayLenTransform = None
+
 
 _DATE_FUNCTIONS = [
     "is_null",
@@ -82,22 +74,7 @@ _weekday_choices = [
 
 def _get_django_function(type_, name, qs):
     def IsNull(field_name):
-        # https://code.djangoproject.com/ticket/32200
-        if django.VERSION[:3] == (3, 1, 3):  # pragma: django 3.1.3
-            return Subquery(
-                qs.annotate(
-                    ddb_is_null=ExpressionWrapper(
-                        Q(**{field_name: None}), output_field=BooleanField()
-                    )
-                )
-                .filter(pk=OuterRef("pk"))
-                .values("ddb_is_null")[:1],
-                output_field=BooleanField(),
-            )
-        else:
-            return ExpressionWrapper(
-                Q(**{field_name: None}), output_field=BooleanField()
-            )
+        return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
 
     if issubclass(type_, ArrayTypeMixin) and name == "length":
         return (ArrayLenTransform, NumberType, (), None, {})

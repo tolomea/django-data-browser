@@ -186,6 +186,7 @@ def test_get_url_link(get_product_flat):
     sortedAssert(data, [["a", None], ["b", "www.google.com"]])
 
 
+@pytest.mark.skipif(django.VERSION > (4, 2), reason="Unable to reproduce on 4.2")
 def test_bad_storage(monkeypatch, admin_ddb_request):
     # break storage
     from django.core.files.storage import FileSystemStorage, default_storage
@@ -241,7 +242,6 @@ def test_get_annotated_field_at_base(
     assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
-@pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_get_aggretated_annotated_field_at_base(
     products, get_product_flat, mock_admin_get_queryset
 ):
@@ -250,7 +250,6 @@ def test_get_aggretated_annotated_field_at_base(
     assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
-@pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_filter_and_select_aggregated_annotation(products, get_product_flat):
     data = get_product_flat(
         1, "annotated__count+1,size", [("annotated__count__gt", "1")]
@@ -258,7 +257,6 @@ def test_filter_and_select_aggregated_annotation(products, get_product_flat):
     assert data == [[1, 2]]  # aggregates last
 
 
-@pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_filter_and_select_annotation_function(products, get_product_flat):
     data = get_product_flat(
         1, "annotated__is_null+1,size", [("annotated__is_null__equals", "NotNull")]
@@ -286,7 +284,6 @@ def test_get_annotated_field_down_tree(
     assert len(mock_admin_get_queryset.call_args_list) == 6  # 4 for setup, 2 for query
 
 
-@pytest.mark.skipif(django.VERSION < (2, 1), reason="Django version 2.1 required")
 def test_get_aggregated_annotated_field_down_tree(
     products, get_product_flat, mock_admin_get_queryset
 ):
@@ -894,7 +891,6 @@ def test_all_datetime_functions(get_product_flat, lookup, value):
     assert data == [[value]]
 
 
-@pytest.mark.skipif(django.VERSION < (2, 2), reason="Django version 2.2 required")
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "lookup,value", [("iso_year", 2020), ("iso_week", 1), ("week_start", "2019-12-30")]
