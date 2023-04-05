@@ -166,7 +166,7 @@ def admin_action(request, model_name, fields):
         raise http.Http404(f"bad field '{field}'")  # pragma: no cover
 
     params = hyperlink.parse(request.get_full_path()).query
-    query = Query.from_request(model_name, field, params)
+    query = Query.from_request(model_name, fields, params)
 
     orm_models = get_models(request)
     if query.model_name not in orm_models:

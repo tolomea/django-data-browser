@@ -465,6 +465,36 @@ def test_action_filtered(admin_client):
 
 
 @pytest.mark.usefixtures("products")
+def test_action_sorted_and_limited(admin_client):
+    url = "/data_browser/query/core.Product/id%s0.%s?limit=1"
+
+    ids = set(models.Product.objects.values_list("id", flat=True))
+
+    for direction, id_ in [("+", min(ids)), ("-", max(ids))]:
+        # check our view is right
+        res = admin_client.get(url % (direction, "json"))
+        assert {row["id"] for row in res.json()["rows"]} == {id_}
+
+        # ask data browser for the action request
+        res = admin_client.post(
+            url % (direction, "html"),
+            {"action": "delete_selected", "field": "id"},
+            content_type="application/json",
+        ).json()
+        assert res == {
+            "method": "post",
+            "url": "/admin/core/product/?",
+            "data": [
+                ["action", "delete_selected"],
+                ["select_across", 0],
+                ["index", 0],
+                ["data_browser", 1],
+                ["_selected_action", id_],
+            ],
+        }
+
+
+@pytest.mark.usefixtures("products")
 def test_related_action(admin_client):
     url = "/data_browser/query/core.Product/address__id,producer__id,id.%s"
 
