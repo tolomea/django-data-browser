@@ -44,6 +44,10 @@ class View(models.Model):
         params.append(("limit", str(self.limit)))
         return Query.from_request(self.model_name, self.fields, params)
 
+    @property
+    def url(self):
+        return self.get_query().get_full_url("html")
+
     def public_link(self):
         if self.public:
             if settings.DATA_BROWSER_ALLOW_PUBLIC:

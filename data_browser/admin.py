@@ -44,8 +44,7 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
     def open_view(obj):
         if not obj.model_name:
             return "N/A"
-        url = obj.get_query().get_full_url("html")
-        return format_html(f'<a href="{url}">view</a>')
+        return format_html(f'<a href="{obj.url}">view</a>')
 
     def get_changeform_initial_data(self, request):
         get_results = super().get_changeform_initial_data(request)
