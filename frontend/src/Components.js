@@ -299,7 +299,7 @@ function ModelSelector(props) {
     >
       {Object.entries(modelsByAppLabel).map(([byAppLabel, models]) => {
         return (
-          <optgroup label={byAppLabel}>
+          <optgroup label={byAppLabel} key={byAppLabel}>
             {models.map((model) => (
               <option key={model}>{model}</option>
             ))}
