@@ -197,25 +197,23 @@ function useData(url) {
 
 function Save(props) {
     const { name, apiUrl, data, redirectUrl } = props;
-    const [saving, setSaving] = useState("save");
-    if (saving === "save")
+    const [state, setState] = useState("save");
+    if (state === "save")
         return (
             <TLink
                 onClick={(event) => {
-                    setSaving("saving");
-                    doPost(apiUrl, data).then((response) =>
-                        setSaving(response)
-                    );
+                    setState("saving");
+                    doPost(apiUrl, data).then((response) => setState(response));
                 }}
             >
                 Save {name || ""}
             </TLink>
         );
-    else if (saving === "saving") return <>Saving {name || ""}</>;
+    else if (state === "saving") return <>Saving {name || ""}</>;
     else {
         const url =
             typeof redirectUrl === "function"
-                ? redirectUrl(saving)
+                ? redirectUrl(state) // state here is the save response
                 : redirectUrl;
         return <Redirect to={url} />;
     }
@@ -223,8 +221,8 @@ function Save(props) {
 
 function Delete(props) {
     const { name, apiUrl, redirectUrl } = props;
-    const [state, setState] = useState("normal");
-    if (state === "normal")
+    const [state, setState] = useState("initial");
+    if (state === "initial")
         return (
             <TLink
                 onClick={(event) => {
@@ -376,6 +374,7 @@ export {
     useData,
     version,
     Save,
+    Update,
     Delete,
     CopyText,
     fetchInProgress,
