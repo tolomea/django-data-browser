@@ -219,6 +219,37 @@ function Save(props) {
     }
 }
 
+function Update(props) {
+    const { name, apiUrl, data, redirectUrl } = props;
+    const [state, setState] = useState("initial");
+    if (state === "initial")
+        return (
+            <TLink
+                onClick={(event) => {
+                    setState("confirm");
+                }}
+            >
+                Update {name || ""}
+            </TLink>
+        );
+    else if (state === "confirm")
+        return (
+            <TLink
+                onClick={(event) => {
+                    setState("updating");
+                    doPatch(apiUrl, data).then((response) =>
+                        setState("updated")
+                    );
+                }}
+            >
+                Are you sure?
+            </TLink>
+        );
+    else if (state === "updating") return "Updating";
+    else if (state === "updated") return <Redirect to={redirectUrl} />;
+    else throw new Error(`unknown update state: ${state}`);
+}
+
 function Delete(props) {
     const { name, apiUrl, redirectUrl } = props;
     const [state, setState] = useState("initial");

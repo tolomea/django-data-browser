@@ -10,6 +10,7 @@ import {
 import "./App.scss";
 import { ContextMenu } from "./ContextMenu";
 import { Tooltip } from "./Tooltip";
+import { CurrentSavedView } from "./CurrentSavedView";
 import { HomePage, QueryPage, Logo, EditSavedView } from "./Components";
 import { Query, getUrlForQuery, empty } from "./Query";
 import { doGet, fetchInProgress } from "./Util";
@@ -144,18 +145,20 @@ function App(props) {
     <BrowserRouter basename={baseUrl}>
       <ContextMenu>
         <Tooltip>
-          <Logo />
-          <Switch>
-            <Route path="/query/:model/:fieldStr?.html">
-              <QueryApp config={props} />
-            </Route>
-            <Route path="/views/:pk.html">
-              <EditSavedView {...{ baseUrl, canMakePublic }} />
-            </Route>
-            <Route path="/">
-              <HomePage {...props} />
-            </Route>
-          </Switch>
+          <CurrentSavedView>
+            <Logo />
+            <Switch>
+              <Route path="/query/:model/:fieldStr?.html">
+                <QueryApp config={props} />
+              </Route>
+              <Route path="/views/:pk.html">
+                <EditSavedView {...{ baseUrl, canMakePublic }} />
+              </Route>
+              <Route path="/">
+                <HomePage {...props} />
+              </Route>
+            </Switch>
+          </CurrentSavedView>
         </Tooltip>
       </ContextMenu>
     </BrowserRouter>

@@ -6,6 +6,7 @@ import {
   useData,
   version,
   Save,
+  Update,
   Delete,
   CopyText,
   HasActionIcon,
@@ -15,6 +16,7 @@ import {
 import { Results } from "./Results";
 import { getPartsForQuery, getRelUrlForQuery } from "./Query";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
+import { GetCurrentSavedView, SetCurrentSavedView } from "./CurrentSavedView";
 import "./App.scss";
 
 function FilterValue(props) {
@@ -344,6 +346,24 @@ function QueryPage(props) {
   else results = <h1>No fields selected</h1>;
 
   const [fieldsToggled, fieldsToggleLink] = useToggle(true);
+  const currentSavedView = useContext(GetCurrentSavedView);
+
+  var updateSavedViewLink = null;
+  if (currentSavedView) {
+    const savedViewName = currentSavedView.name
+      ? `"${currentSavedView.name}"`
+      : "<unamed>";
+    updateSavedViewLink = (
+      <p>
+        <Update
+          name={`saved view ${savedViewName}`}
+          apiUrl={`${baseUrl}api/views/${currentSavedView.pk}/`}
+          data={{ ...currentSavedView, ...getPartsForQuery(query.query) }}
+          redirectUrl={`/views/${currentSavedView.pk}.html`}
+        />
+      </p>
+    );
+  }
 
   return (
     <div className="QueryPage">
@@ -373,6 +393,7 @@ function QueryPage(props) {
           redirectUrl={(view) => `/views/${view.pk}.html`}
         />
       </p>
+      {updateSavedViewLink}
       <div className="MainSpace">
         <div className="FieldsList">
           <div className="FieldsToggle">{fieldsToggleLink}</div>
@@ -394,13 +415,18 @@ function EditSavedView(props) {
   const { pk } = useParams();
   const url = `${baseUrl}api/views/${pk}/`;
   const [view, setView] = useData(url);
+  const setCurrentSavedView = useContext(SetCurrentSavedView);
+  setCurrentSavedView(null);
+
   if (!view) return "";
   return (
     <div className="EditSavedView">
       <div>
         <div className="SavedViewActions">
           <span className="SavedViewTitle">Saved View</span>
-          <Link to={view.link}>Open</Link>
+          <Link to={view.link} onClick={() => setCurrentSavedView(view)}>
+            Open
+          </Link>
         </div>
         <form>
           <input
@@ -495,6 +521,8 @@ function EditSavedView(props) {
 function SavedViewList(props) {
   const { baseUrl } = props;
   const [savedViews] = useData(`${baseUrl}api/views/`);
+  const setCurrentSavedView = useContext(SetCurrentSavedView);
+
   if (!savedViews) return "";
   return (
     <div className="SavedViewList">
@@ -502,7 +530,11 @@ function SavedViewList(props) {
       {savedViews.map((view, index) => (
         <div key={index}>
           <h2>
-            <Link className="Link" to={view.link}>
+            <Link
+              className="Link"
+              to={view.link}
+              onClick={() => setCurrentSavedView(view)}
+            >
               {view.name || "<unnamed>"}
             </Link>
           </h2>
@@ -518,6 +550,9 @@ function SavedViewList(props) {
 
 function HomePage(props) {
   const { sortedModels, baseUrl, defaultRowLimit, allModelFields } = props;
+  const setCurrentSavedView = useContext(SetCurrentSavedView);
+  setCurrentSavedView(null);
+
   return (
     <div className="HomePage">
       <div>

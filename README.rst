@@ -343,6 +343,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Remember the current saved view and allow updating it.                                                   |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.14  | 2023-04-05 | | Fix bug with admin actions not respecting ordering when the number of results exceeds the limit.       |
 |         |            | | Add support for Django 4.2 and Python 3.11 drop support for Django 2.2, 3.0 and 3.1.                   |
 |         |            | | Make "to many" support generally available.                                                            |
