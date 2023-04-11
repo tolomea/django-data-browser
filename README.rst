@@ -343,7 +343,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Clear confirm prompts after a short delay.                                                             |
+| 4.0.15  | 2023-04-11 | | Clear confirm prompts after a short delay.                                                             |
 |         |            | | Remember the current saved view and allow updating it.                                                 |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.14  | 2023-04-05 | | Fix bug with admin actions not respecting ordering when the number of results exceeds the limit.       |
