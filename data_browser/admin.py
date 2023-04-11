@@ -23,7 +23,7 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             },
         ),
         ("Query", {"fields": ["model_name", "fields", "query", "limit"]}),
-        ("Internal", {"fields": ["id", "created_time"]}),
+        ("Internal", {"fields": ["id", "created_time", "shared"]}),
     ]
     list_display = ["__str__", "owner", "public"]
 

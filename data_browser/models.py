@@ -31,6 +31,7 @@ class View(models.Model):
 
     public = models.BooleanField(default=False)
     public_slug = models.CharField(max_length=12, default=get_id, blank=False)
+    shared = models.BooleanField(default=False)
 
     model_name = models.CharField(max_length=32, blank=False)
     fields = models.TextField(blank=True)
