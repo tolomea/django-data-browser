@@ -219,13 +219,21 @@ function Save(props) {
     }
 }
 
+const CONFIRM_PROMPT = "Are you sure?";
+const CONFIRM_TIMEOUT = 1000;
+
 function Update(props) {
     const { name, apiUrl, data, redirectUrl } = props;
     const [state, setState] = useState("initial");
+    var timerID = null;
     if (state === "initial")
         return (
             <TLink
                 onClick={(event) => {
+                    timerID = setTimeout(
+                        () => setState("initial"),
+                        CONFIRM_TIMEOUT
+                    );
                     setState("confirm");
                 }}
             >
@@ -237,12 +245,16 @@ function Update(props) {
             <TLink
                 onClick={(event) => {
                     setState("updating");
+                    if (timerID) {
+                        clearTimeout(timerID);
+                        timerID = null;
+                    }
                     doPatch(apiUrl, data).then((response) =>
                         setState("updated")
                     );
                 }}
             >
-                Are you sure?
+                {CONFIRM_PROMPT}
             </TLink>
         );
     else if (state === "updating") return "Updating";
@@ -253,10 +265,15 @@ function Update(props) {
 function Delete(props) {
     const { name, apiUrl, redirectUrl } = props;
     const [state, setState] = useState("initial");
+    var timerID = null;
     if (state === "initial")
         return (
             <TLink
                 onClick={(event) => {
+                    timerID = setTimeout(
+                        () => setState("initial"),
+                        CONFIRM_TIMEOUT
+                    );
                     setState("confirm");
                 }}
             >
@@ -268,10 +285,14 @@ function Delete(props) {
             <TLink
                 onClick={(event) => {
                     setState("deleting");
+                    if (timerID) {
+                        clearTimeout(timerID);
+                        timerID = null;
+                    }
                     doDelete(apiUrl).then((response) => setState("deleted"));
                 }}
             >
-                Are you sure?
+                {CONFIRM_PROMPT}
             </TLink>
         );
     else if (state === "deleting") return "Deleting";
