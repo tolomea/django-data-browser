@@ -279,19 +279,8 @@ function FieldGroup(props) {
   );
 }
 
-const SEP = ".";
-
 function ModelSelector(props) {
   const { query, sortedModels, model } = props;
-
-  const modelsByAppLabel = sortedModels.reduce((a, x) => {
-    const [appLabel] = x.split(SEP);
-
-    return {
-      ...a,
-      [appLabel]: [...(a[appLabel] || []), x],
-    };
-  }, {});
 
   return (
     <select
@@ -299,12 +288,13 @@ function ModelSelector(props) {
       onChange={(e) => query.setModel(e.target.value)}
       value={model}
     >
-      {Object.entries(modelsByAppLabel).map(([byAppLabel, models]) => {
+      {sortedModels.map(({ appName, modelNames }) => {
         return (
-          <optgroup label={byAppLabel} key={byAppLabel}>
-            {models.map((model) => (
-              <option key={model}>{model}</option>
-            ))}
+          <optgroup label={appName} key={appName}>
+            {modelNames.map((modelName) => {
+              const fullName = `${appName}.${modelName}`;
+              return <option key={fullName}>{fullName}</option>;
+            })}
           </optgroup>
         );
       })}
@@ -558,26 +548,29 @@ function HomePage(props) {
       <div>
         <h1>Models</h1>
         <div>
-          {sortedModels.map((model) => (
-            <div key={model}>
-              <h2>
-                <Link
-                  to={getRelUrlForQuery(
-                    {
-                      model: model,
-                      fields: [],
-                      filters: allModelFields[model].defaultFilters,
-                      limit: defaultRowLimit,
-                    },
-                    "html"
-                  )}
-                  className="Link"
-                >
-                  {model}
-                </Link>
-              </h2>
-            </div>
-          ))}
+          {sortedModels.map(({ appName, modelNames }) =>
+            modelNames.map((modelName) => {
+              const fullName = `${appName}.${modelName}`;
+              return (
+                <h2 key={fullName}>
+                  <Link
+                    to={getRelUrlForQuery(
+                      {
+                        model: fullName,
+                        fields: [],
+                        filters: allModelFields[fullName].defaultFilters,
+                        limit: defaultRowLimit,
+                      },
+                      "html"
+                    )}
+                    className="Link"
+                  >
+                    {fullName}
+                  </Link>
+                </h2>
+              );
+            })
+          )}
         </div>
       </div>
       <SavedViewList {...{ baseUrl }} />

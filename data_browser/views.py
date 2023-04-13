@@ -5,6 +5,7 @@ import json
 import marshal
 import pstats
 import sys
+from collections import defaultdict
 
 import django.contrib.admin.views.decorators as admin_decorators
 import hyperlink
@@ -129,13 +130,21 @@ def _get_config(request):
         for model_name in orm_models
     }
 
+    model_names_by_app = defaultdict(set)
+    for name, model in orm_models.items():
+        if model.root:
+            # todo why don't we get this in parts and then assemble it
+            app_name, model_name = name.split(".")
+            model_names_by_app[app_name].add(model_name)
+
     return {
         "baseUrl": reverse("data_browser:home"),
         "types": types,
         "allModelFields": all_model_fields,
-        "sortedModels": sorted(
-            name for name, model in orm_models.items() if model.root
-        ),
+        "sortedModels": [
+            {"appName": app_name, "modelNames": sorted(model_names)}
+            for app_name, model_names in sorted(model_names_by_app.items())
+        ],
         "canMakePublic": can_make_public(request.user),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
