@@ -327,14 +327,15 @@ a.Logo {
     border: 1px solid var(--border-color);
     border-radius: 3px;
     margin: 30px 2% 0 2%;
-    padding: 0 2% 2% 2%;
+    padding: 0 2% 0% 2%;
+  }
+  .AppModels {
+    margin-left: 20px;
+    margin-bottom: 20px;
   }
 }
 .SavedViewList div {
   margin: 0 0 20px 0;
-}
-.SavedViewList div:last-child {
-  margin: 0;
 }
 
 /* Edit View */

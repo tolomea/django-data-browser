@@ -548,29 +548,34 @@ function HomePage(props) {
       <div>
         <h1>Models</h1>
         <div>
-          {sortedModels.map(({ appName, modelNames }) =>
-            modelNames.map((modelName) => {
-              const fullName = `${appName}.${modelName}`;
-              return (
-                <h2 key={fullName}>
-                  <Link
-                    to={getRelUrlForQuery(
-                      {
-                        model: fullName,
-                        fields: [],
-                        filters: allModelFields[fullName].defaultFilters,
-                        limit: defaultRowLimit,
-                      },
-                      "html"
-                    )}
-                    className="Link"
-                  >
-                    {fullName}
-                  </Link>
-                </h2>
-              );
-            })
-          )}
+          {sortedModels.map(({ appName, modelNames }) => (
+            <>
+              <h2>{appName}</h2>
+              <div key={appName} className="AppModels">
+                {modelNames.map((modelName) => {
+                  const fullName = `${appName}.${modelName}`;
+                  return (
+                    <h2 key={modelName}>
+                      <Link
+                        to={getRelUrlForQuery(
+                          {
+                            model: fullName,
+                            fields: [],
+                            filters: allModelFields[fullName].defaultFilters,
+                            limit: defaultRowLimit,
+                          },
+                          "html"
+                        )}
+                        className="Link"
+                      >
+                        {modelName}
+                      </Link>
+                    </h2>
+                  );
+                })}
+              </div>
+            </>
+          ))}
         </div>
       </div>
       <SavedViewList {...{ baseUrl }} />
