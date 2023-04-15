@@ -37,6 +37,54 @@ function SavedViewList(props) {
   );
 }
 
+function AppEntry(props) {
+  const { appName, modelNames, allModelFields, defaultRowLimit } = props;
+  return (
+    <>
+      <h2>{appName}</h2>
+      <div key={appName} className="AppModels">
+        {modelNames.map((modelName) => {
+          const fullName = `${appName}.${modelName}`;
+          return (
+            <h2 key={modelName}>
+              <Link
+                to={getRelUrlForQuery(
+                  {
+                    model: fullName,
+                    fields: [],
+                    filters: allModelFields[fullName].defaultFilters,
+                    limit: defaultRowLimit,
+                  },
+                  "html"
+                )}
+                className="Link"
+              >
+                {modelName}
+              </Link>
+            </h2>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function ModelList(props) {
+  const { sortedModels, defaultRowLimit, allModelFields } = props;
+  return (
+    <div>
+      <h1>Models</h1>
+      <div className="AppList">
+        {sortedModels.map(({ appName, modelNames }) => (
+          <AppEntry
+            {...{ appName, modelNames, allModelFields, defaultRowLimit }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function HomePage(props) {
   const { sortedModels, baseUrl, defaultRowLimit, allModelFields } = props;
   const setCurrentSavedView = useContext(SetCurrentSavedView);
@@ -44,39 +92,7 @@ function HomePage(props) {
 
   return (
     <div className="HomePage">
-      <div>
-        <h1>Models</h1>
-        <div>
-          {sortedModels.map(({ appName, modelNames }) => (
-            <>
-              <h2>{appName}</h2>
-              <div key={appName} className="AppModels">
-                {modelNames.map((modelName) => {
-                  const fullName = `${appName}.${modelName}`;
-                  return (
-                    <h2 key={modelName}>
-                      <Link
-                        to={getRelUrlForQuery(
-                          {
-                            model: fullName,
-                            fields: [],
-                            filters: allModelFields[fullName].defaultFilters,
-                            limit: defaultRowLimit,
-                          },
-                          "html"
-                        )}
-                        className="Link"
-                      >
-                        {modelName}
-                      </Link>
-                    </h2>
-                  );
-                })}
-              </div>
-            </>
-          ))}
-        </div>
-      </div>
+      <ModelList {...{ sortedModels, defaultRowLimit, allModelFields }} />
       <SavedViewList {...{ baseUrl }} />
     </div>
   );
