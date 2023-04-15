@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import * as Sentry from "@sentry/browser";
 import "./index.scss";
 import App from "./App";
+import { Config } from "./Config";
 
 const config = JSON.parse(
     document.getElementById("backend-config").textContent
@@ -20,7 +21,9 @@ if (config.sentryDsn) {
 
 ReactDOM.render(
     <React.StrictMode>
-        <App {...config} />
+        <Config.Provider value={config}>
+            <App {...config} />
+        </Config.Provider>
     </React.StrictMode>,
     document.getElementById("root")
 );
