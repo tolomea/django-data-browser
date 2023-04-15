@@ -329,13 +329,15 @@ a.Logo {
     margin: 30px 2% 0 2%;
     padding: 0 2% 0% 2%;
   }
-  .AppModels {
-    margin-left: 20px;
+  .AppList {
     margin-bottom: 20px;
+    .AppModels {
+      margin-left: 40px;
+    }
   }
-}
-.SavedViewList div {
-  margin: 0 0 20px 0;
+  .SavedViewList div {
+    margin: 0 0 20px 0;
+  }
 }
 
 /* Edit View */

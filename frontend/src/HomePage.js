@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { useData } from "./Util";
+import { useData, useToggle } from "./Util";
 import { getRelUrlForQuery } from "./Query";
 import { SetCurrentSavedView } from "./CurrentSavedView";
 
@@ -39,32 +39,38 @@ function SavedViewList(props) {
 
 function AppEntry(props) {
   const { appName, modelNames, allModelFields, defaultRowLimit } = props;
+  const [toggled, toggleLink] = useToggle(true);
   return (
     <>
-      <h2>{appName}</h2>
-      <div key={appName} className="AppModels">
-        {modelNames.map((modelName) => {
-          const fullName = `${appName}.${modelName}`;
-          return (
-            <h2 key={modelName}>
-              <Link
-                to={getRelUrlForQuery(
-                  {
-                    model: fullName,
-                    fields: [],
-                    filters: allModelFields[fullName].defaultFilters,
-                    limit: defaultRowLimit,
-                  },
-                  "html"
-                )}
-                className="Link"
-              >
-                {modelName}
-              </Link>
-            </h2>
-          );
-        })}
-      </div>
+      <h2>
+        {toggleLink}
+        {appName}
+      </h2>
+      {toggled && (
+        <div key={appName} className="AppModels">
+          {modelNames.map((modelName) => {
+            const fullName = `${appName}.${modelName}`;
+            return (
+              <h2 key={modelName}>
+                <Link
+                  to={getRelUrlForQuery(
+                    {
+                      model: fullName,
+                      fields: [],
+                      filters: allModelFields[fullName].defaultFilters,
+                      limit: defaultRowLimit,
+                    },
+                    "html"
+                  )}
+                  className="Link"
+                >
+                  {modelName}
+                </Link>
+              </h2>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }
