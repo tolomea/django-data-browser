@@ -419,6 +419,27 @@ function useToggle(initial = false) {
     return [toggled, toggleLink];
 }
 
+function usePersistentToggle(storageKey = null, initial = false) {
+    const blah = localStorage.getItem(storageKey) === "true" ?? initial;
+    const [toggled, setToggled] = useState(blah);
+
+    const toggleLink = (
+        <SLink
+            className="ToggleLink"
+            onClick={() =>
+                setToggled((toggled) => {
+                    localStorage.setItem(storageKey, !toggled);
+                    return !toggled;
+                })
+            }
+        >
+            {toggled ? "remove" : "add"}
+        </SLink>
+    );
+
+    return [toggled, toggleLink];
+}
+
 export {
     TLink,
     SLink,
@@ -439,4 +460,5 @@ export {
     HasActionIcon,
     HasToManyIcon,
     useToggle,
+    usePersistentToggle,
 };

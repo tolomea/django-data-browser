@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { useData, useToggle } from "./Util";
+import { useData, usePersistentToggle } from "./Util";
 import { getRelUrlForQuery } from "./Query";
 import { SetCurrentSavedView } from "./CurrentSavedView";
 import { Config } from "./Config";
@@ -41,7 +41,10 @@ function SavedViewList(props) {
 function AppEntry(props) {
   const config = useContext(Config);
   const { appName, modelNames } = props;
-  const [toggled, toggleLink] = useToggle(config.appsExpanded);
+  const [toggled, toggleLink] = usePersistentToggle(
+    `model.${appName}.toggle`,
+    config.appsExpanded
+  );
   return (
     <>
       <h2>
