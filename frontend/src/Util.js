@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import "./App.scss";
+
 import { ShowTooltip, HideTooltip } from "./Tooltip";
+
+import "./App.scss";
+
 const assert = require("assert");
 let fetchInProgress = false;
 let nextFetch = undefined;

@@ -1,23 +1,30 @@
-import React, { useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import * as Sentry from "@sentry/browser";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useLocation } from "react-router-dom";
+
 import {
   TLink,
   SLink,
-  useData,
-  version,
   Save,
   Update,
-  Delete,
-  CopyText,
   HasActionIcon,
   HasToManyIcon,
   useToggle,
+  doGet,
+  fetchInProgress,
 } from "./Util";
 import { Results } from "./Results";
-import { getPartsForQuery, getRelUrlForQuery } from "./Query";
+import { getPartsForQuery, Query, getUrlForQuery, empty } from "./Query";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
-import { GetCurrentSavedView, SetCurrentSavedView } from "./CurrentSavedView";
+import { GetCurrentSavedView } from "./CurrentSavedView";
+
 import "./App.scss";
+
+const assert = require("assert");
+
+const BOOTING = "Booting...";
+const LOADING = "Loading...";
+const ERROR = "Error";
 
 function FilterValue(props) {
   const { lookupType, onChange, value, field } = props;
@@ -302,16 +309,7 @@ function ModelSelector(props) {
   );
 }
 
-function Logo(props) {
-  return (
-    <Link to="/" className="Logo">
-      <span>DDB</span>
-      <span className="Version">v{version}</span>
-    </Link>
-  );
-}
-
-function QueryPage(props) {
+function QueryPageContent(props) {
   const {
     query,
     rows,
@@ -400,187 +398,122 @@ function QueryPage(props) {
   );
 }
 
-function EditSavedView(props) {
-  const { canMakePublic, baseUrl } = props;
-  const { pk } = useParams();
-  const url = `${baseUrl}api/views/${pk}/`;
-  const [view, setView] = useData(url);
-  const setCurrentSavedView = useContext(SetCurrentSavedView);
-  setCurrentSavedView(null);
+function QueryPage(props) {
+  const { config } = props;
+  const { model, fieldStr } = useParams();
+  const [status, setStatus] = useState(BOOTING);
+  const [query, setQuery] = useState({
+    model: "",
+    fields: [],
+    filters: [],
+    limit: config.defaultRowLimit,
+    ...empty,
+  });
+  const queryStr = useLocation().search;
 
-  if (!view) return "";
+  const handleError = (e) => {
+    if (e.name !== "AbortError") {
+      setStatus(ERROR);
+      console.log(e);
+      Sentry.captureException(e);
+    }
+  };
+
+  const fetchResults = (state) => {
+    setStatus(LOADING);
+    const url = getUrlForQuery(config.baseUrl, state, "json");
+
+    return doGet(url).then((response) => {
+      setQuery((query) => ({
+        ...query,
+        body: response.body,
+        cols: response.cols,
+        rows: response.rows,
+        length: response.length,
+        formatHints: response.formatHints,
+        filterErrors: response.filterErrors,
+        parsedFilterValues: response.parsedFilterValues,
+      }));
+      setStatus(fetchInProgress ? LOADING : undefined);
+      return response;
+    });
+  };
+
+  useEffect(() => {
+    const popstate = (e) => {
+      setQuery(e.state);
+      fetchResults(e.state).catch(handleError);
+    };
+
+    const url = `${config.baseUrl}query/${model}/${
+      fieldStr || ""
+    }.query${queryStr}`;
+
+    doGet(url).then((response) => {
+      const reqState = {
+        model: response.model,
+        fields: response.fields,
+        filters: response.filters,
+        limit: response.limit,
+        ...empty,
+      };
+      setQuery(reqState);
+      setStatus(LOADING);
+      window.history.replaceState(
+        reqState,
+        null,
+        getUrlForQuery(config.baseUrl, reqState, "html")
+      );
+      window.addEventListener("popstate", popstate);
+      fetchResults(reqState).catch(handleError);
+    });
+
+    return () => {
+      window.removeEventListener("popstate", popstate);
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  const handleQueryChange = (queryChange, reload = true) => {
+    const newState = { ...query, ...queryChange };
+
+    setQuery(newState);
+
+    const request = {
+      model: newState.model,
+      fields: newState.fields,
+      filters: newState.filters,
+      limit: newState.limit,
+      ...empty,
+    };
+    window.history.pushState(
+      request,
+      null,
+      getUrlForQuery(config.baseUrl, newState, "html")
+    );
+
+    if (!reload) return;
+
+    fetchResults(newState)
+      .then((response) => {
+        const res = { ...response, ...empty };
+        const req = { ...request };
+        assert.deepStrictEqual(res, req);
+      })
+      .catch(handleError);
+  };
+
+  if (status === BOOTING) return "";
+  const queryObj = new Query(config, query, handleQueryChange);
   return (
-    <div className="EditSavedView">
-      <div>
-        <div className="SavedViewActions">
-          <span className="SavedViewTitle">Saved View</span>
-          <Link to={view.link} onClick={() => setCurrentSavedView(view)}>
-            Open
-          </Link>
-        </div>
-        <form>
-          <input
-            type="text"
-            value={view.name}
-            onChange={(event) => {
-              setView({ name: event.target.value });
-            }}
-            className="SavedViewName"
-            placeholder="enter a name"
-          />
-          <table>
-            <tbody>
-              <tr>
-                <th>Model:</th>
-                <td>{view.model}</td>
-              </tr>
-              <tr>
-                <th>Fields:</th>
-                <td>{view.fields.replace(/,/g, "\u200b,")}</td>
-              </tr>
-              <tr>
-                <th>Filters:</th>
-                <td>{view.query.replace(/&/g, "\u200b&")}</td>
-              </tr>
-              <tr>
-                <th>Limit:</th>
-                <td className="SavedViewLimit">
-                  <input
-                    className="RowLimit"
-                    type="number"
-                    value={view.limit}
-                    onChange={(event) => {
-                      setView({ limit: event.target.value });
-                    }}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>Created Time:</th>
-                <td>{view.createdTime}</td>
-              </tr>
-            </tbody>
-          </table>
-          <textarea
-            value={view.description}
-            onChange={(event) => {
-              setView({ description: event.target.value });
-            }}
-            placeholder="enter a description"
-          />
-          {canMakePublic && (
-            <table>
-              <tbody>
-                <tr>
-                  <th>Is Public:</th>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={view.public}
-                      onChange={(event) => {
-                        setView({ public: event.target.checked });
-                      }}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Public link:</th>
-                  <td>{view.public && <CopyText text={view.publicLink} />}</td>
-                </tr>
-                <tr>
-                  <th>Google Sheets:</th>
-                  <td>
-                    {view.public && (
-                      <CopyText text={view.googleSheetsFormula} />
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          )}
-        </form>
-        <div className="SavedViewActions">
-          <Delete apiUrl={url} redirectUrl="/" />
-          <Link to="/">Close</Link>
-        </div>
-      </div>
-    </div>
+    <QueryPageContent
+      overlay={status}
+      query={queryObj}
+      sortedModels={config.sortedModels}
+      baseUrl={config.baseUrl}
+      {...query}
+    />
   );
 }
 
-function SavedViewList(props) {
-  const { baseUrl } = props;
-  const [savedViews] = useData(`${baseUrl}api/views/`);
-  const setCurrentSavedView = useContext(SetCurrentSavedView);
-
-  if (!savedViews) return "";
-  return (
-    <div className="SavedViewList">
-      <h1>Saved Views</h1>
-      {savedViews.map((view, index) => (
-        <div key={index}>
-          <h2>
-            <Link
-              className="Link"
-              to={view.link}
-              onClick={() => setCurrentSavedView(view)}
-            >
-              {view.name || "<unnamed>"}
-            </Link>
-          </h2>
-          <p>
-            on {view.model} - <Link to={`/views/${view.pk}.html`}>edit</Link>
-          </p>
-          <p>{view.description}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function HomePage(props) {
-  const { sortedModels, baseUrl, defaultRowLimit, allModelFields } = props;
-  const setCurrentSavedView = useContext(SetCurrentSavedView);
-  setCurrentSavedView(null);
-
-  return (
-    <div className="HomePage">
-      <div>
-        <h1>Models</h1>
-        <div>
-          {sortedModels.map(({ appName, modelNames }) => (
-            <>
-              <h2>{appName}</h2>
-              <div key={appName} className="AppModels">
-                {modelNames.map((modelName) => {
-                  const fullName = `${appName}.${modelName}`;
-                  return (
-                    <h2 key={modelName}>
-                      <Link
-                        to={getRelUrlForQuery(
-                          {
-                            model: fullName,
-                            fields: [],
-                            filters: allModelFields[fullName].defaultFilters,
-                            limit: defaultRowLimit,
-                          },
-                          "html"
-                        )}
-                        className="Link"
-                      >
-                        {modelName}
-                      </Link>
-                    </h2>
-                  );
-                })}
-              </div>
-            </>
-          ))}
-        </div>
-      </div>
-      <SavedViewList {...{ baseUrl }} />
-    </div>
-  );
-}
-
-export { HomePage, QueryPage, Logo, EditSavedView };
+export { QueryPage };
