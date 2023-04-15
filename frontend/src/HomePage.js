@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import { useData, useToggle } from "./Util";
 import { getRelUrlForQuery } from "./Query";
 import { SetCurrentSavedView } from "./CurrentSavedView";
+import { Config } from "./Config";
 
 import "./App.scss";
 
 function SavedViewList(props) {
-  const { baseUrl } = props;
-  const [savedViews] = useData(`${baseUrl}api/views/`);
+  const config = useContext(Config);
+  const [savedViews] = useData(`${config.baseUrl}api/views/`);
   const setCurrentSavedView = useContext(SetCurrentSavedView);
 
   if (!savedViews) return "";
@@ -38,9 +39,9 @@ function SavedViewList(props) {
 }
 
 function AppEntry(props) {
-  const { appName, modelNames, defaultRowLimit, allModelFields, appsExpanded } =
-    props;
-  const [toggled, toggleLink] = useToggle(appsExpanded);
+  const config = useContext(Config);
+  const { appName, modelNames } = props;
+  const [toggled, toggleLink] = useToggle(config.appsExpanded);
   return (
     <>
       <h2>
@@ -58,8 +59,8 @@ function AppEntry(props) {
                     {
                       model: fullName,
                       fields: [],
-                      filters: allModelFields[fullName].defaultFilters,
-                      limit: defaultRowLimit,
+                      filters: config.allModelFields[fullName].defaultFilters,
+                      limit: config.defaultRowLimit,
                     },
                     "html"
                   )}
@@ -77,21 +78,13 @@ function AppEntry(props) {
 }
 
 function ModelList(props) {
-  const { sortedModels, defaultRowLimit, allModelFields, appsExpanded } = props;
+  const config = useContext(Config);
   return (
     <div>
       <h1>Models</h1>
       <div className="AppList">
-        {sortedModels.map(({ appName, modelNames }) => (
-          <AppEntry
-            {...{
-              appName,
-              modelNames,
-              defaultRowLimit,
-              allModelFields,
-              appsExpanded,
-            }}
-          />
+        {config.sortedModels.map(({ appName, modelNames }) => (
+          <AppEntry key={appName} {...{ appName, modelNames }} />
         ))}
       </div>
     </div>
@@ -99,22 +92,13 @@ function ModelList(props) {
 }
 
 function HomePage(props) {
-  const {
-    sortedModels,
-    baseUrl,
-    defaultRowLimit,
-    allModelFields,
-    appsExpanded,
-  } = props;
   const setCurrentSavedView = useContext(SetCurrentSavedView);
   setCurrentSavedView(null);
 
   return (
     <div className="HomePage">
-      <ModelList
-        {...{ sortedModels, defaultRowLimit, allModelFields, appsExpanded }}
-      />
-      <SavedViewList {...{ baseUrl }} />
+      <ModelList />
+      <SavedViewList />
     </div>
   );
 }

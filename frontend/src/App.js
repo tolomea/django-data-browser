@@ -36,7 +36,7 @@ function App(props) {
                 <SavedViewPage {...{ baseUrl, canMakePublic }} />
               </Route>
               <Route path="/">
-                <HomePage {...props} />
+                <HomePage />
               </Route>
             </Switch>
           </CurrentSavedView>
