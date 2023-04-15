@@ -17,6 +17,7 @@ import { Results } from "./Results";
 import { getPartsForQuery, Query, getUrlForQuery, empty } from "./Query";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
 import { GetCurrentSavedView } from "./CurrentSavedView";
+import { Config } from "./Config";
 
 import "./App.scss";
 
@@ -50,14 +51,14 @@ function FilterValue(props) {
     ],
   };
 
-  if (props.lookupType === "boolean") {
+  if (lookupType === "boolean") {
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         <option value={true}>true</option>
         <option value={false}>false</option>
       </select>
     );
-  } else if (props.lookupType === "isnull") {
+  } else if (lookupType === "isnull") {
     return (
       <select {...{ value }} onChange={onChangeEvent} className="FilterValue">
         <option value={"IsNull"}>IsNull</option>
@@ -287,7 +288,8 @@ function FieldGroup(props) {
 }
 
 function ModelSelector(props) {
-  const { query, sortedModels, model } = props;
+  const config = useContext(Config);
+  const { query, model } = props;
 
   return (
     <select
@@ -295,7 +297,7 @@ function ModelSelector(props) {
       onChange={(e) => query.setModel(e.target.value)}
       value={model}
     >
-      {sortedModels.map(({ appName, modelNames }) => {
+      {config.sortedModels.map(({ appName, modelNames }) => {
         return (
           <optgroup label={appName} key={appName}>
             {modelNames.map((modelName) => {
@@ -310,18 +312,17 @@ function ModelSelector(props) {
 }
 
 function QueryPageContent(props) {
+  const config = useContext(Config);
   const {
     query,
     rows,
     cols,
     body,
     length,
-    sortedModels,
     model,
     filters,
     filterErrors,
     parsedFilterValues,
-    baseUrl,
     overlay,
     formatHints,
   } = props;
@@ -345,7 +346,7 @@ function QueryPageContent(props) {
       <p>
         <Update
           name={`saved view ${savedViewName}`}
-          apiUrl={`${baseUrl}api/views/${currentSavedView.pk}/`}
+          apiUrl={`${config.baseUrl}api/views/${currentSavedView.pk}/`}
           data={{ ...currentSavedView, ...getPartsForQuery(query.query) }}
           redirectUrl={`/views/${currentSavedView.pk}.html`}
         />
@@ -355,7 +356,7 @@ function QueryPageContent(props) {
 
   return (
     <div className="QueryPage">
-      <ModelSelector {...{ query, sortedModels, model }} />
+      <ModelSelector {...{ query, model }} />
       <Filters {...{ query, filters, filterErrors, parsedFilterValues }} />
       <p>
         <span className={length >= query.query.limit ? "Error" : ""}>
@@ -376,7 +377,7 @@ function QueryPageContent(props) {
         <a href={query.getUrlForMedia("sql")}>View SQL Query</a> -{" "}
         <Save
           name="View"
-          apiUrl={`${baseUrl}api/views/`}
+          apiUrl={`${config.baseUrl}api/views/`}
           data={getPartsForQuery(query.query)}
           redirectUrl={(view) => `/views/${view.pk}.html`}
         />
@@ -399,7 +400,7 @@ function QueryPageContent(props) {
 }
 
 function QueryPage(props) {
-  const { config } = props;
+  const config = useContext(Config);
   const { model, fieldStr } = useParams();
   const [status, setStatus] = useState(BOOTING);
   const [query, setQuery] = useState({
@@ -505,15 +506,7 @@ function QueryPage(props) {
 
   if (status === BOOTING) return "";
   const queryObj = new Query(config, query, handleQueryChange);
-  return (
-    <QueryPageContent
-      overlay={status}
-      query={queryObj}
-      sortedModels={config.sortedModels}
-      baseUrl={config.baseUrl}
-      {...query}
-    />
-  );
+  return <QueryPageContent overlay={status} query={queryObj} {...query} />;
 }
 
 export { QueryPage };

@@ -31,7 +31,7 @@ function App(props) {
             <Logo />
             <Switch>
               <Route path="/query/:model/:fieldStr?.html">
-                <QueryPage config={props} />
+                <QueryPage />
               </Route>
               <Route path="/views/:pk.html">
                 <SavedViewPage />
