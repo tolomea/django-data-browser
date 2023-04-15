@@ -38,8 +38,9 @@ function SavedViewList(props) {
 }
 
 function AppEntry(props) {
-  const { appName, modelNames, allModelFields, defaultRowLimit } = props;
-  const [toggled, toggleLink] = useToggle(true);
+  const { appName, modelNames, defaultRowLimit, allModelFields, appsExpanded } =
+    props;
+  const [toggled, toggleLink] = useToggle(appsExpanded);
   return (
     <>
       <h2>
@@ -76,14 +77,20 @@ function AppEntry(props) {
 }
 
 function ModelList(props) {
-  const { sortedModels, defaultRowLimit, allModelFields } = props;
+  const { sortedModels, defaultRowLimit, allModelFields, appsExpanded } = props;
   return (
     <div>
       <h1>Models</h1>
       <div className="AppList">
         {sortedModels.map(({ appName, modelNames }) => (
           <AppEntry
-            {...{ appName, modelNames, allModelFields, defaultRowLimit }}
+            {...{
+              appName,
+              modelNames,
+              defaultRowLimit,
+              allModelFields,
+              appsExpanded,
+            }}
           />
         ))}
       </div>
@@ -92,13 +99,21 @@ function ModelList(props) {
 }
 
 function HomePage(props) {
-  const { sortedModels, baseUrl, defaultRowLimit, allModelFields } = props;
+  const {
+    sortedModels,
+    baseUrl,
+    defaultRowLimit,
+    allModelFields,
+    appsExpanded,
+  } = props;
   const setCurrentSavedView = useContext(SetCurrentSavedView);
   setCurrentSavedView(null);
 
   return (
     <div className="HomePage">
-      <ModelList {...{ sortedModels, defaultRowLimit, allModelFields }} />
+      <ModelList
+        {...{ sortedModels, defaultRowLimit, allModelFields, appsExpanded }}
+      />
       <SavedViewList {...{ baseUrl }} />
     </div>
   );

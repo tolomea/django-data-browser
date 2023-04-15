@@ -148,6 +148,7 @@ def _get_config(request):
         "canMakePublic": can_make_public(request.user),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
+        "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,
     }
 
 

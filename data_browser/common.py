@@ -86,6 +86,7 @@ class Settings:
         "DATA_BROWSER_ADMIN_FIELD_NAME": "admin",
         "DATA_BROWSER_USING_DB": "default",
         "DATA_BROWSER_ADMIN_OPTIONS": {},
+        "DATA_BROWSER_APPS_EXPANDED": True,
     }
 
     def __getattr__(self, name):
