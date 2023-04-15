@@ -3,13 +3,14 @@ import { Link, useParams } from "react-router-dom";
 
 import { useData, Delete, CopyText } from "./Util";
 import { SetCurrentSavedView } from "./CurrentSavedView";
+import { Config } from "./Config";
 
 import "./App.scss";
 
 function SavedViewPage(props) {
-  const { canMakePublic, baseUrl } = props;
+  const config = useContext(Config);
   const { pk } = useParams();
-  const url = `${baseUrl}api/views/${pk}/`;
+  const url = `${config.baseUrl}api/views/${pk}/`;
   const [view, setView] = useData(url);
   const setCurrentSavedView = useContext(SetCurrentSavedView);
   setCurrentSavedView(null);
@@ -74,7 +75,7 @@ function SavedViewPage(props) {
             }}
             placeholder="enter a description"
           />
-          {canMakePublic && (
+          {config.canMakePublic && (
             <table>
               <tbody>
                 <tr>

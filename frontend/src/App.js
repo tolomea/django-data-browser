@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
 import { ContextMenu } from "./ContextMenu";
@@ -8,6 +8,7 @@ import { HomePage } from "./HomePage";
 import { QueryPage } from "./QueryPage";
 import { SavedViewPage } from "./SavedViewPage";
 import { version } from "./Util";
+import { Config } from "./Config";
 
 import "./App.scss";
 
@@ -21,9 +22,9 @@ function Logo(props) {
 }
 
 function App(props) {
-  const { baseUrl, canMakePublic } = props;
+  const config = useContext(Config);
   return (
-    <BrowserRouter basename={baseUrl}>
+    <BrowserRouter basename={config.baseUrl}>
       <ContextMenu>
         <Tooltip>
           <CurrentSavedView>
@@ -33,7 +34,7 @@ function App(props) {
                 <QueryPage config={props} />
               </Route>
               <Route path="/views/:pk.html">
-                <SavedViewPage {...{ baseUrl, canMakePublic }} />
+                <SavedViewPage />
               </Route>
               <Route path="/">
                 <HomePage />
