@@ -86,6 +86,41 @@ class TestViewList:
             }
         ]
 
+    def test_get_with_folders(self, admin_client, admin_user, view):
+        View.objects.create(
+            owner=admin_user,
+            name="in_folder",
+            description="in_folder_description",
+            public=False,
+            model_name="core.Product",
+            fields="admin",
+            query="name__contains=sql",
+            folder="folder",
+        )
+        View.objects.create(
+            owner=admin_user,
+            name="out_of_folder",
+            description="out_of_folder_description",
+            public=False,
+            model_name="core.Product",
+            fields="admin",
+            query="name__contains=sql",
+        )
+
+        resp = admin_client.get("/data_browser/api/views/")
+        assert resp.status_code == 200
+        summary = [
+            {
+                "name": folder["name"],
+                "views": [view["name"] for view in folder["views"]],
+            }
+            for folder in resp.json()
+        ]
+        assert summary == [
+            {"name": "", "views": ["name", "out_of_folder"]},
+            {"name": "folder", "views": ["in_folder"]},
+        ]
+
     def test_post(self, admin_client, admin_user):
         resp = admin_client.post(
             "/data_browser/api/views/",
