@@ -8,16 +8,12 @@ import { Config } from "./Config";
 
 import "./App.scss";
 
-function SavedViewList(props) {
-  const config = useContext(Config);
-  const [savedViews] = useData(`${config.baseUrl}api/views/`);
+function FolderEntry(props) {
+  const { views } = props;
   const setCurrentSavedView = useContext(SetCurrentSavedView);
-
-  if (!savedViews) return "";
   return (
-    <div className="SavedViewList">
-      <h1>Saved Views</h1>
-      {savedViews.map((view, index) => (
+    <>
+      {views.map((view, index) => (
         <div key={index}>
           <h2>
             <Link
@@ -33,6 +29,22 @@ function SavedViewList(props) {
           </p>
           <p>{view.description}</p>
         </div>
+      ))}
+    </>
+  );
+}
+
+function SavedViewList(props) {
+  const config = useContext(Config);
+  const [savedViews] = useData(`${config.baseUrl}api/views/`);
+
+  if (!savedViews) return "";
+  return (
+    <div className="SavedViewList">
+      <h1>Saved Views</h1>
+
+      {savedViews.map((folder) => (
+        <FolderEntry key={folder.name} views={folder.views} />
       ))}
     </div>
   );
