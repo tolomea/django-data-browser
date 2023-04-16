@@ -38,6 +38,20 @@ function SavedViewPage(props) {
           <table>
             <tbody>
               <tr>
+                <th>Folder:</th>
+                <td>
+                  <input
+                    type="text"
+                    value={view.folder}
+                    onChange={(event) => {
+                      setView({ folder: event.target.value });
+                    }}
+                    placeholder="enter a folder name"
+                  />
+                </td>
+              </tr>
+
+              <tr>
                 <th>Model:</th>
                 <td>
                   <p>{view.model}</p>
