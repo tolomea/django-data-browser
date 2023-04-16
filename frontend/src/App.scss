@@ -335,8 +335,16 @@ a.Logo {
       margin-left: 40px;
     }
   }
-  .SavedViewList div {
-    margin: 0 0 20px 0;
+  .SavedViewList {
+    .SavedView {
+      margin: 10px 0 10px 0;
+    }
+    .SavedViewFolder {
+      margin: 20px 0 20px 0;
+      div {
+        padding-left: 40px;
+      }
+    }
   }
 }
 

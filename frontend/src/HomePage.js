@@ -8,13 +8,13 @@ import { Config } from "./Config";
 
 import "./App.scss";
 
-function FolderEntry(props) {
+function SavedViews(props) {
   const { views } = props;
   const setCurrentSavedView = useContext(SetCurrentSavedView);
   return (
     <>
       {views.map((view, index) => (
-        <div key={index}>
+        <div key={index} className="SavedView">
           <h2>
             <Link
               className="Link"
@@ -34,6 +34,24 @@ function FolderEntry(props) {
   );
 }
 
+function SavedViewFolder(props) {
+  const { name, views } = props;
+  const [toggled, toggleLink] = usePersistentToggle(
+    `folder.${name}.toggle`,
+    false
+  );
+
+  return (
+    <div className="SavedViewFolder">
+      <h2>
+        {toggleLink}
+        {name}
+      </h2>
+      {toggled && <SavedViews views={views} />}
+    </div>
+  );
+}
+
 function SavedViewList(props) {
   const config = useContext(Config);
   const [savedViews] = useData(`${config.baseUrl}api/views/`);
@@ -43,9 +61,17 @@ function SavedViewList(props) {
     <div className="SavedViewList">
       <h1>Saved Views</h1>
 
-      {savedViews.map((folder) => (
-        <FolderEntry key={folder.name} views={folder.views} />
-      ))}
+      {savedViews.map((folder) => {
+        if (folder.name !== "")
+          return (
+            <SavedViewFolder
+              views={folder.views}
+              name={folder.name}
+              key={folder.name}
+            />
+          );
+        else return <SavedViews views={folder.views} />;
+      })}
     </div>
   );
 }
