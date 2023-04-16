@@ -8,39 +8,42 @@ from .common import HttpResponse, JsonResponse, can_make_public
 from .models import View, global_data
 
 
+def clean_str(field, value):
+    return value[: View._meta.get_field(field).max_length]
+
+
+def clean_uint(field, value):
+    try:
+        value = int(value)
+    except Exception:  # noqa: E722  input sanitization
+        value = 1
+    return max(value, 1)
+
+
+def clean_noop(field, value):
+    return value
+
+
+WRITABLE_FIELDS = [  # model_field_name, api_field_name, clean
+    ("name", "name", clean_str),
+    ("description", "description", clean_noop),
+    ("public", "public", clean_noop),
+    ("model_name", "model", clean_noop),
+    ("fields", "fields", clean_noop),
+    ("query", "query", clean_noop),
+    ("limit", "limit", clean_uint),
+    ("folder", "folder", clean_str),
+]
+
+
 def deserialize(request):
     data = json.loads(request.body)
-    if "model" in data:
-        data["model_name"] = data.pop("model")
 
     res = {
-        f: data[f]
-        for f in [
-            "name",
-            "description",
-            "public",
-            "model_name",
-            "fields",
-            "query",
-            "limit",
-            "folder",
-        ]
-        if f in data
+        model_field_name: clean(model_field_name, data[api_field_name])
+        for model_field_name, api_field_name, clean in WRITABLE_FIELDS
+        if api_field_name in data
     }
-
-    # length check
-    for field in ["name", "folder"]:
-        if field in res:
-            res[field] = res[field][: View._meta.get_field(field).max_length]
-
-    # bounds check
-    if "limit" in res:
-        try:
-            res["limit"] = int(res["limit"])
-        except Exception:  # noqa: E722  input sanitization
-            res["limit"] = 1
-        if res["limit"] < 1:
-            res["limit"] = 1
 
     # perm check
     if not can_make_public(request.user):
@@ -51,15 +54,10 @@ def deserialize(request):
 
 def serialize(view):
     return {
-        "name": view.name,
-        "description": view.description,
-        "public": view.public,
-        "model": view.model_name,
-        "fields": view.fields,
-        "query": view.query,
-        "limit": view.limit,
-        "folder": view.folder,
-        # readonly
+        **{
+            api_field_name: getattr(view, model_field_name)
+            for model_field_name, api_field_name, clean in WRITABLE_FIELDS
+        },
         "publicLink": view.public_link(),
         "googleSheetsFormula": view.google_sheets_formula(),
         "link": view.get_query().get_url("html"),
