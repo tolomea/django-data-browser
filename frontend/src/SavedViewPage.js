@@ -39,19 +39,28 @@ function SavedViewPage(props) {
             <tbody>
               <tr>
                 <th>Model:</th>
-                <td>{view.model}</td>
+                <td>
+                  <p>{view.model}</p>
+                </td>
               </tr>
+
               <tr>
                 <th>Fields:</th>
-                <td>{view.fields.replace(/,/g, "\u200b,")}</td>
+                <td>
+                  <p>{view.fields.replace(/,/g, "\u200b,")}</p>
+                </td>
               </tr>
+
               <tr>
                 <th>Filters:</th>
-                <td>{view.query.replace(/&/g, "\u200b&")}</td>
+                <td>
+                  <p>{view.query.replace(/&/g, "\u200b&")}</p>
+                </td>
               </tr>
+
               <tr>
                 <th>Limit:</th>
-                <td className="SavedViewLimit">
+                <td>
                   <input
                     className="RowLimit"
                     type="number"
@@ -62,9 +71,12 @@ function SavedViewPage(props) {
                   />
                 </td>
               </tr>
+
               <tr>
                 <th>Created Time:</th>
-                <td>{view.createdTime}</td>
+                <td>
+                  <p>{view.createdTime}</p>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -90,18 +102,26 @@ function SavedViewPage(props) {
                     />
                   </td>
                 </tr>
-                <tr>
-                  <th>Public link:</th>
-                  <td>{view.public && <CopyText text={view.publicLink} />}</td>
-                </tr>
-                <tr>
-                  <th>Google Sheets:</th>
-                  <td>
-                    {view.public && (
-                      <CopyText text={view.googleSheetsFormula} />
-                    )}
-                  </td>
-                </tr>
+                {view.public && (
+                  <>
+                    <tr>
+                      <th>Public link:</th>
+                      <td>
+                        <p>
+                          <CopyText text={view.publicLink} />
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Google Sheets:</th>
+                      <td>
+                        <p>
+                          <CopyText text={view.googleSheetsFormula} />
+                        </p>
+                      </td>
+                    </tr>
+                  </>
+                )}
               </tbody>
             </table>
           )}

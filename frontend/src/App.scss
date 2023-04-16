@@ -377,19 +377,25 @@ a.Logo {
   }
   td {
     padding: 2px;
+    p {
+      padding: 0px 0px 0px 4px;
+      margin: 0px;
+    }
   }
   table {
     padding: 5px 2px;
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+    }
   }
 }
+
 .SavedViewActions {
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-}
-td.SavedViewLimit {
-  padding: 0px;
 }
 
 input.RowLimit {
