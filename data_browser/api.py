@@ -34,6 +34,7 @@ WRITABLE_FIELDS = [  # model_field_name, api_field_name, clean
     ("query", "query", clean_noop),
     ("limit", "limit", clean_uint),
     ("folder", "folder", clean_str),
+    ("shared", "shared", clean_noop),
 ]
 
 

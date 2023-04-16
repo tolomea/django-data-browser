@@ -81,6 +81,7 @@ class TestViewList:
                         "createdTime": ANY(str),
                         "pk": view.pk,
                         "limit": 1000,
+                        "shared": False,
                     }
                 ],
             }
@@ -154,6 +155,7 @@ class TestViewList:
             "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 1000,
+            "shared": False,
         }
 
         assert view.owner == admin_user
@@ -191,6 +193,7 @@ class TestViewDetail:
             "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 1000,
+            "shared": False,
         }
 
     def test_get_other_owner(self, admin_client, other_view):
@@ -242,6 +245,7 @@ class TestViewDetail:
             "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 1000,
+            "shared": False,
         }
 
         assert view.owner == admin_user
@@ -277,6 +281,7 @@ class TestViewDetail:
             "createdTime": ANY(str),
             "pk": view.pk,
             "limit": 123,
+            "shared": False,
         }
 
         assert view.owner == admin_user
