@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 
 import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
@@ -76,10 +77,14 @@ def view_list(request):
     global_data.request = request
 
     if request.method == "GET":
+        grouped_views = defaultdict(list)
+        for view in get_queryset(request).order_by("name", "created_time"):
+            grouped_views[view.folder.strip()].append(view)
+
         return JsonResponse(
             [
-                serialize(view)
-                for view in get_queryset(request).order_by("name", "created_time")
+                {"name": folder_name, "views": [serialize(view) for view in views]}
+                for folder_name, views in sorted(grouped_views.items())
             ]
         )
     elif request.method == "POST":

@@ -65,19 +65,24 @@ class TestViewList:
         assert resp.status_code == 200
         assert resp.json() == [
             {
-                "name": "name",
-                "description": "description",
-                "folder": "",
-                "public": False,
-                "model": "core.Product",
-                "fields": "admin",
-                "query": "name__contains=sql",
-                "publicLink": "N/A",
-                "googleSheetsFormula": "N/A",
-                "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
-                "createdTime": ANY(str),
-                "pk": view.pk,
-                "limit": 1000,
+                "name": "",
+                "views": [
+                    {
+                        "name": "name",
+                        "description": "description",
+                        "folder": "",
+                        "public": False,
+                        "model": "core.Product",
+                        "fields": "admin",
+                        "query": "name__contains=sql",
+                        "publicLink": "N/A",
+                        "googleSheetsFormula": "N/A",
+                        "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
+                        "createdTime": ANY(str),
+                        "pk": view.pk,
+                        "limit": 1000,
+                    }
+                ],
             }
         ]
 
