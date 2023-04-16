@@ -10,7 +10,7 @@ from .helpers import AdminMixin
 @admin.register(models.View)
 class ViewAdmin(AdminMixin, admin.ModelAdmin):
     fieldsets = [
-        (None, {"fields": ["name", "owner", "open_view", "description"]}),
+        (None, {"fields": ["name", "owner", "open_view", "folder", "description"]}),
         (
             "Public",
             {

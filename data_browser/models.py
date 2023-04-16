@@ -25,6 +25,7 @@ class View(models.Model):
 
     name = models.CharField(max_length=64, blank=False)
     description = models.TextField(blank=True)
+    folder = models.CharField(max_length=64, blank=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL
     )
@@ -33,7 +34,7 @@ class View(models.Model):
     public_slug = models.CharField(max_length=12, default=get_id, blank=False)
     shared = models.BooleanField(default=False)
 
-    model_name = models.CharField(max_length=32, blank=False)
+    model_name = models.CharField(max_length=64, blank=False)
     fields = models.TextField(blank=True)
     query = models.TextField(blank=True)
     limit = models.IntegerField(blank=False, null=False, default=1000)
