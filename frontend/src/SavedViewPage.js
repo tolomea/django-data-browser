@@ -26,17 +26,22 @@ function SavedViewPage(props) {
           </Link>
         </div>
         <form>
-          <input
-            type="text"
-            value={view.name}
-            onChange={(event) => {
-              setView({ name: event.target.value });
-            }}
-            className="SavedViewName"
-            placeholder="enter a name"
-          />
           <table>
             <tbody>
+              <tr>
+                <td colspan="2">
+                  <input
+                    type="text"
+                    value={view.name}
+                    onChange={(event) => {
+                      setView({ name: event.target.value });
+                    }}
+                    className="SavedViewName"
+                    placeholder="enter a name"
+                  />
+                </td>
+              </tr>
+
               <tr>
                 <th>Folder:</th>
                 <td>
@@ -92,54 +97,59 @@ function SavedViewPage(props) {
                   <p>{view.createdTime}</p>
                 </td>
               </tr>
+
+              <tr>
+                <td colspan="2">
+                  <textarea
+                    value={view.description}
+                    onChange={(event) => {
+                      setView({ description: event.target.value });
+                    }}
+                    placeholder="enter a description"
+                  />
+                </td>
+              </tr>
+
+              {config.canMakePublic && (
+                <>
+                  <tr>
+                    <th>Is Public:</th>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={view.public}
+                        onChange={(event) => {
+                          setView({ public: event.target.checked });
+                        }}
+                      />
+                    </td>
+                  </tr>
+                  {view.public && (
+                    <>
+                      <tr>
+                        <th>Public link:</th>
+                        <td>
+                          <p>
+                            <CopyText text={view.publicLink} />
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Google Sheets:</th>
+                        <td>
+                          <p>
+                            <CopyText text={view.googleSheetsFormula} />
+                          </p>
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                </>
+              )}
             </tbody>
           </table>
-          <textarea
-            value={view.description}
-            onChange={(event) => {
-              setView({ description: event.target.value });
-            }}
-            placeholder="enter a description"
-          />
-          {config.canMakePublic && (
-            <table>
-              <tbody>
-                <tr>
-                  <th>Is Public:</th>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={view.public}
-                      onChange={(event) => {
-                        setView({ public: event.target.checked });
-                      }}
-                    />
-                  </td>
-                </tr>
-                {view.public && (
-                  <>
-                    <tr>
-                      <th>Public link:</th>
-                      <td>
-                        <p>
-                          <CopyText text={view.publicLink} />
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Google Sheets:</th>
-                      <td>
-                        <p>
-                          <CopyText text={view.googleSheetsFormula} />
-                        </p>
-                      </td>
-                    </tr>
-                  </>
-                )}
-              </tbody>
-            </table>
-          )}
         </form>
+
         <div className="SavedViewActions">
           <Delete apiUrl={url} redirectUrl="/" />
           <Link to="/">Close</Link>

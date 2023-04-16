@@ -356,7 +356,7 @@ a.Logo {
   form {
     border: 1px solid var(--border-color);
     border-radius: 3px;
-    padding: 15px 15px 12px 15px;
+    padding: 12px;
   }
   .SavedViewName {
     font-size: 20px;
@@ -371,9 +371,11 @@ a.Logo {
     min-height: 100px;
   }
   th {
-    padding: 2px;
+    padding: 2px 2px 2px 6px;
     font-weight: bold;
     text-align: left;
+    white-space: nowrap;
+    min-width: 115px;
   }
   td {
     padding: 2px;
