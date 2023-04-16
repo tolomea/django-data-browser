@@ -5,7 +5,7 @@ import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
-from .common import HttpResponse, JsonResponse, can_make_public
+from .common import HttpResponse, JsonResponse
 from .models import View, global_data
 
 
@@ -45,10 +45,6 @@ def deserialize(request):
         for model_field_name, api_field_name, clean in WRITABLE_FIELDS
         if api_field_name in data
     }
-
-    # perm check
-    if not can_make_public(request.user):
-        res["public"] = False
 
     return res
 

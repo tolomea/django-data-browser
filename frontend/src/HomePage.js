@@ -24,10 +24,12 @@ function SavedViews(props) {
               {view.name || "<unnamed>"}
             </Link>
           </h2>
-          <p>
-            on {view.model} - <Link to={`/views/${view.pk}.html`}>edit</Link>
-          </p>
-          <p>{view.description}</p>
+          <div className="SavedViewDetail">
+            <p>
+              on {view.model} - <Link to={`/views/${view.pk}.html`}>edit</Link>
+            </p>
+            {view.description && <p>{view.description}</p>}
+          </div>
         </div>
       ))}
     </>
@@ -62,7 +64,7 @@ function SavedViewList(props) {
       <h1>Saved Views</h1>
 
       {savedViews.map((folder) => {
-        if (folder.name !== "")
+        if (folder.name)
           return (
             <SavedViewFolder
               views={folder.views}
@@ -70,7 +72,7 @@ function SavedViewList(props) {
               key={folder.name}
             />
           );
-        else return <SavedViews views={folder.views} />;
+        else return <SavedViews views={folder.views} key={folder.name} />;
       })}
     </div>
   );

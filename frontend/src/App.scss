@@ -314,7 +314,7 @@ a.Logo {
   }
 }
 
-/* Index Page */
+/* Home Page */
 
 .HomePage {
   margin: 0;
@@ -332,17 +332,20 @@ a.Logo {
   .AppList {
     margin-bottom: 20px;
     .AppModels {
-      margin-left: 40px;
+      margin-left: 30px;
     }
   }
   .SavedViewList {
     .SavedView {
       margin: 10px 0 10px 0;
+      .SavedViewDetail {
+        padding: 0 0 0 10px;
+      }
     }
     .SavedViewFolder {
       margin: 20px 0 20px 0;
       div {
-        padding-left: 40px;
+        padding-left: 30px;
       }
     }
   }

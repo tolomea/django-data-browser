@@ -164,25 +164,6 @@ class TestViewList:
         assert view.fields == ""
         assert view.query == ""
 
-    def test_post_cant_make_public_without_perm(self, admin_client, limited_user):
-        resp = admin_client.post(
-            "/data_browser/api/views/",
-            json.dumps(
-                {
-                    "name": "test",
-                    "description": "lorem ipsum",
-                    "public": True,
-                    "model": "core.Product",
-                    # leave the last two out just cause
-                }
-            ),
-            content_type="application/json",
-        )
-        assert resp.status_code == 200
-        assert not resp.json()["public"]
-        view = View.objects.get()
-        assert not view.public
-
 
 class TestViewDetail:
     # can't see other users view
@@ -318,19 +299,6 @@ class TestViewDetail:
         assert other_view.owner == other_user
         assert other_view.name == "name2"
         assert other_view.description == "description2"
-
-    def test_patch_cant_make_public_without_perm(
-        self, admin_client, limited_user, view
-    ):
-        resp = admin_client.patch(
-            f"/data_browser/api/views/{view.pk}/",
-            json.dumps({"public": True}),
-            content_type="application/json",
-        )
-        assert resp.status_code == 200
-        assert not resp.json()["public"]
-        view.refresh_from_db()
-        assert not view.public
 
     def test_patch_text_limit(self, admin_client, limited_user, view):
         resp = admin_client.patch(

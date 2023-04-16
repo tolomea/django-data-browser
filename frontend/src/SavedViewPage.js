@@ -29,7 +29,7 @@ function SavedViewPage(props) {
           <table>
             <tbody>
               <tr>
-                <td colspan="2">
+                <td colSpan="2">
                   <input
                     type="text"
                     value={view.name}
@@ -99,7 +99,7 @@ function SavedViewPage(props) {
               </tr>
 
               <tr>
-                <td colspan="2">
+                <td colSpan="2">
                   <textarea
                     value={view.description}
                     onChange={(event) => {
