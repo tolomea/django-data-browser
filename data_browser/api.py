@@ -23,12 +23,17 @@ def deserialize(request):
             "fields",
             "query",
             "limit",
+            "folder",
         ]
         if f in data
     }
-    if "name" in res:
-        res["name"] = res["name"][: View._meta.get_field("name").max_length]
 
+    # length check
+    for field in ["name", "folder"]:
+        if field in res:
+            res[field] = res[field][: View._meta.get_field(field).max_length]
+
+    # bounds check
     if "limit" in res:
         try:
             res["limit"] = int(res["limit"])
@@ -37,6 +42,7 @@ def deserialize(request):
         if res["limit"] < 1:
             res["limit"] = 1
 
+    # perm check
     if not can_make_public(request.user):
         res["public"] = False
 
@@ -52,6 +58,8 @@ def serialize(view):
         "fields": view.fields,
         "query": view.query,
         "limit": view.limit,
+        "folder": view.folder,
+        # readonly
         "publicLink": view.public_link(),
         "googleSheetsFormula": view.google_sheets_formula(),
         "link": view.get_query().get_url("html"),

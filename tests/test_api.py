@@ -67,6 +67,7 @@ class TestViewList:
             {
                 "name": "name",
                 "description": "description",
+                "folder": "",
                 "public": False,
                 "model": "core.Product",
                 "fields": "admin",
@@ -102,6 +103,7 @@ class TestViewList:
         assert resp.json() == {
             "name": "test",
             "description": "lorem ipsum",
+            "folder": "",
             "public": True,
             "model": "core.Product",
             "fields": "",
@@ -157,6 +159,7 @@ class TestViewDetail:
         assert resp.json() == {
             "name": "name",
             "description": "description",
+            "folder": "",
             "public": False,
             "model": "core.Product",
             "fields": "admin",
@@ -207,6 +210,7 @@ class TestViewDetail:
         assert resp.json() == {
             "name": "test",
             "description": "lorem ipsum",
+            "folder": "",
             "public": True,
             "model": "core.Product",
             "fields": "admin",
@@ -241,6 +245,7 @@ class TestViewDetail:
         assert resp.json() == {
             "name": "name",
             "description": "description",
+            "folder": "",
             "public": False,
             "model": "core.Product",
             "fields": "admin",
