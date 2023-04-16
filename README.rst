@@ -345,7 +345,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Group homepage model list into collapsible sections by app.                                            |
+| 4.0.16  | 2023-04-16 | | Group homepage model list into collapsible sections by app.                                            |
 |         |            | | Allow grouping saved views into collapsible folders.                                                   |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.15  | 2023-04-11 | | Clear confirm prompts after a short delay.                                                             |
