@@ -79,10 +79,12 @@ def view_list(request):
             grouped_views[view.folder.strip()].append(view)
 
         return JsonResponse(
-            [
-                {"name": folder_name, "views": [serialize(view) for view in views]}
-                for folder_name, views in sorted(grouped_views.items())
-            ]
+            {
+                "saved": [
+                    {"name": folder_name, "views": [serialize(view) for view in views]}
+                    for folder_name, views in sorted(grouped_views.items())
+                ]
+            }
         )
     elif request.method == "POST":
         view = View.objects.create(owner=request.user, **deserialize(request))

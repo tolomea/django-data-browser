@@ -63,29 +63,31 @@ class TestViewList:
     def test_get(self, admin_client, view, other_view):
         resp = admin_client.get("/data_browser/api/views/")
         assert resp.status_code == 200
-        assert resp.json() == [
-            {
-                "name": "",
-                "views": [
-                    {
-                        "name": "name",
-                        "description": "description",
-                        "folder": "",
-                        "public": False,
-                        "model": "core.Product",
-                        "fields": "admin",
-                        "query": "name__contains=sql",
-                        "publicLink": "N/A",
-                        "googleSheetsFormula": "N/A",
-                        "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
-                        "createdTime": ANY(str),
-                        "pk": view.pk,
-                        "limit": 1000,
-                        "shared": False,
-                    }
-                ],
-            }
-        ]
+        assert resp.json() == {
+            "saved": [
+                {
+                    "name": "",
+                    "views": [
+                        {
+                            "name": "name",
+                            "description": "description",
+                            "folder": "",
+                            "public": False,
+                            "model": "core.Product",
+                            "fields": "admin",
+                            "query": "name__contains=sql",
+                            "publicLink": "N/A",
+                            "googleSheetsFormula": "N/A",
+                            "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
+                            "createdTime": ANY(str),
+                            "pk": view.pk,
+                            "limit": 1000,
+                            "shared": False,
+                        }
+                    ],
+                }
+            ]
+        }
 
     def test_get_with_folders(self, admin_client, admin_user, view):
         View.objects.create(
@@ -115,7 +117,7 @@ class TestViewList:
                 "name": folder["name"],
                 "views": [view["name"] for view in folder["views"]],
             }
-            for folder in resp.json()
+            for folder in resp.json()["saved"]
         ]
         assert summary == [
             {"name": "", "views": ["name", "out_of_folder"]},

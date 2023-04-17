@@ -63,7 +63,7 @@ function SavedViewList(props) {
     <div className="SavedViewList">
       <h1>Saved Views</h1>
 
-      {savedViews.map((folder) => {
+      {savedViews["saved"].map((folder) => {
         if (folder.name)
           return (
             <SavedViewFolder
