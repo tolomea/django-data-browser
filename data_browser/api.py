@@ -4,7 +4,7 @@ import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
-from .common import HttpResponse, JsonResponse
+from .common import SHARE_PERM, HttpResponse, JsonResponse, users_with_permission
 from .models import View, global_data
 from .util import group_by
 
@@ -83,7 +83,24 @@ def view_list(request):
 
     if request.method == "GET":
         saved_views = get_queryset(request).order_by("name", "created_time")
-        return JsonResponse({"saved": serialize_folders(saved_views)})
+        shared_views = (
+            View.objects.exclude(owner=request.user)
+            .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
+            .order_by("name", "created_time")
+            .prefetch_related("owner")
+        )
+        # todo we need to filter to the ones the user can view
+        shared_views_by_user = group_by(shared_views, lambda v: str(v.owner))
+
+        return JsonResponse(
+            {
+                "saved": serialize_folders(saved_views),
+                "shared": [
+                    {"ownerName": owner_name, "views": serialize_folders(shared_views)}
+                    for owner_name, shared_views in shared_views_by_user.items()
+                ],
+            }
+        )
     elif request.method == "POST":
         view = View.objects.create(owner=request.user, **deserialize(request))
         return JsonResponse(serialize(view))

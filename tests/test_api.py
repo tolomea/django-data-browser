@@ -84,7 +84,8 @@ class TestViewList:
                         }
                     ],
                 }
-            ]
+            ],
+            "shared": [],
         }
 
     def test_get_with_folders_and_shared_views(
@@ -113,6 +114,12 @@ class TestViewList:
 
         make_view(owner=admin_user, name="in_folder", folder="folder")
         make_view(owner=admin_user, name="out_of_folder")
+        make_view(owner=other_user, name="other_in_folder", folder="folder")
+        make_view(owner=other_user, name="other_out_of_folder")
+        make_view(
+            owner=other_user, name="shared_in_folder", shared=True, folder="folder"
+        )
+        make_view(owner=other_user, name="shared_out_of_folder", shared=True)
 
         assert get_summary() == {
             "saved": [
@@ -125,7 +132,21 @@ class TestViewList:
                 },
                 {"name": "folder", "views": [{"name": "in_folder", "shared": False}]},
             ],
-            "shared": [],
+            "shared": [
+                {
+                    "ownerName": "other",
+                    "views": [
+                        {
+                            "name": "",
+                            "views": [{"name": "shared_out_of_folder", "shared": True}],
+                        },
+                        {
+                            "name": "folder",
+                            "views": [{"name": "shared_in_folder", "shared": True}],
+                        },
+                    ],
+                }
+            ],
         }
 
     def test_post(self, admin_client, admin_user):

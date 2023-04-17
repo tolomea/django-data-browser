@@ -3,6 +3,9 @@ import math
 import traceback
 
 from django import http
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 from . import version
 
@@ -12,6 +15,14 @@ SHARE_PERM = "share_view"
 
 def has_permission(user, permission):
     return user.has_perm(f"data_browser.{permission}")
+
+
+def users_with_permission(permission):
+    from .models import View
+
+    ct = ContentType.objects.get_for_model(View)
+    perm = Permission.objects.get(codename=permission, content_type=ct)
+    return get_user_model().objects.with_perm(perm)
 
 
 def JsonResponse(data):
