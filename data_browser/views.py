@@ -20,7 +20,14 @@ from django.utils import timezone
 from django.views.decorators import csrf
 
 from . import version
-from .common import HttpResponse, JsonResponse, can_make_public, can_share, settings
+from .common import (
+    PUBLIC_PERM,
+    SHARE_PERM,
+    HttpResponse,
+    JsonResponse,
+    has_permission,
+    settings,
+)
 from .format_csv import get_csv_rows
 from .models import View
 from .orm_admin import get_models
@@ -145,8 +152,8 @@ def _get_config(request):
             {"appName": app_name, "modelNames": sorted(model_names)}
             for app_name, model_names in sorted(model_names_by_app.items())
         ],
-        "canMakePublic": can_make_public(request.user),
-        "canShare": can_share(request.user),
+        "canMakePublic": has_permission(request.user, PUBLIC_PERM),
+        "canShare": has_permission(request.user, SHARE_PERM),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
         "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,
@@ -284,7 +291,7 @@ def view(request, pk, media):
         # some of these are checked by the admin but this is a good time to be paranoid
         view.owner.is_active
         and view.owner.is_staff
-        and can_make_public(view.owner)
+        and has_permission(view.owner, PUBLIC_PERM)
         and settings.DATA_BROWSER_ALLOW_PUBLIC
     ):
         request.user = view.owner  # public views are run as the person who owns them

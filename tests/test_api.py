@@ -3,7 +3,7 @@ import json
 import pytest
 from django.contrib.auth.models import Permission, User
 
-from data_browser.common import MAKE_PUBLIC_CODENAME
+from data_browser.common import PUBLIC_PERM
 from data_browser.models import View
 
 from .util import ANY
@@ -45,9 +45,7 @@ def limited_user(admin_user):
     admin_user.is_superuser = False
     admin_user.save()
 
-    admin_user.user_permissions.add(
-        *Permission.objects.exclude(codename=MAKE_PUBLIC_CODENAME)
-    )
+    admin_user.user_permissions.add(*Permission.objects.exclude(codename=PUBLIC_PERM))
     return admin_user
 
 

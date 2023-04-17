@@ -3,7 +3,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 from django.utils.html import format_html
 
 from . import models
-from .common import can_make_public
+from .common import PUBLIC_PERM, has_permission
 from .helpers import AdminMixin
 
 
@@ -32,7 +32,7 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
 
     def get_fieldsets(self, request, obj=None):
         res = super().get_fieldsets(request, obj)
-        if not can_make_public(request.user):
+        if not has_permission(request.user, PUBLIC_PERM):
             res = [fs for fs in res if fs[0] != "Public"]
         return res
 
