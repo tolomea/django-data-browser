@@ -1,5 +1,4 @@
 import json
-from collections import defaultdict
 
 import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
@@ -7,6 +6,7 @@ from django.views.decorators import csrf
 
 from .common import HttpResponse, JsonResponse
 from .models import View, global_data
+from .util import group_by
 
 
 def clean_str(field, value):
@@ -68,24 +68,22 @@ def get_queryset(request):
     return View.objects.filter(owner=request.user)
 
 
+def serialize_folders(views):
+    grouped_views = group_by(views, key=lambda v: v.folder.strip())
+    return [
+        {"name": folder_name, "views": [serialize(view) for view in views]}
+        for folder_name, views in sorted(grouped_views.items())
+    ]
+
+
 @csrf.csrf_protect
 @admin_decorators.staff_member_required
 def view_list(request):
     global_data.request = request
 
     if request.method == "GET":
-        grouped_views = defaultdict(list)
-        for view in get_queryset(request).order_by("name", "created_time"):
-            grouped_views[view.folder.strip()].append(view)
-
-        return JsonResponse(
-            {
-                "saved": [
-                    {"name": folder_name, "views": [serialize(view) for view in views]}
-                    for folder_name, views in sorted(grouped_views.items())
-                ]
-            }
-        )
+        saved_views = get_queryset(request).order_by("name", "created_time")
+        return JsonResponse({"saved": serialize_folders(saved_views)})
     elif request.method == "POST":
         view = View.objects.create(owner=request.user, **deserialize(request))
         return JsonResponse(serialize(view))

@@ -9,3 +9,10 @@ def annotation_path(path):
 
 def str_to_field(s):
     return slugify(s).replace("-", "_")
+
+
+def group_by(things, key):
+    res = {}
+    for thing in things:
+        res.setdefault(key(thing), []).append(thing)
+    return res
