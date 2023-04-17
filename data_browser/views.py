@@ -20,7 +20,7 @@ from django.utils import timezone
 from django.views.decorators import csrf
 
 from . import version
-from .common import HttpResponse, JsonResponse, can_make_public, settings
+from .common import HttpResponse, JsonResponse, can_make_public, can_share, settings
 from .format_csv import get_csv_rows
 from .models import View
 from .orm_admin import get_models
@@ -146,6 +146,7 @@ def _get_config(request):
             for app_name, model_names in sorted(model_names_by_app.items())
         ],
         "canMakePublic": can_make_public(request.user),
+        "canShare": can_share(request.user),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
         "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,

@@ -5,7 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import crypto, timezone
 
-from .common import MAKE_PUBLIC_CODENAME, settings
+from .common import MAKE_PUBLIC_CODENAME, SHARE_CODENAME, settings
 
 global_data = threading.local()
 
@@ -17,7 +17,8 @@ def get_id():
 class View(models.Model):
     class Meta:
         permissions = [
-            (MAKE_PUBLIC_CODENAME, "Can make a saved view publicly available")
+            (MAKE_PUBLIC_CODENAME, "Can make a saved view publicly available"),
+            (SHARE_CODENAME, "Can share a saved view with other users"),
         ]
 
     id = models.CharField(primary_key=True, max_length=12, default=get_id)

@@ -7,10 +7,15 @@ from django import http
 from . import version
 
 MAKE_PUBLIC_CODENAME = "make_view_public"
+SHARE_CODENAME = "share_view"
 
 
 def can_make_public(user):
     return user.has_perm(f"data_browser.{MAKE_PUBLIC_CODENAME}")
+
+
+def can_share(user):
+    return user.has_perm(f"data_browser.{SHARE_CODENAME}")
 
 
 def JsonResponse(data):

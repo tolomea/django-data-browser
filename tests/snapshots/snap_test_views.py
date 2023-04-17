@@ -2909,6 +2909,7 @@ snapshots["test_query_ctx config"] = {
     "appsExpanded": True,
     "baseUrl": "/data_browser/",
     "canMakePublic": True,
+    "canShare": True,
     "defaultRowLimit": 1000,
     "sentryDsn": None,
     "sortedModels": [
@@ -6267,6 +6268,7 @@ snapshots["test_query_ctx_m2m config"] = {
     "appsExpanded": True,
     "baseUrl": "/data_browser/",
     "canMakePublic": True,
+    "canShare": True,
     "defaultRowLimit": 1000,
     "sentryDsn": None,
     "sortedModels": [
@@ -9625,6 +9627,7 @@ snapshots["test_query_html config"] = {
     "appsExpanded": True,
     "baseUrl": "/data_browser/",
     "canMakePublic": True,
+    "canShare": True,
     "defaultRowLimit": 1000,
     "sentryDsn": None,
     "sortedModels": [
@@ -11607,6 +11610,7 @@ snapshots["test_query_html_no_perms config"] = {
     "appsExpanded": True,
     "baseUrl": "/data_browser/",
     "canMakePublic": False,
+    "canShare": False,
     "defaultRowLimit": 1000,
     "sentryDsn": None,
     "sortedModels": [],
