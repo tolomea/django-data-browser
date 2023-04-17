@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useData, Delete, CopyText } from "./Util";
 import { SetCurrentSavedView } from "./CurrentSavedView";
 import { Config } from "./Config";
+import { ShowTooltip, HideTooltip } from "./Tooltip";
 
 import "./App.scss";
 
@@ -13,8 +14,10 @@ function SavedViewPage(props) {
   const url = `${config.baseUrl}api/views/${pk}/`;
   const [view, setView] = useData(url);
   const setCurrentSavedView = useContext(SetCurrentSavedView);
-  setCurrentSavedView(null);
+  const showTooltip = useContext(ShowTooltip);
+  const hideTooltip = useContext(HideTooltip);
 
+  setCurrentSavedView(null);
   if (!view) return "";
   return (
     <div className="EditSavedView">
@@ -110,10 +113,47 @@ function SavedViewPage(props) {
                 </td>
               </tr>
 
+              {config.canShare && (
+                <tr>
+                  <th
+                    onMouseEnter={(e) =>
+                      showTooltip(e, [
+                        "Share this view with other users.",
+                        "If they have permissions to use it then it will",
+                        "appear under your name on their DDB homepage.",
+                      ])
+                    }
+                    onMouseLeave={(e) => hideTooltip(e)}
+                  >
+                    Share:
+                  </th>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={view.shared}
+                      onChange={(event) => {
+                        setView({ shared: event.target.checked });
+                      }}
+                    />
+                  </td>
+                </tr>
+              )}
+
               {config.canMakePublic && (
                 <>
                   <tr>
-                    <th>Is Public:</th>
+                    <th
+                      onMouseEnter={(e) =>
+                        showTooltip(e, [
+                          "Make this view availalbe at a fixed URL without a login.",
+                          "This is useful for sharing the view with people who aren't",
+                          "users or with third party tools like Google Sheets.",
+                        ])
+                      }
+                      onMouseLeave={(e) => hideTooltip(e)}
+                    >
+                      Is Public:
+                    </th>
                     <td>
                       <input
                         type="checkbox"
