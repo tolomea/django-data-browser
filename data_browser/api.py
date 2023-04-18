@@ -96,7 +96,10 @@ def view_list(request):
             {
                 "saved": serialize_folders(saved_views),
                 "shared": [
-                    {"ownerName": owner_name, "views": serialize_folders(shared_views)}
+                    {
+                        "ownerName": owner_name,
+                        "folders": serialize_folders(shared_views),
+                    }
                     for owner_name, shared_views in shared_views_by_user.items()
                 ],
             }

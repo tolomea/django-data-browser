@@ -101,7 +101,15 @@ class TestViewList:
 
         def get_summary():
             def summarize(stuff):
-                keys = {"name", "views", "shared", "saved", "ownerName"}
+                keys = {
+                    "name",
+                    "views",
+                    "shared",
+                    "saved",
+                    "ownerName",
+                    "folderName",
+                    "folders",
+                }
                 if isinstance(stuff, dict):
                     return {k: summarize(v) for k, v in stuff.items() if k in keys}
                 elif isinstance(stuff, list):
@@ -121,6 +129,7 @@ class TestViewList:
         )
         make_view(owner=other_user, name="shared_out_of_folder", shared=True)
 
+        print(json.dumps(get_summary(), indent=4, sort_keys=True))
         assert get_summary() == {
             "saved": [
                 {
@@ -138,7 +147,7 @@ class TestViewList:
             "shared": [
                 {
                     "ownerName": "other",
-                    "views": [
+                    "folders": [
                         {
                             "folderName": "",
                             "views": [{"name": "shared_out_of_folder", "shared": True}],
