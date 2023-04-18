@@ -8,6 +8,65 @@ import { Config } from "./Config";
 
 import "./App.scss";
 
+function SharedViews(props) {
+  const { views } = props;
+  return views.map((view, index) => (
+    <div key={index} className="SavedView">
+      <h2>
+        <Link className="Link" to={view.link}>
+          {view.name || "<unnamed>"}
+        </Link>
+      </h2>
+    </div>
+  ));
+}
+
+function SharedViewsFolder(props) {
+  const { name, views, ownerName } = props;
+  const [toggled, toggleLink] = usePersistentToggle(
+    `shared.${ownerName}.folder.${name}.toggle`,
+    false
+  );
+
+  return (
+    <div className="SavedViewsFolder">
+      <h2>
+        {toggleLink}
+        {name}
+      </h2>
+      {toggled && <SharedViews views={views} />}
+    </div>
+  );
+}
+
+function OwnersSharedViews(props) {
+  const { ownerName, views, folders } = props;
+  const [toggled, toggleLink] = usePersistentToggle(
+    `shared.${ownerName}.toggle`,
+    false
+  );
+
+  return (
+    <>
+      <h2>
+        {toggleLink}
+        {ownerName}
+      </h2>
+      <div className="OwnersSharedViews">
+        {toggled && <SharedViews views={views} />}
+        {toggled &&
+          folders.map((folder) => (
+            <SharedViewsFolder
+              key={folder.folderName}
+              name={folder.folderName}
+              views={folder.views}
+            />
+          ))}
+      </div>
+    </>
+  );
+}
+
 function SavedViews(props) {
   const { views } = props;
   const setCurrentSavedView = useContext(SetCurrentSavedView);
@@ -32,15 +91,15 @@ function SavedViews(props) {
   ));
 }
 
-function SavedViewFolder(props) {
+function SavedViewsFolder(props) {
   const { name, views } = props;
   const [toggled, toggleLink] = usePersistentToggle(
-    `folder.${name}.toggle`,
+    `saved.folder.${name}.toggle`,
     false
   );
 
   return (
-    <div className="SavedViewFolder">
+    <div className="SavedViewsFolder">
       <h2>
         {toggleLink}
         {name}
@@ -50,22 +109,34 @@ function SavedViewFolder(props) {
   );
 }
 
-function SavedViewList(props) {
+function SavedAndSharedViews(props) {
   const config = useContext(Config);
   const [savedViews] = useData(`${config.baseUrl}api/views/`);
 
   if (!savedViews) return "";
+
   return (
-    <div className="SavedViewList">
-      <h1>Saved Views</h1>
-      <SavedViews views={savedViews.saved.views} />
-      {savedViews.saved.folders.map((folder) => (
-        <SavedViewFolder
-          views={folder.views}
-          name={folder.folderName}
-          key={folder.folderName}
-        />
-      ))}
+    <div className="SavedAndSharedViews">
+      <div>
+        <h1>Saved Views</h1>
+        <SavedViews views={savedViews.saved.views} />
+        {savedViews.saved.folders.map((folder) => (
+          <SavedViewsFolder
+            key={folder.folderName}
+            name={folder.folderName}
+            views={folder.views}
+          />
+        ))}
+        {!!savedViews.shared.length && <h1>Shared Views</h1>}
+        {savedViews.shared.map((owner) => (
+          <OwnersSharedViews
+            key={owner.ownerName}
+            ownerName={owner.ownerName}
+            views={owner.views}
+            folders={owner.folders}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -115,9 +186,9 @@ function AppEntry(props) {
 function ModelList(props) {
   const config = useContext(Config);
   return (
-    <div>
-      <h1>Models</h1>
-      <div className="AppList">
+    <div className="ModelList">
+      <div>
+        <h1>Models</h1>
         {config.sortedModels.map(({ appName, modelNames }) => (
           <AppEntry key={appName} {...{ appName, modelNames }} />
         ))}
@@ -133,7 +204,7 @@ function HomePage(props) {
   return (
     <div className="HomePage">
       <ModelList />
-      <SavedViewList />
+      <SavedAndSharedViews />
     </div>
   );
 }

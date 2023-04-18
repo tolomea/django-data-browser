@@ -326,26 +326,30 @@ a.Logo {
     color: var(--dark-color);
     border: 1px solid var(--border-color);
     border-radius: 3px;
-    margin: 30px 2% 0 2%;
-    padding: 0 2% 0% 2%;
+    margin: 30px 2% 0% 2%;
+    > div {
+      margin: 20px;
+    }
   }
-  .AppList {
-    margin-bottom: 20px;
+  h1 {
+    margin: 18px 0 9px 0;
+  }
+  .ModelList {
     .AppModels {
-      margin-left: 30px;
+      padding-left: 30px;
     }
   }
-  .SavedViewList {
-    .SavedView {
+
+  .SavedAndSharedViews {
+    .SavedView,
+    .SavedViewsFolder,
+    .OwnersSharedViews {
       margin: 10px 0 10px 0;
-      .SavedViewDetail {
-        padding: 0 0 0 10px;
-      }
-    }
-    .SavedViewFolder {
-      margin: 20px 0 20px 0;
       div {
         padding-left: 30px;
+      }
+      .SavedViewDetail {
+        padding: 0 0 0 10px;
       }
     }
   }
