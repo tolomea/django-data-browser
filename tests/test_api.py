@@ -61,30 +61,29 @@ class TestViewList:
     def test_get(self, admin_client, view, other_view):
         resp = admin_client.get("/data_browser/api/views/")
         assert resp.status_code == 200
+        print(json.dumps(resp.json(), indent=4, sort_keys=True))
         assert resp.json() == {
-            "saved": [
-                {
-                    "folderName": "",
-                    "views": [
-                        {
-                            "name": "name",
-                            "description": "description",
-                            "folder": "",
-                            "public": False,
-                            "model": "core.Product",
-                            "fields": "admin",
-                            "query": "name__contains=sql",
-                            "publicLink": "N/A",
-                            "googleSheetsFormula": "N/A",
-                            "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
-                            "createdTime": ANY(str),
-                            "pk": view.pk,
-                            "limit": 1000,
-                            "shared": False,
-                        }
-                    ],
-                }
-            ],
+            "saved": {
+                "views": [
+                    {
+                        "name": "name",
+                        "description": "description",
+                        "folder": "",
+                        "public": False,
+                        "model": "core.Product",
+                        "fields": "admin",
+                        "query": "name__contains=sql",
+                        "publicLink": "N/A",
+                        "googleSheetsFormula": "N/A",
+                        "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
+                        "createdTime": ANY(str),
+                        "pk": view.pk,
+                        "limit": 1000,
+                        "shared": False,
+                    }
+                ],
+                "folders": [],
+            },
             "shared": [],
         }
 
@@ -131,31 +130,27 @@ class TestViewList:
 
         print(json.dumps(get_summary(), indent=4, sort_keys=True))
         assert get_summary() == {
-            "saved": [
-                {
-                    "folderName": "",
-                    "views": [
-                        {"name": "name", "shared": False},
-                        {"name": "out_of_folder", "shared": False},
-                    ],
-                },
-                {
-                    "folderName": "folder",
-                    "views": [{"name": "in_folder", "shared": False}],
-                },
-            ],
+            "saved": {
+                "views": [
+                    {"name": "name", "shared": False},
+                    {"name": "out_of_folder", "shared": False},
+                ],
+                "folders": [
+                    {
+                        "folderName": "folder",
+                        "views": [{"name": "in_folder", "shared": False}],
+                    }
+                ],
+            },
             "shared": [
                 {
                     "ownerName": "other",
+                    "views": [{"name": "shared_out_of_folder", "shared": True}],
                     "folders": [
-                        {
-                            "folderName": "",
-                            "views": [{"name": "shared_out_of_folder", "shared": True}],
-                        },
                         {
                             "folderName": "folder",
                             "views": [{"name": "shared_in_folder", "shared": True}],
-                        },
+                        }
                     ],
                 }
             ],

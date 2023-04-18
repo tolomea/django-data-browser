@@ -62,17 +62,15 @@ function SavedViewList(props) {
   return (
     <div className="SavedViewList">
       <h1>Saved Views</h1>
-
-      {savedViews["saved"].map((folder) => {
-        if (folder.folderName)
-          return (
-            <SavedViewFolder
-              views={folder.views}
-              name={folder.folderName}
-              key={folder.folderName}
-            />
-          );
-        else return <SavedViews views={folder.views} key={folder.folderName} />;
+      <SavedViews views={savedViews.saved.views} />
+      {savedViews.saved.folders.map((folder) => {
+        return (
+          <SavedViewFolder
+            views={folder.views}
+            name={folder.folderName}
+            key={folder.folderName}
+          />
+        );
       })}
     </div>
   );

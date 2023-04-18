@@ -64,16 +64,24 @@ def serialize(view):
     }
 
 
+def serialize_list(views):
+    return [serialize(view) for view in views]
+
+
 def get_queryset(request):
     return View.objects.filter(owner=request.user)
 
 
 def serialize_folders(views):
     grouped_views = group_by(views, key=lambda v: v.folder.strip())
-    return [
-        {"folderName": folder_name, "views": [serialize(view) for view in views]}
-        for folder_name, views in sorted(grouped_views.items())
-    ]
+    flat_views = grouped_views.pop("", [])
+    return {
+        "views": serialize_list(flat_views),
+        "folders": [
+            {"folderName": folder_name, "views": serialize_list(views)}
+            for folder_name, views in sorted(grouped_views.items())
+        ],
+    }
 
 
 @csrf.csrf_protect
@@ -96,10 +104,7 @@ def view_list(request):
             {
                 "saved": serialize_folders(saved_views),
                 "shared": [
-                    {
-                        "ownerName": owner_name,
-                        "folders": serialize_folders(shared_views),
-                    }
+                    {"ownerName": owner_name, **serialize_folders(shared_views)}
                     for owner_name, shared_views in shared_views_by_user.items()
                 ],
             }
