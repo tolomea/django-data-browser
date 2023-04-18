@@ -79,11 +79,16 @@ function SavedViews(props) {
           onClick={() => setCurrentSavedView(view)}
         >
           {view.name || "<unnamed>"}
-        </Link>
+        </Link>{" "}
+        <Link to={`/views/${view.pk}.html`}>(edit)</Link>
       </h2>
       <div className="SavedViewDetail">
         <p>
-          on {view.model} - <Link to={`/views/${view.pk}.html`}>edit</Link>
+          <span>on {view.model} </span>
+        </p>
+        <p>
+          {view.shared && <strong>Shared </strong>}
+          {view.public && <strong>Public </strong>}
         </p>
         {view.description && <p>{view.description}</p>}
       </div>
