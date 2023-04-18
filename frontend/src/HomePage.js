@@ -17,6 +17,12 @@ function SharedViews(props) {
           {view.name || "<unnamed>"}
         </Link>
       </h2>
+      <div className="SavedViewDetail">
+        <p>
+          <span>on {view.model} </span>
+        </p>
+        {view.description && <p>{view.description}</p>}
+      </div>
     </div>
   ));
 }
@@ -123,7 +129,7 @@ function SavedAndSharedViews(props) {
   return (
     <div className="SavedAndSharedViews">
       <div>
-        <h1>Saved Views</h1>
+        <h1>Your Saved Views</h1>
         <SavedViews views={savedViews.saved.views} />
         {savedViews.saved.folders.map((folder) => (
           <SavedViewsFolder
@@ -132,7 +138,7 @@ function SavedAndSharedViews(props) {
             views={folder.views}
           />
         ))}
-        {!!savedViews.shared.length && <h1>Shared Views</h1>}
+        {!!savedViews.shared.length && <h1>Views Shared by Others</h1>}
         {savedViews.shared.map((owner) => (
           <OwnersSharedViews
             key={owner.ownerName}
