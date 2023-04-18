@@ -24,7 +24,7 @@ def view(admin_user):
 
 @pytest.fixture
 def other_user():
-    return User.objects.create()
+    return User.objects.create(username="other", is_active=True, is_superuser=True)
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def other_view(other_user):
 
 
 @pytest.fixture
-def limited_user(admin_user):
+def admin_user_limited(admin_user):
     admin_user.is_superuser = False
     admin_user.save()
 
@@ -87,40 +87,46 @@ class TestViewList:
             ]
         }
 
-    def test_get_with_folders(self, admin_client, admin_user, view):
-        View.objects.create(
-            owner=admin_user,
-            name="in_folder",
-            description="in_folder_description",
-            public=False,
-            model_name="core.Product",
-            fields="admin",
-            query="name__contains=sql",
-            folder="folder",
-        )
-        View.objects.create(
-            owner=admin_user,
-            name="out_of_folder",
-            description="out_of_folder_description",
-            public=False,
-            model_name="core.Product",
-            fields="admin",
-            query="name__contains=sql",
-        )
+    def test_get_with_folders_and_shared_views(
+        self, admin_client, admin_user, view, other_user
+    ):
+        def make_view(**kwargs):
+            View.objects.create(
+                model_name="core.Product",
+                fields="admin",
+                query="name__contains=sql",
+                **kwargs,
+            )
 
-        resp = admin_client.get("/data_browser/api/views/")
-        assert resp.status_code == 200
-        summary = [
-            {
-                "name": folder["name"],
-                "views": [view["name"] for view in folder["views"]],
-            }
-            for folder in resp.json()["saved"]
-        ]
-        assert summary == [
-            {"name": "", "views": ["name", "out_of_folder"]},
-            {"name": "folder", "views": ["in_folder"]},
-        ]
+        def get_summary():
+            def summarize(stuff):
+                keys = {"name", "views", "shared", "saved", "ownerName"}
+                if isinstance(stuff, dict):
+                    return {k: summarize(v) for k, v in stuff.items() if k in keys}
+                elif isinstance(stuff, list):
+                    return [summarize(x) for x in stuff]
+                return stuff
+
+            resp = admin_client.get("/data_browser/api/views/")
+            assert resp.status_code == 200
+            return summarize(resp.json())
+
+        make_view(owner=admin_user, name="in_folder", folder="folder")
+        make_view(owner=admin_user, name="out_of_folder")
+
+        assert get_summary() == {
+            "saved": [
+                {
+                    "name": "",
+                    "views": [
+                        {"name": "name", "shared": False},
+                        {"name": "out_of_folder", "shared": False},
+                    ],
+                },
+                {"name": "folder", "views": [{"name": "in_folder", "shared": False}]},
+            ],
+            "shared": [],
+        }
 
     def test_post(self, admin_client, admin_user):
         resp = admin_client.post(
@@ -305,7 +311,7 @@ class TestViewDetail:
         assert other_view.name == "name2"
         assert other_view.description == "description2"
 
-    def test_patch_text_limit(self, admin_client, limited_user, view):
+    def test_patch_text_limit(self, admin_client, admin_user_limited, view):
         resp = admin_client.patch(
             f"/data_browser/api/views/{view.pk}/",
             json.dumps({"limit": "bob"}),
@@ -316,7 +322,7 @@ class TestViewDetail:
         view.refresh_from_db()
         assert view.limit == 1
 
-    def test_patch_negative_limit(self, admin_client, limited_user, view):
+    def test_patch_negative_limit(self, admin_client, admin_user_limited, view):
         resp = admin_client.patch(
             f"/data_browser/api/views/{view.pk}/",
             json.dumps({"limit": -1}),
