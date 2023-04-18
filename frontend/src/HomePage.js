@@ -11,29 +11,25 @@ import "./App.scss";
 function SavedViews(props) {
   const { views } = props;
   const setCurrentSavedView = useContext(SetCurrentSavedView);
-  return (
-    <>
-      {views.map((view, index) => (
-        <div key={index} className="SavedView">
-          <h2>
-            <Link
-              className="Link"
-              to={view.link}
-              onClick={() => setCurrentSavedView(view)}
-            >
-              {view.name || "<unnamed>"}
-            </Link>
-          </h2>
-          <div className="SavedViewDetail">
-            <p>
-              on {view.model} - <Link to={`/views/${view.pk}.html`}>edit</Link>
-            </p>
-            {view.description && <p>{view.description}</p>}
-          </div>
-        </div>
-      ))}
-    </>
-  );
+  return views.map((view, index) => (
+    <div key={index} className="SavedView">
+      <h2>
+        <Link
+          className="Link"
+          to={view.link}
+          onClick={() => setCurrentSavedView(view)}
+        >
+          {view.name || "<unnamed>"}
+        </Link>
+      </h2>
+      <div className="SavedViewDetail">
+        <p>
+          on {view.model} - <Link to={`/views/${view.pk}.html`}>edit</Link>
+        </p>
+        {view.description && <p>{view.description}</p>}
+      </div>
+    </div>
+  ));
 }
 
 function SavedViewFolder(props) {
@@ -63,15 +59,13 @@ function SavedViewList(props) {
     <div className="SavedViewList">
       <h1>Saved Views</h1>
       <SavedViews views={savedViews.saved.views} />
-      {savedViews.saved.folders.map((folder) => {
-        return (
-          <SavedViewFolder
-            views={folder.views}
-            name={folder.folderName}
-            key={folder.folderName}
-          />
-        );
-      })}
+      {savedViews.saved.folders.map((folder) => (
+        <SavedViewFolder
+          views={folder.views}
+          name={folder.folderName}
+          key={folder.folderName}
+        />
+      ))}
     </div>
   );
 }
