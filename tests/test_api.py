@@ -64,7 +64,7 @@ class TestViewList:
         assert resp.json() == {
             "saved": [
                 {
-                    "name": "",
+                    "folderName": "",
                     "views": [
                         {
                             "name": "name",
@@ -124,24 +124,27 @@ class TestViewList:
         assert get_summary() == {
             "saved": [
                 {
-                    "name": "",
+                    "folderName": "",
                     "views": [
                         {"name": "name", "shared": False},
                         {"name": "out_of_folder", "shared": False},
                     ],
                 },
-                {"name": "folder", "views": [{"name": "in_folder", "shared": False}]},
+                {
+                    "folderName": "folder",
+                    "views": [{"name": "in_folder", "shared": False}],
+                },
             ],
             "shared": [
                 {
                     "ownerName": "other",
                     "views": [
                         {
-                            "name": "",
+                            "folderName": "",
                             "views": [{"name": "shared_out_of_folder", "shared": True}],
                         },
                         {
-                            "name": "folder",
+                            "folderName": "folder",
                             "views": [{"name": "shared_in_folder", "shared": True}],
                         },
                     ],

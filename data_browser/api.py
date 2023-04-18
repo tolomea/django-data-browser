@@ -71,7 +71,7 @@ def get_queryset(request):
 def serialize_folders(views):
     grouped_views = group_by(views, key=lambda v: v.folder.strip())
     return [
-        {"name": folder_name, "views": [serialize(view) for view in views]}
+        {"folderName": folder_name, "views": [serialize(view) for view in views]}
         for folder_name, views in sorted(grouped_views.items())
     ]
 
