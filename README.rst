@@ -345,7 +345,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Fix bug with admin actions only working on the first column (introduced in 4.0.14).                      |
+| 4.0.17  | 2023-04-25 | Fix bug with admin actions only working on the first column (introduced in 4.0.14).                      |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.16  | 2023-04-16 | | Group homepage model list into collapsible sections by app.                                            |
 |         |            | | Allow grouping saved views into collapsible folders.                                                   |
