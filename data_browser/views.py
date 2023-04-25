@@ -183,7 +183,8 @@ def admin_action(request, model_name, fields):
         raise http.Http404(f"'{query.model_name}' does not exist")  # pragma: no cover
 
     bound_query = BoundQuery.bind(query, orm_models)
-    bound_field = bound_query.fields[0].orm_bound_field
+    idx = [field.path_str for field in bound_query.fields].index(field)
+    bound_field = bound_query.fields[idx].orm_bound_field
 
     if not bound_field.field.actions or action not in bound_field.field.actions:
         raise http.Http404(f"bad action '{action}'")  # pragma: no cover

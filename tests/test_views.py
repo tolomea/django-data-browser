@@ -465,8 +465,8 @@ def test_action_filtered(admin_client):
 
 
 @pytest.mark.usefixtures("products")
-def test_action_sorted_and_limited(admin_client):
-    url = "/data_browser/query/core.Product/id%s0.%s?limit=1"
+def test_action_sorted_and_limited_second_position(admin_client):
+    url = "/data_browser/query/core.Product/name,id%s0,size.%s?limit=1"
 
     ids = set(models.Product.objects.values_list("id", flat=True))
 
