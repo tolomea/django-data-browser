@@ -25,6 +25,12 @@ def users_with_permission(permission):
     return get_user_model().objects.with_perm(perm)
 
 
+def str_user(user):
+    return (
+        str(user) or user.get_username() or getattr(user, user.get_email_field_name())
+    )
+
+
 def JsonResponse(data):
     res = http.JsonResponse(data, safe=False)
     res["X-Version"] = version

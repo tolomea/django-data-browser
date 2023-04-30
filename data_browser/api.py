@@ -4,7 +4,13 @@ import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
-from .common import SHARE_PERM, HttpResponse, JsonResponse, users_with_permission
+from .common import (
+    SHARE_PERM,
+    HttpResponse,
+    JsonResponse,
+    str_user,
+    users_with_permission,
+)
 from .models import View, global_data
 from .util import group_by
 
@@ -98,7 +104,7 @@ def view_list(request):
             .prefetch_related("owner")
         )
         # todo we need to filter to the ones the user can view
-        shared_views_by_user = group_by(shared_views, lambda v: str(v.owner))
+        shared_views_by_user = group_by(shared_views, lambda v: str_user(v.owner))
 
         return JsonResponse(
             {
