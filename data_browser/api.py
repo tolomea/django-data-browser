@@ -79,6 +79,7 @@ def serialize(orm_models, view):
         "pk": view.pk,
         "shared": bool(view.shared and view.name),
         "valid": valid,
+        "can_edit": global_data.request.user == view.owner,
     }
 
 

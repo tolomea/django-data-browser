@@ -81,6 +81,7 @@ class TestViewList:
                         "limit": 1000,
                         "shared": False,
                         "valid": True,
+                        "can_edit": True,
                     }
                 ],
                 "folders": [],
@@ -192,6 +193,7 @@ class TestViewList:
             "limit": 1000,
             "shared": False,
             "valid": True,
+            "can_edit": True,
         }
 
         assert view.owner == admin_user
@@ -231,6 +233,7 @@ class TestViewDetail:
             "limit": 1000,
             "shared": False,
             "valid": True,
+            "can_edit": True,
         }
 
     def test_get_other_owner(self, admin_client, other_view):
@@ -284,6 +287,7 @@ class TestViewDetail:
             "limit": 1000,
             "shared": False,
             "valid": True,
+            "can_edit": True,
         }
 
         assert view.owner == admin_user
@@ -321,6 +325,7 @@ class TestViewDetail:
             "limit": 123,
             "shared": False,
             "valid": True,
+            "can_edit": True,
         }
 
         assert view.owner == admin_user
