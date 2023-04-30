@@ -46,12 +46,13 @@ class Query {
   getField(pathStr) {
     const path = pathStr.split("__");
     let model = this.query.model;
-    for (const field of path.slice(0, -1)) {
-      const modelField = this.config.allModelFields[model].fields[field];
+    let modelField = null;
+    for (const field of path) {
+      modelField = this.config.allModelFields[model].fields[field];
       if (modelField === undefined) return null;
       model = modelField.model;
     }
-    return this.config.allModelFields[model].fields[path.slice(-1)];
+    return modelField;
   }
 
   getType(field) {
