@@ -137,6 +137,7 @@ function Filter(props) {
           {pathStr}
         </td>
         <td>{lookup}</td>
+        <td>=</td>
         <td>
           {value}
           <p className="Error">{errorMessage}</p>
