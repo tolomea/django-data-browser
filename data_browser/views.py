@@ -312,7 +312,7 @@ def _data_response(request, query, media, privileged=False, strict=False):
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)
 
-    if strict and not all(f.is_valid for f in bound_query.filters):
+    if strict and not bound_query.all_valid():
         return http.HttpResponseBadRequest()
 
     if media == "csv":

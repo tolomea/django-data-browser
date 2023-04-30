@@ -202,12 +202,13 @@ def _orm_fields(fields):
 
 
 class BoundQuery:
-    def __init__(self, model_name, fields, filters, limit, orm_model):
+    def __init__(self, model_name, fields, filters, limit, orm_model, bad_fields=None):
         self.model_name = model_name
         self.fields = fields
         self.filters = filters
         self.limit = limit
         self.orm_model = orm_model
+        self.bad_fields = bad_fields or []
 
     @classmethod
     def bind(cls, query, orm_models):
@@ -229,10 +230,13 @@ class BoundQuery:
         model_name = query.model_name
 
         fields = []
+        bad_fields = []
         for query_field in query.fields:
             orm_bound_field = get_orm_field(query_field.path)
             if orm_bound_field:
                 fields.append(BoundField.bind(orm_bound_field, query_field))
+            else:
+                bad_fields.append(query_field)
 
         filters = []
         for query_filter in query.filters:
@@ -247,6 +251,7 @@ class BoundQuery:
             filters=filters,
             limit=query.arguments["limit"],
             orm_model=orm_models[model_name],
+            bad_fields=bad_fields,
         )
 
     @cached_property
@@ -291,3 +296,8 @@ class BoundQuery:
     @cached_property
     def bound_body_fields(self):
         return _orm_fields(self.body_fields)
+
+    def all_valid(self):
+        fields_valid = not self.bad_fields
+        filters_valid = all(f.is_valid for f in self.filters)
+        return fields_valid and filters_valid
