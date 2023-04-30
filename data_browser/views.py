@@ -25,6 +25,7 @@ from .common import (
     SHARE_PERM,
     HttpResponse,
     JsonResponse,
+    add_request_info,
     has_permission,
     settings,
 )
@@ -160,17 +161,9 @@ def _get_config(request):
     }
 
 
-def _add_request_info(request, *, view=False):
-    request.data_browser = {
-        "public_view": view,
-        "fields": set(),
-        "calculated_fields": set(),
-    }
-
-
 @admin_decorators.staff_member_required
 def query_ctx(request, *, model_name="", fields=""):
-    _add_request_info(request)
+    add_request_info(request)
     config = _get_config(request)
     return JsonResponse(config)
 
@@ -209,7 +202,7 @@ def admin_action(request, model_name, fields):
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
-    _add_request_info(request)
+    add_request_info(request)
 
     if request.method == "POST":
         return admin_action(request, model_name, fields)
@@ -235,7 +228,7 @@ def query_html(request, *, model_name="", fields=""):
 
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
-    _add_request_info(request)
+    add_request_info(request)
 
     params = hyperlink.parse(request.get_full_path()).query
 
@@ -284,7 +277,7 @@ def query(request, *, model_name, fields="", media):
 
 
 def view(request, pk, media):
-    _add_request_info(request, view=True)
+    add_request_info(request, view=True)
 
     view = get_object_or_404(View.objects.filter(public=True), public_slug=pk)
     if (

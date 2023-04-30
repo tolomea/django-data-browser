@@ -46,13 +46,13 @@ def _fix_filter(models, field, parts, lookup, value):
 
 
 def forwards_0009(View):
-    from data_browser.views import _add_request_info
+    from data_browser.views import add_request_info
 
     User = get_user_model()
 
     request = RequestFactory().get(reverse("admin:index"))
     request.user = User(is_superuser=True)
-    _add_request_info(request)
+    add_request_info(request)
     models = get_models(request)
 
     for view in View.objects.all():

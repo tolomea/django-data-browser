@@ -94,6 +94,14 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
     return max(0, min(dp_for_sf, max_actual_dp, max_dp))
 
 
+def add_request_info(request, *, view=False):
+    request.data_browser = {
+        "public_view": view,
+        "fields": set(),
+        "calculated_fields": set(),
+    }
+
+
 class Settings:
     _defaults = {
         "DATA_BROWSER_ALLOW_PUBLIC": False,

@@ -8,6 +8,7 @@ from .common import (
     SHARE_PERM,
     HttpResponse,
     JsonResponse,
+    add_request_info,
     str_user,
     users_with_permission,
 )
@@ -94,6 +95,7 @@ def serialize_folders(views):
 @csrf.csrf_protect
 @admin_decorators.staff_member_required
 def view_list(request):
+    add_request_info(request)
     global_data.request = request
 
     if request.method == "GET":
@@ -127,6 +129,7 @@ def view_list(request):
 @csrf.csrf_protect
 @admin_decorators.staff_member_required
 def view_detail(request, pk):
+    add_request_info(request)
     global_data.request = request
     view = get_object_or_404(get_queryset(request), pk=pk)
 
