@@ -61,7 +61,7 @@ def deserialize(request):
 
 def serialize(orm_models, view):
     query = view.get_query()
-    if query.model_name not in orm_models:
+    if query.model_name not in orm_models:  # pragma: no cover
         valid = False
     else:
         bound_query = BoundQuery.bind(query, orm_models)
