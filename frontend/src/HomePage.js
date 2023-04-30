@@ -95,6 +95,7 @@ function SavedViews(props) {
         <p>
           {view.shared && <strong>Shared </strong>}
           {view.public && <strong>Public </strong>}
+          {!view.valid && <strong className="Error">Invalid </strong>}
         </p>
         {view.description && <p>{view.description}</p>}
       </div>
