@@ -8,29 +8,47 @@ import { Config } from "./Config";
 
 import "./App.scss";
 
-function SharedViews(props) {
-  const { views } = props;
-  return views.map((view, index) => (
-    <div key={index} className="SavedView">
+function View(props) {
+  const { view } = props;
+  const setCurrentSavedView = useContext(SetCurrentSavedView);
+  return (
+    <div className="SavedView">
       <h2>
-        <Link className="Link" to={view.link}>
+        <Link
+          className="Link"
+          to={view.link}
+          onClick={() => view.can_edit && setCurrentSavedView(view)}
+        >
           {view.name || "<unnamed>"}
-        </Link>
+        </Link>{" "}
+        {view.can_edit && <Link to={`/views/${view.pk}.html`}>(edit)</Link>}
       </h2>
       <div className="SavedViewDetail">
         <p>
           <span>on {view.model} </span>
         </p>
+        <p>
+          {view.can_edit && view.shared && <strong>Shared </strong>}
+          {view.can_edit && view.public && <strong>Public </strong>}
+          {view.can_edit && !view.valid && (
+            <strong className="Error">Invalid </strong>
+          )}
+        </p>
         {view.description && <p>{view.description}</p>}
       </div>
     </div>
-  ));
+  );
 }
 
-function SharedViewsFolder(props) {
-  const { name, views, ownerName } = props;
+function ViewList(props) {
+  const { views } = props;
+  return views.map((view, index) => <View {...{ index, view }} />);
+}
+
+function ViewsFolder(props) {
+  const { parentName, name, views } = props;
   const [toggled, toggleLink] = usePersistentToggle(
-    `shared.${ownerName}.folder.${name}.toggle`,
+    `${parentName}.folder.${name}.toggle`,
     false
   );
 
@@ -40,7 +58,7 @@ function SharedViewsFolder(props) {
         {toggleLink}
         {name}
       </h2>
-      {toggled && <SharedViews views={views} />}
+      {toggled && <ViewList views={views} />}
     </div>
   );
 }
@@ -59,65 +77,18 @@ function OwnersSharedViews(props) {
         {ownerName}
       </h2>
       <div className="OwnersSharedViews">
-        {toggled && <SharedViews views={views} />}
+        {toggled && <ViewList views={views} />}
         {toggled &&
           folders.map((folder) => (
-            <SharedViewsFolder
+            <ViewsFolder
               key={folder.folderName}
               name={folder.folderName}
               views={folder.views}
+              parentName={`shared.${ownerName}`}
             />
           ))}
       </div>
     </>
-  );
-}
-
-function SavedViews(props) {
-  const { views } = props;
-  const setCurrentSavedView = useContext(SetCurrentSavedView);
-  return views.map((view, index) => (
-    <div key={index} className="SavedView">
-      <h2>
-        <Link
-          className="Link"
-          to={view.link}
-          onClick={() => setCurrentSavedView(view)}
-        >
-          {view.name || "<unnamed>"}
-        </Link>{" "}
-        <Link to={`/views/${view.pk}.html`}>(edit)</Link>
-      </h2>
-      <div className="SavedViewDetail">
-        <p>
-          <span>on {view.model} </span>
-        </p>
-        <p>
-          {view.shared && <strong>Shared </strong>}
-          {view.public && <strong>Public </strong>}
-          {!view.valid && <strong className="Error">Invalid </strong>}
-        </p>
-        {view.description && <p>{view.description}</p>}
-      </div>
-    </div>
-  ));
-}
-
-function SavedViewsFolder(props) {
-  const { name, views } = props;
-  const [toggled, toggleLink] = usePersistentToggle(
-    `saved.folder.${name}.toggle`,
-    false
-  );
-
-  return (
-    <div className="SavedViewsFolder">
-      <h2>
-        {toggleLink}
-        {name}
-      </h2>
-      {toggled && <SavedViews views={views} />}
-    </div>
   );
 }
 
@@ -131,12 +102,13 @@ function SavedAndSharedViews(props) {
     <div className="SavedAndSharedViews">
       <div>
         <h1>Your Saved Views</h1>
-        <SavedViews views={savedViews.saved.views} />
+        <ViewList views={savedViews.saved.views} />
         {savedViews.saved.folders.map((folder) => (
-          <SavedViewsFolder
+          <ViewsFolder
             key={folder.folderName}
             name={folder.folderName}
             views={folder.views}
+            parentName={"saved"}
           />
         ))}
         {!!savedViews.shared.length && <h1>Views Shared by Others</h1>}
