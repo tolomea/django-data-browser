@@ -63,29 +63,29 @@ class TestViewList:
         assert resp.status_code == 200
         print(json.dumps(resp.json(), indent=4, sort_keys=True))
         assert resp.json() == {
-            "saved": {
-                "views": [
-                    {
-                        "name": "name",
-                        "description": "description",
-                        "folder": "",
-                        "public": False,
-                        "model": "core.Product",
-                        "fields": "admin",
-                        "query": "name__contains=sql",
-                        "publicLink": "N/A",
-                        "googleSheetsFormula": "N/A",
-                        "link": "/query/core.Product/admin.html?name__contains=sql&limit=1000",
-                        "createdTime": ANY(str),
-                        "pk": view.pk,
-                        "limit": 1000,
-                        "shared": False,
-                        "valid": True,
-                        "can_edit": True,
-                    }
-                ],
-                "folders": [],
-            },
+            "saved": [
+                {
+                    "name": "name",
+                    "description": "description",
+                    "folder": "",
+                    "public": False,
+                    "model": "core.Product",
+                    "fields": "admin",
+                    "query": "name__contains=sql",
+                    "publicLink": "N/A",
+                    "googleSheetsFormula": "N/A",
+                    "link": (
+                        "/query/core.Product/admin.html?name__contains=sql&limit=1000"
+                    ),
+                    "createdTime": ANY(str),
+                    "pk": view.pk,
+                    "limit": 1000,
+                    "shared": False,
+                    "valid": True,
+                    "can_edit": True,
+                    "type": "view",
+                }
+            ],
             "shared": [],
         }
 
@@ -102,15 +102,7 @@ class TestViewList:
 
         def get_summary():
             def summarize(stuff):
-                keys = {
-                    "name",
-                    "views",
-                    "shared",
-                    "saved",
-                    "ownerName",
-                    "folderName",
-                    "folders",
-                }
+                keys = {"name", "shared", "saved", "type", "can_edit", "entries"}
                 if isinstance(stuff, dict):
                     return {k: summarize(v) for k, v in stuff.items() if k in keys}
                 elif isinstance(stuff, list):
@@ -121,38 +113,64 @@ class TestViewList:
             assert resp.status_code == 200
             return summarize(resp.json())
 
-        make_view(owner=admin_user, name="in_folder", folder="folder")
+        make_view(owner=admin_user, name="in_folder", folder="my folder")
         make_view(owner=admin_user, name="out_of_folder")
-        make_view(owner=other_user, name="other_in_folder", folder="folder")
+        make_view(owner=other_user, name="other_in_folder", folder="other folder")
         make_view(owner=other_user, name="other_out_of_folder")
         make_view(
-            owner=other_user, name="shared_in_folder", shared=True, folder="folder"
+            owner=other_user,
+            name="shared_in_folder",
+            shared=True,
+            folder="other folder",
         )
         make_view(owner=other_user, name="shared_out_of_folder", shared=True)
 
         print(json.dumps(get_summary(), indent=4, sort_keys=True))
         assert get_summary() == {
-            "saved": {
-                "views": [
-                    {"name": "name", "shared": False},
-                    {"name": "out_of_folder", "shared": False},
-                ],
-                "folders": [
-                    {
-                        "folderName": "folder",
-                        "views": [{"name": "in_folder", "shared": False}],
-                    }
-                ],
-            },
+            "saved": [
+                {"name": "name", "shared": False, "type": "view", "can_edit": True},
+                {
+                    "name": "out_of_folder",
+                    "shared": False,
+                    "type": "view",
+                    "can_edit": True,
+                },
+                {
+                    "type": "folder",
+                    "name": "my folder",
+                    "entries": [
+                        {
+                            "name": "in_folder",
+                            "shared": False,
+                            "type": "view",
+                            "can_edit": True,
+                        }
+                    ],
+                },
+            ],
             "shared": [
                 {
-                    "ownerName": "other",
-                    "views": [{"name": "shared_out_of_folder", "shared": True}],
-                    "folders": [
+                    "type": "folder",
+                    "name": "other",
+                    "entries": [
                         {
-                            "folderName": "folder",
-                            "views": [{"name": "shared_in_folder", "shared": True}],
-                        }
+                            "name": "shared_out_of_folder",
+                            "shared": True,
+                            "type": "view",
+                            "can_edit": False,
+                        },
+                        {
+                            "name": "other folder",
+                            "type": "folder",
+                            "entries": [
+                                {
+                                    "name": "shared_in_folder",
+                                    "shared": True,
+                                    "type": "view",
+                                    "can_edit": False,
+                                }
+                            ],
+                        },
                     ],
                 }
             ],
@@ -194,6 +212,7 @@ class TestViewList:
             "shared": False,
             "valid": True,
             "can_edit": True,
+            "type": "view",
         }
 
         assert view.owner == admin_user
@@ -234,6 +253,7 @@ class TestViewDetail:
             "shared": False,
             "valid": True,
             "can_edit": True,
+            "type": "view",
         }
 
     def test_get_other_owner(self, admin_client, other_view):
@@ -288,6 +308,7 @@ class TestViewDetail:
             "shared": False,
             "valid": True,
             "can_edit": True,
+            "type": "view",
         }
 
         assert view.owner == admin_user
@@ -326,6 +347,7 @@ class TestViewDetail:
             "shared": False,
             "valid": True,
             "can_edit": True,
+            "type": "view",
         }
 
         assert view.owner == admin_user

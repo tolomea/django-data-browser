@@ -40,15 +40,11 @@ function View(props) {
   );
 }
 
-function ViewList(props) {
-  const { views } = props;
-  return views.map((view, index) => <View {...{ index, view }} />);
-}
-
-function ViewsFolder(props) {
-  const { parentName, name, views } = props;
+function Folder(props) {
+  const { parentName, folder } = props;
+  const fullName = `${parentName}.${folder.name}`;
   const [toggled, toggleLink] = usePersistentToggle(
-    `${parentName}.folder.${name}.toggle`,
+    `${fullName}.toggle`,
     false
   );
 
@@ -56,39 +52,21 @@ function ViewsFolder(props) {
     <div className="SavedViewsFolder">
       <h2>
         {toggleLink}
-        {name}
+        {folder.name}
       </h2>
-      {toggled && <ViewList views={views} />}
+      {toggled && <Entries entries={folder.entries} />}
     </div>
   );
 }
 
-function OwnersSharedViews(props) {
-  const { ownerName, views, folders } = props;
-  const [toggled, toggleLink] = usePersistentToggle(
-    `shared.${ownerName}.toggle`,
-    false
-  );
-
-  return (
-    <>
-      <h2>
-        {toggleLink}
-        {ownerName}
-      </h2>
-      <div className="OwnersSharedViews">
-        {toggled && <ViewList views={views} />}
-        {toggled &&
-          folders.map((folder) => (
-            <ViewsFolder
-              key={folder.folderName}
-              name={folder.folderName}
-              views={folder.views}
-              parentName={`shared.${ownerName}`}
-            />
-          ))}
-      </div>
-    </>
+function Entries(props) {
+  const { entries, parentName } = props;
+  return entries.map((entry, index) =>
+    entry.type === "view" ? (
+      <View key={index} view={entry} />
+    ) : (
+      <Folder key={index} folder={entry} parentName={parentName} />
+    )
   );
 }
 
@@ -96,30 +74,15 @@ function SavedAndSharedViews(props) {
   const config = useContext(Config);
   const [savedViews] = useData(`${config.baseUrl}api/views/`);
 
-  if (!savedViews) return "";
+  if (!savedViews) return ""; // loading state
 
   return (
     <div className="SavedAndSharedViews">
       <div>
         <h1>Your Saved Views</h1>
-        <ViewList views={savedViews.saved.views} />
-        {savedViews.saved.folders.map((folder) => (
-          <ViewsFolder
-            key={folder.folderName}
-            name={folder.folderName}
-            views={folder.views}
-            parentName={"saved"}
-          />
-        ))}
+        <Entries entries={savedViews.saved} parentName="saved" />
         {!!savedViews.shared.length && <h1>Views Shared by Others</h1>}
-        {savedViews.shared.map((owner) => (
-          <OwnersSharedViews
-            key={owner.ownerName}
-            ownerName={owner.ownerName}
-            views={owner.views}
-            folders={owner.folders}
-          />
-        ))}
+        <Entries entries={savedViews.shared} parentName="shared" />
       </div>
     </div>
   );

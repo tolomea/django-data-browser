@@ -80,6 +80,7 @@ def serialize(orm_models, view):
         "shared": bool(view.shared and view.name),
         "valid": valid,
         "can_edit": global_data.request.user == view.owner,
+        "type": "view",
     }
 
 
@@ -97,20 +98,16 @@ def get_queryset(request):
 def serialize_folders(orm_models, views, *, include_invalid=False):
     grouped_views = group_by(views, key=lambda v: v.folder.strip())
     flat_views = grouped_views.pop("", [])
-    return {
-        "views": serialize_list(
-            orm_models, flat_views, include_invalid=include_invalid
-        ),
-        "folders": [
-            {
-                "folderName": folder_name,
-                "views": serialize_list(
-                    orm_models, views, include_invalid=include_invalid
-                ),
-            }
-            for folder_name, views in sorted(grouped_views.items())
-        ],
-    }
+
+    return serialize_list(orm_models, flat_views, include_invalid=include_invalid) + [
+        {"name": folder_name, "type": "folder", "entries": entries}
+        for folder_name, views in sorted(grouped_views.items())
+        if (
+            entries := serialize_list(
+                orm_models, views, include_invalid=include_invalid
+            )
+        )
+    ]
 
 
 @csrf.csrf_protect
@@ -141,11 +138,9 @@ def view_list(request):
                     orm_models, saved_views, include_invalid=True
                 ),
                 "shared": [
-                    {
-                        "ownerName": owner_name,
-                        **serialize_folders(orm_models, shared_views),
-                    }
+                    {"name": owner_name, "type": "folder", "entries": entries}
                     for owner_name, shared_views in shared_views_by_user.items()
+                    if (entries := serialize_folders(orm_models, shared_views))
                 ],
             }
         )
