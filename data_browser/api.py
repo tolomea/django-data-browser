@@ -82,21 +82,31 @@ def serialize(orm_models, view):
     }
 
 
-def serialize_list(orm_models, views):
-    return [serialize(orm_models, view) for view in views]
+def serialize_list(orm_models, views, *, include_invalid=False):
+    res = [serialize(orm_models, view) for view in views]
+    if not include_invalid:
+        res = [row for row in res if row["valid"]]
+    return res
 
 
 def get_queryset(request):
     return View.objects.filter(owner=request.user)
 
 
-def serialize_folders(orm_models, views):
+def serialize_folders(orm_models, views, *, include_invalid=False):
     grouped_views = group_by(views, key=lambda v: v.folder.strip())
     flat_views = grouped_views.pop("", [])
     return {
-        "views": serialize_list(orm_models, flat_views),
+        "views": serialize_list(
+            orm_models, flat_views, include_invalid=include_invalid
+        ),
         "folders": [
-            {"folderName": folder_name, "views": serialize_list(orm_models, views)}
+            {
+                "folderName": folder_name,
+                "views": serialize_list(
+                    orm_models, views, include_invalid=include_invalid
+                ),
+            }
             for folder_name, views in sorted(grouped_views.items())
         ],
     }
@@ -126,7 +136,9 @@ def view_list(request):
 
         return JsonResponse(
             {
-                "saved": serialize_folders(orm_models, saved_views),
+                "saved": serialize_folders(
+                    orm_models, saved_views, include_invalid=True
+                ),
                 "shared": [
                     {
                         "ownerName": owner_name,
