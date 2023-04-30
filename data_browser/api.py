@@ -67,6 +67,7 @@ def serialize(view):
         "link": view.get_query().get_url("html"),
         "createdTime": f"{view.created_time:%Y-%m-%d %H:%M:%S}",
         "pk": view.pk,
+        "shared": bool(view.shared and view.name),
     }
 
 
@@ -100,6 +101,7 @@ def view_list(request):
         shared_views = (
             View.objects.exclude(owner=request.user)
             .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
+            .exclude(name="")
             .order_by("name", "created_time")
             .prefetch_related("owner")
         )

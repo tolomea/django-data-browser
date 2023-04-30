@@ -115,26 +115,33 @@ function SavedViewPage(props) {
 
               {config.canShare && (
                 <tr>
-                  <th
-                    onMouseEnter={(e) =>
-                      showTooltip(e, [
-                        "Share this view with other users.",
-                        "If they have permissions to use it then it will",
-                        "appear under your name on their DDB homepage.",
-                      ])
-                    }
-                    onMouseLeave={(e) => hideTooltip(e)}
-                  >
-                    Share:
-                  </th>
+                  <th>Share:</th>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={view.shared}
-                      onChange={(event) => {
-                        setView({ shared: event.target.checked });
+                    <span
+                      onMouseEnter={(e) => {
+                        console.log("wtf");
+                        const msg = [
+                          "Share this view with other users.",
+                          "If they have permissions to use it then it will",
+                          "appear under your name on their DDB homepage.",
+                        ];
+                        if (!view.name.length)
+                          msg.push(
+                            <strong>To be shared a view must be named.</strong>
+                          );
+                        showTooltip(e, msg);
                       }}
-                    />
+                      onMouseLeave={(e) => hideTooltip(e)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={view.shared && view.name.length}
+                        onChange={(event) => {
+                          setView({ shared: event.target.checked });
+                        }}
+                        disabled={!view.name.length}
+                      />
+                    </span>
                   </td>
                 </tr>
               )}
@@ -142,26 +149,26 @@ function SavedViewPage(props) {
               {config.canMakePublic && (
                 <>
                   <tr>
-                    <th
-                      onMouseEnter={(e) =>
-                        showTooltip(e, [
-                          "Make this view availalbe at a fixed URL without a login.",
-                          "This is useful for sharing the view with people who aren't",
-                          "users or with third party tools like Google Sheets.",
-                        ])
-                      }
-                      onMouseLeave={(e) => hideTooltip(e)}
-                    >
-                      Is Public:
-                    </th>
+                    <th>Is Public:</th>
                     <td>
-                      <input
-                        type="checkbox"
-                        checked={view.public}
-                        onChange={(event) => {
-                          setView({ public: event.target.checked });
-                        }}
-                      />
+                      <span
+                        onMouseEnter={(e) =>
+                          showTooltip(e, [
+                            "Make this view availalbe at a fixed URL without a login.",
+                            "This is useful for sharing the view with people who aren't",
+                            "users or with third party tools like Google Sheets.",
+                          ])
+                        }
+                        onMouseLeave={(e) => hideTooltip(e)}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={view.public}
+                          onChange={(event) => {
+                            setView({ public: event.target.checked });
+                          }}
+                        />
+                      </span>
                     </td>
                   </tr>
                   {view.public && (
