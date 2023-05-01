@@ -99,15 +99,12 @@ def serialize_folders(orm_models, views, *, include_invalid=False):
     grouped_views = group_by(views, key=lambda v: v.folder.strip())
     flat_views = grouped_views.pop("", [])
 
-    return serialize_list(orm_models, flat_views, include_invalid=include_invalid) + [
-        {"name": folder_name, "type": "folder", "entries": entries}
-        for folder_name, views in sorted(grouped_views.items())
-        if (
-            entries := serialize_list(
-                orm_models, views, include_invalid=include_invalid
-            )
-        )
-    ]
+    res = serialize_list(orm_models, flat_views, include_invalid=include_invalid)
+    for folder_name, views in sorted(grouped_views.items()):
+        entries = serialize_list(orm_models, views, include_invalid=include_invalid)
+        if entries:
+            res.append({"name": folder_name, "type": "folder", "entries": entries})
+    return res
 
 
 @csrf.csrf_protect
@@ -131,17 +128,20 @@ def view_list(request):
         # shared_views = [view for view in shared_views if view.valid_for(request.user)]
 
         shared_views_by_user = group_by(shared_views, lambda v: str_user(v.owner))
+        shared_views_serialized = []
+        for owner_name, shared_views in shared_views_by_user.items():
+            entries = serialize_folders(orm_models, shared_views)
+            if entries:
+                shared_views_serialized.append(
+                    {"name": owner_name, "type": "folder", "entries": entries}
+                )
 
         return JsonResponse(
             {
                 "saved": serialize_folders(
                     orm_models, saved_views, include_invalid=True
                 ),
-                "shared": [
-                    {"name": owner_name, "type": "folder", "entries": entries}
-                    for owner_name, shared_views in shared_views_by_user.items()
-                    if (entries := serialize_folders(orm_models, shared_views))
-                ],
+                "shared": shared_views_serialized,
             }
         )
     elif request.method == "POST":
