@@ -3,7 +3,7 @@ import json
 import pytest
 from django.contrib.auth.models import Permission, User
 
-from data_browser.common import PUBLIC_PERM
+from data_browser.common import PUBLIC_PERM, SHARE_PERM
 from data_browser.models import View
 
 from .util import ANY
@@ -24,7 +24,9 @@ def view(admin_user):
 
 @pytest.fixture
 def other_user():
-    return User.objects.create(username="other", is_active=True, is_superuser=True)
+    return User.objects.create(
+        username="other", is_active=True, is_superuser=True, is_staff=True
+    )
 
 
 @pytest.fixture
@@ -50,8 +52,8 @@ def admin_user_limited(admin_user):
 
 
 @pytest.fixture
-def get_list_summary():
-    def inner(client, extra_keys=None):
+def get_list_summary(admin_client):
+    def inner(user, extra_keys=None):
         keys = {"type", "name", "entries"}
         if extra_keys:
             keys.update(extra_keys)
@@ -63,11 +65,31 @@ def get_list_summary():
                 return [summarize(x) for x in stuff]
             return stuff
 
-        resp = client.get("/data_browser/api/views/")
+        admin_client.force_login(user)
+        resp = admin_client.get("/data_browser/api/views/")
         assert resp.status_code == 200
-        return summarize(resp.json())
+        res = {
+            "saved": summarize(resp.json()["saved"]),
+            "shared": summarize(resp.json()["shared"]),
+        }
+        print(json.dumps(res, indent=4, sort_keys=True))
+        return res
 
     return inner
+
+
+def make_view(**kwargs):
+    View.objects.create(
+        model_name="core.Product", fields="admin", query="name__contains=sql", **kwargs
+    )
+
+
+@pytest.fixture
+def multiple_views(admin_user, other_user):
+    make_view(owner=admin_user, name="my_in_folder", folder="my folder")
+    make_view(owner=admin_user, name="my_out_of_folder")
+    make_view(owner=other_user, name="other_in_folder", folder="other folder")
+    make_view(owner=other_user, name="other_out_of_folder")
 
 
 class TestViewList:
@@ -111,20 +133,8 @@ class TestViewList:
         }
 
     def test_get_with_folders_and_shared_views(
-        self, admin_client, admin_user, view, other_user, get_list_summary
+        self, view, multiple_views, admin_user, other_user, get_list_summary
     ):
-        def make_view(**kwargs):
-            View.objects.create(
-                model_name="core.Product",
-                fields="admin",
-                query="name__contains=sql",
-                **kwargs,
-            )
-
-        make_view(owner=admin_user, name="in_folder", folder="my folder")
-        make_view(owner=admin_user, name="out_of_folder")
-        make_view(owner=other_user, name="other_in_folder", folder="other folder")
-        make_view(owner=other_user, name="other_out_of_folder")
         make_view(
             owner=other_user,
             name="shared_in_folder",
@@ -133,23 +143,22 @@ class TestViewList:
         )
         make_view(owner=other_user, name="shared_out_of_folder", shared=True)
 
-        summary = get_list_summary(admin_client, {"shared", "saved", "can_edit"})
-        print(json.dumps(summary, indent=4, sort_keys=True))
+        summary = get_list_summary(admin_user, {"shared", "can_edit"})
         assert summary == {
             "saved": [
-                {"name": "name", "shared": False, "type": "view", "can_edit": True},
                 {
-                    "name": "out_of_folder",
+                    "name": "my_out_of_folder",
                     "shared": False,
                     "type": "view",
                     "can_edit": True,
                 },
+                {"name": "name", "shared": False, "type": "view", "can_edit": True},
                 {
                     "type": "folder",
                     "name": "my folder",
                     "entries": [
                         {
-                            "name": "in_folder",
+                            "name": "my_in_folder",
                             "shared": False,
                             "type": "view",
                             "can_edit": True,
@@ -181,6 +190,200 @@ class TestViewList:
                             ],
                         },
                     ],
+                }
+            ],
+        }
+
+    def test_get_multi_no_sharing(
+        self, admin_user, other_user, get_list_summary, multiple_views
+    ):
+        # admin sees only their own
+        summary = get_list_summary(admin_user)
+        assert summary == {
+            "saved": [
+                {"name": "my_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "my folder",
+                    "entries": [{"name": "my_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [],
+        }
+
+        # other sees only their own
+        summary = get_list_summary(other_user)
+        assert summary == {
+            "saved": [
+                {"name": "other_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "other folder",
+                    "entries": [{"name": "other_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [],
+        }
+
+    def test_get_multi_everything_sharing(
+        self, admin_user, other_user, get_list_summary, multiple_views
+    ):
+        View.objects.update(shared=True)
+
+        # admin sees everything
+        summary = get_list_summary(admin_user)
+        assert summary == {
+            "saved": [
+                {"name": "my_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "my folder",
+                    "entries": [{"name": "my_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [
+                {
+                    "entries": [
+                        {"name": "other_out_of_folder", "type": "view"},
+                        {
+                            "entries": [{"name": "other_in_folder", "type": "view"}],
+                            "name": "other folder",
+                            "type": "folder",
+                        },
+                    ],
+                    "name": "other",
+                    "type": "folder",
+                }
+            ],
+        }
+
+        # other sees everything
+        summary = get_list_summary(other_user)
+        assert summary == {
+            "saved": [
+                {"name": "other_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "other folder",
+                    "entries": [{"name": "other_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [
+                {
+                    "entries": [
+                        {"name": "my_out_of_folder", "type": "view"},
+                        {
+                            "entries": [{"name": "my_in_folder", "type": "view"}],
+                            "name": "my folder",
+                            "type": "folder",
+                        },
+                    ],
+                    "name": "admin",
+                    "type": "folder",
+                }
+            ],
+        }
+
+    def test_get_multi_everything_sharing_no_perms(
+        self, admin_user, other_user, get_list_summary, multiple_views
+    ):
+        View.objects.update(shared=True)
+
+        # other can share but has no other perms
+        other_user.is_superuser = False
+        other_user.save()
+        other_user.user_permissions.add(*Permission.objects.filter(codename=SHARE_PERM))
+
+        # admin can see others shares
+        summary = get_list_summary(admin_user)
+        assert summary == {
+            "saved": [
+                {"name": "my_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "my folder",
+                    "entries": [{"name": "my_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [
+                {
+                    "entries": [
+                        {"name": "other_out_of_folder", "type": "view"},
+                        {
+                            "entries": [{"name": "other_in_folder", "type": "view"}],
+                            "name": "other folder",
+                            "type": "folder",
+                        },
+                    ],
+                    "name": "other",
+                    "type": "folder",
+                }
+            ],
+        }
+
+        # other can only see their own stuff
+        summary = get_list_summary(other_user)
+        assert summary == {
+            "saved": [
+                {"name": "other_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "other folder",
+                    "entries": [{"name": "other_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [],
+        }
+
+    def test_get_multi_everything_no_sharing(
+        self, admin_user, other_user, get_list_summary, multiple_views
+    ):
+        View.objects.update(shared=True)
+
+        # other can do anything but share
+        other_user.is_superuser = False
+        other_user.save()
+        other_user.user_permissions.add(
+            *Permission.objects.exclude(codename=SHARE_PERM)
+        )
+
+        # admin doesn't see others shares
+        summary = get_list_summary(admin_user)
+        assert summary == {
+            "saved": [
+                {"name": "my_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "my folder",
+                    "entries": [{"name": "my_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [],
+        }
+
+        # other sees everything
+        summary = get_list_summary(other_user)
+        assert summary == {
+            "saved": [
+                {"name": "other_out_of_folder", "type": "view"},
+                {
+                    "type": "folder",
+                    "name": "other folder",
+                    "entries": [{"name": "other_in_folder", "type": "view"}],
+                },
+            ],
+            "shared": [
+                {
+                    "entries": [
+                        {"name": "my_out_of_folder", "type": "view"},
+                        {
+                            "entries": [{"name": "my_in_folder", "type": "view"}],
+                            "name": "my folder",
+                            "type": "folder",
+                        },
+                    ],
+                    "name": "admin",
+                    "type": "folder",
                 }
             ],
         }
