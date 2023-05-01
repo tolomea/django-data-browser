@@ -115,7 +115,13 @@ def view_list(request):
     orm_models = get_models(request)
 
     if request.method == "GET":
+        # saved
         saved_views = get_queryset(request).order_by("name", "created_time")
+        saved_views_serialized = serialize_folders(
+            orm_models, saved_views, include_invalid=True
+        )
+
+        # shared
         shared_views = (
             View.objects.exclude(owner=request.user)
             .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
@@ -123,10 +129,6 @@ def view_list(request):
             .order_by("name", "created_time")
             .prefetch_related("owner")
         )
-
-        # filter to the ones the user can view
-        # shared_views = [view for view in shared_views if view.valid_for(request.user)]
-
         shared_views_by_user = group_by(shared_views, lambda v: str_user(v.owner))
         shared_views_serialized = []
         for owner_name, shared_views in shared_views_by_user.items():
@@ -136,13 +138,9 @@ def view_list(request):
                     {"name": owner_name, "type": "folder", "entries": entries}
                 )
 
+        # response
         return JsonResponse(
-            {
-                "saved": serialize_folders(
-                    orm_models, saved_views, include_invalid=True
-                ),
-                "shared": shared_views_serialized,
-            }
+            {"saved": saved_views_serialized, "shared": shared_views_serialized}
         )
     elif request.method == "POST":
         view = View.objects.create(owner=request.user, **deserialize(request))

@@ -49,6 +49,27 @@ def admin_user_limited(admin_user):
     return admin_user
 
 
+@pytest.fixture
+def get_list_summary():
+    def inner(client, extra_keys=None):
+        keys = {"type", "name", "entries"}
+        if extra_keys:
+            keys.update(extra_keys)
+
+        def summarize(stuff):
+            if isinstance(stuff, dict):
+                return {k: summarize(v) for k, v in stuff.items() if k in keys}
+            elif isinstance(stuff, list):
+                return [summarize(x) for x in stuff]
+            return stuff
+
+        resp = client.get("/data_browser/api/views/")
+        assert resp.status_code == 200
+        return summarize(resp.json())
+
+    return inner
+
+
 class TestViewList:
     def test_bad_methods(self, admin_client):
         resp = admin_client.patch("/data_browser/api/views/")
@@ -90,7 +111,7 @@ class TestViewList:
         }
 
     def test_get_with_folders_and_shared_views(
-        self, admin_client, admin_user, view, other_user
+        self, admin_client, admin_user, view, other_user, get_list_summary
     ):
         def make_view(**kwargs):
             View.objects.create(
@@ -99,19 +120,6 @@ class TestViewList:
                 query="name__contains=sql",
                 **kwargs,
             )
-
-        def get_summary():
-            def summarize(stuff):
-                keys = {"name", "shared", "saved", "type", "can_edit", "entries"}
-                if isinstance(stuff, dict):
-                    return {k: summarize(v) for k, v in stuff.items() if k in keys}
-                elif isinstance(stuff, list):
-                    return [summarize(x) for x in stuff]
-                return stuff
-
-            resp = admin_client.get("/data_browser/api/views/")
-            assert resp.status_code == 200
-            return summarize(resp.json())
 
         make_view(owner=admin_user, name="in_folder", folder="my folder")
         make_view(owner=admin_user, name="out_of_folder")
@@ -125,8 +133,9 @@ class TestViewList:
         )
         make_view(owner=other_user, name="shared_out_of_folder", shared=True)
 
-        print(json.dumps(get_summary(), indent=4, sort_keys=True))
-        assert get_summary() == {
+        summary = get_list_summary(admin_client, {"shared", "saved", "can_edit"})
+        print(json.dumps(summary, indent=4, sort_keys=True))
+        assert summary == {
             "saved": [
                 {"name": "name", "shared": False, "type": "view", "can_edit": True},
                 {
