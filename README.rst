@@ -82,6 +82,16 @@ Settings
 +------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 
 
+Permissions
+-----------
+
++------------------------------------+-------------+-------------------------------------------+
+| ``data_browser.make_view_public``  | `Security`_ | Can make a saved view publicly available. |
++------------------------------------+-------------+-------------------------------------------+
+| ``data_browser.share_view``        |             | Can share a saved view with other users.  |
++------------------------------------+-------------+-------------------------------------------+
+
+
 Security
 --------
 
@@ -122,7 +132,7 @@ One convenient way of utilizing this is to create the file ``templates/admin/cha
     {% endblock %}
 
 This will place a "Data Browser" button on the list view of every admin that inherits from the mixin.
-Note: to do this at the top level the app you put the template in must be before contrib.admin in INSTALLED_APPS.
+Note: to do this at the top level, the app you put the template in must be before contrib.admin in INSTALLED_APPS.
 
 Specifying models and fields
 ----------------------------
@@ -345,7 +355,9 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Fix bug where an invalid filter causes the query page to fail to render.                                 |
+|         |            | | Support sharing of saved views between users.                                                          |
+|         |            | | Allow mixing of folders and views in the saved views section.                                          |
+|         |            | | Fix bug where an invalid filter causes the query page to fail to render.                               |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.0.17  | 2023-04-25 | Fix bug with admin actions only working on the first column (introduced in 4.0.14).                      |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
