@@ -147,13 +147,6 @@ class TestViewList:
         assert summary == {
             "saved": [
                 {
-                    "name": "my_out_of_folder",
-                    "shared": False,
-                    "type": "view",
-                    "can_edit": True,
-                },
-                {"name": "name", "shared": False, "type": "view", "can_edit": True},
-                {
                     "type": "folder",
                     "name": "my folder",
                     "entries": [
@@ -165,18 +158,19 @@ class TestViewList:
                         }
                     ],
                 },
+                {
+                    "name": "my_out_of_folder",
+                    "shared": False,
+                    "type": "view",
+                    "can_edit": True,
+                },
+                {"name": "name", "shared": False, "type": "view", "can_edit": True},
             ],
             "shared": [
                 {
                     "type": "folder",
                     "name": "other",
                     "entries": [
-                        {
-                            "name": "shared_out_of_folder",
-                            "shared": True,
-                            "type": "view",
-                            "can_edit": False,
-                        },
                         {
                             "name": "other folder",
                             "type": "folder",
@@ -188,6 +182,12 @@ class TestViewList:
                                     "can_edit": False,
                                 }
                             ],
+                        },
+                        {
+                            "name": "shared_out_of_folder",
+                            "shared": True,
+                            "type": "view",
+                            "can_edit": False,
                         },
                     ],
                 }
@@ -201,12 +201,12 @@ class TestViewList:
         summary = get_list_summary(admin_user)
         assert summary == {
             "saved": [
-                {"name": "my_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "my folder",
                     "entries": [{"name": "my_in_folder", "type": "view"}],
                 },
+                {"name": "my_out_of_folder", "type": "view"},
             ],
             "shared": [],
         }
@@ -215,12 +215,12 @@ class TestViewList:
         summary = get_list_summary(other_user)
         assert summary == {
             "saved": [
-                {"name": "other_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "other folder",
                     "entries": [{"name": "other_in_folder", "type": "view"}],
                 },
+                {"name": "other_out_of_folder", "type": "view"},
             ],
             "shared": [],
         }
@@ -234,22 +234,22 @@ class TestViewList:
         summary = get_list_summary(admin_user)
         assert summary == {
             "saved": [
-                {"name": "my_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "my folder",
                     "entries": [{"name": "my_in_folder", "type": "view"}],
                 },
+                {"name": "my_out_of_folder", "type": "view"},
             ],
             "shared": [
                 {
                     "entries": [
-                        {"name": "other_out_of_folder", "type": "view"},
                         {
                             "entries": [{"name": "other_in_folder", "type": "view"}],
                             "name": "other folder",
                             "type": "folder",
                         },
+                        {"name": "other_out_of_folder", "type": "view"},
                     ],
                     "name": "other",
                     "type": "folder",
@@ -261,22 +261,22 @@ class TestViewList:
         summary = get_list_summary(other_user)
         assert summary == {
             "saved": [
-                {"name": "other_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "other folder",
                     "entries": [{"name": "other_in_folder", "type": "view"}],
                 },
+                {"name": "other_out_of_folder", "type": "view"},
             ],
             "shared": [
                 {
                     "entries": [
-                        {"name": "my_out_of_folder", "type": "view"},
                         {
                             "entries": [{"name": "my_in_folder", "type": "view"}],
                             "name": "my folder",
                             "type": "folder",
                         },
+                        {"name": "my_out_of_folder", "type": "view"},
                     ],
                     "name": "admin",
                     "type": "folder",
@@ -298,22 +298,22 @@ class TestViewList:
         summary = get_list_summary(admin_user)
         assert summary == {
             "saved": [
-                {"name": "my_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "my folder",
                     "entries": [{"name": "my_in_folder", "type": "view"}],
                 },
+                {"name": "my_out_of_folder", "type": "view"},
             ],
             "shared": [
                 {
                     "entries": [
-                        {"name": "other_out_of_folder", "type": "view"},
                         {
                             "entries": [{"name": "other_in_folder", "type": "view"}],
                             "name": "other folder",
                             "type": "folder",
                         },
+                        {"name": "other_out_of_folder", "type": "view"},
                     ],
                     "name": "other",
                     "type": "folder",
@@ -325,12 +325,12 @@ class TestViewList:
         summary = get_list_summary(other_user)
         assert summary == {
             "saved": [
-                {"name": "other_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "other folder",
                     "entries": [{"name": "other_in_folder", "type": "view"}],
                 },
+                {"name": "other_out_of_folder", "type": "view"},
             ],
             "shared": [],
         }
@@ -351,12 +351,12 @@ class TestViewList:
         summary = get_list_summary(admin_user)
         assert summary == {
             "saved": [
-                {"name": "my_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "my folder",
                     "entries": [{"name": "my_in_folder", "type": "view"}],
                 },
+                {"name": "my_out_of_folder", "type": "view"},
             ],
             "shared": [],
         }
@@ -365,22 +365,22 @@ class TestViewList:
         summary = get_list_summary(other_user)
         assert summary == {
             "saved": [
-                {"name": "other_out_of_folder", "type": "view"},
                 {
                     "type": "folder",
                     "name": "other folder",
                     "entries": [{"name": "other_in_folder", "type": "view"}],
                 },
+                {"name": "other_out_of_folder", "type": "view"},
             ],
             "shared": [
                 {
                     "entries": [
-                        {"name": "my_out_of_folder", "type": "view"},
                         {
                             "entries": [{"name": "my_in_folder", "type": "view"}],
                             "name": "my folder",
                             "type": "folder",
                         },
+                        {"name": "my_out_of_folder", "type": "view"},
                     ],
                     "name": "admin",
                     "type": "folder",

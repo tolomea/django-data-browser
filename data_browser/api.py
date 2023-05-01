@@ -19,7 +19,7 @@ from .util import group_by
 
 
 def clean_str(field, value):
-    return value[: View._meta.get_field(field).max_length]
+    return value.strip()[: View._meta.get_field(field).max_length]
 
 
 def clean_uint(field, value):
@@ -59,6 +59,10 @@ def deserialize(request):
     return res
 
 
+def name_sort(entries):
+    return sorted(entries, key=lambda entry: entry["name"].lower())
+
+
 def serialize(orm_models, view):
     query = view.get_query()
     if query.model_name not in orm_models:  # pragma: no cover
@@ -88,11 +92,7 @@ def serialize_list(orm_models, views, *, include_invalid=False):
     res = [serialize(orm_models, view) for view in views]
     if not include_invalid:
         res = [row for row in res if row["valid"]]
-    return res
-
-
-def get_queryset(request):
-    return View.objects.filter(owner=request.user)
+    return name_sort(res)
 
 
 def serialize_folders(orm_models, views, *, include_invalid=False):
@@ -104,7 +104,11 @@ def serialize_folders(orm_models, views, *, include_invalid=False):
         entries = serialize_list(orm_models, views, include_invalid=include_invalid)
         if entries:
             res.append({"name": folder_name, "type": "folder", "entries": entries})
-    return res
+    return name_sort(res)
+
+
+def get_queryset(request):
+    return View.objects.filter(owner=request.user)
 
 
 @csrf.csrf_protect
@@ -116,7 +120,7 @@ def view_list(request):
 
     if request.method == "GET":
         # saved
-        saved_views = get_queryset(request).order_by("name", "created_time")
+        saved_views = get_queryset(request)
         saved_views_serialized = serialize_folders(
             orm_models, saved_views, include_invalid=True
         )
@@ -126,7 +130,6 @@ def view_list(request):
             View.objects.exclude(owner=request.user)
             .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
             .exclude(name="")
-            .order_by("name", "created_time")
             .prefetch_related("owner")
         )
         shared_views_by_user = group_by(shared_views, lambda v: str_user(v.owner))
