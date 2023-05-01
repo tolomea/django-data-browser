@@ -119,7 +119,6 @@ function SavedViewPage(props) {
                   <td>
                     <span
                       onMouseEnter={(e) => {
-                        console.log("wtf");
                         const msg = [
                           "Share this view with other users.",
                           "If they have permissions to use it then it will",

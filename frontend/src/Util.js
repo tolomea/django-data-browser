@@ -420,7 +420,6 @@ function useToggle(initial = false) {
 }
 
 function usePersistentToggle(storageKey = null, initial = false) {
-    console.log(storageKey, initial);
     const blah = localStorage.getItem(storageKey)
         ? localStorage.getItem(storageKey) === "true"
         : initial;
