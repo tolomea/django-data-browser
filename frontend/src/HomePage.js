@@ -41,11 +41,11 @@ function View(props) {
 }
 
 function Folder(props) {
-  const { parentName, folder } = props;
+  const { parentName, folder, foldersExpanded } = props;
   const fullName = `${parentName}.${folder.name}`;
   const [toggled, toggleLink] = usePersistentToggle(
     `${fullName}.toggle`,
-    false
+    foldersExpanded
   );
 
   return (
@@ -54,18 +54,18 @@ function Folder(props) {
         {toggleLink}
         {folder.name}
       </h2>
-      {toggled && <Entries entries={folder.entries} />}
+      {toggled && <Entries entries={folder.entries} {...{ foldersExpanded }} />}
     </div>
   );
 }
 
 function Entries(props) {
-  const { entries, parentName } = props;
+  const { entries, parentName, foldersExpanded } = props;
   return entries.map((entry, index) =>
     entry.type === "view" ? (
       <View key={index} view={entry} />
     ) : (
-      <Folder key={index} folder={entry} parentName={parentName} />
+      <Folder key={index} folder={entry} {...{ parentName, foldersExpanded }} />
     )
   );
 }
@@ -80,9 +80,17 @@ function SavedAndSharedViews(props) {
     <div className="SavedAndSharedViews">
       <div>
         <h1>Your Saved Views</h1>
-        <Entries entries={savedViews.saved} parentName="saved" />
+        <Entries
+          entries={savedViews.saved}
+          parentName="saved"
+          foldersExpanded={true}
+        />
         {!!savedViews.shared.length && <h1>Views Shared by Others</h1>}
-        <Entries entries={savedViews.shared} parentName="shared" />
+        <Entries
+          entries={savedViews.shared}
+          parentName="shared"
+          foldersExpanded={false}
+        />
       </div>
     </div>
   );
