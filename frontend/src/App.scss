@@ -332,7 +332,10 @@ a.Logo {
     }
   }
   h1 {
-    margin: 18px 0 9px 0;
+    margin: 20px 0 10px 0;
+  }
+  p {
+    margin: 0;
   }
   .ModelList {
     .AppModels {
@@ -343,12 +346,12 @@ a.Logo {
   .SavedAndSharedViews {
     .SavedView,
     .SavedViewsFolder {
-      margin: 10px 0 10px 0;
+      margin: 5px 0 10px 0;
       div {
         padding-left: 30px;
       }
       .SavedViewDetail {
-        padding: 0 0 0 10px;
+        padding: 0 0 0 20px;
       }
     }
   }
