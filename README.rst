@@ -355,7 +355,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Fix bug with shared views when using multiple authentication backends.                                   |
+| 4.1.1   | 2023-05-07 | Fix bug with shared views when using multiple authentication backends.                                   |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.1.0   | 2023-05-01 | | Support sharing of saved views between users.                                                          |
 |         |            | | Allow mixing of folders and views in the saved views section.                                          |
