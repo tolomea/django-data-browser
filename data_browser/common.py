@@ -9,6 +9,31 @@ from django.contrib.contenttypes.models import ContentType
 
 from . import version
 
+
+class Settings:
+    _defaults = {
+        "DATA_BROWSER_ALLOW_PUBLIC": False,
+        "DATA_BROWSER_AUTH_USER_COMPAT": True,
+        "DATA_BROWSER_DEFAULT_ROW_LIMIT": 1000,
+        "DATA_BROWSER_DEV": False,
+        "DATA_BROWSER_FE_DSN": None,
+        "DATA_BROWSER_ADMIN_FIELD_NAME": "admin",
+        "DATA_BROWSER_USING_DB": "default",
+        "DATA_BROWSER_ADMIN_OPTIONS": {},
+        "DATA_BROWSER_APPS_EXPANDED": True,
+    }
+
+    def __getattr__(self, name):
+        from django.conf import settings
+
+        if hasattr(settings, name):
+            return getattr(settings, name)
+        return self._defaults[name]
+
+
+settings = Settings()
+
+
 PUBLIC_PERM = "make_view_public"
 SHARE_PERM = "share_view"
 
@@ -22,7 +47,13 @@ def users_with_permission(permission):
 
     ct = ContentType.objects.get_for_model(View)
     perm = Permission.objects.get(codename=permission, content_type=ct)
-    return get_user_model().objects.with_perm(perm)
+    User = get_user_model()
+
+    qs = User.objects.none()
+    for backend_path in settings.AUTHENTICATION_BACKENDS:
+        qs |= User.objects.with_perm(perm, backend=backend_path)
+
+    return qs
 
 
 def str_user(user):
@@ -100,27 +131,3 @@ def add_request_info(request, *, view=False):
         "fields": set(),
         "calculated_fields": set(),
     }
-
-
-class Settings:
-    _defaults = {
-        "DATA_BROWSER_ALLOW_PUBLIC": False,
-        "DATA_BROWSER_AUTH_USER_COMPAT": True,
-        "DATA_BROWSER_DEFAULT_ROW_LIMIT": 1000,
-        "DATA_BROWSER_DEV": False,
-        "DATA_BROWSER_FE_DSN": None,
-        "DATA_BROWSER_ADMIN_FIELD_NAME": "admin",
-        "DATA_BROWSER_USING_DB": "default",
-        "DATA_BROWSER_ADMIN_OPTIONS": {},
-        "DATA_BROWSER_APPS_EXPANDED": True,
-    }
-
-    def __getattr__(self, name):
-        from django.conf import settings
-
-        if hasattr(settings, name):
-            return getattr(settings, name)
-        return self._defaults[name]
-
-
-settings = Settings()

@@ -132,6 +132,15 @@ class TestViewList:
             "shared": [],
         }
 
+    def test_with_multiple_aut_backends(self, admin_client, admin_user, view, settings):
+        settings.AUTHENTICATION_BACKENDS = [
+            "django.contrib.auth.backends.ModelBackend",
+            "django.contrib.auth.backends.ModelBackend",
+        ]
+
+        resp = admin_client.get("/data_browser/api/views/")
+        assert resp.status_code == 200
+
     def test_get_with_folders_and_shared_views(
         self, view, multiple_views, admin_user, other_user, get_list_summary
     ):
