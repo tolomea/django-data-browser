@@ -1512,6 +1512,17 @@ snapshots["test_query_ctx config"] = {
                     "toMany": False,
                     "type": "boolean",
                 },
+                "valid": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": False,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "Valid",
+                    "toMany": False,
+                    "type": "boolean",
+                },
             },
             "sortedFields": [
                 "id",
@@ -1531,6 +1542,7 @@ snapshots["test_query_ctx config"] = {
                 "public_slug",
                 "query",
                 "shared",
+                "valid",
             ],
         },
         "date": {
@@ -4871,6 +4883,17 @@ snapshots["test_query_ctx_m2m config"] = {
                     "toMany": False,
                     "type": "boolean",
                 },
+                "valid": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": False,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "Valid",
+                    "toMany": False,
+                    "type": "boolean",
+                },
             },
             "sortedFields": [
                 "id",
@@ -4890,6 +4913,7 @@ snapshots["test_query_ctx_m2m config"] = {
                 "public_slug",
                 "query",
                 "shared",
+                "valid",
             ],
         },
         "date": {
@@ -8230,6 +8254,17 @@ snapshots["test_query_html config"] = {
                     "toMany": False,
                     "type": "boolean",
                 },
+                "valid": {
+                    "actions": [],
+                    "canPivot": True,
+                    "choices": [],
+                    "concrete": False,
+                    "defaultSort": None,
+                    "model": None,
+                    "prettyName": "Valid",
+                    "toMany": False,
+                    "type": "boolean",
+                },
             },
             "sortedFields": [
                 "id",
@@ -8249,6 +8284,7 @@ snapshots["test_query_html config"] = {
                 "public_slug",
                 "query",
                 "shared",
+                "valid",
             ],
         },
         "date": {
