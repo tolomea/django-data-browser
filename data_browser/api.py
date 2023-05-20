@@ -14,7 +14,6 @@ from .common import (
 )
 from .models import View, global_data
 from .orm_admin import get_models
-from .query import BoundQuery
 from .util import group_by
 
 
@@ -64,13 +63,6 @@ def name_sort(entries):
 
 
 def serialize(orm_models, view):
-    query = view.get_query()
-    if query.model_name not in orm_models:  # pragma: no cover
-        valid = False
-    else:
-        bound_query = BoundQuery.bind(query, orm_models)
-        valid = bound_query.all_valid()
-
     return {
         **{
             api_field_name: getattr(view, model_field_name)
@@ -82,7 +74,7 @@ def serialize(orm_models, view):
         "createdTime": f"{view.created_time:%Y-%m-%d %H:%M:%S}",
         "pk": view.pk,
         "shared": bool(view.shared and view.name),
-        "valid": valid,
+        "valid": view.get_query().is_valid(orm_models),
         "can_edit": global_data.request.user == view.owner,
         "type": "view",
     }

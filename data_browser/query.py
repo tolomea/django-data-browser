@@ -131,6 +131,12 @@ class Query:
         )
         return f"{base_url}?{params}"
 
+    def is_valid(self, orm_models):
+        if self.model_name not in orm_models:
+            return False
+        bound_query = BoundQuery.bind(self, orm_models)
+        return bound_query.all_valid()
+
 
 @dataclasses.dataclass
 class BoundFilter:
