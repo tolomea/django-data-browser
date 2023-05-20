@@ -1,3 +1,5 @@
+from copy import copy
+
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.utils.html import format_html
@@ -36,9 +38,14 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             res = [fs for fs in res if fs[0] != "Public"]
         return res
 
-    def change_view(self, request, *args, **kwargs):
-        models.global_data.request = request
-        return super().change_view(request, *args, **kwargs)
+    def get_object(self, request, object_id, from_field=None):
+        res = super().get_object(request, object_id, from_field=from_field)
+
+        ddb_request = copy(request)
+        ddb_request.environ = request.environ
+        models.global_data.request = ddb_request
+
+        return res
 
     @staticmethod
     def open_view(obj):
