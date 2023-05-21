@@ -190,6 +190,10 @@ class BoundField:
             query_field.priority if orm_bound_field.concrete else None,
         )
 
+    def __post_init__(self):
+        self.error_message = None
+        self.is_valid = True
+
     @cached_property
     def path(self):
         return self.orm_bound_field.full_path

@@ -56,6 +56,7 @@ def _get_query_data(bound_query):
                 "sort": field.direction,
                 "priority": field.priority,
                 "pivoted": field.pivoted,
+                "errorMessage": field.error_message,
             }
             for field in bound_query.fields
         ],

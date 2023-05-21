@@ -12160,7 +12160,15 @@ snapshots["test_query_html_no_perms config"] = {
 snapshots["test_query_is_null_date_filter data"] = {
     "body": [[{}, {}, {}]],
     "cols": [{}],
-    "fields": [{"pathStr": "name", "pivoted": False, "priority": 0, "sort": "asc"}],
+    "fields": [
+        {
+            "errorMessage": None,
+            "pathStr": "name",
+            "pivoted": False,
+            "priority": 0,
+            "sort": "asc",
+        }
+    ],
     "filters": [
         {
             "errorMessage": None,
@@ -12181,9 +12189,27 @@ snapshots["test_query_json data"] = {
     "body": [[{}, {}]],
     "cols": [{}],
     "fields": [
-        {"pathStr": "size", "pivoted": False, "priority": 0, "sort": "dsc"},
-        {"pathStr": "name", "pivoted": False, "priority": 1, "sort": "asc"},
-        {"pathStr": "size_unit", "pivoted": False, "priority": None, "sort": None},
+        {
+            "errorMessage": None,
+            "pathStr": "size",
+            "pivoted": False,
+            "priority": 0,
+            "sort": "dsc",
+        },
+        {
+            "errorMessage": None,
+            "pathStr": "name",
+            "pivoted": False,
+            "priority": 1,
+            "sort": "asc",
+        },
+        {
+            "errorMessage": None,
+            "pathStr": "size_unit",
+            "pivoted": False,
+            "priority": None,
+            "sort": None,
+        },
     ],
     "filters": [
         {
@@ -12229,19 +12255,33 @@ snapshots["test_query_json_pivot data"] = {
     "cols": [{"created_time__month": "January"}, {"created_time__month": "February"}],
     "fields": [
         {
+            "errorMessage": None,
             "pathStr": "created_time__year",
             "pivoted": False,
             "priority": 0,
             "sort": "asc",
         },
         {
+            "errorMessage": None,
             "pathStr": "created_time__month",
             "pivoted": True,
             "priority": 1,
             "sort": "asc",
         },
-        {"pathStr": "id__count", "pivoted": False, "priority": None, "sort": None},
-        {"pathStr": "size__max", "pivoted": False, "priority": None, "sort": None},
+        {
+            "errorMessage": None,
+            "pathStr": "id__count",
+            "pivoted": False,
+            "priority": None,
+            "sort": None,
+        },
+        {
+            "errorMessage": None,
+            "pathStr": "size__max",
+            "pivoted": False,
+            "priority": None,
+            "sort": None,
+        },
     ],
     "filters": [],
     "formatHints": {
@@ -12312,9 +12352,27 @@ snapshots["test_query_qs_variants content"] = [
 
 snapshots["test_query_query query"] = {
     "fields": [
-        {"pathStr": "size", "pivoted": False, "priority": 0, "sort": "dsc"},
-        {"pathStr": "name", "pivoted": False, "priority": 1, "sort": "asc"},
-        {"pathStr": "size_unit", "pivoted": False, "priority": None, "sort": None},
+        {
+            "errorMessage": None,
+            "pathStr": "size",
+            "pivoted": False,
+            "priority": 0,
+            "sort": "dsc",
+        },
+        {
+            "errorMessage": None,
+            "pathStr": "name",
+            "pivoted": False,
+            "priority": 1,
+            "sort": "asc",
+        },
+        {
+            "errorMessage": None,
+            "pathStr": "size_unit",
+            "pivoted": False,
+            "priority": None,
+            "sort": None,
+        },
     ],
     "filters": [
         {
