@@ -243,7 +243,9 @@ class Query {
   removeFilter(index) {
     const newFilters = this.query.filters.slice();
     newFilters.splice(index, 1);
-    this.setQuery({ filters: newFilters });
+    const newFilterErrors = this.query.filterErrors.slice();
+    newFilterErrors.splice(index, 1);
+    this.setQuery({ filters: newFilters, filterErrors: newFilterErrors });
   }
 
   setFilterValue(index, value) {
