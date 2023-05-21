@@ -153,6 +153,9 @@ def _get_all_admin_fields(request):
                 yield f
 
     def visible(model_admin, request):
+        if not request.user:
+            return False
+
         has_attrs = all(
             hasattr(model_admin, a) for a in ["get_fieldsets", "model", "get_queryset"]
         )

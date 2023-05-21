@@ -332,6 +332,6 @@ class BoundQuery:
         return _orm_fields(self.body_fields)
 
     def all_valid(self):
-        fields_valid = all(f.is_valid for f in self.filters)
+        fields_valid = all(f.is_valid for f in self.fields)
         filters_valid = all(f.is_valid for f in self.filters)
         return fields_valid and filters_valid

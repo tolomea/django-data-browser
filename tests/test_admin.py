@@ -12,6 +12,15 @@ def view(admin_user):
     return View(model_name="app.model", fields="fa+0,fd-1,fn", query="bob__equals=fred")
 
 
+def get_field(res, name):
+    for fieldset in res.context[0]["adminform"]:
+        for line in fieldset:
+            for field in line:
+                if field.field["name"] == name:
+                    return field
+    return None
+
+
 def test_open_view(view, rf):
     expected = (
         '<a href="/data_browser/query/app.model/fa+0,fd-1,fn.html'
@@ -35,19 +44,33 @@ def test_change_form_links_have_full_url(view, admin_client):
     )
     assert res.status_code == 200
 
-    all_fields = [
-        field
-        for fieldset in res.context[0]["adminform"]
-        for line in fieldset
-        for field in line
-    ]
-    for field in all_fields:
-        if field.is_readonly and field.field["name"] == "public_link":
-            expected = f"http://testserver/data_browser/view/{view.public_slug}.csv"
-            assert field.contents() == expected
-            break
-    else:
-        assert False
+    expected = f"http://testserver/data_browser/view/{view.public_slug}.csv"
+    assert get_field(res, "public_link").contents() == expected
+
+
+def test_is_valid(view, admin_user, admin_client):
+    view.model_name = "data_browser.View"
+    view.fields = "id"
+    view.query = ""
+
+    # no owner, not valid
+    view.save()
+    res = admin_client.get(
+        f"http://testserver/admin/data_browser/view/{view.pk}/change/"
+    )
+    assert res.status_code == 200
+    assert "True" not in get_field(res, "valid").contents()
+    assert "False" in get_field(res, "valid").contents()
+
+    # all good, not valid
+    view.owner = admin_user
+    view.save()
+    res = admin_client.get(
+        f"http://testserver/admin/data_browser/view/{view.pk}/change/"
+    )
+    assert res.status_code == 200
+    assert "True" in get_field(res, "valid").contents()
+    assert "False" not in get_field(res, "valid").contents()
 
 
 @pytest.fixture
