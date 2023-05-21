@@ -17,6 +17,7 @@ class QueryField:
     priority: int = None
 
     def __post_init__(self):
+        self.path_str = self.path
         self.path = self.path.split("__")
         assert (self.direction is None) == (self.priority is None)
 
@@ -158,7 +159,10 @@ class BoundFilter:
             )
         else:
             self.error_message = "Unknown field"
-        self.is_valid = not self.error_message
+
+    @cached_property
+    def is_valid(self):
+        return not self.error_message
 
     @cached_property
     def path(self):
@@ -180,31 +184,45 @@ class BoundField:
     pivoted: bool
     direction: Optional[str]
     priority: Optional[int]
+    query_field: QueryField
 
     @classmethod
     def bind(cls, orm_bound_field, query_field):
-        return cls(
-            orm_bound_field,
-            query_field.pivoted and orm_bound_field.can_pivot,
-            query_field.direction if orm_bound_field.concrete else None,
-            query_field.priority if orm_bound_field.concrete else None,
-        )
+        if orm_bound_field:
+            return cls(
+                orm_bound_field,
+                query_field.pivoted and orm_bound_field.can_pivot,
+                query_field.direction if orm_bound_field.concrete else None,
+                query_field.priority if orm_bound_field.concrete else None,
+                query_field,
+            )
+        else:
+            return cls(
+                orm_bound_field,
+                query_field.pivoted,
+                query_field.direction,
+                query_field.priority,
+                query_field,
+            )
 
     def __post_init__(self):
-        self.error_message = None
-        self.is_valid = True
+        self.error_message = None if self.orm_bound_field else "Unknown field"
+
+    @cached_property
+    def is_valid(self):
+        return not self.error_message
 
     @cached_property
     def path(self):
-        return self.orm_bound_field.full_path
+        return self.query_field.path
 
     @cached_property
     def pretty_path(self):
-        return self.orm_bound_field.pretty_path
+        return self.orm_bound_field.pretty_path if self.orm_bound_field else None
 
     @cached_property
     def path_str(self):
-        return self.orm_bound_field.path_str
+        return self.query_field.path_str
 
 
 def _orm_fields(fields):
@@ -212,13 +230,12 @@ def _orm_fields(fields):
 
 
 class BoundQuery:
-    def __init__(self, model_name, fields, filters, limit, orm_model, bad_fields=None):
+    def __init__(self, model_name, fields, filters, limit, orm_model):
         self.model_name = model_name
         self.fields = fields
         self.filters = filters
         self.limit = limit
         self.orm_model = orm_model
-        self.bad_fields = bad_fields or []
 
     @classmethod
     def bind(cls, query, orm_models):
@@ -240,13 +257,9 @@ class BoundQuery:
         model_name = query.model_name
 
         fields = []
-        bad_fields = []
         for query_field in query.fields:
             orm_bound_field = get_orm_field(query_field.path)
-            if orm_bound_field:
-                fields.append(BoundField.bind(orm_bound_field, query_field))
-            else:
-                bad_fields.append(query_field)
+            fields.append(BoundField.bind(orm_bound_field, query_field))
 
         filters = []
         for query_filter in query.filters:
@@ -261,14 +274,17 @@ class BoundQuery:
             filters=filters,
             limit=query.arguments["limit"],
             orm_model=orm_models[model_name],
-            bad_fields=bad_fields,
         )
 
     @cached_property
     def sort_fields(self):
-        res = sorted((f for f in self.fields if f.direction), key=lambda f: f.priority)
+        res = sorted(
+            (f for f in self.valid_fields if f.direction), key=lambda f: f.priority
+        )
         # add all unsorted fields on the end of the sort to make stuff stable
-        res += sorted((f for f in self.fields if not f.direction), key=lambda f: f.path)
+        res += sorted(
+            (f for f in self.valid_fields if not f.direction), key=lambda f: f.path
+        )
         return res
 
     @cached_property
@@ -276,20 +292,28 @@ class BoundQuery:
         return [f for f in self.filters if f.is_valid]
 
     @cached_property
+    def valid_fields(self):
+        return [f for f in self.fields if f.is_valid]
+
+    @cached_property
     def col_fields(self):
-        return [f for f in self.fields if f.pivoted]
+        return [f for f in self.valid_fields if f.pivoted]
 
     @cached_property
     def row_fields(self):
-        return [f for f in self.fields if f.orm_bound_field.can_pivot and not f.pivoted]
+        return [
+            f
+            for f in self.valid_fields
+            if f.orm_bound_field.can_pivot and not f.pivoted
+        ]
 
     @cached_property
     def body_fields(self):
-        return [f for f in self.fields if not f.orm_bound_field.can_pivot]
+        return [f for f in self.valid_fields if not f.orm_bound_field.can_pivot]
 
     @cached_property
     def bound_fields(self):
-        return _orm_fields(self.fields)
+        return _orm_fields(self.valid_fields)
 
     @cached_property
     def bound_filters(self):
@@ -308,6 +332,6 @@ class BoundQuery:
         return _orm_fields(self.body_fields)
 
     def all_valid(self):
-        fields_valid = not self.bad_fields
+        fields_valid = all(f.is_valid for f in self.filters)
         filters_valid = all(f.is_valid for f in self.filters)
         return fields_valid and filters_valid

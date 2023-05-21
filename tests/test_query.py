@@ -270,32 +270,38 @@ class TestBoundQuery:
     def test_bad_field(self, orm_models):
         query = Query("app.model", [QueryField("yata")], [])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == [["yata"]]
+        assert [f.path for f in bound_query.valid_fields] == []
 
     def test_bad_field_lookup(self, orm_models):
         query = Query("app.model", [QueryField("fa__count__bob")], [])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == [["fa", "count", "bob"]]
+        assert [f.path for f in bound_query.valid_fields] == []
 
     def test_bad_fk(self, orm_models):
         query = Query("app.model", [QueryField("yata__yata")], [])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == [["yata", "yata"]]
+        assert [f.path for f in bound_query.valid_fields] == []
 
     def test_bad_fk_field(self, orm_models):
         query = Query("app.model", [QueryField("tom__yata")], [])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == [["tom", "yata"]]
+        assert [f.path for f in bound_query.valid_fields] == []
 
     def test_bad_fk_field_aggregate(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones__yata")], [])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == [["tom", "jones", "yata"]]
+        assert [f.path for f in bound_query.valid_fields] == []
 
     def test_bad_long_fk(self, orm_models):
         query = Query("app.model", [QueryField("yata__yata__yata")], [])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == [["yata", "yata", "yata"]]
+        assert [f.path for f in bound_query.valid_fields] == []
 
     def test_aggregate(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones__count")], [])
@@ -330,7 +336,8 @@ class TestBoundQuery:
     def test_fk(self, orm_models):
         query = Query("app.model", [QueryField("tom")], [])
         bound_query = BoundQuery.bind(query, orm_models)
-        assert [f.path for f in bound_query.fields] == []
+        assert [f.path for f in bound_query.fields] == [["tom"]]
+        assert [f.path for f in bound_query.valid_fields] == []
 
     def test_filter_calculated_field(self, orm_models):
         query = Query("app.model", [], [QueryFilter("fn", "equals", "fred")])
