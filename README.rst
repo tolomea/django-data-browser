@@ -356,6 +356,7 @@ Release History
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
 |         |            | | BREAKING: In JSON format move ``parsed`` and ``fitlerErrors`` onto the filters.                        |
+|         |            | | Display invalid fields (previously they were ignored).                                                 |
 |         |            | | Fix small bug when removing filters with errors.                                                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.1.1   | 2023-05-07 | Fix bug with shared views when using multiple authentication backends.                                   |

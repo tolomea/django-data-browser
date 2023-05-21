@@ -192,9 +192,10 @@ textarea::placeholder {
   }
 }
 
-/* Filters */
+/* Filters and InvalidFields*/
 
-.Filters {
+.Filters,
+.InvalidFields {
   margin: 0 auto;
   display: flex;
   align-items: center;

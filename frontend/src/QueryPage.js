@@ -202,6 +202,40 @@ function Filters(props) {
   );
 }
 
+function InvalidField(props) {
+  const { query, field, errorMessage } = props;
+
+  return (
+    <tr className="InvalidField">
+      <td>
+        {" "}
+        <SLink onClick={() => query.removeField(field)}>close</SLink>{" "}
+        {field.pathStr}
+      </td>
+      <td>
+        <p className="Error">{field.errorMessage}</p>
+      </td>
+    </tr>
+  );
+}
+
+function InvalidFields(props) {
+  const { query } = props;
+  const invalidFields = query.invalidFields();
+  if (!invalidFields.length) return "";
+  return (
+    <div className="InvalidFields">
+      <table>
+        <tbody>
+          {invalidFields.map((field, index) => (
+            <InvalidField {...{ query, index, field }} key={index} />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 function Field(props) {
   const { query, path, modelField } = props;
   const type = query.getType(modelField);
@@ -318,10 +352,11 @@ function QueryPageContent(props) {
     filters,
     overlay,
     formatHints,
+    limit,
   } = props;
 
   let results;
-  if (query.query.fields.length)
+  if (query.validFields().length)
     results = (
       <Results {...{ query, rows, cols, body, overlay, formatHints }} />
     );
@@ -352,12 +387,12 @@ function QueryPageContent(props) {
       <ModelSelector {...{ query, model }} />
       <Filters {...{ query, filters }} />
       <p>
-        <span className={length >= query.query.limit ? "Error" : ""}>
+        <span className={length >= limit ? "Error" : ""}>
           Limit:{" "}
           <input
             className="RowLimit"
             type="number"
-            value={query.query.limit}
+            value={limit}
             onChange={(event) => {
               query.setLimit(event.target.value);
             }}
@@ -376,6 +411,7 @@ function QueryPageContent(props) {
         />
       </p>
       {updateSavedViewLink}
+      <InvalidFields {...{ query }} />
       <div className="MainSpace">
         <div className="FieldsList">
           <div className="FieldsToggle">{fieldsToggleLink}</div>

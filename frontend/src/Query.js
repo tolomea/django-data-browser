@@ -92,7 +92,7 @@ class Query {
       {
         fields: this.query.fields.filter((f) => f.pathStr !== field.pathStr),
       },
-      modelField.canPivot
+      !field.errorMessage && modelField.canPivot
     );
   }
 
@@ -281,18 +281,26 @@ class Query {
     return getUrlForQuery(this.config.baseUrl, this.query, media);
   }
 
+  invalidFields() {
+    return this.query.fields.filter((f) => f.errorMessage);
+  }
+
+  validFields() {
+    return this.query.fields.filter((f) => !f.errorMessage);
+  }
+
   colFields() {
-    return this.query.fields.filter((f) => f.pivoted);
+    return this.validFields().filter((f) => f.pivoted);
   }
 
   rowFields() {
-    return this.query.fields.filter(
+    return this.validFields().filter(
       (f) => this.getField(f.pathStr).canPivot && !f.pivoted
     );
   }
 
   bodyFields() {
-    return this.query.fields.filter((f) => !this.getField(f.pathStr).canPivot);
+    return this.validFields().filter((f) => !this.getField(f.pathStr).canPivot);
   }
 
   prettyPathStr(pathStr) {
