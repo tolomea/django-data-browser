@@ -36,9 +36,14 @@ def get_results_flat(with_json, admin_ddb_request):
         data = get_results(admin_ddb_request, bound_query, orm_models, False)
 
         for f in bound_query.filters:
-            if f.err_message:
+            if f.error_message:
                 print(
-                    "filter error:", f.path_str, f.lookup, f.value, "->", f.err_message
+                    "filter error:",
+                    f.path_str,
+                    f.lookup,
+                    f.value,
+                    "->",
+                    f.error_message,
                 )
 
         return data["rows"]

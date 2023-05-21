@@ -153,12 +153,12 @@ class BoundFilter:
 
     def __post_init__(self):
         if self.orm_bound_field:
-            self.parsed, self.err_message = self.orm_bound_field.parse_lookup(
+            self.parsed, self.error_message = self.orm_bound_field.parse_lookup(
                 self.lookup, self.value
             )
         else:
-            self.err_message = "Unknown field"
-        self.is_valid = not self.err_message
+            self.error_message = "Unknown field"
+        self.is_valid = not self.error_message
 
     @cached_property
     def path(self):

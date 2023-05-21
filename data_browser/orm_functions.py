@@ -129,17 +129,17 @@ class OrmBoundFunctionField(OrmBoundField):
         return self._annotate_qs(qs, func)
 
     def parse_lookup(self, lookup, value):
-        parsed, err_message = super().parse_lookup(lookup, value)
+        parsed, error_message = super().parse_lookup(lookup, value)
         if (
             self.name in ["year", "iso_year"]
             and parsed is not None
             and lookup != "is_null"
         ):
             if parsed < 2:
-                err_message = "Can't filter to years less than 2"
+                error_message = "Can't filter to years less than 2"
             if parsed > 9998:
-                err_message = "Can't filter to years greater than 9998"
-        return parsed, err_message
+                error_message = "Can't filter to years greater than 9998"
+        return parsed, error_message
 
 
 class OrmFunctionField(OrmBaseField):

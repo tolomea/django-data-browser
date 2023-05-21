@@ -48,7 +48,7 @@ def _get_query_data(bound_query):
             }
             for filter_ in bound_query.filters
         ],
-        "filterErrors": [filter_.err_message for filter_ in bound_query.filters],
+        "filterErrors": [filter_.error_message for filter_ in bound_query.filters],
         "parsedFilterValues": [
             filter_.formatted_value() for filter_ in bound_query.filters
         ],
