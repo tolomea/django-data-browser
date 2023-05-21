@@ -355,7 +355,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | BREAKING: In JSON format move ``parsed`` and ``fitlerErrors`` onto the filters.                        |
+| 4.2.1   | 2023-05-21 | | BREAKING: In JSON format move ``parsed`` and ``fitlerErrors`` onto the filters.                        |
 |         |            | | Display invalid fields (previously they were ignored).                                                 |
 |         |            | | Fix small bug when removing filters with errors.                                                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
