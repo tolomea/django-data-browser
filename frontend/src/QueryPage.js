@@ -183,7 +183,7 @@ function Filter(props) {
 }
 
 function Filters(props) {
-  const { query, filterErrors, parsedFilterValues, filters } = props;
+  const { query, filters } = props;
   const [toggled, toggleLink] = useToggle(true);
   if (!filters.length) return "";
   return (
@@ -193,13 +193,7 @@ function Filters(props) {
         <table>
           <tbody>
             {filters.map((filter, index) => (
-              <Filter
-                {...{ query, index }}
-                {...filter}
-                key={index}
-                errorMessage={filterErrors[index]}
-                parsed={parsedFilterValues[index]}
-              />
+              <Filter {...{ query, index }} {...filter} key={index} />
             ))}
           </tbody>
         </table>
@@ -322,8 +316,6 @@ function QueryPageContent(props) {
     length,
     model,
     filters,
-    filterErrors,
-    parsedFilterValues,
     overlay,
     formatHints,
   } = props;
@@ -358,7 +350,7 @@ function QueryPageContent(props) {
   return (
     <div className="QueryPage">
       <ModelSelector {...{ query, model }} />
-      <Filters {...{ query, filters, filterErrors, parsedFilterValues }} />
+      <Filters {...{ query, filters }} />
       <p>
         <span className={length >= query.query.limit ? "Error" : ""}>
           Limit:{" "}
@@ -427,14 +419,7 @@ function QueryPage(props) {
 
     return doGet(url).then((response) => {
       setQuery((query) => ({
-        ...query,
-        body: response.body,
-        cols: response.cols,
-        rows: response.rows,
-        length: response.length,
-        formatHints: response.formatHints,
-        filterErrors: response.filterErrors,
-        parsedFilterValues: response.parsedFilterValues,
+        ...response,
       }));
       setStatus(fetchInProgress ? LOADING : undefined);
       return response;
@@ -496,13 +481,7 @@ function QueryPage(props) {
 
     if (!reload) return;
 
-    fetchResults(newState)
-      .then((response) => {
-        const res = { ...response, ...empty };
-        const req = { ...request };
-        assert.deepStrictEqual(res, req);
-      })
-      .catch(handleError);
+    fetchResults(newState).catch(handleError);
   };
 
   if (status === BOOTING) return "";

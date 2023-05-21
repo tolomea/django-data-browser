@@ -3,8 +3,6 @@ const empty = {
   cols: [{}],
   body: [[{}]],
   length: 0,
-  filterErrors: [],
-  parsedFilterValues: [],
   formatHints: {},
 };
 
@@ -243,9 +241,7 @@ class Query {
   removeFilter(index) {
     const newFilters = this.query.filters.slice();
     newFilters.splice(index, 1);
-    const newFilterErrors = this.query.filterErrors.slice();
-    newFilterErrors.splice(index, 1);
-    this.setQuery({ filters: newFilters, filterErrors: newFilterErrors });
+    this.setQuery({ filters: newFilters });
   }
 
   setFilterValue(index, value) {

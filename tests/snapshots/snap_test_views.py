@@ -12161,13 +12161,19 @@ snapshots["test_query_is_null_date_filter data"] = {
     "body": [[{}, {}, {}]],
     "cols": [{}],
     "fields": [{"pathStr": "name", "pivoted": False, "priority": 0, "sort": "asc"}],
-    "filterErrors": [None],
-    "filters": [{"lookup": "is_null", "pathStr": "created_time", "value": "NotNull"}],
+    "filters": [
+        {
+            "errorMessage": None,
+            "lookup": "is_null",
+            "parsed": "NotNull",
+            "pathStr": "created_time",
+            "value": "NotNull",
+        }
+    ],
     "formatHints": {"name": {}},
     "length": 3,
     "limit": 1000,
     "model": "core.Product",
-    "parsedFilterValues": ["NotNull"],
     "rows": [{"name": "a"}, {"name": "b"}, {"name": "c"}],
 }
 
@@ -12179,10 +12185,21 @@ snapshots["test_query_json data"] = {
         {"pathStr": "name", "pivoted": False, "priority": 1, "sort": "asc"},
         {"pathStr": "size_unit", "pivoted": False, "priority": None, "sort": None},
     ],
-    "filterErrors": [None, None],
     "filters": [
-        {"lookup": "lt", "pathStr": "size", "value": "2"},
-        {"lookup": "gt", "pathStr": "id", "value": "0"},
+        {
+            "errorMessage": None,
+            "lookup": "lt",
+            "parsed": 2.0,
+            "pathStr": "size",
+            "value": "2",
+        },
+        {
+            "errorMessage": None,
+            "lookup": "gt",
+            "parsed": 0.0,
+            "pathStr": "id",
+            "value": "0",
+        },
     ],
     "formatHints": {
         "name": {},
@@ -12198,7 +12215,6 @@ snapshots["test_query_json data"] = {
     "length": 2,
     "limit": 1000,
     "model": "core.Product",
-    "parsedFilterValues": [2.0, 0.0],
     "rows": [
         {"name": "a", "size": 1.0, "size_unit": "g"},
         {"name": "b", "size": 1.0, "size_unit": "g"},
@@ -12227,7 +12243,6 @@ snapshots["test_query_json_pivot data"] = {
         {"pathStr": "id__count", "pivoted": False, "priority": None, "sort": None},
         {"pathStr": "size__max", "pivoted": False, "priority": None, "sort": None},
     ],
-    "filterErrors": [],
     "filters": [],
     "formatHints": {
         "created_time__month": {},
@@ -12257,7 +12272,6 @@ snapshots["test_query_json_pivot data"] = {
     "length": 3,
     "limit": 1000,
     "model": "core.Product",
-    "parsedFilterValues": [],
     "rows": [{"created_time__year": 2020.0}, {"created_time__year": 2021.0}],
 }
 
@@ -12302,12 +12316,22 @@ snapshots["test_query_query query"] = {
         {"pathStr": "name", "pivoted": False, "priority": 1, "sort": "asc"},
         {"pathStr": "size_unit", "pivoted": False, "priority": None, "sort": None},
     ],
-    "filterErrors": [None, None],
     "filters": [
-        {"lookup": "lt", "pathStr": "size", "value": "2"},
-        {"lookup": "gt", "pathStr": "id", "value": "0"},
+        {
+            "errorMessage": None,
+            "lookup": "lt",
+            "parsed": 2.0,
+            "pathStr": "size",
+            "value": "2",
+        },
+        {
+            "errorMessage": None,
+            "lookup": "gt",
+            "parsed": 0.0,
+            "pathStr": "id",
+            "value": "0",
+        },
     ],
     "limit": 1000,
     "model": "core.Product",
-    "parsedFilterValues": [2.0, 0.0],
 }
