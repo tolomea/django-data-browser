@@ -1,13 +1,9 @@
-import threading
-
 import hyperlink
 from django.db import models
 from django.urls import reverse
 from django.utils import crypto, timezone
 
-from .common import PUBLIC_PERM, SHARE_PERM, settings
-
-global_data = threading.local()
+from .common import PUBLIC_PERM, SHARE_PERM, global_state, set_global_state, settings
 
 
 def get_id():
@@ -52,29 +48,33 @@ class View(models.Model):
         return self.get_query().get_full_url("html")
 
     def public_link(self):
-        if self.public:
-            if settings.DATA_BROWSER_ALLOW_PUBLIC:
-                url = reverse(
-                    "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
-                )
-                return global_data.request.build_absolute_uri(url)
+        with set_global_state(user=self.owner, public_view=True):
+            if self.public:
+                if settings.DATA_BROWSER_ALLOW_PUBLIC:
+                    url = reverse(
+                        "data_browser:view",
+                        kwargs={"pk": self.public_slug, "media": "csv"},
+                    )
+                    return global_state.request.build_absolute_uri(url)
+                else:
+                    return "Public Views are disabled in Django settings."
             else:
-                return "Public Views are disabled in Django settings."
-        else:
-            return "N/A"
+                return "N/A"
 
     def google_sheets_formula(self):
-        if self.public:
-            if settings.DATA_BROWSER_ALLOW_PUBLIC:
-                url = reverse(
-                    "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
-                )
-                url = global_data.request.build_absolute_uri(url)
-                return f'=importdata("{url}")'
+        with set_global_state(user=self.owner, public_view=True):
+            if self.public:
+                if settings.DATA_BROWSER_ALLOW_PUBLIC:
+                    url = reverse(
+                        "data_browser:view",
+                        kwargs={"pk": self.public_slug, "media": "csv"},
+                    )
+                    url = global_state.request.build_absolute_uri(url)
+                    return f'=importdata("{url}")'
+                else:
+                    return "Public Views are disabled in Django settings."
             else:
-                return "Public Views are disabled in Django settings."
-        else:
-            return "N/A"
+                return "N/A"
 
     def __str__(self):
         return f"{self.model_name} view: {self.name}"

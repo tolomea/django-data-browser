@@ -13,6 +13,8 @@ from data_browser.types import (
     StringChoiceType,
 )
 
+from .common import global_state, set_global_state
+
 
 def _fix_filter(models, field, parts, lookup, value):
     if lookup == "is_null":
@@ -46,14 +48,11 @@ def _fix_filter(models, field, parts, lookup, value):
 
 
 def forwards_0009(View):
-    from data_browser.views import add_request_info
-
     User = get_user_model()
-
+    user = User(is_superuser=True)
     request = RequestFactory().get(reverse("admin:index"))
-    request.user = User(is_superuser=True)
-    add_request_info(request)
-    models = get_models(request)
+    with set_global_state(request=request, user=user, public_view=False):
+        models = get_models(global_state.request)
 
     for view in View.objects.all():
         filters = []

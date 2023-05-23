@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
@@ -45,7 +47,7 @@ def test_change_form_links_have_full_url(view, admin_client):
     assert res.status_code == 200
 
     expected = f"http://testserver/data_browser/view/{view.public_slug}.csv"
-    assert get_field(res, "public_link").contents() == expected
+    assert expected in res.content.decode()
 
 
 def test_is_valid(view, admin_user, admin_client):
@@ -53,14 +55,17 @@ def test_is_valid(view, admin_user, admin_client):
     view.fields = "id"
     view.query = ""
 
-    # no owner, not valid
+    # no owner, validity unknown
     view.save()
     res = admin_client.get(
         f"http://testserver/admin/data_browser/view/{view.pk}/change/"
     )
     assert res.status_code == 200
-    assert "True" not in get_field(res, "valid").contents()
-    assert "False" in get_field(res, "valid").contents()
+    expected = (
+        r'<label>Valid:</label>\s*<div class="readonly"><img'
+        r' src="/static/admin/img/icon-unknown.svg" alt="None"></div>'
+    )
+    assert re.search(expected, res.content.decode())
 
     # all good, not valid
     view.owner = admin_user
@@ -69,8 +74,11 @@ def test_is_valid(view, admin_user, admin_client):
         f"http://testserver/admin/data_browser/view/{view.pk}/change/"
     )
     assert res.status_code == 200
-    assert "True" in get_field(res, "valid").contents()
-    assert "False" not in get_field(res, "valid").contents()
+    expected = (
+        r'<label>Valid:</label>\s*<div class="readonly"><img'
+        r' src="/static/admin/img/icon-yes.svg" alt="True"></div>'
+    )
+    assert re.search(expected, res.content.decode())
 
 
 @pytest.fixture

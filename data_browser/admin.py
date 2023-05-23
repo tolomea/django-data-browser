@@ -1,11 +1,9 @@
-from copy import copy
-
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.utils.html import format_html
 
 from . import models
-from .common import PUBLIC_PERM, add_request_info, has_permission
+from .common import PUBLIC_PERM, global_state, has_permission, set_global_state
 from .helpers import AdminMixin, attributes
 from .orm_admin import get_models
 
@@ -51,15 +49,10 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             res = [fs for fs in res if fs[0] != "Public"]
         return res
 
-    def get_object(self, request, object_id, from_field=None):
-        res = super().get_object(request, object_id, from_field=from_field)
-
-        ddb_request = copy(request)
-        ddb_request.environ = request.environ
-        ddb_request.user = res.owner
-        add_request_info(ddb_request)
-        models.global_data.request = ddb_request
-
+    def changeform_view(self, request, *args, **kwargs):
+        with set_global_state(request=request, set_ddb=False):
+            res = super().changeform_view(request, *args, **kwargs)
+            res.render()
         return res
 
     @staticmethod
@@ -70,8 +63,12 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
 
     @attributes(boolean=True)
     def valid(self, obj):
-        orm_models = get_models(models.global_data.request)
-        return obj.get_query().is_valid(orm_models)
+        if not obj.owner:
+            return None
+
+        with set_global_state(user=obj.owner, public_view=False):
+            orm_models = get_models(global_state.request)
+            return obj.get_query().is_valid(orm_models)
 
     def get_changeform_initial_data(self, request):
         get_results = super().get_changeform_initial_data(request)

@@ -1,6 +1,9 @@
 import logging
 import math
+import threading
 import traceback
+from contextlib import contextmanager
+from copy import copy
 
 from django import http
 from django.contrib.auth import get_user_model
@@ -125,9 +128,44 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
     return max(0, min(dp_for_sf, max_actual_dp, max_dp))
 
 
-def add_request_info(request, *, view=False):
-    request.data_browser = {
-        "public_view": view,
-        "fields": set(),
-        "calculated_fields": set(),
-    }
+class GlobalState(threading.local):
+    def __init__(self):
+        self.set_state(request=None)
+
+    def set_state(self, *, request):
+        self.request = request
+
+    def get_state(self):
+        return {"request": self.request}
+
+
+global_state = GlobalState()
+
+
+@contextmanager
+def set_global_state(*, request=None, user=None, public_view=None, set_ddb=True):
+    old = global_state.get_state()
+
+    if request is None:
+        assert global_state.request
+        request = global_state.request
+
+    new_request = copy(request)
+    new_request.environ = request.environ
+    if user:
+        new_request.user = user
+
+    if set_ddb:
+        assert public_view is not None
+        new_request.data_browser = {
+            "public_view": public_view,
+            "fields": set(),
+            "calculated_fields": set(),
+        }
+
+    global_state.set_state(request=new_request)
+
+    try:
+        yield
+    finally:
+        global_state.set_state(**old)

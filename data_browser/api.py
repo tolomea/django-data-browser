@@ -8,11 +8,12 @@ from .common import (
     SHARE_PERM,
     HttpResponse,
     JsonResponse,
-    add_request_info,
+    global_state,
+    set_global_state,
     str_user,
     users_with_permission,
 )
-from .models import View, global_data
+from .models import View
 from .orm_admin import get_models
 from .util import group_by
 
@@ -46,8 +47,8 @@ WRITABLE_FIELDS = [  # model_field_name, api_field_name, clean
 ]
 
 
-def deserialize(request):
-    data = json.loads(request.body)
+def deserialize(data):
+    data = json.loads(data)
 
     res = {
         model_field_name: clean(model_field_name, data[api_field_name])
@@ -75,7 +76,7 @@ def serialize(orm_models, view):
         "pk": view.pk,
         "shared": bool(view.shared and view.name),
         "valid": view.get_query().is_valid(orm_models),
-        "can_edit": global_data.request.user == view.owner,
+        "can_edit": global_state.request.user == view.owner,
         "type": "view",
     }
 
@@ -99,68 +100,66 @@ def serialize_folders(orm_models, views, *, include_invalid=False):
     return name_sort(res)
 
 
-def get_queryset(request):
-    return View.objects.filter(owner=request.user)
+def get_queryset(user):
+    return View.objects.filter(owner=user)
 
 
 @csrf.csrf_protect
 @admin_decorators.staff_member_required
 def view_list(request):
-    add_request_info(request)
-    global_data.request = request
-    orm_models = get_models(request)
+    with set_global_state(request=request, public_view=False):
+        orm_models = get_models(global_state.request)
 
-    if request.method == "GET":
-        # saved
-        saved_views = get_queryset(request)
-        saved_views_serialized = serialize_folders(
-            orm_models, saved_views, include_invalid=True
-        )
+        if request.method == "GET":
+            # saved
+            saved_views = get_queryset(request.user)
+            saved_views_serialized = serialize_folders(
+                orm_models, saved_views, include_invalid=True
+            )
 
-        # shared
-        shared_views = (
-            View.objects.exclude(owner=request.user)
-            .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
-            .exclude(name="")
-            .prefetch_related("owner")
-        )
-        shared_views_by_user = group_by(shared_views, lambda v: str_user(v.owner))
-        shared_views_serialized = []
-        for owner_name, shared_views in shared_views_by_user.items():
-            entries = serialize_folders(orm_models, shared_views)
-            if entries:
-                shared_views_serialized.append(
-                    {"name": owner_name, "type": "folder", "entries": entries}
-                )
+            # shared
+            shared_views = (
+                View.objects.exclude(owner=request.user)
+                .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
+                .exclude(name="")
+                .prefetch_related("owner")
+            )
+            shared_views_by_user = group_by(shared_views, lambda v: str_user(v.owner))
+            shared_views_serialized = []
+            for owner_name, shared_views in shared_views_by_user.items():
+                entries = serialize_folders(orm_models, shared_views)
+                if entries:
+                    shared_views_serialized.append(
+                        {"name": owner_name, "type": "folder", "entries": entries}
+                    )
 
-        # response
-        return JsonResponse(
-            {"saved": saved_views_serialized, "shared": shared_views_serialized}
-        )
-    elif request.method == "POST":
-        view = View.objects.create(owner=request.user, **deserialize(request))
-        return JsonResponse(serialize(orm_models, view))
-    else:
-        return HttpResponse(status=400)
+            # response
+            return JsonResponse(
+                {"saved": saved_views_serialized, "shared": shared_views_serialized}
+            )
+        elif request.method == "POST":
+            view = View.objects.create(owner=request.user, **deserialize(request.body))
+            return JsonResponse(serialize(orm_models, view))
+        else:
+            return HttpResponse(status=400)
 
 
 @csrf.csrf_protect
 @admin_decorators.staff_member_required
 def view_detail(request, pk):
-    add_request_info(request)
-    global_data.request = request
-    view = get_object_or_404(get_queryset(request), pk=pk)
-    orm_models = get_models(request)
+    with set_global_state(request=request, public_view=False):
+        view = get_object_or_404(get_queryset(request.user), pk=pk)
+        orm_models = get_models(global_state.request)
 
-    if request.method == "GET":
-        return JsonResponse(serialize(orm_models, view))
-    elif request.method == "PATCH":
-        for k, v in deserialize(request).items():
-            setattr(view, k, v)
-        view.save()
-        return JsonResponse(serialize(orm_models, view))
-    elif request.method == "DELETE":
-        view.delete()
-        return HttpResponse(status=204)
-    else:
-        return HttpResponse(status=400)
+        if request.method == "GET":
+            return JsonResponse(serialize(orm_models, view))
+        elif request.method == "PATCH":
+            for k, v in deserialize(request.body).items():
+                setattr(view, k, v)
+            view.save()
+            return JsonResponse(serialize(orm_models, view))
+        elif request.method == "DELETE":
+            view.delete()
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=400)

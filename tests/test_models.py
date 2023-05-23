@@ -1,6 +1,7 @@
 import pytest
 
-from data_browser.models import View, global_data
+from data_browser.common import global_state, set_global_state
+from data_browser.models import View
 
 
 @pytest.fixture
@@ -11,9 +12,8 @@ def view():
 @pytest.fixture
 def global_request(rf):
     request = rf.get("/")
-    global_data.request = request
-    yield request
-    global_data.request = None
+    with set_global_state(request=request, public_view=False):
+        yield global_state.request
 
 
 def test_str(view):

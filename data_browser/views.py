@@ -25,8 +25,9 @@ from .common import (
     SHARE_PERM,
     HttpResponse,
     JsonResponse,
-    add_request_info,
+    global_state,
     has_permission,
+    set_global_state,
     settings,
 )
 from .format_csv import get_csv_rows
@@ -162,9 +163,9 @@ def _get_config(request):
 
 @admin_decorators.staff_member_required
 def query_ctx(request, *, model_name="", fields=""):
-    add_request_info(request)
-    config = _get_config(request)
-    return JsonResponse(config)
+    with set_global_state(request=request, user=request.user, public_view=False):
+        config = _get_config(global_state.request)
+        return JsonResponse(config)
 
 
 def admin_action(request, model_name, fields):
@@ -178,7 +179,7 @@ def admin_action(request, model_name, fields):
     params = hyperlink.parse(request.get_full_path()).query
     query = Query.from_request(model_name, fields, params)
 
-    orm_models = get_models(request)
+    orm_models = get_models(global_state.request)
     if query.model_name not in orm_models:
         raise http.Http404(f"'{query.model_name}' does not exist")  # pragma: no cover
 
@@ -189,109 +190,121 @@ def admin_action(request, model_name, fields):
     if not bound_field.field.actions or action not in bound_field.field.actions:
         raise http.Http404(f"bad action '{action}'")  # pragma: no cover
 
-    results = get_result_list(request, bound_query)
+    results = get_result_list(global_state.request, bound_query)
 
     pks = {row[bound_field.queryset_path_str] for row in results}
     pks -= {None}
 
     model_name = bound_field.field.model_name
-    return orm_models[model_name].get_http_request_for_action(request, action, pks)
+    return orm_models[model_name].get_http_request_for_action(
+        global_state.request, action, pks
+    )
 
 
 @csrf.csrf_protect
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
-    add_request_info(request)
+    with set_global_state(request=request, user=request.user, public_view=False):
+        if global_state.request.method == "POST":
+            return admin_action(request, model_name, fields)
 
-    if request.method == "POST":
-        return admin_action(request, model_name, fields)
+        config = _get_config(global_state.request)
+        config = json.dumps(config, cls=DjangoJSONEncoder)
+        config = (
+            config.replace("<", "\\u003C")
+            .replace(">", "\\u003E")
+            .replace("&", "\\u0026")
+        )
 
-    config = _get_config(request)
-    config = json.dumps(config, cls=DjangoJSONEncoder)
-    config = (
-        config.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
-    )
+        if settings.DATA_BROWSER_DEV:  # pragma: no cover
+            try:
+                response = _get_from_js_dev_server(request, "get")
+            except Exception as e:
+                return HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
 
-    if settings.DATA_BROWSER_DEV:  # pragma: no cover
-        try:
-            response = _get_from_js_dev_server(request, "get")
-        except Exception as e:
-            return HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
+            template = engines["django"].from_string(response.text)
+        else:
+            template = loader.get_template("data_browser/index.html")
 
-        template = engines["django"].from_string(response.text)
-    else:
-        template = loader.get_template("data_browser/index.html")
-
-    return TemplateResponse(request, template, {"config": config, "version": version})
+        return TemplateResponse(
+            request, template, {"config": config, "version": version}
+        )
 
 
 @admin_decorators.staff_member_required
 def query(request, *, model_name, fields="", media):
-    add_request_info(request)
+    with set_global_state(request=request, user=request.user, public_view=False):
+        params = hyperlink.parse(request.get_full_path()).query
 
-    params = hyperlink.parse(request.get_full_path()).query
-
-    if media.startswith("profile") or media.startswith("pstats"):
-        if "_" in media:
-            prof_media, media = media.split("_")
-        else:
-            prof_media = media
-            media = "json"
-
-        profiler = cProfile.Profile()
-        try:
-            profiler.enable()
-
-            query = Query.from_request(model_name, fields, params)
-            for x in _data_response(request, query, media, privileged=True):
-                pass
-
-            profiler.disable()
-
-            if prof_media == "profile":
-                buffer = io.StringIO()
-                stats = pstats.Stats(profiler, stream=buffer)
-                stats.sort_stats("cumulative").print_stats(50)
-                stats.sort_stats("time").print_stats(50)
-                buffer.seek(0)
-                return HttpResponse(buffer, content_type="text/plain")
-            elif prof_media == "pstats":
-                buffer = io.BytesIO()
-                marshal.dump(pstats.Stats(profiler).stats, buffer)
-                buffer.seek(0)
-                response = HttpResponse(buffer, content_type="application/octet-stream")
-                response["Content-Disposition"] = (
-                    "attachment;"
-                    f" filename={query.model_name}-{timezone.now().isoformat()}.pstats"
-                )
-                return response
+        if media.startswith("profile") or media.startswith("pstats"):
+            if "_" in media:
+                prof_media, media = media.split("_")
             else:
-                raise http.Http404(f"Bad file format {prof_media} requested")
-        finally:
-            if profiler:  # pragma: no branch
+                prof_media = media
+                media = "json"
+
+            profiler = cProfile.Profile()
+            try:
+                profiler.enable()
+
+                query = Query.from_request(model_name, fields, params)
+                for x in _data_response(
+                    global_state.request, query, media, privileged=True
+                ):
+                    pass
+
                 profiler.disable()
-    else:
-        query = Query.from_request(model_name, fields, params)
-        return _data_response(request, query, media, privileged=True)
+
+                if prof_media == "profile":
+                    buffer = io.StringIO()
+                    stats = pstats.Stats(profiler, stream=buffer)
+                    stats.sort_stats("cumulative").print_stats(50)
+                    stats.sort_stats("time").print_stats(50)
+                    buffer.seek(0)
+                    return HttpResponse(buffer, content_type="text/plain")
+                elif prof_media == "pstats":
+                    buffer = io.BytesIO()
+                    marshal.dump(pstats.Stats(profiler).stats, buffer)
+                    buffer.seek(0)
+                    response = HttpResponse(
+                        buffer, content_type="application/octet-stream"
+                    )
+                    response["Content-Disposition"] = (
+                        "attachment;"
+                        f" filename={query.model_name}-{timezone.now().isoformat()}.pstats"
+                    )
+                    return response
+                else:
+                    raise http.Http404(f"Bad file format {prof_media} requested")
+            finally:
+                if profiler:  # pragma: no branch
+                    profiler.disable()
+        else:
+            query = Query.from_request(model_name, fields, params)
+            return _data_response(global_state.request, query, media, privileged=True)
 
 
 def view(request, pk, media):
-    add_request_info(request, view=True)
-
     view = get_object_or_404(View.objects.filter(public=True), public_slug=pk)
-    if (
-        # some of these are checked by the admin but this is a good time to be paranoid
-        view.owner.is_active
-        and view.owner.is_staff
-        and has_permission(view.owner, PUBLIC_PERM)
-        and settings.DATA_BROWSER_ALLOW_PUBLIC
-    ):
-        request.user = view.owner  # public views are run as the person who owns them
-        query = view.get_query()
-        return _data_response(request, query, media, privileged=False, strict=True)
-    else:
-        raise http.Http404("No View matches the given query.")
+    with set_global_state(request=request, user=view.owner, public_view=True):
+        if (
+            # some of these are checked by the admin but this is a good time to be paranoid
+            view.owner
+            and view.owner.is_active
+            and view.owner.is_staff
+            and has_permission(view.owner, PUBLIC_PERM)
+            and settings.DATA_BROWSER_ALLOW_PUBLIC
+        ):
+            request.user = (
+                view.owner
+            )  # public views are run as the person who owns them
+            query = view.get_query()
+            return _data_response(
+                global_state.request, query, media, privileged=False, strict=True
+            )
+        else:
+            raise http.Http404("No View matches the given query.")
 
 
 class Echo:
