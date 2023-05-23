@@ -162,7 +162,7 @@ def _get_all_admin_fields():
 
     def visible(model_admin):
         if not request.user:
-            return False
+            return False  # pragma: no cover
 
         has_attrs = all(
             hasattr(model_admin, a) for a in ["get_fieldsets", "model", "get_queryset"]
