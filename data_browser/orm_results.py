@@ -4,6 +4,7 @@ from collections import defaultdict
 
 from django.core.serializers.json import DjangoJSONEncoder
 
+from .common import global_state
 from .orm_lookups import get_django_filter
 from .query import BoundQuery
 from .types import DSC
@@ -213,24 +214,26 @@ def _format_grid(data, col_keys, row_keys, fields, objs):
     return body_data
 
 
-def get_results(request, bound_query, orm_models, with_format_hints):
+def get_results(bound_query, orm_models, with_format_hints):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": [], "length": 0}
 
-    res = get_result_list(request, bound_query)
+    res = get_result_list(global_state.request, bound_query)
 
     if not res:
         return {"rows": [], "cols": [], "body": [], "length": 0}
 
     if bound_query.bound_col_fields and bound_query.bound_row_fields:
         # need to fetch rows and col titles seperately to get correct sort
-        rows_res = get_result_list(request, _rows_sub_query(bound_query))
-        cols_res = get_result_list(request, _cols_sub_query(bound_query))
+        rows_res = get_result_list(global_state.request, _rows_sub_query(bound_query))
+        cols_res = get_result_list(global_state.request, _cols_sub_query(bound_query))
     else:
         rows_res = res
         cols_res = res
 
-    objs = _get_objs_for_calculated_fields(request, bound_query, orm_models, res)
+    objs = _get_objs_for_calculated_fields(
+        global_state.request, bound_query, orm_models, res
+    )
 
     if bound_query.bound_col_fields or bound_query.bound_body_fields:
         raw_body_data, raw_row_data, raw_col_data = _get_data_and_all_keys(

@@ -33,7 +33,7 @@ def get_results_flat(with_json, admin_ddb_request):
             "json.JsonModel", ",".join(fields), list(filters.items())
         )
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(admin_ddb_request, bound_query, orm_models, False)
+        data = get_results(bound_query, orm_models, False)
 
         for f in bound_query.filters:
             if f.error_message:

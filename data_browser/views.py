@@ -318,7 +318,7 @@ def _data_response(query, media, privileged=False, strict=False):
         return http.HttpResponseBadRequest()
 
     if media == "csv":
-        results = get_results(global_state.request, bound_query, orm_models, False)
+        results = get_results(bound_query, orm_models, False)
         csv_rows = get_csv_rows(bound_query, results)
 
         writer = csv.writer(Echo())
@@ -330,7 +330,7 @@ def _data_response(query, media, privileged=False, strict=False):
         )
         return response
     elif media == "json":
-        results = get_results(global_state.request, bound_query, orm_models, True)
+        results = get_results(bound_query, orm_models, True)
         resp = _get_query_data(bound_query) if privileged else {}
         resp.update(results)
         return JsonResponse(resp)

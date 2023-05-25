@@ -111,7 +111,7 @@ def get_product_pivot(admin_ddb_request, get_orm_models, django_assert_num_queri
         query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
-            data = get_results(admin_ddb_request, bound_query, orm_models, False)
+            data = get_results(bound_query, orm_models, False)
             return {
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),
@@ -204,7 +204,7 @@ def test_bad_storage(monkeypatch, admin_ddb_request):
     def get_product_flat(*args, **kwargs):
         query = Query.from_request("core.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(admin_ddb_request, bound_query, orm_models, False)
+        data = get_results(bound_query, orm_models, False)
         return flatten_table(bound_query.fields, data["rows"])
 
     # some storage backends will hard fail if their underlying storage isn't
