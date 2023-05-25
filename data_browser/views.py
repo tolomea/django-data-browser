@@ -118,8 +118,8 @@ def _get_model_fields(model_name, orm_models):
     }
 
 
-def _get_config(request):
-    orm_models = get_models(request)
+def _get_config():
+    orm_models = get_models(global_state.request)
     types = {
         name: {
             "lookups": {
@@ -153,8 +153,8 @@ def _get_config(request):
             {"appName": app_name, "modelNames": sorted(model_names)}
             for app_name, model_names in sorted(model_names_by_app.items())
         ],
-        "canMakePublic": has_permission(request.user, PUBLIC_PERM),
-        "canShare": has_permission(request.user, SHARE_PERM),
+        "canMakePublic": has_permission(global_state.request.user, PUBLIC_PERM),
+        "canShare": has_permission(global_state.request.user, SHARE_PERM),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
         "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,
@@ -164,7 +164,7 @@ def _get_config(request):
 @admin_decorators.staff_member_required
 def query_ctx(request, *, model_name="", fields=""):
     with set_global_state(request=request, user=request.user, public_view=False):
-        config = _get_config(global_state.request)
+        config = _get_config()
         return JsonResponse(config)
 
 
@@ -209,7 +209,7 @@ def query_html(request, *, model_name="", fields=""):
         if request.method == "POST":
             return admin_action(request, model_name, fields)
 
-        config = _get_config(global_state.request)
+        config = _get_config()
         config = json.dumps(config, cls=DjangoJSONEncoder)
         config = (
             config.replace("<", "\\u003C")
