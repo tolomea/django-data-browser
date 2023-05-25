@@ -249,9 +249,7 @@ def query(request, *, model_name, fields="", media):
                 profiler.enable()
 
                 query = Query.from_request(model_name, fields, params)
-                for x in _data_response(
-                    global_state.request, query, media, privileged=True
-                ):
+                for x in _data_response(query, media, privileged=True):
                     pass
 
                 profiler.disable()
@@ -282,7 +280,7 @@ def query(request, *, model_name, fields="", media):
                     profiler.disable()
         else:
             query = Query.from_request(model_name, fields, params)
-            return _data_response(global_state.request, query, media, privileged=True)
+            return _data_response(query, media, privileged=True)
 
 
 def view(request, pk, media):
@@ -300,9 +298,7 @@ def view(request, pk, media):
                 view.owner
             )  # public views are run as the person who owns them
             query = view.get_query()
-            return _data_response(
-                global_state.request, query, media, privileged=False, strict=True
-            )
+            return _data_response(query, media, privileged=False, strict=True)
         else:
             raise http.Http404("No View matches the given query.")
 
@@ -312,8 +308,8 @@ class Echo:
         return value
 
 
-def _data_response(request, query, media, privileged=False, strict=False):
-    orm_models = get_models(request)
+def _data_response(query, media, privileged=False, strict=False):
+    orm_models = get_models(global_state.request)
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)
@@ -322,7 +318,7 @@ def _data_response(request, query, media, privileged=False, strict=False):
         return http.HttpResponseBadRequest()
 
     if media == "csv":
-        results = get_results(request, bound_query, orm_models, False)
+        results = get_results(global_state.request, bound_query, orm_models, False)
         csv_rows = get_csv_rows(bound_query, results)
 
         writer = csv.writer(Echo())
@@ -334,7 +330,7 @@ def _data_response(request, query, media, privileged=False, strict=False):
         )
         return response
     elif media == "json":
-        results = get_results(request, bound_query, orm_models, True)
+        results = get_results(global_state.request, bound_query, orm_models, True)
         resp = _get_query_data(bound_query) if privileged else {}
         resp.update(results)
         return JsonResponse(resp)
@@ -342,7 +338,9 @@ def _data_response(request, query, media, privileged=False, strict=False):
         resp = _get_query_data(bound_query)
         return JsonResponse(resp)
     elif privileged and media in ["sql", "explain", "qs"]:
-        query_set = get_result_queryset(request, bound_query, media == "qs")
+        query_set = get_result_queryset(
+            global_state.request, bound_query, media == "qs"
+        )
         if isinstance(query_set, list):
             res = "Not available for pure aggregates"
         else:
