@@ -71,6 +71,6 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             return obj.get_query().is_valid(orm_models)
 
     def get_changeform_initial_data(self, request):
-        get_results = super().get_changeform_initial_data(request)
-        get_results["owner"] = request.user.pk
-        return get_results
+        res = super().get_changeform_initial_data(request)
+        res["owner"] = request.user.pk
+        return res
