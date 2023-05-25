@@ -16,7 +16,7 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .common import JsonResponse, debug_log, settings
+from .common import JsonResponse, debug_log, global_state, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_debug import DebugQS
@@ -419,12 +419,14 @@ def _get_fields_for_model(request, model, admin, admin_fields):
     return orm_models
 
 
-def get_models(request):
-    model_admins, admin_fields = _get_all_admin_fields(request)
+def get_models():
+    model_admins, admin_fields = _get_all_admin_fields(global_state.request)
     models = {}
     for model in admin_fields:
         models.update(
-            _get_fields_for_model(request, model, model_admins[model], admin_fields)
+            _get_fields_for_model(
+                global_state.request, model, model_admins[model], admin_fields
+            )
         )
     types = {
         type_.name: OrmModel(get_fields_for_type(type_)) for type_ in TYPES.values()

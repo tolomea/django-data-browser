@@ -34,7 +34,7 @@ def with_arrays(db):
 @pytest.fixture
 def get_results_flat(with_arrays, admin_ddb_request):
     def helper(*fields, **filters):
-        orm_models = get_models(admin_ddb_request)
+        orm_models = get_models()
         query = Query.from_request(
             "array.ArrayModel", ",".join(fields), list(filters.items())
         )
@@ -195,7 +195,7 @@ def test_char_choice_array_equals(get_results_flat):
     ],
 )
 def test_0009(admin_ddb_request, with_arrays, before, after):
-    orm_models = get_models(admin_ddb_request)
+    orm_models = get_models()
     valid = int("wtf" not in before)
 
     view = View.objects.create(model_name="array.ArrayModel", query=before)

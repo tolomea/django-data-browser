@@ -3,7 +3,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 from django.utils.html import format_html
 
 from . import models
-from .common import PUBLIC_PERM, global_state, has_permission, set_global_state
+from .common import PUBLIC_PERM, has_permission, set_global_state
 from .helpers import AdminMixin, attributes
 from .orm_admin import get_models
 
@@ -67,7 +67,7 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             return None
 
         with set_global_state(user=obj.owner, public_view=False):
-            orm_models = get_models(global_state.request)
+            orm_models = get_models()
             return obj.get_query().is_valid(orm_models)
 
     def get_changeform_initial_data(self, request):

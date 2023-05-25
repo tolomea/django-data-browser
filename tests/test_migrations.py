@@ -8,7 +8,7 @@ from data_browser.query import BoundQuery
 
 @pytest.fixture
 def models(admin_ddb_request):
-    return get_models(admin_ddb_request)
+    return get_models()
 
 
 @pytest.mark.django_db

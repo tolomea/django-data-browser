@@ -119,7 +119,7 @@ def _get_model_fields(model_name, orm_models):
 
 
 def _get_config():
-    orm_models = get_models(global_state.request)
+    orm_models = get_models()
     types = {
         name: {
             "lookups": {
@@ -179,7 +179,7 @@ def admin_action(request, model_name, fields):
     params = hyperlink.parse(request.get_full_path()).query
     query = Query.from_request(model_name, fields, params)
 
-    orm_models = get_models(global_state.request)
+    orm_models = get_models()
     if query.model_name not in orm_models:
         raise http.Http404(f"'{query.model_name}' does not exist")  # pragma: no cover
 
@@ -309,7 +309,7 @@ class Echo:
 
 
 def _data_response(query, media, privileged=False, strict=False):
-    orm_models = get_models(global_state.request)
+    orm_models = get_models()
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)

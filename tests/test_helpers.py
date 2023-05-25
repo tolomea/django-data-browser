@@ -88,6 +88,6 @@ class TestAdminMixin:
 
 
 def test_admin_options_setting(admin_ddb_request, settings):
-    assert "core.InAdmin" in get_models(admin_ddb_request)
+    assert "core.InAdmin" in get_models()
     settings.DATA_BROWSER_ADMIN_OPTIONS = {"tests.core.admin.InAdmin": {"ignore": True}}
-    assert "core.InAdmin" not in get_models(admin_ddb_request)
+    assert "core.InAdmin" not in get_models()

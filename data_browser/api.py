@@ -108,7 +108,7 @@ def get_queryset(user):
 @admin_decorators.staff_member_required
 def view_list(request):
     with set_global_state(request=request, public_view=False):
-        orm_models = get_models(global_state.request)
+        orm_models = get_models()
 
         if request.method == "GET":
             # saved
@@ -149,7 +149,7 @@ def view_list(request):
 def view_detail(request, pk):
     with set_global_state(request=request, public_view=False):
         view = get_object_or_404(get_queryset(request.user), pk=pk)
-        orm_models = get_models(global_state.request)
+        orm_models = get_models()
 
         if request.method == "GET":
             return JsonResponse(serialize(orm_models, view))

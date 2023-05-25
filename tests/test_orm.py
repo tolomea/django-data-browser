@@ -96,7 +96,7 @@ def pivot_products(db):
 
 @pytest.fixture
 def get_orm_models(admin_ddb_request):
-    return lambda: get_models(admin_ddb_request)
+    return lambda: get_models()
 
 
 @pytest.fixture
@@ -199,7 +199,7 @@ def test_bad_storage(monkeypatch, admin_ddb_request):
     default_storage._wrapped = empty
 
     # copy what the fixture does
-    orm_models = get_models(admin_ddb_request)
+    orm_models = get_models()
 
     def get_product_flat(*args, **kwargs):
         query = Query.from_request("core.Product", *args)
@@ -786,7 +786,7 @@ class TestPermissions:
             user.user_permissions.add(Permission.objects.get(codename=f"change_{perm}"))
 
         ddb_request.user = user
-        return get_models(ddb_request)
+        return get_models()
 
     @pytest.mark.django_db
     def test_all_perms(self, ddb_request):

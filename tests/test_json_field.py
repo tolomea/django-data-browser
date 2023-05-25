@@ -28,7 +28,7 @@ def with_json(db):
 @pytest.fixture
 def get_results_flat(with_json, admin_ddb_request):
     def helper(*fields, **filters):
-        orm_models = get_models(admin_ddb_request)
+        orm_models = get_models()
         query = Query.from_request(
             "json.JsonModel", ",".join(fields), list(filters.items())
         )

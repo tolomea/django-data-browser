@@ -13,7 +13,7 @@ from data_browser.types import (
     StringChoiceType,
 )
 
-from .common import global_state, set_global_state
+from .common import set_global_state
 
 
 def _fix_filter(models, field, parts, lookup, value):
@@ -52,7 +52,7 @@ def forwards_0009(View):
     user = User(is_superuser=True)
     request = RequestFactory().get(reverse("admin:index"))
     with set_global_state(request=request, user=user, public_view=False):
-        models = get_models(global_state.request)
+        models = get_models()
 
     for view in View.objects.all():
         filters = []
