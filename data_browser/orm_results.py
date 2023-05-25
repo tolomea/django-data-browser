@@ -59,17 +59,17 @@ def _rows_sub_query(bound_query):
     )
 
 
-def get_result_queryset(request, bound_query, debug=False):
+def get_result_queryset(bound_query, debug=False):
     all_fields = {f.queryset_path_str: f for f in bound_query.bound_fields}
     all_fields.update({f.queryset_path_str: f for f in bound_query.bound_filters})
 
     qs = bound_query.orm_model.get_queryset(
-        request, {f.split("__")[0] for f in all_fields}, debug=debug
+        global_state.request, {f.split("__")[0] for f in all_fields}, debug=debug
     )
 
     # sql functions and qs annotations
     for field in all_fields.values():
-        qs = field.annotate(request, qs, debug=debug)
+        qs = field.annotate(global_state.request, qs, debug=debug)
 
     # filter normal and sql function fields (aka __date)
     for filter_ in bound_query.valid_filters:
@@ -121,8 +121,8 @@ def get_result_queryset(request, bound_query, debug=False):
     return qs[: bound_query.limit]
 
 
-def get_result_list(request, bound_query):
-    return list(get_result_queryset(request, bound_query))
+def get_result_list(bound_query):
+    return list(get_result_queryset(bound_query))
 
 
 def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
@@ -218,15 +218,15 @@ def get_results(bound_query, orm_models, with_format_hints):
     if not bound_query.fields:
         return {"rows": [], "cols": [], "body": [], "length": 0}
 
-    res = get_result_list(global_state.request, bound_query)
+    res = get_result_list(bound_query)
 
     if not res:
         return {"rows": [], "cols": [], "body": [], "length": 0}
 
     if bound_query.bound_col_fields and bound_query.bound_row_fields:
         # need to fetch rows and col titles seperately to get correct sort
-        rows_res = get_result_list(global_state.request, _rows_sub_query(bound_query))
-        cols_res = get_result_list(global_state.request, _cols_sub_query(bound_query))
+        rows_res = get_result_list(_rows_sub_query(bound_query))
+        cols_res = get_result_list(_cols_sub_query(bound_query))
     else:
         rows_res = res
         cols_res = res

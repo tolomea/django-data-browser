@@ -190,7 +190,7 @@ def admin_action(request, model_name, fields):
     if not bound_field.field.actions or action not in bound_field.field.actions:
         raise http.Http404(f"bad action '{action}'")  # pragma: no cover
 
-    results = get_result_list(global_state.request, bound_query)
+    results = get_result_list(bound_query)
 
     pks = {row[bound_field.queryset_path_str] for row in results}
     pks -= {None}
@@ -206,7 +206,7 @@ def admin_action(request, model_name, fields):
 @admin_decorators.staff_member_required
 def query_html(request, *, model_name="", fields=""):
     with set_global_state(request=request, user=request.user, public_view=False):
-        if global_state.request.method == "POST":
+        if request.method == "POST":
             return admin_action(request, model_name, fields)
 
         config = _get_config(global_state.request)
@@ -338,9 +338,7 @@ def _data_response(query, media, privileged=False, strict=False):
         resp = _get_query_data(bound_query)
         return JsonResponse(resp)
     elif privileged and media in ["sql", "explain", "qs"]:
-        query_set = get_result_queryset(
-            global_state.request, bound_query, media == "qs"
-        )
+        query_set = get_result_queryset(bound_query, media == "qs")
         if isinstance(query_set, list):
             res = "Not available for pure aggregates"
         else:
