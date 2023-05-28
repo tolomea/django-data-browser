@@ -56,7 +56,7 @@ class OrmModel:
     def get_queryset(self, fields=(), debug=False):
         return admin_get_queryset(self.admin, fields, debug=debug)
 
-    def get_http_request_for_action(self, request, action, pks):
+    def get_http_request_for_action(self, action, pks):
         actions = admin_get_actions(self.admin)
         if action not in actions:
             raise http.Http404(f"'{action}' unknown action")  # pragma: no cover
@@ -64,7 +64,7 @@ class OrmModel:
         return JsonResponse(
             {
                 "method": "post",
-                "url": _get_option(self.admin, "action_url", request),
+                "url": _get_option(self.admin, "action_url", global_state.request),
                 "data": [
                     ("action", action),
                     ("select_across", 0),
@@ -329,7 +329,7 @@ def _make_json_sub_module(model_name, field_types):
     return OrmModel(fields)
 
 
-def _get_fields_for_model(request, model, admin, admin_fields):
+def _get_fields_for_model(model, admin, admin_fields):
     fields = {}
     orm_models = {}
 
@@ -398,7 +398,9 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
             rel_name = field_type.name
             if field_type is JSONType:
-                json_fields = _get_option(admin, "json_fields", request).get(field_name)
+                json_fields = _get_option(
+                    admin, "json_fields", global_state.request
+                ).get(field_name)
                 if json_fields:  # pragma: no branch
                     rel_name = f"{model_name}__{field_name}"
                     orm_models[rel_name] = _make_json_sub_module(
@@ -431,11 +433,7 @@ def get_models():
     model_admins, admin_fields = _get_all_admin_fields()
     models = {}
     for model in admin_fields:
-        models.update(
-            _get_fields_for_model(
-                global_state.request, model, model_admins[model], admin_fields
-            )
-        )
+        models.update(_get_fields_for_model(model, model_admins[model], admin_fields))
     types = {
         type_.name: OrmModel(get_fields_for_type(type_)) for type_ in TYPES.values()
     }

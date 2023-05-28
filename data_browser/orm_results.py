@@ -4,7 +4,6 @@ from collections import defaultdict
 
 from django.core.serializers.json import DjangoJSONEncoder
 
-from .common import global_state
 from .orm_lookups import get_django_filter
 from .query import BoundQuery
 from .types import DSC
@@ -69,7 +68,7 @@ def get_result_queryset(bound_query, debug=False):
 
     # sql functions and qs annotations
     for field in all_fields.values():
-        qs = field.annotate(global_state.request, qs, debug=debug)
+        qs = field.annotate(qs, debug=debug)
 
     # filter normal and sql function fields (aka __date)
     for filter_ in bound_query.valid_filters:

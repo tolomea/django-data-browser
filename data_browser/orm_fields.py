@@ -47,12 +47,12 @@ class OrmBoundField:
             return self.previous._lineage() + [self]
         return [self]
 
-    def annotate(self, request, qs, debug=False):
+    def annotate(self, qs, debug=False):
         for field in self._lineage():
-            qs = field._annotate(request, qs, debug=debug)
+            qs = field._annotate(qs, debug=debug)
         return qs
 
-    def _annotate(self, request, qs, debug=False):
+    def _annotate(self, qs, debug=False):
         return qs
 
     def _annotate_qs(self, qs, expression):
@@ -210,7 +210,7 @@ class OrmCalculatedField(OrmBaseField):
 
 
 class OrmBoundAnnotatedField(OrmBoundField):
-    def _annotate(self, request, qs, debug=False):
+    def _annotate(self, qs, debug=False):
         from .orm_admin import admin_get_queryset
 
         if debug:

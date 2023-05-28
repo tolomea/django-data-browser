@@ -196,9 +196,7 @@ def admin_action(request, model_name, fields):
     pks -= {None}
 
     model_name = bound_field.field.model_name
-    return orm_models[model_name].get_http_request_for_action(
-        global_state.request, action, pks
-    )
+    return orm_models[model_name].get_http_request_for_action(action, pks)
 
 
 @csrf.csrf_protect
