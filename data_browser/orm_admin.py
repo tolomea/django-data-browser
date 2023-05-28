@@ -136,8 +136,9 @@ def _model_has_field(model, field_name):
     return True
 
 
-def _get_all_admin_fields(request):
-    assert hasattr(request, "data_browser"), request
+def _get_all_admin_fields():
+    request = global_state.request
+    assert hasattr(request, "data_browser")
 
     def from_fieldsets(admin, include_calculated):
         auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT
@@ -152,7 +153,7 @@ def _get_all_admin_fields(request):
             if include_calculated or _model_has_field(admin.model, f):
                 yield f
 
-    def visible(model_admin, request):
+    def visible(model_admin):
         if not request.user:
             return False
 
@@ -181,7 +182,7 @@ def _get_all_admin_fields(request):
 
     model_admins = {}
     for model, model_admin in site._registry.items():
-        if visible(model_admin, request):
+        if visible(model_admin):
             model_admins[model] = model_admin
             all_model_fields[model].update(model_admin.get_list_display(request))
             all_model_fields[model].add(open_in_admin)
@@ -189,7 +190,7 @@ def _get_all_admin_fields(request):
 
             # check the inlines, these are already filtered for access
             for inline in model_admin.get_inline_instances(request):
-                if visible(inline, request):
+                if visible(inline):
                     try:
                         fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
                     except Exception as e:
@@ -420,7 +421,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
 
 def get_models():
-    model_admins, admin_fields = _get_all_admin_fields(global_state.request)
+    model_admins, admin_fields = _get_all_admin_fields()
     models = {}
     for model in admin_fields:
         models.update(
