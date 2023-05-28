@@ -223,7 +223,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
         return self._annotate_qs(
             qs,
             subquery(
-                admin_get_queryset(self.admin, request, [self.name], debug=debug)
+                admin_get_queryset(self.admin, [self.name], debug=debug)
                 .filter(pk=outer_ref("__".join(self.previous.queryset_path + ["pk"])))
                 .values(self.name)[:1],
                 output_field=self.django_field,

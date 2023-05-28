@@ -53,8 +53,8 @@ class OrmModel:
             for (f, l, v) in default_filters
         ]
 
-    def get_queryset(self, request, fields=(), debug=False):
-        return admin_get_queryset(self.admin, request, fields, debug=debug)
+    def get_queryset(self, fields=(), debug=False):
+        return admin_get_queryset(self.admin, fields, debug=debug)
 
     def get_http_request_for_action(self, request, action, pks):
         actions = admin_get_actions(self.admin, request)
@@ -103,7 +103,12 @@ def open_in_admin(obj):
     return format_html('<a href="{}">{}</a>', url, obj)
 
 
-def admin_get_queryset(admin, request, fields=(), debug=False):
+def _admin_get_queryset(admin, request):
+    # this is just a hook for tests to see the request
+    return admin.get_queryset(request).using(settings.DATA_BROWSER_USING_DB)
+
+
+def admin_get_queryset(admin, fields=(), debug=False):
     if debug:
         klass = admin.__class__
         return DebugQS(
@@ -111,10 +116,11 @@ def admin_get_queryset(admin, request, fields=(), debug=False):
             " admin_site).get_queryset(request)"
         )
     else:
-        request.data_browser.update(
+        # todo should this use the context manager
+        global_state.request.data_browser.update(
             {"calculated_fields": set(fields), "fields": set(fields)}
         )
-        return admin.get_queryset(request).using(settings.DATA_BROWSER_USING_DB)
+        return _admin_get_queryset(admin, global_state.request)
 
 
 def admin_get_actions(admin, request):
@@ -258,7 +264,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
     )
 
     if isinstance(field_func, _AnnotationDescriptor):
-        qs = admin_get_queryset(admin, request, [field_name])
+        qs = admin_get_queryset(admin, [field_name])
 
         annotation = qs.query.annotations.get(field_name)
         if not annotation:  # pragma: no cover

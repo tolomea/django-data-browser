@@ -64,7 +64,7 @@ def get_result_queryset(bound_query, debug=False):
     all_fields.update({f.queryset_path_str: f for f in bound_query.bound_filters})
 
     qs = bound_query.orm_model.get_queryset(
-        global_state.request, {f.split("__")[0] for f in all_fields}, debug=debug
+        {f.split("__")[0] for f in all_fields}, debug=debug
     )
 
     # sql functions and qs annotations
@@ -125,7 +125,7 @@ def get_result_list(bound_query):
     return list(get_result_queryset(bound_query))
 
 
-def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
+def _get_objs_for_calculated_fields(bound_query, orm_models, res):
     # gather up all the objects to fetch for calculated fields
     to_load = defaultdict(set)
     loading_for = defaultdict(set)
@@ -140,9 +140,7 @@ def _get_objs_for_calculated_fields(request, bound_query, orm_models, res):
     objs = {}
     for model_name, pks in to_load.items():
         objs[model_name] = (
-            orm_models[model_name]
-            .get_queryset(request, loading_for[model_name])
-            .in_bulk(pks)
+            orm_models[model_name].get_queryset(loading_for[model_name]).in_bulk(pks)
         )
 
     return objs
@@ -231,9 +229,7 @@ def get_results(bound_query, orm_models, with_format_hints):
         rows_res = res
         cols_res = res
 
-    objs = _get_objs_for_calculated_fields(
-        global_state.request, bound_query, orm_models, res
-    )
+    objs = _get_objs_for_calculated_fields(bound_query, orm_models, res)
 
     if bound_query.bound_col_fields or bound_query.bound_body_fields:
         raw_body_data, raw_row_data, raw_col_data = _get_data_and_all_keys(
