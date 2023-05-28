@@ -57,7 +57,7 @@ class OrmModel:
         return admin_get_queryset(self.admin, fields, debug=debug)
 
     def get_http_request_for_action(self, request, action, pks):
-        actions = admin_get_actions(self.admin, request)
+        actions = admin_get_actions(self.admin)
         if action not in actions:
             raise http.Http404(f"'{action}' unknown action")  # pragma: no cover
 
@@ -123,7 +123,8 @@ def admin_get_queryset(admin, fields=(), debug=False):
         return _admin_get_queryset(admin, global_state.request)
 
 
-def admin_get_actions(admin, request):
+def admin_get_actions(admin):
+    request = global_state.request
     assert hasattr(request, "data_browser"), request
 
     res = {}
@@ -297,7 +298,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 return value() if callable(value) else value
 
         if field_func == open_in_admin and hasattr(admin, "get_actions"):
-            actions = admin_get_actions(admin, request)
+            actions = admin_get_actions(admin)
         else:
             actions = {}
 
@@ -405,7 +406,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     )
 
             if field_name == model._meta.pk.name and hasattr(admin, "get_actions"):
-                actions = admin_get_actions(admin, request)
+                actions = admin_get_actions(admin)
             else:
                 actions = {}
 
