@@ -247,7 +247,7 @@ def _make_pretty(name):
     return (name[0].upper() + name[1:]).replace("_", " ")
 
 
-def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
+def _get_calculated_field(field_name, model_name, model, admin, model_fields):
     if isinstance(field_name, str):
         field_func = getattr(admin, field_name, None)
     else:
@@ -387,7 +387,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
         # Calculated and annotated fields
         elif isinstance(field, type(None)):
             orm_field = _get_calculated_field(
-                request, field_name, model_name, model, admin, model_fields
+                field_name, model_name, model, admin, model_fields
             )
             if orm_field:
                 fields[orm_field.name] = orm_field
