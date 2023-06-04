@@ -14,15 +14,6 @@ def view(admin_user):
     return View(model_name="app.model", fields="fa+0,fd-1,fn", query="bob__equals=fred")
 
 
-def get_field(res, name):
-    for fieldset in res.context[0]["adminform"]:
-        for line in fieldset:
-            for field in line:
-                if field.field["name"] == name:
-                    return field
-    return None
-
-
 def test_open_view(view, rf):
     expected = (
         '<a href="/data_browser/query/app.model/fa+0,fd-1,fn.html'
