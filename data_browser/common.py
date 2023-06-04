@@ -156,9 +156,14 @@ class _State:
         user=_UNSPECIFIED,
         public_view=_UNSPECIFIED,
         set_ddb=True,
+        fields=_UNSPECIFIED,
     ):
         if request is _UNSPECIFIED:
             request = prev.request
+
+        if fields is _UNSPECIFIED:
+            fields = prev.fields if prev else set()
+        fields = set(fields)
 
         new_request = copy(request)
         new_request.environ = request.environ
@@ -173,10 +178,11 @@ class _State:
 
             new_request.data_browser = {
                 "public_view": public_view,
-                "fields": set(),
+                "fields": fields,
                 "calculated_fields": set(),
             }
 
+        self.fields = fields
         self.public_view = public_view
         self.request = new_request
 

@@ -16,7 +16,7 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .common import JsonResponse, debug_log, global_state, settings
+from .common import JsonResponse, debug_log, global_state, set_global_state, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_debug import DebugQS
@@ -116,11 +116,8 @@ def admin_get_queryset(admin, fields=(), debug=False):
             " admin_site).get_queryset(request)"
         )
     else:
-        # TODO should this use the context manager
-        global_state.request.data_browser.update(
-            {"calculated_fields": set(fields), "fields": set(fields)}
-        )
-        return _admin_get_queryset(admin, global_state.request)
+        with set_global_state(fields=fields):
+            return _admin_get_queryset(admin, global_state.request)
 
 
 def admin_get_actions(admin):
