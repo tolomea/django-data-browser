@@ -184,6 +184,7 @@ class _State:
 
         self.public_view = public_view
         self.request = new_request
+        self.children = {}
 
     @cached_property
     def models(self):
@@ -217,7 +218,18 @@ class set_global_state:
 
     def __enter__(self):
         self.old = global_state._state
-        global_state._state = _State(self.old, request=self.request, **self.kwargs)
+
+        cache = self.old and self.request is _UNSPECIFIED
+        key = tuple(self.kwargs.items())
+
+        if cache and key in self.old.children:
+            state = self.old.children[key]
+        else:
+            state = _State(self.old, request=self.request, **self.kwargs)
+            if cache:
+                self.old.children[key] = state
+
+        global_state._state = state
 
     def __exit__(self, exc_type, exc_value, traceback):
         global_state._state = self.old

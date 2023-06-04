@@ -53,7 +53,7 @@ def test_ddb_performance(admin_client, snapshot, multiple_views, mocker):
         "name,valid,public_link,google_sheets_formula.json"
     )
     assert res.status_code == 200
-    assert len(get_models.mock_calls) == 13
+    assert len(get_models.mock_calls) == 5
 
 
 def test_open_view(view, rf):
