@@ -9,9 +9,9 @@ from .common import (
     HttpResponse,
     JsonResponse,
     global_state,
+    set_global_state,
     str_user,
     users_with_permission,
-    view_global_state,
 )
 from .models import View
 from .orm_admin import get_models
@@ -106,7 +106,7 @@ def get_queryset(user):
 
 @csrf.csrf_protect
 @admin_decorators.staff_member_required
-@view_global_state(public_view=False)
+@set_global_state(public_view=False)
 def view_list(request):
     orm_models = get_models()
 
@@ -146,7 +146,7 @@ def view_list(request):
 
 @csrf.csrf_protect
 @admin_decorators.staff_member_required
-@view_global_state(public_view=False)
+@set_global_state(public_view=False)
 def view_detail(request, pk):
     view = get_object_or_404(get_queryset(request.user), pk=pk)
     orm_models = get_models()

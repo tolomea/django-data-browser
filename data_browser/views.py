@@ -29,7 +29,6 @@ from .common import (
     has_permission,
     set_global_state,
     settings,
-    view_global_state,
 )
 from .format_csv import get_csv_rows
 from .models import View
@@ -163,7 +162,7 @@ def _get_config():
 
 
 @admin_decorators.staff_member_required
-@view_global_state(public_view=False)
+@set_global_state(public_view=False)
 def query_ctx(request, *, model_name="", fields=""):
     config = _get_config()
     return JsonResponse(config)
@@ -203,7 +202,7 @@ def admin_action(request, model_name, fields):
 @csrf.csrf_protect
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
-@view_global_state(public_view=False)
+@set_global_state(public_view=False)
 def query_html(request, *, model_name="", fields=""):
     if request.method == "POST":
         return admin_action(request, model_name, fields)
@@ -228,7 +227,7 @@ def query_html(request, *, model_name="", fields=""):
 
 
 @admin_decorators.staff_member_required
-@view_global_state(public_view=False)
+@set_global_state(public_view=False)
 def query(request, *, model_name, fields="", media):
     params = hyperlink.parse(request.get_full_path()).query
 

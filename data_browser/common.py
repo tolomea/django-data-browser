@@ -3,7 +3,6 @@ import logging
 import math
 import threading
 import traceback
-from contextlib import contextmanager
 from copy import copy
 
 from django import http
@@ -143,42 +142,43 @@ class GlobalState(threading.local):
 global_state = GlobalState()
 
 
-@contextmanager
-def set_global_state(*, request=None, user=None, public_view=None, set_ddb=True):
-    old = global_state.get_state()
+class set_global_state:
+    def __init__(self, *, request=None, user=None, public_view=None, set_ddb=True):
+        self.request = request
+        self.user = user
+        self.public_view = public_view
+        self.set_ddb = set_ddb
 
-    if request is None:
-        assert global_state.request
-        request = global_state.request
-
-    new_request = copy(request)
-    new_request.environ = request.environ
-    if user:
-        new_request.user = user
-
-    if set_ddb:
-        assert public_view is not None
-        new_request.data_browser = {
-            "public_view": public_view,
-            "fields": set(),
-            "calculated_fields": set(),
-        }
-
-    global_state.set_state(request=new_request)
-
-    try:
-        yield
-    finally:
-        global_state.set_state(**old)
-
-
-def view_global_state(**decorator_kwargs):
-    def inner(func):
+    def __call__(self, func):
         @functools.wraps(func)
         def wrapper(request, *args, **kwargs):
-            with set_global_state(request=request, **decorator_kwargs):
+            self.request = request
+            with self:
                 return func(request, *args, **kwargs)
 
         return wrapper
 
-    return inner
+    def __enter__(self):
+        self.old = global_state.get_state()
+
+        if self.request is None:
+            assert global_state.request
+            self.request = global_state.request
+
+        new_request = copy(self.request)
+        new_request.environ = self.request.environ
+        if self.user:
+            new_request.user = self.user
+
+        if self.set_ddb:
+            assert self.public_view is not None
+            new_request.data_browser = {
+                "public_view": self.public_view,
+                "fields": set(),
+                "calculated_fields": set(),
+            }
+
+        global_state.set_state(request=new_request)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        global_state.set_state(**self.old)
