@@ -7,9 +7,9 @@ from data_browser.models import View
 @pytest.fixture
 def view(admin_user):
     return View(
-        model_name="app.model",
-        fields="+fa,-fd,fn",
-        query="bob__equals=fred",
+        model_name="core.Product",
+        fields="name+0,size-1,size_unit",
+        query="name__equals=fred",
         owner=admin_user,
     )
 
@@ -23,7 +23,7 @@ def global_request(rf):
 
 def test_str(view):
     view.name = "bob"
-    assert str(view) == "app.model view: bob"
+    assert str(view) == "core.Product view: bob"
 
 
 def test_public_link(view, global_request, settings):

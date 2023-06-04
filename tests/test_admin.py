@@ -12,17 +12,17 @@ from data_browser.models import View
 @pytest.fixture
 def view(admin_user):
     return View(
-        model_name="app.model",
-        fields="fa+0,fd-1,fn",
-        query="bob__equals=fred",
+        model_name="core.Product",
+        fields="name+0,size-1,size_unit",
+        query="name__equals=fred",
         owner=admin_user,
     )
 
 
 def test_open_view(view, rf):
     expected = (
-        '<a href="/data_browser/query/app.model/fa+0,fd-1,fn.html'
-        '?bob__equals=fred&limit=1000">view</a>'
+        '<a href="/data_browser/query/core.Product/name+0,size-1,size_unit.html'
+        '?name__equals=fred&limit=1000">view</a>'
     )
     assert ViewAdmin.open_view(view) == expected
 
