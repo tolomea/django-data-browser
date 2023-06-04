@@ -54,7 +54,7 @@ class View(models.Model):
     def url(self):
         return self.get_query().get_full_url("html")
 
-    def _public_common(self, fmt):
+    def _public_url(self, fmt):
         with set_global_state(user=self.owner, public_view=True):
             if not (has_permission(self.owner, PUBLIC_PERM) and self.public):
                 return "N/A"
@@ -72,10 +72,10 @@ class View(models.Model):
             return fmt.format(url=url)
 
     def public_link(self):
-        return self._public_common("{url}")
+        return self._public_url("{url}")
 
     def google_sheets_formula(self):
-        return self._public_common('=importdata("{url}")')
+        return self._public_url('=importdata("{url}")')
 
     def __str__(self):
         return f"{self.model_name} view: {self.name}"
