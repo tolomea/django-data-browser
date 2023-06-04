@@ -5,8 +5,30 @@ from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.models import Permission, User
 
+from data_browser import orm_admin
 from data_browser.admin import ViewAdmin
 from data_browser.models import View
+
+
+@pytest.fixture
+def other_user():
+    return User.objects.create(
+        username="other", is_active=True, is_superuser=True, is_staff=True
+    )
+
+
+def make_view(**kwargs):
+    View.objects.create(
+        model_name="core.Product", fields="admin", query="name__contains=sql", **kwargs
+    )
+
+
+@pytest.fixture
+def multiple_views(admin_user, other_user):
+    make_view(owner=admin_user, name="my_in_folder", folder="my folder")
+    make_view(owner=admin_user, name="my_out_of_folder")
+    make_view(owner=other_user, name="other_in_folder", folder="other folder")
+    make_view(owner=other_user, name="other_out_of_folder")
 
 
 @pytest.fixture
@@ -17,6 +39,21 @@ def view(admin_user):
         query="name__equals=fred",
         owner=admin_user,
     )
+
+
+def test_ddb_performance(admin_client, snapshot, multiple_views, mocker):
+    View.objects.update(shared=True, public=True)
+
+    get_models = mocker.patch(
+        "data_browser.orm_admin.get_models", wraps=orm_admin.get_models
+    )
+
+    res = admin_client.get(
+        "/data_browser/query/data_browser.View/"
+        "name,valid,public_link,google_sheets_formula.json"
+    )
+    assert res.status_code == 200
+    assert len(get_models.mock_calls) == 13
 
 
 def test_open_view(view, rf):
