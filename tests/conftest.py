@@ -84,7 +84,7 @@ def admin_ddb_request(ddb_request, admin_user):
 def mock_admin_get_queryset(mocker):
     from data_browser.orm_admin import _admin_get_queryset
 
-    # todo, I really want to patch ModelAdmin.get_queryset but can't work out how
+    # TODO, I really want to patch ModelAdmin.get_queryset but can't work out how
     return mocker.patch(
         "data_browser.orm_admin._admin_get_queryset", wraps=_admin_get_queryset
     )

@@ -116,7 +116,7 @@ def admin_get_queryset(admin, fields=(), debug=False):
             " admin_site).get_queryset(request)"
         )
     else:
-        # todo should this use the context manager
+        # TODO should this use the context manager
         global_state.request.data_browser.update(
             {"calculated_fields": set(fields), "fields": set(fields)}
         )

@@ -141,7 +141,7 @@ def _get_config():
     model_names_by_app = defaultdict(set)
     for name, model in orm_models.items():
         if model.root:
-            # todo why don't we get this in parts and then assemble it
+            # TODO why don't we get this in parts and then assemble it
             app_name, model_name = name.split(".")
             model_names_by_app[app_name].add(model_name)
 
