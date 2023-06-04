@@ -3,7 +3,14 @@ from django.db import models
 from django.urls import reverse
 from django.utils import crypto, timezone
 
-from .common import PUBLIC_PERM, SHARE_PERM, global_state, set_global_state, settings
+from .common import (
+    PUBLIC_PERM,
+    SHARE_PERM,
+    global_state,
+    has_permission,
+    set_global_state,
+    settings,
+)
 
 
 def get_id():
@@ -49,11 +56,13 @@ class View(models.Model):
 
     def _public_common(self, fmt):
         with set_global_state(user=self.owner, public_view=True):
-            if not self.public:
+            if not (has_permission(self.owner, PUBLIC_PERM) and self.public):
                 return "N/A"
 
             if not settings.DATA_BROWSER_ALLOW_PUBLIC:
                 return "Public Views are disabled in Django settings."
+
+            # todo invalid
 
             url = reverse(
                 "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}

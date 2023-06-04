@@ -11,7 +11,12 @@ from data_browser.models import View
 
 @pytest.fixture
 def view(admin_user):
-    return View(model_name="app.model", fields="fa+0,fd-1,fn", query="bob__equals=fred")
+    return View(
+        model_name="app.model",
+        fields="fa+0,fd-1,fn",
+        query="bob__equals=fred",
+        owner=admin_user,
+    )
 
 
 def test_open_view(view, rf):
@@ -47,6 +52,7 @@ def test_is_valid(view, admin_user, admin_client):
     view.query = ""
 
     # no owner, validity unknown
+    view.owner = None
     view.save()
     res = admin_client.get(
         f"http://testserver/admin/data_browser/view/{view.pk}/change/"
@@ -58,7 +64,7 @@ def test_is_valid(view, admin_user, admin_client):
     )
     assert re.search(expected, res.content.decode())
 
-    # all good, not valid
+    # all good, valid
     view.owner = admin_user
     view.save()
     res = admin_client.get(
@@ -68,6 +74,19 @@ def test_is_valid(view, admin_user, admin_client):
     expected = (
         r'<label>Valid:</label>\s*<div class="readonly"><img'
         r' src="/static/admin/img/icon-yes.svg" alt="True"></div>'
+    )
+    assert re.search(expected, res.content.decode())
+
+    # invalid
+    view.fields = "invalid"
+    view.save()
+    res = admin_client.get(
+        f"http://testserver/admin/data_browser/view/{view.pk}/change/"
+    )
+    assert res.status_code == 200
+    expected = (
+        r'<label>Valid:</label>\s*<div class="readonly"><img'
+        r' src="/static/admin/img/icon-no.svg" alt="False"></div>'
     )
     assert re.search(expected, res.content.decode())
 

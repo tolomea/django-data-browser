@@ -42,6 +42,9 @@ SHARE_PERM = "share_view"
 
 
 def has_permission(user, permission):
+    if user is None:
+        return False
+
     return user.has_perm(f"data_browser.{permission}")
 
 
