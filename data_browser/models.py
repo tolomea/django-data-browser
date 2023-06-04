@@ -63,7 +63,8 @@ class View(models.Model):
             if not settings.DATA_BROWSER_ALLOW_PUBLIC:
                 return "Public Views are disabled in Django settings."
 
-            # todo invalid
+            if not self.is_valid():
+                return "View is invalid"
 
             url = reverse(
                 "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
