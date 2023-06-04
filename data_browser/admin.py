@@ -5,7 +5,6 @@ from django.utils.html import format_html
 from . import models
 from .common import PUBLIC_PERM, has_permission, set_global_state
 from .helpers import AdminMixin, attributes
-from .orm_admin import get_models
 
 
 @admin.register(models.View)
@@ -63,12 +62,12 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
 
     @attributes(boolean=True)
     def valid(self, obj):
+        # todo remove
         if not obj.owner:
             return None
 
         with set_global_state(user=obj.owner, public_view=False):
-            orm_models = get_models()
-            return obj.get_query().is_valid(orm_models)
+            return obj.is_valid()
 
     def get_changeform_initial_data(self, request):
         res = super().get_changeform_initial_data(request)

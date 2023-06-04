@@ -14,7 +14,6 @@ from .common import (
     users_with_permission,
 )
 from .models import View
-from .orm_admin import get_models
 from .util import group_by
 
 
@@ -63,7 +62,7 @@ def name_sort(entries):
     return sorted(entries, key=lambda entry: entry["name"].lower())
 
 
-def serialize(orm_models, view):
+def serialize(view):
     return {
         **{
             api_field_name: getattr(view, model_field_name)
@@ -75,26 +74,26 @@ def serialize(orm_models, view):
         "createdTime": f"{view.created_time:%Y-%m-%d %H:%M:%S}",
         "pk": view.pk,
         "shared": bool(view.shared and view.name),
-        "valid": view.get_query().is_valid(orm_models),
+        "valid": view.is_valid(),
         "can_edit": global_state.request.user == view.owner,
         "type": "view",
     }
 
 
-def serialize_list(orm_models, views, *, include_invalid=False):
-    res = [serialize(orm_models, view) for view in views]
+def serialize_list(views, *, include_invalid=False):
+    res = [serialize(view) for view in views]
     if not include_invalid:
         res = [row for row in res if row["valid"]]
     return name_sort(res)
 
 
-def serialize_folders(orm_models, views, *, include_invalid=False):
+def serialize_folders(views, *, include_invalid=False):
     grouped_views = group_by(views, key=lambda v: v.folder.strip())
     flat_views = grouped_views.pop("", [])
 
-    res = serialize_list(orm_models, flat_views, include_invalid=include_invalid)
+    res = serialize_list(flat_views, include_invalid=include_invalid)
     for folder_name, views in sorted(grouped_views.items()):
-        entries = serialize_list(orm_models, views, include_invalid=include_invalid)
+        entries = serialize_list(views, include_invalid=include_invalid)
         if entries:
             res.append({"name": folder_name, "type": "folder", "entries": entries})
     return name_sort(res)
@@ -108,14 +107,10 @@ def get_queryset(user):
 @admin_decorators.staff_member_required
 @set_global_state(public_view=False)
 def view_list(request):
-    orm_models = get_models()
-
     if request.method == "GET":
         # saved
         saved_views = get_queryset(request.user)
-        saved_views_serialized = serialize_folders(
-            orm_models, saved_views, include_invalid=True
-        )
+        saved_views_serialized = serialize_folders(saved_views, include_invalid=True)
 
         # shared
         shared_views = (
@@ -127,7 +122,7 @@ def view_list(request):
         shared_views_by_user = group_by(shared_views, lambda v: str_user(v.owner))
         shared_views_serialized = []
         for owner_name, shared_views in shared_views_by_user.items():
-            entries = serialize_folders(orm_models, shared_views)
+            entries = serialize_folders(shared_views)
             if entries:
                 shared_views_serialized.append(
                     {"name": owner_name, "type": "folder", "entries": entries}
@@ -139,7 +134,7 @@ def view_list(request):
         )
     elif request.method == "POST":
         view = View.objects.create(owner=request.user, **deserialize(request.body))
-        return JsonResponse(serialize(orm_models, view))
+        return JsonResponse(serialize(view))
     else:
         return HttpResponse(status=400)
 
@@ -149,15 +144,14 @@ def view_list(request):
 @set_global_state(public_view=False)
 def view_detail(request, pk):
     view = get_object_or_404(get_queryset(request.user), pk=pk)
-    orm_models = get_models()
 
     if request.method == "GET":
-        return JsonResponse(serialize(orm_models, view))
+        return JsonResponse(serialize(view))
     elif request.method == "PATCH":
         for k, v in deserialize(request.body).items():
             setattr(view, k, v)
         view.save()
-        return JsonResponse(serialize(orm_models, view))
+        return JsonResponse(serialize(view))
     elif request.method == "DELETE":
         view.delete()
         return HttpResponse(status=204)
