@@ -286,9 +286,6 @@ def view(request, pk, media):
             and has_permission(view.owner, PUBLIC_PERM)
             and settings.DATA_BROWSER_ALLOW_PUBLIC
         ):
-            request.user = (
-                view.owner
-            )  # public views are run as the person who owns them
             query = view.get_query()
             return _data_response(query, media, privileged=False, strict=True)
         else:
