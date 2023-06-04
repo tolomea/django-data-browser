@@ -136,10 +136,14 @@ class GlobalState(threading.local):
         self.set_state(request=None)
 
     def set_state(self, *, request):
-        self.request = request
+        self._request = request
 
     def get_state(self):
-        return {"request": self.request}
+        return {"request": self._request}
+
+    @property
+    def request(self):
+        return self._request
 
 
 global_state = GlobalState()
