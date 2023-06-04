@@ -378,17 +378,36 @@ def test_view_bad_filter(admin_client):
     view.query = "sixe__lt=2&id__gt=0"
     view.save()
     res = admin_client.get(f"/data_browser/view/{view.public_slug}.json")
-    assert res.status_code == 400
+    assert res.status_code == 404
 
     view.query = "size__lx=2&id__gt=0"
     view.save()
     res = admin_client.get(f"/data_browser/view/{view.public_slug}.json")
-    assert res.status_code == 400
+    assert res.status_code == 404
 
     view.query = "size__lt=a&id__gt=0"
     view.save()
     res = admin_client.get(f"/data_browser/view/{view.public_slug}.json")
-    assert res.status_code == 400
+    assert res.status_code == 404
+
+
+@pytest.mark.usefixtures("products")
+def test_view_bad_field(admin_client):
+    view = data_browser.models.View.objects.create(
+        model_name="core.Product",
+        fields="size-0,name+1,size_unit",
+        query="size__lt=2&id__gt=0",
+        owner=User.objects.get(),
+        public=True,
+    )
+
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.json")
+    assert res.status_code == 200
+
+    view.fields = "invalid"
+    view.save()
+    res = admin_client.get(f"/data_browser/view/{view.public_slug}.json")
+    assert res.status_code == 404
 
 
 @pytest.mark.usefixtures("products")
