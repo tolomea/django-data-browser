@@ -29,6 +29,7 @@ from .common import (
     has_permission,
     set_global_state,
     settings,
+    view_global_state,
 )
 from .format_csv import get_csv_rows
 from .models import View
@@ -162,10 +163,10 @@ def _get_config():
 
 
 @admin_decorators.staff_member_required
+@view_global_state(public_view=False)
 def query_ctx(request, *, model_name="", fields=""):
-    with set_global_state(request=request, user=request.user, public_view=False):
-        config = _get_config()
-        return JsonResponse(config)
+    config = _get_config()
+    return JsonResponse(config)
 
 
 def admin_action(request, model_name, fields):
@@ -202,83 +203,77 @@ def admin_action(request, model_name, fields):
 @csrf.csrf_protect
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
+@view_global_state(public_view=False)
 def query_html(request, *, model_name="", fields=""):
-    with set_global_state(request=request, user=request.user, public_view=False):
-        if request.method == "POST":
-            return admin_action(request, model_name, fields)
+    if request.method == "POST":
+        return admin_action(request, model_name, fields)
 
-        config = _get_config()
-        config = json.dumps(config, cls=DjangoJSONEncoder)
-        config = (
-            config.replace("<", "\\u003C")
-            .replace(">", "\\u003E")
-            .replace("&", "\\u0026")
-        )
+    config = _get_config()
+    config = json.dumps(config, cls=DjangoJSONEncoder)
+    config = (
+        config.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
+    )
 
-        if settings.DATA_BROWSER_DEV:  # pragma: no cover
-            try:
-                response = _get_from_js_dev_server(request, "get")
-            except Exception as e:
-                return HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
+    if settings.DATA_BROWSER_DEV:  # pragma: no cover
+        try:
+            response = _get_from_js_dev_server(request, "get")
+        except Exception as e:
+            return HttpResponse(f"Error loading from JS dev server.<br><br>{e}")
 
-            template = engines["django"].from_string(response.text)
-        else:
-            template = loader.get_template("data_browser/index.html")
+        template = engines["django"].from_string(response.text)
+    else:
+        template = loader.get_template("data_browser/index.html")
 
-        return TemplateResponse(
-            request, template, {"config": config, "version": version}
-        )
+    return TemplateResponse(request, template, {"config": config, "version": version})
 
 
 @admin_decorators.staff_member_required
+@view_global_state(public_view=False)
 def query(request, *, model_name, fields="", media):
-    with set_global_state(request=request, user=request.user, public_view=False):
-        params = hyperlink.parse(request.get_full_path()).query
+    params = hyperlink.parse(request.get_full_path()).query
 
-        if media.startswith("profile") or media.startswith("pstats"):
-            if "_" in media:
-                prof_media, media = media.split("_")
-            else:
-                prof_media = media
-                media = "json"
-
-            profiler = cProfile.Profile()
-            try:
-                profiler.enable()
-
-                query = Query.from_request(model_name, fields, params)
-                for x in _data_response(query, media, privileged=True):
-                    pass
-
-                profiler.disable()
-
-                if prof_media == "profile":
-                    buffer = io.StringIO()
-                    stats = pstats.Stats(profiler, stream=buffer)
-                    stats.sort_stats("cumulative").print_stats(50)
-                    stats.sort_stats("time").print_stats(50)
-                    buffer.seek(0)
-                    return HttpResponse(buffer, content_type="text/plain")
-                elif prof_media == "pstats":
-                    buffer = io.BytesIO()
-                    marshal.dump(pstats.Stats(profiler).stats, buffer)
-                    buffer.seek(0)
-                    response = HttpResponse(
-                        buffer, content_type="application/octet-stream"
-                    )
-                    response["Content-Disposition"] = (
-                        "attachment;"
-                        f" filename={query.model_name}-{timezone.now().isoformat()}.pstats"
-                    )
-                    return response
-                else:
-                    raise http.Http404(f"Bad file format {prof_media} requested")
-            finally:
-                if profiler:  # pragma: no branch
-                    profiler.disable()
+    if media.startswith("profile") or media.startswith("pstats"):
+        if "_" in media:
+            prof_media, media = media.split("_")
         else:
+            prof_media = media
+            media = "json"
+
+        profiler = cProfile.Profile()
+        try:
+            profiler.enable()
+
             query = Query.from_request(model_name, fields, params)
-            return _data_response(query, media, privileged=True)
+            for x in _data_response(query, media, privileged=True):
+                pass
+
+            profiler.disable()
+
+            if prof_media == "profile":
+                buffer = io.StringIO()
+                stats = pstats.Stats(profiler, stream=buffer)
+                stats.sort_stats("cumulative").print_stats(50)
+                stats.sort_stats("time").print_stats(50)
+                buffer.seek(0)
+                return HttpResponse(buffer, content_type="text/plain")
+            elif prof_media == "pstats":
+                buffer = io.BytesIO()
+                marshal.dump(pstats.Stats(profiler).stats, buffer)
+                buffer.seek(0)
+                response = HttpResponse(buffer, content_type="application/octet-stream")
+                response["Content-Disposition"] = (
+                    "attachment;"
+                    f" filename={query.model_name}-{timezone.now().isoformat()}.pstats"
+                )
+                return response
+            else:
+                raise http.Http404(f"Bad file format {prof_media} requested")
+        finally:
+            if profiler:  # pragma: no branch
+                profiler.disable()
+    else:
+        query = Query.from_request(model_name, fields, params)
+        return _data_response(query, media, privileged=True)
 
 
 def view(request, pk, media):

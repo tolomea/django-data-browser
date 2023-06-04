@@ -1,3 +1,4 @@
+import functools
 import logging
 import math
 import threading
@@ -169,3 +170,15 @@ def set_global_state(*, request=None, user=None, public_view=None, set_ddb=True)
         yield
     finally:
         global_state.set_state(**old)
+
+
+def view_global_state(**decorator_kwargs):
+    def inner(func):
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            with set_global_state(request=request, **decorator_kwargs):
+                return func(request, *args, **kwargs)
+
+        return wrapper
+
+    return inner
