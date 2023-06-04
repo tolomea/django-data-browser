@@ -2,8 +2,8 @@ import pytest
 from django.contrib import admin
 
 from data_browser import migration_helpers
+from data_browser.common import global_state
 from data_browser.models import View
-from data_browser.orm_admin import get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
@@ -34,7 +34,7 @@ def with_arrays(db):
 @pytest.fixture
 def get_results_flat(with_arrays, admin_ddb_request):
     def helper(*fields, **filters):
-        orm_models = get_models()
+        orm_models = global_state.models
         query = Query.from_request(
             "array.ArrayModel", ",".join(fields), list(filters.items())
         )
@@ -195,7 +195,7 @@ def test_char_choice_array_equals(get_results_flat):
     ],
 )
 def test_0009(admin_ddb_request, with_arrays, before, after):
-    orm_models = get_models()
+    orm_models = global_state.models
     valid = int("wtf" not in before)
 
     view = View.objects.create(model_name="array.ArrayModel", query=before)

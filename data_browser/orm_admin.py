@@ -16,7 +16,7 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .common import JsonResponse, debug_log, global_state, set_global_state, settings
+from .common import JsonResponse, debug_log, global_state, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_debug import DebugQS
@@ -54,10 +54,10 @@ class OrmModel:
         ]
 
     def get_queryset(self, fields=(), debug=False):
-        return admin_get_queryset(self.admin, fields, debug=debug)
+        return admin_get_queryset(global_state.request, self.admin, fields, debug=debug)
 
     def get_http_request_for_action(self, action, pks):
-        actions = admin_get_actions(self.admin)
+        actions = admin_get_actions(global_state.request, self.admin)
         if action not in actions:
             raise http.Http404(f"'{action}' unknown action")  # pragma: no cover
 
@@ -108,7 +108,7 @@ def _admin_get_queryset(admin, request):
     return admin.get_queryset(request).using(settings.DATA_BROWSER_USING_DB)
 
 
-def admin_get_queryset(admin, fields=(), debug=False):
+def admin_get_queryset(request, admin, fields=(), debug=False):
     if debug:
         klass = admin.__class__
         return DebugQS(
@@ -116,12 +116,19 @@ def admin_get_queryset(admin, fields=(), debug=False):
             " admin_site).get_queryset(request)"
         )
     else:
-        with set_global_state(fields=fields):
-            return _admin_get_queryset(admin, global_state.request)
+        orig = request.data_browser
+        request.data_browser = {
+            **request.data_browser,
+            "calculated_fields": set(fields),
+            "fields": set(fields),
+        }
+        try:
+            return _admin_get_queryset(admin, request)
+        finally:
+            request.data_browser = orig
 
 
-def admin_get_actions(admin):
-    request = global_state.request
+def admin_get_actions(request, admin):
     assert hasattr(request, "data_browser"), request
 
     res = {}
@@ -140,8 +147,7 @@ def _model_has_field(model, field_name):
     return True
 
 
-def _get_all_admin_fields():
-    request = global_state.request
+def _get_all_admin_fields(request):
     assert hasattr(request, "data_browser")
 
     def from_fieldsets(admin, include_calculated):
@@ -244,7 +250,7 @@ def _make_pretty(name):
     return (name[0].upper() + name[1:]).replace("_", " ")
 
 
-def _get_calculated_field(field_name, model_name, model, admin, model_fields):
+def _get_calculated_field(request, field_name, model_name, model, admin, model_fields):
     if isinstance(field_name, str):
         field_func = getattr(admin, field_name, None)
     else:
@@ -262,7 +268,7 @@ def _get_calculated_field(field_name, model_name, model, admin, model_fields):
     )
 
     if isinstance(field_func, _AnnotationDescriptor):
-        qs = admin_get_queryset(admin, [field_name])
+        qs = admin_get_queryset(request, admin, [field_name])
 
         annotation = qs.query.annotations.get(field_name)
         if not annotation:  # pragma: no cover
@@ -295,7 +301,7 @@ def _get_calculated_field(field_name, model_name, model, admin, model_fields):
                 return value() if callable(value) else value
 
         if field_func == open_in_admin and hasattr(admin, "get_actions"):
-            actions = admin_get_actions(admin)
+            actions = admin_get_actions(request, admin)
         else:
             actions = {}
 
@@ -326,7 +332,7 @@ def _make_json_sub_module(model_name, field_types):
     return OrmModel(fields)
 
 
-def _get_fields_for_model(model, admin, admin_fields):
+def _get_fields_for_model(request, model, admin, admin_fields):
     fields = {}
     orm_models = {}
 
@@ -384,7 +390,7 @@ def _get_fields_for_model(model, admin, admin_fields):
         # Calculated and annotated fields
         elif isinstance(field, type(None)):
             orm_field = _get_calculated_field(
-                field_name, model_name, model, admin, model_fields
+                request, field_name, model_name, model, admin, model_fields
             )
             if orm_field:
                 fields[orm_field.name] = orm_field
@@ -395,9 +401,7 @@ def _get_fields_for_model(model, admin, admin_fields):
 
             rel_name = field_type.name
             if field_type is JSONType:
-                json_fields = _get_option(
-                    admin, "json_fields", global_state.request
-                ).get(field_name)
+                json_fields = _get_option(admin, "json_fields", request).get(field_name)
                 if json_fields:  # pragma: no branch
                     rel_name = f"{model_name}__{field_name}"
                     orm_models[rel_name] = _make_json_sub_module(
@@ -405,7 +409,7 @@ def _get_fields_for_model(model, admin, admin_fields):
                     )
 
             if field_name == model._meta.pk.name and hasattr(admin, "get_actions"):
-                actions = admin_get_actions(admin)
+                actions = admin_get_actions(request, admin)
             else:
                 actions = {}
 
@@ -426,11 +430,13 @@ def _get_fields_for_model(model, admin, admin_fields):
     return orm_models
 
 
-def get_models():
-    model_admins, admin_fields = _get_all_admin_fields()
+def get_models(request):
+    model_admins, admin_fields = _get_all_admin_fields(request)
     models = {}
     for model in admin_fields:
-        models.update(_get_fields_for_model(model, model_admins[model], admin_fields))
+        models.update(
+            _get_fields_for_model(request, model, model_admins[model], admin_fields)
+        )
     types = {
         type_.name: OrmModel(get_fields_for_type(type_)) for type_ in TYPES.values()
     }

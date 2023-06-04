@@ -6,7 +6,8 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
 
-from data_browser.orm_admin import OrmModel, get_models
+from data_browser.common import global_state
+from data_browser.orm_admin import OrmModel
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
@@ -96,7 +97,7 @@ def pivot_products(db):
 
 @pytest.fixture
 def get_orm_models(admin_ddb_request):
-    return lambda: get_models()
+    return lambda: global_state.models
 
 
 @pytest.fixture
@@ -199,7 +200,7 @@ def test_bad_storage(monkeypatch, admin_ddb_request):
     default_storage._wrapped = empty
 
     # copy what the fixture does
-    orm_models = get_models()
+    orm_models = global_state.models
 
     def get_product_flat(*args, **kwargs):
         query = Query.from_request("core.Product", *args)
@@ -786,7 +787,7 @@ class TestPermissions:
             user.user_permissions.add(Permission.objects.get(codename=f"change_{perm}"))
 
         ddb_request.user = user
-        return get_models()
+        return global_state.models
 
     @pytest.mark.django_db
     def test_all_perms(self, ddb_request):

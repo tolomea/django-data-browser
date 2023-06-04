@@ -32,7 +32,6 @@ from .common import (
 )
 from .format_csv import get_csv_rows
 from .models import View
-from .orm_admin import get_models
 from .orm_results import get_result_list, get_result_queryset, get_results
 from .query import BoundQuery, Query, QueryFilter
 from .types import TYPES
@@ -119,7 +118,7 @@ def _get_model_fields(model_name, orm_models):
 
 
 def _get_config():
-    orm_models = get_models()
+    orm_models = global_state.models
     types = {
         name: {
             "lookups": {
@@ -179,7 +178,7 @@ def admin_action(request, model_name, fields):
     params = hyperlink.parse(request.get_full_path()).query
     query = Query.from_request(model_name, fields, params)
 
-    orm_models = get_models()
+    orm_models = global_state.models
     if query.model_name not in orm_models:
         raise http.Http404(f"'{query.model_name}' does not exist")  # pragma: no cover
 
@@ -299,7 +298,7 @@ class Echo:
 
 
 def _data_response(query, media, privileged=False):
-    orm_models = get_models()
+    orm_models = global_state.models
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)

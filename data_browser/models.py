@@ -11,7 +11,6 @@ from .common import (
     set_global_state,
     settings,
 )
-from .orm_admin import get_models
 
 
 def get_id():
@@ -83,4 +82,4 @@ class View(models.Model):
         return f"{self.model_name} view: {self.name}"
 
     def is_valid(self):
-        return self.get_query().is_valid(get_models())
+        return self.get_query().is_valid(global_state.models)

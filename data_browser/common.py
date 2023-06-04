@@ -9,6 +9,7 @@ from django import http
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.utils.functional import cached_property
 
 from . import version
 
@@ -139,6 +140,10 @@ class GlobalState(threading.local):
     def request(self):
         return self._state.request
 
+    @property
+    def models(self):
+        return self._state.models
+
 
 global_state = GlobalState()
 
@@ -156,14 +161,9 @@ class _State:
         user=_UNSPECIFIED,
         public_view=_UNSPECIFIED,
         set_ddb=True,
-        fields=_UNSPECIFIED,
     ):
         if request is _UNSPECIFIED:
             request = prev.request
-
-        if fields is _UNSPECIFIED:
-            fields = prev.fields if prev else set()
-        fields = set(fields)
 
         new_request = copy(request)
         new_request.environ = request.environ
@@ -178,13 +178,23 @@ class _State:
 
             new_request.data_browser = {
                 "public_view": public_view,
-                "fields": fields,
+                "fields": set(),
                 "calculated_fields": set(),
             }
 
-        self.fields = fields
         self.public_view = public_view
         self.request = new_request
+
+    @cached_property
+    def models(self):
+        from .orm_admin import get_models
+
+        old = global_state._state
+        global_state._state = None
+        try:
+            return get_models(self.request)
+        finally:
+            global_state._state = old
 
 
 class set_global_state:
