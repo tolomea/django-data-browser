@@ -145,8 +145,14 @@ class GlobalState(threading.local):
 global_state = GlobalState()
 
 
+class _UNSPECIFIED:
+    pass
+
+
 class set_global_state:
-    def __init__(self, *, request=None, user=None, public_view=None, set_ddb=True):
+    def __init__(
+        self, *, request=None, user=_UNSPECIFIED, public_view=None, set_ddb=True
+    ):
         self.request = request
         self.user = user
         self.public_view = public_view
@@ -170,7 +176,7 @@ class set_global_state:
 
         new_request = copy(self.request)
         new_request.environ = self.request.environ
-        if self.user:
+        if self.user is not _UNSPECIFIED:
             new_request.user = self.user
 
         if self.set_ddb:

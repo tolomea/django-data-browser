@@ -51,7 +51,7 @@ def test_is_valid(view, admin_user, admin_client):
     view.fields = "id"
     view.query = ""
 
-    # no owner, validity unknown
+    # no owner, not valid
     view.owner = None
     view.save()
     res = admin_client.get(
@@ -60,7 +60,7 @@ def test_is_valid(view, admin_user, admin_client):
     assert res.status_code == 200
     expected = (
         r'<label>Valid:</label>\s*<div class="readonly"><img'
-        r' src="/static/admin/img/icon-unknown.svg" alt="None"></div>'
+        r' src="/static/admin/img/icon-no.svg" alt="False"></div>'
     )
     assert re.search(expected, res.content.decode())
 

@@ -62,10 +62,6 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
 
     @attributes(boolean=True)
     def valid(self, obj):
-        # todo remove
-        if not obj.owner:
-            return None
-
         with set_global_state(user=obj.owner, public_view=False):
             return obj.is_valid()
 
