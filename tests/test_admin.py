@@ -71,15 +71,24 @@ def test_add_has_user(admin_client):
     assert res.context[0]["adminform"].form.initial["owner"] == user.pk
 
 
-def test_change_form_links_have_full_url(view, admin_client):
+def test_public_links(view, admin_client):
     view.public = True
     view.save()
     res = admin_client.get(
         f"http://testserver/admin/data_browser/view/{view.pk}/change/"
     )
     assert res.status_code == 200
-
     expected = f"http://testserver/data_browser/view/{view.public_slug}.csv"
+    assert expected in res.content.decode()
+
+    view.fields = "bobit"
+    view.save()
+    res = admin_client.get(
+        f"http://testserver/admin/data_browser/view/{view.pk}/change/"
+    )
+    assert res.status_code == 200
+
+    expected = "View is invalid"
     assert expected in res.content.decode()
 
 

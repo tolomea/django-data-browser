@@ -172,8 +172,6 @@ class _State:
             new_request.user = user
 
         if set_ddb:
-            if public_view is _UNSPECIFIED:
-                public_view = prev.public_view
             assert public_view is not _UNSPECIFIED
 
             new_request.data_browser = {
