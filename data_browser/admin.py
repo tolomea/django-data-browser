@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin.utils import flatten_fieldsets
 from django.utils.html import format_html
 
 from . import models
@@ -39,8 +38,11 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
     ]
     list_display = ["__str__", "owner", "public"]
 
-    def get_readonly_fields(self, request, obj):
-        return flatten_fieldsets(self.get_fieldsets(request, obj))
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
     def get_fieldsets(self, request, obj=None):
         res = super().get_fieldsets(request, obj)
@@ -64,8 +66,3 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
     def valid(self, obj):
         with set_global_state(user=obj.owner, public_view=False):
             return obj.is_valid()
-
-    def get_changeform_initial_data(self, request):
-        res = super().get_changeform_initial_data(request)
-        res["owner"] = request.user.pk
-        return res

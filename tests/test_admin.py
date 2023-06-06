@@ -64,11 +64,9 @@ def test_open_view(view, rf):
     assert ViewAdmin.open_view(view) == expected
 
 
-def test_add_has_user(admin_client):
-    user = User.objects.get()
+def test_cant_add(admin_client):
     res = admin_client.get("/admin/data_browser/view/add/")
-    assert res.status_code == 200
-    assert res.context[0]["adminform"].form.initial["owner"] == user.pk
+    assert res.status_code == 403
 
 
 def test_public_links(view, admin_client):
@@ -144,8 +142,6 @@ def get_admin_details(rf):
         request.user = admin_user
         view_admin = ViewAdmin(View, admin.site)
         fields = set(flatten_fieldsets(view_admin.get_fieldsets(request, obj)))
-        read_only = set(view_admin.get_readonly_fields(request, obj))
-        assert fields == read_only
         return fields
 
     return helper
@@ -159,29 +155,7 @@ def staff_user(admin_user):
 
 
 class TestAdminFieldsSuperUser:
-    def test_add_page_edit_everything(self, admin_user, get_admin_details):
-        fields = get_admin_details(admin_user, None)
-        assert fields == {
-            "description",
-            "fields",
-            "model_name",
-            "name",
-            "owner",
-            "public",
-            "public_slug",
-            "query",
-            "created_time",
-            "google_sheets_formula",
-            "id",
-            "open_view",
-            "public_link",
-            "limit",
-            "shared",
-            "folder",
-            "valid",
-        }
-
-    def test_private_view_edit_everything(self, admin_user, get_admin_details, view):
+    def test_private_view_see_everything(self, admin_user, get_admin_details, view):
         fields = get_admin_details(admin_user, view)
         assert fields == {
             "description",
@@ -203,7 +177,7 @@ class TestAdminFieldsSuperUser:
             "valid",
         }
 
-    def test_public_view_edit_everything(self, admin_user, get_admin_details, view):
+    def test_public_view_see_everything(self, admin_user, get_admin_details, view):
         view.public = True
         fields = get_admin_details(admin_user, view)
         assert fields == {
@@ -228,24 +202,6 @@ class TestAdminFieldsSuperUser:
 
 
 class TestAdminFieldsStaffUser:
-    def test_add_page_no_public_fields(self, staff_user, get_admin_details):
-        fields = get_admin_details(staff_user, None)
-        assert fields == {
-            "description",
-            "fields",
-            "model_name",
-            "name",
-            "owner",
-            "query",
-            "created_time",
-            "id",
-            "open_view",
-            "limit",
-            "shared",
-            "folder",
-            "valid",
-        }
-
     def test_private_view_no_public_fields(self, staff_user, get_admin_details, view):
         fields = get_admin_details(staff_user, view)
         assert fields == {
