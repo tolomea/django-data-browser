@@ -47,8 +47,6 @@ WRITABLE_FIELDS = [  # model_field_name, api_field_name, clean
 
 
 def deserialize(data):
-    data = json.loads(data)
-
     res = {
         model_field_name: clean(model_field_name, data[api_field_name])
         for model_field_name, api_field_name, clean in WRITABLE_FIELDS
@@ -133,7 +131,8 @@ def view_list(request):
             {"saved": saved_views_serialized, "shared": shared_views_serialized}
         )
     elif request.method == "POST":
-        view = View.objects.create(owner=request.user, **deserialize(request.body))
+        data = json.loads(request.body)
+        view = View.objects.create(owner=request.user, **deserialize(data))
         return JsonResponse(serialize(view))
     else:
         return HttpResponse(status=400)
@@ -148,7 +147,8 @@ def view_detail(request, pk):
     if request.method == "GET":
         return JsonResponse(serialize(view))
     elif request.method == "PATCH":
-        for k, v in deserialize(request.body).items():
+        data = json.loads(request.body)
+        for k, v in deserialize(data).items():
             setattr(view, k, v)
         view.save()
         return JsonResponse(serialize(view))
