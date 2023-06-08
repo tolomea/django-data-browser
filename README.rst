@@ -355,6 +355,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Fix various issues around saved view validity.                                                           |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.1   | 2023-05-21 | | BREAKING: In JSON format move ``parsed`` and ``fitlerErrors`` onto the filters.                        |
 |         |            | | Display invalid fields (previously they were ignored).                                                 |
 |         |            | | Fix small bug when removing filters with errors.                                                       |
