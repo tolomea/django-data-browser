@@ -1,13 +1,9 @@
-from copy import copy
-
 from django.contrib import admin
-from django.contrib.admin.utils import flatten_fieldsets
 from django.utils.html import format_html
 
 from . import models
-from .common import PUBLIC_PERM, add_request_info, has_permission
+from .common import PUBLIC_PERM, has_permission, set_global_state
 from .helpers import AdminMixin, attributes
-from .orm_admin import get_models
 
 
 @admin.register(models.View)
@@ -42,8 +38,11 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
     ]
     list_display = ["__str__", "owner", "public"]
 
-    def get_readonly_fields(self, request, obj):
-        return flatten_fieldsets(self.get_fieldsets(request, obj))
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
     def get_fieldsets(self, request, obj=None):
         res = super().get_fieldsets(request, obj)
@@ -51,29 +50,19 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             res = [fs for fs in res if fs[0] != "Public"]
         return res
 
-    def get_object(self, request, object_id, from_field=None):
-        res = super().get_object(request, object_id, from_field=from_field)
-
-        ddb_request = copy(request)
-        ddb_request.environ = request.environ
-        ddb_request.user = res.owner
-        add_request_info(ddb_request)
-        models.global_data.request = ddb_request
-
+    def changeform_view(self, request, *args, **kwargs):
+        with set_global_state(request=request, set_ddb=False):
+            res = super().changeform_view(request, *args, **kwargs)
+            res.render()
         return res
 
     @staticmethod
     def open_view(obj):
         if not obj.model_name:
-            return "N/A"
+            return "N/A"  # pragma: no cover
         return format_html(f'<a href="{obj.url}">view</a>')
 
     @attributes(boolean=True)
     def valid(self, obj):
-        orm_models = get_models(models.global_data.request)
-        return obj.get_query().is_valid(orm_models)
-
-    def get_changeform_initial_data(self, request):
-        get_results = super().get_changeform_initial_data(request)
-        get_results["owner"] = request.user.pk
-        return get_results
+        with set_global_state(user=obj.owner, public_view=False):
+            return obj.is_valid()

@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from data_browser.common import global_state
 from data_browser.orm_admin import get_models
 
 from .core.admin import AddressAdmin, ProductAdmin
@@ -88,6 +89,6 @@ class TestAdminMixin:
 
 
 def test_admin_options_setting(admin_ddb_request, settings):
-    assert "core.InAdmin" in get_models(admin_ddb_request)
+    assert "core.InAdmin" in get_models(global_state.request)
     settings.DATA_BROWSER_ADMIN_OPTIONS = {"tests.core.admin.InAdmin": {"ignore": True}}
-    assert "core.InAdmin" not in get_models(admin_ddb_request)
+    assert "core.InAdmin" not in get_models(global_state.request)

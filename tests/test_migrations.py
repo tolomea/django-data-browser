@@ -1,14 +1,14 @@
 import pytest
 
 from data_browser import migration_helpers
+from data_browser.common import global_state
 from data_browser.models import View
-from data_browser.orm_admin import get_models
 from data_browser.query import BoundQuery
 
 
 @pytest.fixture
 def models(admin_ddb_request):
-    return get_models(admin_ddb_request)
+    return global_state.models
 
 
 @pytest.mark.django_db

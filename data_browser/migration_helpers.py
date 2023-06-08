@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from django.test import RequestFactory
 from django.urls import reverse
 
-from data_browser.orm_admin import get_models
 from data_browser.types import (
     IsNullType,
     NumberChoiceArrayType,
@@ -12,6 +11,8 @@ from data_browser.types import (
     StringChoiceArrayType,
     StringChoiceType,
 )
+
+from .common import global_state, set_global_state
 
 
 def _fix_filter(models, field, parts, lookup, value):
@@ -46,14 +47,11 @@ def _fix_filter(models, field, parts, lookup, value):
 
 
 def forwards_0009(View):
-    from data_browser.views import add_request_info
-
     User = get_user_model()
-
+    user = User(is_superuser=True)
     request = RequestFactory().get(reverse("admin:index"))
-    request.user = User(is_superuser=True)
-    add_request_info(request)
-    models = get_models(request)
+    with set_global_state(request=request, user=user, public_view=False):
+        models = global_state.models
 
     for view in View.objects.all():
         filters = []

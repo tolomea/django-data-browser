@@ -1,13 +1,16 @@
-import threading
-
 import hyperlink
 from django.db import models
 from django.urls import reverse
 from django.utils import crypto, timezone
 
-from .common import PUBLIC_PERM, SHARE_PERM, settings
-
-global_data = threading.local()
+from .common import (
+    PUBLIC_PERM,
+    SHARE_PERM,
+    global_state,
+    has_permission,
+    set_global_state,
+    settings,
+)
 
 
 def get_id():
@@ -51,30 +54,32 @@ class View(models.Model):
     def url(self):
         return self.get_query().get_full_url("html")
 
-    def public_link(self):
-        if self.public:
-            if settings.DATA_BROWSER_ALLOW_PUBLIC:
-                url = reverse(
-                    "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
-                )
-                return global_data.request.build_absolute_uri(url)
-            else:
+    def _public_url(self, fmt):
+        with set_global_state(user=self.owner, public_view=True):
+            if not (has_permission(self.owner, PUBLIC_PERM) and self.public):
+                return "N/A"
+
+            if not settings.DATA_BROWSER_ALLOW_PUBLIC:
                 return "Public Views are disabled in Django settings."
-        else:
-            return "N/A"
+
+            if not self.is_valid():
+                return "View is invalid"
+
+            url = reverse(
+                "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
+            )
+            url = global_state.request.build_absolute_uri(url)
+
+            return fmt.format(url=url)
+
+    def public_link(self):
+        return self._public_url("{url}")
 
     def google_sheets_formula(self):
-        if self.public:
-            if settings.DATA_BROWSER_ALLOW_PUBLIC:
-                url = reverse(
-                    "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
-                )
-                url = global_data.request.build_absolute_uri(url)
-                return f'=importdata("{url}")'
-            else:
-                return "Public Views are disabled in Django settings."
-        else:
-            return "N/A"
+        return self._public_url('=importdata("{url}")')
 
     def __str__(self):
         return f"{self.model_name} view: {self.name}"
+
+    def is_valid(self):
+        return self.get_query().is_valid(global_state.models)

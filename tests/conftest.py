@@ -65,23 +65,26 @@ settings.configure(
 
 @pytest.fixture
 def ddb_request(rf):
-    from data_browser.common import add_request_info
+    from data_browser.common import global_state, set_global_state
 
     request = rf.get("/")
-    add_request_info(request)
-    return request
+    with set_global_state(request=request, public_view=False):
+        yield global_state.request
 
 
 @pytest.fixture
 def admin_ddb_request(ddb_request, admin_user):
-    ddb_request.user = admin_user
-    return ddb_request
+    from data_browser.common import global_state, set_global_state
+
+    with set_global_state(user=admin_user, public_view=False):
+        yield global_state.request
 
 
 @pytest.fixture
 def mock_admin_get_queryset(mocker):
-    from data_browser.orm_admin import admin_get_queryset
+    from data_browser.orm_admin import _admin_get_queryset
 
+    # TODO, I really want to patch ModelAdmin.get_queryset but can't work out how
     return mocker.patch(
-        "data_browser.orm_admin.admin_get_queryset", wraps=admin_get_queryset
+        "data_browser.orm_admin._admin_get_queryset", wraps=_admin_get_queryset
     )

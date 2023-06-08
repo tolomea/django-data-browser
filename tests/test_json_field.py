@@ -1,8 +1,8 @@
 import pytest
 from django.contrib import admin
 
+from data_browser.common import global_state
 from data_browser.helpers import AdminMixin
-from data_browser.orm_admin import get_models
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
@@ -28,12 +28,12 @@ def with_json(db):
 @pytest.fixture
 def get_results_flat(with_json, admin_ddb_request):
     def helper(*fields, **filters):
-        orm_models = get_models(admin_ddb_request)
+        orm_models = global_state.models
         query = Query.from_request(
             "json.JsonModel", ",".join(fields), list(filters.items())
         )
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(admin_ddb_request, bound_query, orm_models, False)
+        data = get_results(bound_query, orm_models, False)
 
         for f in bound_query.filters:
             if f.error_message:

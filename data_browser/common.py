@@ -1,11 +1,15 @@
+import functools
 import logging
 import math
+import threading
 import traceback
+from copy import copy
 
 from django import http
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.utils.functional import cached_property
 
 from . import version
 
@@ -39,6 +43,9 @@ SHARE_PERM = "share_view"
 
 
 def has_permission(user, permission):
+    if user is None:
+        return False
+
     return user.has_perm(f"data_browser.{permission}")
 
 
@@ -125,9 +132,101 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
     return max(0, min(dp_for_sf, max_actual_dp, max_dp))
 
 
-def add_request_info(request, *, view=False):
-    request.data_browser = {
-        "public_view": view,
-        "fields": set(),
-        "calculated_fields": set(),
-    }
+class GlobalState(threading.local):
+    def __init__(self):
+        self._state = None
+
+    @property
+    def request(self):
+        return self._state.request
+
+    @property
+    def models(self):
+        return self._state.models
+
+
+global_state = GlobalState()
+
+
+class _UNSPECIFIED:
+    pass
+
+
+class _State:
+    def __init__(
+        self,
+        prev,
+        *,
+        request=_UNSPECIFIED,
+        user=_UNSPECIFIED,
+        public_view=_UNSPECIFIED,
+        set_ddb=True,
+    ):
+        if request is _UNSPECIFIED:
+            request = prev.request
+
+        new_request = copy(request)
+        new_request.environ = request.environ
+
+        if user is not _UNSPECIFIED:
+            new_request.user = user
+
+        if set_ddb:
+            assert public_view is not _UNSPECIFIED
+
+            new_request.data_browser = {
+                "public_view": public_view,
+                "fields": set(),
+                "calculated_fields": set(),
+            }
+
+        self.request = new_request
+        self._children = {}
+
+    @cached_property
+    def models(self):
+        from .orm_admin import get_models
+
+        old = global_state._state
+        global_state._state = None
+        try:
+            return get_models(self.request)
+        finally:
+            global_state._state = old
+
+
+class set_global_state:
+    def __init__(self, request=_UNSPECIFIED, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+
+    def __call__(self, func):
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            assert self.request is _UNSPECIFIED
+            self.request = request
+            try:
+                with self:
+                    return func(request, *args, **kwargs)
+            finally:
+                self.request = _UNSPECIFIED
+
+        return wrapper
+
+    def __enter__(self):
+        self.old = global_state._state
+
+        cachable = self.old and self.request is _UNSPECIFIED
+        key = tuple(self.kwargs.items())
+
+        if cachable and key in self.old._children:
+            state = self.old._children[key]
+        else:
+            state = _State(self.old, request=self.request, **self.kwargs)
+            if cachable:
+                self.old._children[key] = state
+
+        global_state._state = state
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        global_state._state = self.old

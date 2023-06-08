@@ -6,7 +6,8 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Permission, User
 from django.utils import timezone
 
-from data_browser.orm_admin import OrmModel, get_models
+from data_browser.common import global_state
+from data_browser.orm_admin import OrmModel
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery, Query
 
@@ -96,7 +97,7 @@ def pivot_products(db):
 
 @pytest.fixture
 def get_orm_models(admin_ddb_request):
-    return lambda: get_models(admin_ddb_request)
+    return lambda: global_state.models
 
 
 @pytest.fixture
@@ -111,7 +112,7 @@ def get_product_pivot(admin_ddb_request, get_orm_models, django_assert_num_queri
         query = Query.from_request("core.Product", *args, **kwargs)
         bound_query = BoundQuery.bind(query, orm_models)
         with django_assert_num_queries(queries):
-            data = get_results(admin_ddb_request, bound_query, orm_models, False)
+            data = get_results(bound_query, orm_models, False)
             return {
                 "cols": flatten_table(bound_query.col_fields, data["cols"]),
                 "rows": flatten_table(bound_query.row_fields, data["rows"]),
@@ -199,12 +200,12 @@ def test_bad_storage(monkeypatch, admin_ddb_request):
     default_storage._wrapped = empty
 
     # copy what the fixture does
-    orm_models = get_models(admin_ddb_request)
+    orm_models = global_state.models
 
     def get_product_flat(*args, **kwargs):
         query = Query.from_request("core.Product", *args)
         bound_query = BoundQuery.bind(query, orm_models)
-        data = get_results(admin_ddb_request, bound_query, orm_models, False)
+        data = get_results(bound_query, orm_models, False)
         return flatten_table(bound_query.fields, data["rows"])
 
     # some storage backends will hard fail if their underlying storage isn't
@@ -786,7 +787,7 @@ class TestPermissions:
             user.user_permissions.add(Permission.objects.get(codename=f"change_{perm}"))
 
         ddb_request.user = user
-        return get_models(ddb_request)
+        return global_state.models
 
     @pytest.mark.django_db
     def test_all_perms(self, ddb_request):

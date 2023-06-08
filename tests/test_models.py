@@ -1,24 +1,29 @@
 import pytest
 
-from data_browser.models import View, global_data
+from data_browser.common import global_state, set_global_state
+from data_browser.models import View
 
 
 @pytest.fixture
-def view():
-    return View(model_name="app.model", fields="+fa,-fd,fn", query="bob__equals=fred")
+def view(admin_user):
+    return View(
+        model_name="core.Product",
+        fields="name+0,size-1,size_unit",
+        query="name__equals=fred",
+        owner=admin_user,
+    )
 
 
 @pytest.fixture
 def global_request(rf):
     request = rf.get("/")
-    global_data.request = request
-    yield request
-    global_data.request = None
+    with set_global_state(request=request, public_view=False):
+        yield global_state.request
 
 
 def test_str(view):
     view.name = "bob"
-    assert str(view) == "app.model view: bob"
+    assert str(view) == "core.Product view: bob"
 
 
 def test_public_link(view, global_request, settings):

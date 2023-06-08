@@ -25,13 +25,13 @@ from .common import (
     SHARE_PERM,
     HttpResponse,
     JsonResponse,
-    add_request_info,
+    global_state,
     has_permission,
+    set_global_state,
     settings,
 )
 from .format_csv import get_csv_rows
 from .models import View
-from .orm_admin import get_models
 from .orm_results import get_result_list, get_result_queryset, get_results
 from .query import BoundQuery, Query, QueryFilter
 from .types import TYPES
@@ -117,8 +117,8 @@ def _get_model_fields(model_name, orm_models):
     }
 
 
-def _get_config(request):
-    orm_models = get_models(request)
+def _get_config():
+    orm_models = global_state.models
     types = {
         name: {
             "lookups": {
@@ -140,7 +140,7 @@ def _get_config(request):
     model_names_by_app = defaultdict(set)
     for name, model in orm_models.items():
         if model.root:
-            # todo why don't we get this in parts and then assemble it
+            # TODO why don't we get this in parts and then assemble it
             app_name, model_name = name.split(".")
             model_names_by_app[app_name].add(model_name)
 
@@ -152,8 +152,8 @@ def _get_config(request):
             {"appName": app_name, "modelNames": sorted(model_names)}
             for app_name, model_names in sorted(model_names_by_app.items())
         ],
-        "canMakePublic": has_permission(request.user, PUBLIC_PERM),
-        "canShare": has_permission(request.user, SHARE_PERM),
+        "canMakePublic": has_permission(global_state.request.user, PUBLIC_PERM),
+        "canShare": has_permission(global_state.request.user, SHARE_PERM),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
         "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,
@@ -161,9 +161,9 @@ def _get_config(request):
 
 
 @admin_decorators.staff_member_required
+@set_global_state(public_view=False)
 def query_ctx(request, *, model_name="", fields=""):
-    add_request_info(request)
-    config = _get_config(request)
+    config = _get_config()
     return JsonResponse(config)
 
 
@@ -178,7 +178,7 @@ def admin_action(request, model_name, fields):
     params = hyperlink.parse(request.get_full_path()).query
     query = Query.from_request(model_name, fields, params)
 
-    orm_models = get_models(request)
+    orm_models = global_state.models
     if query.model_name not in orm_models:
         raise http.Http404(f"'{query.model_name}' does not exist")  # pragma: no cover
 
@@ -189,25 +189,24 @@ def admin_action(request, model_name, fields):
     if not bound_field.field.actions or action not in bound_field.field.actions:
         raise http.Http404(f"bad action '{action}'")  # pragma: no cover
 
-    results = get_result_list(request, bound_query)
+    results = get_result_list(bound_query)
 
     pks = {row[bound_field.queryset_path_str] for row in results}
     pks -= {None}
 
     model_name = bound_field.field.model_name
-    return orm_models[model_name].get_http_request_for_action(request, action, pks)
+    return orm_models[model_name].get_http_request_for_action(action, pks)
 
 
 @csrf.csrf_protect
 @csrf.ensure_csrf_cookie
 @admin_decorators.staff_member_required
+@set_global_state(public_view=False)
 def query_html(request, *, model_name="", fields=""):
-    add_request_info(request)
-
     if request.method == "POST":
         return admin_action(request, model_name, fields)
 
-    config = _get_config(request)
+    config = _get_config()
     config = json.dumps(config, cls=DjangoJSONEncoder)
     config = (
         config.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
@@ -227,9 +226,8 @@ def query_html(request, *, model_name="", fields=""):
 
 
 @admin_decorators.staff_member_required
+@set_global_state(public_view=False)
 def query(request, *, model_name, fields="", media):
-    add_request_info(request)
-
     params = hyperlink.parse(request.get_full_path()).query
 
     if media.startswith("profile") or media.startswith("pstats"):
@@ -244,7 +242,7 @@ def query(request, *, model_name, fields="", media):
             profiler.enable()
 
             query = Query.from_request(model_name, fields, params)
-            for x in _data_response(request, query, media, privileged=True):
+            for x in _data_response(query, media, privileged=True):
                 pass
 
             profiler.disable()
@@ -273,25 +271,25 @@ def query(request, *, model_name, fields="", media):
                 profiler.disable()
     else:
         query = Query.from_request(model_name, fields, params)
-        return _data_response(request, query, media, privileged=True)
+        return _data_response(query, media, privileged=True)
 
 
 def view(request, pk, media):
-    add_request_info(request, view=True)
-
     view = get_object_or_404(View.objects.filter(public=True), public_slug=pk)
-    if (
-        # some of these are checked by the admin but this is a good time to be paranoid
-        view.owner.is_active
-        and view.owner.is_staff
-        and has_permission(view.owner, PUBLIC_PERM)
-        and settings.DATA_BROWSER_ALLOW_PUBLIC
-    ):
-        request.user = view.owner  # public views are run as the person who owns them
-        query = view.get_query()
-        return _data_response(request, query, media, privileged=False, strict=True)
-    else:
-        raise http.Http404("No View matches the given query.")
+    with set_global_state(request=request, user=view.owner, public_view=True):
+        if (
+            # some of these are checked by the admin but this is a good time to be paranoid
+            view.owner
+            and view.owner.is_active
+            and view.owner.is_staff
+            and has_permission(view.owner, PUBLIC_PERM)
+            and settings.DATA_BROWSER_ALLOW_PUBLIC
+            and view.is_valid()
+        ):
+            query = view.get_query()
+            return _data_response(query, media, privileged=False)
+        else:
+            raise http.Http404("No View matches the given query.")
 
 
 class Echo:
@@ -299,17 +297,14 @@ class Echo:
         return value
 
 
-def _data_response(request, query, media, privileged=False, strict=False):
-    orm_models = get_models(request)
+def _data_response(query, media, privileged=False):
+    orm_models = global_state.models
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)
 
-    if strict and not bound_query.all_valid():
-        return http.HttpResponseBadRequest()
-
     if media == "csv":
-        results = get_results(request, bound_query, orm_models, False)
+        results = get_results(bound_query, orm_models, False)
         csv_rows = get_csv_rows(bound_query, results)
 
         writer = csv.writer(Echo())
@@ -321,7 +316,7 @@ def _data_response(request, query, media, privileged=False, strict=False):
         )
         return response
     elif media == "json":
-        results = get_results(request, bound_query, orm_models, True)
+        results = get_results(bound_query, orm_models, True)
         resp = _get_query_data(bound_query) if privileged else {}
         resp.update(results)
         return JsonResponse(resp)
@@ -329,7 +324,7 @@ def _data_response(request, query, media, privileged=False, strict=False):
         resp = _get_query_data(bound_query)
         return JsonResponse(resp)
     elif privileged and media in ["sql", "explain", "qs"]:
-        query_set = get_result_queryset(request, bound_query, media == "qs")
+        query_set = get_result_queryset(bound_query, media == "qs")
         if isinstance(query_set, list):
             res = "Not available for pure aggregates"
         else:

@@ -16,7 +16,7 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .common import JsonResponse, debug_log, settings
+from .common import JsonResponse, debug_log, global_state, settings
 from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_debug import DebugQS
@@ -53,18 +53,18 @@ class OrmModel:
             for (f, l, v) in default_filters
         ]
 
-    def get_queryset(self, request, fields=(), debug=False):
-        return admin_get_queryset(self.admin, request, fields, debug=debug)
+    def get_queryset(self, fields=(), debug=False):
+        return admin_get_queryset(global_state.request, self.admin, fields, debug=debug)
 
-    def get_http_request_for_action(self, request, action, pks):
-        actions = admin_get_actions(self.admin, request)
+    def get_http_request_for_action(self, action, pks):
+        actions = admin_get_actions(global_state.request, self.admin)
         if action not in actions:
             raise http.Http404(f"'{action}' unknown action")  # pragma: no cover
 
         return JsonResponse(
             {
                 "method": "post",
-                "url": _get_option(self.admin, "action_url", request),
+                "url": _get_option(self.admin, "action_url", global_state.request),
                 "data": [
                     ("action", action),
                     ("select_across", 0),
@@ -103,7 +103,12 @@ def open_in_admin(obj):
     return format_html('<a href="{}">{}</a>', url, obj)
 
 
-def admin_get_queryset(admin, request, fields=(), debug=False):
+def _admin_get_queryset(admin, request):
+    # this is just a hook for tests to see the request
+    return admin.get_queryset(request).using(settings.DATA_BROWSER_USING_DB)
+
+
+def admin_get_queryset(request, admin, fields=(), debug=False):
     if debug:
         klass = admin.__class__
         return DebugQS(
@@ -111,13 +116,19 @@ def admin_get_queryset(admin, request, fields=(), debug=False):
             " admin_site).get_queryset(request)"
         )
     else:
-        request.data_browser.update(
-            {"calculated_fields": set(fields), "fields": set(fields)}
-        )
-        return admin.get_queryset(request).using(settings.DATA_BROWSER_USING_DB)
+        orig = request.data_browser
+        request.data_browser = {
+            **request.data_browser,
+            "calculated_fields": set(fields),
+            "fields": set(fields),
+        }
+        try:
+            return _admin_get_queryset(admin, request)
+        finally:
+            request.data_browser = orig
 
 
-def admin_get_actions(admin, request):
+def admin_get_actions(request, admin):
     assert hasattr(request, "data_browser"), request
 
     res = {}
@@ -137,7 +148,7 @@ def _model_has_field(model, field_name):
 
 
 def _get_all_admin_fields(request):
-    assert hasattr(request, "data_browser"), request
+    assert hasattr(request, "data_browser")
 
     def from_fieldsets(admin, include_calculated):
         auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT
@@ -152,9 +163,9 @@ def _get_all_admin_fields(request):
             if include_calculated or _model_has_field(admin.model, f):
                 yield f
 
-    def visible(model_admin, request):
+    def visible(model_admin):
         if not request.user:
-            return False
+            return False  # pragma: no cover
 
         has_attrs = all(
             hasattr(model_admin, a) for a in ["get_fieldsets", "model", "get_queryset"]
@@ -181,7 +192,7 @@ def _get_all_admin_fields(request):
 
     model_admins = {}
     for model, model_admin in site._registry.items():
-        if visible(model_admin, request):
+        if visible(model_admin):
             model_admins[model] = model_admin
             all_model_fields[model].update(model_admin.get_list_display(request))
             all_model_fields[model].add(open_in_admin)
@@ -189,7 +200,7 @@ def _get_all_admin_fields(request):
 
             # check the inlines, these are already filtered for access
             for inline in model_admin.get_inline_instances(request):
-                if visible(inline, request):
+                if visible(inline):
                     try:
                         fk_field = _get_foreign_key(model, inline.model, inline.fk_name)
                     except Exception as e:
@@ -257,7 +268,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
     )
 
     if isinstance(field_func, _AnnotationDescriptor):
-        qs = admin_get_queryset(admin, request, [field_name])
+        qs = admin_get_queryset(request, admin, [field_name])
 
         annotation = qs.query.annotations.get(field_name)
         if not annotation:  # pragma: no cover
@@ -290,7 +301,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
                 return value() if callable(value) else value
 
         if field_func == open_in_admin and hasattr(admin, "get_actions"):
-            actions = admin_get_actions(admin, request)
+            actions = admin_get_actions(request, admin)
         else:
             actions = {}
 
@@ -398,7 +409,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     )
 
             if field_name == model._meta.pk.name and hasattr(admin, "get_actions"):
-                actions = admin_get_actions(admin, request)
+                actions = admin_get_actions(request, admin)
             else:
                 actions = {}
 
