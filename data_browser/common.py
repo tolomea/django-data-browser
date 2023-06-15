@@ -166,7 +166,6 @@ class _State:
             request = prev.request
 
         new_request = copy(request)
-        new_request.environ = request.environ
 
         if user is not _UNSPECIFIED:
             new_request.user = user
