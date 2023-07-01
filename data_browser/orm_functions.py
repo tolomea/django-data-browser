@@ -174,8 +174,8 @@ TYPE_FUNCTIONS[StringType].append("length")
 def get_functions_for_type(type_):
     funcs = TYPE_FUNCTIONS[type_]
     return {
-        func: OrmFunctionField(
-            type_, func, *_get_django_function(type_, func, None)[1:]
+        name: OrmFunctionField(
+            type_, name, *_get_django_function(type_, name, None)[1:]
         )
-        for func in funcs
+        for name in funcs
     }
