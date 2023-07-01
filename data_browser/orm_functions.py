@@ -35,7 +35,7 @@ _DATE_FUNCTIONS = [
 ]
 
 
-_TYPE_FUNCTIONS = defaultdict(
+TYPE_FUNCTIONS = defaultdict(
     lambda: ["is_null"],
     {
         DateType: _DATE_FUNCTIONS,
@@ -173,7 +173,7 @@ def get_functions_for_type(type_):
     if issubclass(type_, ArrayTypeMixin):
         funcs = ["is_null", "length"]
     else:
-        funcs = _TYPE_FUNCTIONS[type_]
+        funcs = TYPE_FUNCTIONS[type_]
     return {
         func: OrmFunctionField(
             type_.name, func, *_get_django_function(type_, func, None)[1:]
