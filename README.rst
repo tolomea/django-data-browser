@@ -373,6 +373,39 @@ For example to add a count that does not apply distinct to numbers you could do 
         lambda x: Count(x, distinct=False), NumberType
     )
 
+Custom SQL example
+^^^^^^^^^^^^^^^^^^
+
+For a larger example imagine you wanted to use Postgres's percentile_cont functionality to add a p95 aggregate to durations, perhaps for some kind of application performance monitoring usecase.
+
+First we need to explain percentile_cont to Django.
+
+.. code-block:: python
+
+    from django.db.models import Aggregate
+
+    class Percentile(Aggregate):
+        arity = 1
+        function = "percentile_cont"
+        template = "%(function)s(%(percentile)s) WITHIN GROUP (ORDER BY %(expressions)s)"
+        name = "Percentile"
+
+        def __init__(self, percentile, expressions, **extra):
+            super().__init__(expressions, percentile=percentile, **extra)
+
+Then we need to tell the Data Browser we want p95 on duration's.
+
+.. code-block:: python
+
+    from data_browser.orm_aggregates import TYPE_AGGREGATES, Agg
+    from data_browser.types import DurationType
+    from common.models import Percentile
+
+    TYPE_AGGREGATES[DurationType]["p95"] = Agg(
+        lambda x: Percentile(0.95, x), DurationType
+    )
+
+
 
 Version numbers
 ---------------
