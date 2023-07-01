@@ -53,11 +53,12 @@ def IsNull(field_name):
 
 
 class OrmBoundFunctionField(OrmBoundField):
+    def __init__(self, *args, func, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.func = func
+
     def _annotate(self, qs, debug=False):
-        func = _get_django_function(self.previous.type_, self.name, qs)[0](
-            self.previous.queryset_path_str
-        )
-        return self._annotate_qs(qs, func)
+        return self._annotate_qs(qs, self.func(self.previous.queryset_path_str))
 
     def parse_lookup(self, lookup, value):
         parsed, error_message = super().parse_lookup(lookup, value)
@@ -74,7 +75,9 @@ class OrmBoundFunctionField(OrmBoundField):
 
 
 class OrmFunctionField(OrmBaseField):
-    def __init__(self, base_type, name, type_, choices, default_sort, format_hints):
+    def __init__(
+        self, base_type, name, func, type_, choices, default_sort, format_hints
+    ):
         super().__init__(
             base_type.name,
             name,
@@ -87,6 +90,7 @@ class OrmFunctionField(OrmBaseField):
             format_hints=format_hints,
         )
         self.base_type = base_type
+        self.func = func
 
     def bind(self, previous):
         assert previous
@@ -99,10 +103,11 @@ class OrmFunctionField(OrmBaseField):
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=[annotation_path(full_path)],
             filter_=True,
+            func=self.func,
         )
 
 
-def _get_django_function(type_, name, qs):
+def _get_django_function(type_, name):
     if issubclass(type_, ArrayTypeMixin) and name == "length":
         return (ArrayLenTransform, NumberType, (), None, {})
 
@@ -174,8 +179,6 @@ TYPE_FUNCTIONS[StringType].append("length")
 def get_functions_for_type(type_):
     funcs = TYPE_FUNCTIONS[type_]
     return {
-        name: OrmFunctionField(
-            type_, name, *_get_django_function(type_, name, None)[1:]
-        )
+        name: OrmFunctionField(type_, name, *_get_django_function(type_, name))
         for name in funcs
     }
