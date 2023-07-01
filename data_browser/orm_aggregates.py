@@ -54,62 +54,53 @@ class _CastDuration(Cast):
         return self.as_sql(compiler, connection, template=template, **extra_context)
 
 
-TYPE_AGGREGATES = {type_: [] for type_ in TYPES.values()}
+TYPE_AGGREGATES = {type_: {} for type_ in TYPES.values()}
 
 for type_ in TYPES.values():
     if type_ != BooleanType:
-        TYPE_AGGREGATES[type_].append(
-            ("count", lambda x: models.Count(x, distinct=True), NumberType)
+        TYPE_AGGREGATES[type_]["count"] = (
+            lambda x: models.Count(x, distinct=True),
+            NumberType,
         )
 
 for type_ in [DateTimeType, DateType, DurationType, NumberType]:
-    TYPE_AGGREGATES[type_].extend(
-        [("max", models.Max, type_), ("min", models.Min, type_)]
-    )
+    TYPE_AGGREGATES[type_]["max"] = (models.Max, type_)
+    TYPE_AGGREGATES[type_]["min"] = (models.Min, type_)
 
+TYPE_AGGREGATES[NumberType]["average"] = (models.Avg, NumberType)
+TYPE_AGGREGATES[NumberType]["std_dev"] = (models.StdDev, NumberType)
+TYPE_AGGREGATES[NumberType]["sum"] = (models.Sum, NumberType)
+TYPE_AGGREGATES[NumberType]["variance"] = (models.Variance, NumberType)
 
-TYPE_AGGREGATES[NumberType].extend(
-    [
-        ("average", models.Avg, NumberType),
-        ("std_dev", models.StdDev, NumberType),
-        ("sum", models.Sum, NumberType),
-        ("variance", models.Variance, NumberType),
-    ]
+TYPE_AGGREGATES[DurationType]["average"] = (
+    lambda x: models.Avg(_CastDuration(x)),
+    DurationType,
+)
+TYPE_AGGREGATES[DurationType]["sum"] = (
+    lambda x: models.Sum(_CastDuration(x)),
+    DurationType,
 )
 
-
-TYPE_AGGREGATES[DurationType].extend(
-    [
-        ("average", lambda x: models.Avg(_CastDuration(x)), DurationType),
-        ("sum", lambda x: models.Sum(_CastDuration(x)), DurationType),
-    ]
+TYPE_AGGREGATES[BooleanType]["average"] = (
+    lambda x: models.Avg(Cast(x, output_field=IntegerField())),
+    NumberType,
 )
-
-TYPE_AGGREGATES[BooleanType].extend(
-    [
-        (
-            "average",
-            lambda x: models.Avg(Cast(x, output_field=IntegerField())),
-            NumberType,
-        ),
-        ("sum", lambda x: models.Sum(Cast(x, output_field=IntegerField())), NumberType),
-    ]
+TYPE_AGGREGATES[BooleanType]["sum"] = (
+    lambda x: models.Sum(Cast(x, output_field=IntegerField())),
+    NumberType,
 )
 
 if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
     for array_type in ArrayTypeMixin.__subclasses__():
         if array_type.raw_type is None:
-            TYPE_AGGREGATES[array_type.element_type].append(
-                (
-                    "all",
-                    lambda x: ArrayAgg(x, default=Value([]), distinct=True, ordering=x),
-                    array_type,
-                )
+            TYPE_AGGREGATES[array_type.element_type]["all"] = (
+                lambda x: ArrayAgg(x, default=Value([]), distinct=True, ordering=x),
+                array_type,
             )
 
 
 def get_aggregates_for_type(type_):
     return {
-        aggregate: OrmAggregateField(type_, aggregate, func, res_type)
-        for aggregate, func, res_type in TYPE_AGGREGATES[type_]
+        name: OrmAggregateField(type_, name, func, res_type)
+        for name, (func, res_type) in TYPE_AGGREGATES[type_].items()
     }
