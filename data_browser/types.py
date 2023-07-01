@@ -570,7 +570,6 @@ class ArrayTypeMixin:
 for _cls in [
     BooleanType,
     DurationType,
-    BooleanType,
     DateTimeType,
     DateType,
     UUIDType,

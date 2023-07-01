@@ -1,10 +1,9 @@
-from collections import defaultdict
-
 from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, functions
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
     ASC,
+    TYPES,
     ArrayTypeMixin,
     DateTimeType,
     DateType,
@@ -20,29 +19,31 @@ try:
 except ModuleNotFoundError:  # pragma: no cover
     ArrayLenTransform = None
 
+TYPE_FUNCTIONS = {type_: [] for type_ in TYPES.values()}
 
-_DATE_FUNCTIONS = [
-    "is_null",
-    "year",
-    "quarter",
-    "month",
-    "day",
-    "week_day",
-    "month_start",
-    "iso_year",
-    "iso_week",
-    "week_start",
-]
+for type_ in TYPES.values():
+    TYPE_FUNCTIONS[type_].append("is_null")
 
+for array_type in ArrayTypeMixin.__subclasses__():
+    TYPE_FUNCTIONS[array_type].append("length")
 
-TYPE_FUNCTIONS = defaultdict(
-    lambda: ["is_null"],
-    {
-        DateType: _DATE_FUNCTIONS,
-        DateTimeType: _DATE_FUNCTIONS + ["hour", "minute", "second", "date"],
-        StringType: ["is_null", "length"],
-    },
-)
+for type_ in [DateType, DateTimeType]:
+    TYPE_FUNCTIONS[type_].append("year")
+    TYPE_FUNCTIONS[type_].append("quarter")
+    TYPE_FUNCTIONS[type_].append("month")
+    TYPE_FUNCTIONS[type_].append("day")
+    TYPE_FUNCTIONS[type_].append("week_day")
+    TYPE_FUNCTIONS[type_].append("month_start")
+    TYPE_FUNCTIONS[type_].append("iso_year")
+    TYPE_FUNCTIONS[type_].append("iso_week")
+    TYPE_FUNCTIONS[type_].append("week_start")
+
+TYPE_FUNCTIONS[DateTimeType].append("hour")
+TYPE_FUNCTIONS[DateTimeType].append("minute")
+TYPE_FUNCTIONS[DateTimeType].append("second")
+TYPE_FUNCTIONS[DateTimeType].append("date")
+
+TYPE_FUNCTIONS[StringType].append("length")
 
 
 _month_choices = [
@@ -170,10 +171,7 @@ class OrmFunctionField(OrmBaseField):
 
 
 def get_functions_for_type(type_):
-    if issubclass(type_, ArrayTypeMixin):
-        funcs = ["is_null", "length"]
-    else:
-        funcs = TYPE_FUNCTIONS[type_]
+    funcs = TYPE_FUNCTIONS[type_]
     return {
         func: OrmFunctionField(
             type_.name, func, *_get_django_function(type_, func, None)[1:]
