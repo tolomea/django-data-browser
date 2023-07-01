@@ -346,7 +346,7 @@ Functions
 
 The function registry is in ``data_browser.orm_functions.TYPE_FUNCTIONS`` this has type ``dict[BaseType, dict[str, data_browser.orm_functions.Func]]``. It is safe to insert new entries into this at runtime.
 
-For example to add the MD5 function to strings you could do the following:
+For example to add the MD5 function to string fields you could do the following:
 
 .. code-block:: python
 
@@ -361,7 +361,7 @@ Aggregates
 
 The aggregate registry is in ``data_browser.orm_aggregates.TYPE_AGGREGATES`` this has type ``dict[BaseType, dict[str, data_browser.orm_aggregates.Agg]]``. It is safe to insert new entries into this at runtime.
 
-For example to add a count that does not apply distinct to numbers you could do the following:
+For example to add a count that does not apply distinct to number fields you could do the following:
 
 .. code-block:: python
 
@@ -376,9 +376,9 @@ For example to add a count that does not apply distinct to numbers you could do 
 Custom SQL example
 ^^^^^^^^^^^^^^^^^^
 
-For a larger example imagine you wanted to use Postgres's percentile_cont functionality to add a p95 aggregate to durations, perhaps for some kind of application performance monitoring usecase.
+For a larger example imagine you wanted to use Postgres's ``percentile_cont`` functionality to add a ``p95`` aggregate to duration fields, perhaps for some kind of application performance monitoring usecase.
 
-First we need to explain percentile_cont to Django.
+First we need to explain ``percentile_cont`` to Django.
 
 .. code-block:: python
 
@@ -393,13 +393,12 @@ First we need to explain percentile_cont to Django.
         def __init__(self, percentile, expressions, **extra):
             super().__init__(expressions, percentile=percentile, **extra)
 
-Then we need to tell the Data Browser we want p95 on duration's.
+Then we need to tell the Data Browser we want ``p95`` on duration fields.
 
 .. code-block:: python
 
     from data_browser.orm_aggregates import TYPE_AGGREGATES, Agg
     from data_browser.types import DurationType
-    from common.models import Percentile
 
     TYPE_AGGREGATES[DurationType]["p95"] = Agg(
         lambda x: Percentile(0.95, x), DurationType
