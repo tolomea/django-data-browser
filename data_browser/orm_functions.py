@@ -2,6 +2,7 @@ from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, func
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
+    ARRAY_TYPES,
     ASC,
     TYPES,
     ArrayTypeMixin,
@@ -24,7 +25,7 @@ TYPE_FUNCTIONS = {type_: [] for type_ in TYPES.values()}
 for type_ in TYPES.values():
     TYPE_FUNCTIONS[type_].append("is_null")
 
-for array_type in ArrayTypeMixin.__subclasses__():
+for array_type in ARRAY_TYPES.values():
     TYPE_FUNCTIONS[array_type].append("length")
 
 for type_ in [DateType, DateTimeType]:

@@ -593,3 +593,4 @@ class NumberChoiceArrayType(ArrayTypeMixin, BaseType):
 
 
 TYPES = {cls.name: cls for cls in all_subclasses(BaseType)}
+ARRAY_TYPES = {cls.name: cls for cls in all_subclasses(ArrayTypeMixin)}

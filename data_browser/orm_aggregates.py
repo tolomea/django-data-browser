@@ -5,8 +5,8 @@ from django.db.models.functions import Cast
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
+    ARRAY_TYPES,
     TYPES,
-    ArrayTypeMixin,
     BooleanType,
     DateTimeType,
     DateType,
@@ -91,7 +91,7 @@ TYPE_AGGREGATES[BooleanType]["sum"] = (
 )
 
 if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
-    for array_type in ArrayTypeMixin.__subclasses__():
+    for array_type in ARRAY_TYPES.values():
         if array_type.raw_type is None:
             TYPE_AGGREGATES[array_type.element_type]["all"] = (
                 lambda x: ArrayAgg(x, default=Value([]), distinct=True, ordering=x),
