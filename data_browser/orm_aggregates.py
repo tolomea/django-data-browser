@@ -44,6 +44,16 @@ class OrmAggregateField(OrmBaseField):
         )
 
 
+class _CastDuration(Cast):
+    def __init__(self, expression):
+        super().__init__(expression, output_field=DurationField())
+
+    def as_mysql(self, compiler, connection, **extra_context):
+        # https://github.com/django/django/pull/13398
+        template = "%(function)s(%(expressions)s AS signed integer)"
+        return self.as_sql(compiler, connection, template=template, **extra_context)
+
+
 TYPE_AGGREGATES = {type_: [] for type_ in TYPES.values()}
 
 for type_ in TYPES.values():
@@ -52,30 +62,25 @@ for type_ in TYPES.values():
             ("count", lambda x: models.Count(x, distinct=True), NumberType)
         )
 
+for type_ in [DateTimeType, DateType, DurationType, NumberType]:
+    TYPE_AGGREGATES[type_].extend(
+        [("max", models.Max, type_), ("min", models.Min, type_)]
+    )
+
+
 TYPE_AGGREGATES[NumberType].extend(
     [
         ("average", models.Avg, NumberType),
-        ("max", models.Max, NumberType),
-        ("min", models.Min, NumberType),
         ("std_dev", models.StdDev, NumberType),
         ("sum", models.Sum, NumberType),
         ("variance", models.Variance, NumberType),
     ]
 )
 
-TYPE_AGGREGATES[DateTimeType].extend(
-    [("max", models.Max, DateTimeType), ("min", models.Min, DateTimeType)]
-)
-
-TYPE_AGGREGATES[DateType].extend(
-    [("max", models.Max, DateType), ("min", models.Min, DateType)]
-)
 
 TYPE_AGGREGATES[DurationType].extend(
     [
         ("average", lambda x: models.Avg(_CastDuration(x)), DurationType),
-        ("max", models.Max, DurationType),
-        ("min", models.Min, DurationType),
         ("sum", lambda x: models.Sum(_CastDuration(x)), DurationType),
     ]
 )
@@ -101,16 +106,6 @@ if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
                     array_type,
                 )
             )
-
-
-class _CastDuration(Cast):
-    def __init__(self, expression):
-        super().__init__(expression, output_field=DurationField())
-
-    def as_mysql(self, compiler, connection, **extra_context):
-        # https://github.com/django/django/pull/13398
-        template = "%(function)s(%(expressions)s AS signed integer)"
-        return self.as_sql(compiler, connection, template=template, **extra_context)
 
 
 def get_aggregates_for_type(type_):
