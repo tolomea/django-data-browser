@@ -328,6 +328,52 @@ This will let you inject custom CSS and stylesheets.
 
 However note that because of how the normal CSS is injected any custom CSS will be before the normal CSS so you will need to use more specific selectors or ``!important``.
 
+
+Custom functions and aggregations
+---------------------------------
+
+*This functionality is provisional and not subject to normal backward compatible guarantees.*
+
+It is possible to register additional functions and aggregations with the Data Browser, including custom ones.
+
+Types
+^^^^^
+
+Functions and Aggregations are attached to the Data Browsers core types, these are in ``data_browser.types``.
+
+Functions
+^^^^^^^^^
+
+The function registry is in ``data_browser.orm_functions.TYPE_FUNCTIONS`` this has type ``dict[BaseType, dict[str, data_browser.orm_functions.Func]]``. It is safe to insert new entries into this at runtime.
+
+For example to add the MD5 function to strings you could do the following:
+
+.. code-block:: python
+
+    from django.db.models.functions import MD5
+    from data_browser.types import StringType
+    from data_browser.orm_functions import Func, TYPE_FUNCTIONS
+
+    TYPE_FUNCTIONS[StringType]["md5"] = Func(MD5, StringType)
+
+Aggregates
+^^^^^^^^^^
+
+The aggregate registry is in ``data_browser.orm_aggregates.TYPE_AGGREGATES`` this has type ``dict[BaseType, dict[str, data_browser.orm_aggregates.Agg]]``. It is safe to insert new entries into this at runtime.
+
+For example to add a count that does not apply distinct to numbers you could do the following:
+
+.. code-block:: python
+
+    from django.db.models import Count
+    from data_browser.types import NumberType
+    from data_browser.orm_aggregates import Agg, TYPE_AGGREGATES
+
+    TYPE_AGGREGATES[NumberType]["full_count"] = Agg(
+        lambda x: Count(x, distinct=False), NumberType
+    )
+
+
 Version numbers
 ---------------
 
@@ -355,6 +401,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Provisional support for adding custom functions and aggregations.                                        |
 |         |            | Fix ``all`` aggregate on booleans and durations. (Postgres only)                                         |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.3   | 2023-06-15 | Fix ASGI compatibility issue.                                                                            |
