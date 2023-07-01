@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from django.conf import settings
 from django.db import models
 from django.db.models import DurationField, IntegerField, Value
@@ -7,6 +9,7 @@ from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
     ARRAY_TYPES,
     TYPES,
+    BaseType,
     BooleanType,
     DateTimeType,
     DateType,
@@ -22,12 +25,12 @@ except ModuleNotFoundError:  # pragma: no cover
 
 
 class OrmAggregateField(OrmBaseField):
-    def __init__(self, base_type, name, agg_func, type_):
+    def __init__(self, base_type, name, agg):
         super().__init__(
-            base_type.name, name, name.replace("_", " "), type_=type_, concrete=True
+            base_type.name, name, name.replace("_", " "), type_=agg.type_, concrete=True
         )
         self.base_type = base_type
-        self.agg_func = agg_func
+        self.func = agg.func
 
     def bind(self, previous):
         assert previous
@@ -39,7 +42,7 @@ class OrmAggregateField(OrmBaseField):
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=[annotation_path(full_path)],
-            aggregate_clause=self.agg_func(previous.queryset_path_str),
+            aggregate_clause=self.func(previous.queryset_path_str),
             having=True,
         )
 
@@ -54,46 +57,47 @@ class _CastDuration(Cast):
         return self.as_sql(compiler, connection, template=template, **extra_context)
 
 
+@dataclass
+class Agg:
+    func: callable
+    type_: BaseType
+
+
 TYPE_AGGREGATES = {type_: {} for type_ in TYPES.values()}
 
 for type_ in TYPES.values():
     if type_ != BooleanType:
-        TYPE_AGGREGATES[type_]["count"] = (
-            lambda x: models.Count(x, distinct=True),
-            NumberType,
+        TYPE_AGGREGATES[type_]["count"] = Agg(
+            lambda x: models.Count(x, distinct=True), NumberType
         )
 
 for type_ in [DateTimeType, DateType, DurationType, NumberType]:
-    TYPE_AGGREGATES[type_]["max"] = (models.Max, type_)
-    TYPE_AGGREGATES[type_]["min"] = (models.Min, type_)
+    TYPE_AGGREGATES[type_]["max"] = Agg(models.Max, type_)
+    TYPE_AGGREGATES[type_]["min"] = Agg(models.Min, type_)
 
-TYPE_AGGREGATES[NumberType]["average"] = (models.Avg, NumberType)
-TYPE_AGGREGATES[NumberType]["std_dev"] = (models.StdDev, NumberType)
-TYPE_AGGREGATES[NumberType]["sum"] = (models.Sum, NumberType)
-TYPE_AGGREGATES[NumberType]["variance"] = (models.Variance, NumberType)
+TYPE_AGGREGATES[NumberType]["average"] = Agg(models.Avg, NumberType)
+TYPE_AGGREGATES[NumberType]["std_dev"] = Agg(models.StdDev, NumberType)
+TYPE_AGGREGATES[NumberType]["sum"] = Agg(models.Sum, NumberType)
+TYPE_AGGREGATES[NumberType]["variance"] = Agg(models.Variance, NumberType)
 
-TYPE_AGGREGATES[DurationType]["average"] = (
-    lambda x: models.Avg(_CastDuration(x)),
-    DurationType,
+TYPE_AGGREGATES[DurationType]["average"] = Agg(
+    lambda x: models.Avg(_CastDuration(x)), DurationType
 )
-TYPE_AGGREGATES[DurationType]["sum"] = (
-    lambda x: models.Sum(_CastDuration(x)),
-    DurationType,
+TYPE_AGGREGATES[DurationType]["sum"] = Agg(
+    lambda x: models.Sum(_CastDuration(x)), DurationType
 )
 
-TYPE_AGGREGATES[BooleanType]["average"] = (
-    lambda x: models.Avg(Cast(x, output_field=IntegerField())),
-    NumberType,
+TYPE_AGGREGATES[BooleanType]["average"] = Agg(
+    lambda x: models.Avg(Cast(x, output_field=IntegerField())), NumberType
 )
-TYPE_AGGREGATES[BooleanType]["sum"] = (
-    lambda x: models.Sum(Cast(x, output_field=IntegerField())),
-    NumberType,
+TYPE_AGGREGATES[BooleanType]["sum"] = Agg(
+    lambda x: models.Sum(Cast(x, output_field=IntegerField())), NumberType
 )
 
 if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
     for array_type in ARRAY_TYPES.values():
         if array_type.raw_type is None:
-            TYPE_AGGREGATES[array_type.element_type]["all"] = (
+            TYPE_AGGREGATES[array_type.element_type]["all"] = Agg(
                 lambda x: ArrayAgg(x, default=Value([]), distinct=True, ordering=x),
                 array_type,
             )
@@ -101,6 +105,6 @@ if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
 
 def get_aggregates_for_type(type_):
     return {
-        name: OrmAggregateField(type_, name, func, res_type)
-        for name, (func, res_type) in TYPE_AGGREGATES[type_].items()
+        name: OrmAggregateField(type_, name, agg)
+        for name, agg in TYPE_AGGREGATES[type_].items()
     }
