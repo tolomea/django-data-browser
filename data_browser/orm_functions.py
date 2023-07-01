@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Optional
 
 from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, functions
 
@@ -112,7 +113,7 @@ class Func:
     func: callable
     type_: BaseType
     choices: tuple = ()
-    default_sort: str | None = ASC
+    default_sort: Optional[str] = ASC
     format_hints: dict = field(default_factory=dict)
 
 

@@ -25,6 +25,7 @@
     skip_empty = true
 
 [tool.flake8]
+    target-version = "3.7"
     extend-ignore = [
         # Loop control variable not used within the loop body TODO enable this
         "B007",
