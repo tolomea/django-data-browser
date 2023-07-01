@@ -1,3 +1,5 @@
+from dataclasses import dataclass, field
+
 from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, functions
 
 from .orm_fields import OrmBaseField, OrmBoundField
@@ -6,6 +8,7 @@ from .types import (
     ASC,
     TYPES,
     ArrayTypeMixin,
+    BaseType,
     DateTimeType,
     DateType,
     IsNullType,
@@ -75,22 +78,20 @@ class OrmBoundFunctionField(OrmBoundField):
 
 
 class OrmFunctionField(OrmBaseField):
-    def __init__(
-        self, base_type, name, func, type_, choices, default_sort, format_hints
-    ):
+    def __init__(self, base_type, name, func):
         super().__init__(
             base_type.name,
             name,
             name.replace("_", " "),
-            type_=type_,
+            type_=func.type_,
             concrete=True,
             can_pivot=True,
-            choices=choices,
-            default_sort=default_sort,
-            format_hints=format_hints,
+            choices=func.choices,
+            default_sort=func.default_sort,
+            format_hints=func.format_hints,
         )
         self.base_type = base_type
-        self.func = func
+        self.func = func.func
 
     def bind(self, previous):
         assert previous
@@ -107,44 +108,39 @@ class OrmFunctionField(OrmBaseField):
         )
 
 
+@dataclass
+class Func:
+    func: callable
+    type_: BaseType
+    choices: tuple = ()
+    default_sort: str | None = ASC
+    format_hints: dict = field(default_factory=dict)
+
+
 def _get_django_function(type_, name):
     if issubclass(type_, ArrayTypeMixin) and name == "length":
-        return (ArrayLenTransform, NumberType, (), None, {})
+        return Func(ArrayLenTransform, NumberType, default_sort=None)
 
     mapping = {
-        "year": (functions.ExtractYear, NumberType, (), ASC, {"useGrouping": False}),
-        "quarter": (functions.ExtractQuarter, NumberType, (), ASC, {}),
-        "month": (functions.ExtractMonth, NumberChoiceType, _month_choices, ASC, {}),
-        "month_start": (
-            lambda x: functions.TruncMonth(x, DateField()),
-            DateType,
-            (),
-            ASC,
-            {},
+        "year": Func(
+            functions.ExtractYear, NumberType, format_hints={"useGrouping": False}
         ),
-        "day": (functions.ExtractDay, NumberType, (), ASC, {}),
-        "week_day": (
-            functions.ExtractWeekDay,
-            NumberChoiceType,
-            _weekday_choices,
-            ASC,
-            {},
+        "quarter": Func(functions.ExtractQuarter, NumberType),
+        "month": Func(functions.ExtractMonth, NumberChoiceType, choices=_month_choices),
+        "month_start": Func(lambda x: functions.TruncMonth(x, DateField()), DateType),
+        "day": Func(functions.ExtractDay, NumberType),
+        "week_day": Func(
+            functions.ExtractWeekDay, NumberChoiceType, choices=_weekday_choices
         ),
-        "hour": (functions.ExtractHour, NumberType, (), ASC, {}),
-        "minute": (functions.ExtractMinute, NumberType, (), ASC, {}),
-        "second": (functions.ExtractSecond, NumberType, (), ASC, {}),
-        "date": (functions.TruncDate, DateType, (), ASC, {}),
-        "is_null": (IsNull, IsNullType, (), None, {}),
-        "length": (functions.Length, NumberType, (), None, {}),
-        "iso_year": (functions.ExtractIsoYear, NumberType, (), ASC, {}),
-        "iso_week": (functions.ExtractWeek, NumberType, (), ASC, {}),
-        "week_start": (
-            lambda x: functions.TruncWeek(x, DateField()),
-            DateType,
-            (),
-            ASC,
-            {},
-        ),
+        "hour": Func(functions.ExtractHour, NumberType),
+        "minute": Func(functions.ExtractMinute, NumberType),
+        "second": Func(functions.ExtractSecond, NumberType),
+        "date": Func(functions.TruncDate, DateType),
+        "is_null": Func(IsNull, IsNullType, default_sort=None),
+        "length": Func(functions.Length, NumberType, default_sort=None),
+        "iso_year": Func(functions.ExtractIsoYear, NumberType),
+        "iso_week": Func(functions.ExtractWeek, NumberType),
+        "week_start": Func(lambda x: functions.TruncWeek(x, DateField()), DateType),
     }
     return mapping[name]
 
@@ -179,6 +175,6 @@ TYPE_FUNCTIONS[StringType].append("length")
 def get_functions_for_type(type_):
     funcs = TYPE_FUNCTIONS[type_]
     return {
-        name: OrmFunctionField(type_, name, *_get_django_function(type_, name))
+        name: OrmFunctionField(type_, name, _get_django_function(type_, name))
         for name in funcs
     }
