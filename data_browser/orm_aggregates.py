@@ -45,7 +45,7 @@ class OrmAggregateField(OrmBaseField):
         )
 
 
-_TYPE_AGGREGATES = defaultdict(
+TYPE_AGGREGATES = defaultdict(
     lambda: [("count", NumberType)],
     {
         NumberType: [
@@ -77,7 +77,7 @@ _TYPE_AGGREGATES = defaultdict(
 if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
     for array_type in ArrayTypeMixin.__subclasses__():
         if array_type.raw_type is None:
-            _TYPE_AGGREGATES[array_type.element_type].append(("all", array_type))
+            TYPE_AGGREGATES[array_type.element_type].append(("all", array_type))
 
 
 class _CastDuration(Cast):
@@ -121,5 +121,5 @@ def get_aggregates_for_type(type_):
         aggregate: OrmAggregateField(
             type_, aggregate, _get_django_aggregate(type_, aggregate), res_type
         )
-        for aggregate, res_type in _TYPE_AGGREGATES[type_]
+        for aggregate, res_type in TYPE_AGGREGATES[type_]
     }
