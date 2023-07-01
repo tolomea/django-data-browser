@@ -68,6 +68,9 @@ class _CastDuration(Cast):
 
 
 def _get_django_aggregate(field_type, name):
+    if name == "all":
+        return lambda x: ArrayAgg(x, default=Value([]), distinct=True, ordering=x)
+
     if field_type == BooleanType:
         return {
             "average": lambda x: models.Avg(Cast(x, output_field=IntegerField())),
@@ -88,7 +91,6 @@ def _get_django_aggregate(field_type, name):
             "std_dev": models.StdDev,
             "sum": models.Sum,
             "variance": models.Variance,
-            "all": lambda x: ArrayAgg(x, default=Value([]), distinct=True, ordering=x),
         }[name]
 
 

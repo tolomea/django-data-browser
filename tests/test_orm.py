@@ -401,6 +401,13 @@ def test_get_all_aggregate(get_product_flat):
     assert data == [["g", "[1.0, 2.0]"]]
 
 
+@pytest.mark.usefixtures("products")
+@pytest.mark.skipif(not POSTGRES, reason="Postgres specific feature")
+def test_get_all_aggregate_boolean(get_product_flat):
+    data = get_product_flat(1, "size_unit,onsale__all", [])
+    assert data == [["g", "[null]"]]
+
+
 def test_get_aggregate_underscore(products, get_product_flat):
     products[0]._underscore = 1
     products[0].save()
