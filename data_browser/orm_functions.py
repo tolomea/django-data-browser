@@ -23,37 +23,6 @@ except ModuleNotFoundError:  # pragma: no cover
     ArrayLenTransform = None
 
 
-_month_choices = [
-    (1, "January"),
-    (2, "February"),
-    (3, "March"),
-    (4, "April"),
-    (5, "May"),
-    (6, "June"),
-    (7, "July"),
-    (8, "August"),
-    (9, "September"),
-    (10, "October"),
-    (11, "November"),
-    (12, "December"),
-]
-
-
-_weekday_choices = [
-    (1, "Sunday"),
-    (2, "Monday"),
-    (3, "Tuesday"),
-    (4, "Wednesday"),
-    (5, "Thursday"),
-    (6, "Friday"),
-    (7, "Saturday"),
-]
-
-
-def IsNull(field_name):
-    return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
-
-
 class OrmBoundFunctionField(OrmBoundField):
     def __init__(self, *args, func, **kwargs):
         super().__init__(*args, **kwargs)
@@ -105,6 +74,37 @@ class OrmFunctionField(OrmBaseField):
             filter_=True,
             func=self.func,
         )
+
+
+def IsNull(field_name):
+    return ExpressionWrapper(Q(**{field_name: None}), output_field=BooleanField())
+
+
+_month_choices = [
+    (1, "January"),
+    (2, "February"),
+    (3, "March"),
+    (4, "April"),
+    (5, "May"),
+    (6, "June"),
+    (7, "July"),
+    (8, "August"),
+    (9, "September"),
+    (10, "October"),
+    (11, "November"),
+    (12, "December"),
+]
+
+
+_weekday_choices = [
+    (1, "Sunday"),
+    (2, "Monday"),
+    (3, "Tuesday"),
+    (4, "Wednesday"),
+    (5, "Thursday"),
+    (6, "Friday"),
+    (7, "Saturday"),
+]
 
 
 @dataclass
