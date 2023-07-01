@@ -22,6 +22,29 @@ except ModuleNotFoundError:  # pragma: no cover
     ArrayAgg = None
 
 
+class OrmAggregateField(OrmBaseField):
+    def __init__(self, base_type, name, agg_func, type_):
+        super().__init__(
+            base_type.name, name, name.replace("_", " "), type_=type_, concrete=True
+        )
+        self.base_type = base_type
+        self.agg_func = agg_func
+
+    def bind(self, previous):
+        assert previous
+        assert previous.type_ == self.base_type
+        full_path = previous.full_path + [self.name]
+        return OrmBoundField(
+            field=self,
+            previous=previous,
+            full_path=full_path,
+            pretty_path=previous.pretty_path + [self.pretty_name],
+            queryset_path=[annotation_path(full_path)],
+            aggregate_clause=self.agg_func(previous.queryset_path_str),
+            having=True,
+        )
+
+
 _TYPE_AGGREGATES = defaultdict(
     lambda: [("count", NumberType)],
     {
@@ -91,29 +114,6 @@ def _get_django_aggregate(field_type, name):
             "sum": models.Sum,
             "variance": models.Variance,
         }[name]
-
-
-class OrmAggregateField(OrmBaseField):
-    def __init__(self, base_type, name, agg_func, type_):
-        super().__init__(
-            base_type.name, name, name.replace("_", " "), type_=type_, concrete=True
-        )
-        self.base_type = base_type
-        self.agg_func = agg_func
-
-    def bind(self, previous):
-        assert previous
-        assert previous.type_ == self.base_type
-        full_path = previous.full_path + [self.name]
-        return OrmBoundField(
-            field=self,
-            previous=previous,
-            full_path=full_path,
-            pretty_path=previous.pretty_path + [self.pretty_name],
-            queryset_path=[annotation_path(full_path)],
-            aggregate_clause=self.agg_func(previous.queryset_path_str),
-            having=True,
-        )
 
 
 def get_aggregates_for_type(type_):
