@@ -83,7 +83,6 @@ def _get_django_aggregate(field_type, name):
         }[name]
     else:
         return {
-            # these all have result type number
             "average": models.Avg,
             "count": lambda x: models.Count(x, distinct=True),
             "max": models.Max,
@@ -95,28 +94,32 @@ def _get_django_aggregate(field_type, name):
 
 
 class OrmAggregateField(OrmBaseField):
-    def __init__(self, model_name, name, type_):
+    def __init__(self, base_type, name, agg_func, type_):
         super().__init__(
-            model_name, name, name.replace("_", " "), type_=type_, concrete=True
+            base_type.name, name, name.replace("_", " "), type_=type_, concrete=True
         )
+        self.base_type = base_type
+        self.agg_func = agg_func
 
     def bind(self, previous):
         assert previous
+        assert previous.type_ == self.base_type
         full_path = previous.full_path + [self.name]
-        agg_func = _get_django_aggregate(previous.type_, self.name)
         return OrmBoundField(
             field=self,
             previous=previous,
             full_path=full_path,
             pretty_path=previous.pretty_path + [self.pretty_name],
             queryset_path=[annotation_path(full_path)],
-            aggregate_clause=agg_func(previous.queryset_path_str),
+            aggregate_clause=self.agg_func(previous.queryset_path_str),
             having=True,
         )
 
 
 def get_aggregates_for_type(type_):
     return {
-        aggregate: OrmAggregateField(type_.name, aggregate, res_type)
+        aggregate: OrmAggregateField(
+            type_, aggregate, _get_django_aggregate(type_, aggregate), res_type
+        )
         for aggregate, res_type in _TYPE_AGGREGATES[type_]
     }
