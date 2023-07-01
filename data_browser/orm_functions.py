@@ -7,7 +7,6 @@ from .types import (
     ARRAY_TYPES,
     ASC,
     TYPES,
-    ArrayTypeMixin,
     BaseType,
     DateTimeType,
     DateType,
@@ -117,64 +116,49 @@ class Func:
     format_hints: dict = field(default_factory=dict)
 
 
-def _get_django_function(type_, name):
-    if issubclass(type_, ArrayTypeMixin) and name == "length":
-        return Func(ArrayLenTransform, NumberType, default_sort=None)
-
-    mapping = {
-        "year": Func(
-            functions.ExtractYear, NumberType, format_hints={"useGrouping": False}
-        ),
-        "quarter": Func(functions.ExtractQuarter, NumberType),
-        "month": Func(functions.ExtractMonth, NumberChoiceType, choices=_month_choices),
-        "month_start": Func(lambda x: functions.TruncMonth(x, DateField()), DateType),
-        "day": Func(functions.ExtractDay, NumberType),
-        "week_day": Func(
-            functions.ExtractWeekDay, NumberChoiceType, choices=_weekday_choices
-        ),
-        "hour": Func(functions.ExtractHour, NumberType),
-        "minute": Func(functions.ExtractMinute, NumberType),
-        "second": Func(functions.ExtractSecond, NumberType),
-        "date": Func(functions.TruncDate, DateType),
-        "is_null": Func(IsNull, IsNullType, default_sort=None),
-        "length": Func(functions.Length, NumberType, default_sort=None),
-        "iso_year": Func(functions.ExtractIsoYear, NumberType),
-        "iso_week": Func(functions.ExtractWeek, NumberType),
-        "week_start": Func(lambda x: functions.TruncWeek(x, DateField()), DateType),
-    }
-    return mapping[name]
-
-
-TYPE_FUNCTIONS = {type_: [] for type_ in TYPES.values()}
+TYPE_FUNCTIONS = {type_: {} for type_ in TYPES.values()}
 
 for type_ in TYPES.values():
-    TYPE_FUNCTIONS[type_].append("is_null")
+    TYPE_FUNCTIONS[type_]["is_null"] = Func(IsNull, IsNullType, default_sort=None)
 
 for array_type in ARRAY_TYPES.values():
-    TYPE_FUNCTIONS[array_type].append("length")
+    TYPE_FUNCTIONS[array_type]["length"] = Func(
+        ArrayLenTransform, NumberType, default_sort=None
+    )
 
 for type_ in [DateType, DateTimeType]:
-    TYPE_FUNCTIONS[type_].append("year")
-    TYPE_FUNCTIONS[type_].append("quarter")
-    TYPE_FUNCTIONS[type_].append("month")
-    TYPE_FUNCTIONS[type_].append("day")
-    TYPE_FUNCTIONS[type_].append("week_day")
-    TYPE_FUNCTIONS[type_].append("month_start")
-    TYPE_FUNCTIONS[type_].append("iso_year")
-    TYPE_FUNCTIONS[type_].append("iso_week")
-    TYPE_FUNCTIONS[type_].append("week_start")
+    TYPE_FUNCTIONS[type_]["year"] = Func(
+        functions.ExtractYear, NumberType, format_hints={"useGrouping": False}
+    )
+    TYPE_FUNCTIONS[type_]["quarter"] = Func(functions.ExtractQuarter, NumberType)
+    TYPE_FUNCTIONS[type_]["month"] = Func(
+        functions.ExtractMonth, NumberChoiceType, choices=_month_choices
+    )
+    TYPE_FUNCTIONS[type_]["day"] = Func(functions.ExtractDay, NumberType)
+    TYPE_FUNCTIONS[type_]["week_day"] = Func(
+        functions.ExtractWeekDay, NumberChoiceType, choices=_weekday_choices
+    )
+    TYPE_FUNCTIONS[type_]["month_start"] = Func(
+        lambda x: functions.TruncMonth(x, DateField()), DateType
+    )
+    TYPE_FUNCTIONS[type_]["iso_year"] = Func(functions.ExtractIsoYear, NumberType)
+    TYPE_FUNCTIONS[type_]["iso_week"] = Func(functions.ExtractWeek, NumberType)
+    TYPE_FUNCTIONS[type_]["week_start"] = Func(
+        lambda x: functions.TruncWeek(x, DateField()), DateType
+    )
 
-TYPE_FUNCTIONS[DateTimeType].append("hour")
-TYPE_FUNCTIONS[DateTimeType].append("minute")
-TYPE_FUNCTIONS[DateTimeType].append("second")
-TYPE_FUNCTIONS[DateTimeType].append("date")
+TYPE_FUNCTIONS[DateTimeType]["hour"] = Func(functions.ExtractHour, NumberType)
+TYPE_FUNCTIONS[DateTimeType]["minute"] = Func(functions.ExtractMinute, NumberType)
+TYPE_FUNCTIONS[DateTimeType]["second"] = Func(functions.ExtractSecond, NumberType)
+TYPE_FUNCTIONS[DateTimeType]["date"] = Func(functions.TruncDate, DateType)
 
-TYPE_FUNCTIONS[StringType].append("length")
+TYPE_FUNCTIONS[StringType]["length"] = Func(
+    functions.Length, NumberType, default_sort=None
+)
 
 
 def get_functions_for_type(type_):
-    funcs = TYPE_FUNCTIONS[type_]
     return {
-        name: OrmFunctionField(type_, name, _get_django_function(type_, name))
-        for name in funcs
+        name: OrmFunctionField(type_, name, func)
+        for name, func in TYPE_FUNCTIONS[type_].items()
     }
