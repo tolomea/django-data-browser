@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from django.conf import settings
 from django.db import models
 from django.db.models import DurationField, IntegerField, Value
@@ -7,6 +5,7 @@ from django.db.models.functions import Cast
 
 from .orm_fields import OrmBaseField, OrmBoundField
 from .types import (
+    TYPES,
     ArrayTypeMixin,
     BooleanType,
     DateTimeType,
@@ -45,34 +44,37 @@ class OrmAggregateField(OrmBaseField):
         )
 
 
-TYPE_AGGREGATES = defaultdict(
-    lambda: [("count", NumberType)],
-    {
-        NumberType: [
-            ("average", NumberType),
-            ("count", NumberType),
-            ("max", NumberType),
-            ("min", NumberType),
-            ("std_dev", NumberType),
-            ("sum", NumberType),
-            ("variance", NumberType),
-        ],
-        DateTimeType: [
-            ("count", NumberType),
-            ("max", DateTimeType),
-            ("min", DateTimeType),
-        ],
-        DateType: [("count", NumberType), ("max", DateType), ("min", DateType)],
-        DurationType: [
-            ("count", NumberType),
-            ("average", DurationType),
-            ("sum", DurationType),
-            ("max", DurationType),
-            ("min", DurationType),
-        ],
-        BooleanType: [("average", NumberType), ("sum", NumberType)],
-    },
+TYPE_AGGREGATES = {type_: [] for type_ in TYPES.values()}
+
+for type_ in TYPES.values():
+    if type_ != BooleanType:
+        TYPE_AGGREGATES[type_].append(("count", NumberType))
+
+TYPE_AGGREGATES[NumberType].extend(
+    [
+        ("average", NumberType),
+        ("max", NumberType),
+        ("min", NumberType),
+        ("std_dev", NumberType),
+        ("sum", NumberType),
+        ("variance", NumberType),
+    ]
 )
+
+TYPE_AGGREGATES[DateTimeType].extend([("max", DateTimeType), ("min", DateTimeType)])
+
+TYPE_AGGREGATES[DateType].extend([("max", DateType), ("min", DateType)])
+
+TYPE_AGGREGATES[DurationType].extend(
+    [
+        ("average", DurationType),
+        ("max", DurationType),
+        ("min", DurationType),
+        ("sum", DurationType),
+    ]
+)
+
+TYPE_AGGREGATES[BooleanType].extend([("average", NumberType), ("sum", NumberType)])
 
 if "postgresql" in settings.DATABASES["default"]["ENGINE"]:
     for array_type in ArrayTypeMixin.__subclasses__():
