@@ -332,8 +332,6 @@ However note that because of how the normal CSS is injected any custom CSS will 
 Custom functions and aggregations
 ---------------------------------
 
-*This functionality is provisional and not subject to normal backward compatible guarantees.*
-
 It is possible to register additional functions and aggregations with the Data Browser, including custom ones.
 
 Types
@@ -343,6 +341,8 @@ Functions and Aggregations are attached to the Data Browsers core types, these a
 
 Functions
 ^^^^^^^^^
+
+*This functionality is provisional and not subject to normal backward compatible guarantees.*
 
 The function registry is in ``data_browser.orm_functions.TYPE_FUNCTIONS`` this has type ``dict[BaseType, dict[str, data_browser.orm_functions.Func]]``. It is safe to insert new entries into this at runtime.
 
@@ -358,6 +358,8 @@ For example to add the MD5 function to string fields you could do the following:
 
 Aggregates
 ^^^^^^^^^^
+
+*This functionality is provisional and not subject to normal backward compatible guarantees.*
 
 The aggregate registry is in ``data_browser.orm_aggregates.TYPE_AGGREGATES`` this has type ``dict[BaseType, dict[str, data_browser.orm_aggregates.Agg]]``. It is safe to insert new entries into this at runtime.
 
@@ -433,7 +435,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Provisional support for adding custom functions and aggregations.                                        |
+| 4.2.4   | 2023-07-02 | Provisional support for adding custom functions and aggregations.                                        |
 |         |            | Fix ``all`` aggregate on booleans and durations. (Postgres only)                                         |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.3   | 2023-06-15 | Fix ASGI compatibility issue.                                                                            |
