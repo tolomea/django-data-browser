@@ -83,6 +83,15 @@ def test_query_explain(admin_client):
     assert res.status_code == 200
 
 
+@pytest.mark.skipif(SQLITE, reason="Not supported by SQLITE")
+def test_query_analyze(admin_client):
+    res = admin_client.get(
+        "/data_browser/query/core.Product/size-0,name+1,size_unit.analyze"
+        "?size__lt=2&id__gt=0"
+    )
+    assert res.status_code == 200
+
+
 def test_query_sql_aggregate(admin_client):
     res = admin_client.get("/data_browser/query/core.Product/size__count.sql")
     assert res.status_code == 200
