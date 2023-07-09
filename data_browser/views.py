@@ -328,26 +328,39 @@ def _data_response(query, media, privileged=False):
         if isinstance(query_set, list):
             res = "Not available for pure aggregates"
         else:
-            if media == "sql":
+            # disclaimer
+            if media in ["sql", "explain", "analyze"]:
                 res = (
                     "/* This is an approximation of the main query.\nPages with pivoted"
-                    " or calculated data may do additional queries. */\n\n"
+                    " or calculated data may do additional queries. */\n\n\n"
                 )
-                res += sqlparse.format(
-                    str(query_set.query), reindent=True, keyword_case="upper"
-                )
-            elif media == "explain":
-                res = query_set.explain()
-            elif media == "analyze":
-                res = query_set.explain(analyze=True)
             elif media == "qs":
                 res = (
                     "# This is an approximation of the main queryset.\n# Pages with"
-                    " pivoted or calculated data may do additional queries.\n\n"
+                    " pivoted or calculated data may do additional queries.\n\n\n"
                 )
+            else:
+                assert False
+
+            # main part
+            if media == "sql":
+                pass  # actual SQL is handled below
+            elif media == "explain":
+                res += query_set.explain()
+                res += "\n\n\n"
+            elif media == "analyze":
+                res += query_set.explain(analyze=True)
+                res += "\n\n\n"
+            elif media == "qs":
                 res += str(query_set)
             else:
                 assert False
+
+            # sql
+            if media in ["sql", "explain", "analyze"]:
+                res += sqlparse.format(
+                    str(query_set.query), reindent=True, keyword_case="upper"
+                )
         return HttpResponse(res, content_type="text/plain")
     else:
         raise http.Http404(f"Bad file format {media} requested")

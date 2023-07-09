@@ -12319,6 +12319,7 @@ snapshots["test_query_qs_variants content"] = [
     "# This is an approximation of the main queryset.",
     "# Pages with pivoted or calculated data may do additional queries.",
     "",
+    "",
     "tests.core.admin.ProductAdmin(model, admin_site).get_queryset(request).annotate(",
     "    ddb_size_is_null=ExpressionWrapper(",
     "        Q(size=None),",
