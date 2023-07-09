@@ -323,7 +323,7 @@ def _data_response(query, media, privileged=False):
     elif privileged and media == "query":
         resp = _get_query_data(bound_query)
         return JsonResponse(resp)
-    elif privileged and media in ["sql", "explain", "qs"]:
+    elif privileged and media in ["sql", "explain", "analyze", "qs"]:
         query_set = get_result_queryset(bound_query, media == "qs")
         if isinstance(query_set, list):
             res = "Not available for pure aggregates"
@@ -338,6 +338,8 @@ def _data_response(query, media, privileged=False):
                 )
             elif media == "explain":
                 res = query_set.explain()
+            elif media == "analyze":
+                res = query_set.explain(analyze=True)
             elif media == "qs":
                 res = (
                     "# This is an approximation of the main queryset.\n# Pages with"

@@ -269,7 +269,7 @@ Where the ``author.age`` is actually a property on the ``Author`` model, and ``a
 
 Where the ``pks`` passed to in_bulk in the second query came from ``author__id`` in the first.
 
-You can view an approximation of the main queryset by changing the `.html` in the URL to `.qs`. In a similar manner `.sql` and `.explain` are also available.
+You can view an approximation of the main queryset by changing the `.html` in the URL to `.qs`. In a similar manner `.sql`, `.explain` and `.analyze` are also available.
 
 When the Data Browser calls the admin ``get_queryset()`` functions it will put some context in ``request.data_browser``. This allows you to test to see if the Data Browser is making the call as follows:
 
@@ -435,8 +435,10 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-| 4.2.4   | 2023-07-02 | Provisional support for adding custom functions and aggregations.                                        |
-|         |            | Fix ``all`` aggregate on booleans and durations. (Postgres only)                                         |
+|         |            | Add support for DB query analyze via ``.analyze`` url, similar to the existing ``.explain``.             |
++---------+------------+----------------------------------------------------------------------------------------------------------+
+| 4.2.4   | 2023-07-02 | | Provisional support for adding custom functions and aggregations.                                      |
+|         |            | | Fix ``all`` aggregate on booleans and durations. (Postgres only)                                       |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.3   | 2023-06-15 | Fix ASGI compatibility issue.                                                                            |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
