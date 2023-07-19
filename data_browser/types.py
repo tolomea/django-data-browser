@@ -259,6 +259,9 @@ class DateTimeParseMixin:
 
     @staticmethod
     def _unambiguous_date_parse(value, **kwargs):
+        if not any(c.isdigit() for c in value):
+            return None
+
         try:
             res = {
                 dateutil.parser.parse(value, dayfirst=False, yearfirst=False, **kwargs),
@@ -288,6 +291,7 @@ class DateTimeParseMixin:
         # iterate the clauses in the expression
         for clause_str in value.split():
             clause_str = clause_str.lower()
+            match = cls._clause.fullmatch(clause_str)
 
             if clause_str == "now":
                 res = timezone.now()
@@ -297,18 +301,8 @@ class DateTimeParseMixin:
                 # looks like some kinda iso date, roll with the defaults
                 # includes T delimited like 2018-03-20T22:31:23
                 res = dateutil.parser.parse(clause_str, default=cls._truncate_dt(res))
-            elif cls._unambiguous_date_parse(clause_str, default=cls._truncate_dt(res)):
-                # TODO could walrus the duplicate call once we drop support for py3.7
-                res = cls._unambiguous_date_parse(
-                    clause_str, default=cls._truncate_dt(res)
-                )
-            else:
-                # failing that must be relative delta stuff
-                match = cls._clause.fullmatch(clause_str)
-                if not match:
-                    raise Exception(f"Unrecognized clause '{clause_str}'")
-
-                # cut up the clause
+            elif match:
+                # relative delta stuff, cut up the clause
                 field, op, val = match.groups()
                 val = int(val)
                 human_op = {"+": "add", "-": "subtract", "=": "set"}[op]
@@ -349,6 +343,13 @@ class DateTimeParseMixin:
                             kwargs = {"weekday": arg(-val)}
 
                 res += relativedelta.relativedelta(**kwargs)
+            elif cls._unambiguous_date_parse(clause_str, default=cls._truncate_dt(res)):
+                # TODO could walrus the duplicate call once we drop support for py3.7
+                res = cls._unambiguous_date_parse(
+                    clause_str, default=cls._truncate_dt(res)
+                )
+            else:
+                raise Exception(f"Unrecognized clause '{clause_str}'")
 
         return res
 
