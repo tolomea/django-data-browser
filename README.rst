@@ -435,8 +435,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Fix parsing of date/datetime strings like ``mon-1``.                                                     |
-|         |            | Add support for DB query analyze via ``.analyze`` url, similar to the existing ``.explain``.             |
+| 4.2.5   | 2023-07-20 | | Fix parsing of date/datetime strings like ``mon-1``.                                                   |
+|         |            | | Add support for DB query analyze via ``.analyze`` url, similar to the existing ``.explain``.           |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.4   | 2023-07-02 | | Provisional support for adding custom functions and aggregations.                                      |
 |         |            | | Fix ``all`` aggregate on booleans and durations. (Postgres only)                                       |
