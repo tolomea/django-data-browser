@@ -277,7 +277,9 @@ class DateTimeParseMixin:
 
     @staticmethod
     def _truncate_dt(value):
-        return value.replace(hour=0, minute=0, second=0, microsecond=0)
+        return timezone.localtime(value).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
 
     @classmethod
     def _parse(cls, value, choices):

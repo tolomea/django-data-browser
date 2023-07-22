@@ -467,7 +467,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Support custom admin sites. Contributed by #aboutofpluto                                                 |
+|         |            | | Support custom admin sites. Contributed by #aboutofpluto                                               |
+|         |            | | Fix date expression in a filter on a datetime field not anchoring to midnight.                         |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.5   | 2023-07-20 | | Fix parsing of date/datetime strings like ``mon-1``.                                                   |
 |         |            | | Add support for DB query analyze via ``.analyze`` url, similar to the existing ``.explain``.           |
