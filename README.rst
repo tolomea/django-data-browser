@@ -80,6 +80,8 @@ Settings
 +------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 | ``DATA_BROWSER_APPS_EXPANDED``     | ``True``      |                                 | Are the app sections of the homepage model list expanded by default.                               |
 +------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_ADMIN_SITE``        | ``None``      |  `Admin Site`_                  | Specify an ``admin.AdminSite`` to use (default is ``admin.site``).                                 |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 
 
 Permissions
@@ -406,7 +408,37 @@ Then we need to tell the Data Browser we want ``p95`` on duration fields.
         lambda x: Percentile(0.95, x), DurationType
     )
 
+Admin Site
+----------
 
+You can create and use a custom ``admin.AdminSite`` (see https://docs.djangoproject.com/en/4.2/ref/contrib/admin/).
+
+To do so, in your ``settings.py``, add:
+
+.. code-block:: python
+
+    from django.contrib import admin
+
+    class BrowserAdminSite(admin.AdminSite):
+        pass
+
+    DATA_BROWSER_ADMIN_SITE = BrowserAdminSite(name='data_browser')
+
+Then, in any ``admin.py``, register the models as usually but using ``DATA_BROWSER_ADMIN_SITE``.
+
+For instance in ``myapp/admin.py``:
+
+.. code-block:: python
+
+    from django.contrib import admin
+    from django.conf import settings
+    from myapp.models import MyAdminModel, MyBrowsableModel
+
+    # register in admin only
+    admin.register(MyAdminModel)
+
+    # register in data browser only
+    settings.DATA_BROWSER_ADMIN_SITE.register(MyBrowsableModel)
 
 Version numbers
 ---------------
