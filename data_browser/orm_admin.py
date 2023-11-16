@@ -191,7 +191,8 @@ def _get_all_admin_fields(request):
         hidden_model_fields[model].update(_get_option(admin, "hide_fields", request))
 
     model_admins = {}
-    for model, model_admin in site._registry.items():
+    admin_site = settings.DATA_BROWSER_ADMIN_SITE or site
+    for model, model_admin in admin_site._registry.items():
         if visible(model_admin):
             model_admins[model] = model_admin
             all_model_fields[model].update(model_admin.get_list_display(request))
