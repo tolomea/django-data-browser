@@ -6,8 +6,7 @@ from data_browser.helpers import AdminMixin
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery
 from data_browser.query import Query
-
-from .json.models import JsonModel
+from tests.json.models import JsonModel
 
 # Howto enable SQLite JSON support https://code.djangoproject.com/wiki/JSON1Extension
 

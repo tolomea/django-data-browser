@@ -68,7 +68,7 @@
         # only use self and cls for first args
         "B902",
     ]
-    ban-relative-imports = "parents"
+    ban-relative-imports = "true"
     extend-immutable-calls = [
         "timedelta",
         "Decimal",

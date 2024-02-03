@@ -18,31 +18,31 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .common import JsonResponse
-from .common import debug_log
-from .common import global_state
-from .common import settings
-from .helpers import AdminMixin
-from .helpers import _AnnotationDescriptor
-from .helpers import _get_option
-from .helpers import attributes
-from .orm_aggregates import get_aggregates_for_type
-from .orm_debug import DebugQS
-from .orm_fields import OrmAnnotatedField
-from .orm_fields import OrmCalculatedField
-from .orm_fields import OrmConcreteField
-from .orm_fields import OrmFileField
-from .orm_fields import OrmFkField
-from .orm_fields import OrmRawField
-from .orm_functions import get_functions_for_type
-from .orm_types import get_field_type
-from .types import TYPES
-from .types import BooleanType
-from .types import JSONType
-from .types import NumberType
-from .types import StringType
-from .util import str_to_field
-from .util import title_case
+from data_browser.common import JsonResponse
+from data_browser.common import debug_log
+from data_browser.common import global_state
+from data_browser.common import settings
+from data_browser.helpers import AdminMixin
+from data_browser.helpers import _AnnotationDescriptor
+from data_browser.helpers import _get_option
+from data_browser.helpers import attributes
+from data_browser.orm_aggregates import get_aggregates_for_type
+from data_browser.orm_debug import DebugQS
+from data_browser.orm_fields import OrmAnnotatedField
+from data_browser.orm_fields import OrmCalculatedField
+from data_browser.orm_fields import OrmConcreteField
+from data_browser.orm_fields import OrmFileField
+from data_browser.orm_fields import OrmFkField
+from data_browser.orm_fields import OrmRawField
+from data_browser.orm_functions import get_functions_for_type
+from data_browser.orm_types import get_field_type
+from data_browser.types import TYPES
+from data_browser.types import BooleanType
+from data_browser.types import JSONType
+from data_browser.types import NumberType
+from data_browser.types import StringType
+from data_browser.util import str_to_field
+from data_browser.util import title_case
 
 
 @dataclass

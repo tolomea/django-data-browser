@@ -6,17 +6,17 @@ from django.db import models
 from django.db.models import OuterRef
 from django.db.models import Subquery
 
-from .common import global_state
-from .orm_debug import DebugQS
-from .types import ASC
-from .types import BaseType
-from .types import BooleanType
-from .types import DateTimeType
-from .types import DateType
-from .types import HTMLType
-from .types import UnknownType
-from .types import URLType
-from .util import annotation_path
+from data_browser.common import global_state
+from data_browser.orm_debug import DebugQS
+from data_browser.types import ASC
+from data_browser.types import BaseType
+from data_browser.types import BooleanType
+from data_browser.types import DateTimeType
+from data_browser.types import DateType
+from data_browser.types import HTMLType
+from data_browser.types import UnknownType
+from data_browser.types import URLType
+from data_browser.util import annotation_path
 
 
 @dataclass
@@ -212,7 +212,7 @@ class OrmCalculatedField(OrmBaseField):
 
 class OrmBoundAnnotatedField(OrmBoundField):
     def _annotate(self, qs, debug=False):
-        from .orm_admin import admin_get_queryset
+        from data_browser.orm_admin import admin_get_queryset
 
         if debug:
             subquery = DebugQS("Subquery")

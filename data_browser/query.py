@@ -8,9 +8,9 @@ from typing import Sequence
 from django.urls import reverse
 from django.utils.functional import cached_property
 
-from .common import settings
-from .types import ASC
-from .types import DSC
+from data_browser.common import settings
+from data_browser.types import ASC
+from data_browser.types import DSC
 
 
 @dataclasses.dataclass

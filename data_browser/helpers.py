@@ -7,7 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import BooleanField
 from django.urls import reverse
 
-from .common import settings
+from data_browser.common import settings
 
 
 def attributes(**kwargs):

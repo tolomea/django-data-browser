@@ -6,10 +6,9 @@ import pytest
 from django.contrib.auth.models import User
 
 import data_browser.models
-
-from .conftest import SQLITE
-from .core import models
-from .util import UTC
+from tests.conftest import SQLITE
+from tests.core import models
+from tests.util import UTC
 
 
 def dump(val):

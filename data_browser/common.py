@@ -11,7 +11,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
 
-from . import version
+from data_browser import version
 
 
 class Settings:
@@ -51,7 +51,7 @@ def has_permission(user, permission):
 
 
 def users_with_permission(permission):
-    from .models import View
+    from data_browser.models import View
 
     ct = ContentType.objects.get_for_model(View)
     perm = Permission.objects.get(codename=permission, content_type=ct)
@@ -185,7 +185,7 @@ class _State:
 
     @cached_property
     def models(self):
-        from .orm_admin import get_models
+        from data_browser.orm_admin import get_models
 
         old = global_state._state
         global_state._state = None

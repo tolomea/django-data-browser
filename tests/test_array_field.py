@@ -7,11 +7,10 @@ from data_browser.models import View
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery
 from data_browser.query import Query
-
-from .conftest import ARRAY_FIELD_SUPPORT
+from tests.conftest import ARRAY_FIELD_SUPPORT
 
 if ARRAY_FIELD_SUPPORT:
-    from .array.models import ArrayModel
+    from tests.array.models import ArrayModel
 else:
     pytestmark = pytest.mark.skip("Needs ArrayField support")
 

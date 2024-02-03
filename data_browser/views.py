@@ -20,25 +20,25 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators import csrf
 
-from . import version
-from .common import PUBLIC_PERM
-from .common import SHARE_PERM
-from .common import HttpResponse
-from .common import JsonResponse
-from .common import global_state
-from .common import has_permission
-from .common import set_global_state
-from .common import settings
-from .format_csv import get_csv_rows
-from .models import View
-from .orm_results import get_result_list
-from .orm_results import get_result_queryset
-from .orm_results import get_results
-from .query import BoundQuery
-from .query import Query
-from .query import QueryFilter
-from .types import TYPES
-from .util import str_to_field
+from data_browser import version
+from data_browser.common import PUBLIC_PERM
+from data_browser.common import SHARE_PERM
+from data_browser.common import HttpResponse
+from data_browser.common import JsonResponse
+from data_browser.common import global_state
+from data_browser.common import has_permission
+from data_browser.common import set_global_state
+from data_browser.common import settings
+from data_browser.format_csv import get_csv_rows
+from data_browser.models import View
+from data_browser.orm_results import get_result_list
+from data_browser.orm_results import get_result_queryset
+from data_browser.orm_results import get_results
+from data_browser.query import BoundQuery
+from data_browser.query import Query
+from data_browser.query import QueryFilter
+from data_browser.types import TYPES
+from data_browser.util import str_to_field
 
 
 def _get_query_data(bound_query):

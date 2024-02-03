@@ -7,8 +7,7 @@ from django.contrib.auth.models import User
 from data_browser.common import PUBLIC_PERM
 from data_browser.common import SHARE_PERM
 from data_browser.models import View
-
-from .util import ANY
+from tests.util import ANY
 
 
 @pytest.fixture

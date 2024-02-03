@@ -8,19 +8,19 @@ from django.db.models import ExpressionWrapper
 from django.db.models import Q
 from django.db.models import functions
 
-from .orm_fields import OrmBaseField
-from .orm_fields import OrmBoundField
-from .types import ARRAY_TYPES
-from .types import ASC
-from .types import TYPES
-from .types import BaseType
-from .types import DateTimeType
-from .types import DateType
-from .types import IsNullType
-from .types import NumberChoiceType
-from .types import NumberType
-from .types import StringType
-from .util import annotation_path
+from data_browser.orm_fields import OrmBaseField
+from data_browser.orm_fields import OrmBoundField
+from data_browser.types import ARRAY_TYPES
+from data_browser.types import ASC
+from data_browser.types import TYPES
+from data_browser.types import BaseType
+from data_browser.types import DateTimeType
+from data_browser.types import DateType
+from data_browser.types import IsNullType
+from data_browser.types import NumberChoiceType
+from data_browser.types import NumberType
+from data_browser.types import StringType
+from data_browser.util import annotation_path
 
 try:
     from django.contrib.postgres.fields.array import ArrayLenTransform

@@ -5,8 +5,7 @@ from django.db.models import F
 from data_browser.helpers import AdminMixin
 from data_browser.helpers import annotation
 from data_browser.helpers import attributes
-
-from . import models
+from tests.core import models
 
 # admin for perm testing
 

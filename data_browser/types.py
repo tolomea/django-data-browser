@@ -11,9 +11,9 @@ from django.utils import dateparse
 from django.utils import html
 from django.utils import timezone
 
-from .common import all_subclasses
-from .common import debug_log
-from .common import get_optimal_decimal_places
+from data_browser.common import all_subclasses
+from data_browser.common import debug_log
+from data_browser.common import get_optimal_decimal_places
 
 ASC, DSC = "asc", "dsc"
 

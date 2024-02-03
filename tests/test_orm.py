@@ -14,12 +14,11 @@ from data_browser.orm_admin import OrmModel
 from data_browser.orm_results import get_results
 from data_browser.query import BoundQuery
 from data_browser.query import Query
-
-from .conftest import POSTGRES
-from .core import models
-from .util import ANY
-from .util import KEYS
-from .util import UTC
+from tests.conftest import POSTGRES
+from tests.core import models
+from tests.util import ANY
+from tests.util import KEYS
+from tests.util import UTC
 
 
 def sortedAssert(a, b):

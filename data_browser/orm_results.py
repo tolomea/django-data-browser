@@ -4,9 +4,9 @@ from collections import defaultdict
 
 from django.core.serializers.json import DjangoJSONEncoder
 
-from .orm_lookups import get_django_filter
-from .query import BoundQuery
-from .types import DSC
+from data_browser.orm_lookups import get_django_filter
+from data_browser.query import BoundQuery
+from data_browser.types import DSC
 
 
 def _filter(qs, path_str, filter_):

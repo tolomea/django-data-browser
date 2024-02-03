@@ -4,12 +4,12 @@ from django.urls import reverse
 from django.utils import crypto
 from django.utils import timezone
 
-from .common import PUBLIC_PERM
-from .common import SHARE_PERM
-from .common import global_state
-from .common import has_permission
-from .common import set_global_state
-from .common import settings
+from data_browser.common import PUBLIC_PERM
+from data_browser.common import SHARE_PERM
+from data_browser.common import global_state
+from data_browser.common import has_permission
+from data_browser.common import set_global_state
+from data_browser.common import settings
 
 
 def get_id():
@@ -43,7 +43,7 @@ class View(models.Model):
     limit = models.IntegerField(blank=False, null=False, default=1000)
 
     def get_query(self):
-        from .query import Query
+        from data_browser.query import Query
 
         params = list(hyperlink.parse(f"?{self.query}").query)
         params.append(("limit", str(self.limit)))

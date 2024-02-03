@@ -4,15 +4,15 @@ import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
-from .common import SHARE_PERM
-from .common import HttpResponse
-from .common import JsonResponse
-from .common import global_state
-from .common import set_global_state
-from .common import str_user
-from .common import users_with_permission
-from .models import View
-from .util import group_by
+from data_browser.common import SHARE_PERM
+from data_browser.common import HttpResponse
+from data_browser.common import JsonResponse
+from data_browser.common import global_state
+from data_browser.common import set_global_state
+from data_browser.common import str_user
+from data_browser.common import users_with_permission
+from data_browser.models import View
+from data_browser.util import group_by
 
 
 def clean_str(field, value):

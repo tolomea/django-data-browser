@@ -33,8 +33,7 @@ from data_browser.types import StringChoiceType
 from data_browser.types import StringType
 from data_browser.types import UnknownType
 from data_browser.types import UUIDType
-
-from .util import UTC
+from tests.util import UTC
 
 
 @pytest.fixture

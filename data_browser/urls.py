@@ -7,14 +7,14 @@ from django.urls.converters import StringConverter
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 
-from .api import view_detail
-from .api import view_list
-from .common import settings
-from .views import proxy_js_dev_server
-from .views import query
-from .views import query_ctx
-from .views import query_html
-from .views import view
+from data_browser.api import view_detail
+from data_browser.api import view_list
+from data_browser.common import settings
+from data_browser.views import proxy_js_dev_server
+from data_browser.views import query
+from data_browser.views import query_ctx
+from data_browser.views import query_html
+from data_browser.views import view
 
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
 WEB_ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web_root")
