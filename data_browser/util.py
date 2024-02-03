@@ -16,3 +16,7 @@ def group_by(things, key):
     for thing in things:
         res.setdefault(key(thing), []).append(thing)
     return res
+
+
+def title_case(s):
+    return " ".join(w[0].upper() + w[1:] for w in s.split())

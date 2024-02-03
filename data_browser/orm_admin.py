@@ -3,6 +3,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from django import http
+from django.apps import apps
 from django.contrib.admin import site
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.contrib.admin.options import BaseModelAdmin
@@ -31,7 +32,7 @@ from .orm_fields import (
 from .orm_functions import get_functions_for_type
 from .orm_types import get_field_type
 from .types import TYPES, BooleanType, JSONType, NumberType, StringType
-from .util import str_to_field
+from .util import str_to_field, title_case
 
 
 @dataclass
@@ -39,6 +40,8 @@ class OrmModel:
     fields: dict
     admin: BaseModelAdmin = None
     pk: str = None
+    pretty_name: str = None
+    app_pretty_name: str = None
 
     @property
     def root(self):
@@ -78,6 +81,15 @@ class OrmModel:
 
 def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
+
+
+def get_model_pretty_name(model):
+    return title_case(model._meta.verbose_name)
+
+
+def get_app_pretty_name(model):
+    app_config = apps.get_app_config(model._meta.app_label)
+    return title_case(app_config.verbose_name)
 
 
 def get_fields_for_type(type_):
@@ -423,7 +435,11 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             )
 
     orm_models[model_name] = OrmModel(
-        fields=fields, admin=admin, pk=model._meta.pk.name
+        fields=fields,
+        admin=admin,
+        pk=model._meta.pk.name,
+        pretty_name=get_model_pretty_name(model),
+        app_pretty_name=get_app_pretty_name(model),
     )
 
     return orm_models
