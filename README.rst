@@ -41,8 +41,8 @@ Supported Versions
 
 The Data Browser is currently tested on:
 
-* Django 3.2 - 4.2
-* Python 3.7 - 3.11
+* Django 3.2 - 5.0
+* Python 3.8 - 3.12
 * MySQL, PostgreSQL, SQLite
 
 We highly recommend and only officially support the latest patch release of each Python and Django series.
@@ -470,6 +470,7 @@ Release History
 |         |            | | Support custom admin sites. Contributed by #aboutofpluto                                               |
 |         |            | | Fix date expression in a filter on a datetime field not anchoring to midnight.                         |
 |         |            | | Use verbose names for apps and models.                                                                 |
+|         |            | | Add support for Python 3.12 and Django 5.0, drop support for Python 3.7.                               |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.5   | 2023-07-20 | | Fix parsing of date/datetime strings like ``mon-1``.                                                   |
 |         |            | | Add support for DB query analyze via ``.analyze`` url, similar to the existing ``.explain``.           |

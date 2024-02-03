@@ -349,11 +349,10 @@ class DateTimeParseMixin:
                             kwargs = {"weekday": arg(-val)}
 
                 res += relativedelta.relativedelta(**kwargs)
-            elif cls._unambiguous_date_parse(clause_str, default=cls._truncate_dt(res)):
-                # TODO could walrus the duplicate call once we drop support for py3.7
-                res = cls._unambiguous_date_parse(
-                    clause_str, default=cls._truncate_dt(res)
-                )
+            elif parsed := cls._unambiguous_date_parse(
+                clause_str, default=cls._truncate_dt(res)
+            ):
+                res = parsed
             else:
                 raise Exception(f"Unrecognized clause '{clause_str}'")
 
