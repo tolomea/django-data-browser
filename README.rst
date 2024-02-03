@@ -467,6 +467,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Support custom admin sites. Contributed by #aboutofpluto                                                 |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.5   | 2023-07-20 | | Fix parsing of date/datetime strings like ``mon-1``.                                                   |
 |         |            | | Add support for DB query analyze via ``.analyze`` url, similar to the existing ``.explain``.           |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
@@ -602,7 +604,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.1.3   | 2020-12-13 | | Relative time support in date and time filters.                                                        |
 |         |            | | Show parsed dates and datetimes next to filters.                                                       |
-|         |            | | Add view SQL link on front page.                                                                       |
+|         |            | | Add view SQL link on front page. Contributed by #xinye1                                                |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 3.1.2   | 2020-12-09 | | Remove length function from UUID's.                                                                    |
 |         |            | | FK's with no admin are exposed as just the FK field.                                                   |
