@@ -34,7 +34,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: test
           MYSQL_USER: test
           MYSQL_PASSWORD: test
-          MYSQL_DB: data_browser
+          MYSQL_DB: test_data_browser
         ports:
           - 3306:3306
       postgres:
@@ -42,7 +42,7 @@ jobs:
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: data_browser
+          POSTGRES_DB: test_data_browser
         ports:
           - 5432:5432
     env:
