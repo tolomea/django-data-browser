@@ -1,8 +1,8 @@
 # package requirements
 dataclasses; python_version<"3.7"
 Django>=2.2
-hyperlink <= 20.0.1
-python-dateutil <= 2.8.0
+hyperlink <= 21.0.0
+python-dateutil <= 2.8.2
 sqlparse <= 0.4.4
 
 # dev and test
