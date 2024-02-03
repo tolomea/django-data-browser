@@ -9,9 +9,9 @@ sqlparse
 coverage[toml]
 dj-database-url
 pre-commit
-pytest
+pytest <= 7.4.3
 pytest-cov
-pytest-django
+pytest-django <= 4.6.0
 pytest-mock
 pytest-xdist < 2.0
 requests
