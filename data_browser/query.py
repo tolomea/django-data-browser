@@ -1,12 +1,16 @@
 import dataclasses
 import urllib
-from typing import Any, Mapping, Optional, Sequence
+from typing import Any
+from typing import Mapping
+from typing import Optional
+from typing import Sequence
 
 from django.urls import reverse
 from django.utils.functional import cached_property
 
 from .common import settings
-from .types import ASC, DSC
+from .types import ASC
+from .types import DSC
 
 
 @dataclasses.dataclass

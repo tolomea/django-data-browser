@@ -13,27 +13,30 @@ import sqlparse
 from django import http
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404
-from django.template import engines, loader
+from django.template import engines
+from django.template import loader
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators import csrf
 
 from . import version
-from .common import (
-    PUBLIC_PERM,
-    SHARE_PERM,
-    HttpResponse,
-    JsonResponse,
-    global_state,
-    has_permission,
-    set_global_state,
-    settings,
-)
+from .common import PUBLIC_PERM
+from .common import SHARE_PERM
+from .common import HttpResponse
+from .common import JsonResponse
+from .common import global_state
+from .common import has_permission
+from .common import set_global_state
+from .common import settings
 from .format_csv import get_csv_rows
 from .models import View
-from .orm_results import get_result_list, get_result_queryset, get_results
-from .query import BoundQuery, Query, QueryFilter
+from .orm_results import get_result_list
+from .orm_results import get_result_queryset
+from .orm_results import get_results
+from .query import BoundQuery
+from .query import Query
+from .query import QueryFilter
 from .types import TYPES
 from .util import str_to_field
 

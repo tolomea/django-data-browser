@@ -4,15 +4,13 @@ import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
-from .common import (
-    SHARE_PERM,
-    HttpResponse,
-    JsonResponse,
-    global_state,
-    set_global_state,
-    str_user,
-    users_with_permission,
-)
+from .common import SHARE_PERM
+from .common import HttpResponse
+from .common import JsonResponse
+from .common import global_state
+from .common import set_global_state
+from .common import str_user
+from .common import users_with_permission
 from .models import View
 from .util import group_by
 

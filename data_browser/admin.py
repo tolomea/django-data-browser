@@ -2,8 +2,11 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from . import models
-from .common import PUBLIC_PERM, has_permission, set_global_state
-from .helpers import AdminMixin, attributes
+from .common import PUBLIC_PERM
+from .common import has_permission
+from .common import set_global_state
+from .helpers import AdminMixin
+from .helpers import attributes
 
 
 @admin.register(models.View)

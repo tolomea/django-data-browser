@@ -3,7 +3,8 @@ import re
 import pytest
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
+from django.contrib.auth.models import User
 
 from data_browser import orm_admin
 from data_browser.admin import ViewAdmin

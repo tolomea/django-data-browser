@@ -2,25 +2,23 @@ from django.db import models
 from django.db.models import JSONField
 
 from .common import debug_log
-from .types import (
-    BooleanType,
-    DateTimeType,
-    DateType,
-    DurationType,
-    JSONType,
-    NumberArrayType,
-    NumberChoiceArrayType,
-    NumberChoiceType,
-    NumberType,
-    StringableType,
-    StringArrayType,
-    StringChoiceArrayType,
-    StringChoiceType,
-    StringType,
-    UnknownType,
-    URLType,
-    UUIDType,
-)
+from .types import BooleanType
+from .types import DateTimeType
+from .types import DateType
+from .types import DurationType
+from .types import JSONType
+from .types import NumberArrayType
+from .types import NumberChoiceArrayType
+from .types import NumberChoiceType
+from .types import NumberType
+from .types import StringableType
+from .types import StringArrayType
+from .types import StringChoiceArrayType
+from .types import StringChoiceType
+from .types import StringType
+from .types import UnknownType
+from .types import URLType
+from .types import UUIDType
 
 try:
     from django.contrib.postgres.fields import ArrayField
@@ -50,12 +48,10 @@ _FIELD_TYPE_MAP = {
 
 # hashid support
 try:
-    from hashid_field import (
-        BigHashidAutoField,
-        BigHashidField,
-        HashidAutoField,
-        HashidField,
-    )
+    from hashid_field import BigHashidAutoField
+    from hashid_field import BigHashidField
+    from hashid_field import HashidAutoField
+    from hashid_field import HashidField
 except ModuleNotFoundError:
     pass
 else:  # pragma: no cover

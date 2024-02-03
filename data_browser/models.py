@@ -1,16 +1,15 @@
 import hyperlink
 from django.db import models
 from django.urls import reverse
-from django.utils import crypto, timezone
+from django.utils import crypto
+from django.utils import timezone
 
-from .common import (
-    PUBLIC_PERM,
-    SHARE_PERM,
-    global_state,
-    has_permission,
-    set_global_state,
-    settings,
-)
+from .common import PUBLIC_PERM
+from .common import SHARE_PERM
+from .common import global_state
+from .common import has_permission
+from .common import set_global_state
+from .common import settings
 
 
 def get_id():

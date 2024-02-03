@@ -3,8 +3,11 @@ from django.contrib import admin
 from data_browser.common import global_state
 from data_browser.orm_admin import get_models
 
-from .core.admin import AddressAdmin, ProductAdmin
-from .core.models import Address, Producer, Product
+from .core.admin import AddressAdmin
+from .core.admin import ProductAdmin
+from .core.models import Address
+from .core.models import Producer
+from .core.models import Product
 
 
 class TestAdminMixin:

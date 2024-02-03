@@ -1,13 +1,20 @@
 import os
 
-from django.urls import path, re_path, register_converter
+from django.urls import path
+from django.urls import re_path
+from django.urls import register_converter
 from django.urls.converters import StringConverter
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 
-from .api import view_detail, view_list
+from .api import view_detail
+from .api import view_list
 from .common import settings
-from .views import proxy_js_dev_server, query, query_ctx, query_html, view
+from .views import proxy_js_dev_server
+from .views import query
+from .views import query_ctx
+from .views import query_html
+from .views import view
 
 FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
 WEB_ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web_root")

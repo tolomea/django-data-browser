@@ -1,6 +1,7 @@
 import pytest
 
-from data_browser.common import global_state, set_global_state
+from data_browser.common import global_state
+from data_browser.common import set_global_state
 from data_browser.models import View
 
 

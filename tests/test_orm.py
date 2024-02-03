@@ -1,19 +1,25 @@
-from datetime import date, datetime, timedelta
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 
 import django
 import pytest
 from django.contrib.admin.options import BaseModelAdmin
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
+from django.contrib.auth.models import User
 from django.utils import timezone
 
 from data_browser.common import global_state
 from data_browser.orm_admin import OrmModel
 from data_browser.orm_results import get_results
-from data_browser.query import BoundQuery, Query
+from data_browser.query import BoundQuery
+from data_browser.query import Query
 
 from .conftest import POSTGRES
 from .core import models
-from .util import ANY, KEYS, UTC
+from .util import ANY
+from .util import KEYS
+from .util import UTC
 
 
 def sortedAssert(a, b):
@@ -190,7 +196,8 @@ def test_get_url_link(get_product_flat):
 @pytest.mark.skipif(django.VERSION > (4, 2), reason="Unable to reproduce on 4.2")
 def test_bad_storage(monkeypatch, admin_ddb_request):
     # break storage
-    from django.core.files.storage import FileSystemStorage, default_storage
+    from django.core.files.storage import FileSystemStorage
+    from django.core.files.storage import default_storage
     from django.utils.functional import empty
 
     def boom(*args, **kwargs):

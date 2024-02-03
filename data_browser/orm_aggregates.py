@@ -2,20 +2,21 @@ from dataclasses import dataclass
 
 from django.conf import settings
 from django.db import models
-from django.db.models import DurationField, IntegerField, Value
+from django.db.models import DurationField
+from django.db.models import IntegerField
+from django.db.models import Value
 from django.db.models.functions import Cast
 
-from .orm_fields import OrmBaseField, OrmBoundField
-from .types import (
-    ARRAY_TYPES,
-    TYPES,
-    BaseType,
-    BooleanType,
-    DateTimeType,
-    DateType,
-    DurationType,
-    NumberType,
-)
+from .orm_fields import OrmBaseField
+from .orm_fields import OrmBoundField
+from .types import ARRAY_TYPES
+from .types import TYPES
+from .types import BaseType
+from .types import BooleanType
+from .types import DateTimeType
+from .types import DateType
+from .types import DurationType
+from .types import NumberType
 from .util import annotation_path
 
 try:

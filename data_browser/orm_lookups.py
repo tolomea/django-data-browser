@@ -1,6 +1,8 @@
 from django.db.models import Q
 
-from .types import ArrayTypeMixin, IsNullType, StringType
+from .types import ArrayTypeMixin
+from .types import IsNullType
+from .types import StringType
 
 
 def get_django_filter(field_type, path_str, lookup, filter_value):

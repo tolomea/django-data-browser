@@ -1,7 +1,11 @@
 import contextlib
-from textwrap import dedent, indent
+from textwrap import dedent
+from textwrap import indent
 
-from django.db.models import ExpressionWrapper, F, Field, Q
+from django.db.models import ExpressionWrapper
+from django.db.models import F
+from django.db.models import Field
+from django.db.models import Q
 
 SPACES = "    "
 

@@ -63,7 +63,8 @@ settings.configure(
 
 @pytest.fixture
 def ddb_request(rf):
-    from data_browser.common import global_state, set_global_state
+    from data_browser.common import global_state
+    from data_browser.common import set_global_state
 
     request = rf.get("/")
     with set_global_state(request=request, public_view=False):
@@ -72,7 +73,8 @@ def ddb_request(rf):
 
 @pytest.fixture
 def admin_ddb_request(ddb_request, admin_user):
-    from data_browser.common import global_state, set_global_state
+    from data_browser.common import global_state
+    from data_browser.common import set_global_state
 
     with set_global_state(user=admin_user, public_view=False):
         yield global_state.request

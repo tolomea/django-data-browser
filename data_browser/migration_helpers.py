@@ -1,18 +1,18 @@
-from urllib.parse import parse_qsl, urlencode
+from urllib.parse import parse_qsl
+from urllib.parse import urlencode
 
 from django.contrib.auth import get_user_model
 from django.test import RequestFactory
 from django.urls import reverse
 
-from data_browser.types import (
-    IsNullType,
-    NumberChoiceArrayType,
-    NumberChoiceType,
-    StringChoiceArrayType,
-    StringChoiceType,
-)
+from data_browser.types import IsNullType
+from data_browser.types import NumberChoiceArrayType
+from data_browser.types import NumberChoiceType
+from data_browser.types import StringChoiceArrayType
+from data_browser.types import StringChoiceType
 
-from .common import global_state, set_global_state
+from .common import global_state
+from .common import set_global_state
 
 
 def _fix_filter(models, field, parts, lookup, value):

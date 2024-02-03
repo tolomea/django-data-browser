@@ -4,7 +4,8 @@ from django.contrib import admin
 from data_browser.common import global_state
 from data_browser.helpers import AdminMixin
 from data_browser.orm_results import get_results
-from data_browser.query import BoundQuery, Query
+from data_browser.query import BoundQuery
+from data_browser.query import Query
 
 from .json.models import JsonModel
 

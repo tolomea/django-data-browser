@@ -1,21 +1,25 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from typing import Optional
 
-from django.db.models import BooleanField, DateField, ExpressionWrapper, Q, functions
+from django.db.models import BooleanField
+from django.db.models import DateField
+from django.db.models import ExpressionWrapper
+from django.db.models import Q
+from django.db.models import functions
 
-from .orm_fields import OrmBaseField, OrmBoundField
-from .types import (
-    ARRAY_TYPES,
-    ASC,
-    TYPES,
-    BaseType,
-    DateTimeType,
-    DateType,
-    IsNullType,
-    NumberChoiceType,
-    NumberType,
-    StringType,
-)
+from .orm_fields import OrmBaseField
+from .orm_fields import OrmBoundField
+from .types import ARRAY_TYPES
+from .types import ASC
+from .types import TYPES
+from .types import BaseType
+from .types import DateTimeType
+from .types import DateType
+from .types import IsNullType
+from .types import NumberChoiceType
+from .types import NumberType
+from .types import StringType
 from .util import annotation_path
 
 try:

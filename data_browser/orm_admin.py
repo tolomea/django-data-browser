@@ -7,7 +7,8 @@ from django.apps import apps
 from django.contrib.admin import site
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.contrib.admin.options import BaseModelAdmin
-from django.contrib.admin.utils import flatten_fieldsets, model_format_dict
+from django.contrib.admin.utils import flatten_fieldsets
+from django.contrib.admin.utils import model_format_dict
 from django.contrib.auth.admin import UserAdmin
 from django.core.exceptions import FieldDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
@@ -17,22 +18,31 @@ from django.forms.models import _get_foreign_key
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .common import JsonResponse, debug_log, global_state, settings
-from .helpers import AdminMixin, _AnnotationDescriptor, _get_option, attributes
+from .common import JsonResponse
+from .common import debug_log
+from .common import global_state
+from .common import settings
+from .helpers import AdminMixin
+from .helpers import _AnnotationDescriptor
+from .helpers import _get_option
+from .helpers import attributes
 from .orm_aggregates import get_aggregates_for_type
 from .orm_debug import DebugQS
-from .orm_fields import (
-    OrmAnnotatedField,
-    OrmCalculatedField,
-    OrmConcreteField,
-    OrmFileField,
-    OrmFkField,
-    OrmRawField,
-)
+from .orm_fields import OrmAnnotatedField
+from .orm_fields import OrmCalculatedField
+from .orm_fields import OrmConcreteField
+from .orm_fields import OrmFileField
+from .orm_fields import OrmFkField
+from .orm_fields import OrmRawField
 from .orm_functions import get_functions_for_type
 from .orm_types import get_field_type
-from .types import TYPES, BooleanType, JSONType, NumberType, StringType
-from .util import str_to_field, title_case
+from .types import TYPES
+from .types import BooleanType
+from .types import JSONType
+from .types import NumberType
+from .types import StringType
+from .util import str_to_field
+from .util import title_case
 
 
 @dataclass

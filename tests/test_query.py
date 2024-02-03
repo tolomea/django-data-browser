@@ -1,34 +1,38 @@
 import re
-from datetime import date, datetime, timedelta
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 from uuid import UUID
 
 import pytest
 import time_machine
 
 from data_browser import orm_fields
-from data_browser.orm_admin import OrmModel, get_fields_for_type
-from data_browser.query import BoundQuery, Query, QueryField, QueryFilter
-from data_browser.types import (
-    ASC,
-    DSC,
-    BooleanType,
-    DateTimeType,
-    DateType,
-    DurationType,
-    HTMLType,
-    IsNullType,
-    NumberArrayType,
-    NumberChoiceArrayType,
-    NumberChoiceType,
-    NumberType,
-    RegexType,
-    StringArrayType,
-    StringChoiceArrayType,
-    StringChoiceType,
-    StringType,
-    UnknownType,
-    UUIDType,
-)
+from data_browser.orm_admin import OrmModel
+from data_browser.orm_admin import get_fields_for_type
+from data_browser.query import BoundQuery
+from data_browser.query import Query
+from data_browser.query import QueryField
+from data_browser.query import QueryFilter
+from data_browser.types import ASC
+from data_browser.types import DSC
+from data_browser.types import BooleanType
+from data_browser.types import DateTimeType
+from data_browser.types import DateType
+from data_browser.types import DurationType
+from data_browser.types import HTMLType
+from data_browser.types import IsNullType
+from data_browser.types import NumberArrayType
+from data_browser.types import NumberChoiceArrayType
+from data_browser.types import NumberChoiceType
+from data_browser.types import NumberType
+from data_browser.types import RegexType
+from data_browser.types import StringArrayType
+from data_browser.types import StringChoiceArrayType
+from data_browser.types import StringChoiceType
+from data_browser.types import StringType
+from data_browser.types import UnknownType
+from data_browser.types import UUIDType
 
 from .util import UTC
 

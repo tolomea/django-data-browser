@@ -1,21 +1,21 @@
 from dataclasses import dataclass
-from typing import Sequence, Tuple
+from typing import Sequence
+from typing import Tuple
 
 from django.db import models
-from django.db.models import OuterRef, Subquery
+from django.db.models import OuterRef
+from django.db.models import Subquery
 
 from .common import global_state
 from .orm_debug import DebugQS
-from .types import (
-    ASC,
-    BaseType,
-    BooleanType,
-    DateTimeType,
-    DateType,
-    HTMLType,
-    UnknownType,
-    URLType,
-)
+from .types import ASC
+from .types import BaseType
+from .types import BooleanType
+from .types import DateTimeType
+from .types import DateType
+from .types import HTMLType
+from .types import UnknownType
+from .types import URLType
 from .util import annotation_path
 
 

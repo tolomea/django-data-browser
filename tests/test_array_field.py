@@ -5,7 +5,8 @@ from data_browser import migration_helpers
 from data_browser.common import global_state
 from data_browser.models import View
 from data_browser.orm_results import get_results
-from data_browser.query import BoundQuery, Query
+from data_browser.query import BoundQuery
+from data_browser.query import Query
 
 from .conftest import ARRAY_FIELD_SUPPORT
 
