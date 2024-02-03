@@ -49,9 +49,10 @@ def query():
 @pytest.fixture
 def orm_models():
     return {
-        "string": OrmModel(get_fields_for_type(StringType)),
-        "number": OrmModel(get_fields_for_type(NumberType)),
+        "string": OrmModel(full_name="string", fields=get_fields_for_type(StringType)),
+        "number": OrmModel(full_name="number", fields=get_fields_for_type(NumberType)),
         "app.model": OrmModel(
+            full_name="app.model",
             fields={
                 "fa": orm_fields.OrmConcreteField(
                     model_name="app.model",
@@ -99,6 +100,7 @@ def orm_models():
             admin=True,
         ),
         "app.Tom": OrmModel(
+            full_name="app.Tom",
             fields={
                 "jones": orm_fields.OrmConcreteField(
                     model_name="app.Tom",
@@ -119,6 +121,7 @@ def orm_models():
             admin=True,
         ),
         "app.Michael": OrmModel(
+            full_name="app.Michael",
             fields={
                 "bolton": orm_fields.OrmConcreteField(
                     model_name="app.Michael",

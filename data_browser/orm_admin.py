@@ -37,6 +37,7 @@ from .util import str_to_field, title_case
 
 @dataclass
 class OrmModel:
+    full_name: str
     fields: dict
     admin: BaseModelAdmin = None
     pk: str = None
@@ -342,7 +343,7 @@ def _make_json_sub_module(model_name, field_types):
             choices=None,
         )
 
-    return OrmModel(fields)
+    return OrmModel(full_name=model_name, fields=fields)
 
 
 def _get_fields_for_model(request, model, admin, admin_fields):
@@ -418,7 +419,6 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 if json_fields:  # pragma: no branch
                     rel_name = f"{model_name}__{field_name}"
                     orm_models[rel_name] = _make_json_sub_module(rel_name, json_fields)
-
             if field_name == model._meta.pk.name and hasattr(admin, "get_actions"):
                 actions = admin_get_actions(request, admin)
             else:
@@ -435,6 +435,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             )
 
     orm_models[model_name] = OrmModel(
+        full_name=model_name,
         fields=fields,
         admin=admin,
         pk=model._meta.pk.name,
@@ -453,7 +454,8 @@ def get_models(request):
             _get_fields_for_model(request, model, model_admins[model], admin_fields)
         )
     types = {
-        type_.name: OrmModel(get_fields_for_type(type_)) for type_ in TYPES.values()
+        type_.name: OrmModel(full_name=type_.name, fields=get_fields_for_type(type_))
+        for type_ in TYPES.values()
     }
 
     return {**models, **types}

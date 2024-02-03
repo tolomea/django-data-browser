@@ -804,6 +804,7 @@ class TestPermissions:
 
         assert "core.NotInAdmin" not in orm_models
         assert orm_models["core.InAdmin"] == OrmModel(
+            full_name="core.InAdmin",
             fields=KEYS("admin", "id", "name", "normal", "inlineadmin"),
             admin=ANY(BaseModelAdmin),
             pk="id",
@@ -811,6 +812,7 @@ class TestPermissions:
             pretty_name="In Admin",
         )
         assert orm_models["core.InlineAdmin"] == OrmModel(
+            full_name="core.InlineAdmin",
             fields=KEYS("id", "name", "in_admin", "normal"),
             admin=ANY(BaseModelAdmin),
             pk="id",
@@ -818,6 +820,7 @@ class TestPermissions:
             pretty_name="Inline Admin",
         )
         assert orm_models["core.Normal"] == OrmModel(
+            full_name="core.Normal",
             fields=KEYS(
                 "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
             ),
@@ -835,6 +838,7 @@ class TestPermissions:
         assert "core.InAdmin" not in orm_models
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
+            full_name="core.Normal",
             fields=KEYS(
                 "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
             ),
@@ -852,6 +856,7 @@ class TestPermissions:
         assert "core.InAdmin" not in orm_models
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
+            full_name="core.Normal",
             fields=KEYS(
                 "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
             ),
@@ -867,6 +872,7 @@ class TestPermissions:
 
         assert "core.NotInAdmin" not in orm_models
         assert orm_models["core.InAdmin"] == OrmModel(
+            full_name="core.InAdmin",
             fields=KEYS("admin", "id", "name", "normal"),
             admin=ANY(BaseModelAdmin),
             pk="id",
@@ -875,6 +881,7 @@ class TestPermissions:
         )
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
+            full_name="core.Normal",
             fields=KEYS(
                 "admin", "id", "name", "in_admin", "inline_admin", "not_in_admin"
             ),
