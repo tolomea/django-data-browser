@@ -137,21 +137,26 @@ def _get_config():
         for model_name in orm_models
     }
 
-    model_names_by_app = defaultdict(set)
+    root_models_by_app = defaultdict(list)
     for name, model in orm_models.items():
         if model.root:
-            # TODO why don't we get this in parts and then assemble it
-            app_name, model_name = name.split(".")
-            model_names_by_app[app_name].add(model_name)
+            root_models_by_app[model.app_pretty_name].append(model)
+    model_index = [
+        {
+            "appPrettyName": app_pretty_name,
+            "models": [
+                {"prettyName": model.pretty_name, "fullName": model.full_name}
+                for model in sorted(models, key=lambda m: m.pretty_name)
+            ],
+        }
+        for app_pretty_name, models in sorted(root_models_by_app.items())
+    ]
 
     return {
         "baseUrl": reverse("data_browser:home"),
         "types": types,
         "allModelFields": all_model_fields,
-        "sortedModels": [
-            {"appName": app_name, "modelNames": sorted(model_names)}
-            for app_name, model_names in sorted(model_names_by_app.items())
-        ],
+        "modelIndex": model_index,
         "canMakePublic": has_permission(global_state.request.user, PUBLIC_PERM),
         "canShare": has_permission(global_state.request.user, SHARE_PERM),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,

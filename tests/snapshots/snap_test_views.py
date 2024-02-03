@@ -2923,24 +2923,33 @@ snapshots["test_query_ctx config"] = {
     "canMakePublic": True,
     "canShare": True,
     "defaultRowLimit": 1000,
-    "sentryDsn": None,
-    "sortedModels": [
-        {"appName": "auth", "modelNames": ["Group", "User"]},
+    "modelIndex": [
         {
-            "appName": "core",
-            "modelNames": [
-                "Address",
-                "InAdmin",
-                "InlineAdmin",
-                "Normal",
-                "Producer",
-                "Product",
-                "SKU",
-                "Tag",
+            "appPrettyName": "Authentication And Authorization",
+            "models": [
+                {"fullName": "auth.Group", "prettyName": "Group"},
+                {"fullName": "auth.User", "prettyName": "User"},
             ],
         },
-        {"appName": "data_browser", "modelNames": ["View"]},
+        {
+            "appPrettyName": "Core",
+            "models": [
+                {"fullName": "core.Address", "prettyName": "Address"},
+                {"fullName": "core.InAdmin", "prettyName": "In Admin"},
+                {"fullName": "core.InlineAdmin", "prettyName": "Inline Admin"},
+                {"fullName": "core.Normal", "prettyName": "Normal"},
+                {"fullName": "core.Producer", "prettyName": "Producer"},
+                {"fullName": "core.Product", "prettyName": "Product"},
+                {"fullName": "core.SKU", "prettyName": "Sku"},
+                {"fullName": "core.Tag", "prettyName": "Tag"},
+            ],
+        },
+        {
+            "appPrettyName": "Data Browser",
+            "models": [{"fullName": "data_browser.View", "prettyName": "View"}],
+        },
     ],
+    "sentryDsn": None,
     "types": {
         "boolean": {
             "defaultLookup": "equals",
@@ -6294,24 +6303,33 @@ snapshots["test_query_ctx_m2m config"] = {
     "canMakePublic": True,
     "canShare": True,
     "defaultRowLimit": 1000,
-    "sentryDsn": None,
-    "sortedModels": [
-        {"appName": "auth", "modelNames": ["Group", "User"]},
+    "modelIndex": [
         {
-            "appName": "core",
-            "modelNames": [
-                "Address",
-                "InAdmin",
-                "InlineAdmin",
-                "Normal",
-                "Producer",
-                "Product",
-                "SKU",
-                "Tag",
+            "appPrettyName": "Authentication And Authorization",
+            "models": [
+                {"fullName": "auth.Group", "prettyName": "Group"},
+                {"fullName": "auth.User", "prettyName": "User"},
             ],
         },
-        {"appName": "data_browser", "modelNames": ["View"]},
+        {
+            "appPrettyName": "Core",
+            "models": [
+                {"fullName": "core.Address", "prettyName": "Address"},
+                {"fullName": "core.InAdmin", "prettyName": "In Admin"},
+                {"fullName": "core.InlineAdmin", "prettyName": "Inline Admin"},
+                {"fullName": "core.Normal", "prettyName": "Normal"},
+                {"fullName": "core.Producer", "prettyName": "Producer"},
+                {"fullName": "core.Product", "prettyName": "Product"},
+                {"fullName": "core.SKU", "prettyName": "Sku"},
+                {"fullName": "core.Tag", "prettyName": "Tag"},
+            ],
+        },
+        {
+            "appPrettyName": "Data Browser",
+            "models": [{"fullName": "data_browser.View", "prettyName": "View"}],
+        },
     ],
+    "sentryDsn": None,
     "types": {
         "boolean": {
             "defaultLookup": "equals",
@@ -9665,24 +9683,33 @@ snapshots["test_query_html config"] = {
     "canMakePublic": True,
     "canShare": True,
     "defaultRowLimit": 1000,
-    "sentryDsn": None,
-    "sortedModels": [
-        {"appName": "auth", "modelNames": ["Group", "User"]},
+    "modelIndex": [
         {
-            "appName": "core",
-            "modelNames": [
-                "Address",
-                "InAdmin",
-                "InlineAdmin",
-                "Normal",
-                "Producer",
-                "Product",
-                "SKU",
-                "Tag",
+            "appPrettyName": "Authentication And Authorization",
+            "models": [
+                {"fullName": "auth.Group", "prettyName": "Group"},
+                {"fullName": "auth.User", "prettyName": "User"},
             ],
         },
-        {"appName": "data_browser", "modelNames": ["View"]},
+        {
+            "appPrettyName": "Core",
+            "models": [
+                {"fullName": "core.Address", "prettyName": "Address"},
+                {"fullName": "core.InAdmin", "prettyName": "In Admin"},
+                {"fullName": "core.InlineAdmin", "prettyName": "Inline Admin"},
+                {"fullName": "core.Normal", "prettyName": "Normal"},
+                {"fullName": "core.Producer", "prettyName": "Producer"},
+                {"fullName": "core.Product", "prettyName": "Product"},
+                {"fullName": "core.SKU", "prettyName": "Sku"},
+                {"fullName": "core.Tag", "prettyName": "Tag"},
+            ],
+        },
+        {
+            "appPrettyName": "Data Browser",
+            "models": [{"fullName": "data_browser.View", "prettyName": "View"}],
+        },
     ],
+    "sentryDsn": None,
     "types": {
         "boolean": {
             "defaultLookup": "equals",
@@ -11648,8 +11675,8 @@ snapshots["test_query_html_no_perms config"] = {
     "canMakePublic": False,
     "canShare": False,
     "defaultRowLimit": 1000,
+    "modelIndex": [],
     "sentryDsn": None,
-    "sortedModels": [],
     "types": {
         "boolean": {
             "defaultLookup": "equals",
