@@ -1,13 +1,13 @@
 # package requirements
 dataclasses; python_version<"3.7"
 Django>=2.2
-hyperlink
-python-dateutil
-sqlparse
+hyperlink <= 20.0.1
+python-dateutil <= 2.8.0
+sqlparse <= 0.4.4
 
 # dev and test
 coverage[toml]
-dj-database-url
+dj-database-url <= 2.10
 pre-commit
 pytest <= 7.4.3
 pytest-cov
