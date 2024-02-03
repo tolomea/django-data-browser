@@ -6,7 +6,7 @@ python-dateutil <= 2.8.2
 sqlparse <= 0.4.4
 
 # dev and test
-coverage[toml]
+coverage[toml] <= 7.3.2
 dj-database-url <= 2.10
 pre-commit
 pytest <= 7.4.3
