@@ -93,7 +93,6 @@
 [tool.pytest.ini_options]
     addopts = [
         "-ra",
-        "--reuse-db",
         "--durations=20",
     ]
     norecursedirs = [
