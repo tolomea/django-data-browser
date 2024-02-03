@@ -326,12 +326,15 @@ function ModelSelector(props) {
       onChange={(e) => query.setModel(e.target.value)}
       value={model}
     >
-      {config.sortedModels.map(({ appName, modelNames }) => {
+      {config.modelIndex.map(({ appPrettyName, models }) => {
         return (
-          <optgroup label={appName} key={appName}>
-            {modelNames.map((modelName) => {
-              const fullName = `${appName}.${modelName}`;
-              return <option key={fullName}>{fullName}</option>;
+          <optgroup label={appPrettyName} key={appPrettyName}>
+            {models.map((modelEntry) => {
+              return (
+                <option key={modelEntry.fullName} value={modelEntry.fullName}>
+                  {appPrettyName}.{modelEntry.prettyName}
+                </option>
+              );
             })}
           </optgroup>
         );
@@ -485,7 +488,7 @@ function QueryPage(props) {
       window.history.replaceState(
         reqState,
         null,
-        getUrlForQuery(config.baseUrl, reqState, "html")
+        getUrlForQuery(config.baseUrl, reqState, "html"),
       );
       window.addEventListener("popstate", popstate);
       fetchResults(reqState).catch(handleError);
@@ -512,7 +515,7 @@ function QueryPage(props) {
     window.history.pushState(
       request,
       null,
-      getUrlForQuery(config.baseUrl, newState, "html")
+      getUrlForQuery(config.baseUrl, newState, "html"),
     );
 
     if (!reload) return;

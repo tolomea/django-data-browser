@@ -45,7 +45,7 @@ function Folder(props) {
   const fullName = `${parentName}.${folder.name}`;
   const [toggled, toggleLink] = usePersistentToggle(
     `${fullName}.toggle`,
-    foldersExpanded
+    foldersExpanded,
   );
 
   return (
@@ -66,7 +66,7 @@ function Entries(props) {
       <View key={index} view={entry} />
     ) : (
       <Folder key={index} folder={entry} {...{ parentName, foldersExpanded }} />
-    )
+    ),
   );
 }
 
@@ -98,36 +98,37 @@ function SavedAndSharedViews(props) {
 
 function AppEntry(props) {
   const config = useContext(Config);
-  const { appName, modelNames } = props;
+  const { appPrettyName, models } = props;
   const [toggled, toggleLink] = usePersistentToggle(
-    `model.${appName}.toggle`,
-    config.appsExpanded
+    `model.${appPrettyName}.toggle`,
+    config.appsExpanded,
   );
   return (
     <>
       <h2>
         {toggleLink}
-        {appName}
+        {appPrettyName}
       </h2>
       {toggled && (
-        <div key={appName} className="AppModels">
-          {modelNames.map((modelName) => {
-            const fullName = `${appName}.${modelName}`;
+        <div key={appPrettyName} className="AppModels">
+          {models.map((modelEntry) => {
             return (
-              <h2 key={modelName}>
+              <h2 key={modelEntry.prettyName}>
                 <Link
                   to={getRelUrlForQuery(
                     {
-                      model: fullName,
+                      model: modelEntry.fullName,
                       fields: [],
-                      filters: config.allModelFields[fullName].defaultFilters,
+                      filters:
+                        config.allModelFields[modelEntry.fullName]
+                          .defaultFilters,
                       limit: config.defaultRowLimit,
                     },
-                    "html"
+                    "html",
                   )}
                   className="Link"
                 >
-                  {modelName}
+                  {modelEntry.prettyName}
                 </Link>
               </h2>
             );
@@ -144,8 +145,8 @@ function ModelList(props) {
     <div className="ModelList">
       <div>
         <h1>Models</h1>
-        {config.sortedModels.map(({ appName, modelNames }) => (
-          <AppEntry key={appName} {...{ appName, modelNames }} />
+        {config.modelIndex.map(({ appPrettyName, models }) => (
+          <AppEntry key={appPrettyName} {...{ appPrettyName, models }} />
         ))}
       </div>
     </div>
