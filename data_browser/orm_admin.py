@@ -65,19 +65,17 @@ class OrmModel:
         if action not in actions:
             raise http.Http404(f"'{action}' unknown action")  # pragma: no cover
 
-        return JsonResponse(
-            {
-                "method": "post",
-                "url": _get_option(self.admin, "action_url", global_state.request),
-                "data": [
-                    ("action", action),
-                    ("select_across", 0),
-                    ("index", 0),
-                    ("data_browser", 1),
-                    *[(ACTION_CHECKBOX_NAME, pk) for pk in pks],
-                ],
-            }
-        )
+        return JsonResponse({
+            "method": "post",
+            "url": _get_option(self.admin, "action_url", global_state.request),
+            "data": [
+                ("action", action),
+                ("select_across", 0),
+                ("index", 0),
+                ("data_browser", 1),
+                *[(ACTION_CHECKBOX_NAME, pk) for pk in pks],
+            ],
+        })
 
 
 def get_model_name(model, sep="."):

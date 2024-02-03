@@ -106,29 +106,27 @@ class TestViewList:
         assert resp.status_code == 200
         print(json.dumps(resp.json(), indent=4, sort_keys=True))
         assert resp.json() == {
-            "saved": [
-                {
-                    "name": "name",
-                    "description": "description",
-                    "folder": "",
-                    "public": False,
-                    "model": "core.Product",
-                    "fields": "admin",
-                    "query": "name__contains=sql",
-                    "publicLink": "N/A",
-                    "googleSheetsFormula": "N/A",
-                    "link": (
-                        "/query/core.Product/admin.html?name__contains=sql&limit=1000"
-                    ),
-                    "createdTime": ANY(str),
-                    "pk": view.pk,
-                    "limit": 1000,
-                    "shared": False,
-                    "valid": True,
-                    "can_edit": True,
-                    "type": "view",
-                }
-            ],
+            "saved": [{
+                "name": "name",
+                "description": "description",
+                "folder": "",
+                "public": False,
+                "model": "core.Product",
+                "fields": "admin",
+                "query": "name__contains=sql",
+                "publicLink": "N/A",
+                "googleSheetsFormula": "N/A",
+                "link": (
+                    "/query/core.Product/admin.html?name__contains=sql&limit=1000"
+                ),
+                "createdTime": ANY(str),
+                "pk": view.pk,
+                "limit": 1000,
+                "shared": False,
+                "valid": True,
+                "can_edit": True,
+                "type": "view",
+            }],
             "shared": [],
         }
 
@@ -158,14 +156,12 @@ class TestViewList:
                 {
                     "type": "folder",
                     "name": "my folder",
-                    "entries": [
-                        {
-                            "name": "my_in_folder",
-                            "shared": False,
-                            "type": "view",
-                            "can_edit": True,
-                        }
-                    ],
+                    "entries": [{
+                        "name": "my_in_folder",
+                        "shared": False,
+                        "type": "view",
+                        "can_edit": True,
+                    }],
                 },
                 {
                     "name": "my_out_of_folder",
@@ -175,32 +171,28 @@ class TestViewList:
                 },
                 {"name": "name", "shared": False, "type": "view", "can_edit": True},
             ],
-            "shared": [
-                {
-                    "type": "folder",
-                    "name": "other",
-                    "entries": [
-                        {
-                            "name": "other folder",
-                            "type": "folder",
-                            "entries": [
-                                {
-                                    "name": "shared_in_folder",
-                                    "shared": True,
-                                    "type": "view",
-                                    "can_edit": False,
-                                }
-                            ],
-                        },
-                        {
-                            "name": "shared_out_of_folder",
+            "shared": [{
+                "type": "folder",
+                "name": "other",
+                "entries": [
+                    {
+                        "name": "other folder",
+                        "type": "folder",
+                        "entries": [{
+                            "name": "shared_in_folder",
                             "shared": True,
                             "type": "view",
                             "can_edit": False,
-                        },
-                    ],
-                }
-            ],
+                        }],
+                    },
+                    {
+                        "name": "shared_out_of_folder",
+                        "shared": True,
+                        "type": "view",
+                        "can_edit": False,
+                    },
+                ],
+            }],
         }
 
     def test_get_multi_no_sharing(
@@ -250,20 +242,18 @@ class TestViewList:
                 },
                 {"name": "my_out_of_folder", "type": "view"},
             ],
-            "shared": [
-                {
-                    "entries": [
-                        {
-                            "entries": [{"name": "other_in_folder", "type": "view"}],
-                            "name": "other folder",
-                            "type": "folder",
-                        },
-                        {"name": "other_out_of_folder", "type": "view"},
-                    ],
-                    "name": "other",
-                    "type": "folder",
-                }
-            ],
+            "shared": [{
+                "entries": [
+                    {
+                        "entries": [{"name": "other_in_folder", "type": "view"}],
+                        "name": "other folder",
+                        "type": "folder",
+                    },
+                    {"name": "other_out_of_folder", "type": "view"},
+                ],
+                "name": "other",
+                "type": "folder",
+            }],
         }
 
         # other sees everything
@@ -277,20 +267,18 @@ class TestViewList:
                 },
                 {"name": "other_out_of_folder", "type": "view"},
             ],
-            "shared": [
-                {
-                    "entries": [
-                        {
-                            "entries": [{"name": "my_in_folder", "type": "view"}],
-                            "name": "my folder",
-                            "type": "folder",
-                        },
-                        {"name": "my_out_of_folder", "type": "view"},
-                    ],
-                    "name": "admin",
-                    "type": "folder",
-                }
-            ],
+            "shared": [{
+                "entries": [
+                    {
+                        "entries": [{"name": "my_in_folder", "type": "view"}],
+                        "name": "my folder",
+                        "type": "folder",
+                    },
+                    {"name": "my_out_of_folder", "type": "view"},
+                ],
+                "name": "admin",
+                "type": "folder",
+            }],
         }
 
     def test_get_multi_everything_sharing_no_perms(
@@ -314,20 +302,18 @@ class TestViewList:
                 },
                 {"name": "my_out_of_folder", "type": "view"},
             ],
-            "shared": [
-                {
-                    "entries": [
-                        {
-                            "entries": [{"name": "other_in_folder", "type": "view"}],
-                            "name": "other folder",
-                            "type": "folder",
-                        },
-                        {"name": "other_out_of_folder", "type": "view"},
-                    ],
-                    "name": "other",
-                    "type": "folder",
-                }
-            ],
+            "shared": [{
+                "entries": [
+                    {
+                        "entries": [{"name": "other_in_folder", "type": "view"}],
+                        "name": "other folder",
+                        "type": "folder",
+                    },
+                    {"name": "other_out_of_folder", "type": "view"},
+                ],
+                "name": "other",
+                "type": "folder",
+            }],
         }
 
         # other can only see their own stuff
@@ -381,34 +367,30 @@ class TestViewList:
                 },
                 {"name": "other_out_of_folder", "type": "view"},
             ],
-            "shared": [
-                {
-                    "entries": [
-                        {
-                            "entries": [{"name": "my_in_folder", "type": "view"}],
-                            "name": "my folder",
-                            "type": "folder",
-                        },
-                        {"name": "my_out_of_folder", "type": "view"},
-                    ],
-                    "name": "admin",
-                    "type": "folder",
-                }
-            ],
+            "shared": [{
+                "entries": [
+                    {
+                        "entries": [{"name": "my_in_folder", "type": "view"}],
+                        "name": "my folder",
+                        "type": "folder",
+                    },
+                    {"name": "my_out_of_folder", "type": "view"},
+                ],
+                "name": "admin",
+                "type": "folder",
+            }],
         }
 
     def test_post(self, admin_client, admin_user):
         resp = admin_client.post(
             "/data_browser/api/views/",
-            json.dumps(
-                {
-                    "name": "test",
-                    "description": "lorem ipsum",
-                    "public": True,
-                    "model": "core.Product",
-                    # leave the last two out just cause
-                }
-            ),
+            json.dumps({
+                "name": "test",
+                "description": "lorem ipsum",
+                "public": True,
+                "model": "core.Product",
+                # leave the last two out just cause
+            }),
             content_type="application/json",
         )
         assert resp.status_code == 200
@@ -496,15 +478,13 @@ class TestViewDetail:
     def test_patch(self, admin_client, admin_user, view):
         resp = admin_client.patch(
             f"/data_browser/api/views/{view.pk}/",
-            json.dumps(
-                {
-                    "name": "test",
-                    "description": "lorem ipsum",
-                    "public": True,
-                    "model": "core.Product",
-                    # leave the last two out just cause
-                }
-            ),
+            json.dumps({
+                "name": "test",
+                "description": "lorem ipsum",
+                "public": True,
+                "model": "core.Product",
+                # leave the last two out just cause
+            }),
             content_type="application/json",
         )
         assert resp.status_code == 200

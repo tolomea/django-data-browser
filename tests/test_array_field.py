@@ -69,14 +69,12 @@ def test_hello_world(get_results_flat):
         "char_array_field",
         "int_choice_array_field",
         "char_choice_array_field",
-    ) == [
-        {
-            "int_array_field": "[1.0, 2.0]",
-            "char_array_field": '["a", "b"]',
-            "int_choice_array_field": '["A", "B"]',
-            "char_choice_array_field": '["A", "B"]',
-        }
-    ]
+    ) == [{
+        "int_array_field": "[1.0, 2.0]",
+        "char_array_field": '["a", "b"]',
+        "int_choice_array_field": '["A", "B"]',
+        "char_choice_array_field": '["A", "B"]',
+    }]
 
 
 def test_int_array_contains(get_results_flat):

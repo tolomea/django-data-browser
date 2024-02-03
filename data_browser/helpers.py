@@ -140,19 +140,17 @@ class AdminMixin(_AdminOptions, _AdminAnnotations, BaseModelAdmin):
                 args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
             )
             args = self.get_ddb_default_filters()
-            params = urlencode(
-                [
+            params = urlencode([
+                (
+                    f"{field}__{lookup}",
                     (
-                        f"{field}__{lookup}",
-                        (
-                            value
-                            if isinstance(value, str)
-                            else json.dumps(value, cls=DjangoJSONEncoder)
-                        ),
-                    )
-                    for field, lookup, value in args
-                ]
-            )
+                        value
+                        if isinstance(value, str)
+                        else json.dumps(value, cls=DjangoJSONEncoder)
+                    ),
+                )
+                for field, lookup, value in args
+            ])
             extra_context["ddb_url"] = f"{url}?{params}"
 
         return super().changelist_view(request, extra_context)

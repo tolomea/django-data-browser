@@ -83,12 +83,10 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected groups",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected groups",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -99,12 +97,10 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected groups",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected groups",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -143,12 +139,10 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected users",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected users",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -203,12 +197,10 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected users",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected users",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -406,12 +398,10 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected addresss",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected addresss",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -466,12 +456,10 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected addresss",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected addresss",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -519,12 +507,10 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected in admins",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected in admins",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -535,12 +521,10 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected in admins",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected in admins",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -640,12 +624,10 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected normals",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected normals",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -656,12 +638,10 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected normals",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected normals",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -740,12 +720,10 @@ snapshots["test_query_ctx config"] = {
                     "type": None,
                 },
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected producers",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected producers",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -767,12 +745,10 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected producers",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected producers",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1267,12 +1243,10 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected tags",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -1283,12 +1257,10 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "name": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected tags",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -1316,12 +1288,10 @@ snapshots["test_query_ctx config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected views",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected views",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -1387,12 +1357,10 @@ snapshots["test_query_ctx config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected views",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected views",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3463,12 +3431,10 @@ snapshots["test_query_ctx_m2m config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected groups",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected groups",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3479,12 +3445,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected groups",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected groups",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3523,12 +3487,10 @@ snapshots["test_query_ctx_m2m config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected users",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected users",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3583,12 +3545,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": None,
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected users",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected users",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3786,12 +3746,10 @@ snapshots["test_query_ctx_m2m config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected addresss",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected addresss",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3846,12 +3804,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected addresss",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected addresss",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -3899,12 +3855,10 @@ snapshots["test_query_ctx_m2m config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected in admins",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected in admins",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -3915,12 +3869,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected in admins",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected in admins",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4020,12 +3972,10 @@ snapshots["test_query_ctx_m2m config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected normals",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected normals",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -4036,12 +3986,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected normals",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected normals",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4120,12 +4068,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": None,
                 },
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected producers",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected producers",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -4147,12 +4093,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected producers",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected producers",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4647,12 +4591,10 @@ snapshots["test_query_ctx_m2m config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected tags",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -4663,12 +4605,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": "html",
                 },
                 "name": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected tags",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -4696,12 +4636,10 @@ snapshots["test_query_ctx_m2m config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected views",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected views",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -4767,12 +4705,10 @@ snapshots["test_query_ctx_m2m config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected views",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected views",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -6843,12 +6779,10 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected groups",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected groups",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -6859,12 +6793,10 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected groups",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected groups",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -6903,12 +6835,10 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected users",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected users",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -6963,12 +6893,10 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected users",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected users",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -7166,12 +7094,10 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected addresss",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected addresss",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -7226,12 +7152,10 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected addresss",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected addresss",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -7279,12 +7203,10 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected in admins",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected in admins",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -7295,12 +7217,10 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected in admins",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected in admins",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -7400,12 +7320,10 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected normals",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected normals",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -7416,12 +7334,10 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected normals",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected normals",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -7500,12 +7416,10 @@ snapshots["test_query_html config"] = {
                     "type": None,
                 },
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected producers",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected producers",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -7527,12 +7441,10 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected producers",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected producers",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -8027,12 +7939,10 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected tags",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -8043,12 +7953,10 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "name": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected tags",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected tags",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -8076,12 +7984,10 @@ snapshots["test_query_html config"] = {
             "defaultFilters": [],
             "fields": {
                 "admin": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected views",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected views",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": False,
@@ -8147,12 +8053,10 @@ snapshots["test_query_html config"] = {
                     "type": "html",
                 },
                 "id": {
-                    "actions": [
-                        {
-                            "name": "delete_selected",
-                            "prettyName": "Delete selected views",
-                        }
-                    ],
+                    "actions": [{
+                        "name": "delete_selected",
+                        "prettyName": "Delete selected views",
+                    }],
                     "canPivot": True,
                     "choices": [],
                     "concrete": True,
@@ -12187,24 +12091,20 @@ snapshots["test_query_html_no_perms config"] = {
 snapshots["test_query_is_null_date_filter data"] = {
     "body": [[{}, {}, {}]],
     "cols": [{}],
-    "fields": [
-        {
-            "errorMessage": None,
-            "pathStr": "name",
-            "pivoted": False,
-            "priority": 0,
-            "sort": "asc",
-        }
-    ],
-    "filters": [
-        {
-            "errorMessage": None,
-            "lookup": "is_null",
-            "parsed": "NotNull",
-            "pathStr": "created_time",
-            "value": "NotNull",
-        }
-    ],
+    "fields": [{
+        "errorMessage": None,
+        "pathStr": "name",
+        "pivoted": False,
+        "priority": 0,
+        "sort": "asc",
+    }],
+    "filters": [{
+        "errorMessage": None,
+        "lookup": "is_null",
+        "parsed": "NotNull",
+        "pathStr": "created_time",
+        "value": "NotNull",
+    }],
     "formatHints": {"name": {}},
     "length": 3,
     "limit": 1000,

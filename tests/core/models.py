@@ -37,13 +37,11 @@ class FakeField(models.Field):
         return {}
 
     def formfield(self, **kwargs):
-        return super().formfield(
-            **{
-                "max_length": self.max_length,
-                **({} if self.choices else {"widget": forms.Textarea}),
-                **kwargs,
-            }
-        )
+        return super().formfield(**{
+            "max_length": self.max_length,
+            **({} if self.choices else {"widget": forms.Textarea}),
+            **kwargs,
+        })
 
 
 # models for perm testing

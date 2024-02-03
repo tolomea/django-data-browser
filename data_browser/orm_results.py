@@ -78,13 +78,11 @@ def get_result_queryset(bound_query, debug=False):
     # nothing to group on, early out with an aggregate
     if not any(f.group_by for f in bound_query.bound_fields):
         return [
-            qs.aggregate(
-                **{
-                    field.queryset_path_str: field.aggregate_clause
-                    for field in bound_query.bound_fields + bound_query.bound_filters
-                    if field.aggregate_clause
-                }
-            )
+            qs.aggregate(**{
+                field.queryset_path_str: field.aggregate_clause
+                for field in bound_query.bound_fields + bound_query.bound_filters
+                if field.aggregate_clause
+            })
         ]
 
     # group by

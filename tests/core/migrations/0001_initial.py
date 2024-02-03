@@ -154,12 +154,10 @@ class Migration(migrations.Migration):
         ),
         migrations.CreateModel(
             name="Tag",
-            fields=[
-                (
-                    "name",
-                    models.CharField(max_length=16, primary_key=True, serialize=False),
-                )
-            ],
+            fields=[(
+                "name",
+                models.CharField(max_length=16, primary_key=True, serialize=False),
+            )],
         ),
         migrations.CreateModel(
             name="SKU",

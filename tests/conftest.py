@@ -39,20 +39,18 @@ settings.configure(
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
     ],
-    TEMPLATES=[
-        {
-            "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "OPTIONS": {
-                "context_processors": [
-                    "django.template.context_processors.debug",
-                    "django.template.context_processors.request",
-                    "django.template.context_processors.static",
-                    "django.contrib.auth.context_processors.auth",
-                ],
-                "loaders": ["django.template.loaders.app_directories.Loader"],
-            },
-        }
-    ],
+    TEMPLATES=[{
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.template.context_processors.static",
+                "django.contrib.auth.context_processors.auth",
+            ],
+            "loaders": ["django.template.loaders.app_directories.Loader"],
+        },
+    }],
     STATIC_URL="/static/",
     MEDIA_URL="/media/",
     DATA_BROWSER_ALLOW_PUBLIC=True,
