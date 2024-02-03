@@ -814,16 +814,16 @@ class TestPermissions:
             fields=KEYS("admin", "id", "name", "normal", "inlineadmin"),
             admin=ANY(BaseModelAdmin),
             pk="id",
-            app_pretty_name="Core",
-            pretty_name="In Admin",
+            app_verbose_name="Core",
+            verbose_name="In Admin",
         )
         assert orm_models["core.InlineAdmin"] == OrmModel(
             full_name="core.InlineAdmin",
             fields=KEYS("id", "name", "in_admin", "normal"),
             admin=ANY(BaseModelAdmin),
             pk="id",
-            app_pretty_name="Core",
-            pretty_name="Inline Admin",
+            app_verbose_name="Core",
+            verbose_name="Inline Admin",
         )
         assert orm_models["core.Normal"] == OrmModel(
             full_name="core.Normal",
@@ -832,8 +832,8 @@ class TestPermissions:
             ),
             admin=ANY(BaseModelAdmin),
             pk="id",
-            app_pretty_name="Core",
-            pretty_name="Normal",
+            app_verbose_name="Core",
+            verbose_name="Normal",
         )
 
     @pytest.mark.django_db
@@ -850,8 +850,8 @@ class TestPermissions:
             ),
             admin=ANY(BaseModelAdmin),
             pk="id",
-            app_pretty_name="Core",
-            pretty_name="Normal",
+            app_verbose_name="Core",
+            verbose_name="Normal",
         )
 
     @pytest.mark.django_db
@@ -868,8 +868,8 @@ class TestPermissions:
             ),
             admin=ANY(BaseModelAdmin),
             pk="id",
-            app_pretty_name="Core",
-            pretty_name="Normal",
+            app_verbose_name="Core",
+            verbose_name="Normal",
         )
 
     @pytest.mark.django_db
@@ -882,8 +882,8 @@ class TestPermissions:
             fields=KEYS("admin", "id", "name", "normal"),
             admin=ANY(BaseModelAdmin),
             pk="id",
-            app_pretty_name="Core",
-            pretty_name="In Admin",
+            app_verbose_name="Core",
+            verbose_name="In Admin",
         )
         assert "core.InlineAdmin" not in orm_models
         assert orm_models["core.Normal"] == OrmModel(
@@ -893,8 +893,8 @@ class TestPermissions:
             ),
             admin=ANY(BaseModelAdmin),
             pk="id",
-            app_pretty_name="Core",
-            pretty_name="Normal",
+            app_verbose_name="Core",
+            verbose_name="Normal",
         )
 
 

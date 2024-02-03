@@ -51,8 +51,8 @@ class OrmModel:
     fields: dict
     admin: BaseModelAdmin = None
     pk: str = None
-    pretty_name: str = None
-    app_pretty_name: str = None
+    verbose_name: str = None
+    app_verbose_name: str = None
 
     @property
     def root(self):
@@ -92,11 +92,11 @@ def get_model_name(model, sep="."):
     return f"{model._meta.app_label}{sep}{model.__name__}"
 
 
-def get_model_pretty_name(model):
+def get_model_verbose_name(model):
     return title_case(model._meta.verbose_name)
 
 
-def get_app_pretty_name(model):
+def get_app_verbose_name(model):
     app_config = apps.get_app_config(model._meta.app_label)
     return title_case(app_config.verbose_name)
 
@@ -268,7 +268,7 @@ def _get_all_admin_fields(request):
     return model_admins, all_model_fields
 
 
-def _make_pretty(name):
+def _make_verbose(name):
     return (name[0].upper() + name[1:]).replace("_", " ")
 
 
@@ -285,7 +285,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
     if getattr(field_func, "ddb_hide", False):
         return None
 
-    pretty_name = _make_pretty(
+    verbose_name = _make_verbose(
         getattr(field_func, "short_description", field_name.replace("_", " "))
     )
 
@@ -309,7 +309,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
         return OrmAnnotatedField(
             model_name=model_name,
             name=field_name,
-            pretty_name=pretty_name,
+            verbose_name=verbose_name,
             type_=type_,
             django_field=field,
             admin=admin,
@@ -330,7 +330,7 @@ def _get_calculated_field(request, field_name, model_name, model, admin, model_f
         return OrmCalculatedField(
             model_name=model_name,
             name=field_name,
-            pretty_name=pretty_name,
+            verbose_name=verbose_name,
             func=field_func,
             actions=actions,
         )
@@ -345,7 +345,7 @@ def _make_json_sub_module(model_name, field_types):
         fields[field_name] = OrmConcreteField(
             model_name=model_name,
             name=field_name,
-            pretty_name=field_name,
+            verbose_name=field_name,
             type_=type_,
             rel_name=type_.name,
             choices=None,
@@ -363,21 +363,21 @@ def _get_fields_for_model(request, model, admin, admin_fields):
 
     for field_name in admin_fields[model]:
         field = model_fields.get(field_name)
-        pretty_name = (
-            _make_pretty(getattr(field, "verbose_name", field_name)) if field else None
+        verbose_name = (
+            _make_verbose(getattr(field, "verbose_name", field_name)) if field else None
         )
         # FK's etc
         if isinstance(
             field, (models.ForeignKey, ForeignObjectRel, models.ManyToManyField)
         ):
             if isinstance(field, ForeignObjectRel):
-                pretty_name = _make_pretty(field.get_accessor_name())
+                verbose_name = _make_verbose(field.get_accessor_name())
 
             if field.related_model in admin_fields:
                 fields[field_name] = OrmFkField(
                     model_name=model_name,
                     name=field_name,
-                    pretty_name=pretty_name,
+                    verbose_name=verbose_name,
                     rel_name=get_model_name(field.related_model),
                     to_many=field.one_to_many or field.many_to_many,
                 )
@@ -394,7 +394,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                     fields[field_name] = OrmConcreteField(
                         model_name=model_name,
                         name=field_name,
-                        pretty_name=pretty_name,
+                        verbose_name=verbose_name,
                         type_=field_type,
                         rel_name=field_type.name,
                         choices=choices,
@@ -405,7 +405,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             fields[field_name] = OrmFileField(
                 model_name=model_name,
                 name=field_name,
-                pretty_name=pretty_name,
+                verbose_name=verbose_name,
                 django_field=field,
             )
 
@@ -435,7 +435,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             fields[field_name] = OrmConcreteField(
                 model_name=model_name,
                 name=field_name,
-                pretty_name=pretty_name,
+                verbose_name=verbose_name,
                 type_=field_type,
                 rel_name=rel_name,
                 choices=choices,
@@ -447,8 +447,8 @@ def _get_fields_for_model(request, model, admin, admin_fields):
         fields=fields,
         admin=admin,
         pk=model._meta.pk.name,
-        pretty_name=get_model_pretty_name(model),
-        app_pretty_name=get_app_pretty_name(model),
+        verbose_name=get_model_verbose_name(model),
+        app_verbose_name=get_app_verbose_name(model),
     )
 
     return orm_models

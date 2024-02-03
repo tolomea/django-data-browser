@@ -150,7 +150,7 @@ function Filter(props) {
       <td>
         <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
         <TLink onClick={() => query.addField(pathStr, field.defaultSort)}>
-          {query.prettyPathStr(pathStr)}
+          {query.verbosePathStr(pathStr)}
         </TLink>{" "}
       </td>
       <td>
@@ -161,7 +161,7 @@ function Filter(props) {
         >
           {type.sortedLookups.map((lookupName) => (
             <option key={lookupName} value={lookupName}>
-              {type.lookups[lookupName].prettyName}
+              {type.lookups[lookupName].verboseName}
             </option>
           ))}
         </select>
@@ -264,7 +264,7 @@ function Field(props) {
                 query.addField(path.join("__"), modelField.defaultSort)
               }
             >
-              {modelField.prettyName}
+              {modelField.verboseName}
               <HasActionIcon
                 modelField={modelField}
                 message="Has admin actions."
@@ -272,7 +272,7 @@ function Field(props) {
             </TLink>
           ) : (
             <>
-              {modelField.prettyName}
+              {modelField.verboseName}
               <HasToManyIcon
                 modelField={modelField}
                 message="Traversing 'To Many' links may add multiple lines per result."
@@ -326,13 +326,13 @@ function ModelSelector(props) {
       onChange={(e) => query.setModel(e.target.value)}
       value={model}
     >
-      {config.modelIndex.map(({ appPrettyName, models }) => {
+      {config.modelIndex.map(({ appVerboseName, models }) => {
         return (
-          <optgroup label={appPrettyName} key={appPrettyName}>
+          <optgroup label={appVerboseName} key={appVerboseName}>
             {models.map((modelEntry) => {
               return (
                 <option key={modelEntry.fullName} value={modelEntry.fullName}>
-                  {appPrettyName}.{modelEntry.prettyName}
+                  {appVerboseName}.{modelEntry.verboseName}
                 </option>
               );
             })}

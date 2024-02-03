@@ -60,7 +60,7 @@ def orm_models():
                 "fa": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="fa",
-                    pretty_name="fa",
+                    verbose_name="fa",
                     type_=StringType,
                     rel_name=StringType.name,
                     choices=None,
@@ -68,18 +68,18 @@ def orm_models():
                 "fd": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="fd",
-                    pretty_name="fd",
+                    verbose_name="fd",
                     type_=StringType,
                     rel_name=StringType.name,
                     choices=None,
                 ),
                 "fn": orm_fields.OrmCalculatedField(
-                    model_name="app.model", name="fn", pretty_name="fn", func=None
+                    model_name="app.model", name="fn", verbose_name="fn", func=None
                 ),
                 "bob": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="bob",
-                    pretty_name="bob",
+                    verbose_name="bob",
                     type_=StringType,
                     rel_name=StringType.name,
                     choices=None,
@@ -87,7 +87,7 @@ def orm_models():
                 "num": orm_fields.OrmConcreteField(
                     model_name="app.model",
                     name="num",
-                    pretty_name="num",
+                    verbose_name="num",
                     type_=NumberType,
                     rel_name=NumberType.name,
                     choices=None,
@@ -95,7 +95,7 @@ def orm_models():
                 "tom": orm_fields.OrmFkField(
                     model_name="app.model",
                     name="tom",
-                    pretty_name="tom",
+                    verbose_name="tom",
                     rel_name="app.Tom",
                     to_many=False,
                 ),
@@ -108,7 +108,7 @@ def orm_models():
                 "jones": orm_fields.OrmConcreteField(
                     model_name="app.Tom",
                     name="jones",
-                    pretty_name="jones",
+                    verbose_name="jones",
                     type_=StringType,
                     rel_name=StringType.name,
                     choices=None,
@@ -116,7 +116,7 @@ def orm_models():
                 "michael": orm_fields.OrmFkField(
                     model_name="app.Tom",
                     name="michael",
-                    pretty_name="michael",
+                    verbose_name="michael",
                     rel_name="app.Michael",
                     to_many=False,
                 ),
@@ -129,7 +129,7 @@ def orm_models():
                 "bolton": orm_fields.OrmConcreteField(
                     model_name="app.Michael",
                     name="bolton",
-                    pretty_name="bolton",
+                    verbose_name="bolton",
                     type_=StringType,
                     rel_name=StringType.name,
                     choices=None,

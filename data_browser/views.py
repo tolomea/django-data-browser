@@ -80,7 +80,7 @@ def _get_model_fields(model_name, orm_models):
             fields.items(),
             key=lambda name_field: (
                 front.get(name_field[0], sys.maxsize),
-                name_field[1]["prettyName"],
+                name_field[1]["verboseName"],
             ),
         )
         return [name for name, field in sorted_fields]
@@ -92,11 +92,11 @@ def _get_model_fields(model_name, orm_models):
             "type": orm_field.type_.name if orm_field.type_ else None,
             "concrete": orm_field.concrete,
             "canPivot": orm_field.can_pivot,
-            "prettyName": orm_field.pretty_name,
+            "verboseName": orm_field.verbose_name,
             "choices": [v for k, v in orm_field.choices],
             "defaultSort": orm_field.default_sort,
             "actions": [
-                {"name": name, "prettyName": desc}
+                {"name": name, "verboseName": desc}
                 for name, (func, desc) in sorted((orm_field.actions or {}).items())
             ],
         }
@@ -125,7 +125,7 @@ def _get_config():
     types = {
         name: {
             "lookups": {
-                n: {"prettyName": tn, "type": t}
+                n: {"verboseName": tn, "type": t}
                 for n, (tn, t, _) in type_.lookups.items()
             },
             "sortedLookups": list(type_.lookups),
@@ -143,16 +143,16 @@ def _get_config():
     root_models_by_app = defaultdict(list)
     for name, model in orm_models.items():
         if model.root:
-            root_models_by_app[model.app_pretty_name].append(model)
+            root_models_by_app[model.app_verbose_name].append(model)
     model_index = [
         {
-            "appPrettyName": app_pretty_name,
+            "appVerboseName": app_verbose_name,
             "models": [
-                {"prettyName": model.pretty_name, "fullName": model.full_name}
-                for model in sorted(models, key=lambda m: m.pretty_name)
+                {"verboseName": model.verbose_name, "fullName": model.full_name}
+                for model in sorted(models, key=lambda m: m.verbose_name)
             ],
         }
-        for app_pretty_name, models in sorted(root_models_by_app.items())
+        for app_verbose_name, models in sorted(root_models_by_app.items())
     ]
 
     return {

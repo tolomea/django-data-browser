@@ -74,7 +74,7 @@ class OrmFunctionField(OrmBaseField):
             field=self,
             previous=previous,
             full_path=full_path,
-            pretty_path=previous.pretty_path + [self.pretty_name],
+            verbose_path=previous.verbose_path + [self.verbose_name],
             queryset_path=[annotation_path(full_path)],
             filter_=True,
             func=self.func,

@@ -1,5 +1,5 @@
 def head_cell(field):
-    return [" ".join(field.pretty_path)]
+    return [" ".join(field.verbose_path)]
 
 
 def data_cell(value, span=1):

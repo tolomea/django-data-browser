@@ -39,23 +39,23 @@ class TypeMeta(type):
         for name, type_ in cls._lookups().items():
             assert isinstance(type_, tuple), type_
             if len(type_) == 3:
-                type_, keep_choices, pretty_name = type_
+                type_, keep_choices, verbose_name = type_
                 assert keep_choices is not None, (cls, name)
             else:
                 type_, keep_choices = type_
-                pretty_name = name.replace("_", " ")
-            res[name] = pretty_name, type_.name, keep_choices
+                verbose_name = name.replace("_", " ")
+            res[name] = verbose_name, type_.name, keep_choices
         return res
 
     @property
-    def pretty_name(cls):
+    def verbose_name(cls):
         name = cls.__name__
         assert name.endswith("Type")
         return name[: -len("Type")]
 
     @property
     def name(cls):
-        return cls.pretty_name.lower()
+        return cls.verbose_name.lower()
 
 
 class BaseType(metaclass=TypeMeta):
@@ -104,7 +104,7 @@ class BaseType(metaclass=TypeMeta):
         if lookup not in lookups:
             return None, "Bad lookup"
         else:
-            pretty_name, type_name, keep_choices = lookups[lookup]
+            verbose_name, type_name, keep_choices = lookups[lookup]
             if not keep_choices:
                 choices = ()
             type_ = TYPES[type_name]
@@ -112,7 +112,7 @@ class BaseType(metaclass=TypeMeta):
 
     @classmethod
     def format_lookup(cls, lookup, value, choices):
-        pretty_name, type_name, keep_choices = cls.lookups[lookup]
+        verbose_name, type_name, keep_choices = cls.lookups[lookup]
         if not keep_choices:
             choices = ()
         return TYPES[type_name]._get_formatter(choices)(value)
@@ -585,7 +585,7 @@ for _cls in [
     NumberType,
     StringableType,
 ]:
-    _name = f"{_cls.pretty_name}ArrayType"
+    _name = f"{_cls.verbose_name}ArrayType"
     globals()[_name] = type(_name, (ArrayTypeMixin, BaseType), {"element_type": _cls})
 
 

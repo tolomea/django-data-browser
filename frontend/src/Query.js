@@ -14,7 +14,7 @@ function getPartsForQuery(query) {
         (f) =>
           (f.pivoted ? "&" : "") +
           f.pathStr +
-          { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort]
+          { asc: `+${f.priority}`, dsc: `-${f.priority}`, null: "" }[f.sort],
       )
       .join(","),
     query: query.filters
@@ -92,7 +92,7 @@ class Query {
       {
         fields: this.query.fields.filter((f) => f.pathStr !== field.pathStr),
       },
-      !field.errorMessage && modelField.canPivot
+      !field.errorMessage && modelField.canPivot,
     );
   }
 
@@ -121,7 +121,7 @@ class Query {
       fields.splice(newIndex, 0, field);
       this.setQuery(
         { fields: [].concat(rowFields, colFields, bodyFields) },
-        false
+        false,
       );
     }
   }
@@ -231,9 +231,9 @@ class Query {
           return uniqueValues.size > 1;
         })
         .map((field) =>
-          this.filterForValue(field.pathStr, values[field.pathStr], false)
+          this.filterForValue(field.pathStr, values[field.pathStr], false),
         )
-        .filter((f) => f !== null)
+        .filter((f) => f !== null),
     );
     this.setQuery({ filters: newFilters });
   }
@@ -295,7 +295,7 @@ class Query {
 
   rowFields() {
     return this.validFields().filter(
-      (f) => this.getField(f.pathStr).canPivot && !f.pivoted
+      (f) => this.getField(f.pathStr).canPivot && !f.pivoted,
     );
   }
 
@@ -303,18 +303,18 @@ class Query {
     return this.validFields().filter((f) => !this.getField(f.pathStr).canPivot);
   }
 
-  prettyPathStr(pathStr) {
+  verbosePathStr(pathStr) {
     const path = pathStr.split("__");
-    const prettyPath = [];
+    const verbosePath = [];
     let model = this.query.model;
     let field = null;
     for (const part of path) {
       field = this.config.allModelFields[model].fields[part];
       model = field.model;
-      prettyPath.push(field.prettyName);
-      prettyPath.push(field.toMany ? "\u21f6" : "\u21d2");
+      verbosePath.push(field.verboseName);
+      verbosePath.push(field.toMany ? "\u21f6" : "\u21d2");
     }
-    return prettyPath.slice(0, -1).join(" ");
+    return verbosePath.slice(0, -1).join(" ");
   }
 
   getFieldClass(field) {

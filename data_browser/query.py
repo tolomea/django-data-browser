@@ -221,8 +221,8 @@ class BoundField:
         return self.query_field.path
 
     @cached_property
-    def pretty_path(self):
-        return self.orm_bound_field.pretty_path if self.orm_bound_field else None
+    def verbose_path(self):
+        return self.orm_bound_field.verbose_path if self.orm_bound_field else None
 
     @cached_property
     def path_str(self):

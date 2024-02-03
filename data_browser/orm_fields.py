@@ -24,7 +24,7 @@ class OrmBoundField:
     field: "OrmBaseField"
     previous: "OrmBoundField"
     full_path: Sequence[str]
-    pretty_path: Sequence[str]
+    verbose_path: Sequence[str]
     queryset_path: Sequence[str]
     aggregate_clause: Tuple[str, models.Func] = None
     filter_: bool = False
@@ -72,7 +72,7 @@ class OrmBoundField:
     @classmethod
     def blank(cls):
         return cls(
-            field=None, previous=None, full_path=[], pretty_path=[], queryset_path=[]
+            field=None, previous=None, full_path=[], verbose_path=[], queryset_path=[]
         )
 
     def get_format_hints(self, data):
@@ -84,7 +84,7 @@ class OrmBoundField:
 class OrmBaseField:
     model_name: str
     name: str
-    pretty_name: str
+    verbose_name: str
     type_: BaseType = None
     concrete: bool = False
     rel_name: str = None
@@ -113,9 +113,9 @@ class OrmBaseField:
 
 
 class OrmFkField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, rel_name, to_many):
+    def __init__(self, model_name, name, verbose_name, rel_name, to_many):
         super().__init__(
-            model_name, name, pretty_name, rel_name=rel_name, to_many=to_many
+            model_name, name, verbose_name, rel_name=rel_name, to_many=to_many
         )
 
     def bind(self, previous):
@@ -124,19 +124,19 @@ class OrmFkField(OrmBaseField):
             field=self,
             previous=previous,
             full_path=previous.full_path + [self.name],
-            pretty_path=previous.pretty_path + [self.pretty_name],
+            verbose_path=previous.verbose_path + [self.verbose_name],
             queryset_path=previous.queryset_path + [self.name],
         )
 
 
 class OrmConcreteField(OrmBaseField):
     def __init__(
-        self, model_name, name, pretty_name, type_, rel_name, choices, actions=None
+        self, model_name, name, verbose_name, type_, rel_name, choices, actions=None
     ):
         super().__init__(
             model_name,
             name,
-            pretty_name,
+            verbose_name,
             concrete=True,
             type_=type_,
             rel_name=rel_name,
@@ -152,7 +152,7 @@ class OrmConcreteField(OrmBaseField):
             field=self,
             previous=previous,
             full_path=previous.full_path + [self.name],
-            pretty_path=previous.pretty_path + [self.pretty_name],
+            verbose_path=previous.verbose_path + [self.verbose_name],
             queryset_path=previous.queryset_path + [self.name],
             filter_=True,
         )
@@ -164,21 +164,21 @@ class OrmRawField(OrmConcreteField):
             field=self,
             previous=previous,
             full_path=previous.full_path + [self.name],
-            pretty_path=previous.pretty_path + [self.pretty_name],
+            verbose_path=previous.verbose_path + [self.verbose_name],
             queryset_path=previous.queryset_path,
             filter_=True,
         )
 
 
 class OrmCalculatedField(OrmBaseField):
-    def __init__(self, model_name, name, pretty_name, func, actions=None):
+    def __init__(self, model_name, name, verbose_name, func, actions=None):
         if getattr(func, "boolean", False):
             type_ = BooleanType
         else:
             type_ = HTMLType
 
         super().__init__(
-            model_name, name, pretty_name, type_=type_, can_pivot=True, actions=actions
+            model_name, name, verbose_name, type_=type_, can_pivot=True, actions=actions
         )
         self.func = func
 
@@ -188,7 +188,7 @@ class OrmCalculatedField(OrmBaseField):
             field=self,
             previous=previous,
             full_path=previous.full_path + [self.name],
-            pretty_path=previous.pretty_path + [self.pretty_name],
+            verbose_path=previous.verbose_path + [self.verbose_name],
             queryset_path=previous.queryset_path + ["pk"],
             model_name=self.model_name,
         )
@@ -236,12 +236,12 @@ class OrmBoundAnnotatedField(OrmBoundField):
 
 class OrmAnnotatedField(OrmBaseField):
     def __init__(
-        self, model_name, name, pretty_name, type_, django_field, admin, choices
+        self, model_name, name, verbose_name, type_, django_field, admin, choices
     ):
         super().__init__(
             model_name,
             name,
-            pretty_name,
+            verbose_name,
             type_=type_,
             rel_name=type_.name,
             can_pivot=True,
@@ -259,18 +259,18 @@ class OrmAnnotatedField(OrmBaseField):
             field=self,
             previous=previous,
             full_path=full_path,
-            pretty_path=previous.pretty_path + [self.pretty_name],
+            verbose_path=previous.verbose_path + [self.verbose_name],
             queryset_path=[annotation_path(full_path)],
             filter_=True,
         )
 
 
 class OrmFileField(OrmConcreteField):
-    def __init__(self, model_name, name, pretty_name, django_field):
+    def __init__(self, model_name, name, verbose_name, django_field):
         super().__init__(
             model_name,
             name,
-            pretty_name,
+            verbose_name,
             type_=URLType,
             rel_name=URLType.name,
             choices=None,

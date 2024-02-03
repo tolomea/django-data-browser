@@ -27,14 +27,14 @@ function HeadCell(props) {
       e,
       modelField.actions.map((action) => {
         return {
-          name: action.prettyName,
+          name: action.verboseName,
           fn: () =>
             doPost("", {
               action: action.name,
               field: field.pathStr,
             }).then((response) => syncPost(response.url, response.data)),
         };
-      })
+      }),
     );
   }
 
@@ -65,7 +65,7 @@ function HeadCell(props) {
             filter_alt
           </SLink>{" "}
           <TLink onClick={() => query.toggleSort(field)}>
-            {query.prettyPathStr(field.pathStr)}
+            {query.verbosePathStr(field.pathStr)}
             {
               {
                 dsc: `↑${field.priority}`,
@@ -76,7 +76,7 @@ function HeadCell(props) {
           </TLink>
         </>
       ) : (
-        " " + query.prettyPathStr(field.pathStr)
+        " " + query.verbosePathStr(field.pathStr)
       )}
       <HasActionIcon
         modelField={modelField}
@@ -325,7 +325,7 @@ function Results(props) {
                         />
                       ))}
                     </tr>
-                  )
+                  ),
               )}
           </tbody>
         </table>

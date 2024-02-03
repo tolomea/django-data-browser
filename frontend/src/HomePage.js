@@ -98,22 +98,22 @@ function SavedAndSharedViews(props) {
 
 function AppEntry(props) {
   const config = useContext(Config);
-  const { appPrettyName, models } = props;
+  const { appVerboseName, models } = props;
   const [toggled, toggleLink] = usePersistentToggle(
-    `model.${appPrettyName}.toggle`,
+    `model.${appVerboseName}.toggle`,
     config.appsExpanded,
   );
   return (
     <>
       <h2>
         {toggleLink}
-        {appPrettyName}
+        {appVerboseName}
       </h2>
       {toggled && (
-        <div key={appPrettyName} className="AppModels">
+        <div key={appVerboseName} className="AppModels">
           {models.map((modelEntry) => {
             return (
-              <h2 key={modelEntry.prettyName}>
+              <h2 key={modelEntry.verboseName}>
                 <Link
                   to={getRelUrlForQuery(
                     {
@@ -128,7 +128,7 @@ function AppEntry(props) {
                   )}
                   className="Link"
                 >
-                  {modelEntry.prettyName}
+                  {modelEntry.verboseName}
                 </Link>
               </h2>
             );
@@ -145,8 +145,8 @@ function ModelList(props) {
     <div className="ModelList">
       <div>
         <h1>Models</h1>
-        {config.modelIndex.map(({ appPrettyName, models }) => (
-          <AppEntry key={appPrettyName} {...{ appPrettyName, models }} />
+        {config.modelIndex.map(({ appVerboseName, models }) => (
+          <AppEntry key={appVerboseName} {...{ appVerboseName, models }} />
         ))}
       </div>
     </div>
