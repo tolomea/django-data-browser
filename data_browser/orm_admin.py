@@ -405,9 +405,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                 json_fields = _get_option(admin, "json_fields", request).get(field_name)
                 if json_fields:  # pragma: no branch
                     rel_name = f"{model_name}__{field_name}"
-                    orm_models[rel_name] = _make_json_sub_module(
-                        model_name, json_fields
-                    )
+                    orm_models[rel_name] = _make_json_sub_module(rel_name, json_fields)
 
             if field_name == model._meta.pk.name and hasattr(admin, "get_actions"):
                 actions = admin_get_actions(request, admin)
