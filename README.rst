@@ -467,6 +467,8 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
+|         |            | Add a text filter to the top of the field list.                                                          |
++---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.6   | 2024-01-04 | | Support custom admin sites. Contributed by #aboutofpluto                                               |
 |         |            | | Fix date expression in a filter on a datetime field not anchoring to midnight.                         |
 |         |            | | Use verbose names for apps and models.                                                                 |

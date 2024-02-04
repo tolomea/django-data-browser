@@ -12,6 +12,7 @@ import {
   useToggle,
   doGet,
   fetchInProgress,
+  isSubsequence,
 } from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery, Query, getUrlForQuery, empty } from "./Query";
@@ -237,9 +238,10 @@ function InvalidFields(props) {
 }
 
 function Field(props) {
-  const { query, path, modelField } = props;
+  const { query, path, modelField, fieldFilter } = props;
   const type = query.getType(modelField);
   const [toggled, toggleLink] = useToggle();
+  const expanded = modelField.model && (toggled || fieldFilter);
 
   return (
     <>
@@ -283,11 +285,14 @@ function Field(props) {
       </tr>
 
       {/* sub fields */}
-      {toggled && (
+      {expanded && (
         <tr>
           <td></td>
           <td colSpan="2">
-            <FieldGroup {...{ query, path }} model={modelField.model} />
+            <FieldGroup
+              {...{ query, path, fieldFilter }}
+              model={modelField.model}
+            />
           </td>
         </tr>
       )}
@@ -296,18 +301,21 @@ function Field(props) {
 }
 
 function FieldGroup(props) {
-  const { query, model, path } = props;
+  const { query, model, path, fieldFilter } = props;
   const modelFields = query.getModelFields(model);
+  const filterParts = fieldFilter.toLowerCase().split(".");
   return (
     <table className="FieldGroup">
       <tbody>
         {modelFields.sortedFields.map((fieldName) => {
           const modelField = modelFields.fields[fieldName];
+          if (!isSubsequence(filterParts[0], fieldName.toLowerCase())) return;
           return (
             <Field
               key={fieldName}
               {...{ query, modelField }}
               path={path.concat([fieldName])}
+              fieldFilter={filterParts.slice(1).join(".")}
             />
           );
         })}
@@ -385,6 +393,10 @@ function QueryPageContent(props) {
     );
   }
 
+  const [fieldFilter, setFieldFilter] = useState("");
+  const showTooltip = useContext(ShowTooltip);
+  const hideTooltip = useContext(HideTooltip);
+
   return (
     <div className="QueryPage">
       <ModelSelector {...{ query, model }} />
@@ -419,8 +431,31 @@ function QueryPageContent(props) {
         <div className="FieldsList">
           <div className="FieldsToggle">{fieldsToggleLink}</div>
           {fieldsToggled && (
+            <div className="FieldsFilter">
+              <input
+                type="text"
+                value={fieldFilter}
+                onChange={(event) => {
+                  setFieldFilter(event.target.value);
+                }}
+                onMouseEnter={(e) =>
+                  showTooltip(e, ["Use '.' to filter related models."])
+                }
+                onMouseLeave={(e) => hideTooltip(e)}
+              />
+              <button
+                label="X"
+                onClick={(event) => {
+                  setFieldFilter("");
+                }}
+              >
+                X
+              </button>
+            </div>
+          )}
+          {fieldsToggled && (
             <div className="Scroller">
-              <FieldGroup {...{ query, model }} path={[]} />
+              <FieldGroup {...{ query, model, fieldFilter }} path={[]} />
             </div>
           )}
         </div>

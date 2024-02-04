@@ -163,6 +163,13 @@ textarea::placeholder {
   }
   > .FieldsList {
     margin: 10px 0 10px 10px;
+    > .FieldsFilter {
+      display: flex;
+      flex-direction: row;
+      > input {
+        flex: 1;
+      }
+    }
   }
 }
 
@@ -246,14 +253,15 @@ select.Lookup {
   th,
   td {
     padding: 0px;
-    padding: 1px;
   }
   td {
+    padding: 4px 0px;
     text-align: left;
   }
   .FieldName {
     border-radius: 4px;
     padding: 4px;
+    width: 100%;
   }
 }
 

@@ -84,7 +84,7 @@ function doFetch(url, options, process) {
             if (next) {
                 doFetch(next.url, next.options, next.process).then(
                     (res) => next.resolve(res),
-                    (err) => next.reject(err)
+                    (err) => next.reject(err),
                 );
                 throw new AbortError("superceeded");
             } else {
@@ -104,7 +104,7 @@ function doFetch(url, options, process) {
                 console.log(
                     "Version mismatch, hard reload",
                     version,
-                    response_version
+                    response_version,
                 );
                 window.location.reload(true);
             }
@@ -124,7 +124,7 @@ function doDelete(url) {
             method: "DELETE",
             headers: { "X-CSRFToken": csrf_token },
         },
-        (response) => response
+        (response) => response,
     );
 }
 
@@ -139,7 +139,7 @@ function doPatch(url, data) {
             },
             body: JSON.stringify(data),
         },
-        (response) => response.json()
+        (response) => response.json(),
     );
 }
 
@@ -154,7 +154,7 @@ function doPost(url, data) {
             },
             body: JSON.stringify(data),
         },
-        (response) => response.json()
+        (response) => response.json(),
     );
 }
 
@@ -189,7 +189,7 @@ function useData(url) {
             setData((prev) => ({ ...prev, ...updates }));
             doPatch(url, updates)
                 .then((response) =>
-                    setData((prev) => ({ ...prev, ...response }))
+                    setData((prev) => ({ ...prev, ...response })),
                 )
                 .catch((e) => {
                     if (e.name !== "AbortError") throw e;
@@ -235,7 +235,7 @@ function Update(props) {
                 onClick={(event) => {
                     timerID = setTimeout(
                         () => setState("initial"),
-                        CONFIRM_TIMEOUT
+                        CONFIRM_TIMEOUT,
                     );
                     setState("confirm");
                 }}
@@ -253,7 +253,7 @@ function Update(props) {
                         timerID = null;
                     }
                     doPatch(apiUrl, data).then((response) =>
-                        setState("updated")
+                        setState("updated"),
                     );
                 }}
             >
@@ -275,7 +275,7 @@ function Delete(props) {
                 onClick={(event) => {
                     timerID = setTimeout(
                         () => setState("initial"),
-                        CONFIRM_TIMEOUT
+                        CONFIRM_TIMEOUT,
                     );
                     setState("confirm");
                 }}
@@ -350,7 +350,7 @@ function shallowEqual(objA: mixed, objB: mixed): boolean {
                 "different key",
                 keysA[i],
                 objA[keysA[i]],
-                objB[keysA[i]]
+                objB[keysA[i]],
             );
             return false;
         }
@@ -443,6 +443,21 @@ function usePersistentToggle(storageKey = null, initial = false) {
     return [toggled, toggleLink];
 }
 
+function isSubsequence(sub, str) {
+    let subIndex = 0;
+    let strIndex = 0;
+
+    while (strIndex < str.length && subIndex < sub.length) {
+        if (sub[subIndex] === str[strIndex]) {
+            subIndex++;
+        }
+        strIndex++;
+    }
+
+    // If subIndex is equal to the length of sub, then all characters are found
+    return subIndex === sub.length;
+}
+
 export {
     TLink,
     SLink,
@@ -464,4 +479,5 @@ export {
     HasToManyIcon,
     useToggle,
     usePersistentToggle,
+    isSubsequence,
 };
