@@ -41,9 +41,7 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: test
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: test_data_browser
         ports:
           - 5432:5432
         options: >-
