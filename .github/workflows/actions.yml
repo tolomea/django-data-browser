@@ -42,7 +42,6 @@ jobs:
           - 5432:5432
     env:
       DATABASE_URL: ${{ matrix.database_url }}
-      TOX_PARALLEL_NO_SPINNER: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -55,7 +54,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install tox tox-gh-actions
       - name: Test with tox
-        run: tox
+        run: tox run
       - name: Upload coverage data
         uses: actions/upload-artifact@v2
         with:
