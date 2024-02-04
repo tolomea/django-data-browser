@@ -29,17 +29,13 @@ jobs:
           - postgres://postgres:test@127.0.0.1:5432/data_browser
     services:
       mysql:
-        image: mysql
+        image: mysql:8.1.0
         env:
-          MYSQL_USER: root
-          MYSQL_PASSWORD: test
           MYSQL_ROOT_PASSWORD: test
-          MYSQL_DB: test_data_browser
         ports:
           - 3306:3306
-        options: --tmpfs /var/lib/mysql
       postgres:
-        image: postgres
+        image: postgres:13.12
         env:
           POSTGRES_PASSWORD: test
         ports:
