@@ -467,9 +467,9 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Add a text filter to the top of the field list.                                                          |
+| 4.2.7   | 2024-02-04 | Add a text filter to the top of the field list.                                                          |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
-| 4.2.6   | 2024-01-04 | | Support custom admin sites. Contributed by #aboutofpluto                                               |
+| 4.2.6   | 2024-02-04 | | Support custom admin sites. Contributed by #aboutofpluto                                               |
 |         |            | | Fix date expression in a filter on a datetime field not anchoring to midnight.                         |
 |         |            | | Use verbose names for apps and models.                                                                 |
 |         |            | | Add support for Python 3.12 and Django 5.0, drop support for Python 3.7.                               |
