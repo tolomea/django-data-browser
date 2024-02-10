@@ -2,7 +2,8 @@ import * as Sentry from "@sentry/browser";
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
-import { SLink, Save, Update, useToggle, doGet, fetchInProgress } from "./Util";
+import { doGet, fetchInProgress } from "./Network";
+import { SLink, Save, Update, useToggle } from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery, Query, getUrlForQuery, empty } from "./Query";
 import { ShowTooltip, HideTooltip } from "./Tooltip";

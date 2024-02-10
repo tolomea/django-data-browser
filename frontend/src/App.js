@@ -7,7 +7,7 @@ import { CurrentSavedView } from "./CurrentSavedView";
 import { HomePage } from "./HomePage";
 import { QueryPage } from "./QueryPage";
 import { SavedViewPage } from "./SavedViewPage";
-import { version } from "./Util";
+import { version } from "./Network";
 import { Config } from "./Config";
 
 import "./App.scss";

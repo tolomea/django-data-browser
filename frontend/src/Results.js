@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import "./App.scss";
-import { TLink, SLink, Overlay, syncPost, doPost, HasActionIcon } from "./Util";
+import { syncPost, doPost } from "./Network";
+import { TLink, SLink, Overlay, HasActionIcon } from "./Util";
 import { ShowContextMenu } from "./ContextMenu";
 
 function Spacer(props) {

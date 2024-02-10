@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { useData, Delete, CopyText } from "./Util";
+import { useData } from "./Network";
+import { Delete, CopyText } from "./Util";
 import { SetCurrentSavedView } from "./CurrentSavedView";
 import { Config } from "./Config";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
@@ -126,7 +127,7 @@ function SavedViewPage(props) {
                         ];
                         if (!view.name.length)
                           msg.push(
-                            <strong>To be shared a view must be named.</strong>
+                            <strong>To be shared a view must be named.</strong>,
                           );
                         showTooltip(e, msg);
                       }}

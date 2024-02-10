@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { useData, usePersistentToggle } from "./Util";
+import { useData } from "./Network";
+import { usePersistentToggle } from "./Util";
 import { getRelUrlForQuery } from "./Query";
 import { SetCurrentSavedView } from "./CurrentSavedView";
 import { Config } from "./Config";
