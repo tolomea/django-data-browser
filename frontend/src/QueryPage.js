@@ -309,7 +309,10 @@ function FieldGroup(props) {
       <tbody>
         {modelFields.sortedFields.map((fieldName) => {
           const modelField = modelFields.fields[fieldName];
-          if (!isSubsequence(filterParts[0], fieldName.toLowerCase())) return;
+          if (
+            !isSubsequence(filterParts[0], modelField.verboseName.toLowerCase())
+          )
+            return;
           return (
             <Field
               key={fieldName}
