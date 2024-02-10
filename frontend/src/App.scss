@@ -239,29 +239,28 @@ select.Lookup {
 .FieldsList {
   display: flex;
   flex-flow: column nowrap;
-  .Scroller,
-  table table {
+  .Scroller {
     border: 1px solid var(--border-color);
     border-radius: 3px;
   }
-  tbody,
-  th,
-  td {
-    border: none;
-    vertical-align: top;
+  .FieldRow{
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 2px;
   }
-  th,
-  td {
-    padding: 0px;
-  }
-  td {
+  .FieldFilter, .FieldExpand {
     padding: 4px 0px;
-    text-align: left;
+    min-width: 20px;
   }
   .FieldName {
     border-radius: 4px;
     padding: 4px;
     width: 100%;
+  }
+  .FieldSubFields {
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    margin: 2px 2px 2px 20px;
   }
 }
 

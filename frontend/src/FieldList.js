@@ -17,57 +17,56 @@ function Field(props) {
 
   return (
     <>
-      <tr className="Field">
-        {/* filter */}
-        <td>
-          {modelField.concrete && type.defaultLookup && (
-            <SLink onClick={() => query.addFilter(path.join("__"))}>
-              filter_alt
-            </SLink>
-          )}
-        </td>
+      <div className="Field">
+        <div className="FieldRow">
+          {/* filter */}
+          <div className="FieldFilter">
+            {modelField.concrete && type.defaultLookup && (
+              <SLink onClick={() => query.addFilter(path.join("__"))}>
+                filter_alt
+              </SLink>
+            )}
+          </div>
 
-        {/* expand */}
-        <td>{modelField.model && toggleLink}</td>
+          {/* expand */}
+          <div className="FieldExpand">{modelField.model && toggleLink}</div>
 
-        {/* name */}
-        <td className={`FieldName ${query.getFieldClass(modelField)}`}>
-          {modelField.type ? (
-            <TLink
-              onClick={() =>
-                query.addField(path.join("__"), modelField.defaultSort)
-              }
-            >
-              {modelField.verboseName}
-              <HasActionIcon
-                modelField={modelField}
-                message="Has admin actions."
-              />
-            </TLink>
-          ) : (
-            <>
-              {modelField.verboseName}
-              <HasToManyIcon
-                modelField={modelField}
-                message="Traversing 'To Many' links may add multiple lines per result."
-              />
-            </>
-          )}
-        </td>
-      </tr>
+          {/* name */}
+          <div className={`FieldName ${query.getFieldClass(modelField)}`}>
+            {modelField.type ? (
+              <TLink
+                onClick={() =>
+                  query.addField(path.join("__"), modelField.defaultSort)
+                }
+              >
+                {modelField.verboseName}
+                <HasActionIcon
+                  modelField={modelField}
+                  message="Has admin actions."
+                />
+              </TLink>
+            ) : (
+              <>
+                {modelField.verboseName}
+                <HasToManyIcon
+                  modelField={modelField}
+                  message="Traversing 'To Many' links may add multiple lines per result."
+                />
+              </>
+            )}
+          </div>
+        </div>
 
-      {/* sub fields */}
-      {expanded && (
-        <tr>
-          <td></td>
-          <td colSpan="2">
+        {/* sub fields */}
+        {expanded && (
+          <div className="FieldSubFields">
             <FieldGroup
               {...{ query, path, fieldFilter }}
               model={modelField.model}
             />
-          </td>
-        </tr>
-      )}
+          </div>
+        )}
+      </div>
     </>
   );
 }
@@ -77,23 +76,21 @@ function FieldGroup(props) {
   const modelFields = query.getModelFields(model);
   const filterParts = fieldFilter.toLowerCase().split(".");
   return (
-    <table className="FieldGroup">
-      <tbody>
-        {modelFields.sortedFields.map((fieldName) => {
-          const modelField = modelFields.fields[fieldName];
-          if (!strMatch(filterParts[0], modelField.verboseName.toLowerCase()))
-            return null;
-          return (
-            <Field
-              key={fieldName}
-              {...{ query, modelField }}
-              path={path.concat([fieldName])}
-              fieldFilter={filterParts.slice(1).join(".")}
-            />
-          );
-        })}
-      </tbody>
-    </table>
+    <>
+      {modelFields.sortedFields.map((fieldName) => {
+        const modelField = modelFields.fields[fieldName];
+        if (!strMatch(filterParts[0], modelField.verboseName.toLowerCase()))
+          return null;
+        return (
+          <Field
+            key={fieldName}
+            {...{ query, modelField }}
+            path={path.concat([fieldName])}
+            fieldFilter={filterParts.slice(1).join(".")}
+          />
+        );
+      })}
+    </>
   );
 }
 
