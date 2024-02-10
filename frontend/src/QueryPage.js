@@ -12,7 +12,7 @@ import {
   useToggle,
   doGet,
   fetchInProgress,
-  isSubsequence,
+  strMatch,
 } from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery, Query, getUrlForQuery, empty } from "./Query";
@@ -21,8 +21,6 @@ import { GetCurrentSavedView } from "./CurrentSavedView";
 import { Config } from "./Config";
 
 import "./App.scss";
-
-const assert = require("assert");
 
 const BOOTING = "Booting...";
 const LOADING = "Loading...";
@@ -309,9 +307,7 @@ function FieldGroup(props) {
       <tbody>
         {modelFields.sortedFields.map((fieldName) => {
           const modelField = modelFields.fields[fieldName];
-          if (
-            !isSubsequence(filterParts[0], modelField.verboseName.toLowerCase())
-          )
+          if (!strMatch(filterParts[0], modelField.verboseName.toLowerCase()))
             return;
           return (
             <Field
@@ -442,7 +438,10 @@ function QueryPageContent(props) {
                   setFieldFilter(event.target.value);
                 }}
                 onMouseEnter={(e) =>
-                  showTooltip(e, ["Use '.' to filter related models."])
+                  showTooltip(e, [
+                    "Use ' ' to seperate search terms.",
+                    "Use '.' to filter inside related models.",
+                  ])
                 }
                 onMouseLeave={(e) => hideTooltip(e)}
               />

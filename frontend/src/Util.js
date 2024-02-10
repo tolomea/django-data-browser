@@ -458,6 +458,11 @@ function isSubsequence(sub, str) {
     return subIndex === sub.length;
 }
 
+function strMatch(pattern, str) {
+    pattern = pattern.replace(/\s+/g, ".*");
+    return !!str.match(pattern);
+}
+
 export {
     TLink,
     SLink,
@@ -480,4 +485,5 @@ export {
     useToggle,
     usePersistentToggle,
     isSubsequence,
+    strMatch,
 };
