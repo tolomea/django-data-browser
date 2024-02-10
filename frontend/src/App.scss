@@ -243,13 +243,24 @@ select.Lookup {
     border: 1px solid var(--border-color);
     border-radius: 3px;
   }
-  .FieldRow{
+  .FieldRow {
     display: flex;
     flex-flow: row nowrap;
-    margin: 2px;
+    padding: 2px;
+    background: white;
   }
-  .FieldFilter, .FieldExpand {
-    padding: 4px 0px;
+  .FieldRowExpanded {
+    position: sticky;
+    padding-bottom: 0;
+  }
+  .FieldRowExpanded .FieldExpand,
+  .FieldRowExpanded .FieldName {
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+  }
+  .FieldFilter,
+  .FieldExpand {
+    padding: 4px 0px 0px 0px;
     min-width: 20px;
   }
   .FieldName {
@@ -259,8 +270,9 @@ select.Lookup {
   }
   .FieldSubFields {
     border: 1px solid var(--border-color);
-    border-radius: 3px;
-    margin: 2px 2px 2px 20px;
+    border-top: None;
+    border-radius: 0;
+    margin: 0px 2px 2px 22px;
   }
 }
 

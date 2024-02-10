@@ -10,15 +10,25 @@ import {
 import "./App.scss";
 
 function Field(props) {
-  const { query, path, modelField, fieldFilter } = props;
+  const { query, path, modelField, fieldFilter, nesting } = props;
   const type = query.getType(modelField);
   const [toggled, toggleLink] = useToggle();
   const expanded = modelField.model && (toggled || fieldFilter);
+  const stickyOffsetStyle = {
+    top: -2 + nesting * 30,
+    zIndex: 1000 - nesting,
+  };
+  const zStyle = {
+    zIndex: 1000 - nesting - 1,
+  };
 
   return (
     <>
       <div className="Field">
-        <div className="FieldRow">
+        <div
+          className={`FieldRow ${expanded && "FieldRowExpanded"}`}
+          style={stickyOffsetStyle}
+        >
           {/* filter */}
           <div className="FieldFilter">
             {modelField.concrete && type.defaultLookup && (
@@ -59,10 +69,11 @@ function Field(props) {
 
         {/* sub fields */}
         {expanded && (
-          <div className="FieldSubFields">
+          <div className="FieldSubFields" style={zStyle}>
             <FieldGroup
               {...{ query, path, fieldFilter }}
               model={modelField.model}
+              nesting={nesting + 1}
             />
           </div>
         )}
@@ -72,9 +83,10 @@ function Field(props) {
 }
 
 function FieldGroup(props) {
-  const { query, model, path, fieldFilter } = props;
+  const { query, model, path, fieldFilter, nesting } = props;
   const modelFields = query.getModelFields(model);
   const filterParts = fieldFilter.toLowerCase().split(".");
+
   return (
     <>
       {modelFields.sortedFields.map((fieldName) => {
@@ -84,7 +96,7 @@ function FieldGroup(props) {
         return (
           <Field
             key={fieldName}
-            {...{ query, modelField }}
+            {...{ query, modelField, nesting }}
             path={path.concat([fieldName])}
             fieldFilter={filterParts.slice(1).join(".")}
           />
@@ -99,7 +111,7 @@ function FieldList(props) {
 
   return (
     <div className="Scroller">
-      <FieldGroup {...{ query, model, fieldFilter }} path={[]} />
+      <FieldGroup {...{ query, model, fieldFilter }} path={[]} nesting={0} />
     </div>
   );
 }
