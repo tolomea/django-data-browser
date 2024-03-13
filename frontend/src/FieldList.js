@@ -16,10 +16,10 @@ function Field(props) {
   const expanded = modelField.model && (toggled || fieldFilter);
   const stickyOffsetStyle = {
     top: -2 + nesting * 30,
-    zIndex: 1000 - nesting,
+    zIndex: 99 - nesting,
   };
   const zStyle = {
-    zIndex: 1000 - nesting - 1,
+    zIndex: 99 - nesting - 1,
   };
 
   return (
