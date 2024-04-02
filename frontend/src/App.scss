@@ -261,7 +261,7 @@ select.Lookup {
   .FieldRowExpanded .FieldExpand,
   .FieldRowExpanded .FieldName {
     border-bottom: 1px solid var(--border-color);
-    border-radius: 0;
+    border-radius: 4px 4px 0 0;
   }
   .FieldFilter,
   .FieldExpand {
