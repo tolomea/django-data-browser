@@ -312,9 +312,13 @@ function isSubsequence(sub, str) {
     return subIndex === sub.length;
 }
 
-function strMatch(pattern, str) {
-    pattern = pattern.replace(/\s+/g, ".*");
-    return !!str.match(pattern);
+function strMatch(pattern, ...strs) {
+    pattern = pattern.replace(/\s+/g, ".*").toLowerCase();
+    for (const str of strs) {
+        const cleanStr = str.replace(/\s+/g, "").toLowerCase();
+        if (cleanStr.match(pattern)) return true;
+    }
+    return false;
 }
 
 export {

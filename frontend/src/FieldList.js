@@ -91,7 +91,7 @@ function FieldGroup(props) {
     <>
       {modelFields.sortedFields.map((fieldName) => {
         const modelField = modelFields.fields[fieldName];
-        if (!strMatch(filterParts[0], modelField.verboseName.toLowerCase()))
+        if (!strMatch(filterParts[0], fieldName, modelField.verboseName))
           return null;
         return (
           <Field
