@@ -94,6 +94,7 @@ class OrmBaseField:
     format_hints: dict = None
     actions: dict = None
     to_many: bool = False
+    real: bool = False
 
     def __post_init__(self):
         if not self.type_:
@@ -144,6 +145,7 @@ class OrmRealField(OrmBaseField):
             choices=choices or (),
             default_sort=ASC if type_ in [DateType, DateTimeType] else None,
             actions=actions,
+            real=True,
         )
 
     def bind(self, previous):

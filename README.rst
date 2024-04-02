@@ -469,6 +469,7 @@ Release History
 +=========+============+==========================================================================================================+
 |         |            | | Fix Z fighting issue with the field filter.                                                            |
 |         |            | | Make field filter matching more permissive.                                                            |
+|         |            | | Add a distinct (cyan) color for annotated fields.                                                      |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.8   | 2024-02-11 | | Improve field filter matching.                                                                         |
 |         |            | | Add sticky headers to the field list.                                                                  |

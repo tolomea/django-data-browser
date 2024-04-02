@@ -91,6 +91,7 @@ def _get_model_fields(model_name, orm_models):
             "toMany": orm_field.to_many,
             "type": orm_field.type_.name if orm_field.type_ else None,
             "concrete": orm_field.concrete,
+            "real": orm_field.real,
             "canPivot": orm_field.can_pivot,
             "verboseName": orm_field.verbose_name,
             "choices": [v for k, v in orm_field.choices],

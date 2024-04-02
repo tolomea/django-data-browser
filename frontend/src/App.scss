@@ -14,10 +14,11 @@
   --bad-color: hsl(14, 100%, 50%);
   --good-color: hsl(126, 68%, 30%);
 
-  --real-field-color: hsl(126, 36%, 88%);
+  --real-field-color: hsl(126, 46%, 88%);
   --calculated-field-color: hsl(0, 0%, 88%);
-  --aggregate-field-color: hsl(237, 33%, 88%);
-  --function-field-color: hsl(126, 36%, 88%);
+  --aggregate-field-color: hsl(237, 46%, 88%);
+  --function-field-color: hsl(170, 40%, 88%);
+  --annotated-field-color: hsl(170, 40%, 88%);
   --related-field-color: hsl(0, 0%, 100%);
 }
 
@@ -39,6 +40,10 @@
 
 .RelatedField {
   background-color: var(--related-field-color);
+}
+
+.AnnotatedField {
+  background-color: var(--annotated-field-color);
 }
 
 select,
