@@ -129,7 +129,7 @@ class OrmFkField(OrmBaseField):
         )
 
 
-class OrmConcreteField(OrmBaseField):
+class OrmRealField(OrmBaseField):
     def __init__(
         self, model_name, name, verbose_name, type_, rel_name, choices, actions=None
     ):
@@ -158,7 +158,7 @@ class OrmConcreteField(OrmBaseField):
         )
 
 
-class OrmRawField(OrmConcreteField):
+class OrmRawField(OrmRealField):
     def bind(self, previous):
         return OrmBoundField(
             field=self,
@@ -265,7 +265,7 @@ class OrmAnnotatedField(OrmBaseField):
         )
 
 
-class OrmFileField(OrmConcreteField):
+class OrmFileField(OrmRealField):
     def __init__(self, model_name, name, verbose_name, django_field):
         super().__init__(
             model_name,

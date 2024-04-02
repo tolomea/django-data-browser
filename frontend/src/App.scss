@@ -14,15 +14,15 @@
   --bad-color: hsl(14, 100%, 50%);
   --good-color: hsl(126, 68%, 30%);
 
-  --concrete-field-color: hsl(126, 36%, 88%);
+  --real-field-color: hsl(126, 36%, 88%);
   --calculated-field-color: hsl(0, 0%, 88%);
   --aggregate-field-color: hsl(237, 33%, 88%);
   --function-field-color: hsl(126, 36%, 88%);
   --related-field-color: hsl(0, 0%, 100%);
 }
 
-.ConcreteField {
-  background-color: var(--concrete-field-color);
+.RealField {
+  background-color: var(--real-field-color);
 }
 
 .CalculatedField {

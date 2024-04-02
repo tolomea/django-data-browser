@@ -57,7 +57,7 @@ def orm_models():
         "app.model": OrmModel(
             full_name="app.model",
             fields={
-                "fa": orm_fields.OrmConcreteField(
+                "fa": orm_fields.OrmRealField(
                     model_name="app.model",
                     name="fa",
                     verbose_name="fa",
@@ -65,7 +65,7 @@ def orm_models():
                     rel_name=StringType.name,
                     choices=None,
                 ),
-                "fd": orm_fields.OrmConcreteField(
+                "fd": orm_fields.OrmRealField(
                     model_name="app.model",
                     name="fd",
                     verbose_name="fd",
@@ -76,7 +76,7 @@ def orm_models():
                 "fn": orm_fields.OrmCalculatedField(
                     model_name="app.model", name="fn", verbose_name="fn", func=None
                 ),
-                "bob": orm_fields.OrmConcreteField(
+                "bob": orm_fields.OrmRealField(
                     model_name="app.model",
                     name="bob",
                     verbose_name="bob",
@@ -84,7 +84,7 @@ def orm_models():
                     rel_name=StringType.name,
                     choices=None,
                 ),
-                "num": orm_fields.OrmConcreteField(
+                "num": orm_fields.OrmRealField(
                     model_name="app.model",
                     name="num",
                     verbose_name="num",
@@ -105,7 +105,7 @@ def orm_models():
         "app.Tom": OrmModel(
             full_name="app.Tom",
             fields={
-                "jones": orm_fields.OrmConcreteField(
+                "jones": orm_fields.OrmRealField(
                     model_name="app.Tom",
                     name="jones",
                     verbose_name="jones",
@@ -126,7 +126,7 @@ def orm_models():
         "app.Michael": OrmModel(
             full_name="app.Michael",
             fields={
-                "bolton": orm_fields.OrmConcreteField(
+                "bolton": orm_fields.OrmRealField(
                     model_name="app.Michael",
                     name="bolton",
                     verbose_name="bolton",

@@ -322,7 +322,7 @@ class Query {
     if (!field.concrete) return "CalculatedField";
     if (!field.canPivot) return "AggregateField";
     if (!field.model) return "FunctionField";
-    return "ConcreteField";
+    return "RealField";
   }
 }
 

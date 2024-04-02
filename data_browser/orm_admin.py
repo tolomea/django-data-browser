@@ -30,10 +30,10 @@ from data_browser.orm_aggregates import get_aggregates_for_type
 from data_browser.orm_debug import DebugQS
 from data_browser.orm_fields import OrmAnnotatedField
 from data_browser.orm_fields import OrmCalculatedField
-from data_browser.orm_fields import OrmConcreteField
 from data_browser.orm_fields import OrmFileField
 from data_browser.orm_fields import OrmFkField
 from data_browser.orm_fields import OrmRawField
+from data_browser.orm_fields import OrmRealField
 from data_browser.orm_functions import get_functions_for_type
 from data_browser.orm_types import get_field_type
 from data_browser.types import TYPES
@@ -342,7 +342,7 @@ def _make_json_sub_module(model_name, field_types):
     fields = dict(get_fields_for_type(JSONType))
     for field_name, type_name in field_types.items():
         type_ = TYPE_MAP[type_name]
-        fields[field_name] = OrmConcreteField(
+        fields[field_name] = OrmRealField(
             model_name=model_name,
             name=field_name,
             verbose_name=field_name,
@@ -391,7 +391,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
                         field_name, foreign_related_fields[0]
                     )
                     assert field_type != JSONType
-                    fields[field_name] = OrmConcreteField(
+                    fields[field_name] = OrmRealField(
                         model_name=model_name,
                         name=field_name,
                         verbose_name=verbose_name,
@@ -432,7 +432,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             else:
                 actions = {}
 
-            fields[field_name] = OrmConcreteField(
+            fields[field_name] = OrmRealField(
                 model_name=model_name,
                 name=field_name,
                 verbose_name=verbose_name,
