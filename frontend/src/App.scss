@@ -460,7 +460,7 @@ input.RowLimit {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 99;
   pointer-events: none;
 }
 
@@ -478,6 +478,7 @@ input.RowLimit {
 
 .Tooltip,
 .ContextMenu {
+  z-index: 100;
   position: fixed;
   background: white;
   border: 1px solid var(--border-color);
