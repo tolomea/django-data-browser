@@ -38,8 +38,8 @@ function Tooltip(props) {
                 {props.children}
                 {state.messages.length ? (
                     <div ref={node} className="Tooltip" style={divStyle}>
-                        {state.messages.map((m) => (
-                            <p>{m}</p>
+                        {state.messages.map((m, i) => (
+                            <p key={i}>{m}</p>
                         ))}
                     </div>
                 ) : null}
