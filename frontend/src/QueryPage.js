@@ -38,7 +38,9 @@ function InvalidField(props) {
 function InvalidFields(props) {
   const { query } = props;
   const invalidFields = query.invalidFields();
+
   if (!invalidFields.length) return "";
+
   return (
     <div className="InvalidFields">
       <table>
@@ -79,54 +81,86 @@ function ModelSelector(props) {
   );
 }
 
-function QueryPageContent(props) {
-  const config = useContext(Config);
-  const {
-    query,
-    rows,
-    cols,
-    body,
-    length,
-    model,
-    filters,
-    overlay,
-    formatHints,
-    limit,
-  } = props;
-
-  let results;
-  if (query.validFields().length)
-    results = (
-      <Results {...{ query, rows, cols, body, overlay, formatHints }} />
-    );
-  else results = <h1>No fields selected</h1>;
-
-  const [fieldsToggled, fieldsToggleLink] = useToggle(true);
-  const currentSavedView = useContext(GetCurrentSavedView);
-
-  var updateSavedViewLink = null;
-  if (currentSavedView) {
-    const savedViewName = currentSavedView.name
-      ? `"${currentSavedView.name}"`
-      : "<unamed>";
-    updateSavedViewLink = (
-      <p>
-        <Update
-          name={`saved view ${savedViewName}`}
-          apiUrl={`${config.baseUrl}api/views/${currentSavedView.pk}/`}
-          data={{ ...currentSavedView, ...getPartsForQuery(query.query) }}
-          redirectUrl={`/views/${currentSavedView.pk}.html`}
-        />
-      </p>
-    );
-  }
-
-  const [fieldFilter, setFieldFilter] = useState("");
+function FieldsFilter(props) {
+  const { fieldFilter, setFieldFilter } = props;
   const showTooltip = useContext(ShowTooltip);
   const hideTooltip = useContext(HideTooltip);
 
   return (
-    <div className="QueryPage">
+    <div className="FieldsFilter">
+      <input
+        type="text"
+        value={fieldFilter}
+        onChange={(event) => {
+          setFieldFilter(event.target.value);
+        }}
+        onMouseEnter={(e) =>
+          showTooltip(e, [
+            "Use ' ' to seperate search terms.",
+            "Use '.' to filter inside related models.",
+          ])
+        }
+        onMouseLeave={(e) => hideTooltip(e)}
+      />
+      <button
+        label="X"
+        onClick={(event) => {
+          setFieldFilter("");
+        }}
+      >
+        X
+      </button>
+    </div>
+  );
+}
+
+function FilterSideBar(props) {
+  const { query, model } = props;
+  const [fieldsToggled, fieldsToggleLink] = useToggle(true);
+  const [fieldFilter, setFieldFilter] = useState("");
+
+  return (
+    <div className="FieldsList">
+      <div className="FieldsToggle">{fieldsToggleLink}</div>
+      {fieldsToggled && <FieldsFilter {...{ fieldFilter, setFieldFilter }} />}
+      {fieldsToggled && <FieldList {...{ query, model, fieldFilter }} />}
+    </div>
+  );
+}
+
+function ResultsPane(props) {
+  const { query, rows, cols, body, overlay, formatHints } = props;
+
+  if (!query.validFields().length) return <h1>No fields selected</h1>;
+
+  return <Results {...{ query, rows, cols, body, overlay, formatHints }} />;
+}
+
+function UpdateSavedView(props) {
+  const config = useContext(Config);
+  const { query } = props;
+  const currentSavedView = useContext(GetCurrentSavedView);
+
+  if (!currentSavedView) return null;
+
+  return (
+    <p>
+      <Update
+        name={`saved view ${currentSavedView.name || "<unamed>"}`}
+        apiUrl={`${config.baseUrl}api/views/${currentSavedView.pk}/`}
+        data={{ ...currentSavedView, ...getPartsForQuery(query.query) }}
+        redirectUrl={`/views/${currentSavedView.pk}.html`}
+      />
+    </p>
+  );
+}
+
+function Header(props) {
+  const config = useContext(Config);
+  const { query, length, model, filters, limit } = props;
+
+  return (
+    <>
       <ModelSelector {...{ query, model }} />
       <FilterList {...{ query, filters }} />
       <p>
@@ -153,40 +187,40 @@ function QueryPageContent(props) {
           redirectUrl={(view) => `/views/${view.pk}.html`}
         />
       </p>
-      {updateSavedViewLink}
+      <UpdateSavedView {...{ query }} />
       <InvalidFields {...{ query }} />
+    </>
+  );
+}
+
+function QueryPageContent(props) {
+  const {
+    query,
+    rows,
+    cols,
+    body,
+    length,
+    model,
+    filters,
+    overlay,
+    formatHints,
+    limit,
+  } = props;
+
+  return (
+    <div className="QueryPage">
+      <Header
+        {...{
+          query,
+          length,
+          model,
+          filters,
+          limit,
+        }}
+      />
       <div className="MainSpace">
-        <div className="FieldsList">
-          <div className="FieldsToggle">{fieldsToggleLink}</div>
-          {fieldsToggled && (
-            <div className="FieldsFilter">
-              <input
-                type="text"
-                value={fieldFilter}
-                onChange={(event) => {
-                  setFieldFilter(event.target.value);
-                }}
-                onMouseEnter={(e) =>
-                  showTooltip(e, [
-                    "Use ' ' to seperate search terms.",
-                    "Use '.' to filter inside related models.",
-                  ])
-                }
-                onMouseLeave={(e) => hideTooltip(e)}
-              />
-              <button
-                label="X"
-                onClick={(event) => {
-                  setFieldFilter("");
-                }}
-              >
-                X
-              </button>
-            </div>
-          )}
-          {fieldsToggled && <FieldList {...{ query, model, fieldFilter }} />}
-        </div>
-        {results}
+        <FilterSideBar {...{ query, model }} />
+        <ResultsPane {...{ query, rows, cols, body, overlay, formatHints }} />
         <div />
       </div>
     </div>
