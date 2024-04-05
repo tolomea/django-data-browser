@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
 import { doGet, fetchInProgress } from "./Network";
-import { SLink, Save, Update, useToggle } from "./Util";
+import { SLink, Save, Update, useToggle, matchPrepare } from "./Util";
 import { Results } from "./Results";
 import { getPartsForQuery, Query, getUrlForQuery, empty } from "./Query";
 import { ShowTooltip, HideTooltip } from "./Tooltip";
@@ -123,7 +123,12 @@ function FilterSideBar(props) {
     <div className="FieldsList">
       <div className="FieldsToggle">{fieldsToggleLink}</div>
       {fieldsToggled && <FieldsFilter {...{ fieldFilter, setFieldFilter }} />}
-      {fieldsToggled && <FieldList {...{ query, model, fieldFilter }} />}
+      {fieldsToggled && (
+        <FieldList
+          {...{ query, model }}
+          filterParts={matchPrepare(fieldFilter)}
+        />
+      )}
     </div>
   );
 }

@@ -469,6 +469,7 @@ Release History
 +=========+============+==========================================================================================================+
 |         |            | | Fix Z fighting issue with the field filter.                                                            |
 |         |            | | Refactor JS for greater speed.                                                                         |
+|         |            | | Fix a regex escaping issue in the field filter.                                                        |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.9   | 2024-04-02 | | Make field filter matching more permissive.                                                            |
 |         |            | | Add a distinct (cyan) color for annotated fields.                                                      |

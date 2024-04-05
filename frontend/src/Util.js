@@ -312,8 +312,22 @@ function isSubsequence(sub, str) {
     return subIndex === sub.length;
 }
 
+function matchPrepare(str) {
+    return str
+        .toLowerCase()
+        .split(".")
+        .map((part) => {
+            // Escape special characters for regex
+            part = part.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+
+            // Replace all whitespace with ".*"
+            part = part.replace(/\s+/g, ".*");
+
+            return part;
+        });
+}
+
 function strMatch(pattern, ...strs) {
-    pattern = pattern.replace(/\s+/g, ".*").toLowerCase();
     for (const str of strs) {
         const cleanStr = str.replace(/\s+/g, "").toLowerCase();
         if (cleanStr.match(pattern)) return true;
@@ -336,4 +350,5 @@ export {
     usePersistentToggle,
     isSubsequence,
     strMatch,
+    matchPrepare,
 };

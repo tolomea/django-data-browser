@@ -10,10 +10,10 @@ import {
 import "./App.scss";
 
 function Field(props) {
-  const { query, path, modelField, fieldFilter, nesting } = props;
+  const { query, path, modelField, filterParts, nesting } = props;
   const type = query.getType(modelField);
   const [toggled, toggleLink] = useToggle();
-  const expanded = modelField.model && (toggled || fieldFilter);
+  const expanded = modelField.model && (toggled || filterParts.length || "");
   const stickyOffsetStyle = {
     top: -2 + nesting * 30,
     zIndex: 99 - nesting,
@@ -71,7 +71,7 @@ function Field(props) {
         {expanded && (
           <div className="FieldSubFields" style={zStyle}>
             <FieldGroup
-              {...{ query, path, fieldFilter }}
+              {...{ query, path, filterParts }}
               model={modelField.model}
               nesting={nesting + 1}
             />
@@ -83,9 +83,8 @@ function Field(props) {
 }
 
 function FieldGroup(props) {
-  const { query, model, path, fieldFilter, nesting } = props;
+  const { query, model, path, filterParts, nesting } = props;
   const modelFields = query.getModelFields(model);
-  const filterParts = fieldFilter.toLowerCase().split(".");
 
   return (
     <>
@@ -98,7 +97,7 @@ function FieldGroup(props) {
             key={fieldName}
             {...{ query, modelField, nesting }}
             path={path.concat([fieldName])}
-            fieldFilter={filterParts.slice(1).join(".")}
+            filterParts={filterParts.slice(1)}
           />
         );
       })}
@@ -107,11 +106,11 @@ function FieldGroup(props) {
 }
 
 function FieldList(props) {
-  const { query, model, fieldFilter } = props;
+  const { query, model, filterParts } = props;
 
   return (
     <div className="Scroller">
-      <FieldGroup {...{ query, model, fieldFilter }} path={[]} nesting={0} />
+      <FieldGroup {...{ query, model, filterParts }} path={[]} nesting={0} />
     </div>
   );
 }
