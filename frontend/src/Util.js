@@ -318,7 +318,7 @@ function matchPrepare(str) {
         .split(".")
         .map((part) => {
             // Escape special characters for regex
-            part = part.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+            part = part.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 
             // Replace all whitespace with ".*"
             part = part.replace(/\s+/g, ".*");
