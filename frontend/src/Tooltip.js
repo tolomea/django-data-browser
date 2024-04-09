@@ -1,34 +1,42 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import "./App.scss";
 import useWindowDimensions from "./WindowDimensions";
 const ShowTooltip = React.createContext();
 const HideTooltip = React.createContext();
 
 function Tooltip(props) {
-    const hidden = { left: 0, top: 0, messages: [] };
+    const hidden = useMemo(() => {
+        return { left: 0, top: 0, messages: [] };
+    }, []);
     const pad = 10;
     const minWidth = 200;
     const node = useRef();
     const [state, setState] = useState(hidden);
     const { width } = useWindowDimensions();
 
-    function showTooltip(event, messages) {
-        if (messages) {
-            var left = event.target.getBoundingClientRect().right;
-            var top = event.target.getBoundingClientRect().top - pad;
-            if (left + minWidth > width) {
-                left = width - minWidth;
-                top = event.target.getBoundingClientRect().bottom;
+    const showTooltip = useCallback(
+        (event, messages) => {
+            if (messages) {
+                var left = event.target.getBoundingClientRect().right;
+                var top = event.target.getBoundingClientRect().top - pad;
+                if (left + minWidth > width) {
+                    left = width - minWidth;
+                    top = event.target.getBoundingClientRect().bottom;
+                }
+                setState({ messages, left, top });
             }
-            setState({ messages, left, top });
-        }
-        event.preventDefault();
-    }
+            event.preventDefault();
+        },
+        [setState, width],
+    );
 
-    function hideTooltip(event) {
-        setState(hidden);
-        event.preventDefault();
-    }
+    const hideTooltip = useCallback(
+        (event) => {
+            setState(hidden);
+            event.preventDefault();
+        },
+        [setState, hidden],
+    );
 
     const divStyle = { left: state.left, top: state.top };
 
