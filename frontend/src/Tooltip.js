@@ -27,7 +27,7 @@ function Tooltip(props) {
             }
             event.preventDefault();
         },
-        [setState, width],
+        [setState, width, pad, minWidth],
     );
 
     const hideTooltip = useCallback(

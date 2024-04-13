@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./App.scss";
 import useWindowDimensions from "./WindowDimensions";
 import { TLink } from "./Util";
@@ -38,19 +38,25 @@ function ContextMenu(props) {
         }
     }, [width, height, state.entries, state.x, state.y]);
 
-    function showContextMenu(event, entries) {
-        entries = entries.filter((x) => x);
-        if (entries.length && window.getSelection().toString().length === 0) {
-            setState({
-                entries,
-                y: event.clientY,
-                x: event.clientX,
-                top: 0,
-                left: 0,
-            });
-            event.preventDefault();
-        }
-    }
+    const showContextMenu = useCallback(
+        (event, entries) => {
+            entries = entries.filter((x) => x);
+            if (
+                entries.length &&
+                window.getSelection().toString().length === 0
+            ) {
+                setState({
+                    entries,
+                    y: event.clientY,
+                    x: event.clientX,
+                    top: 0,
+                    left: 0,
+                });
+                event.preventDefault();
+            }
+        },
+        [setState],
+    );
 
     const divStyle = {
         left: state.left,
