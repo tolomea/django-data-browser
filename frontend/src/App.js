@@ -15,8 +15,7 @@ import "./App.scss";
 function Logo(props) {
   return (
     <Link to="/" className="Logo">
-      <span>DDB</span>
-      <span className="Version">v{version}</span>
+      <span>Data Browser</span>
     </Link>
   );
 }
