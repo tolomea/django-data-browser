@@ -5,21 +5,21 @@
 }
 
 :root {
-  --dark-color: hsl(209, 17%, 24%);
-  --link-color: hsl(237, 100%, 45%); /* was hsl(200, 100%, 30%)*/
-  --dark-link-color: hsl(237, 100%, 30%); /* was hsl(200, 100%, 30%)*/
+  --dark-color: #3498db;
+  --link-color: #3498db; /* was hsl(200, 100%, 30%)*/
+  --dark-link-color: #3498db; /* was hsl(200, 100%, 30%)*/
   --border-color: hsl(0, 0%, 80%);
-  --shade-color: hsl(0, 0%, 93%);
+  --shade-color: hsl(0, 1%, 31%);
   --null-color: hsl(0, 0%, 87%);
   --bad-color: hsl(14, 100%, 50%);
   --good-color: hsl(126, 68%, 30%);
 
-  --real-field-color: hsl(126, 46%, 88%);
-  --calculated-field-color: hsl(0, 0%, 88%);
-  --aggregate-field-color: hsl(237, 46%, 88%);
-  --function-field-color: hsl(170, 40%, 88%);
-  --annotated-field-color: hsl(170, 40%, 88%);
-  --related-field-color: hsl(0, 0%, 100%);
+  --real-field-color: #070606;
+  --calculated-field-color: hsl(0, 10%, 4%);
+  --aggregate-field-color: hsl(240, 6%, 7%);
+  --function-field-color: hsl(180, 4%, 5%);
+  --annotated-field-color: hsl(180, 3%, 7%);
+  --related-field-color: hsl(0, 7%, 11%);
 }
 
 .RealField {
@@ -56,13 +56,6 @@ textarea {
   font-weight: inherit;
 }
 
-body {
-  font-family: "Roboto", "Noto Sans", sans-serif;
-  padding: 0;
-  margin: 0;
-  font-size: 16px;
-  color: var(--dark-color);
-}
 
 a {
   text-decoration: none;
@@ -80,10 +73,12 @@ h1 {
   font-weight: normal;
 }
 h2 {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: normal;
+  text-transform: uppercase;
   padding: 0;
   margin: 0;
+  line-height: 1.8;
 }
 p {
   margin: 5px auto;
@@ -168,6 +163,7 @@ textarea::placeholder {
   }
   > .FieldsList {
     margin: 10px 0 10px 10px;
+
     > .FieldsFilter {
       display: flex;
       flex-direction: row;
@@ -190,7 +186,7 @@ textarea::placeholder {
   text-align-last: center;
   border: none;
   padding: 1px;
-  font-size: 28px;
+  font-size: 18px;
   color: var(--dark-color);
   &:hover {
     border: 1px solid var(--border-color);
@@ -252,7 +248,7 @@ select.Lookup {
     display: flex;
     flex-flow: row nowrap;
     padding: 2px;
-    background: white;
+    background: transparent;
   }
   .FieldRowExpanded {
     position: sticky;
@@ -325,10 +321,8 @@ select.Lookup {
 /* Logo */
 
 a.Logo {
-  position: absolute;
   margin: 0 15px;
   font-size: 40px;
-  font-family: "Anton", sans-serif;
   cursor: pointer;
   color: var(--dark-color);
   > span {
@@ -343,7 +337,6 @@ a.Logo {
 
 .HomePage {
   margin: 0;
-  padding: 40px 30px 30px 30px;
   display: flex;
   align-items: flex-start;
   > div {
@@ -362,11 +355,13 @@ a.Logo {
   p {
     margin: 0;
   }
-  .ModelList {
+
     .AppModels {
-      padding-left: 30px;
+      padding: 8px 30px;
+      font-size: 0.8125rem;
+      line-height: 1rem;
     }
-  }
+
 
   .SavedAndSharedViews {
     .SavedView,
@@ -500,4 +495,9 @@ input.RowLimit {
 
 .ContextCursor {
   cursor: context-menu;
+}
+
+
+.fullTable{
+  width: 100%;
 }

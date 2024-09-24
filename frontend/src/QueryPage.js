@@ -136,7 +136,7 @@ function FilterSideBar(props) {
 function ResultsPane(props) {
   const { query, rows, cols, body, overlay, formatHints } = props;
 
-  if (!query.validFields().length) return <h1>No fields selected</h1>;
+  if (!query.validFields().length) return <h3>No fields selected</h3>;
 
   return <Results {...{ query, rows, cols, body, overlay, formatHints }} />;
 }

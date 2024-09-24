@@ -27,7 +27,6 @@ function App(props) {
       <ContextMenu>
         <Tooltip>
           <CurrentSavedView>
-            <Logo />
             <Switch>
               <Route path="/query/:model/:fieldStr?.html">
                 <QueryPage />

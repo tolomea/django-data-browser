@@ -80,7 +80,7 @@ function SavedAndSharedViews(props) {
   return (
     <div className="SavedAndSharedViews">
       <div>
-        <h1>Your Saved Views</h1>
+        <h3>Your Saved Views</h3>
         <Entries
           entries={savedViews.saved}
           parentName="saved"
@@ -105,16 +105,19 @@ function AppEntry(props) {
     config.appsExpanded,
   );
   return (
-    <>
-      <h2>
+      <>
+      <tr>
+      <th>
         {toggleLink}
         {appVerboseName}
-      </h2>
+      </th>
+      </tr>
       {toggled && (
-        <div key={appVerboseName} className="AppModels">
+        <section key={appVerboseName}>
           {models.map((modelEntry) => {
             return (
-              <h2 key={modelEntry.verboseName}>
+                <p key={modelEntry.verboseName} className="AppModels">
+
                 <Link
                   to={getRelUrlForQuery(
                     {
@@ -131,10 +134,10 @@ function AppEntry(props) {
                 >
                   {modelEntry.verboseName}
                 </Link>
-              </h2>
+                    </p>
             );
           })}
-        </div>
+        </section>
       )}
     </>
   );
@@ -143,14 +146,14 @@ function AppEntry(props) {
 function ModelList(props) {
   const config = useContext(Config);
   return (
-    <div className="ModelList">
-      <div>
-        <h1>Models</h1>
-        {config.modelIndex.map(({ appVerboseName, models }) => (
-          <AppEntry key={appVerboseName} {...{ appVerboseName, models }} />
-        ))}
+      <div className=" module">
+          <h2>Models</h2>
+          <table className="fullTable">
+              {config.modelIndex.map(({appVerboseName, models}) => (
+                  <AppEntry key={appVerboseName} {...{appVerboseName, models}} />
+              ))}
+          </table>
       </div>
-    </div>
   );
 }
 
