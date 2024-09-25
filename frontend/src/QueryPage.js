@@ -163,41 +163,77 @@ function UpdateSavedView(props) {
 function Header(props) {
   const config = useContext(Config);
   const { query, length, model, filters, limit } = props;
+  const [showPopup, setShowPopup] = useState(false);
 
-  return (
-    <>
-      <ModelSelector {...{ query, model }} />
-      <FilterList {...{ query, filters }} />
-      <p>
-        <span className={length >= limit ? "Error" : ""}>
-          Limit:{" "}
-          <input
-            className="RowLimit"
-            type="number"
-            value={limit}
-            onChange={(event) => {
-              query.setLimit(event.target.value);
-            }}
-            min="1"
-          />{" "}
-          - Showing {length} results -{" "}
+  const handleAsyncDownload = (media) => {
+    query.sendAsyncDownloadRequest(media)
+      .then(() => {
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
+      })
+      .catch((error) => {
+        console.error("Error sending async download request:", error);
+        // Handle error (e.g., show error message to user)
+      });
+  };
+
+ return (
+     <header className="QueryHeader">
+       <div className="QueryHeader-group">
+         <ModelSelector {...{query, model}} />
+         <div className="">
+           <label htmlFor="limit-input">Limit:</label>
+           <input
+               id="limit-input"
+               className="QueryHeader-limit"
+               type="number"
+               value={limit}
+               onChange={(event) => {
+                 query.setLimit(event.target.value);
+               }}
+               min="1"
+               max={config.maxRows ? config.maxRows : 1000}
+           />
+         </div>
+         <span className="QueryHeader-results">
+          {length} results
         </span>
-        <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
-        <a href={query.getUrlForMedia("bulk-csv")}>Download Full CSV</a> -{" "}
-        <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
-        <a href={query.getUrlForMedia("bulk-json")}>Download full JSON</a> -{" "}
-        <a href={query.getUrlForMedia("sql")}>View SQL Query</a> -{" "}
-        <Save
-          name="View"
-          apiUrl={`${config.baseUrl}api/views/`}
-          data={getPartsForQuery(query.query)}
-          redirectUrl={(view) => `/views/${view.pk}.html`}
-        />
-      </p>
-      <UpdateSavedView {...{ query }} />
-      <InvalidFields {...{ query }} />
-    </>
-  );
+       </div>
+
+
+       <div className="QueryHeader-group">
+         <div className="QueryHeader-dropdown">
+           <button className="QueryHeader-btn">JSON</button>
+           <div className="QueryHeader-dropdown-content">
+             <a href={query.getUrlForMedia("json")}>Partial JSON</a>
+             <a onClick={() => handleAsyncDownload("bulk-json")}>Full JSON</a>
+           </div>
+         </div>
+         <div className="QueryHeader-dropdown">
+         <button className="QueryHeader-btn">CSV</button>
+           <div className="QueryHeader-dropdown-content">
+             <a href={query.getUrlForMedia("csv")}>Partial CSV</a>
+             <a onClick={() => handleAsyncDownload("bulk-csv")}>Full CSV</a>
+           </div>
+         </div>
+         <a href={query.getUrlForMedia("sql")} className="QueryHeader-btn">SQL</a>
+         <Save
+             name="View"
+             apiUrl={`${config.baseUrl}api/views/`}
+             data={getPartsForQuery(query.query)}
+             redirectUrl={(view) => `/views/${view.pk}.html`}
+             className="QueryHeader-btn"
+         />
+       </div>
+       {showPopup && (
+           <div className="popup">
+             Download will be available shortly. See <a href={config.baseUrl}>Pending Downloads</a>
+           </div>
+       )}
+     </header>
+ );
+
+
 }
 
 function QueryPageContent(props) {
@@ -215,18 +251,18 @@ function QueryPageContent(props) {
   } = props;
 
   return (
-    <div className="QueryPage">
-      <Header
-        {...{
-          query,
-          length,
-          model,
-          filters,
-          limit,
-        }}
-      />
-      <div className="MainSpace">
-        <FilterSideBar {...{ query, model }} />
+      <div className="QueryPage">
+        <Header
+            {...{
+              query,
+              length,
+              model,
+              filters,
+              limit,
+            }}
+        />
+        <div className="MainSpace">
+          <FilterSideBar {...{ query, model }} />
         <ResultsPane {...{ query, rows, cols, body, overlay, formatHints }} />
         <div />
       </div>

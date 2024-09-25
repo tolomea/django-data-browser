@@ -165,6 +165,7 @@ def _get_config():
         "canShare": has_permission(global_state.request.user, SHARE_PERM),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
+        "maxRows": settings.DATA_BROWSER_MAX_ROWS,
         "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,
     }
 

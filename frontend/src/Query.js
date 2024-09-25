@@ -1,3 +1,5 @@
+import {doGet} from "./Network";
+
 const empty = {
   rows: [{}],
   cols: [{}],
@@ -279,6 +281,11 @@ class Query {
 
   getUrlForMedia(media) {
     return getUrlForQuery(this.config.baseUrl, this.query, media);
+  }
+
+  sendAsyncDownloadRequest(media) {
+    const url = this.getUrlForMedia(media) + '&async=true';
+    return doGet(url);
   }
 
   invalidFields() {
