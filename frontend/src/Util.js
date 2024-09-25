@@ -42,15 +42,14 @@ function TLink(props) {
 function SLink(props) {
     const { className, onClick, children } = props;
     const linkClass = className === 'addlink' ? 'addlink' : `SLink material-icons ${className}`;
-    // const childContent = linkClass === "addlink" ? "": children
-    const childContent = children
+    const childContent = linkClass === "addlink" ? "": children
     return (
-        <a href="#"
+        <button type="button"
             {...{ onClick }}
             className= {linkClass}
         >
             {childContent}
-        </a>
+        </button>
     );
 }
 
@@ -265,9 +264,10 @@ function useToggle(initial = false) {
 
     const toggleLink = (
         <SLink
-            className="addlink"
+            className="ToggleLink"
             onClick={() => setToggled((toggled) => !toggled)}
         >
+            {toggled ? "remove" : "add"}
         </SLink>
     );
 
@@ -283,7 +283,7 @@ function usePersistentToggle(storageKey = null, initial = false) {
 
     const toggleLink = (
         <SLink
-            className="addlink"
+            className="ToggleLink"
             onClick={() =>
                 setToggled((toggled) => {
                     localStorage.setItem(storageKey, !toggled);

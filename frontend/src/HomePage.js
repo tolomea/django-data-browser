@@ -142,6 +142,50 @@ function AppEntry(props) {
     </>
   );
 }
+  // const [downloads] = useData(`${config.baseUrl}api/views/`);
+
+  function PendingDownloads() {
+    const mockDownloads = [
+      { id: 1, name: "Report 1", status: "completed", downloadUrl: "#" },
+      { id: 2, name: "Data Export 2", status: "processing" },
+      { id: 3, name: "Analysis Results", status: "completed", downloadUrl: "#" },
+      { id: 4, name: "Monthly Summary", status: "queued" },
+    ];
+    const downloads = mockDownloads;
+  
+    return (
+      <div className="PendingDownloads">
+ 
+        <h3>Pending Downloads</h3>       
+        <br/>
+        <table className="fullTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {downloads.map((download) => (
+              <tr key={download.id}>
+                <td>{download.name}</td>
+                <td>
+                  {download.status === 'completed' ? (
+                    <a href={download.downloadUrl} className="download-link">
+                      {download.status}
+                    </a>
+                  ) : (
+                    download.status
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
 
 function ModelList(props) {
   const config = useContext(Config);
@@ -157,16 +201,23 @@ function ModelList(props) {
   );
 }
 
+
 function HomePage(props) {
   const setCurrentSavedView = useContext(SetCurrentSavedView);
   setCurrentSavedView(null);
 
   return (
     <div className="HomePage">
-      <ModelList />
-      <SavedAndSharedViews />
+      <div className="LeftColumn">
+        <ModelList />
+      </div>
+      <div className="RightColumn">
+        <PendingDownloads />
+        <SavedAndSharedViews />
+      </div>
     </div>
   );
 }
+
 
 export { HomePage };

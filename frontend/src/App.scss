@@ -501,3 +501,75 @@ input.RowLimit {
 .fullTable{
   width: 100%;
 }
+
+.PendingDownloads {
+  margin-bottom: 20px;
+}
+
+.button-green {
+  background-color: #4CAF50;
+  color: white;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.button-green:hover {
+  background-color: #45a049;
+}
+
+.HomePage {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0;
+  padding: 20px;
+
+  .LeftColumn, .RightColumn {
+    flex: 1;
+    margin: 0 10px;
+  }
+
+  .LeftColumn {
+    max-width: 60%;
+  }
+
+  .RightColumn {
+    max-width: 40%;
+  }
+
+  .module {
+    margin-bottom: 20px;
+  }
+
+  .PendingDownloads, .SavedAndSharedViews {
+    @extend .module;
+  }
+
+  .download-link {
+    color: var(--link-color);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  th {
+    font-weight: bold;
+  }
+}

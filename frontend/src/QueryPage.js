@@ -183,7 +183,9 @@ function Header(props) {
           - Showing {length} results -{" "}
         </span>
         <a href={query.getUrlForMedia("csv")}>Download as CSV</a> -{" "}
+        <a href={query.getUrlForMedia("bulk-csv")}>Download Full CSV</a> -{" "}
         <a href={query.getUrlForMedia("json")}>View as JSON</a> -{" "}
+        <a href={query.getUrlForMedia("bulk-json")}>Download full JSON</a> -{" "}
         <a href={query.getUrlForMedia("sql")}>View SQL Query</a> -{" "}
         <Save
           name="View"
