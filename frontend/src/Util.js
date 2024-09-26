@@ -54,7 +54,7 @@ function SLink(props) {
 }
 
 function Save(props) {
-    const { name, apiUrl, data, redirectUrl } = props;
+    const { name, apiUrl, data, redirectUrl,className} = props;
     const [state, setState] = useState("save");
     if (state === "save")
         return (
@@ -63,6 +63,7 @@ function Save(props) {
                     setState("saving");
                     doPost(apiUrl, data).then((response) => setState(response));
                 }}
+                className={className}
             >
                 Save {name || ""}
             </TLink>

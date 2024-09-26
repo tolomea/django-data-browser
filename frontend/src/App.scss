@@ -590,9 +590,9 @@ input.RowLimit {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
+  padding: 0 20px;
+  background-color: transparent;
+  border-bottom: 1px solid #9a9a9a;
 
   &-group {
     display: flex;
@@ -603,7 +603,7 @@ input.RowLimit {
   &-results {
     margin-left: 10px;
     font-size: 14px;
-    color: #6c757d;
+    // color: #6c757d;
   }
 
   &-btn {
@@ -695,4 +695,40 @@ input.RowLimit {
     @extend .QueryHeader-btn;
     display: inline-block;
   }
+}
+
+
+// Custom scrollbar styles
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #6b6b6b #2b2b2b;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2b2b2b;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #6b6b6b;
+  border-radius: 5px;
+  border: 2px solid #2b2b2b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #7b7b7b;
+}
+
+// For Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #6b6b6b #2b2b2b;
+}
+
+a {
+  cursor: pointer!important;
 }

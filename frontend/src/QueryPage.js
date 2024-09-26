@@ -164,16 +164,20 @@ function Header(props) {
   const config = useContext(Config);
   const { query, length, model, filters, limit } = props;
   const [showPopup, setShowPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState('');
 
   const handleAsyncDownload = (media) => {
     query.sendAsyncDownloadRequest(media)
-      .then(() => {
+      .then((response) => {
+        setPopupContent(JSON.stringify(response, null, 2));
         setShowPopup(true);
-        setTimeout(() => setShowPopup(false), 3000);
+        setTimeout(() => setShowPopup(false), 5000);
       })
       .catch((error) => {
         console.error("Error sending async download request:", error);
-        // Handle error (e.g., show error message to user)
+        setPopupContent("Error: " + error.message);
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 5000);
       });
   };
 
@@ -182,22 +186,23 @@ function Header(props) {
        <div className="QueryHeader-group">
          <ModelSelector {...{query, model}} />
          <div className="">
-           <label htmlFor="limit-input">Limit:</label>
            <input
                id="limit-input"
                className="QueryHeader-limit"
                type="number"
-               value={limit}
-               onChange={(event) => {
-                 query.setLimit(event.target.value);
-               }}
-               min="1"
-               max={config.maxRows ? config.maxRows : 1000}
+          value={limit}
+          onChange={(event) => {
+            const newValue = Math.min(parseInt(event.target.value), config.maxRows || 1000);
+            query.setLimit(newValue);
+          }}
+          min="1"
+          max={config.maxRows || 1000}
            />
-         </div>
          <span className="QueryHeader-results">
           {length} results
         </span>
+         </div>
+
        </div>
 
 
@@ -206,14 +211,14 @@ function Header(props) {
            <button className="QueryHeader-btn">JSON</button>
            <div className="QueryHeader-dropdown-content">
              <a href={query.getUrlForMedia("json")}>Partial JSON</a>
-             <a onClick={() => handleAsyncDownload("bulk-json")}>Full JSON</a>
+             <a onClick={() => handleAsyncDownload("json")}>Full JSON</a>
            </div>
          </div>
          <div className="QueryHeader-dropdown">
          <button className="QueryHeader-btn">CSV</button>
            <div className="QueryHeader-dropdown-content">
              <a href={query.getUrlForMedia("csv")}>Partial CSV</a>
-             <a onClick={() => handleAsyncDownload("bulk-csv")}>Full CSV</a>
+             <a onClick={() => handleAsyncDownload("csv")}>Full CSV</a>
            </div>
          </div>
          <a href={query.getUrlForMedia("sql")} className="QueryHeader-btn">SQL</a>
@@ -226,10 +231,10 @@ function Header(props) {
          />
        </div>
        {showPopup && (
-           <div className="popup">
-             Download will be available shortly. See <a href={config.baseUrl}>Pending Downloads</a>
-           </div>
-       )}
+        <div className="popup">
+          <pre>{popupContent}</pre>
+        </div>
+      )}
      </header>
  );
 

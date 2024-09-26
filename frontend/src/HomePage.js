@@ -156,7 +156,7 @@ function AppEntry(props) {
     return (
       <div className="PendingDownloads">
  
-        <h3>Pending Downloads</h3>       
+        <h3>Available Downloads</h3>       
         <br/>
         <table className="fullTable">
           <thead>
