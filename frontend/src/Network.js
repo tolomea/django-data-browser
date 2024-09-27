@@ -127,24 +127,65 @@ function syncPost(url, data) {
     form.submit();
 }
 
+// function useData(url) {
+//     const [data, setData] = useState();
+//     useEffect(() => {
+//         doGet(url).then((response) => setData(response));
+//     }, [url]);
+//     return [
+//         data,
+//         (updates) => {
+//             setData((prev) => ({ ...prev, ...updates }));
+//             doPatch(url, updates)
+//                 .then((response) =>
+//                     setData((prev) => ({ ...prev, ...response })),
+//                 )
+//                 .catch((e) => {
+//                     if (e.name !== "AbortError") throw e;
+//                 });
+//         },
+//     ];
+// }
+
 function useData(url) {
-    const [data, setData] = useState();
-    useEffect(() => {
-        doGet(url).then((response) => setData(response));
-    }, [url]);
-    return [
-        data,
-        (updates) => {
-            setData((prev) => ({ ...prev, ...updates }));
-            doPatch(url, updates)
-                .then((response) =>
-                    setData((prev) => ({ ...prev, ...response })),
-                )
-                .catch((e) => {
-                    if (e.name !== "AbortError") throw e;
-                });
-        },
-    ];
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const abortController = new AbortController();
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(url, { signal: abortController.signal });
+        const result = await response.json();
+        if (isMounted) {
+          setData(result);
+          setError(null);
+        }
+      } catch (err) {
+        if (isMounted && err.name !== 'AbortError') {
+          setError(err);
+          setData(null);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
+  }, [url]);
+
+  return [data, loading, error];
 }
 
 export {

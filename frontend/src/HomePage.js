@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { useData } from "./Network";
+import {doGet, useData} from "./Network";
 import { usePersistentToggle } from "./Util";
 import { getRelUrlForQuery } from "./Query";
 import { SetCurrentSavedView } from "./CurrentSavedView";
@@ -142,16 +142,20 @@ function AppEntry(props) {
     </>
   );
 }
-  // const [downloads] = useData(`${config.baseUrl}api/views/`);
 
   function PendingDownloads() {
+    const config = useContext(Config);
+
     const mockDownloads = [
       { id: 1, name: "Report 1", status: "completed", downloadUrl: "#" },
       { id: 2, name: "Data Export 2", status: "processing" },
       { id: 3, name: "Analysis Results", status: "completed", downloadUrl: "#" },
       { id: 4, name: "Monthly Summary", status: "queued" },
     ];
-    const downloads = mockDownloads;
+    const [downloads, loading, error] = useData(config.downloadsUrl);
+
+    if (!downloads) return "";
+    console.log(downloads)
   
     return (
       <div className="PendingDownloads">
@@ -161,13 +165,17 @@ function AppEntry(props) {
         <table className="fullTable">
           <thead>
             <tr>
+              <th>S/N</th>
               <th>Name</th>
               <th>Status</th>
+              <th>Type</th>
+              <th>Created</th>
             </tr>
           </thead>
           <tbody>
             {downloads.map((download) => (
               <tr key={download.id}>
+                <td>{download.id}</td>
                 <td>{download.name}</td>
                 <td>
                   {download.status === 'completed' ? (
@@ -178,6 +186,8 @@ function AppEntry(props) {
                     download.status
                   )}
                 </td>
+                  <td>{download.media}</td>
+                  <td>{download.started}</td>
               </tr>
             ))}
           </tbody>
