@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import {doGet, useData} from "./Network";
+import {doGet, useData, useCData} from "./Network";
 import { usePersistentToggle } from "./Util";
 import { getRelUrlForQuery } from "./Query";
 import { SetCurrentSavedView } from "./CurrentSavedView";
@@ -152,10 +152,9 @@ function AppEntry(props) {
       { id: 3, name: "Analysis Results", status: "completed", downloadUrl: "#" },
       { id: 4, name: "Monthly Summary", status: "queued" },
     ];
-    const [downloads, loading, error] = useData(config.downloadsUrl);
+    const [downloads, loading, error] = useCData(config.downloadsUrl);
 
     if (!downloads) return "";
-    console.log(downloads)
   
     return (
       <div className="PendingDownloads">

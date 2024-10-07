@@ -127,27 +127,27 @@ function syncPost(url, data) {
     form.submit();
 }
 
-// function useData(url) {
-//     const [data, setData] = useState();
-//     useEffect(() => {
-//         doGet(url).then((response) => setData(response));
-//     }, [url]);
-//     return [
-//         data,
-//         (updates) => {
-//             setData((prev) => ({ ...prev, ...updates }));
-//             doPatch(url, updates)
-//                 .then((response) =>
-//                     setData((prev) => ({ ...prev, ...response })),
-//                 )
-//                 .catch((e) => {
-//                     if (e.name !== "AbortError") throw e;
-//                 });
-//         },
-//     ];
-// }
-
 function useData(url) {
+    const [data, setData] = useState();
+    useEffect(() => {
+        doGet(url).then((response) => setData(response));
+    }, [url]);
+    return [
+        data,
+        (updates) => {
+            setData((prev) => ({ ...prev, ...updates }));
+            doPatch(url, updates)
+                .then((response) =>
+                    setData((prev) => ({ ...prev, ...response })),
+                )
+                .catch((e) => {
+                    if (e.name !== "AbortError") throw e;
+                });
+        },
+    ];
+}
+
+function useCData(url) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -194,6 +194,7 @@ export {
     doDelete,
     doPost,
     useData,
+    useCData,
     version,
     fetchInProgress,
     syncPost,
