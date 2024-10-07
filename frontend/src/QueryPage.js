@@ -221,7 +221,7 @@ function Header(props) {
              <a onClick={() => handleAsyncDownload("csv")}>Full CSV</a>
            </div>
          </div>
-         <a href={query.getUrlForMedia("sql")} className="QueryHeader-btn">SQL</a>
+         {/*<a href={query.getUrlForMedia("sql")} className="QueryHeader-btn">SQL</a>*/}
          <Save
              name="View"
              apiUrl={`${config.baseUrl}api/views/`}

@@ -162,7 +162,7 @@ function AppEntry(props) {
  
         <h3>Available Downloads</h3>       
         <br/>
-        <table className="fullTable">
+        <table className="rightTable">
           <thead>
             <tr>
               <th>S/N</th>

@@ -10,7 +10,7 @@
   --dark-link-color: #3498db; /* was hsl(200, 100%, 30%)*/
   --border-color: hsl(0, 0%, 80%);
   --shade-color: hsl(0, 1%, 31%);
-  --null-color: hsl(0, 0%, 87%);
+  --null-color: hsl(0, 1%, 31%);
   --bad-color: hsl(14, 100%, 50%);
   --good-color: hsl(126, 68%, 30%);
 
@@ -475,10 +475,10 @@ input.RowLimit {
 .ContextMenu {
   z-index: 100;
   position: fixed;
-  background: white;
+  background: #514f4f;
   border: 1px solid var(--border-color);
   padding: 5px;
-  box-shadow: 3px 3px 10px var(--dark-color);
+  color: floralwhite;
   p {
     padding: 5px;
     margin: 0px;
@@ -497,10 +497,60 @@ input.RowLimit {
   cursor: context-menu;
 }
 
+.fullTable {
+  width: 100%;}
 
-.fullTable{
+.rightTable {
   width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
 }
+
+.RightColumn {
+  max-width: 40%;
+  overflow-x: hidden;
+
+  .PendingDownloads {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  th {
+    font-weight: bold;
+  }
+
+  .column-wrapped {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  // Adjust column widths
+  th:nth-child(1), td:nth-child(1) { width: 5%; min-width: 30px; }
+  th:nth-child(2), td:nth-child(2) { width: 40%; min-width: 150px; }
+  th:nth-child(3), td:nth-child(3) { width: 15%; min-width: 50px; }
+  th:nth-child(4), td:nth-child(4) { width: 10%; min-width: 30px; }
+  th:nth-child(5), td:nth-child(5) { width: 30%; min-width: 150px; }
+
+  // Non-wrapped columns
+  th:nth-child(1), td:nth-child(1),
+  th:nth-child(4), td:nth-child(4) {
+    white-space: nowrap;
+  }
+}
+
 
 .PendingDownloads {
   margin-bottom: 20px;
@@ -553,7 +603,7 @@ input.RowLimit {
   }
 
   .download-link {
-    color: var(--link-color);
+    color: var(--primary-fg);
     text-decoration: underline;
     cursor: pointer;
   }
@@ -664,7 +714,7 @@ input.RowLimit {
 .ModelSelector {
   max-width: 200px;
   padding: 5px 10px;
-  border: 1px solid #ced4da;
+  border: 1px solid #a1a9ae;
   border-radius: 4px;
   font-size: 14px;
 }
