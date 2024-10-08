@@ -297,11 +297,15 @@ def query(request, *, model_name, fields="", media):
                 if seconds_passed < int(generation_timeline):
                     left_secs = round(generation_timeline - seconds_passed)
                     return JsonResponse(
-                        f"A report is currently in progress. To regenerate, Try again in {left_secs} secs"
+                        {
+                            "message": f"A report is currently in progress. To regenerate, Try again in {left_secs} secs"
+                        }
                     )
             task_id = run_query(username, model_name, fields, media)
             return JsonResponse(
-                f"Report would be available shortly, see Downloads section :{task_id}"
+                {
+                    "message": f"Report would be available shortly, see Downloads section :{task_id}"
+                }
             )
         query = Query.from_request(model_name, fields, params)
         return _data_response(query, media, privileged=True)

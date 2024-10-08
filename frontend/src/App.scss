@@ -627,11 +627,13 @@ input.RowLimit {
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: var(--dark-color);
-  color: white;
+  background-color:  var(--border-color);
+  color: #d6cece;
   padding: 16px;
   border-radius: 4px;
   z-index: 1000;
+  width: 30%;
+  word-break: auto-phrase;
 }
 
 .QueryHeader {

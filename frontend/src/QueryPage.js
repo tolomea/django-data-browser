@@ -169,7 +169,7 @@ function Header(props) {
   const handleAsyncDownload = (media) => {
     query.sendAsyncDownloadRequest(media)
       .then((response) => {
-        setPopupContent(JSON.stringify(response, null, 2));
+        setPopupContent(JSON.stringify(response.message));
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 5000);
       })
@@ -232,7 +232,7 @@ function Header(props) {
        </div>
        {showPopup && (
         <div className="popup">
-          <pre>{popupContent}</pre>
+          <p>{popupContent}</p>
         </div>
       )}
      </header>
