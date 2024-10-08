@@ -21,6 +21,7 @@ from django.utils import timezone
 from django.views.decorators import csrf
 
 from data_browser import version
+from data_browser.background_task_runner import fetch_related_report, run_query
 from data_browser.common import PUBLIC_PERM
 from data_browser.common import SHARE_PERM
 from data_browser.common import HttpResponse
@@ -39,6 +40,8 @@ from data_browser.query import Query
 from data_browser.query import QueryFilter
 from data_browser.types import TYPES
 from data_browser.util import str_to_field
+from core.models.configs import GlobalConfigurationFetcher
+from ibl_dm_axd.data_reports.models import ReportState, ReportTask
 
 
 def _get_query_data(bound_query):
@@ -165,7 +168,9 @@ def _get_config():
         "canShare": has_permission(global_state.request.user, SHARE_PERM),
         "sentryDsn": settings.DATA_BROWSER_FE_DSN,
         "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
+        "maxRows": settings.DATA_BROWSER_MAX_ROWS,
         "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,
+        "downloadsUrl": reverse("data_browser:downloads"),
     }
 
 
@@ -279,6 +284,29 @@ def query(request, *, model_name, fields="", media):
             if profiler:  # pragma: no branch
                 profiler.disable()
     else:
+        is_async = request.GET.get("async", False) in ["true", "True"]
+        if is_async:
+            username = request.user.username
+            report = fetch_related_report(username, model_name, fields, media)
+            generation_timeline = (
+                GlobalConfigurationFetcher().DATA_BROWSER_GENERATION_TIMELINE_SECONDS
+                or 300
+            )
+            if report:
+                seconds_passed = (timezone.now() - report.started).total_seconds()
+                if seconds_passed < int(generation_timeline):
+                    left_secs = round(generation_timeline - seconds_passed)
+                    return JsonResponse(
+                        {
+                            "message": f"A report is currently in progress. To regenerate, Try again in {left_secs} secs"
+                        }
+                    )
+            task_id = run_query(username, model_name, fields, media)
+            return JsonResponse(
+                {
+                    "message": f"Report would be available shortly, see Downloads section :{task_id}"
+                }
+            )
         query = Query.from_request(model_name, fields, params)
         return _data_response(query, media, privileged=True)
 
@@ -306,11 +334,12 @@ class Echo:
         return value
 
 
-def _data_response(query, media, privileged=False):
+def _data_response(query, media, privileged=False, raw=False, remove_limit=False):
     orm_models = global_state.models
     if query.model_name not in orm_models:
         raise http.Http404(f"{query.model_name} does not exist")
     bound_query = BoundQuery.bind(query, orm_models)
+    bound_query.limit = None if remove_limit else bound_query.limit
 
     if media == "csv":
         results = get_results(bound_query, orm_models, False)
@@ -326,6 +355,8 @@ def _data_response(query, media, privileged=False):
         return response
     elif media == "json":
         results = get_results(bound_query, orm_models, True)
+        if raw:
+            return results["rows"]
         resp = _get_query_data(bound_query) if privileged else {}
         resp.update(results)
         return JsonResponse(resp)
@@ -401,3 +432,32 @@ def proxy_js_dev_server(request, path):  # pragma: no cover
         status=response.status_code,
         reason=response.reason,
     )
+
+
+@admin_decorators.staff_member_required
+@set_global_state(public_view=False)
+def show_available_results(request):
+    reports = ReportTask.objects.filter(
+        report_name="model_browser_report",
+        owner=request.user.username,
+    ).order_by("-started")
+    data = []
+    for c, report in enumerate(reports, start=1):
+        downloadUrl = ""
+        if report.state == ReportState.COMPLETED:
+            downloadUrl = report.completedreport.get_url(
+                report.platform.key, request.get_host()
+            )
+        data.append(
+            {
+                "id": c,
+                "launchId": report.background_task_id,
+                "started": report.started.isoformat(),
+                "name": report.kwargs["model_name"],
+                "status": report.state,
+                "media": report.kwargs["media"],
+                "downloadUrl": downloadUrl + f"?format={report.kwargs['media']}",
+            }
+        )
+
+    return JsonResponse(data)

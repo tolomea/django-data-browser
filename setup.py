@@ -16,12 +16,12 @@ for directory in ("fe_build", "templates", "web_root"):
 setuptools.setup(
     name="django-data-browser",
     version=version,
-    author="Gordon Wrigley",
-    author_email="gordon.wrigley@gmail.com",
+    author="IBL",
+    author_email="developer@ibleducation.com",
     description="Interactive user-friendly database explorer.",
     long_description=Path("README.rst").read_text(),
     long_description_content_type="text/x-rst",
-    url="https://github.com/tolomea/django-data-browser",
+    url="https://github.com/iblai/ibl-django-data-browser-app",
     packages=setuptools.find_packages(exclude=["tests*"]),
     classifiers=[
         "Programming Language :: Python :: 3",

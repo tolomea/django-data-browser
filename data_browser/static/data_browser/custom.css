@@ -1,0 +1,14 @@
+a.Logo>span{
+    font-size: 15px!important;
+    position: relative;
+}
+.ToggleLink {
+    color: #70bf2c;
+    font-weight: 800;
+    font-size: 16px;
+    margin-right: 6px;
+    text-decoration: double;
+}
+* {
+    font-weight: 600;
+}

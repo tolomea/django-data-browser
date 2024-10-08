@@ -41,19 +41,20 @@ function TLink(props) {
 
 function SLink(props) {
     const { className, onClick, children } = props;
+    const linkClass = className === 'addlink' ? 'addlink' : `SLink material-icons ${className}`;
+    const childContent = linkClass === "addlink" ? "": children
     return (
-        <button
+        <button type="button"
             {...{ onClick }}
-            type="button"
-            className={`SLink material-icons ${className}`}
+            className= {linkClass}
         >
-            {children}
+            {childContent}
         </button>
     );
 }
 
 function Save(props) {
-    const { name, apiUrl, data, redirectUrl } = props;
+    const { name, apiUrl, data, redirectUrl,className} = props;
     const [state, setState] = useState("save");
     if (state === "save")
         return (
@@ -62,6 +63,7 @@ function Save(props) {
                     setState("saving");
                     doPost(apiUrl, data).then((response) => setState(response));
                 }}
+                className={className}
             >
                 Save {name || ""}
             </TLink>

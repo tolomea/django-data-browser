@@ -1,112 +1,74 @@
-{% load static %}
+{% extends 'admin/base.html' %}
+{% load i18n static %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Django Data Browser" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="{% url 'data_browser:home' %}apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="{% url 'data_browser:home' %}favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="{% url 'data_browser:home' %}favicon-16x16.png"
-    />
-    <link rel="manifest" href="{% url 'data_browser:home' %}site.webmanifest" />
-    <title>View</title>
+{% block title %}{{ block.super }} | View{% endblock %}
 
-    <style>
-      ul.messagelist {
-          padding: 0;
-          margin: 0;
-      }
+{% block header %}
+<!-- Start header -->
+<div id="header">
+    <!-- Start Branding -->
+    <div id="branding">
+        {% block branding %}
+        <div class="brand-container">
+            <a href="{% url 'admin:index' %}" class="brand-link">
+                <img title="{{ site_header|default:_('Django administration') }}" alt="{{ site_header|default:_('Django administration') }}" src="{% static 'dl_manager/admin/img/ibl-logo.png' %}">
+            </a>
+        </div>
+        {% endblock %}
+    </div>
+    <!-- End Branding -->
+    {% block usertools %}
+    <!-- Start UserTools -->
+    <div id="user-tools">
+        {% block welcome-msg %}
+            {% translate 'Welcome,' %} <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+        {% endblock %}
+        {% include "admin/includes/userlinks.html" %}
+    </div>
+    <!-- End User tools -->
+    {% endblock %}
 
-      ul.messagelist li {
-          display: block;
-          font-weight: 400;
-          font-size: 13px;
-          padding: 10px 10px 10px 65px;
-          margin: 0 0 10px 0;
-          background: #dfd url('{% static "admin/img/icon-yes.svg" %}') 40px 12px no-repeat;
-          background-size: 16px auto;
-          color: #333;
-          line-height: 20px;
-      }
+    {% block nav-global %}{% endblock %}
+</div>
+<!-- End Heading -->
+{% endblock %}
+{% block bodyclass %}{{ block.super }}{% endblock %}
 
-      ul.messagelist li.warning {
-          background: #ffc url('{% static "admin/img/icon-alert.svg" %}') 40px 14px no-repeat;
-          background-size: 14px auto;
-      }
+{% block extrastyle %}
+<!-- Start Extra styles in head -->
+{{ block.super }}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet"/>
+<link href="{% url 'data_browser:home' %}apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="{% url 'data_browser:home' %}favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="{% url 'data_browser:home' %}favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+<link href="{% url 'data_browser:home' %}site.webmanifest" rel="manifest"/>
 
-      ul.messagelist li.error {
-          background: #ffefef url('{% static "admin/img/icon-no.svg" %}') 40px 12px no-repeat;
-          background-size: 16px auto;
-      }
-    </style>
+{% endblock %}
 
-    {% block extrahead %} {% endblock %}
-  </head>
-  <body>
-    {% block messages %}
-      {% if messages %}
-        <ul class="messagelist">{% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
-        {% endfor %}</ul>
-      {% endif %}
-    {% endblock messages %}
+{% block extrahead %}
+{{ block.super }}
+<meta content="Data Browser" name="description"/>
+<head>
+</head>
+  <link rel="icon" href="{% static 'dl_manager/admin/img/favicon.png' %}" sizes="32x32" />
+  <link rel="icon" href="{% static 'dl_manager/admin/img/favicon.png' %}" sizes="192x192" />
+<link rel="stylesheet" type="text/css" href="{% static 'dl_manager/admin/css/dlm_admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'data_browser/custom.css' %}" />
+{% endblock %}
 
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+{% block content %}
+<noscript>You need to enable JavaScript to run this app.</noscript>{% csrf_token %}
+<script id="backend-version" type="application/json">{{version}}</script>
+<script id="backend-config" type="application/json">{% autoescape off %}{{config}}{% endautoescape %}</script>
+<div id="root"></div>
+{% endblock %}
 
-    {% csrf_token %}
-    <script id="backend-version" type="application/json">
-      {{ version }}
-    </script>
-    <script id="backend-config" type="application/json">
-      {% autoescape off %}{{ config }}{% endautoescape %}
-    </script>
-
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
-</html>
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+{% if title %} &rsaquo; {{ title }}{% endif %}
+{% if subtitle %} &rsaquo; {{ subtitle }}{% endif %}
+&rsaquo; <a href="{% url 'data_browser:home' %}">Data Browser</a>
+</div>
+{% endblock %}

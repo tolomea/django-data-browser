@@ -5,21 +5,21 @@
 }
 
 :root {
-  --dark-color: hsl(209, 17%, 24%);
-  --link-color: hsl(237, 100%, 45%); /* was hsl(200, 100%, 30%)*/
-  --dark-link-color: hsl(237, 100%, 30%); /* was hsl(200, 100%, 30%)*/
+  --dark-color: #3498db;
+  --link-color: #3498db; /* was hsl(200, 100%, 30%)*/
+  --dark-link-color: #3498db; /* was hsl(200, 100%, 30%)*/
   --border-color: hsl(0, 0%, 80%);
-  --shade-color: hsl(0, 0%, 93%);
-  --null-color: hsl(0, 0%, 87%);
+  --shade-color: hsl(0, 1%, 31%);
+  --null-color: hsl(0, 1%, 31%);
   --bad-color: hsl(14, 100%, 50%);
   --good-color: hsl(126, 68%, 30%);
 
-  --real-field-color: hsl(126, 46%, 88%);
-  --calculated-field-color: hsl(0, 0%, 88%);
-  --aggregate-field-color: hsl(237, 46%, 88%);
-  --function-field-color: hsl(170, 40%, 88%);
-  --annotated-field-color: hsl(170, 40%, 88%);
-  --related-field-color: hsl(0, 0%, 100%);
+  --real-field-color: #070606;
+  --calculated-field-color: hsl(0, 10%, 4%);
+  --aggregate-field-color: hsl(240, 6%, 7%);
+  --function-field-color: hsl(180, 4%, 5%);
+  --annotated-field-color: hsl(180, 3%, 7%);
+  --related-field-color: hsl(0, 7%, 11%);
 }
 
 .RealField {
@@ -56,13 +56,6 @@ textarea {
   font-weight: inherit;
 }
 
-body {
-  font-family: "Roboto", "Noto Sans", sans-serif;
-  padding: 0;
-  margin: 0;
-  font-size: 16px;
-  color: var(--dark-color);
-}
 
 a {
   text-decoration: none;
@@ -80,10 +73,11 @@ h1 {
   font-weight: normal;
 }
 h2 {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: normal;
   padding: 0;
   margin: 0;
+  line-height: 1.8;
 }
 p {
   margin: 5px auto;
@@ -168,6 +162,7 @@ textarea::placeholder {
   }
   > .FieldsList {
     margin: 10px 0 10px 10px;
+
     > .FieldsFilter {
       display: flex;
       flex-direction: row;
@@ -190,7 +185,7 @@ textarea::placeholder {
   text-align-last: center;
   border: none;
   padding: 1px;
-  font-size: 28px;
+  font-size: 18px;
   color: var(--dark-color);
   &:hover {
     border: 1px solid var(--border-color);
@@ -252,7 +247,7 @@ select.Lookup {
     display: flex;
     flex-flow: row nowrap;
     padding: 2px;
-    background: white;
+    background: transparent;
   }
   .FieldRowExpanded {
     position: sticky;
@@ -325,10 +320,8 @@ select.Lookup {
 /* Logo */
 
 a.Logo {
-  position: absolute;
   margin: 0 15px;
   font-size: 40px;
-  font-family: "Anton", sans-serif;
   cursor: pointer;
   color: var(--dark-color);
   > span {
@@ -343,7 +336,6 @@ a.Logo {
 
 .HomePage {
   margin: 0;
-  padding: 40px 30px 30px 30px;
   display: flex;
   align-items: flex-start;
   > div {
@@ -362,11 +354,13 @@ a.Logo {
   p {
     margin: 0;
   }
-  .ModelList {
+
     .AppModels {
-      padding-left: 30px;
+      padding: 8px 30px;
+      font-size: 0.8125rem;
+      line-height: 1rem;
     }
-  }
+
 
   .SavedAndSharedViews {
     .SavedView,
@@ -480,10 +474,10 @@ input.RowLimit {
 .ContextMenu {
   z-index: 100;
   position: fixed;
-  background: white;
+  background: #514f4f;
   border: 1px solid var(--border-color);
   padding: 5px;
-  box-shadow: 3px 3px 10px var(--dark-color);
+  color: floralwhite;
   p {
     padding: 5px;
     margin: 0px;
@@ -500,4 +494,292 @@ input.RowLimit {
 
 .ContextCursor {
   cursor: context-menu;
+}
+
+.fullTable {
+  width: 100%;}
+
+.rightTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.RightColumn {
+  max-width: 40%;
+  overflow-x: hidden;
+
+  .PendingDownloads {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  th {
+    font-weight: bold;
+  }
+
+  .column-wrapped {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  // Adjust column widths
+  th:nth-child(1), td:nth-child(1) { width: 5%; min-width: 30px; }
+  th:nth-child(2), td:nth-child(2) { width: 40%; min-width: 150px; }
+  th:nth-child(3), td:nth-child(3) { width: 15%; min-width: 50px; }
+  th:nth-child(4), td:nth-child(4) { width: 10%; min-width: 30px; }
+  th:nth-child(5), td:nth-child(5) { width: 30%; min-width: 150px; }
+
+  // Non-wrapped columns
+  th:nth-child(1), td:nth-child(1),
+  th:nth-child(4), td:nth-child(4) {
+    white-space: nowrap;
+  }
+}
+
+
+.PendingDownloads {
+  margin-bottom: 20px;
+}
+
+.button-green {
+  background-color: #4CAF50;
+  color: white;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.button-green:hover {
+  background-color: #45a049;
+}
+
+.HomePage {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0;
+  padding: 20px;
+
+  .LeftColumn, .RightColumn {
+    flex: 1;
+    margin: 0 10px;
+  }
+
+  .LeftColumn {
+    max-width: 60%;
+  }
+
+  .RightColumn {
+    max-width: 40%;
+  }
+
+  .module {
+    margin-bottom: 20px;
+  }
+
+  .PendingDownloads, .SavedAndSharedViews {
+    @extend .module;
+  }
+
+  .download-link {
+    color: var(--primary-fg);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  th {
+    font-weight: bold;
+  }
+}
+
+.popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color:  var(--border-color);
+  color: #d6cece;
+  padding: 16px;
+  border-radius: 4px;
+  z-index: 1000;
+  width: 30%;
+  word-break: auto-phrase;
+}
+
+.QueryHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background-color: transparent;
+  border-bottom: 1px solid #9a9a9a;
+
+  &-group {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+  }
+
+  &-results {
+    margin-left: 10px;
+    font-size: 14px;
+    // color: #6c757d;
+  }
+
+  &-btn {
+    background-color: var(--dark-color);
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: var(--link-color);
+    }
+  }
+
+  &-dropdown {
+    position: relative;
+    display: inline-block;
+
+    &-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+
+      a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
+      }
+    }
+
+    &:hover .QueryHeader-dropdown-content {
+      display: block;
+    }
+  }
+
+  &-limit {
+    width: 70px;
+    padding: 5px;
+    margin-left: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+}
+
+.ModelSelector {
+  max-width: 200px;
+  padding: 5px 10px;
+  border: 1px solid #a1a9ae;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .QueryHeader {
+    flex-direction: column;
+    align-items: stretch;
+
+    &-group {
+      justify-content: center;
+      margin: 5px 0;
+    }
+
+    &-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .ModelSelector {
+      max-width: 100%;
+    }
+  }
+}
+
+.Save {
+  .TLink {
+    @extend .QueryHeader-btn;
+    display: inline-block;
+  }
+}
+
+
+// Custom scrollbar styles
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #6b6b6b #2b2b2b;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2b2b2b;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #6b6b6b;
+  border-radius: 5px;
+  border: 2px solid #2b2b2b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #7b7b7b;
+}
+
+// For Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #6b6b6b #2b2b2b;
+}
+
+a {
+  cursor: pointer!important;
 }

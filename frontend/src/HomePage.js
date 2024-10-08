@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { useData } from "./Network";
+import {doGet, useData, useCData} from "./Network";
 import { usePersistentToggle } from "./Util";
 import { getRelUrlForQuery } from "./Query";
 import { SetCurrentSavedView } from "./CurrentSavedView";
@@ -80,7 +80,7 @@ function SavedAndSharedViews(props) {
   return (
     <div className="SavedAndSharedViews">
       <div>
-        <h1>Your Saved Views</h1>
+        <h3>Your Saved Views</h3>
         <Entries
           entries={savedViews.saved}
           parentName="saved"
@@ -105,16 +105,19 @@ function AppEntry(props) {
     config.appsExpanded,
   );
   return (
-    <>
-      <h2>
+      <>
+      <tr>
+      <th>
         {toggleLink}
         {appVerboseName}
-      </h2>
+      </th>
+      </tr>
       {toggled && (
-        <div key={appVerboseName} className="AppModels">
+        <section key={appVerboseName}>
           {models.map((modelEntry) => {
             return (
-              <h2 key={modelEntry.verboseName}>
+                <p key={modelEntry.verboseName} className="AppModels">
+
                 <Link
                   to={getRelUrlForQuery(
                     {
@@ -131,28 +134,82 @@ function AppEntry(props) {
                 >
                   {modelEntry.verboseName}
                 </Link>
-              </h2>
+                    </p>
             );
           })}
-        </div>
+        </section>
       )}
     </>
   );
 }
 
+  function PendingDownloads() {
+    const config = useContext(Config);
+
+    const mockDownloads = [
+      { id: 1, name: "Report 1", status: "completed", downloadUrl: "#" },
+      { id: 2, name: "Data Export 2", status: "processing" },
+      { id: 3, name: "Analysis Results", status: "completed", downloadUrl: "#" },
+      { id: 4, name: "Monthly Summary", status: "queued" },
+    ];
+    const [downloads, loading, error] = useCData(config.downloadsUrl);
+
+    if (!downloads) return "";
+  
+    return (
+      <div className="PendingDownloads">
+ 
+        <h3>Available Downloads</h3>       
+        <br/>
+        <table className="rightTable">
+          <thead>
+            <tr>
+              <th>S/N</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {downloads.map((download) => (
+              <tr key={download.id}>
+                <td>{download.id}</td>
+                <td>{download.name}</td>
+                <td>
+                  {download.status === 'completed' ? (
+                    <a href={download.downloadUrl} className="download-link">
+                      {download.status}
+                    </a>
+                  ) : (
+                    download.status
+                  )}
+                </td>
+                  <td>{download.media}</td>
+                  <td>{download.started}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+
 function ModelList(props) {
   const config = useContext(Config);
   return (
-    <div className="ModelList">
-      <div>
-        <h1>Models</h1>
-        {config.modelIndex.map(({ appVerboseName, models }) => (
-          <AppEntry key={appVerboseName} {...{ appVerboseName, models }} />
-        ))}
+      <div className=" module">
+          <h2>Models</h2>
+          <table className="fullTable">
+              {config.modelIndex.map(({appVerboseName, models}) => (
+                  <AppEntry key={appVerboseName} {...{appVerboseName, models}} />
+              ))}
+          </table>
       </div>
-    </div>
   );
 }
+
 
 function HomePage(props) {
   const setCurrentSavedView = useContext(SetCurrentSavedView);
@@ -160,10 +217,16 @@ function HomePage(props) {
 
   return (
     <div className="HomePage">
-      <ModelList />
-      <SavedAndSharedViews />
+      <div className="LeftColumn">
+        <ModelList />
+      </div>
+      <div className="RightColumn">
+        <PendingDownloads />
+        <SavedAndSharedViews />
+      </div>
     </div>
   );
 }
+
 
 export { HomePage };

@@ -114,8 +114,9 @@ def get_result_queryset(bound_query, debug=False):
             # this comes up with impliclty ordered fields, which are neither
             sort_fields.append(field.orm_bound_field.queryset_path_str)
     qs = qs.order_by(*sort_fields)
-
-    return qs[: bound_query.limit]
+    if bound_query.limit:
+        return qs[: bound_query.limit]
+    return qs
 
 
 def get_result_list(bound_query):

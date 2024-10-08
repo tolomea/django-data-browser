@@ -18,13 +18,14 @@ class Settings:
     _defaults = {
         "DATA_BROWSER_ALLOW_PUBLIC": False,
         "DATA_BROWSER_AUTH_USER_COMPAT": True,
-        "DATA_BROWSER_DEFAULT_ROW_LIMIT": 1000,
+        "DATA_BROWSER_DEFAULT_ROW_LIMIT": 100,
+        "DATA_BROWSER_MAX_ROWS": 1000,
         "DATA_BROWSER_DEV": False,
         "DATA_BROWSER_FE_DSN": None,
         "DATA_BROWSER_ADMIN_FIELD_NAME": "admin",
         "DATA_BROWSER_USING_DB": "default",
         "DATA_BROWSER_ADMIN_OPTIONS": {},
-        "DATA_BROWSER_APPS_EXPANDED": True,
+        "DATA_BROWSER_APPS_EXPANDED": False,
         "DATA_BROWSER_ADMIN_SITE": None,
     }
 
