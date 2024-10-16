@@ -9,9 +9,15 @@ from collections import defaultdict
 
 import django.contrib.admin.views.decorators as admin_decorators
 import hyperlink
+import pandas as pd
 import sqlparse
 from django import http
 from django.core.serializers.json import DjangoJSONEncoder
+from django.http import (
+    HttpResponseBadRequest,
+    HttpResponseNotFound,
+    StreamingHttpResponse,
+)
 from django.shortcuts import get_object_or_404
 from django.template import engines
 from django.template import loader
@@ -21,7 +27,6 @@ from django.utils import timezone
 from django.views.decorators import csrf
 
 from data_browser import version
-from data_browser.background_task_runner import fetch_related_report, run_query
 from data_browser.common import PUBLIC_PERM
 from data_browser.common import SHARE_PERM
 from data_browser.common import HttpResponse
@@ -31,7 +36,8 @@ from data_browser.common import has_permission
 from data_browser.common import set_global_state
 from data_browser.common import settings
 from data_browser.format_csv import get_csv_rows
-from data_browser.models import View
+from data_browser.helpers import DDBReportState, DDBReportTask
+from data_browser.models import Platform, View
 from data_browser.orm_results import get_result_list
 from data_browser.orm_results import get_result_queryset
 from data_browser.orm_results import get_results
@@ -40,8 +46,7 @@ from data_browser.query import Query
 from data_browser.query import QueryFilter
 from data_browser.types import TYPES
 from data_browser.util import str_to_field
-from core.models.configs import GlobalConfigurationFetcher
-from ibl_dm_axd.data_reports.models import ReportState, ReportTask
+from data_browser.background_task_runner import fetch_related_report, run_query
 
 
 def _get_query_data(bound_query):
@@ -288,10 +293,7 @@ def query(request, *, model_name, fields="", media):
         if is_async:
             username = request.user.username
             report = fetch_related_report(username, model_name, fields, media)
-            generation_timeline = (
-                GlobalConfigurationFetcher().DATA_BROWSER_GENERATION_TIMELINE_SECONDS
-                or 300
-            )
+            generation_timeline = settings.DATA_BROWSER_GENERATION_TIMELINE_SECONDS
             if report:
                 seconds_passed = (timezone.now() - report.started).total_seconds()
                 if seconds_passed < int(generation_timeline):
@@ -437,14 +439,17 @@ def proxy_js_dev_server(request, path):  # pragma: no cover
 @admin_decorators.staff_member_required
 @set_global_state(public_view=False)
 def show_available_results(request):
-    reports = ReportTask.objects.filter(
-        report_name="model_browser_report",
+    reports = DDBReportTask.objects.filter(
         owner=request.user.username,
     ).order_by("-started")
+    DDBReportTask.objects.filter(
+        started__lt=timezone.now()
+        - timezone.timedelta(seconds=settings.REPORT_EXPIRY_SECONDS)
+    ).delete()
     data = []
     for c, report in enumerate(reports, start=1):
         downloadUrl = ""
-        if report.state == ReportState.COMPLETED:
+        if report.state == DDBReportState.COMPLETED:
             downloadUrl = report.completedreport.get_url(
                 report.platform.key, request.get_host()
             )
@@ -456,8 +461,63 @@ def show_available_results(request):
                 "name": report.kwargs["model_name"],
                 "status": report.state,
                 "media": report.kwargs["media"],
-                "downloadUrl": downloadUrl + f"?format={report.kwargs['media']}",
+                "downloadUrl": downloadUrl + f"?format={report.kwargs['media']}"
+                if downloadUrl
+                else "",
             }
         )
 
     return JsonResponse(data)
+
+
+def handle_csv_download(task):
+    class Buffer:
+        def write(self, value):
+            return value
+
+    pseudo_buffer = Buffer()
+    writer = csv.writer(pseudo_buffer)
+    filename = f"{task.report_name}.{timezone.now()}.csv"
+    df = pd.DataFrame(**task.completedreport.content)
+    columns = list(df.columns.tolist())
+    content = df[columns].to_dict(orient="split").get("data", [])
+    return StreamingHttpResponse(
+        stream_csv(writer, content, column_names=columns),
+        content_type="application/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+def handle_json_download(task):
+    df = pd.DataFrame(**task.completedreport.content)
+    return JsonResponse(df.to_dict(orient="records"))
+
+
+def stream_csv(writer, content, column_names):
+    if column_names:
+        yield writer.writerow(column_names)
+    for row in content:
+        yield writer.writerow(row)
+
+
+def stream_download(request, org, task_id):
+    platform = get_object_or_404(Platform, key=org)
+    download_format = request.GET.get("format", "csv")
+    format_handlers = {
+        "csv": handle_csv_download,
+        "json": handle_json_download,
+    }
+
+    handler = format_handlers.get(download_format.lower(), None)
+
+    if not handler:
+        return HttpResponseBadRequest("Invalid format")
+    task = DDBReportTask.objects.filter(
+        background_task_id=task_id, platform__key=platform.key
+    ).first()
+    if not task:
+        return HttpResponseNotFound("Invalid report")
+    elif task.state == DDBReportState.COMPLETED:
+        return handler(task)
+    else:
+        return HttpResponse("Download not available")
