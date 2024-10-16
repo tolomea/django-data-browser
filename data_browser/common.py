@@ -27,6 +27,11 @@ class Settings:
         "DATA_BROWSER_ADMIN_OPTIONS": {},
         "DATA_BROWSER_APPS_EXPANDED": False,
         "DATA_BROWSER_ADMIN_SITE": None,
+        "DATA_BROWSER_REPORT_TASK_MODEL": "data_browser.models.ReportTask",
+        "DATA_BROWSER_REPORT_STATE_MODEL": "data_browser.models.ReportState",
+        "DATA_BROWSER_RUN_BACKGROUND_REPORT_FUNC": "data_browser.tasks.run_background_report",
+        "DATA_BROWSER_GENERATION_TIMELINE_SECONDS": 300,
+        "REPORT_EXPIRY_SECONDS": 86400,
     }
 
     def __getattr__(self, name):
