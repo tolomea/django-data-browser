@@ -69,3 +69,8 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
     def valid(self, obj):
         with set_global_state(user=obj.owner, public_view=False):
             return obj.is_valid()
+
+@admin.register(models.ReportTask)
+class ReportTaskAdmin(AdminMixin, admin.ModelAdmin):
+    list_display = ("owner", "report_name", "started", "state")
+    list_filter = ("state",)
