@@ -7,7 +7,7 @@ from data_browser import version
 
 root = Path("data_browser")
 data_files = []
-for directory in ("fe_build", "templates", "web_root"):
+for directory in ("templates", "web_root", "static"):
     for path, _, filenames in os.walk(root / directory):
         for filename in filenames:
             data_files.append(os.path.join("..", path, filename))
