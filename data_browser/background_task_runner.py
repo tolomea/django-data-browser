@@ -11,6 +11,7 @@ def fetch_related_report(username, model_name, fields, media):
         platform__key="main",
         kwargs__model_name=model_name,
         kwargs__fields=fields,
+        kwargs__media=media,
     )
     return DDBReportTask.objects.filter(**filters).last()
 
