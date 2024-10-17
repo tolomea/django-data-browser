@@ -300,7 +300,7 @@ def query(request, *, model_name, fields="", media):
                     left_secs = round(generation_timeline - seconds_passed)
                     return JsonResponse(
                         {
-                            "message": f"A report is currently in progress. To regenerate, Try again in {left_secs} secs"
+                            "message": f"A report was recently requested. To regenerate, Try again in {left_secs} secs"
                         }
                     )
             task_id = run_query(username, model_name, fields, media)
