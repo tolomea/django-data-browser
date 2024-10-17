@@ -5,6 +5,8 @@ import pandas as pd
 from celery import shared_task
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.http import QueryDict
 
 from data_browser.models import CompletedReport, Platform, ReportState, ReportTask
 from data_browser.query import Query
@@ -12,7 +14,6 @@ from data_browser.query import Query
 import logging
 
 log = logging.getLogger(__name__)
-
 
 @shared_task(bind=True)
 def run_background_report(self, **kwargs):
@@ -32,12 +33,37 @@ def run_background_report(self, **kwargs):
         background_task_id=task_id,
         kwargs=kwargs,
     )
-    query = Query.from_request(model_name, fields, params)
 
+    # Create a more comprehensive mock request object
+    class MockRequest:
+        def __init__(self, user):
+            self.user = user
+            self.data_browser = {"public_view": False, "fields": set(), "calculated_fields": set()}
+            self.GET = QueryDict('', mutable=True)
+            self.POST = QueryDict('', mutable=True)
+            self.META = {}
+            self.method = 'GET'
+
+        def get_host(self):
+            return 'localhost'
+    
+    from data_browser.common import set_global_state, GlobalState, _State
     from data_browser.views import _data_response
-    response = _data_response(
-        query, "json", privileged=True, raw=True, remove_limit=True
-    )
+    from data_browser.orm_admin import get_models
+    
+    User = get_user_model()
+    user = User.objects.get(username=owner)
+    mock_request = MockRequest(user)
+
+    # Set up the global state
+    global_state = GlobalState()
+    global_state._state = _State(None, request=mock_request, public_view=False, set_ddb=True)
+    global_state._state.models = get_models(mock_request)
+
+    # Use set_global_state as a context manager
+    with set_global_state(request=mock_request, public_view=False):
+        query = Query.from_request(model_name, fields, params)
+        response = _data_response(query, "json", privileged=True, raw=True, remove_limit=True)
 
     now = timezone.now()
     completed_report = CompletedReport.objects.create(
