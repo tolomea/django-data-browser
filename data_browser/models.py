@@ -82,3 +82,55 @@ class View(models.Model):
 
     def is_valid(self):
         return self.get_query().is_valid(global_state.models)
+
+
+class Platform(models.Model):
+    id = models.CharField(primary_key=True, max_length=12, default=get_id)
+    key = models.CharField(max_length=200, unique=True, help_text="The platform key")
+
+
+class ReportState(models.TextChoices):
+    PENDING = "pending"
+    RUNNING = "running"
+    ACCUMULATING = "accumulating"
+    PROCESSING = "processing"
+    STORING = "storing"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+    ERROR = "error"
+    EXPIRED = "expired"
+
+
+class ReportTask(models.Model):
+    id = models.CharField(primary_key=True, max_length=12, default=get_id)
+    owner = models.CharField(max_length=255)
+    platform = models.ForeignKey(
+        Platform, on_delete=models.CASCADE, related_name="report_tasks"
+    )
+    report_name = models.CharField(max_length=255)
+    generator = models.TextField(null=False)
+    background_task_id = models.CharField(max_length=255)
+    kwargs = models.JSONField(default=dict)
+    state = models.CharField(
+        max_length=63, choices=ReportState.choices, default=ReportState.PENDING
+    )
+
+    traceback = models.TextField(default="", help_text="Error information")
+    started = models.DateTimeField(
+        default=timezone.now, help_text="When Report Request was started"
+    )
+    stopped = models.DateTimeField(
+        default=None, null=True, help_text="When Report was stopped"
+    )
+
+
+class CompletedReport(models.Model):
+    id = models.CharField(primary_key=True, max_length=12, default=get_id)
+    task = models.OneToOneField(ReportTask, on_delete=models.CASCADE, unique=True)
+    content = models.JSONField(default=dict)
+    meta_data = models.JSONField(default=dict)
+    created_on = models.DateTimeField(default=timezone.now)
+    expires_on = models.DateTimeField()
+
+    def get_url(self, platform, host):
+        return f"https://{host}{reverse('data_browser:report-download', args=(platform, self.task.background_task_id,))}"

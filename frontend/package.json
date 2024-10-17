@@ -16,11 +16,12 @@
     "react-router": "^5",
     "react-router-dom": "^5",
     "react-scripts": "^5.0.0",
+    "react-scripts-rewired": "^3.1.1",
     "sass": "^1.49.7"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build  && node remove-head.js",
+    "build": "react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

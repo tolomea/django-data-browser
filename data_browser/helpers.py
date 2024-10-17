@@ -6,6 +6,7 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import BooleanField
 from django.urls import reverse
+from django.utils.module_loading import import_string
 
 from data_browser.common import settings
 
@@ -140,17 +141,19 @@ class AdminMixin(_AdminOptions, _AdminAnnotations, BaseModelAdmin):
                 args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
             )
             args = self.get_ddb_default_filters()
-            params = urlencode([
-                (
-                    f"{field}__{lookup}",
+            params = urlencode(
+                [
                     (
-                        value
-                        if isinstance(value, str)
-                        else json.dumps(value, cls=DjangoJSONEncoder)
-                    ),
-                )
-                for field, lookup, value in args
-            ])
+                        f"{field}__{lookup}",
+                        (
+                            value
+                            if isinstance(value, str)
+                            else json.dumps(value, cls=DjangoJSONEncoder)
+                        ),
+                    )
+                    for field, lookup, value in args
+                ]
+            )
             extra_context["ddb_url"] = f"{url}?{params}"
 
         return super().changelist_view(request, extra_context)
@@ -188,3 +191,15 @@ def ddb_hide(func):  # pragma: no cover
 
 
 annotation = _AnnotationDescriptor
+
+DDBReportTask = settings.DATA_BROWSER_REPORT_TASK_MODEL
+if isinstance(DDBReportTask, str):
+    DDBReportTask = import_string(DDBReportTask)
+
+DDBReportState = settings.DATA_BROWSER_REPORT_STATE_MODEL
+if isinstance(DDBReportState, str):
+    DDBReportState = import_string(DDBReportState)
+
+ddb_run_background_report = settings.DATA_BROWSER_RUN_BACKGROUND_REPORT_FUNC
+if isinstance(ddb_run_background_report, str):
+    ddb_run_background_report = import_string(ddb_run_background_report)

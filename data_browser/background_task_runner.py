@@ -1,16 +1,18 @@
-from ibl_dm_axd.data_reports.models import ReportTask, CompletedReport
-from ibl_dm_axd.data_reports.tasks import run_background_report
 from django.conf import settings
+from data_browser.helpers import DDBReportTask, ddb_run_background_report
+from data_browser.models import ReportTask
 
 
 def fetch_related_report(username, model_name, fields, media):
-    return ReportTask.objects.filter(
-        report_name="model_browser_report",
+    report_name = model_name if DDBReportTask == ReportTask else "model_browser_report"
+    filters = dict(
+        report_name=report_name,
         owner=username,
         platform__key="main",
         kwargs__model_name=model_name,
         kwargs__fields=fields,
-    ).last()
+    )
+    return DDBReportTask.objects.filter(**filters).last()
 
 
 def run_query(username, model_name, fields, media) -> str:
@@ -24,4 +26,4 @@ def run_query(username, model_name, fields, media) -> str:
         "store_task": True,
         "sync_mode": settings.DEBUG,
     }
-    return run_background_report.delay(**data)
+    return ddb_run_background_report.delay(**data)

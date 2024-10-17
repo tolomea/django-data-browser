@@ -29,3 +29,20 @@ Background Tasks
 ------------
 Full rows are automatically sent as background tasks and available for download once completed. The status can be viewed 
 in `/axd_data_reports/reporttask/`
+
+Additional configs
+------------
+In order to define a custom model class to store background reports into, you can specify it with the following configs
+
+```
+{
+... other data browser configs...
+        "DATA_BROWSER_REPORT_TASK_MODEL": "data_browser.models.ReportTask",
+        "DATA_BROWSER_REPORT_STATE_MODEL": "data_browser.models.ReportState",
+        "DATA_BROWSER_RUN_BACKGROUND_REPORT_FUNC": "data_browser.tasks.run_background_report",
+        "DATA_BROWSER_GENERATION_TIMELINE_SECONDS": 300,
+        "REPORT_EXPIRY_SECONDS": 86400,
+        
+}
+```
+

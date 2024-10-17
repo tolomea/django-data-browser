@@ -10,7 +10,7 @@ from django.views.static import serve
 from data_browser.api import view_detail
 from data_browser.api import view_list
 from data_browser.common import settings
-from data_browser.views import proxy_js_dev_server, show_available_results
+from data_browser.views import proxy_js_dev_server, show_available_results, stream_download
 from data_browser.views import query
 from data_browser.views import query_ctx
 from data_browser.views import query_html
@@ -46,6 +46,7 @@ urlpatterns = [
     # api
     path("api/views/", view_list, name="view_list"),
     path("api/download-list/", show_available_results, name="downloads"),
+    path("api/<slug:org>/<str:task_id>/download/", stream_download, name="report-download"),
     path("api/views/<pk>/", view_detail, name="view_detail"),
     # other html pages
     re_path(r".*\.html", query_html),
