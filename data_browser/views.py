@@ -12,6 +12,8 @@ import hyperlink
 import pandas as pd
 import sqlparse
 from django import http
+from django.contrib import messages
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import (
     HttpResponseBadRequest,
@@ -19,34 +21,32 @@ from django.http import (
     StreamingHttpResponse,
 )
 from django.shortcuts import get_object_or_404
-from django.template import engines
-from django.template import loader
+from django.template import engines, loader
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import format_html
 from django.views.decorators import csrf
 
 from data_browser import version
-from data_browser.common import PUBLIC_PERM
-from data_browser.common import SHARE_PERM
-from data_browser.common import HttpResponse
-from data_browser.common import JsonResponse
-from data_browser.common import global_state
-from data_browser.common import has_permission
-from data_browser.common import set_global_state
-from data_browser.common import settings
+from data_browser.background_task_runner import fetch_related_report, run_query
+from data_browser.common import (
+    PUBLIC_PERM,
+    SHARE_PERM,
+    HttpResponse,
+    JsonResponse,
+    global_state,
+    has_permission,
+    set_global_state,
+    settings,
+)
 from data_browser.format_csv import get_csv_rows
 from data_browser.helpers import DDBReportState, DDBReportTask
 from data_browser.models import Platform, View
-from data_browser.orm_results import get_result_list
-from data_browser.orm_results import get_result_queryset
-from data_browser.orm_results import get_results
-from data_browser.query import BoundQuery
-from data_browser.query import Query
-from data_browser.query import QueryFilter
+from data_browser.orm_results import get_result_list, get_result_queryset, get_results
+from data_browser.query import BoundQuery, Query, QueryFilter
 from data_browser.types import TYPES
 from data_browser.util import str_to_field
-from data_browser.background_task_runner import fetch_related_report, run_query
 
 
 def _get_query_data(bound_query):
@@ -298,17 +298,24 @@ def query(request, *, model_name, fields="", media):
                 seconds_passed = (timezone.now() - report.started).total_seconds()
                 if seconds_passed < int(generation_timeline):
                     left_secs = round(generation_timeline - seconds_passed)
+
+                    messages.warning(
+                        request,
+                        f"A report was recently requested. To regenerate, try again in {naturaltime(timezone.timedelta(seconds=left_secs))}",
+                    )
                     return JsonResponse(
                         {
-                            "message": f"A report was recently requested. To regenerate, Try again in {left_secs} secs"
+                            "success": False,
                         }
                     )
-            task_id = run_query(username, model_name, fields, media)
-            return JsonResponse(
-                {
-                    "message": f"Report would be available shortly, see Downloads section :{task_id}"
-                }
+            run_query(username, model_name, fields, media)
+            downloads_url = reverse("data_browser:home")
+            message = format_html(
+                "Report will be available shortly in <a style='color:azure' href='{}#AvailableDownloads'>Available Downloads</a>",
+                downloads_url,
             )
+            messages.success(request, message)
+            return JsonResponse({"success": True})
         query = Query.from_request(model_name, fields, params)
         return _data_response(query, media, privileged=True)
 
@@ -471,11 +478,7 @@ def show_available_results(request):
 
 
 def handle_csv_download(task):
-    class Buffer:
-        def write(self, value):
-            return value
-
-    pseudo_buffer = Buffer()
+    pseudo_buffer = Echo()
     writer = csv.writer(pseudo_buffer)
     filename = f"{task.report_name}.{timezone.now()}.csv"
     df = pd.DataFrame(**task.completedreport.content)

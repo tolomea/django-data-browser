@@ -159,7 +159,7 @@ function AppEntry(props) {
     return (
       <div className="PendingDownloads">
  
-        <h3>Available Downloads</h3>       
+        <h3 id="#AvailableDownloads">Available Downloads</h3>
         <br/>
         <table className="rightTable">
           <thead>
@@ -221,8 +221,9 @@ function HomePage(props) {
         <ModelList />
       </div>
       <div className="RightColumn">
-        <PendingDownloads />
         <SavedAndSharedViews />
+        <PendingDownloads />
+
       </div>
     </div>
   );
