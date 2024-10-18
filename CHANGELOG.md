@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 0.0.3
+- UI Improvements
+
 ## 0.0.2
 - Ensure we can choose custom models and functions 
   * Defaults are
