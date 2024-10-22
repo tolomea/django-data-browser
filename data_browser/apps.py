@@ -10,13 +10,13 @@ class DataBrowserConfig(AppConfig):
     plugin_app = {
         'url_config': {
             'lms.djangoapp': {
-                'namespace': '/admin/data-browser/',
-                'regex': r'^data_browser/',
+                'namespace': 'data_browser',
+                'regex': r'^/admin/data-browser/',
                 'relative_path': 'urls',
             },
             'cms.djangoapp': {
-                'namespace': '/admin/data-browser/',
-                'regex': r'^data_browser/',
+                'namespace': 'data_browser',
+                'regex': r'^/admin/data-browser/',
                 'relative_path': 'urls',
             }
         },
