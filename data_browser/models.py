@@ -88,6 +88,8 @@ class Platform(models.Model):
     id = models.CharField(primary_key=True, max_length=12, default=get_id)
     key = models.CharField(max_length=200, unique=True, help_text="The platform key")
 
+    def __str__(self):
+        return self.key
 
 class ReportState(models.TextChoices):
     PENDING = "pending"
@@ -122,6 +124,9 @@ class ReportTask(models.Model):
     stopped = models.DateTimeField(
         default=None, null=True, help_text="When Report was stopped"
     )
+
+    def __str__(self):
+        return self.background_task_id
 
 
 class CompletedReport(models.Model):
