@@ -27,6 +27,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
 from django.views.decorators import csrf
+from django.contrib.admin.utils import quote
 
 from data_browser import version
 from data_browser.background_task_runner import fetch_related_report, run_query
@@ -465,6 +466,14 @@ def show_available_results(request):
             downloadUrl = report.completedreport.get_url(
                 report.platform.key, request.get_host()
             )
+        
+        # Generate the admin detail URL
+        admin_url = reverse(
+            f'admin:{report._meta.app_label}_{report._meta.model_name}_change',
+            args=[quote(report.pk)]
+        )
+        admin_popup_url = f'{admin_url}?_popup=1'
+
         data.append(
             {
                 "id": c,
@@ -476,6 +485,7 @@ def show_available_results(request):
                 "downloadUrl": downloadUrl + f"?format={report.kwargs['media']}"
                 if downloadUrl
                 else "",
+                "adminUrl": admin_popup_url,  # Add this new field
             }
         )
 

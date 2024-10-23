@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 
 import {doGet, useData, useCData} from "./Network";
 import { usePersistentToggle } from "./Util";
@@ -149,6 +150,11 @@ function PendingDownloads() {
 
   if (!downloads) return "";
 
+  const openAdminPopup = (url, event) => {
+    event.preventDefault();
+    window.open(url, 'AdminPopup', 'width=800,height=600,resizable=yes,scrollbars=yes');
+  };
+
   const icons = {
     completed: (downloadUrl) => (
       <a href={downloadUrl} className="download-link" title="Download">
@@ -209,7 +215,16 @@ function PendingDownloads() {
           {downloads.map((download) => (
             <tr key={download.id}>
               <td>{download.id}</td>
-              <td>{download.name}</td>
+              <td>
+                <a 
+                  href={download.adminUrl} 
+                  onClick={(e) => openAdminPopup(download.adminUrl, e)}
+                  className="admin-link"
+                  title="Open Admin Details"
+                >
+                  {download.name}
+                </a>
+              </td>
               <td>
                 {download.status === 'completed' && icons.completed(download.downloadUrl)}
                 {download.status === 'pending' && icons.processing}
