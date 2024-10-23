@@ -3,7 +3,6 @@ from sys import getsizeof
 
 import pandas as pd
 from celery import shared_task
-from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.http import QueryDict
@@ -46,7 +45,7 @@ def run_background_report(self, **kwargs):
             def get_host(self):
                 return 'localhost'
 
-        from data_browser.common import set_global_state, GlobalState, _State
+        from data_browser.common import set_global_state, GlobalState, _State, settings
         from data_browser.views import _data_response
         from data_browser.orm_admin import get_models
 
