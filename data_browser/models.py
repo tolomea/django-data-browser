@@ -134,3 +134,14 @@ class CompletedReport(models.Model):
 
     def get_url(self, platform, host):
         return f"https://{host}{reverse('data_browser:report-download', args=(platform, self.task.background_task_id,))}"
+
+
+class DataBrowserPage(models.Model):
+    """ Used to add a custom link to the admin page"""
+    id = models.CharField(primary_key=True, max_length=12, default=get_id)
+
+    class Meta:
+        managed = False
+        verbose_name = "Data Browser Page"
+        verbose_name_plural = "Data Browser Page"
+

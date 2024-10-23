@@ -11,7 +11,7 @@
         {% block branding %}
         <div class="brand-container">
             <a href="{% url 'admin:index' %}" class="brand-link">
-                <img title="{{ site_header|default:_('Django administration') }}" alt="{{ site_header|default:_('Django administration') }}" src="{% static 'dl_manager/admin/img/ibl-logo.png' %}">
+                <img width="40" height="40" title="{{ site_header|default:_('Django administration') }}" alt="{{ site_header|default:_('Django administration') }}" src="{% static 'data_browser/logo.png' %}">
             </a>
         </div>
         {% endblock %}
@@ -39,9 +39,9 @@
 {{ block.super }}
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet"/>
-<link href="{% static 'data_browser/static/apple-touch-icon.png/' %}" rel="apple-touch-icon" sizes="180x180"/>
-<link href="{% static 'data_browser/static/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png"/>
-<link href="{% static 'data_browser/static/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png"/>
+<link href="{% static 'data_browser/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180"/>
+<link href="{% static 'data_browser/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png"/>
+<link href="{% static 'data_browser/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png"/>
 
 {% endblock %}
 
@@ -51,8 +51,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'data_browser/static/css/main.css' %}" />
 
 
-  <link rel="icon" href="{% static 'dl_manager/admin/img/favicon.png' %}" sizes="32x32" />
-  <link rel="icon" href="{% static 'dl_manager/admin/img/favicon.png' %}" sizes="192x192" />
+  <link rel="icon" href="{% static 'data_browser/favicon-32x32.png' %}" sizes="32x32" />
+  <link rel="icon" href="{% static 'data_browser/android-chrome-192x192.png' %}" sizes="192x192" />
 <link rel="stylesheet" type="text/css" href="{% static 'dl_manager/admin/css/dlm_admin.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'data_browser/custom.css' %}" />
 {% endblock %}

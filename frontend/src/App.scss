@@ -537,10 +537,10 @@ input.RowLimit {
   }
 
   // Adjust column widths
-  th:nth-child(1), td:nth-child(1) { width: 5%; min-width: 30px; }
-  th:nth-child(2), td:nth-child(2) { width: 40%; min-width: 150px; }
-  th:nth-child(3), td:nth-child(3) { width: 15%; min-width: 50px; }
-  th:nth-child(4), td:nth-child(4) { width: 10%; min-width: 30px; }
+  th:nth-child(1), td:nth-child(1) { width: 6%; min-width: 30px; }
+  th:nth-child(2), td:nth-child(2) { width: 40%; min-width: 100px; }
+  th:nth-child(3), td:nth-child(3) { width: 15%; min-width: 100px; }
+  th:nth-child(4), td:nth-child(4) { width: 13%; min-width: 50px; }
   th:nth-child(5), td:nth-child(5) { width: 30%; min-width: 150px; }
 
   // Non-wrapped columns
