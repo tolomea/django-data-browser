@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 0.0.4
+- Add edX plugin support 
+- Ensures report detail can be viewed
+- UI Improvements. Adds icons for actions
+
 ## 0.0.3
 - UI Improvements
 

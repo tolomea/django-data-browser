@@ -27,6 +27,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
 from django.views.decorators import csrf
+from django.contrib.admin.utils import quote
 
 from data_browser import version
 from data_browser.background_task_runner import fetch_related_report, run_query
@@ -47,7 +48,8 @@ from data_browser.orm_results import get_result_list, get_result_queryset, get_r
 from data_browser.query import BoundQuery, Query, QueryFilter
 from data_browser.types import TYPES
 from data_browser.util import str_to_field
-
+import  logging
+logger = logging.getLogger(__name__)
 
 def _get_query_data(bound_query):
     return {
@@ -298,7 +300,6 @@ def query(request, *, model_name, fields="", media):
                 seconds_passed = (timezone.now() - report.started).total_seconds()
                 if seconds_passed < int(generation_timeline):
                     left_secs = round(generation_timeline - seconds_passed)
-
                     messages.warning(
                         request,
                         f"A report was recently requested. To regenerate, try again in {naturaltime(timezone.timedelta(seconds=left_secs))}",
@@ -308,14 +309,19 @@ def query(request, *, model_name, fields="", media):
                             "success": False,
                         }
                     )
-            run_query(username, model_name, fields, media)
             downloads_url = reverse("data_browser:home")
             message = format_html(
                 "Report will be available shortly in <a style='color:azure' href='{}#AvailableDownloads'>Available Downloads</a>",
                 downloads_url,
             )
-            messages.success(request, message)
-            return JsonResponse({"success": True})
+            try:
+                run_query(username, model_name, fields, media)
+                messages.success(request, message)
+                return JsonResponse({"success": True})
+            except Exception as e:
+                logger.exception(e)
+                messages.error(request, f"{e}")
+                return JsonResponse({"success": False})
         query = Query.from_request(model_name, fields, params)
         return _data_response(query, media, privileged=True)
 
@@ -460,6 +466,14 @@ def show_available_results(request):
             downloadUrl = report.completedreport.get_url(
                 report.platform.key, request.get_host()
             )
+        
+        # Generate the admin detail URL
+        admin_url = reverse(
+            f'admin:{report._meta.app_label}_{report._meta.model_name}_change',
+            args=[quote(report.pk)]
+        )
+        admin_popup_url = f'{admin_url}?_popup=1'
+
         data.append(
             {
                 "id": c,
@@ -471,6 +485,7 @@ def show_available_results(request):
                 "downloadUrl": downloadUrl + f"?format={report.kwargs['media']}"
                 if downloadUrl
                 else "",
+                "adminUrl": admin_popup_url,  # Add this new field
             }
         )
 

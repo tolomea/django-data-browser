@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 
 import {doGet, useData, useCData} from "./Network";
 import { usePersistentToggle } from "./Util";
@@ -143,58 +144,101 @@ function AppEntry(props) {
   );
 }
 
-  function PendingDownloads() {
-    const config = useContext(Config);
+function PendingDownloads() {
+  const config = useContext(Config);
+  const [downloads, loading, error] = useCData(config.downloadsUrl);
 
-    const mockDownloads = [
-      { id: 1, name: "Report 1", status: "completed", downloadUrl: "#" },
-      { id: 2, name: "Data Export 2", status: "processing" },
-      { id: 3, name: "Analysis Results", status: "completed", downloadUrl: "#" },
-      { id: 4, name: "Monthly Summary", status: "queued" },
-    ];
-    const [downloads, loading, error] = useCData(config.downloadsUrl);
+  if (!downloads) return "";
 
-    if (!downloads) return "";
-  
-    return (
-      <div className="PendingDownloads">
- 
-        <h3 id="#AvailableDownloads">Available Downloads</h3>
-        <br/>
-        <table className="rightTable">
-          <thead>
-            <tr>
-              <th>S/N</th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Type</th>
-              <th>Created</th>
+  const openAdminPopup = (url, event) => {
+    event.preventDefault();
+    window.open(url, 'AdminPopup', 'width=800,height=600,resizable=yes,scrollbars=yes');
+  };
+
+  const icons = {
+    completed: (downloadUrl) => (
+      <a href={downloadUrl} className="download-link" title="Download">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 16L7 11H17L12 16Z" fill="#4CAF50"/>
+          <path d="M12 2V11M12 16L7 11H17L12 16ZM7 20H17" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </a>
+    ),
+    processing: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" title="Processing">
+        <path d="M12 2V6M12 18V22M6 12H2M22 12H18M19.07 4.93L16.24 7.76M19.07 19.07L16.24 16.24M4.93 19.07L7.76 16.24M4.93 4.93L7.76 7.76" stroke="#FFA500" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0 12 12"
+            to="360 12 12"
+            dur="5s"
+            repeatCount="indefinite"
+          />
+        </path>
+      </svg>
+    ),
+    error: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" title="Failed">
+        <path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#FF0000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )
+  };
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  };
+
+  return (
+    <div className="PendingDownloads">
+      <h3 id="#AvailableDownloads">Available Downloads</h3>
+      <br/>
+      <table className="rightTable">
+        <thead>
+          <tr>
+            <th>S/N</th>
+            <th>Name</th>
+            <th></th>
+            <th>Type</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {downloads.map((download) => (
+            <tr key={download.id}>
+              <td>{download.id}</td>
+              <td>
+                <a 
+                  href={download.adminUrl} 
+                  onClick={(e) => openAdminPopup(download.adminUrl, e)}
+                  className="admin-link"
+                  title="Open Admin Details"
+                >
+                  {download.name}
+                </a>
+              </td>
+              <td>
+                {download.status === 'completed' && icons.completed(download.downloadUrl)}
+                {download.status === 'pending' && icons.processing}
+                {download.status === 'error' && icons.error}
+              </td>
+              <td>{download.media}</td>
+              <td>{formatDate(download.started)}</td>
             </tr>
-          </thead>
-          <tbody>
-            {downloads.map((download) => (
-              <tr key={download.id}>
-                <td>{download.id}</td>
-                <td>{download.name}</td>
-                <td>
-                  {download.status === 'completed' ? (
-                    <a href={download.downloadUrl} className="download-link">
-                      {download.status}
-                    </a>
-                  ) : (
-                    download.status
-                  )}
-                </td>
-                  <td>{download.media}</td>
-                  <td>{download.started}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 function ModelList(props) {
   const config = useContext(Config);

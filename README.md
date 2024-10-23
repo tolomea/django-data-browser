@@ -27,8 +27,7 @@ Front end files are in `frontend/`. When you make changes to any files, the file
 
 Background Tasks
 ------------
-Full rows are automatically sent as background tasks and available for download once completed. The status can be viewed 
-in `/axd_data_reports/reporttask/`
+Full rows are automatically sent as background tasks and available for download once completed.
 
 Additional configs
 ------------
@@ -46,3 +45,6 @@ In order to define a custom model class to store background reports into, you ca
 }
 ```
 
+Installing in LMS/ Other Django Projects
+------------
+Once installed in LMS, You can check the admin page for Data Browser Page to view the page. 

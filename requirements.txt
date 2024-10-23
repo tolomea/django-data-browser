@@ -17,3 +17,4 @@ pytest-xdist < 2.0
 requests
 git+https://github.com/tolomea/python-snapshottest.git  # fork for py3.12 support
 time-machine
+pandas==2.2.0

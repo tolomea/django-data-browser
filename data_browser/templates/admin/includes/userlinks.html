@@ -1,0 +1,32 @@
+
+{% load i18n static %}
+    {% url 'admin:core_platform_changelist' as manage_tenant %}
+    {%  if manage_tenant %}
+        <a href="{{ manage_tenant }}"> Platforms</a> /
+    {% endif %}
+
+    {% url 'admin:core_userplatformlink_changelist' as manage_tenant_user %}
+    {%  if manage_tenant_user %}
+        <a href="{{ manage_tenant_user }}"> Users </a> /
+    {% endif %}
+
+    {% if user.is_active and user.is_staff %}
+    {% url 'django-admindocs-docroot' as docsroot %}
+    {% if docsroot %}
+        <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+    {% endif %}
+
+    {% url 'data_browser:home' as data_browser %}
+    {%  if data_browser %}
+        <a href="{{ data_browser }}"> Data Browser </a> /
+    {% endif %}
+
+    {% endif %}
+    {% if user.has_usable_password %}
+    <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
+    {% endif %}
+    <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
+        {% csrf_token %}
+        <button type="submit">{% translate 'Log out' %}</button>
+    </form>
+

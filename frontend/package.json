@@ -12,11 +12,11 @@
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
     "react": "^16",
+    "react-app-rewired": "^2.2.1",
     "react-dom": "^16",
     "react-router": "^5",
     "react-router-dom": "^5",
     "react-scripts": "^5.0.0",
-    "react-scripts-rewired": "^3.1.1",
     "sass": "^1.49.7"
   },
   "scripts": {

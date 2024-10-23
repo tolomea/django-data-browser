@@ -88,6 +88,8 @@ class Platform(models.Model):
     id = models.CharField(primary_key=True, max_length=12, default=get_id)
     key = models.CharField(max_length=200, unique=True, help_text="The platform key")
 
+    def __str__(self):
+        return self.key
 
 class ReportState(models.TextChoices):
     PENDING = "pending"
@@ -123,6 +125,9 @@ class ReportTask(models.Model):
         default=None, null=True, help_text="When Report was stopped"
     )
 
+    def __str__(self):
+        return self.background_task_id
+
 
 class CompletedReport(models.Model):
     id = models.CharField(primary_key=True, max_length=12, default=get_id)
@@ -134,3 +139,14 @@ class CompletedReport(models.Model):
 
     def get_url(self, platform, host):
         return f"https://{host}{reverse('data_browser:report-download', args=(platform, self.task.background_task_id,))}"
+
+
+class DataBrowserPage(models.Model):
+    """ Used to add a custom link to the admin page"""
+    id = models.CharField(primary_key=True, max_length=12, default=get_id)
+
+    class Meta:
+        managed = False
+        verbose_name = "Data Browser Page"
+        verbose_name_plural = "Data Browser Page"
+
