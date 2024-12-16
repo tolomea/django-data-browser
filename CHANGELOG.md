@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 0.0.5
+- Ensure path is `/data` in lms
+
 ## 0.0.4
 - Add edX plugin support 
 - Ensures report detail can be viewed

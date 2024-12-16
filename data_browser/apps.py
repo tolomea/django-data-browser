@@ -11,12 +11,12 @@ class DataBrowserConfig(AppConfig):
         'url_config': {
             'lms.djangoapp': {
                 'namespace': 'data_browser',
-                'regex': r'^data-browser-viewer/',
+                'regex': r'^data/',
                 'relative_path': 'urls',
             },
             'cms.djangoapp': {
                 'namespace': 'data_browser',
-                'regex': r'^data-browser-viewer/',
+                'regex': r'^data/',
                 'relative_path': 'urls',
             }
         },
