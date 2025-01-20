@@ -30,7 +30,7 @@ setuptools.setup(
     ],
     python_requires=">=3.8",
     package_data={"": data_files},
-    install_requires=["Django>=3.2", "hyperlink", "python-dateutil", "sqlparse"],
+    install_requires=["Django>=3.2", "hyperlink", "python-dateutil", "sqlparse", "ipdb", "ipython", "pandas"],
     entry_points={
         "lms.djangoapp": [
             "data_browser = data_browser.apps:DataBrowserConfig",
