@@ -1,4 +1,3 @@
-import django
 import pytest
 from django.db.models import Q
 
@@ -25,9 +24,6 @@ def test_format_value(value, expected):
 def test_format_value_2():
     value = ~(Q("bob") | Q("fred"))
 
-    if django.VERSION < (4, 2):
-        expected = "~Q(Q('bob') | Q('fred'))"
-    else:
-        expected = "~(Q('bob') | Q('fred'))"
+    expected = "~(Q('bob') | Q('fred'))"
 
     assert _format_value(value) == expected

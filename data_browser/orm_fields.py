@@ -288,7 +288,7 @@ class OrmFileField(OrmRealField):
                 # some storage backends will hard fail if their underlying storage isn't
                 # setup right https://github.com/tolomea/django-data-browser/issues/11
                 return self.django_field.storage.url(value)
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 return str(e)
 
         return format

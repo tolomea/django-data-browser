@@ -1,5 +1,4 @@
 # package requirements
-dataclasses; python_version<"3.8"
 Django>=2.2
 hyperlink
 python-dateutil
@@ -15,5 +14,5 @@ pytest-django
 pytest-mock
 pytest-xdist < 2.0
 requests
-git+https://github.com/tolomea/python-snapshottest.git  # fork for py3.12 support
+snapshottest >= 1.0.0a1 # for 3.12+ support
 time-machine

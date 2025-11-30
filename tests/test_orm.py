@@ -193,7 +193,7 @@ def test_get_url_link(get_product_flat):
 
 
 @pytest.mark.skipif(django.VERSION > (4, 2), reason="Unable to reproduce on 4.2")
-def test_bad_storage(monkeypatch, admin_ddb_request):
+def test_bad_storage(monkeypatch, admin_ddb_request):  # pragma: no cover
     # break storage
     from django.core.files.storage import FileSystemStorage
     from django.core.files.storage import default_storage
