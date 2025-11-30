@@ -56,10 +56,11 @@ jobs:
       - name: Test with tox
         run: tox run
       - name: Upload coverage data
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage-data
+          name: coverage-data-${{ strategy.job-index }}
           path: ".coverage.*"
+          include-hidden-files: true
 
   coverage:
     runs-on: ubuntu-latest
@@ -76,9 +77,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install coverage[toml]
       - name: Download coverage data.
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
-          name: coverage-data
+          pattern: coverage-data-*
+          merge-multiple: true
       - name: Combine coverage & fail if it's <100%.
         run: |
           python -m coverage combine
@@ -86,7 +88,7 @@ jobs:
           python -m coverage report --fail-under=100
       - name: Upload HTML report if check failed.
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: html-report
           path: htmlcov
