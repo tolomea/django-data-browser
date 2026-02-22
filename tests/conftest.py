@@ -58,6 +58,7 @@ settings.configure(
     USE_TZ=True,
     TIME_ZONE="UTC",
     SECRET_KEY="secret",
+    DEFAULT_AUTO_FIELD="django.db.models.AutoField",
 )
 
 
