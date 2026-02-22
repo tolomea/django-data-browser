@@ -41,7 +41,7 @@ Supported Versions
 
 The Data Browser is currently tested on:
 
-* Django 4.2 - 5.2
+* Django 4.2 - 6.2
 * Python 3.10 - 3.14
 * MySQL, PostgreSQL, SQLite
 
@@ -467,7 +467,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Add support for Python 3.13 and 3.14 and Django 5.1 and 5.2                                            |
+|         |            | | Add support for Python 3.13 and 3.14 and Django 5.1, 5.2 and 6.0                                       |
 |         |            | | Remove support for Python 3.8 and 3.9 and Django 3.2, 4.0 and 4.1                                      |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.10  | 2024-04-08 | | Fix Z fighting issue with the field filter.                                                            |

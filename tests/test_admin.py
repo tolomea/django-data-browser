@@ -60,7 +60,7 @@ def test_ddb_performance(admin_client, snapshot, multiple_views, mocker):
 def test_open_view(view, rf):
     expected = (
         '<a href="/data_browser/query/core.Product/name+0,size-1,size_unit.html'
-        '?name__equals=fred&limit=1000">view</a>'
+        '?name__equals=fred&amp;limit=1000">view</a>'
     )
     assert ViewAdmin.open_view(view) == expected
 

@@ -63,7 +63,7 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
     def open_view(obj):
         if not obj.model_name:
             return "N/A"  # pragma: no cover
-        return format_html(f'<a href="{obj.url}">view</a>')
+        return format_html('<a href="{}">view</a>', obj.url)
 
     @attributes(boolean=True)
     def valid(self, obj):

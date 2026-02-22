@@ -26,6 +26,7 @@ repos:
     hooks:
     -   id: unimport
         args: [--remove, --include-star-import, --ignore-init, --gitignore]
+        language_version: python3.10
 -   repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.10.1
     hooks:
