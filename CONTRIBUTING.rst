@@ -91,7 +91,7 @@ The compiled JavaScript is checked into the repo, so if only want to mess with t
 If you want to modify the JavaScript then you also need to:
 
 2. Enable proxying to the JS dev server by adding ``DATA_BROWSER_DEV = True`` to your settings.
-3. Run the JavaScript dev server with ``WDS_SOCKET_PORT=3000 PUBLIC_URL=data_browser npm start``.
+3. Run the JavaScript dev server with ``WDS_SOCKET_PORT=3000 PUBLIC_URL=data-browser npm start``.
    The ``WDS_SOCKET_PORT`` is so the proxied JS can find it's dev server.
    The ``PUBLIC_URL`` tells the JS dev server what path to serve from and should be the same as the URL you have mounted the Data Browser on in your urls file.
 
