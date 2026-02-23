@@ -410,7 +410,7 @@ def _get_fields_for_model(request, model, admin, admin_fields):
             )
 
         # Calculated and annotated fields
-        elif isinstance(field, type(None)):
+        elif field is None:
             orm_field = _get_calculated_field(
                 request, field_name, model_name, model, admin, model_fields
             )

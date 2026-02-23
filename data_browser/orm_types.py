@@ -41,8 +41,8 @@ _FIELD_TYPE_MAP = {
     models.DateField: DateType,
     models.UUIDField: UUIDType,
     models.URLField: URLType,
-    **{f: StringType for f in _STRING_FIELDS},
-    **{f: NumberType for f in _NUMBER_FIELDS},
+    **dict.fromkeys(_STRING_FIELDS, StringType),
+    **dict.fromkeys(_NUMBER_FIELDS, NumberType),
 }
 
 

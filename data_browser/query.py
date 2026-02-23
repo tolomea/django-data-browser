@@ -1,9 +1,8 @@
 import dataclasses
 import urllib
+from collections.abc import Mapping
+from collections.abc import Sequence
 from typing import Any
-from typing import Mapping
-from typing import Optional
-from typing import Sequence
 
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -41,7 +40,7 @@ def parse_sort(value, symbol, direction):
     path, priority = value.split(symbol)
     try:
         return path, direction, int(priority)
-    except Exception:  # noqa: E722  input sanitization
+    except Exception:
         return path, None, None
 
 
@@ -95,7 +94,7 @@ class Query:
         value = self.arguments.get("limit")
         try:
             value = int(value)
-        except Exception:  # noqa: E722  input sanitization
+        except Exception:
             value = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
         self.arguments["limit"] = max(1, value)
 
@@ -186,8 +185,8 @@ class BoundFilter:
 class BoundField:
     orm_bound_field: Any
     pivoted: bool
-    direction: Optional[str]
-    priority: Optional[int]
+    direction: str | None
+    priority: int | None
     query_field: QueryField
 
     @classmethod

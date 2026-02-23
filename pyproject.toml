@@ -1,8 +1,3 @@
-[tool.black]
-    target-version = ['py310']
-    preview = true
-    skip-magic-trailing-comma = true
-
 [tool.coverage.run]
     branch = true
     omit = [
@@ -24,73 +19,6 @@
     skip_covered = true
     skip_empty = true
 
-[tool.flake8]
-    target-version = "3.10"
-    extend-ignore = [
-        # Loop control variable not used within the loop body TODO enable this
-        "B007",
-        # use raise exception instead of assert False TODO enable this
-        "B011",
-        # Abstract base class with no abstract method.
-        "B024",
-        # use "{s!r}" instead of "'{s}'" TODO enable this
-        "B028",
-        # Whitespace before ':', conflicts with Black
-        "E203",
-        # Line length, conflicts with Black
-        "E501",
-        # Do not use variables named 'I', 'O', or 'l'
-        "E741",
-        # unnecessary variable assignment before return statement.
-        "R504",
-        # unnecessary else after return statement.
-        "R505",
-        # unnecessary else after raise statement.
-        "R506",
-        # unnecessary else after continue statement.
-        "R507",
-        # unnecessary else after break statement.
-        "R508",
-        # unnecessary else after break statement.
-        "SIM102",
-        # Use 'contextlib.suppress(...)' instead of try-except-pass
-        "SIM105",
-        # Combine conditions via a logical or to prevent duplicating code, TODO maybe enable
-        "SIM114",
-        # Merge with-statements that use the same scope, TODO maybe enable
-        "SIM117",
-        # Use 'a_dict.get(key, "default_value")' instead of an if-block
-        "SIM401",
-    ]
-    extend-select = [
-        # don't use return X in generators
-        "B901",
-        # only use self and cls for first args
-        "B902",
-    ]
-    ban-relative-imports = "true"
-    extend-immutable-calls = [
-        "timedelta",
-        "Decimal",
-    ]
-    per-file-ignores = [
-        # allowing prints in some files
-        "tests/*:T20",
-        # allow no __init__ at the toplevel
-        "setup.py:INP001",
-    ]
-
-
-[tool.isort]
-    force_single_line=true
-    multi_line_output=3
-    include_trailing_comma=true
-    force_grid_wrap=0
-    use_parentheses=true
-    line_length=88
-    default_section="THIRDPARTY"
-    known_first_party="data_browser,tests"
-
 [tool.pytest.ini_options]
     addopts = [
         "-ra",
@@ -110,3 +38,101 @@
         "dist",
         "web_root",
     ]
+
+[tool.ruff]
+target-version = "py310"
+preview = true
+
+[tool.ruff.lint]
+extend-select = [
+    "TID", # flake8-tidy-imports
+    "C4", # flake8-comprehensions
+    "B", # flake8-bugbear
+    "T20", # flake8-print
+    "T10", # flake8-debugger
+    "SIM", # flake8-simplify
+    "RET", # flake8-return
+    "INP", # flake8-no-pep420
+    "COM", # flake8-commas
+    "G", # flake8-logging-format
+    "PIE", # flake8-pie
+    "DJ", # flake8-django
+    "SLOT", # flake8-slots
+    "I", # isort
+    "UP", # pyupgrade
+    "RUF", # ruf
+    "F", # pyflakes
+    "PTH", # flake8-use-pathlib
+    "W", # pycodestyle
+    "E", # pycodestyle
+]
+
+ignore = [
+    "B018", # Found useless expression. Either assign it to a variable or remove it.
+    "B024", # {name} is an abstract base class, but it has no abstract methods or properties
+    "COM812", # Trailing comma missing
+    "DJ001", # Avoid using `null=True` on string-based fields such as `URLField`
+    "DJ008", # Model does not define `__str__` method
+    "DJ012", # Order of model's inner classes, methods, and fields does not follow the Django Style Guide
+    "E501", # Line too long ({width} > {limit})
+    "E741", # Do not use variables named 'I', 'O', or 'l'
+    "RET504", # Unnecessary assignment to {name} before return statement
+    "RET505", # Unnecessary {branch} after return statement
+    "RET506", # Unnecessary {branch} after raise statement
+    "RET507", # Unnecessary {branch} after continue statement
+    "RET508", # Unnecessary {branch} after break statement
+    "RUF001", # String contains ambiguous {}. Did you mean {}?
+    "RUF002", # Docstring contains ambiguous {}. Did you mean {}?
+    "RUF012", # Mutable class attributes should be annotated with typing.ClassVar
+    "RUF067", # `__init__` module should only contain docstrings and re-exports
+    "SIM102", # Use a single if statement instead of nested if statements
+    "SIM103", # Return the condition {condition} directly
+    "SIM108", # Use ternary operator {contents} instead of if-else-block
+    "SIM114", # Combine if branches using logical or operator
+    "SIM300", # Yoda condition detected
+
+    # TODO MAYBE ENABLE THESE
+
+    "B007", # Loop control variable {name} not used within loop body
+    "B011", # Do not assert False (python -O removes these calls), raise AssertionError()
+    "B904", # Within an except* clause, raise exceptions with raise ... from err or raise ... from None to distinguish them from errors in exception handling
+    "B905", # zip() without an explicit strict= parameter
+    "G004", # Logging statement uses f-string
+    "PTH123", # open() should be replaced by Path.open()
+    "RUF039", # First argument to {call} is not raw string
+    "RUF059", # Unpacked variable {name} is never used
+    "SIM105", # Use contextlib.suppress({exception}) instead of try-except-pass
+    "SIM117", # Use a single with statement with multiple contexts instead of nested with statements
+    "UP007", # Use X | Y for type annotations
+
+    "PTH100",
+    "PTH118",
+    "PTH120",
+    "RUF005",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**.py" = ["T20"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Disallow all relative imports.
+# ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+required-imports = []
+known-first-party = [
+    "data_browser",
+    "tests",
+]
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+skip-magic-trailing-comma = true
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"

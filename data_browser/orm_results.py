@@ -257,9 +257,9 @@ def get_results(bound_query, orm_models, with_format_hints):
                 list(itertools.chain.from_iterable(body_data)),
             ),
         ]:
-            format_hints.update(
-                {field.path_str: field.get_format_hints(data) for field in fields}
-            )
+            format_hints.update({
+                field.path_str: field.get_format_hints(data) for field in fields
+            })
 
         return {
             "rows": row_data,

@@ -1,7 +1,7 @@
 import json
 import re
 import uuid
-from functools import lru_cache
+from functools import cache
 
 import dateutil.parser
 from dateutil import relativedelta
@@ -31,7 +31,7 @@ class TypeMeta(type):
     @property
     def default_lookup(cls):
         lookups = cls.lookups
-        return list(lookups)[0] if lookups else None
+        return next(iter(lookups)) if lookups else None
 
     @property
     def lookups(cls):
@@ -197,7 +197,7 @@ class RegexType(BaseType):
     default_value = ".*"
 
     @staticmethod
-    @lru_cache(maxsize=None)
+    @cache
     def _parse(value, choices):
         assert not choices
         from django.contrib.contenttypes.models import ContentType

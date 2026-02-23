@@ -239,7 +239,7 @@ def query_html(request, *, model_name="", fields=""):
 def query(request, *, model_name, fields="", media):
     params = hyperlink.parse(request.get_full_path()).query
 
-    if media.startswith("profile") or media.startswith("pstats"):
+    if media.startswith(("profile", "pstats")):
         if "_" in media:
             prof_media, media = media.split("_")
         else:

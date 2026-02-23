@@ -22,7 +22,7 @@ def clean_str(field, value):
 def clean_uint(field, value):
     try:
         value = int(value)
-    except Exception:  # noqa: E722  input sanitization
+    except Exception:
         value = 1
     return max(value, 1)
 
@@ -110,7 +110,8 @@ def view_list(request):
 
         # shared
         shared_views = (
-            View.objects.exclude(owner=request.user)
+            View.objects
+            .exclude(owner=request.user)
             .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
             .exclude(name="")
             .prefetch_related("owner")
@@ -120,14 +121,17 @@ def view_list(request):
         for owner_name, shared_views in shared_views_by_user.items():
             entries = serialize_folders(shared_views)
             if entries:
-                shared_views_serialized.append(
-                    {"name": owner_name, "type": "folder", "entries": entries}
-                )
+                shared_views_serialized.append({
+                    "name": owner_name,
+                    "type": "folder",
+                    "entries": entries,
+                })
 
         # response
-        return JsonResponse(
-            {"saved": saved_views_serialized, "shared": shared_views_serialized}
-        )
+        return JsonResponse({
+            "saved": saved_views_serialized,
+            "shared": shared_views_serialized,
+        })
     elif request.method == "POST":
         data = json.loads(request.body)
         view = View.objects.create(owner=request.user, **deserialize(data))

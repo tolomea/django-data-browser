@@ -39,8 +39,6 @@ def _fix_filter(models, field, parts, lookup, value):
                 value = choices[value]
             else:
                 parts.append("raw")
-    else:
-        pass
 
     return parts, lookup, value
 

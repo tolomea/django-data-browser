@@ -1,6 +1,5 @@
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
-from typing import Tuple
 
 from django.db import models
 from django.db.models import OuterRef
@@ -26,7 +25,7 @@ class OrmBoundField:
     full_path: Sequence[str]
     verbose_path: Sequence[str]
     queryset_path: Sequence[str]
-    aggregate_clause: Tuple[str, models.Func] = None
+    aggregate_clause: tuple[str, models.Func] = None
     filter_: bool = False
     having: bool = False
     model_name: str = None
@@ -89,7 +88,7 @@ class OrmBaseField:
     concrete: bool = False
     rel_name: str = None
     can_pivot: bool = False
-    choices: Sequence[Tuple[str, str]] = ()
+    choices: Sequence[tuple[str, str]] = ()
     default_sort: str = None
     format_hints: dict = None
     actions: dict = None
