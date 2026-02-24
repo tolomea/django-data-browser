@@ -65,7 +65,7 @@ def forwards_0009(View):
             else:
                 parts, lookup, value = _fix_filter(models, field, parts, lookup, value)
 
-            key = "__".join(parts + [lookup])
+            key = "__".join([*parts, lookup])
             filters.append((key, value))
         view.query = urlencode(filters)
         view.save()

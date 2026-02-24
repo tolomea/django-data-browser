@@ -44,7 +44,7 @@ class OrmBoundField:
 
     def _lineage(self):
         if self.previous:
-            return self.previous._lineage() + [self]
+            return [*self.previous._lineage(), self]
         return [self]
 
     def annotate(self, qs, debug=False):
@@ -123,9 +123,9 @@ class OrmFkField(OrmBaseField):
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=previous.full_path + [self.name],
-            verbose_path=previous.verbose_path + [self.verbose_name],
-            queryset_path=previous.queryset_path + [self.name],
+            full_path=[*previous.full_path, self.name],
+            verbose_path=[*previous.verbose_path, self.verbose_name],
+            queryset_path=[*previous.queryset_path, self.name],
         )
 
 
@@ -152,9 +152,9 @@ class OrmRealField(OrmBaseField):
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=previous.full_path + [self.name],
-            verbose_path=previous.verbose_path + [self.verbose_name],
-            queryset_path=previous.queryset_path + [self.name],
+            full_path=[*previous.full_path, self.name],
+            verbose_path=[*previous.verbose_path, self.verbose_name],
+            queryset_path=[*previous.queryset_path, self.name],
             filter_=True,
         )
 
@@ -164,8 +164,8 @@ class OrmRawField(OrmRealField):
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=previous.full_path + [self.name],
-            verbose_path=previous.verbose_path + [self.verbose_name],
+            full_path=[*previous.full_path, self.name],
+            verbose_path=[*previous.verbose_path, self.verbose_name],
             queryset_path=previous.queryset_path,
             filter_=True,
         )
@@ -188,9 +188,9 @@ class OrmCalculatedField(OrmBaseField):
         return OrmBoundField(
             field=self,
             previous=previous,
-            full_path=previous.full_path + [self.name],
-            verbose_path=previous.verbose_path + [self.verbose_name],
-            queryset_path=previous.queryset_path + ["pk"],
+            full_path=[*previous.full_path, self.name],
+            verbose_path=[*previous.verbose_path, self.verbose_name],
+            queryset_path=[*previous.queryset_path, "pk"],
             model_name=self.model_name,
         )
 
@@ -228,7 +228,7 @@ class OrmBoundAnnotatedField(OrmBoundField):
                 admin_get_queryset(
                     global_state.request, self.admin, [self.name], debug=debug
                 )
-                .filter(pk=outer_ref("__".join(self.previous.queryset_path + ["pk"])))
+                .filter(pk=outer_ref("__".join([*self.previous.queryset_path, "pk"])))
                 .values(self.name)[:1],
                 output_field=self.django_field,
             ),
@@ -255,12 +255,12 @@ class OrmAnnotatedField(OrmBaseField):
     def bind(self, previous):
         previous = previous or OrmBoundField.blank()
 
-        full_path = previous.full_path + [self.name]
+        full_path = [*previous.full_path, self.name]
         return OrmBoundAnnotatedField(
             field=self,
             previous=previous,
             full_path=full_path,
-            verbose_path=previous.verbose_path + [self.verbose_name],
+            verbose_path=[*previous.verbose_path, self.verbose_name],
             queryset_path=[annotation_path(full_path)],
             filter_=True,
         )

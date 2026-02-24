@@ -108,7 +108,6 @@ ignore = [
     "PTH100",
     "PTH118",
     "PTH120",
-    "RUF005",
 ]
 
 [tool.ruff.lint.per-file-ignores]

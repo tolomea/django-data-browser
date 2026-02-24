@@ -68,12 +68,12 @@ class OrmFunctionField(OrmBaseField):
     def bind(self, previous):
         assert previous
         assert previous.type_ == self.base_type
-        full_path = previous.full_path + [self.name]
+        full_path = [*previous.full_path, self.name]
         return OrmBoundFunctionField(
             field=self,
             previous=previous,
             full_path=full_path,
-            verbose_path=previous.verbose_path + [self.verbose_name],
+            verbose_path=[*previous.verbose_path, self.verbose_name],
             queryset_path=[annotation_path(full_path)],
             filter_=True,
             func=self.func,

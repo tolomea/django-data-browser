@@ -111,7 +111,7 @@ class Query:
     @property
     def _filter_fields(self):
         return [
-            ("__".join(filter.path + [filter.lookup]), filter.value)
+            ("__".join([*filter.path, filter.lookup]), filter.value)
             for filter in self.filters
         ] + [(key, str(value)) for key, value in self.arguments.items()]
 
