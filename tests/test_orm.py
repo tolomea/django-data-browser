@@ -139,7 +139,7 @@ def get_product_flat(get_product_pivot):
             return []
         else:
             assert res["cols"] == [[]]  # this currently can't flatten pivoted stuff
-            return [r + b for r, b in zip(res["rows"], res["body"][0])]
+            return [r + b for r, b in zip(res["rows"], res["body"][0], strict=True)]
 
     return helper
 

@@ -91,7 +91,7 @@ def debug_log(msg, exc=None):  # pragma: no cover
         msg = f"{msg}:\n{traceback.format_exc()}"
 
     if settings.DEBUG:
-        logging.getLogger(__name__).warning(f"DDB: {msg}")
+        logging.getLogger(__name__).warning("DDB: %s", msg)
 
 
 def all_subclasses(cls):

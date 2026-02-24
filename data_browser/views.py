@@ -142,7 +142,7 @@ def _get_config():
     }
 
     root_models_by_app = defaultdict(list)
-    for name, model in orm_models.items():
+    for model in orm_models.values():
         if model.root:
             root_models_by_app[model.app_verbose_name].append(model)
     model_index = [
@@ -251,7 +251,7 @@ def query(request, *, model_name, fields="", media):
             profiler.enable()
 
             query = Query.from_request(model_name, fields, params)
-            for x in _data_response(query, media, privileged=True):
+            for _ in _data_response(query, media, privileged=True):
                 pass
 
             profiler.disable()

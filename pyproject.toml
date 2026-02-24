@@ -68,6 +68,7 @@ extend-select = [
 ]
 
 ignore = [
+    "B007", # Loop control variable {} not used within loop body
     "B018", # Found useless expression. Either assign it to a variable or remove it.
     "B024", # {name} is an abstract base class, but it has no abstract methods or properties
     "COM812", # Trailing comma missing
@@ -84,20 +85,13 @@ ignore = [
     "RUF001", # String contains ambiguous {}. Did you mean {}?
     "RUF002", # Docstring contains ambiguous {}. Did you mean {}?
     "RUF012", # Mutable class attributes should be annotated with typing.ClassVar
+    "RUF059", # Unpacked variable {} is never used
     "RUF067", # `__init__` module should only contain docstrings and re-exports
     "SIM102", # Use a single if statement instead of nested if statements
     "SIM103", # Return the condition {condition} directly
     "SIM108", # Use ternary operator {contents} instead of if-else-block
     "SIM114", # Combine if branches using logical or operator
     "SIM300", # Yoda condition detected
-
-    # TODO MAYBE ENABLE THESE
-
-    "B007", # Loop control variable {name} not used within loop body
-    "B904", # Within an except* clause, raise exceptions with raise ... from err or raise ... from None to distinguish them from errors in exception handling
-    "B905", # zip() without an explicit strict= parameter
-    "G004", # Logging statement uses f-string
-    "RUF059", # Unpacked variable {name} is never used
 ]
 
 [tool.ruff.lint.per-file-ignores]

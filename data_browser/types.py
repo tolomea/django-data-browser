@@ -211,7 +211,7 @@ class RegexType(BaseType):
                 list(ContentType.objects.filter(model__regex=value))
         except Exception as e:
             debug_log("Error parsing filter value", e)
-            raise Exception("Invalid regex")
+            raise Exception("Invalid regex") from e
         return value
 
 
@@ -453,8 +453,8 @@ class UnknownType(BaseType):
 def _json_loads(value):
     try:
         return json.loads(value.strip())
-    except json.JSONDecodeError:
-        raise ValueError("Invalid JSON value")
+    except json.JSONDecodeError as e:
+        raise ValueError("Invalid JSON value") from e
 
 
 class JSONFieldType(BaseType):
