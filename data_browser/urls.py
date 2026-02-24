@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from django.urls import path
 from django.urls import re_path
@@ -16,8 +16,8 @@ from data_browser.views import query_ctx
 from data_browser.views import query_html
 from data_browser.views import view
 
-FE_BUILD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fe_build")
-WEB_ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web_root")
+FE_BUILD_DIR = Path(__file__).resolve().parent / "fe_build"
+WEB_ROOT_DIR = Path(__file__).resolve().parent / "web_root"
 
 
 class OptionalString(StringConverter):

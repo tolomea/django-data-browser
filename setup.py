@@ -10,7 +10,7 @@ data_files = []
 for directory in ("fe_build", "templates", "web_root"):
     for path, _, filenames in os.walk(root / directory):
         for filename in filenames:
-            data_files.append(os.path.join("..", path, filename))
+            data_files.append(str(Path("..") / path / filename))
 
 
 setuptools.setup(

@@ -104,10 +104,6 @@ ignore = [
     "SIM105", # Use contextlib.suppress({exception}) instead of try-except-pass
     "SIM117", # Use a single with statement with multiple contexts instead of nested with statements
     "UP007", # Use X | Y for type annotations
-
-    "PTH100",
-    "PTH118",
-    "PTH120",
 ]
 
 [tool.ruff.lint.per-file-ignores]
