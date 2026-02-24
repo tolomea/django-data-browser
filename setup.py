@@ -9,8 +9,7 @@ root = Path("data_browser")
 data_files = []
 for directory in ("fe_build", "templates", "web_root"):
     for path, _, filenames in os.walk(root / directory):
-        for filename in filenames:
-            data_files.append(str(Path("..") / path / filename))
+        data_files.extend(str(Path("..") / path / filename) for filename in filenames)
 
 
 setuptools.setup(

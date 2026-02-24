@@ -203,9 +203,7 @@ def _get_keys(res, fields, all_keys):
 def _format_grid(data, col_keys, row_keys, fields, objs):
     body_data = []
     for col_key in col_keys:
-        table = []
-        for row_key in row_keys:
-            table.append(data[row_key].get(col_key))
+        table = [data[row_key].get(col_key) for row_key in row_keys]
         body_data.append(_format_table(fields, table, objs))
     return body_data
 

@@ -65,7 +65,9 @@ extend-select = [
     "PTH", # flake8-use-pathlib
     "W", # pycodestyle
     "E", # pycodestyle
-    "S",
+    "S", # flake8-bandit
+    "ISC", # flake8-implicit-str-concat
+    "PERF", # perflint
 ]
 
 ignore = [
