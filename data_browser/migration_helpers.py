@@ -28,7 +28,7 @@ def _fix_filter(models, field, parts, lookup, value):
             else:
                 parts.append("raw")
         elif lookup == "is_null":
-            assert False  # should have been caught above
+            raise AssertionError()  # should have been caught above
         else:
             parts.append("raw")
     elif field.type_ in [StringChoiceArrayType, NumberChoiceArrayType]:

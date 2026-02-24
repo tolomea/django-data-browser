@@ -13,7 +13,7 @@ def get_django_filter(field_type, path_str, lookup, filter_value):
         elif filter_value is False:
             return ~Q(**{path_str: None})
         else:
-            assert False
+            raise AssertionError()
 
     if field_type == IsNullType:
         assert lookup == "equals", lookup
@@ -22,7 +22,7 @@ def get_django_filter(field_type, path_str, lookup, filter_value):
         elif filter_value is False:
             return Q(**{path_str: False})
         else:
-            assert False
+            raise AssertionError()
 
     if lookup == "field_equals":
         lookup, filter_value = filter_value

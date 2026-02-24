@@ -65,7 +65,7 @@ class BaseType(metaclass=TypeMeta):
     element_type = None
 
     def __init__(self):
-        assert False
+        raise AssertionError()
 
     @classmethod
     def _lookups(cls):

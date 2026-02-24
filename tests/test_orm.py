@@ -200,7 +200,7 @@ def test_bad_storage(monkeypatch, admin_ddb_request):  # pragma: no cover
     from django.utils.functional import empty
 
     def boom(*args, **kwargs):
-        assert False
+        raise AssertionError()
 
     monkeypatch.setattr(FileSystemStorage, "__init__", boom)
     default_storage._wrapped = empty
@@ -220,7 +220,7 @@ def test_bad_storage(monkeypatch, admin_ddb_request):  # pragma: no cover
     models.Product.objects.create(name="a", producer=producer)
     models.Product.objects.create(name="b", producer=producer, image="bob.jpg")
     data = get_product_flat("name,image", [])
-    sortedAssert(data, [["a", ""], ["b", "assert False"]])
+    sortedAssert(data, [["a", ""], ["b", "raise AssertionError()"]])
 
 
 @pytest.mark.usefixtures("products")

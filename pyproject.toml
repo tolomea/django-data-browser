@@ -12,7 +12,7 @@
 
 [tool.coverage.report]
     exclude_lines = [
-        "assert False",
+        "raise AssertionError()",
         "pragma: no cover",
     ]
     show_missing = true
@@ -94,7 +94,6 @@ ignore = [
     # TODO MAYBE ENABLE THESE
 
     "B007", # Loop control variable {name} not used within loop body
-    "B011", # Do not assert False (python -O removes these calls), raise AssertionError()
     "B904", # Within an except* clause, raise exceptions with raise ... from err or raise ... from None to distinguish them from errors in exception handling
     "B905", # zip() without an explicit strict= parameter
     "G004", # Logging statement uses f-string

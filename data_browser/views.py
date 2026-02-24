@@ -349,7 +349,7 @@ def _data_response(query, media, privileged=False):
                     " pivoted or calculated data may do additional queries.\n\n\n"
                 )
             else:
-                assert False
+                raise AssertionError()
 
             # main part
             if media == "sql":
@@ -363,7 +363,7 @@ def _data_response(query, media, privileged=False):
             elif media == "qs":
                 res += str(query_set)
             else:
-                assert False
+                raise AssertionError()
 
             # sql
             if media in ["sql", "explain", "analyze"]:
