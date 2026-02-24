@@ -65,6 +65,7 @@ extend-select = [
     "PTH", # flake8-use-pathlib
     "W", # pycodestyle
     "E", # pycodestyle
+    "S",
 ]
 
 ignore = [
@@ -87,6 +88,7 @@ ignore = [
     "RUF012", # Mutable class attributes should be annotated with typing.ClassVar
     "RUF059", # Unpacked variable {} is never used
     "RUF067", # `__init__` module should only contain docstrings and re-exports
+    "S101", # S101 Use of `assert` detected
     "SIM102", # Use a single if statement instead of nested if statements
     "SIM103", # Return the condition {condition} directly
     "SIM108", # Use ternary operator {contents} instead of if-else-block

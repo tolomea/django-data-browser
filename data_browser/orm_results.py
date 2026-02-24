@@ -143,8 +143,9 @@ def _get_objs_for_calculated_fields(bound_query, orm_models, res):
     return objs
 
 
-# dump out the results
 def _format_table(fields, data, objs):
+    # dump out the results
+    # do this JIT style by building the minimal code to do the dump and then eval'ing it
     namespace = {"objs": objs, "data": data}
 
     field_lines = []
@@ -157,7 +158,7 @@ def _format_table(fields, data, objs):
 
     code = ["[None if row is None else {", *field_lines, "} for row in data]"]
 
-    return eval("\n".join(code), namespace)
+    return eval("\n".join(code), namespace)  # noqa: S307
 
 
 def _get_fields(row, fields):
