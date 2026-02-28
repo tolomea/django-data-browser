@@ -314,12 +314,12 @@ class TestBoundQuery:
         bound_query = BoundQuery.bind(query, orm_models)
         assert [f.path for f in bound_query.fields] == [["tom", "jones", "count"]]
 
-    def test_piovt_aggregate(self, orm_models):
+    def test_pivot_aggregate(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones__count", pivoted=True)], [])
         bound_query = BoundQuery.bind(query, orm_models)
         assert [f.pivoted for f in bound_query.fields] == [False]
 
-    def test_piovt(self, orm_models):
+    def test_pivot(self, orm_models):
         query = Query("app.model", [QueryField("tom__jones", pivoted=True)], [])
         bound_query = BoundQuery.bind(query, orm_models)
         assert [f.pivoted for f in bound_query.fields] == [True]
