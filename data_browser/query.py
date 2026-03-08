@@ -8,8 +8,11 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 
 from data_browser.common import settings
+from data_browser.types import ALL
 from data_browser.types import ASC
+from data_browser.types import CLOSE
 from data_browser.types import DSC
+from data_browser.types import OPEN_OPS
 
 
 @dataclasses.dataclass
@@ -250,13 +253,46 @@ class BoundQuery:
 
     @classmethod
     def bind_filters(cls, get_orm_field, query_filters):
-        filters = []
-        for query_filter in query_filters:
-            orm_bound_field = get_orm_field(query_filter.path)
-            if orm_bound_field and not orm_bound_field.concrete:
-                orm_bound_field = None
-            filters.append(BoundFilter.bind(orm_bound_field, query_filter))
-        return filters
+        todo = list(query_filters)
+
+        if todo and todo[-1].path == ["op"] and todo[-1].value == CLOSE:
+            todo.pop()
+
+        if todo and todo[0].path == ["op"] and todo[0].value in OPEN_OPS:
+            op = todo.pop(0).value
+        else:
+            op = ALL
+
+        def parse_group(inner):
+            filters = []
+            while todo:
+                query_filter = todo.pop(0)
+                if query_filter.path == ["op"]:
+                    if query_filter.value == CLOSE:
+                        if inner:  # ignore closes at the outermost level
+                            return filters
+                        else:
+                            # excess close, add it as a filter, let it error
+                            filters.append(BoundFilter.bind(None, query_filter))
+
+                    else:
+                        if query_filter.value in OPEN_OPS:
+                            sub_filters = parse_group(True)
+                            if sub_filters:
+                                filters.append((query_filter.value, sub_filters))
+                        else:
+                            # bad op, add it as a filter, let it error
+                            filters.append(BoundFilter.bind(None, query_filter))
+                else:
+                    orm_bound_field = get_orm_field(query_filter.path)
+                    if orm_bound_field and not orm_bound_field.concrete:
+                        orm_bound_field = None
+                    filters.append(BoundFilter.bind(orm_bound_field, query_filter))
+            return filters
+
+        filters = parse_group(False)
+
+        return (op, filters)
 
     @classmethod
     def bind(cls, query, orm_models):
@@ -298,7 +334,7 @@ class BoundQuery:
 
     @cached_property
     def valid_filters(self):
-        return [f for f in self.filters if f.is_valid]
+        return [f for f in self.flat_filters if f.is_valid]
 
     @cached_property
     def valid_fields(self):
@@ -340,7 +376,21 @@ class BoundQuery:
     def bound_body_fields(self):
         return _orm_fields(self.body_fields)
 
+    @cached_property
+    def flat_filters(self):
+        def flatten(filter_group):
+            res = []
+            op, filters = filter_group
+            for filter_ in filters:
+                if isinstance(filter_, BoundFilter):
+                    res.append(filter_)
+                else:
+                    res.extend(flatten(filter_))
+            return res
+
+        return flatten(self.filters)
+
     def all_valid(self):
         fields_valid = all(f.is_valid for f in self.fields)
-        filters_valid = all(f.is_valid for f in self.filters)
+        filters_valid = all(f.is_valid for f in self.flat_filters)
         return fields_valid and filters_valid

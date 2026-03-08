@@ -16,6 +16,9 @@ from data_browser.common import debug_log
 from data_browser.common import get_optimal_decimal_places
 
 ASC, DSC = "asc", "dsc"
+ANY, ALL, NONE, NOT_ALL, CLOSE = "any", "all", "some", "not-all", "close"
+OPEN_OPS = {ANY, ALL, NONE, NOT_ALL}
+OPS = {*OPEN_OPS, CLOSE}
 
 
 class TypeMeta(type):

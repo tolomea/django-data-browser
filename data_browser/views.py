@@ -34,25 +34,49 @@ from data_browser.models import View
 from data_browser.orm_results import get_result_list
 from data_browser.orm_results import get_result_queryset
 from data_browser.orm_results import get_results
+from data_browser.query import BoundFilter
 from data_browser.query import BoundQuery
 from data_browser.query import Query
 from data_browser.query import QueryFilter
+from data_browser.types import CLOSE
 from data_browser.types import TYPES
 from data_browser.util import str_to_field
 
 
 def _get_query_data(bound_query):
-    return {
-        "filters": [
+    def flatten_filters(filter_group):
+        op, filters = filter_group
+        res = [
             {
-                "pathStr": filter_.path_str,
-                "lookup": filter_.lookup,
-                "value": filter_.value,
-                "errorMessage": filter_.error_message,
-                "parsed": filter_.formatted_value(),
+                "pathStr": "op",
+                "lookup": "",
+                "value": op,
+                "errorMessage": None,
+                "parsed": None,
             }
-            for filter_ in bound_query.filters
-        ],
+        ]
+        for filter_ in filters:
+            if isinstance(filter_, BoundFilter):
+                res.append({
+                    "pathStr": filter_.path_str,
+                    "lookup": filter_.lookup,
+                    "value": filter_.value,
+                    "errorMessage": filter_.error_message,
+                    "parsed": filter_.formatted_value(),
+                })
+            else:
+                res.extend(flatten_filters(filter_))
+        res.append({
+            "pathStr": "op",
+            "lookup": "",
+            "value": CLOSE,
+            "errorMessage": None,
+            "parsed": None,
+        })
+        return res
+
+    return {
+        "filters": flatten_filters(bound_query.filters),
         "fields": [
             {
                 "pathStr": field.path_str,
@@ -116,7 +140,7 @@ def _get_model_fields(model_name, orm_models):
                 "lookup": filter_.lookup,
                 "value": filter_.value,
             }
-            for filter_ in bq.filters
+            for filter_ in bq.flat_filters
         ],
     }
 
