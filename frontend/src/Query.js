@@ -74,6 +74,24 @@ function getFieldIndex(field, fields) {
   return fields.findIndex((f) => f.pathStr === field.pathStr);
 }
 
+/**
+ * Decrements the priority of every field whose sort priority is greater than
+ * `removedPriority`, closing the gap left when a sort is removed.
+ *
+ * @param {object[]} fields - Array of field objects.
+ * @param {number} removedPriority - The priority that is being vacated.
+ * @returns {object[]} New array with adjusted priorities.
+ */
+function compactSortPriorities(fields, removedPriority) {
+  return fields.map((f) => ({
+    ...f,
+    priority:
+      f.priority != null && f.priority > removedPriority
+        ? f.priority - 1
+        : f.priority,
+  }));
+}
+
 
 /**
  * Wraps the current query definition and its most recent result data, and
@@ -199,10 +217,12 @@ class Query {
    */
   removeField(field) {
     const modelField = this.getField(field.pathStr);
+    let newFields = this.query.fields.filter((f) => f.pathStr !== field.pathStr);
+    if (field.sort) {
+      newFields = compactSortPriorities(newFields, field.priority);
+    }
     this.setQuery(
-      {
-        fields: this.query.fields.filter((f) => f.pathStr !== field.pathStr),
-      },
+      { fields: newFields },
       !field.errorMessage && modelField.canPivot,
     );
   }
@@ -263,13 +283,7 @@ class Query {
 
     if (field.sort) {
       // move any later sort fields forward
-      newFields = newFields.map((f) => ({
-        ...f,
-        priority:
-          f.priority != null && f.priority > field.priority
-            ? f.priority - 1
-            : f.priority,
-      }));
+      newFields = compactSortPriorities(newFields, field.priority);
     }
 
     if (newSort) {
