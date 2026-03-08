@@ -6,6 +6,7 @@ import {
   useToggle,
   strMatch,
 } from "./Util";
+import { getFieldClass } from "./Query";
 
 import "./App.scss";
 
@@ -42,7 +43,7 @@ function Field(props) {
           <div className="FieldExpand">{modelField.model && toggleLink}</div>
 
           {/* name */}
-          <div className={`FieldName ${query.getFieldClass(modelField)}`}>
+          <div className={`FieldName ${getFieldClass(modelField)}`}>
             {modelField.type ? (
               <TLink
                 onClick={() =>

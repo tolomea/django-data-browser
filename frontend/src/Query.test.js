@@ -1,4 +1,4 @@
-import { Query, getPartsForQuery, getRelUrlForQuery, getUrlForQuery, empty } from "./Query";
+import { Query, getPartsForQuery, getRelUrlForQuery, getUrlForQuery, getFieldClass, empty } from "./Query";
 
 // ---- Fixture data ----
 
@@ -758,48 +758,42 @@ describe("Query.verbosePathStr", () => {
   });
 });
 
-// ---- Query.getFieldClass ----
+// ---- getFieldClass ----
 
-describe("Query.getFieldClass", () => {
+describe("getFieldClass", () => {
   it("RelatedField: field has no type", () => {
-    const { query } = makeQ();
     expect(
-      query.getFieldClass({ type: null, concrete: true, canPivot: true, model: "Book", real: true })
+      getFieldClass({ type: null, concrete: true, canPivot: true, model: "Book", real: true })
     ).toBe("RelatedField");
   });
 
   it("CalculatedField: has type but not concrete", () => {
-    const { query } = makeQ();
     expect(
-      query.getFieldClass({ type: "string", concrete: false, canPivot: true, model: null, real: true })
+      getFieldClass({ type: "string", concrete: false, canPivot: true, model: null, real: true })
     ).toBe("CalculatedField");
   });
 
   it("AggregateField: concrete but not canPivot", () => {
-    const { query } = makeQ();
     expect(
-      query.getFieldClass({ type: "number", concrete: true, canPivot: false, model: null, real: true })
+      getFieldClass({ type: "number", concrete: true, canPivot: false, model: null, real: true })
     ).toBe("AggregateField");
   });
 
   it("FunctionField: concrete, canPivot, but no model", () => {
-    const { query } = makeQ();
     expect(
-      query.getFieldClass({ type: "string", concrete: true, canPivot: true, model: null, real: true })
+      getFieldClass({ type: "string", concrete: true, canPivot: true, model: null, real: true })
     ).toBe("FunctionField");
   });
 
   it("AnnotatedField: concrete, canPivot, has model, but not real", () => {
-    const { query } = makeQ();
     expect(
-      query.getFieldClass({ type: "string", concrete: true, canPivot: true, model: "Book", real: false })
+      getFieldClass({ type: "string", concrete: true, canPivot: true, model: "Book", real: false })
     ).toBe("AnnotatedField");
   });
 
   it("RealField: concrete, canPivot, has model, real", () => {
-    const { query } = makeQ();
     expect(
-      query.getFieldClass({ type: "string", concrete: true, canPivot: true, model: "Book", real: true })
+      getFieldClass({ type: "string", concrete: true, canPivot: true, model: "Book", real: true })
     ).toBe("RealField");
   });
 });

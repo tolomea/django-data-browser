@@ -62,6 +62,19 @@ function getUrlForQuery(baseUrl, query, media) {
   return `${window.location.origin}${baseUrl}${relUrl}`;
 }
 
+
+/**
+ * Returns the index of a field within an array of fields, matched by pathStr.
+ *
+ * @param {object} field - Field object with a `pathStr` property.
+ * @param {object[]} fields - Array of field objects to search.
+ * @returns {number} Index of the matching field, or -1 if not found.
+ */
+function getFieldIndex(field, fields) {
+  return fields.findIndex((f) => f.pathStr === field.pathStr);
+}
+
+
 /**
  * Wraps the current query definition and its most recent result data, and
  * provides methods for reading and mutating the query.
@@ -151,17 +164,6 @@ class Query {
   }
 
   /**
-   * Returns the index of a field within an array of fields, matched by pathStr.
-   *
-   * @param {object} field - Field object with a `pathStr` property.
-   * @param {object[]} fields - Array of field objects to search.
-   * @returns {number} Index of the matching field, or -1 if not found.
-   */
-  _getFieldIndex(field, fields) {
-    return fields.findIndex((f) => f.pathStr === field.pathStr);
-  }
-
-  /**
    * Adds (or re-adds) a field to the query, replacing any existing entry for
    * the same path.  If a sort direction is provided the new field gets the
    * next available sort priority (highest existing priority + 1).
@@ -232,7 +234,7 @@ class Query {
     else fields = bodyFields;
 
     // work out it's old and new index
-    const index = this._getFieldIndex(field, fields);
+    const index = getFieldIndex(field, fields);
     const newIndex = index + (left ? -1 : 1);
 
     // if anything changed then update our section and then
@@ -250,15 +252,12 @@ class Query {
   /**
    * Cycles a field's sort direction through null → asc → dsc → null.
    *
-   * When a sort is applied the field is given priority 0 (highest) and all
-   * other sorted fields have their priorities incremented.  When a sort is
-   * removed all higher-priority fields have their priorities decremented to
-   * close the gap.
+   * Keeps the sort indicies forward packed.
    *
    * @param {object} field - Field object from `query.fields`.
    */
   toggleSort(field) {
-    const index = this._getFieldIndex(field, this.query.fields);
+    const index = getFieldIndex(field, this.query.fields);
     const newSort = { asc: "dsc", dsc: null, null: "asc" }[field.sort];
     let newFields = this.query.fields.slice();
 
@@ -297,7 +296,7 @@ class Query {
    * @param {object} field - Field object from `query.fields`.
    */
   togglePivot(field) {
-    const index = this._getFieldIndex(field, this.query.fields);
+    const index = getFieldIndex(field, this.query.fields);
     let newFields = this.query.fields.slice();
     newFields[index].pivoted = !newFields[index].pivoted;
     this.setQuery({
@@ -553,31 +552,32 @@ class Query {
     return verbosePath.slice(0, -1).join(" ");
   }
 
-  /**
-   * Returns a CSS class name used to style a field according to its structural
-   * kind, so the user can tell at a glance what sort of field they are looking at.
-   *
-   * The classification priority is:
-   * - No `type`      → "RelatedField"    (pure relation traversal, no own value)
-   * - Not `concrete` → "CalculatedField" (Python-computed, not a DB column)
-   * - Not `canPivot` → "AggregateField"  (aggregate, cannot be a row/col header)
-   * - No `model`     → "FunctionField"   (applies a function/transform; detected
-   *                                       by absence of sub-fields, though the
-   *                                       concept does not preclude sub-fields)
-   * - Not `real`     → "AnnotatedField"  (ORM annotation)
-   * - Otherwise      → "RealField"       (plain database column)
-   *
-   * @param {object} field - Model-field descriptor.
-   * @returns {string} CSS class name.
-   */
-  getFieldClass(field) {
-    if (!field.type) return "RelatedField";
-    if (!field.concrete) return "CalculatedField";
-    if (!field.canPivot) return "AggregateField";
-    if (!field.model) return "FunctionField";
-    if (!field.real) return "AnnotatedField";
-    return "RealField";
-  }
 }
 
-export { Query, getPartsForQuery, getRelUrlForQuery, getUrlForQuery, empty };
+/**
+ * Returns a CSS class name used to style a field according to its structural
+ * kind, so the user can tell at a glance what sort of field they are looking at.
+ *
+ * The classification priority is:
+ * - No `type`      → "RelatedField"    (pure relation traversal, no own value)
+ * - Not `concrete` → "CalculatedField" (Python-computed, not a DB column)
+ * - Not `canPivot` → "AggregateField"  (aggregate, cannot be a row/col header)
+ * - No `model`     → "FunctionField"   (applies a function/transform; detected
+ *                                       by absence of sub-fields, though the
+ *                                       concept does not preclude sub-fields)
+ * - Not `real`     → "AnnotatedField"  (ORM annotation)
+ * - Otherwise      → "RealField"       (plain database column)
+ *
+ * @param {object} field - Model-field descriptor.
+ * @returns {string} CSS class name.
+ */
+function getFieldClass(field) {
+  if (!field.type) return "RelatedField";
+  if (!field.concrete) return "CalculatedField";
+  if (!field.canPivot) return "AggregateField";
+  if (!field.model) return "FunctionField";
+  if (!field.real) return "AnnotatedField";
+  return "RealField";
+}
+
+export { Query, getPartsForQuery, getRelUrlForQuery, getUrlForQuery, getFieldClass, empty };

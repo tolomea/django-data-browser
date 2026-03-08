@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import "./App.scss";
 import { syncPost, doPost } from "./Network";
+import { getFieldClass } from "./Query";
 import { TLink, SLink, Overlay, HasActionIcon } from "./Util";
 import { ShowContextMenu } from "./ContextMenu";
 
@@ -19,7 +20,7 @@ function HeadCell(props) {
     props;
   const modelField = query.getField(field.pathStr);
   const type = query.getType(modelField);
-  const fieldClass = query.getFieldClass(modelField);
+  const fieldClass = getFieldClass(modelField);
 
   const showContextMenu = useContext(ShowContextMenu);
 
