@@ -1,3 +1,4 @@
+/** Placeholder query result used before real data has loaded. */
 const empty = {
   rows: [{}],
   cols: [{}],
@@ -6,6 +7,18 @@ const empty = {
   formatHints: {},
 };
 
+/**
+ * Extracts the URL-ready parts of a query object.
+ *
+ * Fields are encoded as a comma-separated string where each entry is the
+ * field's path, optionally prefixed with "&" when pivoted, and suffixed with
+ * "+N" (ascending) or "-N" (descending) for sorted fields where N is the
+ * sort priority.  Filters are encoded as URL query-string parameters of the
+ * form "path__lookup=value".
+ *
+ * @param {object} query - The query state object.
+ * @returns {{ model: string, fields: string, query: string, limit: number }}
+ */
 function getPartsForQuery(query) {
   return {
     model: query.model,
@@ -24,23 +37,70 @@ function getPartsForQuery(query) {
   };
 }
 
+/**
+ * Returns a relative URL for the given query and media type.
+ *
+ * @param {object} query - The query state object.
+ * @param {string} media - The media/format suffix (e.g. "json", "csv", "html").
+ * @returns {string} Relative URL of the form "query/Model/fields.media?filters&limit=N".
+ */
 function getRelUrlForQuery(query, media) {
   const { model, fields, query: query_str, limit } = getPartsForQuery(query);
   return `query/${model}/${fields}.${media}?${query_str}&limit=${limit}`;
 }
 
+/**
+ * Returns an absolute URL for the given query and media type.
+ *
+ * @param {string} baseUrl - The application base URL path (e.g. "/data-browser/").
+ * @param {object} query - The query state object.
+ * @param {string} media - The media/format suffix (e.g. "json", "csv", "html").
+ * @returns {string} Absolute URL including origin.
+ */
 function getUrlForQuery(baseUrl, query, media) {
   const relUrl = getRelUrlForQuery(query, media);
   return `${window.location.origin}${baseUrl}${relUrl}`;
 }
 
+/**
+ * Wraps the current query definition and its most recent result data, and
+ * provides methods for reading and mutating the query.
+ *
+ * The query object contains two distinct concerns:
+ * - **Query definition** — model, fields, filters, limit — what to fetch.
+ * - **Result data** — rows, cols, body — the data returned by the last fetch.
+ *
+ * All mutation methods call `setQuery` with a partial update that is merged
+ * into the stored query by the caller.
+ */
 class Query {
+  /**
+   * @param {object} config - Application-level config including type and model
+   *   field metadata (allModelFields, types, baseUrl, defaultRowLimit).
+   * @param {object} query - The combined query definition and result data.
+   *   Definition fields: model, fields, filters, limit.
+   *   Result fields: rows, cols, body (populated after each fetch).
+   * @param {Function} setQuery - Callback to signal that the query definition
+   *   has changed.  First argument is a partial object merged into the stored
+   *   query.  Optional second boolean argument (default true) indicates whether
+   *   the change requires refetching the result data; pass false for
+   *   layout-only changes where the existing data is still valid.
+   */
   constructor(config, query, setQuery) {
     this.config = config;
     this.query = query;
     this.setQuery = setQuery;
   }
 
+  /**
+   * Resolves a double-underscore-separated field path string to the leaf
+   * model-field descriptor, following relation links through each intermediate
+   * model.
+   *
+   * @param {string} pathStr - Field path such as "author__name".
+   * @returns {object|null} The model-field descriptor, or null if any segment
+   *   of the path is not found.
+   */
   getField(pathStr) {
     const path = pathStr.split("__");
     let model = this.query.model;
@@ -53,24 +113,62 @@ class Query {
     return modelField;
   }
 
+  /**
+   * Returns the type descriptor for a model-field descriptor.
+   *
+   * @param {object} field - A model-field descriptor as returned by `getField`.
+   * @returns {object} The type descriptor (lookups, defaultLookup, defaultValue, …).
+   */
   getType(field) {
     return this.config.types[field.type];
   }
 
+  /**
+   * Returns the field map and metadata for the given model name.
+   *
+   * @param {string} model - Model name (e.g. "app.MyModel").
+   * @returns {object} Object containing `fields`, `defaultFilters`, etc.
+   */
   getModelFields(model) {
     return this.config.allModelFields[model];
   }
 
+  /**
+   * Returns the default filter value string for a given field, type, and lookup.
+   *
+   * For choice-based lookups the first available choice is used; otherwise the
+   * type's own `defaultValue` is used.
+   *
+   * @param {object} field - Model-field descriptor.
+   * @param {object} type - Type descriptor for the field.
+   * @param {string} lookup - Lookup key (e.g. "equals", "contains").
+   * @returns {string} The default value as a string.
+   */
   getDefaultLookupValue(field, type, lookup) {
     const lookup_type = type.lookups[lookup].type;
     if (lookup_type.endsWith("choice")) return String(field.choices[0]);
     else return String(this.config.types[lookup_type].defaultValue);
   }
 
+  /**
+   * Returns the index of a field within an array of fields, matched by pathStr.
+   *
+   * @param {object} field - Field object with a `pathStr` property.
+   * @param {object[]} fields - Array of field objects to search.
+   * @returns {number} Index of the matching field, or -1 if not found.
+   */
   _getFieldIndex(field, fields) {
     return fields.findIndex((f) => f.pathStr === field.pathStr);
   }
 
+  /**
+   * Adds (or re-adds) a field to the query, replacing any existing entry for
+   * the same path.  If a sort direction is provided the new field gets the
+   * next available sort priority (highest existing priority + 1).
+   *
+   * @param {string} pathStr - Double-underscore-separated field path.
+   * @param {string|null} sort - Initial sort direction: "asc", "dsc", or null.
+   */
   addField(pathStr, sort) {
     const newFields = this.query.fields.filter((f) => f.pathStr !== pathStr);
     const priorities = newFields
@@ -86,6 +184,17 @@ class Query {
     this.setQuery({ fields: newFields });
   }
 
+  /**
+   * Removes a field from the query.
+   *
+   * A refetch is required when removing a valid row or col field, because
+   * those fields participate in the collective distinct that produces the
+   * pivot table's row and column headers.  Removing a body field (canPivot
+   * false) or an already-invalid field does not change the result shape, so
+   * no refetch is needed.
+   *
+   * @param {object} field - Field object from `query.fields`.
+   */
   removeField(field) {
     const modelField = this.getField(field.pathStr);
     this.setQuery(
@@ -96,6 +205,18 @@ class Query {
     );
   }
 
+  /**
+   * Moves a field one position left or right within its section (cols, rows,
+   * or body).  The field's section is determined by its pivot state and
+   * whether the underlying model field can be pivoted.  Does nothing if the
+   * field is already at the boundary of its section.
+   *
+   * No refetch is needed because the same result data is valid regardless of
+   * field display order.
+   *
+   * @param {object} field - Field object from `query.fields`.
+   * @param {boolean} left - True to move left (earlier), false to move right.
+   */
   moveField(field, left) {
     const modelField = this.getField(field.pathStr);
 
@@ -126,6 +247,16 @@ class Query {
     }
   }
 
+  /**
+   * Cycles a field's sort direction through null → asc → dsc → null.
+   *
+   * When a sort is applied the field is given priority 0 (highest) and all
+   * other sorted fields have their priorities incremented.  When a sort is
+   * removed all higher-priority fields have their priorities decremented to
+   * close the gap.
+   *
+   * @param {object} field - Field object from `query.fields`.
+   */
   toggleSort(field) {
     const index = this._getFieldIndex(field, this.query.fields);
     const newSort = { asc: "dsc", dsc: null, null: "asc" }[field.sort];
@@ -159,6 +290,12 @@ class Query {
     });
   }
 
+  /**
+   * Toggles the `pivoted` flag on a field, moving it between the row section
+   * and the col section of the pivot table.
+   *
+   * @param {object} field - Field object from `query.fields`.
+   */
   togglePivot(field) {
     const index = this._getFieldIndex(field, this.query.fields);
     let newFields = this.query.fields.slice();
@@ -168,6 +305,12 @@ class Query {
     });
   }
 
+  /**
+   * Appends a new filter for the given field path using the type's default
+   * lookup and default value.
+   *
+   * @param {string} pathStr - Double-underscore-separated field path.
+   */
   addFilter(pathStr) {
     const field = this.getField(pathStr);
     const type = this.getType(field);
@@ -180,6 +323,23 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
+  /**
+   * Constructs a filter object for a given value, choosing an appropriate
+   * lookup automatically.
+   *
+   * - `null` maps to the "is_null" lookup (if the type supports it) with value
+   *   "IsNull" or "NotNull" when negated.  "IsNull" and "NotNull" are the
+   *   choice-like labels that the backend maps to Django's `__isnull=True/False`.
+   * - The strings "IsNull" / "NotNull" (already an isnull-style value) map to
+   *   an "equals" lookup, with the value swapped when negated.
+   * - Any other value maps to "equals" or "not_equals" depending on `negate`.
+   * - Returns null if no suitable lookup exists on the field's type.
+   *
+   * @param {string} pathStr - Double-underscore-separated field path.
+   * @param {*} value - The cell value to filter on.
+   * @param {boolean} negate - When true, produce an exclusion filter instead.
+   * @returns {{ pathStr: string, lookup: string, value: string }|null}
+   */
   filterForValue(pathStr, value, negate) {
     const lookups = this.getType(this.getField(pathStr)).lookups;
     if (value === null && lookups.hasOwnProperty("is_null"))
@@ -203,18 +363,45 @@ class Query {
     else return null;
   }
 
+  /**
+   * Appends a filter that includes rows matching `value` on the given field.
+   *
+   * @param {string} pathStr - Double-underscore-separated field path.
+   * @param {*} value - The value to filter on.
+   */
   addExactFilter(pathStr, value) {
     const newFilters = this.query.filters.slice();
     newFilters.push(this.filterForValue(pathStr, value, false));
     this.setQuery({ filters: newFilters });
   }
 
+  /**
+   * Appends a filter that excludes rows matching `value` on the given field.
+   *
+   * @param {string} pathStr - Double-underscore-separated field path.
+   * @param {*} value - The value to exclude.
+   */
   addExactExclude(pathStr, value) {
     const newFilters = this.query.filters.slice();
     newFilters.push(this.filterForValue(pathStr, value, true));
     this.setQuery({ filters: newFilters });
   }
 
+  /**
+   * Appends equality filters derived from a cell's context values, enabling
+   * navigation from an aggregate view into a more specific one.
+   *
+   * `rows` and `cols` are lists of dicts where each dict maps a field's
+   * pathStr to its value at that row/col index.  Only fields that are
+   * filterable (canPivot && concrete), present in `values`, and actually
+   * distinguish rows in the current result (i.e. the relevant dimension has
+   * more than one distinct value for that field) produce filters.  Fields
+   * with only one distinct value are already implicitly filtered and adding
+   * a redundant filter would be noise.
+   *
+   * @param {Object.<string, *>} values - Map of pathStr → cell value for the
+   *   clicked cell's row/col context.
+   */
   drillDown(values) {
     const newFilters = this.query.filters.concat(
       this.query.fields
@@ -238,18 +425,37 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
+  /**
+   * Removes the filter at the given index from the filter list.
+   *
+   * @param {number} index - Zero-based index into `query.filters`.
+   */
   removeFilter(index) {
     const newFilters = this.query.filters.slice();
     newFilters.splice(index, 1);
     this.setQuery({ filters: newFilters });
   }
 
+  /**
+   * Updates the value of an existing filter.
+   *
+   * @param {number} index - Zero-based index into `query.filters`.
+   * @param {string} value - New filter value string.
+   */
   setFilterValue(index, value) {
     const newFilters = this.query.filters.slice();
     newFilters[index] = { ...newFilters[index], value: value };
     this.setQuery({ filters: newFilters });
   }
 
+  /**
+   * Changes the lookup operator of an existing filter.  If the new lookup has
+   * a different value type than the current one, the filter value is reset to
+   * the new lookup's default.
+   *
+   * @param {number} index - Zero-based index into `query.filters`.
+   * @param {string} lookup - New lookup key (e.g. "contains", "gt").
+   */
   setFilterLookup(index, lookup) {
     const newFilters = this.query.filters.slice();
     const filter = newFilters[index];
@@ -262,11 +468,22 @@ class Query {
     this.setQuery({ filters: newFilters });
   }
 
+  /**
+   * Sets the row limit, enforcing a minimum of 1.
+   *
+   * @param {number|string} limit - Desired row limit (coerced to Number).
+   */
   setLimit(limit) {
     limit = Number(limit);
     this.setQuery({ limit: limit > 0 ? limit : 1 });
   }
 
+  /**
+   * Switches to a different model, resetting fields to empty and filters to
+   * the model's defaults.
+   *
+   * @param {string} model - Model name to switch to.
+   */
   setModel(model) {
     this.setQuery({
       model: model,
@@ -277,32 +494,51 @@ class Query {
     });
   }
 
+  /**
+   * Returns an absolute URL for the current query in the requested format.
+   *
+   * @param {string} media - Format suffix (e.g. "json", "csv", "html").
+   * @returns {string} Absolute URL.
+   */
   getUrlForMedia(media) {
     return getUrlForQuery(this.config.baseUrl, this.query, media);
   }
 
+  /** Returns fields that have a validation error message. */
   invalidFields() {
     return this.query.fields.filter((f) => f.errorMessage);
   }
 
+  /** Returns fields that have no validation error message. */
   validFields() {
     return this.query.fields.filter((f) => !f.errorMessage);
   }
 
+  /** Returns valid fields that are currently pivoted (used as column headers). */
   colFields() {
     return this.validFields().filter((f) => f.pivoted);
   }
 
+  /** Returns valid, pivot-capable fields that are not currently pivoted (used as row headers). */
   rowFields() {
     return this.validFields().filter(
       (f) => this.getField(f.pathStr).canPivot && !f.pivoted,
     );
   }
 
+  /** Returns valid fields whose underlying model field cannot be pivoted (body/data cells). */
   bodyFields() {
     return this.validFields().filter((f) => !this.getField(f.pathStr).canPivot);
   }
 
+  /**
+   * Converts a double-underscore path string into a human-readable label by
+   * joining each segment's verbose name with arrow symbols.  Relation traversals
+   * use "⇒" for single-valued relations and "⇶" for to-many relations.
+   *
+   * @param {string} pathStr - Double-underscore-separated field path.
+   * @returns {string} Human-readable path label (e.g. "Author ⇒ Name").
+   */
   verbosePathStr(pathStr) {
     const path = pathStr.split("__");
     const verbosePath = [];
@@ -317,6 +553,23 @@ class Query {
     return verbosePath.slice(0, -1).join(" ");
   }
 
+  /**
+   * Returns a CSS class name used to style a field according to its structural
+   * kind, so the user can tell at a glance what sort of field they are looking at.
+   *
+   * The classification priority is:
+   * - No `type`      → "RelatedField"    (pure relation traversal, no own value)
+   * - Not `concrete` → "CalculatedField" (Python-computed, not a DB column)
+   * - Not `canPivot` → "AggregateField"  (aggregate, cannot be a row/col header)
+   * - No `model`     → "FunctionField"   (applies a function/transform; detected
+   *                                       by absence of sub-fields, though the
+   *                                       concept does not preclude sub-fields)
+   * - Not `real`     → "AnnotatedField"  (ORM annotation)
+   * - Otherwise      → "RealField"       (plain database column)
+   *
+   * @param {object} field - Model-field descriptor.
+   * @returns {string} CSS class name.
+   */
   getFieldClass(field) {
     if (!field.type) return "RelatedField";
     if (!field.concrete) return "CalculatedField";
