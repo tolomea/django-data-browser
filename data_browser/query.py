@@ -241,6 +241,24 @@ class BoundQuery:
         self.orm_model = orm_model
 
     @classmethod
+    def bind_fields(cls, get_orm_field, query_fields):
+        fields = []
+        for query_field in query_fields:
+            orm_bound_field = get_orm_field(query_field.path)
+            fields.append(BoundField.bind(orm_bound_field, query_field))
+        return fields
+
+    @classmethod
+    def bind_filters(cls, get_orm_field, query_filters):
+        filters = []
+        for query_filter in query_filters:
+            orm_bound_field = get_orm_field(query_filter.path)
+            if orm_bound_field and not orm_bound_field.concrete:
+                orm_bound_field = None
+            filters.append(BoundFilter.bind(orm_bound_field, query_filter))
+        return filters
+
+    @classmethod
     def bind(cls, query, orm_models):
         def get_orm_field(parts):
             model_name = query.model_name
@@ -259,22 +277,10 @@ class BoundQuery:
 
         model_name = query.model_name
 
-        fields = []
-        for query_field in query.fields:
-            orm_bound_field = get_orm_field(query_field.path)
-            fields.append(BoundField.bind(orm_bound_field, query_field))
-
-        filters = []
-        for query_filter in query.filters:
-            orm_bound_field = get_orm_field(query_filter.path)
-            if orm_bound_field and not orm_bound_field.concrete:
-                orm_bound_field = None
-            filters.append(BoundFilter.bind(orm_bound_field, query_filter))
-
         return cls(
             model_name=model_name,
-            fields=fields,
-            filters=filters,
+            fields=cls.bind_fields(get_orm_field, query.fields),
+            filters=cls.bind_filters(get_orm_field, query.filters),
             limit=query.arguments["limit"],
             orm_model=orm_models[model_name],
         )
