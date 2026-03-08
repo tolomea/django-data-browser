@@ -524,6 +524,43 @@ describe("Query.addExactFilter and addExactExclude", () => {
   });
 });
 
+// ---- Query.moveFilter ----
+
+describe("Query.moveFilter", () => {
+  const filterA = { pathStr: "name", lookup: "equals", value: "Alice" };
+  const filterB = { pathStr: "book_count", lookup: "gt", value: "5" };
+
+  it("moves a filter right", () => {
+    const { query, setQuery } = makeQ({ filters: [filterA, filterB] });
+    query.moveFilter(0, false);
+    expect(setQuery.mock.calls[0][0].filters).toEqual([filterB, filterA]);
+  });
+
+  it("moves a filter left", () => {
+    const { query, setQuery } = makeQ({ filters: [filterA, filterB] });
+    query.moveFilter(1, true);
+    expect(setQuery.mock.calls[0][0].filters).toEqual([filterB, filterA]);
+  });
+
+  it("does nothing when moving left from the first position", () => {
+    const { query, setQuery } = makeQ({ filters: [filterA, filterB] });
+    query.moveFilter(0, true);
+    expect(setQuery).not.toHaveBeenCalled();
+  });
+
+  it("does nothing when moving right from the last position", () => {
+    const { query, setQuery } = makeQ({ filters: [filterA, filterB] });
+    query.moveFilter(1, false);
+    expect(setQuery).not.toHaveBeenCalled();
+  });
+
+  it("does not trigger a refetch", () => {
+    const { query, setQuery } = makeQ({ filters: [filterA, filterB] });
+    query.moveFilter(0, false);
+    expect(setQuery.mock.calls[0][1]).toBe(false);
+  });
+});
+
 // ---- Query.removeFilter ----
 
 describe("Query.removeFilter", () => {

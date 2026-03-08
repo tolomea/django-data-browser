@@ -225,8 +225,16 @@ textarea::placeholder {
   table th,
   table td {
     border: none;
-    padding: 3px 1px;
+    padding: 1px;
   }
+}
+
+.FilterMoveButtons {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  font-size: 84%;
+  line-height: 1;
 }
 
 select.FilterValue,

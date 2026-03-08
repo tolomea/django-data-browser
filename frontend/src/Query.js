@@ -439,6 +439,25 @@ class Query {
   }
 
   /**
+   * Moves the filter at `index` one position earlier or later in the list.
+   * Does nothing if the filter is already at the boundary.
+   *
+   * No refetch is needed because filter order does not affect query results.
+   *
+   * @param {number} index - Zero-based index into `query.filters`.
+   * @param {boolean} left - True to move earlier, false to move later.
+   */
+  moveFilter(index, left) {
+    const newIndex = index + (left ? -1 : 1);
+    if (0 <= newIndex && newIndex < this.query.filters.length) {
+      const newFilters = this.query.filters.slice();
+      const [filter] = newFilters.splice(index, 1);
+      newFilters.splice(newIndex, 0, filter);
+      this.setQuery({ filters: newFilters }, false);
+    }
+  }
+
+  /**
    * Removes the filter at the given index from the filter list.
    *
    * @param {number} index - Zero-based index into `query.filters`.

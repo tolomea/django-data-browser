@@ -96,7 +96,7 @@ function FilterValue(props) {
 }
 
 function Filter(props) {
-  const { pathStr, index, lookup, query, value, errorMessage, parsed } = props;
+  const { pathStr, index, numFilters, lookup, query, value, errorMessage, parsed } = props;
   const field = query.getField(pathStr);
   var type = null;
   var lookupType = null;
@@ -112,6 +112,14 @@ function Filter(props) {
         <td>
           {" "}
           <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
+          <span className="FilterMoveButtons">
+            {index !== 0 && (
+              <SLink onClick={() => query.moveFilter(index, true)}>expand_less</SLink>
+            )}
+            {index !== numFilters - 1 && (
+              <SLink onClick={() => query.moveFilter(index, false)}>expand_more</SLink>
+            )}
+          </span>{" "}
           {pathStr}
         </td>
         <td>{lookup}</td>
@@ -127,6 +135,14 @@ function Filter(props) {
     <tr className="Filter">
       <td>
         <SLink onClick={() => query.removeFilter(index)}>close</SLink>{" "}
+        <span className="FilterMoveButtons">
+          {index !== 0 && (
+            <SLink onClick={() => query.moveFilter(index, true)}>expand_less</SLink>
+          )}
+          {index !== numFilters - 1 && (
+            <SLink onClick={() => query.moveFilter(index, false)}>expand_more</SLink>
+          )}
+        </span>{" "}
         <TLink onClick={() => query.addField(pathStr, field.defaultSort)}>
           {query.verbosePathStr(pathStr)}
         </TLink>{" "}
@@ -171,7 +187,7 @@ function FilterList(props) {
         <table>
           <tbody>
             {filters.map((filter, index) => (
-              <Filter {...{ query, index }} {...filter} key={index} />
+              <Filter {...{ query, index, numFilters: filters.length }} {...filter} key={index} />
             ))}
           </tbody>
         </table>
