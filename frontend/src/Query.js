@@ -453,7 +453,7 @@ class Query {
       const newFilters = this.query.filters.slice();
       const [filter] = newFilters.splice(index, 1);
       newFilters.splice(newIndex, 0, filter);
-      this.setQuery({ filters: newFilters }, false);
+      this.setQuery({ filters: newFilters });
     }
   }
 
