@@ -6,7 +6,10 @@ import traceback
 from copy import copy
 
 from django import http
+from django.contrib.admin import site as default_admin
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
@@ -230,3 +233,22 @@ class set_global_state:
 
     def __exit__(self, exc_type, exc_value, traceback):
         global_state._state = self.old
+
+
+site = settings.DATA_BROWSER_ADMIN_SITE or default_admin
+
+
+def has_admin_site_permissions():
+    def decorator(view_func=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url="admin:login"):
+        @functools.wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            actual_decorator = user_passes_test(
+                lambda u: u.is_active and site.has_permission(request),
+                login_url=login_url,
+                redirect_field_name=redirect_field_name,
+            )
+            return actual_decorator(view_func)(request, *args, **kwargs)
+
+        return _wrapped_view
+
+    return decorator

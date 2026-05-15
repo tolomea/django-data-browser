@@ -1,6 +1,5 @@
 import json
 
-import django.contrib.admin.views.decorators as admin_decorators
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
@@ -8,6 +7,7 @@ from data_browser.common import SHARE_PERM
 from data_browser.common import HttpResponse
 from data_browser.common import JsonResponse
 from data_browser.common import global_state
+from data_browser.common import has_admin_site_permissions
 from data_browser.common import set_global_state
 from data_browser.common import str_user
 from data_browser.common import users_with_permission
@@ -100,7 +100,7 @@ def get_queryset(user):
 
 
 @csrf.csrf_protect
-@admin_decorators.staff_member_required
+@has_admin_site_permissions()
 @set_global_state(public_view=False)
 def view_list(request):
     if request.method == "GET":
@@ -141,7 +141,7 @@ def view_list(request):
 
 
 @csrf.csrf_protect
-@admin_decorators.staff_member_required
+@has_admin_site_permissions()
 @set_global_state(public_view=False)
 def view_detail(request, pk):
     view = get_object_or_404(get_queryset(request.user), pk=pk)

@@ -6,8 +6,8 @@ import marshal
 import pstats
 import sys
 from collections import defaultdict
+from itertools import starmap
 
-import django.contrib.admin.views.decorators as admin_decorators
 import hyperlink
 import sqlparse
 from django import http
@@ -26,6 +26,7 @@ from data_browser.common import SHARE_PERM
 from data_browser.common import HttpResponse
 from data_browser.common import JsonResponse
 from data_browser.common import global_state
+from data_browser.common import has_admin_site_permissions
 from data_browser.common import has_permission
 from data_browser.common import set_global_state
 from data_browser.common import settings
@@ -104,7 +105,7 @@ def _get_model_fields(model_name, orm_models):
         for name, orm_field in orm_model.fields.items()
     }
 
-    q = Query(model_name, [], [QueryFilter(*f) for f in orm_model.default_filters])
+    q = Query(model_name, [], list(starmap(QueryFilter, orm_model.default_filters)))
     bq = BoundQuery.bind(q, orm_models)
 
     return {
@@ -169,7 +170,7 @@ def _get_config():
     }
 
 
-@admin_decorators.staff_member_required
+@has_admin_site_permissions()
 @set_global_state(public_view=False)
 def query_ctx(request, *, model_name="", fields=""):
     config = _get_config()
@@ -209,7 +210,7 @@ def admin_action(request, model_name, fields):
 
 @csrf.csrf_protect
 @csrf.ensure_csrf_cookie
-@admin_decorators.staff_member_required
+@has_admin_site_permissions()
 @set_global_state(public_view=False)
 def query_html(request, *, model_name="", fields=""):
     if request.method == "POST":
@@ -234,7 +235,7 @@ def query_html(request, *, model_name="", fields=""):
     return TemplateResponse(request, template, {"config": config, "version": version})
 
 
-@admin_decorators.staff_member_required
+@has_admin_site_permissions()
 @set_global_state(public_view=False)
 def query(request, *, model_name, fields="", media):
     params = hyperlink.parse(request.get_full_path()).query
@@ -349,7 +350,7 @@ def _data_response(query, media, privileged=False):
                     " pivoted or calculated data may do additional queries.\n\n\n"
                 )
             else:
-                raise AssertionError()
+                raise AssertionError
 
             # main part
             if media == "sql":
@@ -363,7 +364,7 @@ def _data_response(query, media, privileged=False):
             elif media == "qs":
                 res += str(query_set)
             else:
-                raise AssertionError()
+                raise AssertionError
 
             # sql
             if media in ["sql", "explain", "analyze"]:
@@ -388,8 +389,7 @@ def _get_from_js_dev_server(request, method=None):  # pragma: no cover
 
 @csrf.csrf_exempt
 def proxy_js_dev_server(request, path):  # pragma: no cover
-    """
-    Proxy HTTP requests to the frontend dev server in development.
+    """Proxy HTTP requests to the frontend dev server in development.
 
     The implementation is very basic e.g. it doesn't handle HTTP headers.
 
