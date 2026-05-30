@@ -37,9 +37,10 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             },
         ),
         ("Query", {"fields": ["model_name", "fields", "query", "limit"]}),
-        ("Internal", {"fields": ["id", "created_time", "shared"]}),
+        ("Internal", {"fields": ["id", "created_time", "shared", "admin_site"]}),
     ]
-    list_display = ["__str__", "owner", "public"]
+    list_display = ["__str__", "owner", "public", "admin_site"]
+    list_filter = ["admin_site"]
 
     def has_add_permission(self, request):
         return False

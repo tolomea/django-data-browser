@@ -37,6 +37,7 @@ class View(models.Model):
     public_slug = models.CharField(max_length=12, default=get_id, blank=False)
     shared = models.BooleanField(default=False)
 
+    admin_site = models.CharField(max_length=200, default="admin")
     model_name = models.CharField(max_length=64, blank=False)
     fields = models.TextField(blank=True)
     query = models.TextField(blank=True)

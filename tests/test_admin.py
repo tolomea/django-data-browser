@@ -159,6 +159,7 @@ class TestAdminFieldsSuperUser:
     def test_private_view_see_everything(self, admin_user, get_admin_details, view):
         fields = get_admin_details(admin_user, view)
         assert fields == {
+            "admin_site",
             "description",
             "fields",
             "model_name",
@@ -182,6 +183,7 @@ class TestAdminFieldsSuperUser:
         view.public = True
         fields = get_admin_details(admin_user, view)
         assert fields == {
+            "admin_site",
             "description",
             "fields",
             "model_name",
@@ -206,6 +208,7 @@ class TestAdminFieldsStaffUser:
     def test_private_view_no_public_fields(self, staff_user, get_admin_details, view):
         fields = get_admin_details(staff_user, view)
         assert fields == {
+            "admin_site",
             "description",
             "fields",
             "model_name",
@@ -225,6 +228,7 @@ class TestAdminFieldsStaffUser:
         view.public = True
         fields = get_admin_details(staff_user, view)
         assert fields == {
+            "admin_site",
             "created_time",
             "description",
             "fields",

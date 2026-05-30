@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.admin import site as default_admin
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
@@ -9,10 +10,15 @@ from data_browser.common import JsonResponse
 from data_browser.common import global_state
 from data_browser.common import has_admin_site_permissions
 from data_browser.common import set_global_state
+from data_browser.common import settings
 from data_browser.common import str_user
 from data_browser.common import users_with_permission
 from data_browser.models import View
 from data_browser.util import group_by
+
+
+def _get_admin_site_name():
+    return (settings.DATA_BROWSER_ADMIN_SITE or default_admin).name
 
 
 def clean_str(field, value):
@@ -134,7 +140,9 @@ def view_list(request):
         })
     elif request.method == "POST":
         data = json.loads(request.body)
-        view = View.objects.create(owner=request.user, **deserialize(data))
+        view = View.objects.create(
+            owner=request.user, admin_site=_get_admin_site_name(), **deserialize(data)
+        )
         return JsonResponse(serialize(view))
     else:
         return HttpResponse(status=400)
