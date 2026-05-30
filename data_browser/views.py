@@ -15,7 +15,6 @@ from django.shortcuts import get_object_or_404
 from django.template import engines
 from django.template import loader
 from django.template.response import TemplateResponse
-from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators import csrf
 
@@ -155,7 +154,7 @@ def _get_config():
     ]
 
     return {
-        "baseUrl": reverse("data_browser:home"),
+        "baseUrl": global_state.settings.reverse("home"),
         "types": types,
         "allModelFields": all_model_fields,
         "modelIndex": model_index,

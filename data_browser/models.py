@@ -1,6 +1,5 @@
 import hyperlink
 from django.db import models
-from django.urls import reverse
 from django.utils import crypto
 from django.utils import timezone
 
@@ -65,8 +64,8 @@ class View(models.Model):
             if not self.is_valid():
                 return "View is invalid"
 
-            url = reverse(
-                "data_browser:view", kwargs={"pk": self.public_slug, "media": "csv"}
+            url = global_state.settings.reverse(
+                "view", kwargs={"pk": self.public_slug, "media": "csv"}
             )
             url = global_state.request.build_absolute_uri(url)
 

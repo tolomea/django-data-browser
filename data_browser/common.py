@@ -135,6 +135,21 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
     return max(0, min(dp_for_sf, max_actual_dp, max_dp))
 
 
+class InstanceSettings:
+    namespace = "data_browser"
+
+    def __getattr__(self, name):
+        return getattr(settings, name)
+
+    def reverse(self, name, *args, **kwargs):
+        from django.urls import reverse
+
+        return reverse(f"{self.namespace}:{name}", *args, **kwargs)
+
+
+_instance_settings = InstanceSettings()
+
+
 class GlobalState(threading.local):
     def __init__(self):
         self._state = None
@@ -149,7 +164,7 @@ class GlobalState(threading.local):
 
     @property
     def settings(self):
-        return settings
+        return _instance_settings
 
 
 global_state = GlobalState()

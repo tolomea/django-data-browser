@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from collections.abc import Sequence
 from typing import Any
 
-from django.urls import reverse
 from django.utils.functional import cached_property
 
 from data_browser.common import global_state
@@ -117,13 +116,13 @@ class Query:
 
     def get_url(self, media):
         url = self.get_full_url(media)
-        home = reverse("data_browser:home")
+        home = global_state.settings.reverse("home")
         assert url.startswith(home)
         return url[len(home) - 1 :]
 
     def get_full_url(self, media):
-        base_url = reverse(
-            "data_browser:query",
+        base_url = global_state.settings.reverse(
+            "query",
             kwargs={
                 "model_name": self.model_name,
                 "fields": self._field_str,

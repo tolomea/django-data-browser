@@ -52,7 +52,8 @@ class _AdminOptions:
             return self.ddb_action_url  # pragma: no cover
 
         meta = self.model._meta
-        return reverse(f"admin:{meta.app_label}_{meta.model_name}_changelist") + "?"
+        site_name = global_state.settings.DATA_BROWSER_ADMIN_SITE.name
+        return reverse(f"{site_name}:{meta.app_label}_{meta.model_name}_changelist") + "?"
 
 
 def _get_option(admin, name, *args):
