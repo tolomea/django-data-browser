@@ -4,7 +4,6 @@ from dataclasses import dataclass
 
 from django import http
 from django.apps import apps
-from django.contrib.admin import site
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
@@ -118,7 +117,7 @@ def open_in_admin(obj):
     if obj is None:  # pragma: no cover
         return None
 
-    admin_site = settings.DATA_BROWSER_ADMIN_SITE or site
+    admin_site = settings.DATA_BROWSER_ADMIN_SITE
     model_name = get_model_name(obj.__class__, "_")
     url_name = f"{admin_site.name}:{model_name}_change".lower()
     url = reverse(url_name, args=[obj.pk])
@@ -216,7 +215,7 @@ def _get_all_admin_fields(request):
         hidden_model_fields[model].update(_get_option(admin, "hide_fields", request))
 
     model_admins = {}
-    admin_site = settings.DATA_BROWSER_ADMIN_SITE or site
+    admin_site = settings.DATA_BROWSER_ADMIN_SITE
     for model, model_admin in admin_site._registry.items():
         if visible(model_admin):
             model_admins[model] = model_admin

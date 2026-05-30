@@ -26,7 +26,7 @@ class Settings:
         "DATA_BROWSER_USING_DB": "default",
         "DATA_BROWSER_ADMIN_OPTIONS": {},
         "DATA_BROWSER_APPS_EXPANDED": True,
-        "DATA_BROWSER_ADMIN_SITE": None,
+        "DATA_BROWSER_ADMIN_SITE": default_admin,
         "DATA_BROWSER_ACTIONS_ENABLED": True,
     }
 
@@ -237,7 +237,7 @@ class set_global_state:
 def has_admin_site_permissions(view_func):
     @functools.wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        actual_site = settings.DATA_BROWSER_ADMIN_SITE or default_admin
+        actual_site = settings.DATA_BROWSER_ADMIN_SITE
         if not actual_site.has_permission(request):
             from django.contrib.auth.views import redirect_to_login
 

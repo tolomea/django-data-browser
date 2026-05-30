@@ -1,6 +1,5 @@
 import json
 
-from django.contrib.admin import site as default_admin
 from django.shortcuts import get_object_or_404
 from django.views.decorators import csrf
 
@@ -18,7 +17,7 @@ from data_browser.util import group_by
 
 
 def _get_admin_site_name():
-    return (settings.DATA_BROWSER_ADMIN_SITE or default_admin).name
+    return settings.DATA_BROWSER_ADMIN_SITE.name
 
 
 def clean_str(field, value):

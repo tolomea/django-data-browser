@@ -3,11 +3,9 @@ from django.db import models
 
 
 def populate_admin_site(apps, schema_editor):
-    from django.contrib.admin import site as default_admin
-
     from data_browser.common import settings
 
-    admin_site = settings.DATA_BROWSER_ADMIN_SITE or default_admin
+    admin_site = settings.DATA_BROWSER_ADMIN_SITE
     View = apps.get_model("data_browser", "View")
     View.objects.update(admin_site=admin_site.name)
 
