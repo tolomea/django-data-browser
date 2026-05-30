@@ -118,8 +118,9 @@ def open_in_admin(obj):
     if obj is None:  # pragma: no cover
         return None
 
+    admin_site = settings.DATA_BROWSER_ADMIN_SITE or site
     model_name = get_model_name(obj.__class__, "_")
-    url_name = f"admin:{model_name}_change".lower()
+    url_name = f"{admin_site.name}:{model_name}_change".lower()
     url = reverse(url_name, args=[obj.pk])
     return format_html('<a href="{}">{}</a>', url, obj)
 
