@@ -20,11 +20,9 @@ from django.utils.html import format_html
 from data_browser.common import JsonResponse
 from data_browser.common import debug_log
 from data_browser.common import global_state
-from data_browser.common import settings
 from data_browser.helpers import AdminMixin
 from data_browser.helpers import _AnnotationDescriptor
 from data_browser.helpers import _get_option
-from data_browser.helpers import attributes
 from data_browser.orm_aggregates import get_aggregates_for_type
 from data_browser.orm_debug import DebugQS
 from data_browser.orm_fields import OrmAnnotatedField
@@ -112,21 +110,32 @@ def get_fields_for_type(type_):
     return {**aggregates, **functions, **others}
 
 
-@attributes(short_description=settings.DATA_BROWSER_ADMIN_FIELD_NAME)
-def open_in_admin(obj):
-    if obj is None:  # pragma: no cover
-        return None
+class _OpenInAdmin:
+    __name__ = "open_in_admin"
 
-    admin_site = settings.DATA_BROWSER_ADMIN_SITE
-    model_name = get_model_name(obj.__class__, "_")
-    url_name = f"{admin_site.name}:{model_name}_change".lower()
-    url = reverse(url_name, args=[obj.pk])
-    return format_html('<a href="{}">{}</a>', url, obj)
+    @property
+    def short_description(self):
+        return global_state.settings.DATA_BROWSER_ADMIN_FIELD_NAME
+
+    def __call__(self, obj):
+        if obj is None:  # pragma: no cover
+            return None
+
+        admin_site = global_state.settings.DATA_BROWSER_ADMIN_SITE
+        model_name = get_model_name(obj.__class__, "_")
+        url_name = f"{admin_site.name}:{model_name}_change".lower()
+        url = reverse(url_name, args=[obj.pk])
+        return format_html('<a href="{}">{}</a>', url, obj)
+
+
+open_in_admin = _OpenInAdmin()
 
 
 def _admin_get_queryset(admin, request):
     # this is just a hook for tests to see the request
-    return admin.get_queryset(request).using(settings.DATA_BROWSER_USING_DB)
+    return admin.get_queryset(request).using(
+        global_state.settings.DATA_BROWSER_USING_DB
+    )
 
 
 def admin_get_queryset(request, admin, fields=(), debug=False):
@@ -152,7 +161,7 @@ def admin_get_queryset(request, admin, fields=(), debug=False):
 def admin_get_actions(request, admin):
     assert hasattr(request, "data_browser"), request
 
-    if not settings.DATA_BROWSER_ACTIONS_ENABLED:
+    if not global_state.settings.DATA_BROWSER_ACTIONS_ENABLED:
         return {}
 
     res = {}
@@ -175,7 +184,7 @@ def _get_all_admin_fields(request):
     assert hasattr(request, "data_browser")
 
     def from_fieldsets(admin, include_calculated):
-        auth_user_compat = settings.DATA_BROWSER_AUTH_USER_COMPAT
+        auth_user_compat = global_state.settings.DATA_BROWSER_AUTH_USER_COMPAT
         if auth_user_compat and isinstance(admin, UserAdmin):
             obj = admin.model()  # get the change fieldsets, not the add ones
         else:
@@ -215,7 +224,7 @@ def _get_all_admin_fields(request):
         hidden_model_fields[model].update(_get_option(admin, "hide_fields", request))
 
     model_admins = {}
-    admin_site = settings.DATA_BROWSER_ADMIN_SITE
+    admin_site = global_state.settings.DATA_BROWSER_ADMIN_SITE
     for model, model_admin in admin_site._registry.items():
         if visible(model_admin):
             model_admins[model] = model_admin

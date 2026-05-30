@@ -147,6 +147,10 @@ class GlobalState(threading.local):
     def models(self):
         return self._state.models
 
+    @property
+    def settings(self):
+        return settings
+
 
 global_state = GlobalState()
 

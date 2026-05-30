@@ -7,7 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import BooleanField
 from django.urls import reverse
 
-from data_browser.common import settings
+from data_browser.common import global_state
 
 
 def attributes(**kwargs):
@@ -57,7 +57,7 @@ class _AdminOptions:
 
 def _get_option(admin, name, *args):
     admin_name = f"{admin.__class__.__module__}.{admin.__class__.__qualname__}"
-    defaults = settings.DATA_BROWSER_ADMIN_OPTIONS.get(admin_name, {})
+    defaults = global_state.settings.DATA_BROWSER_ADMIN_OPTIONS.get(admin_name, {})
 
     field = f"ddb_{name}"
     func = f"get_ddb_{name}"

@@ -9,7 +9,6 @@ from data_browser.common import JsonResponse
 from data_browser.common import global_state
 from data_browser.common import has_admin_site_permissions
 from data_browser.common import set_global_state
-from data_browser.common import settings
 from data_browser.common import str_user
 from data_browser.common import users_with_permission
 from data_browser.models import View
@@ -17,7 +16,7 @@ from data_browser.util import group_by
 
 
 def _get_admin_site_name():
-    return settings.DATA_BROWSER_ADMIN_SITE.name
+    return global_state.settings.DATA_BROWSER_ADMIN_SITE.name
 
 
 def clean_str(field, value):

@@ -72,10 +72,8 @@ def _get_model_fields(model_name, orm_models):
     orm_model = orm_models[model_name]
 
     def sort_model_fields(fields):
-        front = {
-            orm_model.pk: 1,
-            str_to_field(settings.DATA_BROWSER_ADMIN_FIELD_NAME.lower()): 2,
-        }
+        open_in_admin_ = global_state.settings.DATA_BROWSER_ADMIN_FIELD_NAME.lower()
+        front = {orm_model.pk: 1, str_to_field(open_in_admin_): 2}
         sorted_fields = sorted(
             fields.items(),
             key=lambda name_field: (
@@ -163,9 +161,9 @@ def _get_config():
         "modelIndex": model_index,
         "canMakePublic": has_permission(global_state.request.user, PUBLIC_PERM),
         "canShare": has_permission(global_state.request.user, SHARE_PERM),
-        "sentryDsn": settings.DATA_BROWSER_FE_DSN,
-        "defaultRowLimit": settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
-        "appsExpanded": settings.DATA_BROWSER_APPS_EXPANDED,
+        "sentryDsn": global_state.settings.DATA_BROWSER_FE_DSN,
+        "defaultRowLimit": global_state.settings.DATA_BROWSER_DEFAULT_ROW_LIMIT,
+        "appsExpanded": global_state.settings.DATA_BROWSER_APPS_EXPANDED,
     }
 
 
@@ -292,7 +290,7 @@ def view(request, pk, media):
             and view.owner.is_active
             and view.owner.is_staff
             and has_permission(view.owner, PUBLIC_PERM)
-            and settings.DATA_BROWSER_ALLOW_PUBLIC
+            and global_state.settings.DATA_BROWSER_ALLOW_PUBLIC
             and view.is_valid()
         ):
             query = view.get_query()

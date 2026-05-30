@@ -7,7 +7,7 @@ from typing import Any
 from django.urls import reverse
 from django.utils.functional import cached_property
 
-from data_browser.common import settings
+from data_browser.common import global_state
 from data_browser.types import ASC
 from data_browser.types import DSC
 
@@ -95,7 +95,7 @@ class Query:
         try:
             value = int(value)
         except Exception:
-            value = settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
+            value = global_state.settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
         self.arguments["limit"] = max(1, value)
 
     @property

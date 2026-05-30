@@ -59,7 +59,7 @@ class View(models.Model):
             if not (has_permission(self.owner, PUBLIC_PERM) and self.public):
                 return "N/A"
 
-            if not settings.DATA_BROWSER_ALLOW_PUBLIC:
+            if not global_state.settings.DATA_BROWSER_ALLOW_PUBLIC:
                 return "Public Views are disabled in Django settings."
 
             if not self.is_valid():
