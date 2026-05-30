@@ -596,3 +596,21 @@ def test_admin_action(admin_client):
     res = admin_client.post(res["url"], data)
     assert "Are you sure you want to delete the selected" in res.rendered_content
     assert set(res.context[0]["queryset"].values_list("id", flat=True)) == ids
+
+
+@pytest.mark.usefixtures("products")
+@pytest.mark.django_db
+def test_actions_disabled(admin_client):
+    from django.test import override_settings
+
+    with override_settings(DATA_BROWSER_ACTIONS_ENABLED=False):
+        res = admin_client.get("/data_browser/query/core.Product/.ctx?")
+    assert res.status_code == 200
+    assert res.json()["allModelFields"]["core.Product"]["fields"]["admin"]["actions"] == []
+
+
+@pytest.mark.django_db
+def test_no_permission_redirect(client):
+    res = client.get("/data_browser/query//.html?")
+    assert res.status_code == 302
+    assert "/admin/login/" in res["Location"]
