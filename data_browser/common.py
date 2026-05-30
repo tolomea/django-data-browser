@@ -27,6 +27,7 @@ class Settings:
         "DATA_BROWSER_ADMIN_OPTIONS": {},
         "DATA_BROWSER_APPS_EXPANDED": True,
         "DATA_BROWSER_ADMIN_SITE": None,
+        "DATA_BROWSER_ACTIONS_ENABLED": True,
     }
 
     def __getattr__(self, name):

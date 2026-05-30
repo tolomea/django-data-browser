@@ -153,6 +153,9 @@ def admin_get_queryset(request, admin, fields=(), debug=False):
 def admin_get_actions(request, admin):
     assert hasattr(request, "data_browser"), request
 
+    if not settings.DATA_BROWSER_ACTIONS_ENABLED:
+        return {}
+
     res = {}
     for func, name, desc in admin.get_actions(request).values():
         if not getattr(func, "ddb_hide", False):

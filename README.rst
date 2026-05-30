@@ -80,7 +80,9 @@ Settings
 +------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 | ``DATA_BROWSER_APPS_EXPANDED``     | ``True``      |                                 | Are the app sections of the homepage model list expanded by default.                               |
 +------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_ADMIN_SITE``        | ``None``      |  `Admin Site`_                  | Specify an ``admin.AdminSite`` to use (default is ``admin.site``).                                 |
+| ``DATA_BROWSER_ADMIN_SITE``        | ``None``      | `Admin Site`_                   | Specify an ``admin.AdminSite`` to use (default is ``admin.site``).                                 |
++------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
+| ``DATA_BROWSER_ACTIONS_ENABLED``   | ``True``      | `Admin Actions`_                | Enable Django admin actions in the data browser.                                                   |
 +------------------------------------+---------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 
 
@@ -468,6 +470,7 @@ Release History
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
 |         |            | | Fix "open in admin" linking to default admin when DATA_BROWSER_ADMIN_SITE is set.                      |
+|         |            | | Add DATA_BROWSER_ACTIONS_ENABLED setting to allow disabling admin actions.                             |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.12  | 2026-05-30 | | Use AdminSite.has_permission instead of staff_member_required. Contributed by #j-osephlong             |
 |         |            | | Make it possible to reorder filters.                                                                   |
