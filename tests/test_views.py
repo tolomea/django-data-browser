@@ -606,7 +606,9 @@ def test_actions_disabled(admin_client):
     with override_settings(DATA_BROWSER_ACTIONS_ENABLED=False):
         res = admin_client.get("/data_browser/query/core.Product/.ctx?")
     assert res.status_code == 200
-    assert res.json()["allModelFields"]["core.Product"]["fields"]["admin"]["actions"] == []
+    assert (
+        res.json()["allModelFields"]["core.Product"]["fields"]["admin"]["actions"] == []
+    )
 
 
 @pytest.mark.django_db
