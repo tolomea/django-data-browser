@@ -180,7 +180,7 @@ class _State:
         prev,
         *,
         request=_UNSPECIFIED,
-        user=_UNSPECIFIED,
+        override_request_user=_UNSPECIFIED,
         public_view=_UNSPECIFIED,
         set_ddb=True,
     ):
@@ -189,8 +189,8 @@ class _State:
 
         new_request = copy(request)
 
-        if user is not _UNSPECIFIED:
-            new_request.user = user
+        if override_request_user is not _UNSPECIFIED:
+            new_request.user = override_request_user
 
         if set_ddb:
             assert public_view is not _UNSPECIFIED

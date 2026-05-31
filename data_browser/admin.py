@@ -68,5 +68,5 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
 
     @attributes(boolean=True)
     def valid(self, obj):
-        with set_global_state(user=obj.owner, public_view=False):
+        with set_global_state(override_request_user=obj.owner, public_view=False):
             return obj.is_valid()

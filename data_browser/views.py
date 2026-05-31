@@ -282,7 +282,7 @@ def query(request, *, model_name, fields="", media):
 
 def view(request, pk, media):
     view = get_object_or_404(View.objects.filter(public=True), public_slug=pk)
-    with set_global_state(request=request, user=view.owner, public_view=True):
+    with set_global_state(request=request, override_request_user=view.owner, public_view=True):
         if (
             # some of these are checked by the admin but this is a good time to be paranoid
             view.owner

@@ -79,7 +79,7 @@ def admin_ddb_request(ddb_request, admin_user):
     from data_browser.common import global_state
     from data_browser.common import set_global_state
 
-    with set_global_state(user=admin_user, public_view=False):
+    with set_global_state(override_request_user=admin_user, public_view=False):
         yield global_state.request
 
 
