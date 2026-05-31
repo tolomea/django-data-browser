@@ -54,7 +54,11 @@ class View(models.Model):
         return self.get_query().get_full_url("html")
 
     def _public_url(self, fmt):
-        with set_global_state(override_request_user=self.owner, public_view=True):
+        with set_global_state(
+            override_request_user=self.owner,
+            public_view=True,
+            admin_site_name=self.admin_site,
+        ):
             if not (has_permission(self.owner, PUBLIC_PERM) and self.public):
                 return "N/A"
 

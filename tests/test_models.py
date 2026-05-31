@@ -18,7 +18,7 @@ def view(admin_user):
 @pytest.fixture
 def global_request(rf):
     request = rf.get("/")
-    with set_global_state(request=request, public_view=False):
+    with set_global_state(request=request, public_view=False, admin_site_name="admin"):
         yield global_state.request
 
 

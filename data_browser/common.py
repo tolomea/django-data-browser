@@ -135,19 +135,27 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
     return max(0, min(dp_for_sf, max_actual_dp, max_dp))
 
 
+_registry = {}  # namespace -> InstanceSettings
+
+
+def _namespace_for_site_name(site_name):
+    return "data_browser" if site_name == "admin" else f"data_browser_{site_name}"
+
+
 class InstanceSettings:
-    namespace = "data_browser"
+    def __init__(self, namespace, admin_site):
+        self.namespace = namespace
+        self._overrides = {"DATA_BROWSER_ADMIN_SITE": admin_site}
 
     def __getattr__(self, name):
+        if name in self._overrides:
+            return self._overrides[name]
         return getattr(settings, name)
 
     def reverse(self, name, *args, **kwargs):
         from django.urls import reverse
 
         return reverse(f"{self.namespace}:{name}", *args, **kwargs)
-
-
-_instance_settings = InstanceSettings()
 
 
 class GlobalState(threading.local):
@@ -164,7 +172,7 @@ class GlobalState(threading.local):
 
     @property
     def settings(self):
-        return _instance_settings
+        return _registry[self._state.namespace]
 
 
 global_state = GlobalState()
@@ -183,6 +191,7 @@ class _State:
         override_request_user=_UNSPECIFIED,
         public_view=_UNSPECIFIED,
         set_ddb=True,
+        admin_site_name=_UNSPECIFIED,
     ):
         if request is _UNSPECIFIED:
             request = prev.request
@@ -204,12 +213,27 @@ class _State:
         self.request = new_request
         self._children = {}
 
+        if admin_site_name is _UNSPECIFIED:
+            ns = new_request.resolver_match.namespace
+            assert ns in _registry, f"Namespace '{ns}' not in DDB registry"
+            self.namespace = ns
+        else:
+            self.namespace = (
+                _namespace_for_site_name(admin_site_name) if admin_site_name else None
+            )
+
     @cached_property
     def models(self):
         from data_browser.orm_admin import get_models
 
+        # Replace _state with a minimal stand-in that exposes namespace
+        # so global_state.settings still works during get_models
+        # but blocks model or request access
+        class _Barrier:
+            namespace = self.namespace
+
         old = global_state._state
-        global_state._state = None
+        global_state._state = _Barrier()
         try:
             return get_models(self.request)
         finally:
@@ -256,11 +280,14 @@ class set_global_state:
 def has_admin_site_permissions(view_func):
     @functools.wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        actual_site = settings.DATA_BROWSER_ADMIN_SITE
-        if not actual_site.has_permission(request):
+        ns = request.resolver_match.namespace
+        admin_site = _registry[ns].DATA_BROWSER_ADMIN_SITE
+        if not admin_site.has_permission(request):
             from django.contrib.auth.views import redirect_to_login
 
-            return redirect_to_login(request.get_full_path(), "admin:login")
+            return redirect_to_login(
+                request.get_full_path(), f"{admin_site.name}:login"
+            )
         return view_func(request, *args, **kwargs)
 
     return _wrapped_view

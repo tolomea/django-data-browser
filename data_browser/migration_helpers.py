@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from data_browser.common import global_state
 from data_browser.common import set_global_state
+from data_browser.common import settings
 from data_browser.types import IsNullType
 from data_browser.types import NumberChoiceArrayType
 from data_browser.types import NumberChoiceType
@@ -48,7 +49,10 @@ def forwards_0009(View):
     user = User(is_superuser=True)
     request = RequestFactory().get(reverse("admin:index"))
     with set_global_state(
-        request=request, override_request_user=user, public_view=False
+        request=request,
+        override_request_user=user,
+        public_view=False,
+        admin_site_name=settings.DATA_BROWSER_ADMIN_SITE.name,
     ):
         models = global_state.models
 

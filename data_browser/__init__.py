@@ -22,9 +22,10 @@ def _register_url_converter():
     _converter_registered = True
 
 
-def get_urls():
+def get_urls(admin_site=None):
     _register_url_converter()
 
+    from django.core.exceptions import ImproperlyConfigured
     from django.urls import include
     from django.urls import path
     from django.urls import re_path
@@ -33,12 +34,27 @@ def get_urls():
 
     from data_browser.api import view_detail
     from data_browser.api import view_list
+    from data_browser.common import InstanceSettings
+    from data_browser.common import _namespace_for_site_name
+    from data_browser.common import _registry
     from data_browser.common import settings
     from data_browser.views import proxy_js_dev_server
     from data_browser.views import query
     from data_browser.views import query_ctx
     from data_browser.views import query_html
     from data_browser.views import view
+
+    if admin_site is None:
+        admin_site = settings.DATA_BROWSER_ADMIN_SITE
+
+    namespace = _namespace_for_site_name(admin_site.name)
+
+    if namespace in _registry:
+        raise ImproperlyConfigured(
+            f"Data browser already registered for admin site '{admin_site.name}'"
+        )
+
+    _registry[namespace] = InstanceSettings(namespace, admin_site)
 
     if settings.DATA_BROWSER_DEV:  # pragma: no cover
         static_view = (proxy_js_dev_server,)
@@ -65,9 +81,9 @@ def get_urls():
         re_path(r"^(?P<path>static/.*)$", *static_view, name="static"),
         re_path(
             r"^.*/(?P<path>static/.*)$",
-            RedirectView.as_view(pattern_name="data_browser:static", permanent=True),
+            RedirectView.as_view(pattern_name=f"{namespace}:static", permanent=True),
         ),
         re_path(r"^(?P<path>.*)$", serve, {"document_root": _WEB_ROOT_DIR}),
     ]
 
-    return include((patterns, "data_browser"))
+    return include((patterns, "data_browser"), namespace=namespace)

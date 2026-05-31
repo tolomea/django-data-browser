@@ -54,9 +54,15 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
             res = [fs for fs in res if fs[0] != "Public"]
         return res
 
-    def changeform_view(self, request, *args, **kwargs):
-        with set_global_state(request=request, set_ddb=False):
-            res = super().changeform_view(request, *args, **kwargs)
+    def changeform_view(self, request, object_id=None, *args, **kwargs):
+        site_name = None
+        if object_id is not None:
+            view_obj = models.View.objects.get(pk=object_id)
+            site_name = view_obj.admin_site
+        with set_global_state(
+            request=request, set_ddb=False, admin_site_name=site_name
+        ):
+            res = super().changeform_view(request, object_id, *args, **kwargs)
             res.render()
         return res
 
@@ -68,5 +74,9 @@ class ViewAdmin(AdminMixin, admin.ModelAdmin):
 
     @attributes(boolean=True)
     def valid(self, obj):
-        with set_global_state(override_request_user=obj.owner, public_view=False):
+        with set_global_state(
+            override_request_user=obj.owner,
+            public_view=False,
+            admin_site_name=obj.admin_site,
+        ):
             return obj.is_valid()

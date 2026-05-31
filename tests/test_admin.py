@@ -58,11 +58,15 @@ def test_ddb_performance(admin_client, snapshot, multiple_views, mocker):
 
 
 def test_open_view(view, rf):
+    from data_browser.common import set_global_state
+
     expected = (
         '<a href="/data_browser/query/core.Product/name+0,size-1,size_unit.html'
         '?name__equals=fred&amp;limit=1000">view</a>'
     )
-    assert ViewAdmin.open_view(view) == expected
+    request = rf.get("/")
+    with set_global_state(request=request, public_view=False, admin_site_name="admin"):
+        assert ViewAdmin.open_view(view) == expected
 
 
 def test_cant_add(admin_client):

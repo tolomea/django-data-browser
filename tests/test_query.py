@@ -173,6 +173,16 @@ class ParseHelpers:
 
 
 class TestQueryFromRequest:
+    @pytest.fixture(autouse=True)
+    def _ddb_context(self, rf):
+        from data_browser.common import set_global_state
+
+        request = rf.get("/")
+        with set_global_state(
+            request=request, public_view=False, admin_site_name="admin"
+        ):
+            yield
+
     def test_from_request(self, query):
         q = Query.from_request("app.model", "fa+1,fd-0,fn", [("bob__equals", "fred")])
         assert q == query
@@ -254,6 +264,16 @@ class TestQueryFromRequest:
 
 
 class TestQueryUrl:
+    @pytest.fixture(autouse=True)
+    def _ddb_context(self, rf):
+        from data_browser.common import set_global_state
+
+        request = rf.get("/")
+        with set_global_state(
+            request=request, public_view=False, admin_site_name="admin"
+        ):
+            yield
+
     def test_url(self, query):
         query.arguments = {"limit": "123"}
         assert (

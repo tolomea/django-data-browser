@@ -138,23 +138,28 @@ class AdminMixin(_AdminOptions, _AdminAnnotations, BaseModelAdmin):
         extra_context = extra_context or {}
 
         if not self.get_ddb_ignore(request):
-            url = reverse(
-                "data_browser:query_html",
-                args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
-            )
-            args = self.get_ddb_default_filters()
-            params = urlencode([
-                (
-                    f"{field}__{lookup}",
-                    (
-                        value
-                        if isinstance(value, str)
-                        else json.dumps(value, cls=DjangoJSONEncoder)
-                    ),
+            from data_browser.common import _namespace_for_site_name
+            from data_browser.common import _registry
+
+            ns = _namespace_for_site_name(self.admin_site.name)
+            if ns in _registry:
+                url = _registry[ns].reverse(
+                    "query_html",
+                    args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],
                 )
-                for field, lookup, value in args
-            ])
-            extra_context["ddb_url"] = f"{url}?{params}"
+                args = self.get_ddb_default_filters()
+                params = urlencode([
+                    (
+                        f"{field}__{lookup}",
+                        (
+                            value
+                            if isinstance(value, str)
+                            else json.dumps(value, cls=DjangoJSONEncoder)
+                        ),
+                    )
+                    for field, lookup, value in args
+                ])
+                extra_context["ddb_url"] = f"{url}?{params}"
 
         return super().changelist_view(request, extra_context)
 
