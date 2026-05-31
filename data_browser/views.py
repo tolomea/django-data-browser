@@ -286,8 +286,7 @@ def view(request, pk, media):
         if (
             # some of these are checked by the admin but this is a good time to be paranoid
             view.owner
-            and view.owner.is_active
-            and view.owner.is_staff
+            and global_state.settings.DATA_BROWSER_ADMIN_SITE.has_permission(global_state.request)
             and has_permission(view.owner, PUBLIC_PERM)
             and global_state.settings.DATA_BROWSER_ALLOW_PUBLIC
             and view.is_valid()
