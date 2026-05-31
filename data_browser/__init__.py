@@ -22,7 +22,7 @@ def _register_url_converter():
     _converter_registered = True
 
 
-def get_urls(admin_site=None):
+def get_urls(admin_site=None, **setting_overrides):
     _register_url_converter()
 
     from django.core.exceptions import ImproperlyConfigured
@@ -54,7 +54,9 @@ def get_urls(admin_site=None):
             f"Data browser already registered for admin site '{admin_site.name}'"
         )
 
-    _registry[namespace] = InstanceSettings(namespace, admin_site)
+    overrides = {f"DATA_BROWSER_{k.upper()}": v for k, v in setting_overrides.items()}
+    overrides["DATA_BROWSER_ADMIN_SITE"] = admin_site
+    _registry[namespace] = InstanceSettings(namespace, overrides)
 
     if settings.DATA_BROWSER_DEV:  # pragma: no cover
         static_view = (proxy_js_dev_server,)
