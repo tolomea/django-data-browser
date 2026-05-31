@@ -100,7 +100,8 @@ def serialize_folders(views, *, include_invalid=False):
 
 
 def get_queryset(user):
-    return View.objects.filter(owner=user)
+    admin_site_name = global_state.settings.DATA_BROWSER_ADMIN_SITE.name
+    return View.objects.filter(owner=user, admin_site=admin_site_name)
 
 
 @csrf.csrf_protect
@@ -108,6 +109,8 @@ def get_queryset(user):
 @set_global_state(public_view=False)
 def view_list(request):
     if request.method == "GET":
+        admin_site_name = global_state.settings.DATA_BROWSER_ADMIN_SITE.name
+
         # saved
         saved_views = get_queryset(request.user)
         saved_views_serialized = serialize_folders(saved_views, include_invalid=True)
@@ -115,6 +118,7 @@ def view_list(request):
         # shared
         shared_views = (
             View.objects
+            .filter(admin_site=admin_site_name)
             .exclude(owner=request.user)
             .filter(owner__in=users_with_permission(SHARE_PERM), shared=True)
             .exclude(name="")
