@@ -86,16 +86,16 @@ class Query:
             else:
                 arguments[path__lookup] = value
 
+        try:
+            limit = max(1, int(arguments.get("limit")))
+        except Exception:
+            limit = global_state.settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
+        arguments["limit"] = limit
+
         return cls(model_name, fields, filters, arguments)
 
     def __post_init__(self):
-        # sanitize limit
-        value = self.arguments.get("limit")
-        try:
-            value = int(value)
-        except Exception:
-            value = global_state.settings.DATA_BROWSER_DEFAULT_ROW_LIMIT
-        self.arguments["limit"] = max(1, value)
+        assert isinstance(self.arguments.get("limit"), int)
 
     @property
     def _field_str(self):
