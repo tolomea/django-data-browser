@@ -616,3 +616,14 @@ def test_no_permission_redirect(client):
     res = client.get("/data_browser/query//.html?")
     assert res.status_code == 302
     assert "/admin/login/" in res["Location"]
+
+
+def test_get_urls_duplicate_registration():
+    import pytest
+    from django.contrib.admin import site as default_admin
+    from django.core.exceptions import ImproperlyConfigured
+
+    import data_browser
+
+    with pytest.raises(ImproperlyConfigured, match="already registered"):
+        data_browser.get_urls(default_admin)
