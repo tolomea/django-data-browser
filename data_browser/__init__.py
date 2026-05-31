@@ -10,7 +10,7 @@ _converter_registered = False
 
 def _register_url_converter():
     global _converter_registered
-    if _converter_registered:
+    if _converter_registered:  # pragma: no cover
         return
     from django.urls import register_converter
     from django.urls.converters import StringConverter
