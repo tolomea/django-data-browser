@@ -53,7 +53,9 @@ class _AdminOptions:
 
         meta = self.model._meta
         site_name = global_state.settings.DATA_BROWSER_ADMIN_SITE.name
-        return reverse(f"{site_name}:{meta.app_label}_{meta.model_name}_changelist") + "?"
+        return (
+            reverse(f"{site_name}:{meta.app_label}_{meta.model_name}_changelist") + "?"
+        )
 
 
 def _get_option(admin, name, *args):

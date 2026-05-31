@@ -47,7 +47,9 @@ def forwards_0009(View):
     User = get_user_model()
     user = User(is_superuser=True)
     request = RequestFactory().get(reverse("admin:index"))
-    with set_global_state(request=request, override_request_user=user, public_view=False):
+    with set_global_state(
+        request=request, override_request_user=user, public_view=False
+    ):
         models = global_state.models
 
     for view in View.objects.all():
