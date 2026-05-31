@@ -1,22 +1,30 @@
 from pathlib import Path
 
-from django.urls import register_converter
-from django.urls.converters import StringConverter
-
 version = "4.2.12"
-
-
-class _OptionalString(StringConverter):
-    regex = "[^/]*"
-
-
-register_converter(_OptionalString, "opt_str")
 
 _FE_BUILD_DIR = Path(__file__).resolve().parent / "fe_build"
 _WEB_ROOT_DIR = Path(__file__).resolve().parent / "web_root"
 
+_converter_registered = False
+
+
+def _register_url_converter():
+    global _converter_registered
+    if _converter_registered:
+        return
+    from django.urls import register_converter
+    from django.urls.converters import StringConverter
+
+    class _OptionalString(StringConverter):
+        regex = "[^/]*"
+
+    register_converter(_OptionalString, "opt_str")
+    _converter_registered = True
+
 
 def get_urls():
+    _register_url_converter()
+
     from django.urls import include
     from django.urls import path
     from django.urls import re_path
