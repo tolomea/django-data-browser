@@ -172,7 +172,7 @@ class ParseHelpers:
         assert self.type_.get_formatter(self.choices)(value) == expected
 
 
-class TestQuery:
+class TestQueryFromRequest:
     def test_from_request(self, query):
         q = Query.from_request("app.model", "fa+1,fd-0,fn", [("bob__equals", "fred")])
         assert q == query
@@ -252,6 +252,8 @@ class TestQuery:
         q = Query.from_request("app.model", "&fn", [])
         assert q == Query("app.model", [QueryField("fn", True)], [], {"limit": 1000})
 
+
+class TestQueryUrl:
     def test_url(self, query):
         query.arguments = {"limit": "123"}
         assert (
