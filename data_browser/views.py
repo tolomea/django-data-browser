@@ -101,8 +101,7 @@ def _get_model_fields(model_name, orm_models):
         for name, orm_field in orm_model.fields.items()
     }
 
-    q = Query(model_name, [], [QueryFilter(*f) for f in orm_model.default_filters])
-    bq = BoundQuery.bind(q, orm_models)
+    default_filters = [QueryFilter(*f) for f in orm_model.default_filters]
 
     return {
         "fields": all_fields,
@@ -113,7 +112,7 @@ def _get_model_fields(model_name, orm_models):
                 "lookup": filter_.lookup,
                 "value": filter_.value,
             }
-            for filter_ in bq.filters
+            for filter_ in default_filters
         ],
     }
 
