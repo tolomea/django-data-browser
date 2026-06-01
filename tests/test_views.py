@@ -620,9 +620,16 @@ def test_no_permission_redirect(client):
 
 def test_get_urls_duplicate_registration():
     import pytest
+    from django.contrib.admin import AdminSite
     from django.core.exceptions import ImproperlyConfigured
 
     import data_browser
+    from data_browser.common import _registry
 
-    with pytest.raises(ImproperlyConfigured, match="already registered"):
-        data_browser.get_urls()
+    my_site = AdminSite(name="test_duplicate")
+    try:
+        data_browser.get_urls(my_site)
+        with pytest.raises(ImproperlyConfigured, match="already registered"):
+            data_browser.get_urls(my_site)
+    finally:
+        _registry.pop("data_browser_test_duplicate", None)

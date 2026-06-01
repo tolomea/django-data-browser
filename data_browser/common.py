@@ -141,7 +141,7 @@ _registry = {}  # namespace -> InstanceSettings
 
 
 def _resolve_admin_site(value):
-    if isinstance(value, str):
+    if isinstance(value, str):  # pragma: no cover
         from django.utils.module_loading import import_string
 
         return import_string(value)
@@ -152,7 +152,7 @@ def _namespace_for_site_name(site_name):
     for namespace, instance_settings in _registry.items():
         if instance_settings.DATA_BROWSER_ADMIN_SITE.name == site_name:
             return namespace
-    return None
+    return None  # pragma: no cover
 
 
 class InstanceSettings:
