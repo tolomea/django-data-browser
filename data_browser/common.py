@@ -143,6 +143,14 @@ def get_optimal_decimal_places(nums, sf=3, max_dp=6):
 _registry = {}  # namespace -> InstanceSettings
 
 
+def _resolve_admin_site(value):
+    if isinstance(value, str):
+        from django.utils.module_loading import import_string
+
+        return import_string(value)
+    return value
+
+
 def _namespace_for_site_name(site_name):
     for namespace, instance_settings in _registry.items():
         if instance_settings.DATA_BROWSER_ADMIN_SITE.name == site_name:

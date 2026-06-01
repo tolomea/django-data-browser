@@ -36,6 +36,7 @@ def get_urls(admin_site=None, **setting_overrides):
     from data_browser.api import view_list
     from data_browser.common import InstanceSettings
     from data_browser.common import _registry
+    from data_browser.common import _resolve_admin_site
     from data_browser.common import settings
     from data_browser.views import proxy_js_dev_server
     from data_browser.views import query
@@ -44,9 +45,10 @@ def get_urls(admin_site=None, **setting_overrides):
     from data_browser.views import view
 
     if admin_site is None:
-        admin_site = settings.DATA_BROWSER_ADMIN_SITE
+        admin_site = _resolve_admin_site(settings.DATA_BROWSER_ADMIN_SITE)
         namespace = "data_browser"
     else:
+        admin_site = _resolve_admin_site(admin_site)
         namespace = f"data_browser_{admin_site.name}"
 
     if namespace in _registry:

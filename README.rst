@@ -80,7 +80,7 @@ Settings
 +------------------------------------+----------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 | ``DATA_BROWSER_APPS_EXPANDED``     | ``True``       |                                 | Are the app sections of the homepage model list expanded by default.                               |
 +------------------------------------+----------------+---------------------------------+----------------------------------------------------------------------------------------------------+
-| ``DATA_BROWSER_ADMIN_SITE``        | ``admin.site`` | `Admin Site`_                   | Specify an ``admin.AdminSite`` to use.                                                             |
+| ``DATA_BROWSER_ADMIN_SITE``        | ``admin.site`` | `Admin Site`_                   | Specify an ``admin.AdminSite`` to use, or a dotted path string to one.                             |
 +------------------------------------+----------------+---------------------------------+----------------------------------------------------------------------------------------------------+
 | ``DATA_BROWSER_ACTIONS_ENABLED``   | ``True``       | `Admin Actions`_                | Enable Django admin actions in the data browser.                                                   |
 +------------------------------------+----------------+---------------------------------+----------------------------------------------------------------------------------------------------+
@@ -415,16 +415,27 @@ Admin Site
 
 You can create and use a custom ``admin.AdminSite`` (see https://docs.djangoproject.com/en/4.2/ref/contrib/admin/).
 
-To do so, in your ``settings.py``, add:
+To do so, create the site in a separate module (e.g. ``myapp/admin_sites.py``) to avoid circular imports:
 
 .. code-block:: python
 
-    from django.contrib import admin
+    from django.contrib.admin import AdminSite
 
-    class BrowserAdminSite(admin.AdminSite):
+    class BrowserAdminSite(AdminSite):
         pass
 
-    DATA_BROWSER_ADMIN_SITE = BrowserAdminSite(name='data_browser')
+    browser_admin_site = BrowserAdminSite(name='data_browser')
+
+Then in ``settings.py`` set ``DATA_BROWSER_ADMIN_SITE`` to either the site object or a dotted path string:
+
+.. code-block:: python
+
+    # object form
+    from myapp.admin_sites import browser_admin_site
+    DATA_BROWSER_ADMIN_SITE = browser_admin_site
+
+    # or dotted path form (avoids import at settings load time)
+    DATA_BROWSER_ADMIN_SITE = "myapp.admin_sites.browser_admin_site"
 
 Then, in any ``admin.py``, register the models as usual but using ``DATA_BROWSER_ADMIN_SITE``.
 
@@ -469,8 +480,10 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Fix "open in admin" linking to default admin when DATA_BROWSER_ADMIN_SITE is set.                      |
+|         |            | | Add ``get_urls(admin_site)`` for mounting multiple Data Browser instances on different admin sites.    |
+|         |            | | Fix DATA_BROWSER_ADMIN_SITE not being respected for permissions, open-in-admin links and action URLs.  |
 |         |            | | Add DATA_BROWSER_ACTIONS_ENABLED setting to allow disabling admin actions.                             |
+|         |            | | DATA_BROWSER_ADMIN_SITE now also accepts a dotted path string.                                         |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.12  | 2026-05-30 | | Use AdminSite.has_permission instead of staff_member_required. Contributed by #j-osephlong             |
 |         |            | | Make it possible to reorder filters.                                                                   |
