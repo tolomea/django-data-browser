@@ -14,12 +14,6 @@ from django.utils.functional import cached_property
 
 from data_browser import version
 
-_GLOBAL_SETTINGS = {
-    "DATA_BROWSER_AUTH_USER_COMPAT": True,
-    "DATA_BROWSER_DEV": False,
-    "DATA_BROWSER_FE_DSN": None,
-}
-
 _INSTANCE_SETTINGS = {
     "DATA_BROWSER_ACTIONS_ENABLED": True,
     "DATA_BROWSER_ADMIN_FIELD_NAME": "admin",
@@ -27,13 +21,16 @@ _INSTANCE_SETTINGS = {
     "DATA_BROWSER_ADMIN_SITE": default_admin,
     "DATA_BROWSER_ALLOW_PUBLIC": False,
     "DATA_BROWSER_APPS_EXPANDED": True,
+    "DATA_BROWSER_AUTH_USER_COMPAT": True,
     "DATA_BROWSER_DEFAULT_ROW_LIMIT": 1000,
+    "DATA_BROWSER_DEV": False,
+    "DATA_BROWSER_FE_DSN": None,
     "DATA_BROWSER_USING_DB": "default",
 }
 
 
 class Settings:
-    _defaults = {**_GLOBAL_SETTINGS, **_INSTANCE_SETTINGS}
+    _defaults = _INSTANCE_SETTINGS
 
     def __getattr__(self, name):
         from django.conf import settings

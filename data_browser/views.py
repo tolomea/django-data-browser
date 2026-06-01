@@ -26,7 +26,6 @@ from data_browser.common import JsonResponse
 from data_browser.common import global_state
 from data_browser.common import has_permission
 from data_browser.common import set_global_state
-from data_browser.common import settings
 from data_browser.format_csv import get_csv_rows
 from data_browser.models import View
 from data_browser.orm_results import get_result_list
@@ -213,7 +212,7 @@ def query_html(request, *, model_name="", fields=""):
         config.replace("<", "\\u003C").replace(">", "\\u003E").replace("&", "\\u0026")
     )
 
-    if settings.DATA_BROWSER_DEV:  # pragma: no cover
+    if global_state.settings.DATA_BROWSER_DEV:  # pragma: no cover
         try:
             response = _get_from_js_dev_server(request, "get")
         except Exception as e:

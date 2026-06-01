@@ -58,9 +58,10 @@ def get_urls(admin_site=None, **setting_overrides):
 
     overrides = {f"DATA_BROWSER_{k.upper()}": v for k, v in setting_overrides.items()}
     overrides["DATA_BROWSER_ADMIN_SITE"] = admin_site
-    _registry[namespace] = InstanceSettings(namespace, overrides)
+    instance_settings = InstanceSettings(namespace, overrides)
+    _registry[namespace] = instance_settings
 
-    if settings.DATA_BROWSER_DEV:  # pragma: no cover
+    if instance_settings.DATA_BROWSER_DEV:  # pragma: no cover
         static_view = (proxy_js_dev_server,)
     else:
         static_view = (serve, {"document_root": _FE_BUILD_DIR})
