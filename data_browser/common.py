@@ -144,7 +144,10 @@ _registry = {}  # namespace -> InstanceSettings
 
 
 def _namespace_for_site_name(site_name):
-    return "data_browser" if site_name == "admin" else f"data_browser_{site_name}"
+    for namespace, instance_settings in _registry.items():
+        if instance_settings.DATA_BROWSER_ADMIN_SITE.name == site_name:
+            return namespace
+    raise AssertionError(f"No DDB instance registered for admin site '{site_name}'")
 
 
 class InstanceSettings:

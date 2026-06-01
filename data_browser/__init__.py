@@ -35,7 +35,6 @@ def get_urls(admin_site=None, **setting_overrides):
     from data_browser.api import view_detail
     from data_browser.api import view_list
     from data_browser.common import InstanceSettings
-    from data_browser.common import _namespace_for_site_name
     from data_browser.common import _registry
     from data_browser.common import settings
     from data_browser.views import proxy_js_dev_server
@@ -46,8 +45,9 @@ def get_urls(admin_site=None, **setting_overrides):
 
     if admin_site is None:
         admin_site = settings.DATA_BROWSER_ADMIN_SITE
-
-    namespace = _namespace_for_site_name(admin_site.name)
+        namespace = "data_browser"
+    else:
+        namespace = f"data_browser_{admin_site.name}"
 
     if namespace in _registry:
         raise ImproperlyConfigured(
