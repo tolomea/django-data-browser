@@ -142,7 +142,7 @@ class AdminMixin(_AdminOptions, _AdminAnnotations, BaseModelAdmin):
             from data_browser.common import _registry
 
             ns = _namespace_for_site_name(self.admin_site.name)
-            if ns in _registry:  # pragma: no branch
+            if ns:
                 url = _registry[ns].reverse(
                     "query_html",
                     args=[f"{self.model._meta.app_label}.{self.model.__name__}", ""],

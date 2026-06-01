@@ -152,7 +152,7 @@ def _namespace_for_site_name(site_name):
     for namespace, instance_settings in _registry.items():
         if instance_settings.DATA_BROWSER_ADMIN_SITE.name == site_name:
             return namespace
-    raise AssertionError(f"No DDB instance registered for admin site '{site_name}'")
+    return None
 
 
 class InstanceSettings:
@@ -235,9 +235,11 @@ class _State:
             assert ns in _registry, f"Namespace '{ns}' not in DDB registry"
             self.namespace = ns
         else:
-            self.namespace = (
-                _namespace_for_site_name(admin_site_name) if admin_site_name else None
-            )
+            self.namespace = _namespace_for_site_name(admin_site_name)
+            if admin_site_name:
+                assert self.namespace is not None, (
+                    f"No DDB instance registered for admin site '{admin_site_name}'"
+                )
 
     @cached_property
     def models(self):
