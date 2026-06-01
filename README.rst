@@ -477,7 +477,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | | Add ``get_urls(admin_site)`` for mounting multiple Data Browser instances on different admin sites.    |
+| 4.2.13  | 2026-06-01 | | Add ``get_urls(admin_site)`` for mounting multiple Data Browser instances on different admin sites.    |
 |         |            | | Fix DATA_BROWSER_ADMIN_SITE not being respected for permissions, open-in-admin links and action URLs.  |
 |         |            | | Add DATA_BROWSER_ACTIONS_ENABLED setting to allow disabling admin actions.                             |
 |         |            | | DATA_BROWSER_ADMIN_SITE now also accepts a dotted path string.                                         |
