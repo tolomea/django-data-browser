@@ -47,7 +47,8 @@ def _fix_filter(models, field, parts, lookup, value):
 def forwards_0009(View):
     User = get_user_model()
     user = User(is_superuser=True)
-    request = RequestFactory().get(reverse("admin:index"))
+    admin_site = settings.DATA_BROWSER_ADMIN_SITE
+    request = RequestFactory().get(reverse(f"{admin_site.name}:index"))
     with set_global_state(
         request=request,
         override_request_user=user,
