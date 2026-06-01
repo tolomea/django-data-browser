@@ -1,13 +1,11 @@
 import json
 
 from django.shortcuts import get_object_or_404
-from django.views.decorators import csrf
 
 from data_browser.common import SHARE_PERM
 from data_browser.common import HttpResponse
 from data_browser.common import JsonResponse
 from data_browser.common import global_state
-from data_browser.common import has_admin_site_permissions
 from data_browser.common import set_global_state
 from data_browser.common import str_user
 from data_browser.common import users_with_permission
@@ -104,8 +102,6 @@ def get_queryset(user):
     return View.objects.filter(owner=user, admin_site=admin_site_name)
 
 
-@csrf.csrf_protect
-@has_admin_site_permissions
 @set_global_state(public_view=False)
 def view_list(request):
     if request.method == "GET":
@@ -150,8 +146,6 @@ def view_list(request):
         return HttpResponse(status=400)
 
 
-@csrf.csrf_protect
-@has_admin_site_permissions
 @set_global_state(public_view=False)
 def view_detail(request, pk):
     view = get_object_or_404(get_queryset(request.user), pk=pk)

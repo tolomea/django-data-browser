@@ -64,21 +64,23 @@ def get_urls(admin_site=None, **setting_overrides):
         static_view = (serve, {"document_root": _FE_BUILD_DIR})
 
     query_path = "query/<model_name>/<opt_str:fields>"
+    query_html_view = admin_site.admin_view(query_html)
+    query_ctx_view = admin_site.admin_view(query_ctx)
 
     patterns = [
         # queries
-        path(f"{query_path}.html", query_html, name="query_html"),
-        path(f"{query_path}.ctx", query_ctx),
-        path(f"{query_path}.<media>", query, name="query"),
+        path(f"{query_path}.html", query_html_view, name="query_html"),
+        path(f"{query_path}.ctx", query_ctx_view),
+        path(f"{query_path}.<media>", admin_site.admin_view(query), name="query"),
         # views
         path("view/<pk>.<media>", view, name="view"),
         # api
-        path("api/views/", view_list, name="view_list"),
-        path("api/views/<pk>/", view_detail, name="view_detail"),
+        path("api/views/", admin_site.admin_view(view_list), name="view_list"),
+        path("api/views/<pk>/", admin_site.admin_view(view_detail), name="view_detail"),
         # other html pages
-        re_path(r".*\.html", query_html),
-        re_path(r".*\.ctx", query_ctx),
-        path("", query_html, name="home"),
+        re_path(r".*\.html", query_html_view),
+        re_path(r".*\.ctx", query_ctx_view),
+        path("", query_html_view, name="home"),
         # static files
         re_path(r"^(?P<path>static/.*)$", *static_view, name="static"),
         re_path(

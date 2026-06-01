@@ -284,19 +284,3 @@ class set_global_state:
 
     def __exit__(self, exc_type, exc_value, traceback):
         global_state._state = self.old
-
-
-def has_admin_site_permissions(view_func):
-    @functools.wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        ns = request.resolver_match.namespace
-        admin_site = _registry[ns].DATA_BROWSER_ADMIN_SITE
-        if not admin_site.has_permission(request):
-            from django.contrib.auth.views import redirect_to_login
-
-            return redirect_to_login(
-                request.get_full_path(), f"{admin_site.name}:login"
-            )
-        return view_func(request, *args, **kwargs)
-
-    return _wrapped_view

@@ -24,7 +24,6 @@ from data_browser.common import SHARE_PERM
 from data_browser.common import HttpResponse
 from data_browser.common import JsonResponse
 from data_browser.common import global_state
-from data_browser.common import has_admin_site_permissions
 from data_browser.common import has_permission
 from data_browser.common import set_global_state
 from data_browser.common import settings
@@ -165,7 +164,6 @@ def _get_config():
     }
 
 
-@has_admin_site_permissions
 @set_global_state(public_view=False)
 def query_ctx(request, *, model_name="", fields=""):
     config = _get_config()
@@ -203,9 +201,7 @@ def admin_action(request, model_name, fields):
     return orm_models[model_name].get_http_request_for_action(action, pks)
 
 
-@csrf.csrf_protect
 @csrf.ensure_csrf_cookie
-@has_admin_site_permissions
 @set_global_state(public_view=False)
 def query_html(request, *, model_name="", fields=""):
     if request.method == "POST":
@@ -230,7 +226,6 @@ def query_html(request, *, model_name="", fields=""):
     return TemplateResponse(request, template, {"config": config, "version": version})
 
 
-@has_admin_site_permissions
 @set_global_state(public_view=False)
 def query(request, *, model_name, fields="", media):
     params = hyperlink.parse(request.get_full_path()).query
