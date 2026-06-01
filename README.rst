@@ -413,45 +413,42 @@ Then we need to tell the Data Browser we want ``p95`` on duration fields.
 Admin Site
 ----------
 
-You can create and use a custom ``admin.AdminSite`` (see https://docs.djangoproject.com/en/4.2/ref/contrib/admin/).
+By default the Data Browser uses Django's default admin site. You can point it at a custom ``admin.AdminSite`` (see `Django's docs <https://docs.djangoproject.com/en/stable/ref/contrib/admin/#adminsite-objects>`_) in two ways.
 
-To do so, create the site in a separate module (e.g. ``myapp/admin_sites.py``) to avoid circular imports:
-
-.. code-block:: python
-
-    from django.contrib.admin import AdminSite
-
-    class BrowserAdminSite(AdminSite):
-        pass
-
-    browser_admin_site = BrowserAdminSite(name='data_browser')
-
-Then in ``settings.py`` set ``DATA_BROWSER_ADMIN_SITE`` to either the site object or a dotted path string:
+**Single site** — set ``DATA_BROWSER_ADMIN_SITE`` in ``settings.py`` to either the site object or a dotted path string:
 
 .. code-block:: python
 
     # object form
-    from myapp.admin_sites import browser_admin_site
-    DATA_BROWSER_ADMIN_SITE = browser_admin_site
+    from myapp.admin_sites import my_site
+    DATA_BROWSER_ADMIN_SITE = my_site
 
-    # or dotted path form (avoids import at settings load time)
-    DATA_BROWSER_ADMIN_SITE = "myapp.admin_sites.browser_admin_site"
+    # dotted path form (avoids importing at settings load time)
+    DATA_BROWSER_ADMIN_SITE = "myapp.admin_sites.my_site"
 
-Then, in any ``admin.py``, register the models as usual but using ``DATA_BROWSER_ADMIN_SITE``.
+The Data Browser URL conf (``data_browser.urls``) will automatically use the configured site. Per-instance settings can be overridden via ``settings.py`` using the ``DATA_BROWSER_*`` settings.
 
-For instance in ``myapp/admin.py``:
+**Multiple sites** — use ``get_urls(admin_site)`` directly in your URL conf instead of ``data_browser.urls``:
 
 .. code-block:: python
 
-    from django.contrib import admin
-    from django.conf import settings
-    from myapp.models import MyAdminModel, MyBrowsableModel
+    import data_browser
+    from myapp.admin_sites import my_site
 
-    # register in admin only
-    admin.register(MyAdminModel)
+    urlpatterns = [
+        path("admin/", admin.site.urls),
+        path("my-admin/", my_site.urls),
+        path("data-browser/", include("data_browser.urls")),       # uses default admin
+        path("my-data-browser/", data_browser.get_urls(my_site)),  # uses my_site
+    ]
 
-    # register in data browser only
-    settings.DATA_BROWSER_ADMIN_SITE.register(MyBrowsableModel)
+Per-instance settings can be overridden as keyword arguments to ``get_urls()``:
+
+.. code-block:: python
+
+    data_browser.get_urls(my_site, allow_public=True, default_row_limit=500)
+
+The keyword argument names are the ``DATA_BROWSER_*`` setting names in snake case.
 
 Version numbers
 ---------------
