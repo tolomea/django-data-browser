@@ -477,7 +477,7 @@ Release History
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | Version | Date       | Summary                                                                                                  |
 +=========+============+==========================================================================================================+
-|         |            | Fix migration when using DATA_BROWSER_ADMIN_SITE with a dotted string.                                   |
+| 4.2.14  | 2026-06-07 | Fix migration when using DATA_BROWSER_ADMIN_SITE with a dotted string.                                   |
 +---------+------------+----------------------------------------------------------------------------------------------------------+
 | 4.2.13  | 2026-06-01 | | Add ``get_urls(admin_site)`` for mounting multiple Data Browser instances on different admin sites.    |
 |         |            | | Fix DATA_BROWSER_ADMIN_SITE not being respected for permissions, open-in-admin links and action URLs.  |
