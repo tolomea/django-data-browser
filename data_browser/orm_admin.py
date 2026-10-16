@@ -165,10 +165,16 @@ def admin_get_actions(request, admin):
         return {}
 
     res = {}
+
+    # in case get_action_choices is filtering the available actions
+    allowed = {
+        name for name, _ in admin.get_action_choices(request, default_choices=[])
+    }
     for func, name, desc in admin.get_actions(request).values():
-        if not getattr(func, "ddb_hide", False):
-            desc %= model_format_dict(admin.opts)
-            res[name] = func, desc
+        if name not in allowed or getattr(func, "ddb_hide", False):
+            continue
+        desc %= model_format_dict(admin.opts)
+        res[name] = func, desc
     return res
 
 
