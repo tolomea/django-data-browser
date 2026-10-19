@@ -1,6 +1,6 @@
 from pathlib import Path
 
-version = "4.2.15"
+version = "4.2.16"
 
 _FE_BUILD_DIR = Path(__file__).resolve().parent / "fe_build"
 _WEB_ROOT_DIR = Path(__file__).resolve().parent / "web_root"
