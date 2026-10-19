@@ -4,19 +4,14 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@sentry/browser": "^6.17.5",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
+    "@sentry/browser": "^11.8.0",
     "assert": "^2.0.0",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
     "react": "^16",
     "react-dom": "^16",
     "react-router": "^5",
-    "react-router-dom": "^5",
-    "react-scripts": "^5.0.0",
-    "sass": "^1.49.7"
+    "react-router-dom": "^5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,6 +35,11 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "prettier": "^2.5.1",
+    "react-scripts": "^5.0.0",
+    "sass": "^1.49.7"
   }
 }
